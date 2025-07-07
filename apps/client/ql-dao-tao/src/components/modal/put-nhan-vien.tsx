@@ -12,16 +12,23 @@ import {
     useUpsertUserProfile,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, message, type UploadFile } from 'antd'
+import { Col, Form, message, Row, Tabs, type UploadFile } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { getMinioUrl } from '@workspace/constant'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
-import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
+import KeKhaiTaiSanTab from './quan-ly-ho-so/tabs/ke-khai-tai-san'
+import KhenThuongKyLuatTab from './quan-ly-ho-so/tabs/khen-thuong-ky-luat'
+import ThanNhanTab from './quan-ly-ho-so/tabs/tab-danh-sach-than-nhan'
+import DoiTuongChinhSachTab from './quan-ly-ho-so/tabs/tab-doi-tuong-chinh-sach'
+import HocHamHocViTab from './quan-ly-ho-so/tabs/tab-hoc-ham-hoc-vi'
+import QuaTrinhCongTacTab from './quan-ly-ho-so/tabs/tab-qua-trinh-cong-tac'
+import ThongTinCaNhanTab from './quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
+import TrinhDoChungChiTab from './quan-ly-ho-so/tabs/tab-trinh-do-chung-chi'
+// import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
+// import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
 import type { PutStaffProfile, StaffProfileType, UserProfileType } from './quan-ly-ho-so/type'
-import { tabs } from './quan-ly-ho-so/type'
 
 dayjs.locale('vi')
 // export type PutUserProfile = UserProfile;
@@ -320,6 +327,69 @@ const PutUserProfileStaffModal = () => {
         hideSpinner()
     }
 
+    const tabsData = useMemo(() => {
+        return [
+            {
+                key: '1',
+                label: 'Thông tin cán bộ',
+                children: (
+                    <Row gutter={[16, 16]}>
+                        <Col span={24}>
+                            <ThongTinCaNhanTab
+                                avatar={avatar}
+                                setAvatar={setAvatar}
+                                id={id}
+                                type={'LECTURER'}
+                            />
+                        </Col>
+                    </Row>
+                ),
+            },
+            {
+                key: '2',
+                label: 'Học hàm, học vị',
+                children: <HocHamHocViTab />,
+                forceRender: true,
+            },
+            {
+                key: '3',
+                label: 'Trình độ, chứng chỉ',
+                children: <TrinhDoChungChiTab />,
+                forceRender: true,
+            },
+            {
+                key: '4',
+                label: 'Quá trình công tác',
+                children: <QuaTrinhCongTacTab />,
+                forceRender: true,
+            },
+            {
+                key: '6',
+                label: 'Khen thưởng - kỷ luật',
+                children: <KhenThuongKyLuatTab />,
+                forceRender: true,
+            },
+            {
+                key: '7',
+                label: 'Đối tượng chính sách',
+                children: <DoiTuongChinhSachTab />,
+                forceRender: true,
+            },
+            {
+                key: '8',
+                label: 'Kê khai tài sản',
+                children: <KeKhaiTaiSanTab />,
+                forceRender: true,
+            },
+            {
+                key: '9',
+                label: 'Thân nhân',
+                children: <ThanNhanTab />,
+                forceRender: true,
+            },
+        ]
+    }, [avatar, id])
+
     // const difference = (
     //     object: Record<PropertyKey, unknown>,
     //     base: Record<PropertyKey, unknown>
@@ -429,18 +499,8 @@ const PutUserProfileStaffModal = () => {
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
-            <Col xs={24} md={5}>
-                <SidebarMenu tabs={tabs} activeKey={activeKey} setActiveKey={setActiveKey} />
-            </Col>
-
-            <Col xs={24} md={19}>
-                <TabQuanLyHoSo
-                    activeKey={activeKey}
-                    setActiveKey={setActiveKey}
-                    type="STAFF"
-                    avatar={avatar}
-                    setAvatar={setAvatar}
-                />
+            <Col span={24}>
+                <Tabs className="w-full" items={tabsData} />
             </Col>
         </PutFormModal>
     )

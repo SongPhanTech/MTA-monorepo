@@ -1,4 +1,4 @@
-import { DownloadOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FilterLecture } from '@components/filter'
 import type { FilterProps } from '@components/filter/filter-lecture'
@@ -13,7 +13,6 @@ import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vie
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { getMinioUrl } from '@workspace/constant'
 import {
     useCountLecturer,
     useFindManyDM_CapBac,
@@ -25,7 +24,7 @@ import {
     useFindManyTemplateFile,
     useUpdateLecturer,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Dropdown, Flex, Image, Input, Menu, message, Row } from 'antd'
+import { Button, Col, DatePicker, Dropdown, Flex, Input, Menu, message, Row } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
@@ -451,28 +450,28 @@ export default function UserProfilePageLecture() {
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                            {
-                                title: 'Ảnh',
-                                align: 'center',
-                                width: 120,
-                                className: 'flex justify-center',
-                                render: (_, record) => {
-                                    const avatar = record.userProfile?.avatar
+                            // {
+                            //     title: 'Ảnh',
+                            //     align: 'center',
+                            //     width: 120,
+                            //     className: 'flex justify-center',
+                            //     render: (_, record) => {
+                            //         const avatar = record.userProfile?.avatar
 
-                                    return avatar ? (
-                                        <Image src={getMinioUrl(avatar)} width={100} height={80} />
-                                    ) : (
-                                        <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                                            <UserOutlined
-                                                style={{
-                                                    fontSize: 32,
-                                                    color: '#bfbfbf',
-                                                }}
-                                            />
-                                        </div>
-                                    )
-                                },
-                            },
+                            //         return avatar ? (
+                            //             <Image src={getMinioUrl(avatar)} width={100} height={80} />
+                            //         ) : (
+                            //             <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                            //                 <UserOutlined
+                            //                     style={{
+                            //                         fontSize: 32,
+                            //                         color: '#bfbfbf',
+                            //                     }}
+                            //                 />
+                            //             </div>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Mã giảng viên',
                                 dataIndex: 'code',

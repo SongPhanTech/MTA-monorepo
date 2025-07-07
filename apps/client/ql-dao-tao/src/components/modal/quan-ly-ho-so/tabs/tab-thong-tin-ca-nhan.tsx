@@ -49,46 +49,37 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
     // Hook để lấy danh sách UserProfile để làm options cho AutoComplete
     const { data: userProfileOptions = [] } = useFindManyUserProfile({
         where: {
-            AND: [
-                {
-                    OR: [
-                        // STUDENT types - kiểm tra educationAndTraining không bị xóa
-                        ...(type.includes('STUDENT')
-                            ? [
-                                  {
-                                      educationAndTraining: {
-                                          some: {
-                                              deletedAt: null, // Thêm điều kiện không bị xóa
-                                          },
-                                      },
-                                  },
-                              ]
-                            : []),
+            educationAndTraining: type.includes('STUDENT')
+                ? {
+                      some: {
+                          deletedAt: null, // Thêm điều kiện không bị xóa
+                          trainingObjectType: {
+                              type: type.includes('CIVILIAN')
+                                  ? {
+                                        in: ['CIVILIAN'],
+                                    }
+                                  : {
+                                        notIn: ['CIVILIAN'],
+                                    },
+                          },
+                      },
+                  }
+                : undefined,
+            // LECTURER type - kiểm tra lecturer không bị xóa
+            lecturer:
+                type === 'LECTURER'
+                    ? {
+                          deletedAt: null, // Thêm điều kiện không bị xóa
+                      }
+                    : undefined,
 
-                        // LECTURER type - kiểm tra lecturer không bị xóa
-                        ...(type === 'LECTURER'
-                            ? [
-                                  {
-                                      lecturer: {
-                                          deletedAt: null, // Thêm điều kiện không bị xóa
-                                      },
-                                  },
-                              ]
-                            : []),
-
-                        // STAFF type - kiểm tra staffs không bị xóa
-                        ...(type === 'STAFF'
-                            ? [
-                                  {
-                                      staffs: {
-                                          deletedAt: null, // Thêm điều kiện không bị xóa
-                                      },
-                                  },
-                              ]
-                            : []),
-                    ],
-                },
-            ],
+            // STAFF type - kiểm tra staffs không bị xóa
+            staffs:
+                type === 'STAFF'
+                    ? {
+                          deletedAt: null, // Thêm điều kiện không bị xóa
+                      }
+                    : undefined,
         },
         select: {
             firstName: true,
@@ -117,7 +108,17 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
 
     const { data: ethnicityData = [], refetch: refetchEth } = useFindManyDM_DanToc()
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+        where: {
+            type: type.includes('CIVILIAN')
+                ? {
+                      in: ['CIVILIAN'],
+                  }
+                : {
+                      notIn: ['CIVILIAN'],
+                  },
+        },
+    })
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
 
@@ -762,235 +763,311 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
                         </Col>
                     </>
                 )}
-
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="dateOfBirth" label="Ngày sinh" className="mb-0">
-                        <DatePicker
-                            format="DD/MM/YYYY"
-                            className="w-full"
-                            disabledDate={(date) => date && date > dayjs().endOf('day')}
-                        />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="idCardDate" label="Ngày cấp CCCD" className="mb-0">
-                        <DatePicker
-                            format="DD/MM/YYYY"
-                            className="w-full"
-                            disabledDate={(date) => date && date > dayjs().endOf('day')}
-                        />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="officerNumber"
-                        label="Số hiệu sĩ quan"
-                        className="mb-0"
-                    >
-                        <Input placeholder="Nhập số hiệu sĩ quan / quân nhân" />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="gender" label="Giới tính" className="mb-0">
-                        <Select
-                            allowClear
-                            placeholder="Chọn giới tính"
-                            options={GENDER_LIST.map((i) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            })}
-                        />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="phoneNumber" label="Số điện thoại" className="mb-0">
-                        <Input placeholder="Nhập số điện thoại" />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="email" label="Thư điện tử" className="mb-0">
-                        <Input placeholder="Nhập thư điện tử" />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="healthInsuranceNumber"
-                        label="Thẻ bảo hiểm y tế"
-                        className="mb-0"
-                    >
-                        <Input placeholder="Nhập thẻ bảo hiểm y tế" />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="bankAccountNumber"
-                        label="Số thẻ ngân hàng"
-                        className="mb-0"
-                    >
-                        <Input placeholder="Nhập số thẻ ngân hàng" />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="bankName" label="Ngân hàng" className="mb-0">
-                        <Input placeholder="Nhập ngân hàng" />
-                    </FormItem>
-                </Col>
-
-                {type.includes('STUDENT') && (
-                    <Col sm={12} lg={8}>
-                        <FormItem
-                            form={form}
-                            name="registrationAreaId"
-                            label="Khu vực đăng ký"
-                            className="mb-0"
-                            normalize={(value) => (value === undefined ? null : value)}
-                        >
-                            <Select
-                                allowClear
-                                placeholder="Chọn khu vực đăng ký"
-                                options={registrationAreaData.map((i) => {
-                                    return {
-                                        value: i.Id,
-                                        label: i.sTen,
-                                    }
-                                })}
-                            />
-                        </FormItem>
-                    </Col>
-                )}
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="nationalityId"
-                        label="Quốc tịch"
-                        className="mb-0"
-                        normalize={(value) => (value === undefined ? null : value)}
-                    >
-                        <Select
-                            allowClear
-                            placeholder="Chọn quốc tịch"
-                            options={nationalityData.map((i) => {
-                                return {
-                                    value: i.Id,
-                                    label: i.sTen,
-                                }
-                            })}
-                        />
-                    </FormItem>
-                </Col>
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="religionId"
-                        label="Tôn giáo"
-                        className="mb-0"
-                        normalize={(value) => (value === undefined ? null : value)}
-                    >
-                        <Select
-                            allowClear
-                            placeholder="Chọn tôn giáo"
-                            options={religionData.map((i) => {
-                                return {
-                                    value: i.Id,
-                                    label: i.sTen,
-                                }
-                            })}
-                        />
-                    </FormItem>
-                </Col>
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="ethnicityId"
-                        label="Dân tộc"
-                        className="mb-0"
-                        normalize={(value) => (value === undefined ? null : value)}
-                    >
-                        <Select
-                            allowClear
-                            placeholder="Chọn dân tộc"
-                            options={ethnicityData.map((i) => {
-                                return {
-                                    value: i.Id,
-                                    label: i.sTen,
-                                }
-                            })}
-                        />
-                    </FormItem>
-                </Col>
-
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="unionDate" label="Ngày vào đoàn" className="mb-0">
-                        <DatePicker
-                            format="DD/MM/YYYY"
-                            className="w-full"
-                            disabledDate={(date) => date && date > dayjs().endOf('day')}
-                        />
-                    </FormItem>
-                </Col>
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="unionPlace" label="Nơi vào đoàn" className="mb-0">
-                        <Input placeholder="Nhập nơi vào đoàn" />
-                    </FormItem>
-                </Col>
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="CPVJoinDate" label="Ngày vào Đảng" className="mb-0">
-                        <DatePicker
-                            format="DD/MM/YYYY"
-                            className="w-full"
-                            disabledDate={(date) => date && date > dayjs().endOf('day')}
-                        />
-                    </FormItem>
-                </Col>
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="officialCPVDate"
-                        label="Ngày chính thức"
-                        className="mb-0"
-                    >
-                        <DatePicker
-                            format="DD/MM/YYYY"
-                            className="w-full"
-                            disabledDate={(date) => date && date > dayjs().endOf('day')}
-                        />
-                    </FormItem>
-                </Col>
-                <Col sm={12} lg={8}>
-                    <FormItem form={form} name="CPVJoinPlace" label="Nơi vào Đảng" className="mb-0">
-                        <Input placeholder="Nhập nơi vào Đảng" />
-                    </FormItem>
-                </Col>
-                <Col sm={12} lg={8}>
-                    <FormItem
-                        form={form}
-                        name="tenureDate"
-                        label="Ngày vào niên chế"
-                        className="mb-0"
-                    >
-                        <DatePicker
-                            format="DD/MM/YYYY"
-                            className="w-full"
-                            disabledDate={(date) => date && date > dayjs().endOf('day')}
-                        />
-                    </FormItem>
-                </Col>
             </Row>
 
             <div className="mt-4">
+                <Collapse ghost accordion={true} className="bg-gray-50 shadow-sm">
+                    <Panel
+                        header={
+                            <span className="text-base font-medium text-gray-800">
+                                {' '}
+                                Thông tin cá nhân
+                            </span>
+                        }
+                        key="1"
+                        className="border-none mb-2"
+                    >
+                        <Row gutter={[16, 16]}>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="dateOfBirth"
+                                    label="Ngày sinh"
+                                    className="mb-0"
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) => date && date > dayjs().endOf('day')}
+                                    />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="idCardDate"
+                                    label="Ngày cấp CCCD"
+                                    className="mb-0"
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) => date && date > dayjs().endOf('day')}
+                                    />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="officerNumber"
+                                    label="Số hiệu sĩ quan"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập số hiệu sĩ quan / quân nhân" />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="gender"
+                                    label="Giới tính"
+                                    className="mb-0"
+                                >
+                                    <Select
+                                        allowClear
+                                        placeholder="Chọn giới tính"
+                                        options={GENDER_LIST.map((i) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
+                                        })}
+                                    />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="phoneNumber"
+                                    label="Số điện thoại"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập số điện thoại" />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="email"
+                                    label="Thư điện tử"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập thư điện tử" />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="healthInsuranceNumber"
+                                    label="Thẻ bảo hiểm y tế"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập thẻ bảo hiểm y tế" />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="bankAccountNumber"
+                                    label="Số thẻ ngân hàng"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập số thẻ ngân hàng" />
+                                </FormItem>
+                            </Col>
+
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="bankName"
+                                    label="Ngân hàng"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập ngân hàng" />
+                                </FormItem>
+                            </Col>
+
+                            {type.includes('STUDENT') && (
+                                <Col sm={12} lg={8}>
+                                    <FormItem
+                                        form={form}
+                                        name="registrationAreaId"
+                                        label="Khu vực đăng ký"
+                                        className="mb-0"
+                                        normalize={(value) => (value === undefined ? null : value)}
+                                    >
+                                        <Select
+                                            allowClear
+                                            placeholder="Chọn khu vực đăng ký"
+                                            options={registrationAreaData.map((i) => {
+                                                return {
+                                                    value: i.Id,
+                                                    label: i.sTen,
+                                                }
+                                            })}
+                                        />
+                                    </FormItem>
+                                </Col>
+                            )}
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="nationalityId"
+                                    label="Quốc tịch"
+                                    className="mb-0"
+                                    normalize={(value) => (value === undefined ? null : value)}
+                                >
+                                    <Select
+                                        allowClear
+                                        placeholder="Chọn quốc tịch"
+                                        options={nationalityData.map((i) => {
+                                            return {
+                                                value: i.Id,
+                                                label: i.sTen,
+                                            }
+                                        })}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="religionId"
+                                    label="Tôn giáo"
+                                    className="mb-0"
+                                    normalize={(value) => (value === undefined ? null : value)}
+                                >
+                                    <Select
+                                        allowClear
+                                        placeholder="Chọn tôn giáo"
+                                        options={religionData.map((i) => {
+                                            return {
+                                                value: i.Id,
+                                                label: i.sTen,
+                                            }
+                                        })}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="ethnicityId"
+                                    label="Dân tộc"
+                                    className="mb-0"
+                                    normalize={(value) => (value === undefined ? null : value)}
+                                >
+                                    <Select
+                                        allowClear
+                                        placeholder="Chọn dân tộc"
+                                        options={ethnicityData.map((i) => {
+                                            return {
+                                                value: i.Id,
+                                                label: i.sTen,
+                                            }
+                                        })}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Panel>
+                </Collapse>
+                <Collapse ghost accordion={true} className="bg-gray-50 shadow-sm">
+                    <Panel
+                        header={
+                            <span className="text-base font-medium text-gray-800">Đoàn - Đảng</span>
+                        }
+                        key="1"
+                        className="border-none mb-2"
+                    >
+                        <Row gutter={[16, 16]}>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="unionDate"
+                                    label="Ngày vào đoàn"
+                                    className="mb-0"
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) => date && date > dayjs().endOf('day')}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="unionPlace"
+                                    label="Nơi vào đoàn"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập nơi vào đoàn" />
+                                </FormItem>
+                            </Col>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="CPVJoinDate"
+                                    label="Ngày vào Đảng"
+                                    className="mb-0"
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) => date && date > dayjs().endOf('day')}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="officialCPVDate"
+                                    label="Ngày chính thức vào đảng"
+                                    className="mb-0"
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) => date && date > dayjs().endOf('day')}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="CPVJoinPlace"
+                                    label="Nơi vào Đảng"
+                                    className="mb-0"
+                                >
+                                    <Input placeholder="Nhập nơi vào Đảng" />
+                                </FormItem>
+                            </Col>
+                            <Col sm={12} lg={8}>
+                                <FormItem
+                                    form={form}
+                                    name="tenureDate"
+                                    label="Ngày vào niên chế"
+                                    className="mb-0"
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        className="w-full"
+                                        disabledDate={(date) => date && date > dayjs().endOf('day')}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Panel>
+                </Collapse>
+
                 <Collapse ghost accordion={true} className="bg-gray-50 shadow-sm">
                     <Panel
                         header={

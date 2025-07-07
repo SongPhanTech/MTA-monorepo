@@ -66,6 +66,8 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_REN_LUYEN_LOP_BIEN_CHE": "/quan-ly-diem/ql-diem-ren-luyen/lop-bien-che",
     "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
     "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
+    "QUAN_LY_HO_SO_QL_HOC_VIEN_ID": "/quan-ly-ho-so/ql-hoc-vien/[id]",
+    "QUAN_LY_HO_SO_QL_HOC_VIEN": "/quan-ly-ho-so/ql-hoc-vien",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG": "/quan-ly-ho-so/ql-ren-luyen/danh-gia-tong",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG_LOP_BIEN_CHE": "/quan-ly-ho-so/ql-ren-luyen/danh-gia-tong/lop-bien-che",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA": "/quan-ly-ho-so/ql-ren-luyen/danh-gia",
