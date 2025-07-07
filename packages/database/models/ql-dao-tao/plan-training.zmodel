@@ -11,6 +11,7 @@ import 'training-score'
 import 'scholarship'
 import 'warning'
 import 'training-action'
+import 'ranking'
 
 enum SubjectClassStudentStatus {
   Registered

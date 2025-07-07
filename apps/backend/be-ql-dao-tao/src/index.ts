@@ -73,11 +73,14 @@ app.route('/api/student', StudentApp)
 app.route('/api/training-score', TrainingScoreApp)
 app.route('/api/curriculum', CurriculumApp)
 
+const nv = await prisma.dM_NhanVien.findFirstOrThrow()
+
 app.use(
     '/api/model/*',
     createHonoHandler({
         getPrisma: async (ctx: Context) => {
-            return enhance(prisma, { user: ctx.get('user') })
+            return enhance(prisma, { user: nv })
+            // return enhance(prisma, { user: ctx.get('user') })
         },
     })
 )

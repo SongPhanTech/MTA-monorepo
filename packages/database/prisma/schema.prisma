@@ -290,6 +290,13 @@ enum DecisionStatus {
   @@schema("ql-dao-tao")
 }
 
+enum RankingContext {
+  STUDYING
+  GRADUATION
+
+  @@schema("ql-dao-tao")
+}
+
 enum TemplateFileType {
   UPLOAD
   DOWNLOAD
@@ -1182,28 +1189,6 @@ model ScoreConvert {
   improvementRegister Boolean        @default(false)
   trainingCourse      TrainingCourse @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId    String
-
-  @@schema("ql-dao-tao")
-}
-
-/// Xếp loại học lực
-model AcademicRankingConvert {
-  id               String                  @id() @default(cuid())
-  code             String?                 @unique()
-  active           Boolean                 @default(true)
-  description      String?                 @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime                @default(now())
-  updatedAt        DateTime                @updatedAt()
-  classification   String
-  baseScore        AcademicRankingBaseType
-  base10Min        Float?
-  base10Max        Float?
-  base4Min         Float?
-  base4Max         Float?
-  graduated        Boolean
-  trainingCourse   TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
 
   @@schema("ql-dao-tao")
 }
@@ -2879,6 +2864,66 @@ model DocumentFile {
   studentAcademicDecisionId String?
 
   @@schema("ql-danh-muc")
+}
+
+/// Xếp loại học lực
+model AcademicRankingConvert {
+  id               String                        @id() @default(cuid())
+  code             String?                       @unique()
+  active           Boolean                       @default(true)
+  description      String?                       @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                      @default(now())
+  updatedAt        DateTime                      @updatedAt()
+  classification   String
+  context          RankingContext
+  rankOrder        Int
+  baseScore        AcademicRankingBaseType
+  base10Min        Float?
+  base10Max        Float?
+  base4Min         Float?
+  base4Max         Float?
+  graduated        Boolean
+  trainingCourse   TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  downgradeRules   GraduationRankDowngradeRule[]
+
+  @@unique([trainingCourseId, context, rankOrder])
+  @@schema("ql-dao-tao")
+}
+
+/// Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp
+model GraduationRankDowngradeRule {
+  id            String                             @id() @default(cuid())
+  code          String?                            @unique()
+  active        Boolean                            @default(true)
+  description   String?                            @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime                           @default(now())
+  updatedAt     DateTime                           @updatedAt()
+  initialRank   AcademicRankingConvert             @relation(fields: [initialRankId], references: [id])
+  initialRankId String                             @unique()
+  conditions    GraduationRankDowngradeCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Một điều kiện cụ thể trong bộ quy tắc hạ bậc
+model GraduationRankDowngradeCondition {
+  id              String                      @id() @default(cuid())
+  code            String?                     @unique()
+  active          Boolean                     @default(true)
+  description     String?                     @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt()
+  downgradeRule   GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
+  downgradeRuleId String
+  field           CriteriaField
+  operator        CriteriaOperator
+  value           Float
+
+  @@schema("ql-dao-tao")
 }
 
 model TemplateFile {

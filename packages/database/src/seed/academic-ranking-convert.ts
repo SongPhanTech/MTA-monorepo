@@ -5,8 +5,10 @@ export const academicRankingConversions: Omit<
     'trainingCourseId'
 >[] = [
     {
-        baseScore: 'Base10',
         classification: 'Xuất sắc',
+        context: 'GRADUATION',
+        rankOrder: 1,
+        baseScore: 'Base10',
         base10Min: 9.0,
         base10Max: 10,
         // base4Min: 3.6,
@@ -14,9 +16,10 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        baseScore: 'Base10',
-
         classification: 'Giỏi',
+        context: 'GRADUATION',
+        rankOrder: 2,
+        baseScore: 'Base10',
         base10Min: 8.0,
         base10Max: 8.99,
         // base4Min: 3.2,
@@ -24,8 +27,10 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        baseScore: 'Base10',
         classification: 'Khá',
+        context: 'GRADUATION',
+        rankOrder: 3,
+        baseScore: 'Base10',
         base10Min: 7.0,
         base10Max: 7.99,
         // base4Min: 2.5,
@@ -33,8 +38,10 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        baseScore: 'Base10',
         classification: 'Trung Bình Khá',
+        context: 'GRADUATION',
+        rankOrder: 4,
+        baseScore: 'Base10',
         base10Min: 6.5,
         base10Max: 6.99,
         // base4Min: 2.3,
@@ -42,8 +49,10 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        baseScore: 'Base10',
         classification: 'Trung Bình',
+        context: 'GRADUATION',
+        rankOrder: 5,
+        baseScore: 'Base10',
         base10Min: 5.5,
         base10Max: 6.49,
         // base4Min: 2.0,
@@ -51,8 +60,10 @@ export const academicRankingConversions: Omit<
         graduated: true,
     },
     {
-        baseScore: 'Base10',
         classification: 'Yếu',
+        context: 'GRADUATION',
+        rankOrder: 6,
+        baseScore: 'Base10',
         base10Min: 0,
         base10Max: 5.49,
         // base4Min: 0,
