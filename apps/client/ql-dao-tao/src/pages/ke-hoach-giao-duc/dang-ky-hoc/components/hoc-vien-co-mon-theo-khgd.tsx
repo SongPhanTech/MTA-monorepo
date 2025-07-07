@@ -13,7 +13,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -65,7 +65,10 @@ export default function StudentCourseByPlan({
         },
         queryClient
     )
-    const students = studentData?.data?.data
+
+    const students = useMemo(() => {
+        return studentData?.data?.data || []
+    }, [studentData?.data?.data])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {

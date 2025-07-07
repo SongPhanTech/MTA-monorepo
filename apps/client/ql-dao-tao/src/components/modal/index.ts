@@ -35,6 +35,7 @@ import PutOrganizationUser from './put-organization-user'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
+import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutBuildingModal from './put-toa-nha'
@@ -91,6 +92,7 @@ export {
     PutTrainingTimeModal,
     PutTrainingFormModal,
     PutHocBong,
+    PutScholarshipCriteria,
     PutAcademicRanking,
     PutCloneAcademicRanking,
 }

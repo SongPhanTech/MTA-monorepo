@@ -90,6 +90,8 @@ const PutHocBong = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
+                effectiveFrom: dayjs(initialValue.effectiveFrom),
+                effectiveTo: initialValue.effectiveTo ? dayjs(initialValue.effectiveTo) : undefined,
             })
         } else {
             form.setFieldsValue({
@@ -110,11 +112,10 @@ const PutHocBong = () => {
             title={id ? 'Chỉnh sửa học bổng' : 'Thêm mới học bổng'}
         >
             <Col span={12}>
-                <FormItem form={form} name="trainingObjectTypeIds" label="Khóa học" required>
+                <FormItem form={form} name="trainingCourseId" label="Khóa học" required>
                     <Select
-                        mode="multiple"
                         maxTagCount={'responsive'}
-                        placeholder="Chọn đối tượng đào tạo"
+                        placeholder="Chọn khóa"
                         options={trainingCourseData.map((i: TrainingCourse) => {
                             return {
                                 value: i.id,
@@ -135,26 +136,13 @@ const PutHocBong = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="baseAmount"
-                    label="Số tiền cơ bản"
-                    rules={[
-                        {
-                            type: 'number',
-                            min: 0,
-                            max: 1000000000,
-                            message: 'Số tiền phải từ 0 đến 1,000,000,000',
-                        },
-                    ]}
-                    required
-                >
+                <FormItem form={form} name="baseAmount" label="Số tiền cơ bản" required>
                     <InputNumber
                         placeholder="Nhập số tiền"
                         className="w-full"
                         min={0}
                         max={1000000000}
-                        step={0.01}
+                        step={1}
                         precision={2}
                         decimalSeparator="."
                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -186,19 +174,21 @@ const PutHocBong = () => {
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <FormItem form={form} name={'active'} label="Trạng thái" required>
-                    <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>Đang hoạt động</Radio>
-                        <Radio value={false}>Ngừng hoạt động</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
+            {id && (
+                <Col span={24}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }
