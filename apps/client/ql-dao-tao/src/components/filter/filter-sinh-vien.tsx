@@ -1,4 +1,4 @@
-import { FilterOutlined } from '@ant-design/icons'
+// import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import {
     Button,
@@ -7,7 +7,6 @@ import {
     Flex,
     Form,
     Input,
-    Popover,
     Row,
     //   Select,
     Space,
@@ -164,7 +163,7 @@ const FilterSinhVien = (props: Props) => {
                 <Input
                     id="search"
                     onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                    placeholder="Nhập tên sinh viên..."
+                    placeholder="Tìm kiếm"
                     style={{
                         width: 300,
                         marginRight: 8,
@@ -181,7 +180,7 @@ const FilterSinhVien = (props: Props) => {
                     allowClear
                 />
             </Form.Item>
-            <Popover
+            {/* <Popover
                 content={filterContent}
                 trigger="click"
                 open={open}
@@ -207,7 +206,7 @@ const FilterSinhVien = (props: Props) => {
                         justifyContent: 'center',
                     }}
                 />
-            </Popover>
+            </Popover> */}
         </Flex>
     )
 }

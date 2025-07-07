@@ -1,5 +1,4 @@
 import { UploadOutlined } from '@ant-design/icons'
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { FilterSinhVien } from '@components/filter'
 import DeleteIcon from '@components/icons/delete'
@@ -14,6 +13,7 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { $Enums } from '@workspace/db'
 import {
     useCountStudent,
     useFindManyCurriculumVersion,
@@ -23,16 +23,15 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Flex, Menu, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Menu, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
@@ -52,7 +51,7 @@ export default function UserProfilePageDs() {
 
     const router = useRouter()
 
-    const [selectedTrainingObjectType, setSelectedTrainingObjectType] = useState<string>()
+    // const [selectedTrainingObjectType, setSelectedTrainingObjectType] = useState<string>()
     const [selectedTrainingCourse, setSelectedTrainingCourse] = useState<string>()
     const [selectedFixedClass, setSelectedFixedClass] = useState<string>()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -73,11 +72,11 @@ export default function UserProfilePageDs() {
                     },
                 ],
             },
-            ...(selectedTrainingObjectType && {
-                trainingObjectTypeId: {
-                    equals: selectedTrainingObjectType,
+            trainingObjectType: {
+                type: {
+                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
-            }),
+            },
             ...(selectedTrainingCourse && {
                 fixedClass: {
                     trainingCourseId: {
@@ -122,13 +121,13 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: TrainingOnjectTypeData = [], refetch: refetchTrainingObjectType } =
-        useFindManyTrainingObjectType()
+    // const { data: TrainingOnjectTypeData = [], refetch: refetchTrainingObjectType } =
+    //     useFindManyTrainingObjectType()
 
-    const handleTrainingObjectTypeChange = (value: string) => {
-        setSelectedTrainingObjectType(value)
-        refetch()
-    }
+    // const handleTrainingObjectTypeChange = (value: string) => {
+    //     setSelectedTrainingObjectType(value)
+    //     refetch()
+    // }
 
     const { data: TrainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
@@ -178,31 +177,6 @@ export default function UserProfilePageDs() {
         orderBy: { name: 'asc' },
     })
 
-    const handleFixedClassChange = (value: string) => {
-        setSelectedFixedClass(value)
-
-        const selectedClass = FixedClassData?.find((cls) => cls.id === value)
-
-        if (selectedClass?.trainingCourseId) {
-            const newCourse = selectedClass.trainingCourseId
-
-            // Tự động set khóa học tương ứng với lớp
-            setSelectedTrainingCourse(newCourse)
-        }
-
-        refetch()
-    }
-
-    const filteredFixedClassData = useMemo(() => {
-        if (!selectedTrainingCourse) {
-            return FixedClassData
-        }
-
-        return (
-            FixedClassData?.filter((cls) => cls.trainingCourseId === selectedTrainingCourse) || []
-        )
-    }, [FixedClassData, selectedTrainingCourse])
-
     const { data: count } = useCountStudent({
         where: {
             userProfile: {
@@ -219,11 +193,11 @@ export default function UserProfilePageDs() {
                     },
                 ],
             },
-            ...(selectedTrainingObjectType && {
-                trainingObjectTypeId: {
-                    equals: selectedTrainingObjectType,
+            trainingObjectType: {
+                type: {
+                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
-            }),
+            },
             ...(selectedTrainingCourse && {
                 fixedClass: {
                     trainingCourseId: {
@@ -280,7 +254,6 @@ export default function UserProfilePageDs() {
     const handleModal = () => {
         onOpen({
             preSelectedValues: {
-                trainingObjectTypeId: selectedTrainingObjectType,
                 trainingCourseId: selectedTrainingCourse,
                 fixedClassId: selectedFixedClass,
             },
@@ -432,65 +405,20 @@ export default function UserProfilePageDs() {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                Sinh viên / Học viên
-            </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col flex="1 1">
+                        <Col span={12}>
                             <FilterSinhVien
                                 handleFilterChange={handleFilterChange}
                                 filters={filters}
                                 setFilters={setFilters}
                             />
                         </Col>
-                        <Col flex="1 1" className="max-w-[300px]">
-                            <Select
-                                placeholder="Đối tượng đào tạo"
-                                style={{ width: '100%' }}
-                                options={TrainingOnjectTypeData?.map((item) => {
-                                    return {
-                                        value: item.id,
-                                        label: item.name,
-                                    }
-                                })}
-                                value={selectedTrainingObjectType}
-                                onChange={handleTrainingObjectTypeChange}
-                            />
-                        </Col>
-                        <Col flex="1 1" className="max-w-[300px]">
-                            <Select
-                                placeholder="Khóa đào tạo"
-                                style={{ width: '100%' }}
-                                options={TrainingCourseData?.map((item) => {
-                                    return {
-                                        value: item.id,
-                                        label: item.name,
-                                    }
-                                })}
-                                value={selectedTrainingCourse}
-                                onChange={handleTrainingCourseChange}
-                            />
-                        </Col>
-                        <Col flex="1 1" className="max-w-[300px]">
-                            <Select
-                                placeholder="Lớp"
-                                style={{ width: '100%' }}
-                                options={filteredFixedClassData?.map((item) => {
-                                    return {
-                                        value: item.id,
-                                        label: `${item.code}-${item.name}`,
-                                    }
-                                })}
-                                value={selectedFixedClass}
-                                onChange={handleFixedClassChange}
-                            />
-                        </Col>
 
                         {/* Hàng chứa các button */}
-                        <Col xs={24}>
+                        <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 <Button
                                     type="primary"
@@ -533,27 +461,6 @@ export default function UserProfilePageDs() {
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                            // {
-                            //     title: 'Ảnh',
-                            //     align: 'center',
-                            //     width: 150,
-                            //     className: 'flex justify-center',
-                            //     render: (_, record) => {
-                            //         const avatar = record?.userProfile?.avatar
-                            //         return avatar ? (
-                            //             <Image src={getMinioUrl(avatar)} />
-                            //         ) : (
-                            //             <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                            //                 <UserOutlined
-                            //                     style={{
-                            //                         fontSize: 32,
-                            //                         color: '#bfbfbf',
-                            //                     }}
-                            //                 />
-                            //             </div>
-                            //         )
-                            //     },
-                            // },
                             {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
@@ -606,12 +513,12 @@ export default function UserProfilePageDs() {
                                 title: 'Đối tượng ĐT',
                                 align: 'center',
                                 width: 130,
-                                filters: TrainingOnjectTypeData.map((item) => ({
-                                    text: item.name,
-                                    value: item.name,
-                                })),
-                                onFilter: (value, record) =>
-                                    record.trainingObjectType.name === value,
+                                // filters: TrainingOnjectTypeData.map((item) => ({
+                                //     text: item.name,
+                                //     value: item.name,
+                                // })),
+                                // onFilter: (value, record) =>
+                                //     record.trainingObjectType.name === value,
                                 render: (record) =>
                                     record.trainingObjectType ? record.trainingObjectType.name : '',
                             },

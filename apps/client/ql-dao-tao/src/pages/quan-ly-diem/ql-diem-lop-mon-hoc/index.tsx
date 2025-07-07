@@ -10,7 +10,12 @@ import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { ArchivedAward, SubjectClass, TrainingObjectType } from '@workspace/db'
+import type {
+    ArchivedAward,
+    StudentSubjectScore,
+    SubjectClass,
+    TrainingObjectType,
+} from '@workspace/db'
 import {
     useCountStudentSubjectScore,
     useFindManyStudentSubjectScore,
@@ -374,7 +379,7 @@ export default function SubjectClassScore() {
                     const lyDoScore = scoreLyDo.find((s) => s.id === record.id)
                     const finalScore = Number(renderFinalScore(record).finalScore)
 
-                    const parseScoreValue = (value: any) => {
+                    const parseScoreValue = (value: number | string) => {
                         if (
                             value === undefined ||
                             value === null ||
@@ -546,7 +551,7 @@ export default function SubjectClassScore() {
         e: React.KeyboardEvent<HTMLInputElement>,
         recordId: string,
         type: 'cc' | 'tx' | 'thi',
-        dataTable: any[]
+        dataTable: Partial<StudentSubjectScore>[]
     ) => {
         const fieldOrder: ('cc' | 'tx' | 'thi')[] = ['cc', 'tx', 'thi']
         const currentRowIndex = dataTable.findIndex((item) => item.id === recordId)
@@ -829,7 +834,7 @@ export default function SubjectClassScore() {
                                 dataIndex: 'attendanceScore',
                                 width: 90,
                                 align: 'center',
-                                render: (_: any, record: any) => {
+                                render: (_, record) => {
                                     const isEditable = record.subjectClass?.scoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         : false
@@ -902,7 +907,7 @@ export default function SubjectClassScore() {
                                 dataIndex: 'midtermScore',
                                 width: 90,
                                 align: 'center',
-                                render: (_: any, record: any) => {
+                                render: (_, record) => {
                                     const isEditable = record.subjectClass?.scoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         : false
@@ -975,7 +980,7 @@ export default function SubjectClassScore() {
                                 dataIndex: 'examScore',
                                 width: 90,
                                 align: 'center',
-                                render: (_: any, record: any) => {
+                                render: (_, record) => {
                                     const isEditable = record.subjectClass?.examScoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.examScoreDeadline)
                                         : false

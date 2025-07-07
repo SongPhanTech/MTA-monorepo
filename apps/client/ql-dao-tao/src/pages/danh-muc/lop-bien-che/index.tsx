@@ -155,75 +155,82 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={6}>
-                            <Form.Item label="" name="search">
-                                <Input
-                                    id="search"
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
-                                    }
-                                    placeholder="Tìm kiếm"
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={4}>
-                            <Form.Item
-                                className="mb-0"
-                                name="trainingObjectTypeId"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                                labelAlign="left"
-                            >
-                                <Select
-                                    placeholder="Chọn đối tượng đào tạo"
-                                    options={trainingObjectTypeData.map(
-                                        (i: TrainingObjectType) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        })
-                                    )}
-                                    onChange={(val) =>
-                                        handleFilterChange('trainingObjectTypeId', val)
-                                    }
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={4}>
-                            <Form.Item name="trainingCourseId" label="">
-                                <Select
-                                    placeholder="Chọn khóa"
-                                    options={trainingCourseData.map((i: TrainingCourse) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
+                    <Row gutter={[16, 16]} align="top" justify={'space-between'}>
+                        <Flex>
+                            <Col span={8}>
+                                <Form.Item label="" name="search">
+                                    <Input
+                                        id="search"
+                                        onChange={(e) =>
+                                            handleFilterChange('searchText', e.target.value)
                                         }
-                                    })}
-                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
+                                        placeholder="Tìm kiếm"
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    className="mb-0"
+                                    name="trainingObjectTypeId"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelAlign="left"
+                                >
+                                    <Select
+                                        placeholder="Chọn đối tượng đào tạo"
+                                        options={trainingObjectTypeData.map(
+                                            (i: TrainingObjectType) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            })
+                                        )}
+                                        onChange={(val) =>
+                                            handleFilterChange('trainingObjectTypeId', val)
+                                        }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name="trainingCourseId" label="">
+                                    <Select
+                                        placeholder="Chọn khóa"
+                                        options={trainingCourseData.map((i: TrainingCourse) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
+                                        })}
+                                        onChange={(val) =>
+                                            handleFilterChange('trainingCourseId', val)
+                                        }
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
 
-                        <Col span={6}>
-                            <Form.Item name="curriculumVersionId" label="">
-                                <Select
-                                    placeholder="Chọn chương trình đào tạo"
-                                    options={curriculumVersionData.map((i: CurriculumVersion) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
+                            <Col span={8}>
+                                <Form.Item name="curriculumVersionId" label="">
+                                    <Select
+                                        placeholder="Chọn chương trình đào tạo"
+                                        options={curriculumVersionData.map(
+                                            (i: CurriculumVersion) => {
+                                                return {
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }
+                                            }
+                                        )}
+                                        onChange={(val) =>
+                                            handleFilterChange('curriculumVersionId', val)
                                         }
-                                    })}
-                                    onChange={(val) =>
-                                        handleFilterChange('curriculumVersionId', val)
-                                    }
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Flex>
+
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
                                 {/* <Button onClick={handleOpenGPASemester} type="primary">
