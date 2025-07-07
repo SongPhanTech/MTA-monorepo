@@ -213,6 +213,7 @@ Table SchoolYear {
   milestone Milestone [not null]
   studentTrainingSchoolYear StudentTrainingSchoolYear [not null]
   studentYearResult StudentYearResult [not null]
+  studentAcademicDecision StudentAcademicDecision [not null]
 
   Note: 'Năm học'
 }
@@ -239,6 +240,7 @@ Table Semester {
   studentSemesterResult StudentSemesterResult [not null]
   scholarshipAward ScholarshipAward [not null]
   academicWarning AcademicWarning [not null]
+  studentAcademicDecision StudentAcademicDecision [not null]
 
   indexes {
     (schoolYearId, semesterType) [unique]
@@ -297,6 +299,7 @@ Table TrainingCourse {
   studentTrainingCourse StudentTrainingCourse [not null]
   scholarships Scholarship [not null]
   academicWarningRule AcademicWarningRule [not null]
+  academicActionConfig AcademicActionConfig [not null]
 
   Note: 'Khoá học'
 }
@@ -929,6 +932,7 @@ Table Student {
   studentYearResult StudentYearResult [not null]
   scholarshipAwards ScholarshipAward [not null]
   academicWarning AcademicWarning [not null]
+  studentAcademicDecision StudentAcademicDecision [not null]
 
   Note: 'HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang'
 }
@@ -2245,14 +2249,18 @@ Table AcademicWarningRule {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  ruleType AcademicWarningRuleType [not null]
-  threshold Float
-  semesterCondition Int
-  yearCondition Int
+  field CriteriaField [not null]
+  operator CriteriaOperator [not null]
+  threshold Float [not null]
+  tuple String[] [not null]
   severity Int [not null]
+  yearCondition Int
+  semesterCondition Int
   trainingCourse TrainingCourse [not null]
   trainingCourseId String [not null]
   academicWarning AcademicWarning [not null]
+
+  Note: 'Quy tắc cấu hình Cảnh báo học tập (phiên bản cải tiến)'
 }
 
 Table AcademicWarning {
@@ -2306,6 +2314,90 @@ Table DisciplinaryWarningReason {
   severityLevel Int [not null]
 }
 
+Table AcademicActionConfig {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  actionType AcademicActionType [not null]
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
+  ruleSets AcademicActionRuleSet [not null]
+  decisions StudentAcademicDecision [not null]
+
+  Note: 'Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)'
+}
+
+Table AcademicActionRuleSet {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  config AcademicActionConfig [not null]
+  configId String [not null]
+  conditions AcademicActionCondition [not null]
+
+  Note: 'Bộ quy tắc, chứa nhiều điều kiện (AND logic)
+Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
+Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)'
+}
+
+Table AcademicActionCondition {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  ruleSet AcademicActionRuleSet [not null]
+  ruleSetId String [not null]
+  field CriteriaField [not null]
+  operator CriteriaOperator [not null]
+  value Float [not null]
+  tuple String[] [not null]
+  yearCondition Int
+  isPriorityStudent Boolean
+
+  Note: 'Điều kiện cụ thể để kích hoạt xử lý'
+}
+
+Table StudentAcademicDecision {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  semester Semester
+  semesterId String
+  schoolYear SchoolYear
+  schoolYearId String
+  appliedConfig AcademicActionConfig [not null]
+  appliedConfigId String [not null]
+  actionTaken AcademicActionType [not null]
+  decisionDate DateTime [default: `now()`, not null]
+  reason String
+  documentEvidence DocumentFile [not null]
+  status DecisionStatus [not null, default: 'PENDING']
+
+  indexes {
+    (studentId, semesterId, schoolYearId, appliedConfigId) [unique]
+  }
+
+  Note: 'Quyết định xử lý học tập cho sinh viên'
+}
+
 Table DocumentFile {
   id String [pk]
   code String [unique]
@@ -2328,6 +2420,8 @@ Table DocumentFile {
   curriculumVersionId String
   subjectVersion SubjectVersion
   subjectVersionId String
+  studentAcademicDecision StudentAcademicDecision
+  studentAcademicDecisionId String
 }
 
 Table TemplateFile {
@@ -2558,33 +2652,31 @@ Enum StudentTrainingType {
 }
 
 Enum CriteriaField {
-  TOTAL_CREDITS
-  REGISTERED_CREDITS
-  ACCUMULATED_CREDITS_PERCENT
-  COURSE_GRADE_MIN
-  GRADUATION_GRADE_MIN
   SEMESTER_GPA
+  YEARLY_GPA
+  CUMULATIVE_GPA
   ENTRY_SCORE
-  CONDUCT
-  FOREIGN_LANGUAGE
+  COURSE_GRADE_LOWEST
+  GRADUATION_COURSE_GRADE_LOWEST
+  SEMESTER_REGISTERED_CREDITS
+  SEMESTER_PASSED_CREDITS
+  SEMESTER_FAILED_CREDITS
+  SEMESTER_FAILED_CREDITS_PERCENT
+  YEAR_FAILED_CREDITS
+  CUMULATIVE_PASSED_CREDITS
+  CUMULATIVE_DEBT_CREDITS
+  CUMULATIVE_PROGRESS_PERCENT
   ACADEMIC_WARNING_LEVEL
   DISCIPLINARY_WARNING_LEVEL
-}
-
-Enum CriteriaOperator {
-  GTE
-  LTE
-  EQ
-  IN
-}
-
-Enum AcademicWarningRuleType {
-  GPA_SEMESTER_BELOW
-  GPA_CUMULATIVE_BELOW
-  FAILED_CREDITS_SEMESTER
-  FAILED_CREDITS_TOTAL
-  GPA_ZERO
-  NO_REGISTRATION
+  REPEAT_YEAR_COUNT
+  CONDUCT_SCORE
+  HAS_PASSED_FOREIGN_LANGUAGE
+  HAS_REGISTERED_FOR_SEMESTER
+  IS_PRIORITY_STUDENT
+  IS_CLASS_MONITOR_OR_LEADER
+  IS_STUDY_DURATION_EXCEEDED
+  IS_DEBT_SUBJECT_CONSECUTIVE
+  HAS_IMPROVEMENT_REGISTRATION
 }
 
 Enum DisciplinaryWarningReasonType {
@@ -2594,6 +2686,26 @@ Enum DisciplinaryWarningReasonType {
   EXAM_PROXY_REPEAT
   LATE_TUITION_1
   LATE_TUITION_2
+}
+
+Enum CriteriaOperator {
+  GTE
+  LTE
+  EQ
+  IN
+}
+
+Enum AcademicActionType {
+  REPEAT_YEAR
+  SUSPENSION
+  EXPULSION
+}
+
+Enum DecisionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  APPEALED
 }
 
 Enum TemplateFileType {
@@ -2900,6 +3012,20 @@ Ref: AcademicWarning.semesterId > Semester.id
 
 Ref: DisciplinaryWarningReason.warningId > DisciplinaryWarning.id
 
+Ref: AcademicActionConfig.trainingCourseId > TrainingCourse.id
+
+Ref: AcademicActionRuleSet.configId > AcademicActionConfig.id
+
+Ref: AcademicActionCondition.ruleSetId > AcademicActionRuleSet.id
+
+Ref: StudentAcademicDecision.studentId > Student.id
+
+Ref: StudentAcademicDecision.semesterId > Semester.id
+
+Ref: StudentAcademicDecision.schoolYearId > SchoolYear.id
+
+Ref: StudentAcademicDecision.appliedConfigId > AcademicActionConfig.id
+
 Ref: DocumentFile.archivedCertificateId > ArchivedCertificate.id
 
 Ref: DocumentFile.archivedAwardId > ArchivedAward.id
@@ -2909,3 +3035,5 @@ Ref: DocumentFile.curriculumId > Curriculum.id
 Ref: DocumentFile.curriculumVersionId > CurriculumVersion.id
 
 Ref: DocumentFile.subjectVersionId > SubjectVersion.id
+
+Ref: DocumentFile.studentAcademicDecisionId > StudentAcademicDecision.id
