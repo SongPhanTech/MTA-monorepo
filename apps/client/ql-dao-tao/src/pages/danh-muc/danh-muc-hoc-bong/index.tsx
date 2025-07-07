@@ -181,46 +181,52 @@ export default function Scholarship() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={4}>
-                            <Input
-                                id="search"
-                                onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                                style={{ width: '100%' }}
-                                placeholder="Tìm kiếm tên học bổng"
-                                allowClear
-                            />
-                        </Col>
-                        <Col span={4}>
-                            <Select
-                                placeholder="Chọn khóa"
-                                options={trainingCourseData.map((i: TrainingCourse) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
+                        <Flex>
+                            <Col span={8}>
+                                <Input
+                                    id="search"
+                                    onChange={(e) =>
+                                        handleFilterChange('searchText', e.target.value)
                                     }
-                                })}
-                                style={{ width: '100%' }}
-                                onChange={(val) => handleFilterChange('trainingCourseId', val)}
-                                allowClear
-                            />
-                        </Col>
-                        <Col span={4}>
-                            <Select
-                                placeholder="Chọn đối tượng đào tạo"
-                                options={trainingObjectTypeData.map((i: TrainingObjectType) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
+                                    style={{ width: '100%' }}
+                                    placeholder="Tìm kiếm tên học bổng"
+                                    allowClear
+                                />
+                            </Col>
+                            <Col span={8}>
+                                <Select
+                                    placeholder="Chọn khóa"
+                                    options={trainingCourseData.map((i: TrainingCourse) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
+                                        }
+                                    })}
+                                    style={{ width: '100%' }}
+                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                                    allowClear
+                                />
+                            </Col>
+                            <Col span={8}>
+                                <Select
+                                    placeholder="Chọn đối tượng đào tạo"
+                                    options={trainingObjectTypeData.map((i: TrainingObjectType) => {
+                                        return {
+                                            value: i.id,
+                                            label: i.name,
+                                        }
+                                    })}
+                                    style={{ width: '100%' }}
+                                    onChange={(val) =>
+                                        handleFilterChange('trainingObjectTypeId', val)
                                     }
-                                })}
-                                style={{ width: '100%' }}
-                                onChange={(val) => handleFilterChange('trainingObjectTypeId', val)}
-                                allowClear
-                                disabled={!filters?.trainingCourseId}
-                            />
-                        </Col>
+                                    allowClear
+                                    disabled={!filters?.trainingCourseId}
+                                />
+                            </Col>
+                        </Flex>
 
-                        <Col span={8}>
+                        <Col span={4}>
                             <Flex justify="end" gap={4}>
                                 <Button onClick={() => onOpenPutHocBong()} type="primary">
                                     <BookPlus />

@@ -518,6 +518,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Quản lý hồ sơ sinh viên',
                     },
                     {
+                        id: 'ql-hoc-vien',
+                        label: 'Quản lý hồ sơ học viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_HOC_VIEN,
+                        description: 'Quản lý hồ sơ học viên',
+                    },
+                    {
                         id: 'user-profile-lecture',
                         label: 'Quản lý hồ sơ giảng viên',
                         icon: IdcardOutlined,

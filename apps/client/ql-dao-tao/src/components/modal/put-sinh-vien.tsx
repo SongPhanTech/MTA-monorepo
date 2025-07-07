@@ -14,15 +14,20 @@ import {
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import type { UploadFile } from 'antd'
-import { Col, Form, message } from 'antd'
+import { Col, Form, message, Row, Tabs } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { $Enums } from '@workspace/db'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
-import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
-import { type PutStudentProfile, tabs, type UserProfileType } from './quan-ly-ho-so/type'
+import KhenThuongKyLuatTab from './quan-ly-ho-so/tabs/khen-thuong-ky-luat'
+import ThanNhanTab from './quan-ly-ho-so/tabs/tab-danh-sach-than-nhan'
+import DoiTuongChinhSachTab from './quan-ly-ho-so/tabs/tab-doi-tuong-chinh-sach'
+import QuaTrinhDaoTaoTab from './quan-ly-ho-so/tabs/tab-qua-trinh-dao-tao'
+import ThongTinCaNhanTab from './quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
+import TrinhDoChungChiTab from './quan-ly-ho-so/tabs/tab-trinh-do-chung-chi'
+// import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
+import type { PutStudentProfile, UserProfileType } from './quan-ly-ho-so/type'
 
 dayjs.locale('vi')
 
@@ -271,6 +276,57 @@ const PutStudentModal = () => {
         hideSpinner()
     }
 
+    const tabsData = useMemo(() => {
+        return [
+            {
+                key: '1',
+                label: 'Thông tin sinh viên',
+                children: (
+                    <Row gutter={[16, 16]}>
+                        <Col span={24}>
+                            <ThongTinCaNhanTab
+                                avatar={avatar}
+                                setAvatar={setAvatar}
+                                id={id}
+                                type={'CIVILIAN_STUDENT'}
+                            />
+                        </Col>
+                    </Row>
+                ),
+            },
+            {
+                key: '3',
+                label: 'Trình độ, chứng chỉ',
+                children: <TrinhDoChungChiTab />,
+                forceRender: true,
+            },
+            {
+                key: '5',
+                label: 'Quá trình đào tạo',
+                children: <QuaTrinhDaoTaoTab />,
+                forceRender: true,
+            },
+            {
+                key: '6',
+                label: 'Khen thưởng - kỷ luật',
+                children: <KhenThuongKyLuatTab />,
+                forceRender: true,
+            },
+            {
+                key: '7',
+                label: 'Đối tượng chính sách',
+                children: <DoiTuongChinhSachTab />,
+                forceRender: true,
+            },
+            {
+                key: '9',
+                label: 'Thân nhân',
+                children: <ThanNhanTab />,
+                forceRender: true,
+            },
+        ]
+    }, [avatar, id])
+
     useEffect(() => {
         if (studentData) {
             form.setFieldsValue({
@@ -392,24 +448,14 @@ const PutStudentModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa sinh viên/ học viên' : 'Thêm sinh viên/ học viên'}
+            title={id ? 'Chỉnh sửa học viên' : 'Thêm học viên'}
             className="w-[90vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
-            <Col xs={24} md={5}>
-                <SidebarMenu tabs={tabs} activeKey={activeKey} setActiveKey={setActiveKey} />
-            </Col>
-
-            <Col xs={24} md={19}>
-                <TabQuanLyHoSo
-                    activeKey={activeKey}
-                    setActiveKey={setActiveKey}
-                    type="CIVILIAN_STUDENT"
-                    avatar={avatar}
-                    setAvatar={setAvatar}
-                />
+            <Col span={24}>
+                <Tabs className="w-full" items={tabsData} />
             </Col>
         </PutFormModal>
     )

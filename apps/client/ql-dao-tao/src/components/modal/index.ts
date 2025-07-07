@@ -16,6 +16,7 @@ import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
 import PutUserProfileLectureModal from './put-giang-vien'
 import PutHocBong from './put-hoc-bong'
+import PutHocvienModal from './put-hoc-vien'
 import PutTrainingCourseModal from './put-khoa-huan-luyen'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
 import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
@@ -92,6 +93,7 @@ export {
     PutTrainingTimeModal,
     PutTrainingFormModal,
     PutHocBong,
+    PutHocvienModal,
     PutScholarshipCriteria,
     PutAcademicRanking,
     PutCloneAcademicRanking,

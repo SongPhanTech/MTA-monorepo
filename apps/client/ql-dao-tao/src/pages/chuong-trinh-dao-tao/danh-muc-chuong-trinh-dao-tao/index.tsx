@@ -371,7 +371,7 @@ export default function TrainingProgramCatalog() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
@@ -392,8 +392,8 @@ export default function TrainingProgramCatalog() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={10}>
-                                    <Form.Item className="mb-0" name="trainingObjectId">
+                                <Col span={8} className="max-w-[200px]">
+                                    <Form.Item name="trainingObjectId">
                                         <Select
                                             placeholder="Chọn đối tượng đào tạo"
                                             options={trainingObjectTypeData.map(
@@ -426,7 +426,7 @@ export default function TrainingProgramCatalog() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={10}>
+                                <Col span={8}>
                                     <Form.Item className="mb-0" name="trainingMajorId">
                                         <Select
                                             placeholder="Chọn chuyên ngành đào tạo"
