@@ -9,8 +9,8 @@ import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse } from '@workspace/db'
 import {
     useCountTrainingCourse,
-    useDeleteManyScoreConvert,
-    useDeleteScoreConvert,
+    useDeleteAcademicRankingConvert,
+    useDeleteManyAcademicRankingConvert,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
@@ -42,7 +42,7 @@ export default function AcademicRankingConvertPage() {
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
             academicRankingConvert: {
-                some: {
+                every: {
                     active:
                         filters.active === 'true'
                             ? true
@@ -100,12 +100,12 @@ export default function AcademicRankingConvertPage() {
         onOpen()
     }
 
-    const { mutateAsync: UpdateScoreConvert } = useDeleteScoreConvert()
-    const { mutateAsync: UpdateManyScoreConvert } = useDeleteManyScoreConvert()
+    const { mutateAsync: UpdateAcademicRanking } = useDeleteAcademicRankingConvert()
+    const { mutateAsync: UpdateManyAcademicRanking } = useDeleteManyAcademicRankingConvert()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await UpdateScoreConvert({
+            await UpdateAcademicRanking({
                 where: {
                     id,
                 },
@@ -120,7 +120,7 @@ export default function AcademicRankingConvertPage() {
         try {
             showSpinner()
 
-            await UpdateManyScoreConvert({
+            await UpdateManyAcademicRanking({
                 where: {
                     trainingCourseId: record.id,
                 },
