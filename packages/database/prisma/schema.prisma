@@ -101,6 +101,13 @@ enum AcademicRankingBaseType {
   @@schema("ql-dao-tao")
 }
 
+enum RankingContext {
+  STUDYING
+  GRADUATION
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentStatus {
   ENROLLED
   GRADUATED
@@ -1196,6 +1203,8 @@ model AcademicRankingConvert {
   createdAt        DateTime                @default(now())
   updatedAt        DateTime                @updatedAt()
   classification   String
+  context          RankingContext
+  rankOrder        Int
   baseScore        AcademicRankingBaseType
   base10Min        Float?
   base10Max        Float?
@@ -1205,6 +1214,7 @@ model AcademicRankingConvert {
   trainingCourse   TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
 
+  @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")
 }
 
