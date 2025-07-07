@@ -1,9 +1,12 @@
-import { useContext, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useCallback, useContext, useEffect } from 'react'
 import { fetchSession } from '.'
 import { SessionContext } from './provider'
 
 export const useSession = () => {
     const { sessionState, setSessionState, setStatus, status } = useContext(SessionContext)
+    const router = useRouter()
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (status === 'loading') return
@@ -16,18 +19,18 @@ export const useSession = () => {
         }
     }, [])
 
-    // const goToLastPage = useCallback(() => {
-    //     const lastPage = localStorage.getItem('lastPage')
-    //     if (lastPage && lastPage !== '/') {
-    //         window.location.href = lastPage
-    //         return true
-    //     }
-    //     return false
-    // }, [])
+    const goToLastPage = useCallback(() => {
+        const lastPage = localStorage.getItem('lastPage')
+        if (lastPage && lastPage !== '/') {
+            router.push(lastPage)
+            return true
+        }
+        return false
+    }, [router])
 
     return {
         status,
         data: sessionState,
-        // goToLastPage,
+        goToLastPage,
     }
 }
