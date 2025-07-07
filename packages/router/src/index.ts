@@ -443,7 +443,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_KHOA_HUAN_LUYEN,
                         description: 'Danh mục khoá đào tạo',
                     },
-
+                    {
+                        id: 'xep-loai-hoc-luc',
+                        label: 'Xếp loại học lực',
+                        icon: BookOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_HOC_LUC,
+                        description: 'Xếp loại học lực',
+                    },
                     {
                         id: 'danh-muc-danh-muc-phong-hoc',
                         label: 'Danh mục phòng học',
