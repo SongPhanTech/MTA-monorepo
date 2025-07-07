@@ -3,7 +3,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutHocBong, PutTrainingMajorModal } from '@components/modal'
+import { PutHocBong, PutScholarshipCriteria } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
@@ -18,6 +18,7 @@ import {
     useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookPlus, Check, X } from 'lucide-react'
 import type React from 'react'
@@ -126,7 +127,7 @@ export default function Scholarship() {
         scholarshipId: string
         scholarshipCriteriaId: string
     }>({
-        tag: PutTrainingMajorModal.name,
+        tag: PutScholarshipCriteria.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -246,7 +247,7 @@ export default function Scholarship() {
                             effectiveFrom,
                             effectiveTo,
                         }) =>
-                            `${code} - ${name} - ${trainingCourse?.name} - ${effectiveFrom} - ${effectiveTo}`
+                            `${code || ''} - ${name || ''} - ${trainingCourse?.name || ''} - ${trainingCourse?.trainingObjectType?.name || ''} - ${(effectiveFrom && dayjs(effectiveFrom).format('DD/MM/YYYY')) || ''} - ${(effectiveTo && dayjs(effectiveTo).format('DD/MM/YYYY')) || ''}`
                         }
                         defaultExpandAll
                         currentPage={currentPage}
@@ -267,10 +268,10 @@ export default function Scholarship() {
                                 render: (value) => getCriteriaFieldLabel(value),
                             },
                             {
-                                title: 'Đảo ngược operator',
+                                title: 'Đảo ngược so sánh',
                                 dataIndex: 'invert',
                                 align: 'center',
-                                width: 100,
+                                width: 80,
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">

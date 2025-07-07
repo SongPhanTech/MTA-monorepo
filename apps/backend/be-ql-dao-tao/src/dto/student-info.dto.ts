@@ -48,7 +48,7 @@ export const StudentScholarship = z.object({
     userProfile: z.any().describe('Thông tin người dùng'),
 })
 
-export const StudentDiscipline = z.object({
+export const StudentAcademicWarning = z.object({
     id: z.string().describe('ID của sinh viên'),
     stt: z.number().describe('STT'),
     hoTen: z.string().describe('Họ tên sinh viên'),
@@ -57,6 +57,8 @@ export const StudentDiscipline = z.object({
     khoa: z.string().describe('Khoa'),
     chuyenNganh: z.string().describe('Chuyên ngành'),
     kyDangHoc: z.number().describe('Kỳ đăng học'),
+    namDangHoc: z.number().describe('Năm đang học'),
+    heSoDiem: z.number().describe('Loại hệ số điểm'),
     kyCuoi: z.boolean().describe('Kỳ cuối'),
     ngaySinh: z.string().describe('Ngày sinh'),
     diemTrungBinh4: z.number().describe('Điểm trung bình hệ 4'),
@@ -81,4 +83,4 @@ export const StudentTemplateData = z.object({
 export type StudentInfo = z.infer<typeof StudentInfo>
 export type StudentTemplateData = z.infer<typeof StudentTemplateData>
 export type StudentScholarship = z.infer<typeof StudentScholarship>
-export type StudentDiscipline = z.infer<typeof StudentDiscipline>
+export type StudentAcademicWarning = z.infer<typeof StudentAcademicWarning>

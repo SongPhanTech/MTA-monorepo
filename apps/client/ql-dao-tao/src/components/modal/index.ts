@@ -7,6 +7,7 @@ import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutCertificateScoreModal from './put-chung-chi-score'
 import PutConvertScore from './put-chuyen-doi-diem'
 import PutTrainingMajorModal from './put-chuyen-nganh'
+import PutCloneAcademicRanking from './put-clone-acdemic-ranking'
 import PutCloneConvertScore from './put-clone-convert-score'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
@@ -35,6 +36,7 @@ import PutOrganizationUser from './put-organization-user'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
+import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutBuildingModal from './put-toa-nha'
@@ -42,6 +44,7 @@ import PutTrainingFormModal from './put-training-form'
 import PutTrainingTimeModal from './put-training-time'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
+import PutAcademicRanking from './put-xep-loai-hoc-luc'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 export {
@@ -91,4 +94,7 @@ export {
     PutTrainingFormModal,
     PutHocBong,
     PutHocvienModal,
+    PutScholarshipCriteria,
+    PutAcademicRanking,
+    PutCloneAcademicRanking,
 }
