@@ -1,27 +1,30 @@
 import '../base'
 import '../ql-dao-tao/plan-training'
+import '../ql-dao-tao/training-action'
 
 model DocumentFile extends Base {
-  name                  String
-  path                  String
-  size                  BigInt
-  mimeType              String?
+  name                      String
+  path                      String
+  size                      BigInt
+  mimeType                  String?
 
-  archivedCertificate   ArchivedCertificate? @relation(fields: [archivedCertificateId], references: [id])
-  archivedCertificateId String?
+  archivedCertificate       ArchivedCertificate?     @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId     String?
 
 
-  archivedAward         ArchivedAward?       @relation(fields: [archivedAwardId], references: [id])
-  archivedAwardId       String?
+  archivedAward             ArchivedAward?           @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId           String?
 
-  curriculum            Curriculum?          @relation(fields: [curriculumId], references: [id])
-  curriculumId          String?
+  curriculum                Curriculum?              @relation(fields: [curriculumId], references: [id])
+  curriculumId              String?
 
-  curriculumVersion     CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId   String?
+  curriculumVersion         CurriculumVersion?       @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId       String?
 
-  subjectVersion        SubjectVersion?      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId      String?
+  subjectVersion            SubjectVersion?          @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId          String?
 
+  studentAcademicDecision   StudentAcademicDecision? @relation(fields: [studentAcademicDecisionId], references: [id])
+  studentAcademicDecisionId String?
   @@schema("ql-danh-muc")
 }
