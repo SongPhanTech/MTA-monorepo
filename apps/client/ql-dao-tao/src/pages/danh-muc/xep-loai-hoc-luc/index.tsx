@@ -2,13 +2,13 @@ import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutCloneConvertScore, PutConvertScore } from '@components/modal'
+import { PutAcademicRanking, PutCloneAcademicRanking } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse } from '@workspace/db'
 import {
-    useCountScoreConvert,
+    useCountTrainingCourse,
     useDeleteManyScoreConvert,
     useDeleteScoreConvert,
     useFindManyTrainingCourse,
@@ -69,7 +69,7 @@ export default function AcademicRankingConvertPage() {
             },
         },
         include: {
-            scoreConverts: {
+            academicRankingConvert: {
                 orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
             },
         },
@@ -78,20 +78,7 @@ export default function AcademicRankingConvertPage() {
         },
     })
 
-    const { data: count } = useCountScoreConvert({
-        where: {
-            active:
-                filters.active === 'true' ? true : filters.active === 'false' ? false : undefined,
-            ...(filters.searchText && filters.searchText.trim() !== ''
-                ? {
-                      AND: [
-                          { base10Min: { lte: Number(filters.searchText) } },
-                          { base10Max: { gte: Number(filters.searchText) } },
-                      ],
-                  }
-                : {}),
-        },
-    })
+    const { data: count } = useCountTrainingCourse({})
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -100,11 +87,11 @@ export default function AcademicRankingConvertPage() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: PutConvertScore.name,
+        tag: PutAcademicRanking.name,
     })
 
     const { onOpen: onOpenCopy } = useDisclosure<{ record: TrainingCourse }>({
-        tag: PutCloneConvertScore.name,
+        tag: PutCloneAcademicRanking.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -247,11 +234,16 @@ export default function AcademicRankingConvertPage() {
                                 dataIndex: 'base10Max',
                                 align: 'center',
                             },
-                            // {
-                            //     title: 'Điểm hệ 4',
-                            //     dataIndex: 'base4',
-                            //     align: 'center',
-                            // },
+                            {
+                                title: 'Điểm hệ 4 từ',
+                                dataIndex: 'base4Min',
+                                align: 'center',
+                            },
+                            {
+                                title: 'Điểm hệ 4 đến',
+                                dataIndex: 'base4Max',
+                                align: 'center',
+                            },
                             {
                                 title: 'Xếp loại',
                                 dataIndex: 'classification',
@@ -295,7 +287,7 @@ export default function AcademicRankingConvertPage() {
                         ]}
                         headerTitleKey={'name'}
                         currentPage={currentPage}
-                        childrenFieldName="scoreConverts"
+                        childrenFieldName="academicRankingConvert"
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

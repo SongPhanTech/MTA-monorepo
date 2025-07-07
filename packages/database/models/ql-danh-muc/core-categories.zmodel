@@ -162,7 +162,6 @@ model DM_UngDung extends CoreBase {
 }
 
 model DM_NhanVien extends CoreBase {
-  sTen                String
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?

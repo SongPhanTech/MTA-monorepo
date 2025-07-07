@@ -5,10 +5,9 @@ import 'student'
 
 model Scholarship extends Base {
   name             String
-  bonusGrade       Float                 @default(0)
   baseAmount       Decimal // Số tiền cơ bản (nếu áp dụng kiểu nhân hệ số)
   multiplier       Float                 @default(1) // Hệ số nhân với baseAmount (1.2, 1.4…), nếu áp dụng
-  effectiveFrom    DateTime
+  effectiveFrom    DateTime?
   effectiveTo      DateTime?
 
   trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
