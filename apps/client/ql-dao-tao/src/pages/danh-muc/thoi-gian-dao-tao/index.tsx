@@ -1,45 +1,34 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutTrainingTimeModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { CurriculumVersion, TrainingCourse } from '@workspace/db'
 import {
     useCountTrainingTime,
-    useFindManyCurriculumVersion,
     useFindManyTrainingTime,
-    useUpdateFixedClass,
+    useUpdateTrainingTime,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
-import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
+export default function TrainingTimePage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_searchText, _setSearchText] = useState<string>('')
     const [filters, setFilters] = useState({
         searchText: '',
-        trainingCourseId: trainingCourse ? trainingCourse.id : undefined,
-        trainingObjectTypeId: undefined,
-        curriculumVersionId: undefined,
     })
 
-    const router = useRouter()
     const { data = [], refetch } = useFindManyTrainingTime({
         where: {
             OR: [
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
-            curriculumVersion: {
-                some: {
-                    id: filters.curriculumVersionId,
-                },
-            },
         },
         orderBy: {
             name: 'asc',
@@ -48,9 +37,9 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
-        orderBy: { name: 'asc' },
-    })
+    // const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+    //     orderBy: { name: 'asc' },
+    // })
 
     const { data: count } = useCountTrainingTime({
         where: {
@@ -58,11 +47,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
-            curriculumVersion: {
-                some: {
-                    id: filters.curriculumVersionId,
-                },
-            },
         },
     })
 
@@ -82,11 +66,11 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         onOpen()
     }
 
-    const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
+    const { mutateAsync: updateTrainingTime } = useUpdateTrainingTime()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateFixedClass({
+            await updateTrainingTime({
                 where: {
                     id,
                 },
@@ -124,7 +108,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 />
                             </Form.Item>
                         </Col>
-
+                        {/* 
                         <Col span={6}>
                             <Form.Item name="curriculumVersionId" label="">
                                 <Select
@@ -141,7 +125,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     allowClear
                                 />
                             </Form.Item>
-                        </Col>
+                        </Col> */}
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
                                 <Button onClick={handleModal} type="primary">
@@ -176,6 +160,24 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 width: 200,
                                 dataIndex: 'name',
                             },
+                            {
+                                title: 'Thao tác',
+                                width: 50,
+                                align: 'center',
+                                render: (_, { id }) => (
+                                    <Row className="justify-center gap-2">
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, id)}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: () => handleDelete(id),
+                                            }}
+                                        />
+                                    </Row>
+                                ),
+                            },
                         ]}
                         data={data}
                         pagination={{
@@ -194,6 +196,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     )
 }
 
-FixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
+TrainingTimePage.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

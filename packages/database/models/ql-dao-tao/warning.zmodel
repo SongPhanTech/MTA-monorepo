@@ -5,29 +5,25 @@ import 'training-score'
 import 'categories'
 import 'plan-training'
 import 'scholarship'
+import 'criteria'
 
+/// Quy tắc cấu hình Cảnh báo học tập (phiên bản cải tiến)
 model AcademicWarningRule extends Base {
-  ruleType          AcademicWarningRuleType
-  threshold         Float?    // Ngưỡng giới hạn (nếu có)
-  semesterCondition Int?      // Áp dụng cho học kỳ thứ mấy, null nếu áp dụng mọi học kỳ
-  yearCondition     Int?      // Áp dụng cho năm học thứ mấy, null nếu áp dụng mọi năm
-  severity          Int      // 1 hoặc 2 mức tăng
+  field             CriteriaField      // Trường dữ liệu để kiểm tra, ví dụ: SEMESTER_GPA
+  operator          CriteriaOperator   // Toán tử so sánh, ví dụ: LTE (nhỏ hơn hoặc bằng)
+  threshold         Float              // Ngưỡng giá trị để so sánh
+  tuple             String[]          @default([]) // giá trị sử dụng cho operator IN
 
-  trainingCourse    TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
+  severity          Int                // Mức độ cảnh cáo sẽ tăng nếu vi phạm (1 hoặc 2)
+
+  // Các điều kiện phụ để quy tắc được áp dụng
+  yearCondition     Int?     // Áp dụng cho sinh viên năm thứ mấy, null nếu áp dụng mọi năm
+  semesterCondition Int?     // Áp dụng cho học kỳ thứ mấy trong năm, null nếu áp dụng mọi học kỳ
+
+  trainingCourse    TrainingCourse    @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId  String
 
   academicWarning   AcademicWarning[]
-
-  @@schema("ql-dao-tao")
-}
-
-enum AcademicWarningRuleType {
-  GPA_SEMESTER_BELOW
-  GPA_CUMULATIVE_BELOW
-  FAILED_CREDITS_SEMESTER
-  FAILED_CREDITS_TOTAL
-  GPA_ZERO
-  NO_REGISTRATION
 
   @@schema("ql-dao-tao")
 }
@@ -65,17 +61,6 @@ model DisciplinaryWarningReason extends Base {
   warningId     String
   reasonType    DisciplinaryWarningReasonType
   severityLevel Int      // 1 hoặc 2 mức nâng
-
-  @@schema("ql-dao-tao")
-}
-
-enum DisciplinaryWarningReasonType {
-  DISCIPLINE_PENALTY                 // Bị kỷ luật từ cảnh cáo trở lên
-  EXAM_VIOLATION                     // Bị đình chỉ hoặc cảnh cáo thi
-  EXAM_PROXY_FIRST                   // Thi hộ lần đầu
-  EXAM_PROXY_REPEAT                  // Thi hộ lần hai
-  LATE_TUITION_1                     // Nộp học phí muộn <= 4 tuần
-  LATE_TUITION_2                     // Nộp học phí muộn > 4 tuần
 
   @@schema("ql-dao-tao")
 }

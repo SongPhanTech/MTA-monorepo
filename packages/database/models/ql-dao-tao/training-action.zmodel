@@ -1,0 +1,102 @@
+import '../base'
+import '../ql-danh-muc/document'
+import '../ql-nguoi-dung/profile'
+import 'student'
+import 'training-score'
+import 'categories'
+import 'plan-training'
+import 'scholarship'
+import 'criteria'
+
+/// Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)
+model AcademicActionConfig extends Base {
+  name             String
+  actionType       AcademicActionType // Loại hành động: REPEAT_YEAR, SUSPENSION, EXPULSION
+
+  trainingCourse   TrainingCourse            @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+
+  // Tập hợp các điều kiện để kích hoạt hành động này
+  // Ví dụ: để "Thôi học", cần (CBHT mức 4) HOẶC (CCHĐ mức 4)
+  ruleSets         AcademicActionRuleSet[]
+
+  // Các quyết định đã được đưa ra dựa trên cấu hình này
+  decisions        StudentAcademicDecision[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Loại hành động xử lý học tập
+enum AcademicActionType {
+  REPEAT_YEAR // Lưu ban (Học lại năm) - cho hệ quân sự
+  SUSPENSION  // Đình chỉ học tập
+  EXPULSION   // Buộc thôi học
+
+  @@schema("ql-dao-tao")
+}
+
+/// Bộ quy tắc, chứa nhiều điều kiện (AND logic)
+/// Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
+/// Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)
+model AcademicActionRuleSet extends Base {
+  config     AcademicActionConfig      @relation(fields: [configId], references: [id])
+  configId   String
+
+  // Các điều kiện trong bộ quy tắc này (liên kết bằng logic AND)
+  conditions AcademicActionCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Điều kiện cụ thể để kích hoạt xử lý
+model AcademicActionCondition extends Base {
+  ruleSet           AcademicActionRuleSet @relation(fields: [ruleSetId], references: [id])
+  ruleSetId         String
+
+  field             CriteriaField         // Trường dữ liệu để kiểm tra (tái sử dụng từ ScholarshipCriteria)
+  operator          CriteriaOperator      // Toán tử so sánh (GTE, LTE, EQ)
+  value             Float                 // Giá trị để so sánh
+  tuple             String[]              @default([]) // giá trị sử dụng cho operator IN
+
+  // Điều kiện bổ sung
+  yearCondition     Int? // Áp dụng cho sinh viên năm thứ mấy
+  isPriorityStudent Boolean? // Áp dụng cho đối tượng ưu tiên? (true/false/null)
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quyết định xử lý học tập cho sinh viên
+model StudentAcademicDecision extends Base {
+  student          Student              @relation(fields: [studentId], references: [id])
+  studentId        String
+
+  semester         Semester?            @relation(fields: [semesterId], references: [id])
+  semesterId       String?
+
+  schoolYear       SchoolYear?          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId     String?
+
+  // Cấu hình đã được áp dụng để đưa ra quyết định này
+  appliedConfig    AcademicActionConfig @relation(fields: [appliedConfigId], references: [id])
+  appliedConfigId  String
+
+  actionTaken      AcademicActionType   // Hành động đã thực hiện
+  decisionDate     DateTime             @default(now())
+  reason           String?              // Ghi chú lý do, ví dụ: "Vi phạm CBHT mức 4"
+  documentEvidence DocumentFile[]       // Minh chứng (biên bản họp, quyết định...)
+
+  // Trạng thái của quyết định
+  status           DecisionStatus       @default(PENDING)
+
+  @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
+  @@schema("ql-dao-tao")
+}
+
+enum DecisionStatus {
+  PENDING   // Đang chờ duyệt
+  APPROVED  // Đã duyệt
+  REJECTED  // Bị từ chối
+  APPEALED  // Đang khiếu nại
+
+  @@schema("ql-dao-tao")
+}

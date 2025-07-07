@@ -1,0 +1,58 @@
+/// Enum hệ thống đánh giá (Học bổng, Cảnh báo, Xử lý học tập).
+enum CriteriaField {
+  // --- Nhóm 1: Điểm số & GPA ---
+  SEMESTER_GPA                      // Điểm trung bình học kỳ
+  YEARLY_GPA                        // Điểm trung bình năm học
+  CUMULATIVE_GPA                    // Điểm trung bình tích lũy
+  ENTRY_SCORE                       // Điểm thi đầu vào (xét cho tân sinh viên)
+  COURSE_GRADE_LOWEST               // Điểm của học phần thấp nhất trong kỳ/năm xét
+  GRADUATION_COURSE_GRADE_LOWEST    // Điểm của học phần tốt nghiệp thấp nhất
+
+  // --- Nhóm 2: Tín chỉ ---
+  SEMESTER_REGISTERED_CREDITS       // Số tín chỉ đã đăng ký trong học kỳ
+  SEMESTER_PASSED_CREDITS           // Số tín chỉ đã đạt trong học kỳ
+  SEMESTER_FAILED_CREDITS           // Số tín chỉ không đạt trong học kỳ
+  SEMESTER_FAILED_CREDITS_PERCENT   // Tỷ lệ % tín chỉ không đạt trên tổng số đăng ký trong kỳ
+  YEAR_FAILED_CREDITS               // Tổng số tín chỉ không đạt trong năm học
+  CUMULATIVE_PASSED_CREDITS         // Tổng số tín chỉ tích lũy từ đầu khóa học
+  CUMULATIVE_DEBT_CREDITS           // Tổng số tín chỉ còn nợ tích lũy từ đầu khóa học
+  CUMULATIVE_PROGRESS_PERCENT       // Tỷ lệ % tín chỉ đã tích lũy so với tổng tín chỉ yêu cầu của CTĐT
+
+  // --- Nhóm 3: Cảnh báo & Trạng thái Học vụ ---
+  ACADEMIC_WARNING_LEVEL            // Mức Cảnh báo học tập hiện tại của sinh viên (0-4)
+  DISCIPLINARY_WARNING_LEVEL        // Mức Cảnh cáo học đường hiện tại của sinh viên (0-4)
+  REPEAT_YEAR_COUNT                 // Số lần sinh viên đã bị lưu ban (học lại cả năm)
+
+  // --- Nhóm 4: Rèn luyện & Điều kiện khác ---
+  CONDUCT_SCORE                     // Điểm rèn luyện của kỳ hoặc năm đang xét
+  HAS_PASSED_FOREIGN_LANGUAGE       // Điều kiện đã đạt chuẩn đầu ra ngoại ngữ (boolean)
+  HAS_REGISTERED_FOR_SEMESTER       // Điều kiện đã đăng ký học cho kỳ hiện tại (boolean)
+  IS_PRIORITY_STUDENT               // Là đối tượng ưu tiên (boolean)
+  IS_CLASS_MONITOR_OR_LEADER        // Là cán bộ lớp hoặc cán bộ đoàn (boolean, dùng để cộng điểm thưởng)
+  IS_STUDY_DURATION_EXCEEDED        // Đã vượt quá thời gian đào tạo tối đa (boolean)
+  IS_DEBT_SUBJECT_CONSECUTIVE       // Có nợ một môn học trong 2 học kỳ chính liên tiếp (boolean)
+  HAS_IMPROVEMENT_REGISTRATION      // Có đăng ký học cải thiện hoặc học lại trong kỳ (boolean)
+
+  @@schema("ql-dao-tao")
+}
+
+/// Enum cảnh cáo học đường
+enum DisciplinaryWarningReasonType {
+  DISCIPLINE_PENALTY                 // Bị kỷ luật từ cảnh cáo trở lên
+  EXAM_VIOLATION                     // Bị đình chỉ hoặc cảnh cáo thi
+  EXAM_PROXY_FIRST                   // Thi hộ lần đầu
+  EXAM_PROXY_REPEAT                  // Thi hộ lần hai
+  LATE_TUITION_1                     // Nộp học phí muộn <= 4 tuần
+  LATE_TUITION_2                     // Nộp học phí muộn > 4 tuần
+
+  @@schema("ql-dao-tao")
+}
+
+enum CriteriaOperator {
+  GTE // >=
+  LTE // <=
+  EQ  // =
+  IN  // in
+
+  @@schema("ql-dao-tao")
+}

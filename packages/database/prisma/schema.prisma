@@ -220,18 +220,45 @@ enum StudentTrainingType {
   @@schema("ql-dao-tao")
 }
 
+/// Enum hệ thống đánh giá (Học bổng, Cảnh báo, Xử lý học tập).
 enum CriteriaField {
-  TOTAL_CREDITS
-  REGISTERED_CREDITS
-  ACCUMULATED_CREDITS_PERCENT
-  COURSE_GRADE_MIN
-  GRADUATION_GRADE_MIN
   SEMESTER_GPA
+  YEARLY_GPA
+  CUMULATIVE_GPA
   ENTRY_SCORE
-  CONDUCT
-  FOREIGN_LANGUAGE
+  COURSE_GRADE_LOWEST
+  GRADUATION_COURSE_GRADE_LOWEST
+  SEMESTER_REGISTERED_CREDITS
+  SEMESTER_PASSED_CREDITS
+  SEMESTER_FAILED_CREDITS
+  SEMESTER_FAILED_CREDITS_PERCENT
+  YEAR_FAILED_CREDITS
+  CUMULATIVE_PASSED_CREDITS
+  CUMULATIVE_DEBT_CREDITS
+  CUMULATIVE_PROGRESS_PERCENT
   ACADEMIC_WARNING_LEVEL
   DISCIPLINARY_WARNING_LEVEL
+  REPEAT_YEAR_COUNT
+  CONDUCT_SCORE
+  HAS_PASSED_FOREIGN_LANGUAGE
+  HAS_REGISTERED_FOR_SEMESTER
+  IS_PRIORITY_STUDENT
+  IS_CLASS_MONITOR_OR_LEADER
+  IS_STUDY_DURATION_EXCEEDED
+  IS_DEBT_SUBJECT_CONSECUTIVE
+  HAS_IMPROVEMENT_REGISTRATION
+
+  @@schema("ql-dao-tao")
+}
+
+/// Enum cảnh cáo học đường
+enum DisciplinaryWarningReasonType {
+  DISCIPLINE_PENALTY
+  EXAM_VIOLATION
+  EXAM_PROXY_FIRST
+  EXAM_PROXY_REPEAT
+  LATE_TUITION_1
+  LATE_TUITION_2
 
   @@schema("ql-dao-tao")
 }
@@ -245,24 +272,27 @@ enum CriteriaOperator {
   @@schema("ql-dao-tao")
 }
 
-enum AcademicWarningRuleType {
-  GPA_SEMESTER_BELOW
-  GPA_CUMULATIVE_BELOW
-  FAILED_CREDITS_SEMESTER
-  FAILED_CREDITS_TOTAL
-  GPA_ZERO
-  NO_REGISTRATION
+/// Loại hành động xử lý học tập
+enum AcademicActionType {
+  REPEAT_YEAR
+  SUSPENSION
+  EXPULSION
 
   @@schema("ql-dao-tao")
 }
 
-enum DisciplinaryWarningReasonType {
-  DISCIPLINE_PENALTY
-  EXAM_VIOLATION
-  EXAM_PROXY_FIRST
-  EXAM_PROXY_REPEAT
-  LATE_TUITION_1
-  LATE_TUITION_2
+enum DecisionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  APPEALED
+
+  @@schema("ql-dao-tao")
+}
+
+enum RankingContext {
+  STUDYING
+  GRADUATION
 
   @@schema("ql-dao-tao")
 }
@@ -501,6 +531,7 @@ model SchoolYear {
   milestone                 Milestone[]
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
   studentYearResult         StudentYearResult[]
+  studentAcademicDecision   StudentAcademicDecision[]
 
   @@schema("ql-dao-tao")
 }
@@ -528,6 +559,7 @@ model Semester {
   studentSemesterResult   StudentSemesterResult[]
   scholarshipAward        ScholarshipAward[]
   academicWarning         AcademicWarning[]
+  studentAcademicDecision StudentAcademicDecision[]
 
   @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
@@ -585,6 +617,7 @@ model TrainingCourse {
   studentTrainingCourse  StudentTrainingCourse[]
   scholarships           Scholarship[]
   academicWarningRule    AcademicWarningRule[]
+  academicActionConfig   AcademicActionConfig[]
 
   @@schema("ql-dao-tao")
 }
@@ -1160,28 +1193,6 @@ model ScoreConvert {
   @@schema("ql-dao-tao")
 }
 
-/// Xếp loại học lực
-model AcademicRankingConvert {
-  id               String                  @id() @default(cuid())
-  code             String?                 @unique()
-  active           Boolean                 @default(true)
-  description      String?                 @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime                @default(now())
-  updatedAt        DateTime                @updatedAt()
-  classification   String
-  baseScore        AcademicRankingBaseType
-  base10Min        Float?
-  base10Max        Float?
-  base4Min         Float?
-  base4Max         Float?
-  graduated        Boolean
-  trainingCourse   TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
-
-  @@schema("ql-dao-tao")
-}
-
 /// Nội dung tính tải đào tạo
 model TrainingKPI {
   id          String    @id() @default(cuid())
@@ -1246,6 +1257,7 @@ model Student {
   studentYearResult         StudentYearResult[]
   scholarshipAwards         ScholarshipAward[]
   academicWarning           AcademicWarning[]
+  studentAcademicDecision   StudentAcademicDecision[]
 
   @@schema("ql-dao-tao")
 }
@@ -1984,7 +1996,6 @@ model DM_NhanVien {
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
-  sTen                String
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -2610,10 +2621,9 @@ model Scholarship {
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt()
   name             String
-  bonusGrade       Float                 @default(0)
   baseAmount       Decimal
   multiplier       Float                 @default(1)
-  effectiveFrom    DateTime
+  effectiveFrom    DateTime?
   effectiveTo      DateTime?
   trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
@@ -2665,20 +2675,23 @@ model ScholarshipAward {
   @@schema("ql-dao-tao")
 }
 
+/// Quy tắc cấu hình Cảnh báo học tập (phiên bản cải tiến)
 model AcademicWarningRule {
-  id                String                  @id() @default(cuid())
-  code              String?                 @unique()
-  active            Boolean                 @default(true)
-  description       String?                 @db.Text()
+  id                String            @id() @default(cuid())
+  code              String?           @unique()
+  active            Boolean           @default(true)
+  description       String?           @db.Text()
   deletedAt         DateTime?
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @updatedAt()
-  ruleType          AcademicWarningRuleType
-  threshold         Float?
-  semesterCondition Int?
-  yearCondition     Int?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt()
+  field             CriteriaField
+  operator          CriteriaOperator
+  threshold         Float
+  tuple             String[]          @default([])
   severity          Int
-  trainingCourse    TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
+  yearCondition     Int?
+  semesterCondition Int?
+  trainingCourse    TrainingCourse    @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId  String
   academicWarning   AcademicWarning[]
 
@@ -2740,30 +2753,177 @@ model DisciplinaryWarningReason {
   @@schema("ql-dao-tao")
 }
 
+/// Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)
+model AcademicActionConfig {
+  id               String                    @id() @default(cuid())
+  code             String?                   @unique()
+  active           Boolean                   @default(true)
+  description      String?                   @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt()
+  name             String
+  actionType       AcademicActionType
+  trainingCourse   TrainingCourse            @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  ruleSets         AcademicActionRuleSet[]
+  decisions        StudentAcademicDecision[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Bộ quy tắc, chứa nhiều điều kiện (AND logic)
+/// Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
+/// Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)
+model AcademicActionRuleSet {
+  id          String                    @id() @default(cuid())
+  code        String?                   @unique()
+  active      Boolean                   @default(true)
+  description String?                   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt()
+  config      AcademicActionConfig      @relation(fields: [configId], references: [id])
+  configId    String
+  conditions  AcademicActionCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Điều kiện cụ thể để kích hoạt xử lý
+model AcademicActionCondition {
+  id                String                @id() @default(cuid())
+  code              String?               @unique()
+  active            Boolean               @default(true)
+  description       String?               @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt()
+  ruleSet           AcademicActionRuleSet @relation(fields: [ruleSetId], references: [id])
+  ruleSetId         String
+  field             CriteriaField
+  operator          CriteriaOperator
+  value             Float
+  tuple             String[]              @default([])
+  yearCondition     Int?
+  isPriorityStudent Boolean?
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quyết định xử lý học tập cho sinh viên
+model StudentAcademicDecision {
+  id               String               @id() @default(cuid())
+  code             String?              @unique()
+  active           Boolean              @default(true)
+  description      String?              @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt()
+  student          Student              @relation(fields: [studentId], references: [id])
+  studentId        String
+  semester         Semester?            @relation(fields: [semesterId], references: [id])
+  semesterId       String?
+  schoolYear       SchoolYear?          @relation(fields: [schoolYearId], references: [id])
+  schoolYearId     String?
+  appliedConfig    AcademicActionConfig @relation(fields: [appliedConfigId], references: [id])
+  appliedConfigId  String
+  actionTaken      AcademicActionType
+  decisionDate     DateTime             @default(now())
+  reason           String?
+  documentEvidence DocumentFile[]
+  status           DecisionStatus       @default(PENDING)
+
+  @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
+  @@schema("ql-dao-tao")
+}
+
 model DocumentFile {
-  id                    String               @id() @default(cuid())
-  code                  String?              @unique()
-  active                Boolean              @default(true)
-  description           String?              @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt()
-  name                  String
-  path                  String
-  size                  BigInt
-  mimeType              String?
-  archivedCertificate   ArchivedCertificate? @relation(fields: [archivedCertificateId], references: [id])
-  archivedCertificateId String?
-  archivedAward         ArchivedAward?       @relation(fields: [archivedAwardId], references: [id])
-  archivedAwardId       String?
-  curriculum            Curriculum?          @relation(fields: [curriculumId], references: [id])
-  curriculumId          String?
-  curriculumVersion     CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId   String?
-  subjectVersion        SubjectVersion?      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId      String?
+  id                        String                   @id() @default(cuid())
+  code                      String?                  @unique()
+  active                    Boolean                  @default(true)
+  description               String?                  @db.Text()
+  deletedAt                 DateTime?
+  createdAt                 DateTime                 @default(now())
+  updatedAt                 DateTime                 @updatedAt()
+  name                      String
+  path                      String
+  size                      BigInt
+  mimeType                  String?
+  archivedCertificate       ArchivedCertificate?     @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId     String?
+  archivedAward             ArchivedAward?           @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId           String?
+  curriculum                Curriculum?              @relation(fields: [curriculumId], references: [id])
+  curriculumId              String?
+  curriculumVersion         CurriculumVersion?       @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId       String?
+  subjectVersion            SubjectVersion?          @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId          String?
+  studentAcademicDecision   StudentAcademicDecision? @relation(fields: [studentAcademicDecisionId], references: [id])
+  studentAcademicDecisionId String?
 
   @@schema("ql-danh-muc")
+}
+
+/// Xếp loại học lực
+model AcademicRankingConvert {
+  id               String                        @id() @default(cuid())
+  code             String?                       @unique()
+  active           Boolean                       @default(true)
+  description      String?                       @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                      @default(now())
+  updatedAt        DateTime                      @updatedAt()
+  classification   String
+  context          RankingContext
+  rankOrder        Int
+  baseScore        AcademicRankingBaseType
+  base10Min        Float?
+  base10Max        Float?
+  base4Min         Float?
+  base4Max         Float?
+  graduated        Boolean
+  trainingCourse   TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  downgradeRules   GraduationRankDowngradeRule[]
+
+  @@unique([trainingCourseId, context, rankOrder])
+  @@schema("ql-dao-tao")
+}
+
+/// Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp
+model GraduationRankDowngradeRule {
+  id            String                             @id() @default(cuid())
+  code          String?                            @unique()
+  active        Boolean                            @default(true)
+  description   String?                            @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime                           @default(now())
+  updatedAt     DateTime                           @updatedAt()
+  initialRank   AcademicRankingConvert             @relation(fields: [initialRankId], references: [id])
+  initialRankId String                             @unique()
+  conditions    GraduationRankDowngradeCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Một điều kiện cụ thể trong bộ quy tắc hạ bậc
+model GraduationRankDowngradeCondition {
+  id              String                      @id() @default(cuid())
+  code            String?                     @unique()
+  active          Boolean                     @default(true)
+  description     String?                     @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt()
+  downgradeRule   GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
+  downgradeRuleId String
+  field           CriteriaField
+  operator        CriteriaOperator
+  value           Float
+
+  @@schema("ql-dao-tao")
 }
 
 model TemplateFile {

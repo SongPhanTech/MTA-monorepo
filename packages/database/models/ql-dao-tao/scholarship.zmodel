@@ -2,13 +2,13 @@ import '../base'
 import 'categories'
 import 'plan-training'
 import 'student'
+import 'criteria'
 
 model Scholarship extends Base {
   name             String
-  bonusGrade       Float                 @default(0)
   baseAmount       Decimal // Số tiền cơ bản (nếu áp dụng kiểu nhân hệ số)
   multiplier       Float                 @default(1) // Hệ số nhân với baseAmount (1.2, 1.4…), nếu áp dụng
-  effectiveFrom    DateTime
+  effectiveFrom    DateTime?
   effectiveTo      DateTime?
 
   trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
@@ -31,31 +31,6 @@ model ScholarshipCriteria extends Base {
   tuple         String[]         @default([]) // giá trị sử dụng cho operator IN
 
   bonusValue    Float            @default(0) // cộng thêm điểm nếu đúng tiêu chí (ví dụ cộng 0.1 TBHK) e.g. on TOTAL_CREDITS +5 if accumulatedCredits > totalCreditsByCurriculum
-
-  @@schema("ql-dao-tao")
-}
-
-enum CriteriaField {
-  TOTAL_CREDITS                  // Tổng số tín chỉ học tập trong học kỳ
-  REGISTERED_CREDITS             // Số tín chỉ đăng ký trong học kỳ
-  ACCUMULATED_CREDITS_PERCENT    // % tín chỉ tích lũy so với kế hoạch
-  COURSE_GRADE_MIN               // Điểm học phần tối thiểu
-  GRADUATION_GRADE_MIN           // Điểm học phần tốt nghiệp tối thiểu
-  SEMESTER_GPA                   // Điểm trung bình học kỳ
-  ENTRY_SCORE                    // Điểm thi đầu vào (cho học viên mới)
-  CONDUCT                        // Mức rèn luyện
-  FOREIGN_LANGUAGE               // Đạt chuẩn đầu ra ngoại ngữ (boolean)
-  ACADEMIC_WARNING_LEVEL         // Cảnh cáo học tập (không bị kỷ luật từ khiển trách trở lên invert(value >= 3))
-  DISCIPLINARY_WARNING_LEVEL     // Cảnh cáo học đường
-
-  @@schema("ql-dao-tao")
-}
-
-enum CriteriaOperator {
-  GTE // >=
-  LTE // <=
-  EQ  // =
-  IN  // in
 
   @@schema("ql-dao-tao")
 }
