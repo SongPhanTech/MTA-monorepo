@@ -34,8 +34,6 @@ export default function CanhCaoHocBong() {
         { enabled: !!semesterId }
     )
 
-    console.log(initialValue)
-
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
