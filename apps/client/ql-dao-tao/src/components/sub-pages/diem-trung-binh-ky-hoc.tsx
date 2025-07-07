@@ -46,9 +46,6 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
         useStudentTrainingTypeOptions()
     const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
-    async function _onOk(output?: any) {
-        if (!output) return
-    }
 
     const { data: dataStudents, refetch } = useFindManyFixedClass(
         {
@@ -380,7 +377,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                     <TableCollapse
                         rowKey="key"
                         headerTitleKey={({ code, name, trainingCourse, managementOrganization }) =>
-                            `${code} - ${name} - ${trainingCourse?.name} - ${trainingCourse?.trainingObjectType?.name} - ${managementOrganization?.sTen}`
+                            `${code || ''} - ${name || ''} - ${trainingCourse?.name || ''} - ${trainingCourse?.trainingObjectType?.name || ''} - ${managementOrganization?.sTen || ''}`
                         }
                         childrenFieldName="students"
                         defaultExpandAll
@@ -389,7 +386,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                             {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
-                                width: 80,
+                                width: 120,
                                 align: 'center',
                                 fixed: 'left',
                             },
@@ -445,7 +442,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                             {
                                 title: 'Xếp loại rèn luyện',
                                 dataIndex: ['studentSemesterResult', '0', 'studentTrainingType'],
-                                width: 90,
+                                width: 140,
                                 align: 'center',
                                 render: (value) => (
                                     <Tag color={getStudentTrainingTypeColor(value)}>

@@ -241,7 +241,7 @@ export default function Scholarship() {
                             effectiveFrom,
                             effectiveTo,
                         }) =>
-                            `${code} - ${name} - ${trainingCourse?.name} - ${trainingCourse?.trainingObjectType?.name} - ${effectiveFrom && dayjs(effectiveFrom).format('DD/MM/YYYY')} - ${effectiveTo && dayjs(effectiveTo).format('DD/MM/YYYY')}`
+                            `${code || ''} - ${name || ''} - ${trainingCourse?.name || ''} - ${trainingCourse?.trainingObjectType?.name || ''} - ${(effectiveFrom && dayjs(effectiveFrom).format('DD/MM/YYYY')) || ''} - ${(effectiveTo && dayjs(effectiveTo).format('DD/MM/YYYY')) || ''}`
                         }
                         defaultExpandAll
                         currentPage={currentPage}
