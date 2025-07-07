@@ -62,11 +62,15 @@ app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // private route
 app.route('/api/minio', MinIOApp)
 
+const nv = await prisma.dM_NhanVien.findFirstOrThrow({})
+console.log(nv)
+
 app.use(
     '/api/model/*',
     createHonoHandler({
         getPrisma: async (ctx: Context) => {
-            return enhance(prisma, { user: ctx.get('user') })
+            return enhance(prisma, { user: nv })
+            // return enhance(prisma, { user: ctx.get('user') })
         },
     })
 )
