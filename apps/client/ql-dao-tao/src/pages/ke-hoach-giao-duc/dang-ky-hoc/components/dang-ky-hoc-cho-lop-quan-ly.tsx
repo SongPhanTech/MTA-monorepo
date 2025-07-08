@@ -4,11 +4,11 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import { useFindManySemester, useFindManySubjectClass } from '@workspace/db/hooks'
-import { Col, Flex, Form, Input, Row } from 'antd'
+import { Checkbox, Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -26,12 +26,20 @@ export default function RegisterClassManager({
 }: RegisterClassProps) {
     const [currentPage, _setCurrentPage] = useState(1)
     const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
-    const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        semesterId: null,
-    })
     const { getScheduleLabel } = useScheduleOptions()
     const { getExamTypeLabel } = useExamTypeOptions()
+
+    const { data: semesters = [] } = useFindManySemester({
+        orderBy: {
+            createdAt: 'desc',
+        },
+    })
+
+    const latestSemester = useMemo(() => semesters?.[0]?.id || null, [semesters])
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+        semesterId: latestSemester,
+    })
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
@@ -71,14 +79,7 @@ export default function RegisterClassManager({
             createdAt: 'desc',
         },
     })
-
     type SubjectClassData = (typeof subjectClassData)[number]
-
-    const { data: semester = [] } = useFindManySemester({
-        orderBy: {
-            createdAt: 'desc',
-        },
-    })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -88,15 +89,13 @@ export default function RegisterClassManager({
     )
 
     useEffect(() => {
-        if (semester.length > 0 && !filters.semesterId) {
-            const latestSemesterId = semester[0].id
-            setFilters((prev) => {
-                const newFilters = { ...prev, semesterId: latestSemesterId }
-                debouncedRefetch()
-                return newFilters
-            })
+        if (latestSemester && !filters.semesterId) {
+            setFilters((prev) => ({
+                ...prev,
+                semesterId: latestSemester,
+            }))
         }
-    }, [semester, filters, debouncedRefetch])
+    }, [latestSemester, filters.semesterId])
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -104,6 +103,12 @@ export default function RegisterClassManager({
             debouncedRefetch()
             return newFilters
         })
+    }
+
+    const handleRowSelection = (record: any) => {
+        setSemesterId?.(record.semesterId)
+        setSubjectClassId?.(record.id)
+        setSelectedRowKey(record.id)
     }
 
     return (
@@ -141,7 +146,9 @@ export default function RegisterClassManager({
                                 labelAlign="left"
                             >
                                 <TreeSelectSemester
-                                    defaultValue={filters.semesterId || undefined}
+                                    style={{ width: '250px' }}
+                                    defaultValue={latestSemester || ''}
+                                    value={filters.semesterId || ''}
                                     onChange={(val) => handleFilterChange('semesterId', val)}
                                 />
                             </Form.Item>
@@ -154,17 +161,30 @@ export default function RegisterClassManager({
                 id="subject-class"
                 dataSource={subjectClassData}
                 onRow={(record) => ({
-                    onClick: () => {
-                        setSemesterId?.(record.semesterId)
-                        setSubjectClassId?.(record.id)
-                        setSelectedRowKey(record.id)
-                    },
+                    onClick: () => handleRowSelection(record),
                     style: { cursor: 'pointer' },
                     className:
                         record.id === selectedRowKey ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]' : '',
                 })}
                 selectedRow={selectedRowKey}
                 columns={[
+                    {
+                        title: '',
+                        dataIndex: 'selection',
+                        width: 50,
+                        align: 'center',
+                        fixed: 'left',
+                        render: (_, record) => (
+                            <Checkbox
+                                checked={record.id === selectedRowKey}
+                                onChange={(e) => {
+                                    e.stopPropagation()
+                                    handleRowSelection(record)
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        ),
+                    },
                     {
                         title: 'STT',
                         dataIndex: '',

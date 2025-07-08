@@ -139,7 +139,7 @@ export default function OplympicAwards() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 30,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
