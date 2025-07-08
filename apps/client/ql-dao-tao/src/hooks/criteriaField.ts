@@ -38,6 +38,7 @@ export const useCriteriaFieldOptions = () => {
         { value: CriteriaField.ACADEMIC_WARNING_LEVEL, label: 'Mức cảnh báo học tập' },
         { value: CriteriaField.DISCIPLINARY_WARNING_LEVEL, label: 'Mức cảnh cáo học đường' },
         { value: CriteriaField.REPEAT_YEAR_COUNT, label: 'Số lần lưu ban' },
+        { value: CriteriaField.SUSPENSION_COUNT, label: 'Số lần bị đình chỉ' },
 
         // --- Nhóm 4: Rèn luyện & Điều kiện khác ---
         { value: CriteriaField.CONDUCT_SCORE, label: 'Điểm rèn luyện' },

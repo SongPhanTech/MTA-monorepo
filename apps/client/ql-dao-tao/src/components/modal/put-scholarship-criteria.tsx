@@ -20,7 +20,7 @@ import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 export type PutScholarshipCriteria = ScholarshipCriteria
 dayjs.locale('vi')
 
-type CurriculumVersionInput = {
+type ScholarshipCriteriaInput = {
     scholarshipId: string
     scholarshipCriteriaId: string
 }
@@ -30,7 +30,7 @@ const PutScholarshipCriteria = () => {
     const { options: criteriaFieldOptions } = useCriteriaFieldOptions()
     const { options: criteriaOperatorOptions } = useCriteriaOperatorOptions()
 
-    const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
+    const { isOpen, onClose, input } = useDisclosure<ScholarshipCriteriaInput>({
         tag: PutScholarshipCriteria.name,
         onClose: form.resetFields,
     })
@@ -49,6 +49,7 @@ const PutScholarshipCriteria = () => {
                 return
             }
             const data = {
+                code: output?.code,
                 scholarshipId: input.scholarshipId,
                 field: output?.field,
                 invert: output?.invert,
@@ -56,8 +57,8 @@ const PutScholarshipCriteria = () => {
                 value: output?.value,
                 // tuple: output?.tuple,
                 bonusValue: output?.bonusValue,
-                description: output.description,
-                active: output.active,
+                description: output?.description,
+                active: output?.active,
             }
             if (input?.scholarshipCriteriaId) {
                 await updateScholarshipCriteria({
