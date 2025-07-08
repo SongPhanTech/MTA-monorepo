@@ -5,7 +5,7 @@ import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
 import type { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { checkWarningEligibility, listStudentWarning } from '../services/academic-warning'
+import { listStudentWarning, resultCourseStudentWarning } from '../services/academic-warning'
 import {
     listStudentInfo,
     populateExcelTemplate,
@@ -158,9 +158,6 @@ const dsRaKyLuatHocTapJson = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kì học',
             }),
-            trainingCourseId: z.string().openapi('trainingCourseId', {
-                description: 'ID của khoá đào tạo',
-            }),
         }),
     },
     responses: {
@@ -191,7 +188,7 @@ const tongKetHocKyHVSV = createRoute({
     tags: ['Student'],
     summary: 'Tổng kết kết quả học kỳ của học viên, sinh viên',
     description: 'Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON',
-    method: 'get',
+    method: 'post',
     request: {
         query: z.object({
             semesterId: z.string().openapi('semesterId', {
@@ -418,13 +415,13 @@ app.openapi(dsRaSoatHocBongJson, async (c) => {
 })
 
 app.openapi(dsRaKyLuatHocTapJson, async (c) => {
-    const { semesterId, trainingCourseId } = c.req.valid('query')
+    const { semesterId } = c.req.valid('query')
     const students = await listStudentWarning(semesterId)
 
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-    const filteredStudents = await checkWarningEligibility(students, trainingCourseId)
+    const filteredStudents = await resultCourseStudentWarning(students)
     return c.json(filteredStudents, 200)
 })
 

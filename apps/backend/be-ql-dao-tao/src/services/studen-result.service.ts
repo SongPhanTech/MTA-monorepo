@@ -154,11 +154,11 @@ const ThongTinTichLuy = async (
         })
 
         // GPA hệ 4
+        // Làm tròn đến 2 số thập phân
         const diemTrungBinh4 =
             Math.round(
                 (DSDiemHe4.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100
             ) / 100
-        // Tính điểm trung bình hệ 10 trong kỳ
         const diemTrungBinh10 =
             Math.round(
                 (DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100
@@ -640,7 +640,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     semesterId,
                     createdAt: new Date(),
                     updatedAt: new Date(),
-                    studyYear: Math.floor(thongTinTichLuy.kyDangHoc / 2), // năm học thứ mấy
+                    studyYear: Math.floor((thongTinTichLuy.kyDangHoc + 1) / 2), // năm học thứ mấy: kỳ 1,2 -> năm 1; kỳ 3,4 -> năm 2
                     semesterIndexInCourse: thongTinTichLuy.kyDangHoc, // Kỳ đang học
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
