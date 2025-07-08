@@ -1,296 +1,237 @@
-import {
-    type Prisma,
-    PrismaClient,
-    type ScholarshipCriteria,
-    type StudentTrainingType,
-} from '@prisma/client'
+import { createId } from '@paralleldrive/cuid2'
+import { CriteriaField, CriteriaOperator, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-// seed học bổng Lê Quý Đôn
-const trainingCourses = await prisma.trainingCourse.findMany()
-for (const course of trainingCourses) {
-    // Tạo học bổng Lê Quý Đôn
-    const leQuyDon = await prisma.scholarship.create({
-        data: {
-            trainingCourseId: course.id,
-            name: 'Học bổng Lê Quý Đôn',
-            description: 'Áp dụng cho học viên quân sự có TBHK >= 9.0',
-            baseAmount: 2000000,
-            multiplier: 1,
-            effectiveFrom: new Date('2025-01-01'),
-        },
+// seed
+async function seedScholarshipCriteria() {
+    console.log('Bắt đầu seed tiêu chí học bổng...')
+
+    // --- Lấy ID của các khóa học Dân sự và Quân sự (giả sử đã có) ---
+    const civilianCourse = await prisma.trainingCourse.findMany({
+        where: { trainingObjectType: { type: 'CIVILIAN' } },
     })
 
-    await prisma.scholarshipCriteria.createMany({
-        data: [
-            {
-                scholarshipId: leQuyDon.id,
-                field: 'TOTAL_CREDITS',
-                operator: 'GTE',
-                value: 10,
-            },
-            {
-                scholarshipId: leQuyDon.id,
-                field: 'COURSE_GRADE_MIN',
-                operator: 'GTE',
-                value: 7.0,
-            },
-            {
-                scholarshipId: leQuyDon.id,
-                field: 'SEMESTER_GPA',
-                operator: 'GTE',
-                value: 9.0,
-            },
-            {
-                scholarshipId: leQuyDon.id,
-                field: 'CONDUCT',
-                operator: 'GTE',
-                value: 3, // giả sử: 0=WEAK, 1=AVERAGE, ..., 4=EXCELLENT
-            },
-            {
-                scholarshipId: leQuyDon.id,
-                field: 'FOREIGN_LANGUAGE',
-                operator: 'EQ',
-                value: 1,
-            },
-        ],
+    const militaryCourse = await prisma.trainingCourse.findMany({
+        where: { trainingObjectType: { type: 'MILITARY' } },
     })
 
-    // Học bổng dân sự loại Xuất sắc
-    const civilExcellent = await prisma.scholarship.create({
-        data: {
-            trainingCourseId: course.id,
-            name: 'Học bổng Khuyến khích Xuất sắc',
-            code: 'HB_CIVIL_EXCELLENT',
-            description: 'Sinh viên dân sự đạt loại Xuất sắc',
-            baseAmount: 1000000,
-            multiplier: 1.4,
-            effectiveFrom: new Date('2025-01-01'),
-        },
-    })
-
-    await prisma.scholarshipCriteria.createMany({
-        data: [
-            {
-                scholarshipId: civilExcellent.id,
-                field: 'COURSE_GRADE_MIN',
-                operator: 'GTE',
-                value: 4.0, // điểm D trở lên
-            },
-            {
-                scholarshipId: civilExcellent.id,
-                field: 'SEMESTER_GPA',
-                operator: 'GTE',
-                value: 9.0,
-            },
-            {
-                scholarshipId: civilExcellent.id,
-                field: 'CONDUCT',
-                operator: 'EQ',
-                value: 4, // EXCELLENT
-            },
-            {
-                scholarshipId: civilExcellent.id,
-                field: 'ACCUMULATED_CREDITS_PERCENT',
-                operator: 'GTE',
-                value: 90,
-            },
-        ],
-    })
-
-    // Cộng điểm ưu tiên cho học viên quốc tế quân sự
-    await prisma.scholarshipCriteria.create({
-        data: {
-            scholarshipId: leQuyDon.id,
-            field: 'SEMESTER_GPA',
-            operator: 'GTE',
-            value: 9.0,
-            bonusValue: 0.1,
-            description: 'Cộng 0.1 GPA cho học viên quốc tế quân sự',
-        },
-    })
-}
-// end seed
-
-export async function evaluateScholarships(
-    semesterId: string,
-    trainingCourseId: string,
-    trainingMajorIds: string[]
-) {
-    const scholarships = await prisma.scholarship.findMany({
-        where: {
-            trainingCourseId,
-            effectiveFrom: { lte: new Date() },
-            effectiveTo: { gte: new Date() },
-        },
-        include: { criteria: true },
-    })
-
-    const results = await prisma.studentSemesterResult.findMany({
-        where: {
-            semesterId,
-            student: {
-                fixedClass: { trainingCourseId },
-                ...(trainingMajorIds
-                    ? {
-                          curriculumVersion: {
-                              curriculum: { trainingMajorId: { in: trainingMajorIds } },
-                          },
-                      }
-                    : {}),
-            },
-        },
-        include: {
-            student: {
-                include: {
-                    studentTrainingSemester: { where: { semesterId } },
-                    trainingObjectType: true,
-                    fixedClass: {
-                        select: {
-                            curriculumVersion: {
-                                select: {
-                                    curriculum: {
-                                        select: {
-                                            trainingMajor: {
-                                                select: {
-                                                    trainingField: {
-                                                        select: {
-                                                            trainingObjectTypes: true,
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
+    // =================================================================
+    // == TIÊU CHÍ HỌC BỔNG KHUYẾN KHÍCH HỌC TẬP - HỆ DÂN SỰ ==
+    // =================================================================
+    const civilianScholarships = [
+        {
+            name: 'Học bổng KKHT loại Xuất sắc - Dân sự',
+            criteria: [
+                // Tiêu chí riêng
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 3.6 },
+                { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 4 }, // Rèn luyện Xuất sắc
+                // Tiêu chí chung
+                {
+                    field: CriteriaField.COURSE_GRADE_LOWEST,
+                    operator: CriteriaOperator.GTE,
+                    value: 1.0,
+                }, // Điểm D (hệ 4) trở lên
+                {
+                    field: CriteriaField.SEMESTER_REGISTERED_CREDITS,
+                    operator: CriteriaOperator.GTE,
+                    value: 15,
                 },
-            },
+                {
+                    field: CriteriaField.DISCIPLINARY_WARNING_LEVEL,
+                    operator: CriteriaOperator.LTE,
+                    value: 0,
+                }, // Không bị kỷ luật từ khiển trách
+                {
+                    field: CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE,
+                    operator: CriteriaOperator.EQ,
+                    value: 1,
+                }, // 1 = true
+            ],
         },
-    })
-
-    for (const scholarship of scholarships) {
-        const candidates: { result: (typeof results)[number]; calculatedGPA: number }[] = []
-
-        for (const result of results) {
-            let isEligible = true
-            let calculatedGPA = result.gpa
-
-            for (const criterion of scholarship.criteria) {
-                const satisfied = checkCriterion(result, criterion)
-                if (!satisfied && criterion.bonusValue == null) {
-                    isEligible = false
-                    break
-                }
-
-                // Nếu thoả mãn điều kiện bonus, cộng điểm
-                if (satisfied && criterion.bonusValue) {
-                    calculatedGPA += criterion.bonusValue
-                }
-            }
-
-            if (isEligible) {
-                candidates.push({ result, calculatedGPA })
-            }
-        }
-
-        // Xếp hạng theo GPA giảm dần
-        const sorted = candidates.sort((a, b) => b.calculatedGPA - a.calculatedGPA)
-
-        // Ghi lại kết quả
-        let priorityRank = 1
-        for (const award of sorted) {
-            const amount = scholarship.baseAmount.mul(scholarship.multiplier).round().toNumber()
-
-            await prisma.scholarshipAward.upsert({
-                where: {
-                    studentId_scholarshipId_semesterId: {
-                        studentId: award.result.studentId,
-                        scholarshipId: scholarship.id,
-                        semesterId,
-                    },
+        {
+            name: 'Học bổng KKHT loại Giỏi - Dân sự',
+            criteria: [
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 3.2 },
+                { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 3 }, // Rèn luyện Tốt trở lên
+                {
+                    field: CriteriaField.COURSE_GRADE_LOWEST,
+                    operator: CriteriaOperator.GTE,
+                    value: 1.0,
                 },
-                update: {
-                    amount,
-                    gpaAtAward: award.calculatedGPA,
-                    priorityRank,
+                {
+                    field: CriteriaField.SEMESTER_REGISTERED_CREDITS,
+                    operator: CriteriaOperator.GTE,
+                    value: 15,
                 },
-                create: {
-                    studentId: award.result.studentId,
+                {
+                    field: CriteriaField.DISCIPLINARY_WARNING_LEVEL,
+                    operator: CriteriaOperator.LTE,
+                    value: 0,
+                },
+                {
+                    field: CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE,
+                    operator: CriteriaOperator.EQ,
+                    value: 1,
+                },
+            ],
+        },
+        {
+            name: 'Học bổng KKHT loại Khá - Dân sự',
+            criteria: [
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 2.5 },
+                { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 2 }, // Rèn luyện Khá trở lên
+                {
+                    field: CriteriaField.COURSE_GRADE_LOWEST,
+                    operator: CriteriaOperator.GTE,
+                    value: 1.0,
+                },
+                {
+                    field: CriteriaField.SEMESTER_REGISTERED_CREDITS,
+                    operator: CriteriaOperator.GTE,
+                    value: 15,
+                },
+                {
+                    field: CriteriaField.DISCIPLINARY_WARNING_LEVEL,
+                    operator: CriteriaOperator.LTE,
+                    value: 0,
+                },
+                {
+                    field: CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE,
+                    operator: CriteriaOperator.EQ,
+                    value: 1,
+                },
+            ],
+        },
+    ]
+
+    // =================================================================
+    // == TIÊU CHÍ HỌC BỔNG - HỆ QUÂN SỰ ==
+    // =================================================================
+    const militaryScholarships = [
+        {
+            name: 'Học bổng Lê Quý Đôn - Quân sự',
+            criteria: [
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 9.0 },
+                {
+                    field: CriteriaField.COURSE_GRADE_LOWEST,
+                    operator: CriteriaOperator.GTE,
+                    value: 7.0,
+                },
+                { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 3 }, // Rèn luyện Tốt
+                {
+                    field: CriteriaField.SEMESTER_REGISTERED_CREDITS,
+                    operator: CriteriaOperator.GTE,
+                    value: 10,
+                },
+                {
+                    field: CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE,
+                    operator: CriteriaOperator.EQ,
+                    value: 1,
+                },
+            ],
+        },
+        {
+            name: 'Học bổng loại A - Quân sự',
+            criteria: [
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 8.5 },
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 8.99 }, // <= 8.99
+                {
+                    field: CriteriaField.COURSE_GRADE_LOWEST,
+                    operator: CriteriaOperator.GTE,
+                    value: 7.0,
+                },
+                { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 3 },
+                {
+                    field: CriteriaField.SEMESTER_REGISTERED_CREDITS,
+                    operator: CriteriaOperator.GTE,
+                    value: 10,
+                },
+                {
+                    field: CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE,
+                    operator: CriteriaOperator.EQ,
+                    value: 1,
+                },
+            ],
+        },
+        {
+            name: 'Học bổng loại B - Quân sự',
+            criteria: [
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 8.0 },
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 8.49 }, // <= 8.49
+                {
+                    field: CriteriaField.COURSE_GRADE_LOWEST,
+                    operator: CriteriaOperator.GTE,
+                    value: 7.0,
+                },
+                { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 3 },
+                {
+                    field: CriteriaField.SEMESTER_REGISTERED_CREDITS,
+                    operator: CriteriaOperator.GTE,
+                    value: 10,
+                },
+                {
+                    field: CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE,
+                    operator: CriteriaOperator.EQ,
+                    value: 1,
+                },
+            ],
+        },
+    ]
+
+    for (const course of civilianCourse) {
+        const scholarships = civilianScholarships.map((item) => ({
+            id: createId(),
+            ...item,
+        }))
+
+        await prisma.scholarship.createMany({
+            data: scholarships.map(({ id, name }) => ({
+                id,
+                name,
+                trainingCourseId: course.id,
+                baseAmount: 1000,
+            })),
+        })
+
+        await prisma.scholarshipCriteria.createMany({
+            data: scholarships.flatMap((scholarship) =>
+                scholarship.criteria.map((criterion) => ({
+                    ...criterion,
                     scholarshipId: scholarship.id,
-                    semesterId,
-                    amount,
-                    gpaAtAward: award.calculatedGPA,
-                    priorityRank,
-                },
-            })
-            priorityRank += 1
-        }
+                }))
+            ),
+        })
     }
+
+    for (const course of militaryCourse) {
+        const scholarships = militaryScholarships.map((item) => ({
+            id: createId(),
+            ...item,
+        }))
+
+        await prisma.scholarship.createMany({
+            data: scholarships.map(({ id, name }) => ({
+                id,
+                name,
+                trainingCourseId: course.id,
+                baseAmount: 1000,
+            })),
+        })
+
+        await prisma.scholarshipCriteria.createMany({
+            data: scholarships.flatMap((scholarship) =>
+                scholarship.criteria.map((criterion) => ({
+                    ...criterion,
+                    scholarshipId: scholarship.id,
+                }))
+            ),
+        })
+    }
+
+    console.log('Seed tiêu chí học bổng hoàn tất.')
 }
 
-type StudentSemesterResult = Prisma.StudentSemesterResultGetPayload<{
-    include: {
-        student: {
-            include: {
-                studentTrainingSemester: true
-            }
-        }
-    }
-}>
-
-function checkCriterion(result: StudentSemesterResult, criterion: ScholarshipCriteria): boolean {
-    const val = (() => {
-        switch (criterion.field) {
-            case 'TOTAL_CREDITS':
-                return result.totalCredits
-            case 'REGISTERED_CREDITS':
-                return result.registeredCredits
-            case 'ACCUMULATED_CREDITS_PERCENT':
-                return result.accumulatedCredits // giả định đã % sẵn
-            case 'COURSE_GRADE_MIN':
-                return 7.0 // chưa có dữ liệu chi tiết học phần, tạm mock
-            case 'SEMESTER_GPA':
-                return result.gpa
-            case 'ENTRY_SCORE':
-                return result.entryScore ?? 0
-            case 'CONDUCT':
-                return conductLevelToNumeric(
-                    result.student.studentTrainingSemester[0]?.trainingType
-                )
-            case 'FOREIGN_LANGUAGE':
-                return result.foreignLangPass ? 1 : 0
-        }
-    })()
-
-    switch (criterion.operator) {
-        case 'GTE':
-            return val >= criterion.value
-        case 'LTE':
-            return val <= criterion.value
-        case 'EQ':
-            return val === criterion.value
-    }
-}
-
-function conductLevelToNumeric(level: StudentTrainingType | undefined): number {
-    switch (level) {
-        case 'VERY_POOR':
-            return 0
-        case 'POOR':
-            return 1
-        case 'AVERAGE':
-            return 2
-        case 'MEDIUM':
-            return 3
-        case 'FAIR':
-            return 4
-        case 'GOOD':
-            return 5
-        default:
-            return -1
-    }
-}
+// Chạy hàm main
+await seedScholarshipCriteria()
+// end seed

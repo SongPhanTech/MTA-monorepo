@@ -1,58 +1,184 @@
-export const academicWarningRules = [
+import { CriteriaField, CriteriaOperator, PrismaClient, type TrainingCourse } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+// Định nghĩa các quy tắc cảnh báo cho hệ Dân sự
+const civilianWarningRules = [
+    // --- Tăng 1 mức cảnh báo (severity: 1) ---
     {
-        ruleType: 'GPA_SEMESTER_BELOW',
-        threshold: 4.0,
+        field: CriteriaField.SEMESTER_FAILED_CREDITS_PERCENT,
+        operator: CriteriaOperator.GTE,
+        threshold: 50, // Tỷ lệ tín chỉ không đạt > 50%
         severity: 1,
-        description: 'Điểm trung bình học kỳ dưới 4.0',
     },
     {
-        ruleType: 'GPA_CUMULATIVE_BELOW',
-        threshold: 4.6,
+        field: CriteriaField.CUMULATIVE_DEBT_CREDITS,
+        operator: CriteriaOperator.GTE,
+        threshold: 24, // Nợ đọng > 24 tín chỉ
+        severity: 1,
+    },
+    {
+        field: CriteriaField.SEMESTER_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 0.8, // ĐTB học kỳ < 0.8
+        severity: 1,
+        yearCondition: 1, // Áp dụng cho năm thứ nhất
+        semesterCondition: 1, // Áp dụng cho học kỳ đầu tiên
+    },
+    {
+        field: CriteriaField.SEMESTER_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 1.0, // ĐTB học kỳ < 1.0 (cho các kỳ sau)
+        severity: 1,
+    },
+    {
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 1.2, // ĐTB tích lũy < 1.2
+        severity: 1,
         yearCondition: 1,
-        severity: 1,
-        description: 'TBTL dưới 4.6 đối với năm thứ nhất',
     },
     {
-        ruleType: 'GPA_CUMULATIVE_BELOW',
-        threshold: 5.0,
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 1.4,
+        severity: 1,
         yearCondition: 2,
-        severity: 1,
-        description: 'TBTL dưới 5.0 đối với năm thứ hai',
     },
     {
-        ruleType: 'GPA_CUMULATIVE_BELOW',
-        threshold: 5.2,
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 1.6,
+        severity: 1,
         yearCondition: 3,
-        severity: 1,
-        description: 'TBTL dưới 5.2 đối với năm thứ ba',
     },
     {
-        ruleType: 'GPA_CUMULATIVE_BELOW',
-        threshold: 5.4,
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 1.8,
+        severity: 1,
         yearCondition: 4,
-        severity: 1,
-        description: 'TBTL dưới 5.4 đối với năm thứ tư trở đi',
     },
+    // --- Tăng 2 mức cảnh báo (severity: 2) ---
     {
-        ruleType: 'FAILED_CREDITS_SEMESTER',
-        threshold: 6,
-        severity: 1,
-        description: 'Tín chỉ không đạt trong học kỳ vượt quá 6',
-    },
-    {
-        ruleType: 'FAILED_CREDITS_TOTAL',
-        threshold: 10,
-        severity: 1,
-        description: 'Tổng số tín chỉ nợ từ đầu khóa vượt quá 10',
-    },
-    {
-        ruleType: 'GPA_ZERO',
+        field: CriteriaField.SEMESTER_GPA,
+        operator: CriteriaOperator.EQ,
+        threshold: 0, // ĐTB học kỳ = 0
         severity: 2,
-        description: 'Điểm trung bình học kỳ bằng 0',
     },
     {
-        ruleType: 'NO_REGISTRATION',
+        field: CriteriaField.HAS_REGISTERED_FOR_SEMESTER,
+        operator: CriteriaOperator.EQ,
+        threshold: 0, // Không đăng ký học tập (false)
         severity: 2,
-        description: 'Không đăng ký học, tự ý bỏ học không lý do',
     },
-] as const
+]
+
+// Định nghĩa các quy tắc cảnh báo cho hệ Quân sự
+const militaryWarningRules = [
+    // --- Tăng 1 mức cảnh báo (severity: 1) ---
+    {
+        field: CriteriaField.SEMESTER_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 4.0, // ĐTB học kỳ < 4.0
+        severity: 1,
+    },
+    {
+        field: CriteriaField.YEAR_FAILED_CREDITS,
+        operator: CriteriaOperator.GTE,
+        threshold: 6, // Nợ trong năm > 6 tín chỉ
+        severity: 1,
+    },
+    {
+        field: CriteriaField.CUMULATIVE_DEBT_CREDITS,
+        operator: CriteriaOperator.GTE,
+        threshold: 10, // Nợ tích lũy > 10 tín chỉ
+        severity: 1,
+    },
+    {
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 4.6,
+        severity: 1,
+        yearCondition: 1,
+    },
+    {
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 5.0,
+        severity: 1,
+        yearCondition: 2,
+    },
+    {
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 5.2,
+        severity: 1,
+        yearCondition: 3,
+    },
+    {
+        field: CriteriaField.CUMULATIVE_GPA,
+        operator: CriteriaOperator.LTE,
+        threshold: 5.4,
+        severity: 1,
+        yearCondition: 4,
+    },
+]
+
+// Hàm chung để xử lý seed
+async function seedRulesForCourses(courses: TrainingCourse[], rules: any[]) {
+    if (courses.length === 0) return
+
+    // Xóa tất cả các quy tắc cũ thuộc các khóa học này
+    await prisma.academicWarningRule.deleteMany({
+        where: {
+            trainingCourseId: {
+                in: courses.map((course) => course.id),
+            },
+        },
+    })
+
+    // Chuẩn bị dữ liệu mới
+    const dataToCreate = courses.flatMap((course) =>
+        rules.map((rule) => ({
+            ...rule,
+            trainingCourseId: course.id,
+        }))
+    )
+
+    // Tạo mới hàng loạt
+    await prisma.academicWarningRule.createMany({
+        data: dataToCreate,
+    })
+
+    console.log(
+        `Đã seed ${dataToCreate.length} quy tắc Cảnh báo học tập cho ${courses.length} khóa học.`
+    )
+}
+
+// Hàm main để chạy seeder
+async function main() {
+    console.log('Bắt đầu seed quy tắc Cảnh báo học tập...')
+    try {
+        // Lấy tất cả các khóa học dân sự và quân sự
+        const civilianCourses = await prisma.trainingCourse.findMany({
+            where: { trainingObjectType: { type: 'CIVILIAN' } },
+        })
+        const militaryCourses = await prisma.trainingCourse.findMany({
+            where: { trainingObjectType: { type: 'MILITARY' } },
+        })
+
+        // Chạy seed
+        await seedRulesForCourses(civilianCourses, civilianWarningRules)
+        await seedRulesForCourses(militaryCourses, militaryWarningRules)
+
+        console.log('Seed quy tắc Cảnh báo học tập hoàn tất.')
+    } catch (error) {
+        console.error('Lỗi khi seed quy tắc Cảnh báo học tập:', error)
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+// Chạy hàm main
+main()

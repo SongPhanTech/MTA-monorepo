@@ -7,6 +7,121 @@ import 'categories'
 import 'training-score'
 import 'criteria'
 
+enum GraduationSessionStatus {
+  PLANNING              // Đang lên kế hoạch
+  OPEN_FOR_APPLICATION  // Đang mở nhận đơn
+  IN_REVIEW             // Đang trong quá trình xét duyệt
+  COMPLETED             // Đã hoàn tất
+  CLOSED                // Đã đóng
+
+  @@schema("ql-dao-tao")
+}
+
+/// Đợt xét tốt nghiệp 
+model GraduationSession extends Base {
+  name             String
+  sessionDate      DateTime             // Ngày diễn ra phiên họp của hội đồng
+  applicationStart DateTime             // Ngày bắt đầu nhận đơn
+  applicationEnd   DateTime             // Ngày kết thúc nhận đơn
+
+  status           GraduationSessionStatus        @default(PLANNING)
+
+  // Danh sách các đơn xét tốt nghiệp trong đợt này
+  applications     StudentGraduationApplication[]
+
+  @@schema("ql-dao-tao")
+}
+
+enum ApplicationStatus {
+  SUBMITTED  // Mới nộp
+  IN_REVIEW  // Đang được xem xét
+  APPROVED   // Được chấp thuận
+  REJECTED   // Bị từ chối
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quản lý đơn đăng ký xét tốt nghiệp của sinh viên
+model StudentGraduationApplication extends Base {
+  student                Student                  @relation(fields: [studentId], references: [id])
+  studentId              String
+
+  session                GraduationSession        @relation(fields: [sessionId], references: [id])
+  sessionId              String
+
+  applicationDate        DateTime                 @default(now())
+  status                 ApplicationStatus        @default(SUBMITTED)
+
+  checkResults           Json?
+
+  applicationCheckResult ApplicationCheckResult[]
+  // Quyết định cuối cùng cho đơn này
+  decision               GraduationDecision?
+
+  @@unique([studentId, sessionId])
+  @@schema("ql-dao-tao")
+}
+
+/// Kết quả kiểm tra điều kiện tự động của hệ thống
+model ApplicationCheckResult extends Base {
+  studentGraduationApplication   StudentGraduationApplication @relation(fields: [studentGraduationApplicationId], references: [id])
+  studentGraduationApplicationId String                       @unique
+
+  graduationCondition            GraduationCondition          @relation(fields: [graduationConditionId], references: [id])
+  graduationConditionId          String
+
+  passed                         Boolean
+  actualValue                    Float?
+  @@schema("ql-dao-tao")
+}
+
+/// Lưu trữ quyết định tốt nghiệp cuối cùng cho một sinh viên
+model GraduationDecision extends Base {
+  application      StudentGraduationApplication @relation(fields: [applicationId], references: [id])
+  applicationId    String                       @unique
+
+  student          Student                      @relation(fields: [studentId], references: [id])
+  studentId        String                       @unique // Mỗi sinh viên chỉ có 1 quyết định tốt nghiệp
+
+  decisionDate     DateTime                     @default(now())
+  notes            String?          // Ghi chú của hội đồng
+
+  // Thông tin tại thời điểm tốt nghiệp (snapshot)
+  finalGpa         Float            // GPA cuối cùng
+  finalRank        String           // Xếp hạng cuối cùng (sau khi xét hạ bậc)
+  diplomaNumber    String?          // Số hiệu văn bằng
+  diplomaIssueDate DateTime?        // Ngày cấp bằng
+
+  @@schema("ql-dao-tao")
+}
+
+/// Cấu hình bộ điều kiện để được xét tốt nghiệp, áp dụng cho một khoá học
+model GraduationConditionConfig extends Base {
+  name             String
+
+  trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String                @unique // Mỗi khoá học chỉ có 1 bộ điều kiện tốt nghiệp
+
+  // Danh sách các điều kiện, sinh viên phải thoả mãn TẤT CẢ
+  conditions       GraduationCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Một điều kiện cụ thể trong bộ điều kiện tốt nghiệp
+model GraduationCondition extends Base {
+  config                 GraduationConditionConfig @relation(fields: [configId], references: [id])
+  configId               String
+
+  field                  CriteriaField  // Trường dữ liệu để kiểm tra (ví dụ: CUMULATIVE_GPA)
+  operator               CriteriaOperator // Toán tử so sánh (ví dụ: GTE)
+  value                  Float          // Giá trị ngưỡng (ví dụ: 5.5 đối với hệ QS)
+
+  applicationCheckResult ApplicationCheckResult[]
+
+  @@schema("ql-dao-tao")
+}
+
 enum RankingContext {
   STUDYING    // Xếp loại trong quá trình học (học lực)
   GRADUATION  // Xếp loại khi tốt nghiệp
