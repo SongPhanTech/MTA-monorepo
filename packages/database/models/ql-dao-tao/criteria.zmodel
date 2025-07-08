@@ -22,6 +22,7 @@ enum CriteriaField {
   ACADEMIC_WARNING_LEVEL            // Mức Cảnh báo học tập hiện tại của sinh viên (0-4)
   DISCIPLINARY_WARNING_LEVEL        // Mức Cảnh cáo học đường hiện tại của sinh viên (0-4)
   REPEAT_YEAR_COUNT                 // Số lần sinh viên đã bị lưu ban (học lại cả năm)
+  SUSPENSION_COUNT                  // Số lần bị đình chỉ
 
   // --- Nhóm 4: Rèn luyện & Điều kiện khác ---
   CONDUCT_SCORE                     // Điểm rèn luyện của kỳ hoặc năm đang xét

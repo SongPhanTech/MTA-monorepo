@@ -239,6 +239,7 @@ enum CriteriaField {
   ACADEMIC_WARNING_LEVEL
   DISCIPLINARY_WARNING_LEVEL
   REPEAT_YEAR_COUNT
+  SUSPENSION_COUNT
   CONDUCT_SCORE
   HAS_PASSED_FOREIGN_LANGUAGE
   HAS_REGISTERED_FOR_SEMESTER
@@ -1317,6 +1318,7 @@ model StudentSemesterResult {
   suspended                Boolean                 @default(false)
   expelled                 Boolean                 @default(false)
 
+  @@unique([studentId, semesterId])
   @@schema("ql-dao-tao")
 }
 
@@ -1349,6 +1351,7 @@ model StudentYearResult {
   suspended                Boolean                 @default(false)
   expelled                 Boolean                 @default(false)
 
+  @@unique([studentId, schoolYearId])
   @@schema("ql-dao-tao")
 }
 

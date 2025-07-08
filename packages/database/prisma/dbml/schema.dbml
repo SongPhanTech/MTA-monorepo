@@ -966,6 +966,10 @@ Table StudentSemesterResult {
   disciplinaryWarningLevel Int [not null, default: 0]
   suspended Boolean [not null, default: false]
   expelled Boolean [not null, default: false]
+
+  indexes {
+    (studentId, semesterId) [unique]
+  }
 }
 
 Table StudentYearResult {
@@ -996,6 +1000,10 @@ Table StudentYearResult {
   disciplinaryWarningLevel Int [not null, default: 0]
   suspended Boolean [not null, default: false]
   expelled Boolean [not null, default: false]
+
+  indexes {
+    (studentId, schoolYearId) [unique]
+  }
 }
 
 Table User {
@@ -2849,6 +2857,7 @@ Enum CriteriaField {
   ACADEMIC_WARNING_LEVEL
   DISCIPLINARY_WARNING_LEVEL
   REPEAT_YEAR_COUNT
+  SUSPENSION_COUNT
   CONDUCT_SCORE
   HAS_PASSED_FOREIGN_LANGUAGE
   HAS_REGISTERED_FOR_SEMESTER

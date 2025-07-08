@@ -2,6 +2,7 @@ import {
     AcademicActionType,
     CriteriaField,
     CriteriaOperator,
+    type Prisma,
     PrismaClient,
     type TrainingCourse,
 } from '@prisma/client'
@@ -11,12 +12,13 @@ const prisma = new PrismaClient()
 type ActionDefinition = {
     name: string
     actionType: AcademicActionType
+    ruleSets: Omit<Prisma.AcademicActionConditionUncheckedCreateInput, 'ruleSetId'>[][]
 }
 
 // =================================================================
 // == ĐỊNH NGHĨA QUY TẮC XỬ LÝ HỌC TẬP - HỆ DÂN SỰ (Điều 34) ==
 // =================================================================
-const civilianActionDefs = [
+const civilianActionDefs: ActionDefinition[] = [
     // --- Buộc thôi học ---
     {
         name: 'Buộc thôi học - Hệ Dân sự',
@@ -173,6 +175,7 @@ const militaryActionDefs = [
             // Các quy tắc riêng của hệ Quân sự
             [{ field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.EQ, value: 0 }],
             [{ field: CriteriaField.YEARLY_GPA, operator: CriteriaOperator.LTE, value: 4.0 }],
+            [{ field: CriteriaField.REPEAT_YEAR_COUNT, operator: CriteriaOperator.GTE, value: 2 }],
             // TBTL dưới ngưỡng theo năm
             [
                 {
@@ -230,7 +233,7 @@ async function main() {
                 // 1. Upsert cấu hình hành động chính
                 const config = await prisma.academicActionConfig.upsert({
                     where: {
-                        name_trainingCourseId: {
+                        trainingCourseId_name: {
                             name: def.name,
                             trainingCourseId: course.id,
                         },

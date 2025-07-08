@@ -131,6 +131,7 @@ model StudentSemesterResult extends Base {
   suspended                Boolean                 @default(false) // đình chỉ học
   expelled                 Boolean                 @default(false) // đuổi học
 
+  @@unique([studentId, semesterId])
   @@schema("ql-dao-tao")
 }
 
@@ -163,6 +164,7 @@ model StudentYearResult extends Base {
   suspended                Boolean                 @default(false)
   expelled                 Boolean                 @default(false)
 
+  @@unique([studentId, schoolYearId])
   @@schema("ql-dao-tao")
 }
 
