@@ -39,7 +39,13 @@ import type { PutModalType, TabThongTinCaNhan } from '../type'
 
 const { Panel } = Collapse
 
-export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabThongTinCaNhan) {
+export default function ThongTinCaNhanTab({
+    id,
+    type,
+    avatar,
+    setAvatar,
+    setUserSelected,
+}: TabThongTinCaNhan) {
     const form = Form.useFormInstance<PutModalType>()
 
     const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -96,17 +102,17 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
         }))
     }, [userProfileOptions])
 
-    const { data: registrationAreaData = [], refetch: refetchRe } = useFindManyDM_KhuVuc_DiaLy()
+    const { data: registrationAreaData = [] } = useFindManyDM_KhuVuc_DiaLy()
 
     const { data: staffPositionData = [] } = useFindManyStaffPosition()
 
     const { data: staffTypeData = [] } = useFindManyStaffType()
 
-    const { data: nationalityData = [], refetch: refetchNa } = useFindManyDM_QuocGia()
+    const { data: nationalityData = [] } = useFindManyDM_QuocGia()
 
-    const { data: religionData = [], refetch: refetchReli } = useFindManyDM_TonGiao()
+    const { data: religionData = [] } = useFindManyDM_TonGiao()
 
-    const { data: ethnicityData = [], refetch: refetchEth } = useFindManyDM_DanToc()
+    const { data: ethnicityData = [] } = useFindManyDM_DanToc()
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
         where: {
@@ -379,13 +385,14 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
     useEffect(() => {
         if (cccdUserProfileData && !id) {
             fillUserInfo(cccdUserProfileData)
+            setUserSelected(cccdUserProfileData)
         }
-    }, [cccdUserProfileData, fillUserInfo, id])
+    }, [cccdUserProfileData, fillUserInfo, id, setUserSelected])
 
     return (
         <>
             <Row gutter={[16, 16]}>
-                <Col span={4}>
+                <Col span={3}>
                     <div
                         style={{
                             transform: 'scale(1.35)',
@@ -419,7 +426,7 @@ export default function ThongTinCaNhanTab({ id, type, avatar, setAvatar }: TabTh
                     </div>
                 </Col>
 
-                <Col span={20}>
+                <Col span={21}>
                     <Row gutter={[10, 10]}>
                         <Col sm={12} lg={12}>
                             <FormItem

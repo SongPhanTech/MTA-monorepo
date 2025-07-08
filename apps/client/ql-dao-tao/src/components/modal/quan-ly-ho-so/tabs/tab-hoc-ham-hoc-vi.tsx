@@ -3,10 +3,12 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { Student } from '@workspace/db'
 import { Button, Collapse, Flex, Row } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import PutHocHamHocViModal from '../modals/put-hoc-ham-hoc-vi'
+import type { UserProfileType } from '../type'
 
 const { Panel } = Collapse
 
@@ -21,7 +23,13 @@ const data = [
     },
 ]
 
-export default function HocHamHocViTab() {
+export default function HocHamHocViTab({
+    studentData,
+    userSelected,
+}: {
+    studentData?: Student | undefined
+    userSelected?: UserProfileType | undefined
+}) {
     const [openCollapse, setOpenCollapse] = useState<string | null>(null)
     const [currentPage, _setCurrentPage] = useState(1)
     const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -29,6 +37,14 @@ export default function HocHamHocViTab() {
     const { onOpen } = useDisclosure({
         tag: PutHocHamHocViModal.name,
     })
+
+    console.log(studentData, userSelected)
+
+    // const dataTableHocham=useMemo(()=>{
+    //         if(userSelected){
+    //             return userSelected.
+    //         }
+    // },[userSelected,studentData])
 
     const handleCollapseChange = (collapseId: string) => (key: string | string[]) => {
         if (key && key.length > 0) {

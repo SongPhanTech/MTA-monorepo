@@ -65,6 +65,7 @@ model Student extends Base {
   trainingRank              TrainingRank?                  @relation(fields: [trainingRankId], references: [id])
   trainingRankId            String?
 
+  // Giảm 1 khi kỳ hiện tại không vi phạm
   academicWarningLevel      Int                            @default(0) // mức cảnh cáo học tập
   disciplinaryWarningLevel  Int                            @default(0) // mức cảnh cáo học đường
 
@@ -76,6 +77,7 @@ model Student extends Base {
   studentYearResult         StudentYearResult[]
   scholarshipAwards         ScholarshipAward[]
   academicWarning           AcademicWarning[]
+  disciplinaryWarning       DisciplinaryWarning[]
   studentAcademicDecision   StudentAcademicDecision[]
   graduationApplications    StudentGraduationApplication[]
   graduationDecision        GraduationDecision?
@@ -129,6 +131,7 @@ model StudentSemesterResult extends Base {
   suspended                Boolean                 @default(false) // đình chỉ học
   expelled                 Boolean                 @default(false) // đuổi học
 
+  @@unique([studentId, semesterId])
   @@schema("ql-dao-tao")
 }
 
@@ -161,6 +164,7 @@ model StudentYearResult extends Base {
   suspended                Boolean                 @default(false)
   expelled                 Boolean                 @default(false)
 
+  @@unique([studentId, schoolYearId])
   @@schema("ql-dao-tao")
 }
 

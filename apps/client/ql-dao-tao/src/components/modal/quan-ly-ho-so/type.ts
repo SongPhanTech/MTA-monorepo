@@ -60,6 +60,8 @@ export type TabThongTinCaNhan = {
     type: $Enums.UserType
     avatar: UploadFile[]
     setAvatar: (avatar: UploadFile[]) => void
+    userSelected?: UserProfileType | undefined
+    setUserSelected: (userSelected: any) => void
 }
 
 export type StudentModalProps = {

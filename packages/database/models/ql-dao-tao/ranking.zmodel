@@ -72,6 +72,8 @@ model ApplicationCheckResult extends Base {
 
   passed                         Boolean
   actualValue                    Float?
+
+  @@unique([studentGraduationApplicationId, graduationConditionId])
   @@schema("ql-dao-tao")
 }
 

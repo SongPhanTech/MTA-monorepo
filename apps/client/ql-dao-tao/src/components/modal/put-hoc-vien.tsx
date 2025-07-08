@@ -52,9 +52,8 @@ type PreFillFormFields = {
 const PutHocvienModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
 
-    const [activeKey, setActiveKey] = useState<string>('1')
     const [avatar, setAvatar] = useState<UploadFile[]>([])
-
+    const [userSelected, setUserSelected] = useState<UserProfileType | undefined>(undefined)
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: PutHocvienModal.name,
         onClose: form.resetFields,
@@ -62,39 +61,44 @@ const PutHocvienModal = () => {
     const { id, preSelectedValues } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: fixedClassData = [], refetch: refetchFix } = useFindManyFixedClass({
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
         include: {
             trainingCourse: true,
             curriculumVersion: true,
         },
     })
 
-    const { data: studentData } = useFindUniqueStudent({
-        where: { id: id || '' },
-        include: {
-            userProfile: {
-                include: {
-                    nationality: true,
-                    religion: true,
-                    ethnicity: true,
-                    rank: true,
-                    academicRankType: true,
-                    academicDegreeType: true,
-                    positionCPV: true,
+    const { data: studentData } = useFindUniqueStudent(
+        {
+            where: { id: id },
+            include: {
+                userProfile: {
+                    include: {
+                        nationality: true,
+                        religion: true,
+                        ethnicity: true,
+                        rank: true,
+                        academicRankType: true,
+                        academicDegreeType: true,
+                        positionCPV: true,
+                    },
                 },
-            },
-            trainingObjectType: true,
-            fixedClass: {
-                include: {
-                    trainingCourse: true,
+                trainingObjectType: true,
+                fixedClass: {
+                    include: {
+                        trainingCourse: true,
+                    },
                 },
+                trainingType: true,
+                registrationArea: true,
+                trainingLevel: true,
+                priorityObject: true,
             },
-            trainingType: true,
-            registrationArea: true,
-            trainingLevel: true,
-            priorityObject: true,
         },
-    })
+        {
+            enabled: !!id,
+        }
+    )
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -292,6 +296,7 @@ const PutHocvienModal = () => {
                                 setAvatar={setAvatar}
                                 id={id}
                                 type={'MILITARY_STUDENT'}
+                                setUserSelected={setUserSelected}
                             />
                         </Col>
                     </Row>
@@ -300,7 +305,7 @@ const PutHocvienModal = () => {
             {
                 key: '2',
                 label: 'Học hàm, học vị',
-                children: <HocHamHocViTab />,
+                children: <HocHamHocViTab studentData={studentData} userSelected={userSelected} />,
                 forceRender: true,
             },
             {
@@ -334,7 +339,7 @@ const PutHocvienModal = () => {
                 forceRender: true,
             },
         ]
-    }, [avatar, id])
+    }, [studentData, userSelected, avatar, id])
 
     useEffect(() => {
         if (studentData) {

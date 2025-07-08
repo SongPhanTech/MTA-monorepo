@@ -146,6 +146,8 @@ model TrainingMajor extends Base {
   trainingFieldId       String
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
   curriculum            Curriculum[]
+
+  @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
 }
 
@@ -156,13 +158,12 @@ model TrainingMajorOnTrainingObjectType extends Base {
   trainingObjectTypeId String
 
   @@unique([trainingMajorId, trainingObjectTypeId])
-
   @@schema("ql-dao-tao")
 }
 
 /// khối kiến thức
 model TrainingBlock extends Base {
-  name               String
+  name               String                             @unique
   /// ưu tiên sắp xếp
   priority           Int                                @default(0)
 
@@ -181,7 +182,6 @@ model TrainingBlockOnCurriculumVersion extends Base {
   subjects            TrainingBlockSubject[]
 
   @@unique([trainingBlockId, curriculumVersionId])
-
   @@schema("ql-dao-tao")
 }
 

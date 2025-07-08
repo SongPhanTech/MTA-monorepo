@@ -53,13 +53,13 @@ export default function CanhCaoHocBong() {
                     },
                     {
                         key: '3',
-                        label: 'Xét cảnh cáo học đường',
-                        children: <XetCanhCaoHocDuong />,
+                        label: 'Xét cảnh cáo học tập',
+                        children: <XetCanhCaoHocTap semesterId={semesterId} />,
                     },
                     {
                         key: '4',
-                        label: 'Xét cảnh cáo học tập',
-                        children: <XetCanhCaoHocTap />,
+                        label: 'Xét cảnh cáo học đường',
+                        children: <XetCanhCaoHocDuong />,
                     },
                     {
                         key: '5',
