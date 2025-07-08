@@ -467,9 +467,20 @@ const NAVIGATION: NavigationType = {
                     {
                         id: 'hoc-bong',
                         label: 'Danh mục học bổng',
-                        icon: TeamOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_HOC_BONG,
                         description: 'Danh mục học bổng',
+                    },
+                    {
+                        id: 'canh-cao-hoc-tap',
+                        label: 'Danh mục cảnh cáo học tập',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP,
+                        description: 'Danh mục cảnh cáo học tập',
+                    },
+                    {
+                        id: 'canh-cao-hoc-duong',
+                        label: 'Danh mục cảnh cáo học đường',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG,
+                        description: 'Danh mục cảnh cáo học đường',
                     },
                     {
                         id: 'thoi-gian-dao-tao',

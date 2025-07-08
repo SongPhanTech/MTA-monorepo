@@ -66,8 +66,8 @@ model DisciplinaryWarning extends Base {
 // Nộp học phí muộn > 4 tuần
 model DisciplinaryWarningReason extends Base {
   name          String              @unique
-  warning       DisciplinaryWarning @relation(fields: [warningId], references: [id])
-  warningId     String
+  warning       DisciplinaryWarning? @relation(fields: [warningId], references: [id])
+  warningId     String?
   severityLevel Int      // 1 hoặc 2 mức nâng
 
   @@schema("ql-dao-tao")

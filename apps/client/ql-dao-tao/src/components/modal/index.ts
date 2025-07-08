@@ -4,6 +4,8 @@ import ConfirmModal from './confirm-dialog'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
+import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
+import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
 import PutCertificateScoreModal from './put-chung-chi-score'
 import PutConvertScore from './put-chuyen-doi-diem'
 import PutTrainingMajorModal from './put-chuyen-nganh'
@@ -97,4 +99,6 @@ export {
     PutScholarshipCriteria,
     PutAcademicRanking,
     PutCloneAcademicRanking,
+    PutDisciplinaryWarningReason,
+    PutAcademicWarningRule,
 }

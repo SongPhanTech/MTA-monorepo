@@ -2,13 +2,20 @@ import DeleteIcon from '@components/icons/delete'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
+import { useExportStudentLearningDisciplineJson } from '@workspace/libs/api/training'
 import { Search } from 'lucide-react'
+import { useMemo } from 'react'
 
 dayjs.locale('vi')
 
-const XetCanhCaoHocTap = () => {
+interface XetCanhCaoHocTapProps {
+    semesterId: string
+}
+
+const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     const fakeData = [
         {
             id: '1',
@@ -48,6 +55,23 @@ const XetCanhCaoHocTap = () => {
             ],
         },
     ]
+
+    const { data: students = [], refetch } = useExportStudentLearningDisciplineJson(
+        {
+            semesterId: semesterId || '',
+        },
+        {
+            query: {
+                enabled: !!semesterId,
+            },
+        },
+        queryClient
+    )
+
+    const studentData = useMemo(() => {
+        return students?.data || []
+    }, [students?.data])
+    console.log(studentData)
 
     return (
         <div>
