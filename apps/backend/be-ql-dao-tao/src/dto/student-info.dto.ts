@@ -87,6 +87,37 @@ export const StudentAcademicWarning = z.object({
 
     userProfile: z.any().describe('Thông tin người dùng'),
 })
+export const StudentAcademicAction = z.object({
+    id: z.string().describe('ID của sinh viên'),
+    stt: z.number().describe('STT'),
+    hoTen: z.string().describe('Họ tên sinh viên'),
+    maSinhVien: z.string().describe('Mã sinh viên'),
+    doiTuong: z.string().describe('Đối tượng'),
+    khoa: z.string().describe('Khóa'),
+    khoaId: z.string().describe('ID Khoá'),
+    chuyenNganh: z.string().describe('Chuyên ngành'),
+    chuyenNganhId: z.string().describe('ID Chuyên ngành'),
+    nganh: z.string().describe('Ngành'),
+    nganhId: z.string().describe('ID Ngành'),
+    kyDangHoc: z.number().describe('Kỳ đăng học'),
+    namDangHoc: z.number().describe('Năm đang học'),
+    heSoDiem: z.number().describe('Loại hệ số điểm'),
+    kyCuoi: z.boolean().describe('Kỳ cuối'),
+    ngaySinh: z.string().describe('Ngày sinh'),
+    diemTrungBinh4: z.number().describe('Điểm trung bình hệ 4'),
+    diemTrungBinh10: z.number().describe('Điểm trung bình hệ 10'),
+    xepLoaiHocTap: z.string().describe('Xếp loại học tập'),
+    soTinChiDangKy: z.number().describe('Số tín chỉ đăng ký trong học kỳ'),
+    soTinChiTichLuy: z.number().describe('Số tín chỉ tích lũy'),
+    diemHe10TichLuy: z.number().describe('Điểm hệ 10 tích lũy'),
+    diemHe4TichLuy: z.number().describe('Điểm hệ 4 tích lũy'),
+    noTinChiTrongKy: z.number().describe('Nợ tín chỉ trong kỳ (số môn thi trong kỳ không đạt)'),
+    tongSoTinChiNo: z.number().describe('Số tín chỉ nợ'),
+    mucCanhCaoHocTap: z.number().describe('Mức cảnh cáo học tập'),
+    mucCanhCaoHocDuong: z.number().describe('Mức cảnh cáo học đường'),
+    xepLoaiRenLuyenKy: z.string().describe('Xếp loại rèn luyện'),
+    userProfile: z.any().describe('Thông tin người dùng'),
+})
 
 export const StudentTemplateData = z.object({
     date: z.string().describe('Ngày'),
@@ -109,6 +140,14 @@ export const CourseStudentAcademicWarning = z.object({
         .array(StudentAcademicWarning)
         .describe('Danh sách sinh viên có cảnh báo học vụ trong khóa học'),
 })
+export const CourseStudentAcademicAction = z.object({
+    courseId: z.string().describe('ID khóa học'),
+    courseName: z.string().describe('Tên khóa học'),
+    students: z
+        .array(StudentAcademicAction)
+        .describe('Danh sách sinh viên lưu ban, thôi học trong khóa học'),
+})
+
 export type StudentInfo = z.infer<typeof StudentInfo>
 export type StudentTemplateData = z.infer<typeof StudentTemplateData>
 export type StudentScholarship = z.infer<typeof StudentScholarship>
@@ -116,3 +155,5 @@ export type ListScholarship = z.infer<typeof ListScholarship>
 export type StudentAcademicWarning = z.infer<typeof StudentAcademicWarning>
 export type CourseStudentScholarship = z.infer<typeof CourseStudentScholarship>
 export type CourseStudentAcademicWarning = z.infer<typeof CourseStudentAcademicWarning>
+export type CourseStudentAcademicAction = z.infer<typeof CourseStudentAcademicAction>
+export type StudentAcademicAction = z.infer<typeof StudentAcademicAction>
