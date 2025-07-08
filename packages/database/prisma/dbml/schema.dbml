@@ -211,7 +211,6 @@ Table SchoolYear {
   endDate DateTime
   semesters Semester [not null]
   milestone Milestone [not null]
-  studentTrainingSchoolYear StudentTrainingSchoolYear [not null]
   studentYearResult StudentYearResult [not null]
   studentAcademicDecision StudentAcademicDecision [not null]
 
@@ -236,7 +235,6 @@ Table Semester {
   subjectClasses SubjectClass [not null]
   trainingCoursesStart TrainingCourse [not null]
   trainingScoreSession TrainingScoreSession [not null]
-  studentTrainingSemester StudentTrainingSemester [not null]
   studentSemesterResult StudentSemesterResult [not null]
   scholarshipAward ScholarshipAward [not null]
   academicWarning AcademicWarning [not null]
@@ -297,11 +295,9 @@ Table TrainingCourse {
   fixedClass FixedClass [not null]
   scoreConverts ScoreConvert [not null]
   academicRankingConvert AcademicRankingConvert [not null]
-  studentTrainingCourse StudentTrainingCourse [not null]
   scholarships Scholarship [not null]
   academicWarningRule AcademicWarningRule [not null]
   academicActionConfig AcademicActionConfig [not null]
-  graduationConditionConfig GraduationConditionConfig [not null]
 
   Note: 'Khoá học'
 }
@@ -910,9 +906,6 @@ Table Student {
   academicWarningLevel Int [not null, default: 0]
   disciplinaryWarningLevel Int [not null, default: 0]
   studentTrainingScore StudentTrainingScore [not null]
-  studentTrainingSemester StudentTrainingSemester [not null]
-  studentTrainingSchoolYear StudentTrainingSchoolYear [not null]
-  studentTrainingCourse StudentTrainingCourse [not null]
   studentSemesterResult StudentSemesterResult [not null]
   studentYearResult StudentYearResult [not null]
   scholarshipAwards ScholarshipAward [not null]
@@ -945,6 +938,7 @@ Table StudentSemesterResult {
   cumulativeGpaBase4 Float [not null]
   gpaBase10 Float [not null]
   cumulativeGpaBase10 Float [not null]
+  conductScore Float
   studentTrainingType StudentTrainingType [not null]
   lowestFinalScore Float [not null]
   lowestGraduationScore Float
@@ -991,6 +985,7 @@ Table StudentYearResult {
   cumulativeGpaBase4 Float [not null]
   gpaBase10 Float [not null]
   cumulativeGpaBase10 Float [not null]
+  conductScore Float
   studentTrainingType StudentTrainingType [not null]
   totalCredits Int [not null]
   failedCredits Int [not null]
@@ -2129,54 +2124,6 @@ Table StudentTrainingScore {
   }
 }
 
-Table StudentTrainingSemester {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  student Student [not null]
-  studentId String [not null]
-  semester Semester [not null]
-  semesterId String [not null]
-  scoreAvg Float [not null, default: 0]
-  trainingType StudentTrainingType [not null]
-}
-
-Table StudentTrainingSchoolYear {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  student Student [not null]
-  studentId String [not null]
-  schoolYear SchoolYear [not null]
-  schoolYearId String [not null]
-  scoreAvg Float [not null, default: 0]
-  trainingType StudentTrainingType [not null]
-}
-
-Table StudentTrainingCourse {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  student Student [not null]
-  studentId String [not null]
-  TrainingCourse TrainingCourse [not null]
-  trainingCourseId String [not null]
-  scoreAvg Float [not null, default: 0]
-  trainingType StudentTrainingType [not null]
-}
-
 Table Scholarship {
   id String [pk]
   code String [unique]
@@ -2312,8 +2259,7 @@ Table DisciplinaryWarningReason {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [unique, not null]
-  warning DisciplinaryWarning
-  warningId String
+  warning DisciplinaryWarning [not null]
   severityLevel Int [not null]
 }
 
@@ -2463,7 +2409,6 @@ Table StudentGraduationApplication {
   sessionId String [not null]
   applicationDate DateTime [default: `now()`, not null]
   status ApplicationStatus [not null, default: 'SUBMITTED']
-  checkResults Json
   applicationCheckResult ApplicationCheckResult [not null]
   decision GraduationDecision
 
@@ -2484,13 +2429,13 @@ Table ApplicationCheckResult {
   updatedAt DateTime [not null]
   studentGraduationApplication StudentGraduationApplication [not null]
   studentGraduationApplicationId String [unique, not null]
-  graduationCondition GraduationCondition [not null]
-  graduationConditionId String [not null]
+  rankingCondition RankingCondition [not null]
+  rankingConditionId String [not null]
   passed Boolean [not null]
   actualValue Float
 
   indexes {
-    (studentGraduationApplicationId, graduationConditionId) [unique]
+    (studentGraduationApplicationId, rankingConditionId) [unique]
   }
 
   Note: 'Kết quả kiểm tra điều kiện tự động của hệ thống'
@@ -2518,40 +2463,6 @@ Table GraduationDecision {
   Note: 'Lưu trữ quyết định tốt nghiệp cuối cùng cho một sinh viên'
 }
 
-Table GraduationConditionConfig {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  trainingCourse TrainingCourse [not null]
-  trainingCourseId String [unique, not null]
-  conditions GraduationCondition [not null]
-
-  Note: 'Cấu hình bộ điều kiện để được xét tốt nghiệp, áp dụng cho một khoá học'
-}
-
-Table GraduationCondition {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  config GraduationConditionConfig [not null]
-  configId String [not null]
-  field CriteriaField [not null]
-  operator CriteriaOperator [not null]
-  value Float [not null]
-  applicationCheckResult ApplicationCheckResult [not null]
-
-  Note: 'Một điều kiện cụ thể trong bộ điều kiện tốt nghiệp'
-}
-
 Table AcademicRankingConvert {
   id String [pk]
   code String [unique]
@@ -2571,6 +2482,7 @@ Table AcademicRankingConvert {
   graduated Boolean [not null]
   trainingCourse TrainingCourse [not null]
   trainingCourseId String [not null]
+  rankingCondition RankingCondition [not null]
   downgradeRules GraduationRankDowngradeRule [not null]
 
   indexes {
@@ -2610,6 +2522,24 @@ Table GraduationRankDowngradeCondition {
   value Float [not null]
 
   Note: 'Một điều kiện cụ thể trong bộ quy tắc hạ bậc'
+}
+
+Table RankingCondition {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  ranking AcademicRankingConvert [not null]
+  rankingId String [not null]
+  field CriteriaField [not null]
+  operator CriteriaOperator [not null]
+  value Float [not null]
+  applicationCheckResult ApplicationCheckResult [not null]
+
+  Note: 'Điều kiện để đạt được một mức xếp loại'
 }
 
 Table TemplateFile {
@@ -2678,6 +2608,11 @@ Table PermissionToRole {
 Table AcademicWarningToAcademicWarningRule {
   academicwarningId String [ref: > AcademicWarning.id]
   rulesId String [ref: > AcademicWarningRule.id]
+}
+
+Table DisciplinaryWarningToDisciplinaryWarningReason {
+  reasondetailsId String [ref: > DisciplinaryWarningReason.id]
+  warningId String [ref: > DisciplinaryWarning.id]
 }
 
 Enum SubjectClassStudentStatus {
@@ -3180,18 +3115,6 @@ Ref: StudentTrainingScore.trainingScoreSessionId > TrainingScoreSession.id
 
 Ref: StudentTrainingScore.studentId > Student.id
 
-Ref: StudentTrainingSemester.studentId > Student.id
-
-Ref: StudentTrainingSemester.semesterId > Semester.id
-
-Ref: StudentTrainingSchoolYear.studentId > Student.id
-
-Ref: StudentTrainingSchoolYear.schoolYearId > SchoolYear.id
-
-Ref: StudentTrainingCourse.studentId > Student.id
-
-Ref: StudentTrainingCourse.trainingCourseId > TrainingCourse.id
-
 Ref: Scholarship.trainingCourseId > TrainingCourse.id
 
 Ref: ScholarshipCriteria.scholarshipId > Scholarship.id
@@ -3211,8 +3134,6 @@ Ref: AcademicWarning.semesterId > Semester.id
 Ref: DisciplinaryWarning.studentId > Student.id
 
 Ref: DisciplinaryWarning.semesterId > Semester.id
-
-Ref: DisciplinaryWarningReason.warningId > DisciplinaryWarning.id
 
 Ref: AcademicActionConfig.trainingCourseId > TrainingCourse.id
 
@@ -3246,18 +3167,16 @@ Ref: StudentGraduationApplication.sessionId > GraduationSession.id
 
 Ref: ApplicationCheckResult.studentGraduationApplicationId > StudentGraduationApplication.id
 
-Ref: ApplicationCheckResult.graduationConditionId > GraduationCondition.id
+Ref: ApplicationCheckResult.rankingConditionId > RankingCondition.id
 
 Ref: GraduationDecision.applicationId - StudentGraduationApplication.id
 
 Ref: GraduationDecision.studentId - Student.id
-
-Ref: GraduationConditionConfig.trainingCourseId > TrainingCourse.id
-
-Ref: GraduationCondition.configId > GraduationConditionConfig.id
 
 Ref: AcademicRankingConvert.trainingCourseId > TrainingCourse.id
 
 Ref: GraduationRankDowngradeRule.initialRankId > AcademicRankingConvert.id
 
 Ref: GraduationRankDowngradeCondition.downgradeRuleId > GraduationRankDowngradeRule.id
+
+Ref: RankingCondition.rankingId > AcademicRankingConvert.id

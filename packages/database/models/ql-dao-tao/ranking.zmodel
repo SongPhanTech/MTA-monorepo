@@ -52,8 +52,6 @@ model StudentGraduationApplication extends Base {
   applicationDate        DateTime                 @default(now())
   status                 ApplicationStatus        @default(SUBMITTED)
 
-  checkResults           Json?
-
   applicationCheckResult ApplicationCheckResult[]
   // Quyết định cuối cùng cho đơn này
   decision               GraduationDecision?
@@ -67,13 +65,13 @@ model ApplicationCheckResult extends Base {
   studentGraduationApplication   StudentGraduationApplication @relation(fields: [studentGraduationApplicationId], references: [id])
   studentGraduationApplicationId String                       @unique
 
-  graduationCondition            GraduationCondition          @relation(fields: [graduationConditionId], references: [id])
-  graduationConditionId          String
+  rankingCondition               RankingCondition             @relation(fields: [rankingConditionId], references: [id])
+  rankingConditionId             String
 
   passed                         Boolean
   actualValue                    Float?
 
-  @@unique([studentGraduationApplicationId, graduationConditionId])
+  @@unique([studentGraduationApplicationId, rankingConditionId])
   @@schema("ql-dao-tao")
 }
 
@@ -97,33 +95,6 @@ model GraduationDecision extends Base {
   @@schema("ql-dao-tao")
 }
 
-/// Cấu hình bộ điều kiện để được xét tốt nghiệp, áp dụng cho một khoá học
-model GraduationConditionConfig extends Base {
-  name             String
-
-  trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String                @unique // Mỗi khoá học chỉ có 1 bộ điều kiện tốt nghiệp
-
-  // Danh sách các điều kiện, sinh viên phải thoả mãn TẤT CẢ
-  conditions       GraduationCondition[]
-
-  @@schema("ql-dao-tao")
-}
-
-/// Một điều kiện cụ thể trong bộ điều kiện tốt nghiệp
-model GraduationCondition extends Base {
-  config                 GraduationConditionConfig @relation(fields: [configId], references: [id])
-  configId               String
-
-  field                  CriteriaField  // Trường dữ liệu để kiểm tra (ví dụ: CUMULATIVE_GPA)
-  operator               CriteriaOperator // Toán tử so sánh (ví dụ: GTE)
-  value                  Float          // Giá trị ngưỡng (ví dụ: 5.5 đối với hệ QS)
-
-  applicationCheckResult ApplicationCheckResult[]
-
-  @@schema("ql-dao-tao")
-}
-
 enum RankingContext {
   STUDYING    // Xếp loại trong quá trình học (học lực)
   GRADUATION  // Xếp loại khi tốt nghiệp
@@ -133,7 +104,7 @@ enum RankingContext {
 
 /// Xếp loại học lực
 model AcademicRankingConvert extends Base {
-  classification   String // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
+  classification   String           // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
   context          RankingContext   // Bối cảnh áp dụng: Học tập hay Tốt nghiệp
   rankOrder        Int              // Thứ tự ưu tiên của xếp loại (1 là cao nhất)
 
@@ -149,6 +120,7 @@ model AcademicRankingConvert extends Base {
   trainingCourse   TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
 
+  rankingCondition RankingCondition[]
   downgradeRules   GraduationRankDowngradeRule[]
 
   @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
@@ -180,6 +152,21 @@ model GraduationRankDowngradeCondition extends Base {
   operator        CriteriaOperator // Toán tử so sánh (GTE, LTE...)
   value           Float          // Giá trị ngưỡng
 
+
+  @@schema("ql-dao-tao")
+}
+
+/// Điều kiện để đạt được một mức xếp loại
+model RankingCondition extends Base {
+  ranking                AcademicRankingConvert   @relation(fields: [rankingId], references: [id])
+  rankingId              String
+
+  // Quy tắc điều kiện
+  field                  CriteriaField    // Trường dữ liệu để kiểm tra (ví dụ: CUMULATIVE_GPA)
+  operator               CriteriaOperator // Toán tử so sánh (ví dụ: GTE)
+  value                  Float            // Giá trị ngưỡng (ví dụ: 5.5 đối với hệ QS)
+
+  applicationCheckResult ApplicationCheckResult[]
 
   @@schema("ql-dao-tao")
 }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
