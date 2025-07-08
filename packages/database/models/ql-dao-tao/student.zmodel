@@ -10,6 +10,7 @@ import 'plan-training'
 import 'scholarship'
 import 'warning'
 import 'training-action'
+import 'ranking'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
@@ -18,7 +19,7 @@ model Student extends Base {
   from                      DateTime? // từ ngày
   to                        DateTime? // đến ngày
 
-  trainingLocation          TrainingLocation?           @relation(fields: [trainingLocationId], references: [id])
+  trainingLocation          TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
   trainingLocationId        String?
 
   /// đối tượng ưu tiên
@@ -26,44 +27,46 @@ model Student extends Base {
 
   unionLeader               String?
 
-  status                    StudentStatus               @default(ENROLLED)
+  status                    StudentStatus                  @default(ENROLLED)
 
-  classMonitor              FixedClass?                 @relation("ClassMonitor")
-  fixedClass                FixedClass?                 @relation(fields: [fixedClassId], references: [id])
+  classMonitor              FixedClass?                    @relation("ClassMonitor")
+  fixedClass                FixedClass?                    @relation(fields: [fixedClassId], references: [id])
   fixedClassId              String?
   subjectClassStudent       StudentSubjectScore[]
 
   userProfileId             String
-  userProfile               UserProfile                 @relation(fields: [userProfileId], references: [id])
+  userProfile               UserProfile                    @relation(fields: [userProfileId], references: [id])
 
-  trainingLevel             TrainingLevel?              @relation(fields: [trainingLevelId], references: [id])
+  trainingLevel             TrainingLevel?                 @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId           String?
 
-  trainingObjectType        TrainingObjectType?         @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectType        TrainingObjectType?            @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
   trainingObjectTypeId      String?
 
-  trainingType              TrainingType?               @relation(fields: [trainingTypeId], references: [id])
+  trainingType              TrainingType?                  @relation(fields: [trainingTypeId], references: [id])
   trainingTypeId            String?
 
-  trainingForm              TrainingForm?               @relation(fields: [trainingFormId], references: [id])
+  trainingForm              TrainingForm?                  @relation(fields: [trainingFormId], references: [id])
   trainingFormId            String?
 
-  registrationArea          DM_KhuVuc_DiaLy?            @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
+  registrationArea          DM_KhuVuc_DiaLy?               @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
   registrationAreaId        String?
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý
   // phiên bản -> CTĐT -> chuyên ngành
-  curriculumVersion         CurriculumVersion?          @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion         CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId       String?
 
-  studyRank                 StudyRank?                  @relation(fields: [studyRankId], references: [id])
+  // maybe can remove
+  studyRank                 StudyRank?                     @relation(fields: [studyRankId], references: [id])
   studyRankId               String?
 
-  trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
+  // maybe can remove
+  trainingRank              TrainingRank?                  @relation(fields: [trainingRankId], references: [id])
   trainingRankId            String?
 
-  academicWarningLevel      Int                         @default(0) // mức cảnh cáo học tập
-  disciplinaryWarningLevel  Int                         @default(0) // mức cảnh cáo học đường
+  academicWarningLevel      Int                            @default(0) // mức cảnh cáo học tập
+  disciplinaryWarningLevel  Int                            @default(0) // mức cảnh cáo học đường
 
   studentTrainingScore      StudentTrainingScore[]
   studentTrainingSemester   StudentTrainingSemester[]
@@ -74,6 +77,8 @@ model Student extends Base {
   scholarshipAwards         ScholarshipAward[]
   academicWarning           AcademicWarning[]
   studentAcademicDecision   StudentAcademicDecision[]
+  graduationApplications    StudentGraduationApplication[]
+  graduationDecision        GraduationDecision?
 
   @@schema("ql-dao-tao")
 }

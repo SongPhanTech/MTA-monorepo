@@ -290,6 +290,25 @@ enum DecisionStatus {
   @@schema("ql-dao-tao")
 }
 
+enum GraduationSessionStatus {
+  PLANNING
+  OPEN_FOR_APPLICATION
+  IN_REVIEW
+  COMPLETED
+  CLOSED
+
+  @@schema("ql-dao-tao")
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
 enum RankingContext {
   STUDYING
   GRADUATION
@@ -586,38 +605,39 @@ model Milestone {
 
 /// Khoá học
 model TrainingCourse {
-  id                     String                   @id() @default(cuid())
-  code                   String?                  @unique()
-  active                 Boolean                  @default(true)
-  description            String?                  @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @updatedAt()
-  name                   String
-  semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id])
-  semesterStartId        String
-  startYear              Int?
-  endYear                Int?
-  academicYear           String?
-  maxTrainingTime        Float?
-  admissionQuota         Int?
-  coef_1                 Float                    @default(0.1)
-  coef_2                 Float                    @default(0.3)
-  coef_3                 Float                    @default(0.6)
-  scoreToTakeExam        Float                    @default(0)
-  scoreToPass            Float                    @default(4)
-  scoreToPassConditional Float                    @default(5)
-  scoreToTakeGraduation  Float                    @default(5)
-  scoreToPassGraduation  Float                    @default(5.5)
-  trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId   String
-  fixedClass             FixedClass[]
-  scoreConverts          ScoreConvert[]
-  academicRankingConvert AcademicRankingConvert[]
-  studentTrainingCourse  StudentTrainingCourse[]
-  scholarships           Scholarship[]
-  academicWarningRule    AcademicWarningRule[]
-  academicActionConfig   AcademicActionConfig[]
+  id                        String                      @id() @default(cuid())
+  code                      String?                     @unique()
+  active                    Boolean                     @default(true)
+  description               String?                     @db.Text()
+  deletedAt                 DateTime?
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @updatedAt()
+  name                      String
+  semesterStart             Semester                    @relation(fields: [semesterStartId], references: [id])
+  semesterStartId           String
+  startYear                 Int?
+  endYear                   Int?
+  academicYear              String?
+  maxTrainingTime           Float?
+  admissionQuota            Int?
+  coef_1                    Float                       @default(0.1)
+  coef_2                    Float                       @default(0.3)
+  coef_3                    Float                       @default(0.6)
+  scoreToTakeExam           Float                       @default(0)
+  scoreToPass               Float                       @default(4)
+  scoreToPassConditional    Float                       @default(5)
+  scoreToTakeGraduation     Float                       @default(5)
+  scoreToPassGraduation     Float                       @default(5.5)
+  trainingObjectType        TrainingObjectType          @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId      String
+  fixedClass                FixedClass[]
+  scoreConverts             ScoreConvert[]
+  academicRankingConvert    AcademicRankingConvert[]
+  studentTrainingCourse     StudentTrainingCourse[]
+  scholarships              Scholarship[]
+  academicWarningRule       AcademicWarningRule[]
+  academicActionConfig      AcademicActionConfig[]
+  graduationConditionConfig GraduationConditionConfig[]
 
   @@schema("ql-dao-tao")
 }
@@ -1209,46 +1229,46 @@ model TrainingKPI {
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student {
-  id                        String                      @id() @default(cuid())
-  code                      String?                     @unique()
-  active                    Boolean                     @default(true)
-  description               String?                     @db.Text()
+  id                        String                         @id() @default(cuid())
+  code                      String?                        @unique()
+  active                    Boolean                        @default(true)
+  description               String?                        @db.Text()
   deletedAt                 DateTime?
-  createdAt                 DateTime                    @default(now())
-  updatedAt                 DateTime                    @updatedAt()
+  createdAt                 DateTime                       @default(now())
+  updatedAt                 DateTime                       @updatedAt()
   entryScore                Float?
   from                      DateTime?
   to                        DateTime?
-  trainingLocation          TrainingLocation?           @relation(fields: [trainingLocationId], references: [id])
+  trainingLocation          TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
   trainingLocationId        String?
   /// đối tượng ưu tiên
   priorityObject            PriorityObject[]
   unionLeader               String?
-  status                    StudentStatus               @default(ENROLLED)
-  classMonitor              FixedClass?                 @relation("ClassMonitor")
-  fixedClass                FixedClass?                 @relation(fields: [fixedClassId], references: [id])
+  status                    StudentStatus                  @default(ENROLLED)
+  classMonitor              FixedClass?                    @relation("ClassMonitor")
+  fixedClass                FixedClass?                    @relation(fields: [fixedClassId], references: [id])
   fixedClassId              String?
   subjectClassStudent       StudentSubjectScore[]
   userProfileId             String
-  userProfile               UserProfile                 @relation(fields: [userProfileId], references: [id])
-  trainingLevel             TrainingLevel?              @relation(fields: [trainingLevelId], references: [id])
+  userProfile               UserProfile                    @relation(fields: [userProfileId], references: [id])
+  trainingLevel             TrainingLevel?                 @relation(fields: [trainingLevelId], references: [id])
   trainingLevelId           String?
-  trainingObjectType        TrainingObjectType?         @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectType        TrainingObjectType?            @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId      String?
-  trainingType              TrainingType?               @relation(fields: [trainingTypeId], references: [id])
+  trainingType              TrainingType?                  @relation(fields: [trainingTypeId], references: [id])
   trainingTypeId            String?
-  trainingForm              TrainingForm?               @relation(fields: [trainingFormId], references: [id])
+  trainingForm              TrainingForm?                  @relation(fields: [trainingFormId], references: [id])
   trainingFormId            String?
-  registrationArea          DM_KhuVuc_DiaLy?            @relation(fields: [registrationAreaId], references: [Id])
+  registrationArea          DM_KhuVuc_DiaLy?               @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId        String?
-  curriculumVersion         CurriculumVersion?          @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion         CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId       String?
-  studyRank                 StudyRank?                  @relation(fields: [studyRankId], references: [id])
+  studyRank                 StudyRank?                     @relation(fields: [studyRankId], references: [id])
   studyRankId               String?
-  trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
+  trainingRank              TrainingRank?                  @relation(fields: [trainingRankId], references: [id])
   trainingRankId            String?
-  academicWarningLevel      Int                         @default(0)
-  disciplinaryWarningLevel  Int                         @default(0)
+  academicWarningLevel      Int                            @default(0)
+  disciplinaryWarningLevel  Int                            @default(0)
   studentTrainingScore      StudentTrainingScore[]
   studentTrainingSemester   StudentTrainingSemester[]
   studentTrainingSchoolYear StudentTrainingSchoolYear[]
@@ -1258,6 +1278,8 @@ model Student {
   scholarshipAwards         ScholarshipAward[]
   academicWarning           AcademicWarning[]
   studentAcademicDecision   StudentAcademicDecision[]
+  graduationApplications    StudentGraduationApplication[]
+  graduationDecision        GraduationDecision?
 
   @@schema("ql-dao-tao")
 }
@@ -2621,6 +2643,7 @@ model Scholarship {
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt()
   name             String
+  rankOrder        Int
   baseAmount       Decimal
   multiplier       Float                 @default(1)
   effectiveFrom    DateTime?
@@ -2864,6 +2887,126 @@ model DocumentFile {
   studentAcademicDecisionId String?
 
   @@schema("ql-danh-muc")
+}
+
+/// Đợt xét tốt nghiệp 
+model GraduationSession {
+  id               String                         @id() @default(cuid())
+  code             String?                        @unique()
+  active           Boolean                        @default(true)
+  description      String?                        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                       @default(now())
+  updatedAt        DateTime                       @updatedAt()
+  name             String
+  sessionDate      DateTime
+  applicationStart DateTime
+  applicationEnd   DateTime
+  status           GraduationSessionStatus        @default(PLANNING)
+  applications     StudentGraduationApplication[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quản lý đơn đăng ký xét tốt nghiệp của sinh viên
+model StudentGraduationApplication {
+  id                     String                   @id() @default(cuid())
+  code                   String?                  @unique()
+  active                 Boolean                  @default(true)
+  description            String?                  @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt()
+  student                Student                  @relation(fields: [studentId], references: [id])
+  studentId              String
+  session                GraduationSession        @relation(fields: [sessionId], references: [id])
+  sessionId              String
+  applicationDate        DateTime                 @default(now())
+  status                 ApplicationStatus        @default(SUBMITTED)
+  checkResults           Json?
+  applicationCheckResult ApplicationCheckResult[]
+  decision               GraduationDecision?
+
+  @@unique([studentId, sessionId])
+  @@schema("ql-dao-tao")
+}
+
+/// Kết quả kiểm tra điều kiện tự động của hệ thống
+model ApplicationCheckResult {
+  id                             String                       @id() @default(cuid())
+  code                           String?                      @unique()
+  active                         Boolean                      @default(true)
+  description                    String?                      @db.Text()
+  deletedAt                      DateTime?
+  createdAt                      DateTime                     @default(now())
+  updatedAt                      DateTime                     @updatedAt()
+  studentGraduationApplication   StudentGraduationApplication @relation(fields: [studentGraduationApplicationId], references: [id])
+  studentGraduationApplicationId String                       @unique()
+  graduationCondition            GraduationCondition          @relation(fields: [graduationConditionId], references: [id])
+  graduationConditionId          String
+  passed                         Boolean
+  actualValue                    Float?
+
+  @@schema("ql-dao-tao")
+}
+
+/// Lưu trữ quyết định tốt nghiệp cuối cùng cho một sinh viên
+model GraduationDecision {
+  id               String                       @id() @default(cuid())
+  code             String?                      @unique()
+  active           Boolean                      @default(true)
+  description      String?                      @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                     @default(now())
+  updatedAt        DateTime                     @updatedAt()
+  application      StudentGraduationApplication @relation(fields: [applicationId], references: [id])
+  applicationId    String                       @unique()
+  student          Student                      @relation(fields: [studentId], references: [id])
+  studentId        String                       @unique()
+  decisionDate     DateTime                     @default(now())
+  notes            String?
+  finalGpa         Float
+  finalRank        String
+  diplomaNumber    String?
+  diplomaIssueDate DateTime?
+
+  @@schema("ql-dao-tao")
+}
+
+/// Cấu hình bộ điều kiện để được xét tốt nghiệp, áp dụng cho một khoá học
+model GraduationConditionConfig {
+  id               String                @id() @default(cuid())
+  code             String?               @unique()
+  active           Boolean               @default(true)
+  description      String?               @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt()
+  name             String
+  trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String                @unique()
+  conditions       GraduationCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Một điều kiện cụ thể trong bộ điều kiện tốt nghiệp
+model GraduationCondition {
+  id                     String                    @id() @default(cuid())
+  code                   String?                   @unique()
+  active                 Boolean                   @default(true)
+  description            String?                   @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime                  @default(now())
+  updatedAt              DateTime                  @updatedAt()
+  config                 GraduationConditionConfig @relation(fields: [configId], references: [id])
+  configId               String
+  field                  CriteriaField
+  operator               CriteriaOperator
+  value                  Float
+  applicationCheckResult ApplicationCheckResult[]
+
+  @@schema("ql-dao-tao")
 }
 
 /// Xếp loại học lực

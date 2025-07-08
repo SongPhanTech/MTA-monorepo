@@ -181,38 +181,39 @@ model Milestone extends Base {
 
 /// Khoá học
 model TrainingCourse extends Base {
-  name                   String
-  semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
-  semesterStartId        String
-  startYear              Int?
-  endYear                Int?
-  academicYear           String?
-  maxTrainingTime        Float?
-  admissionQuota         Int?
+  name                      String
+  semesterStart             Semester                    @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
+  semesterStartId           String
+  startYear                 Int?
+  endYear                   Int?
+  academicYear              String?
+  maxTrainingTime           Float?
+  admissionQuota            Int?
 
-  coef_1                 Float                    @default(0.1) // Hệ số 1
-  coef_2                 Float                    @default(0.3) // Hệ số 2
-  coef_3                 Float                    @default(0.6) // Hệ số 3
+  coef_1                    Float                       @default(0.1) // Hệ số 1
+  coef_2                    Float                       @default(0.3) // Hệ số 2
+  coef_3                    Float                       @default(0.6) // Hệ số 3
 
-  scoreToTakeExam        Float                    @default(0) // Điểm tối thiểu để được thi (điểm liệt)
-  scoreToPass            Float                    @default(4) // Điểm tối thiểu để qua môn
-  scoreToPassConditional Float                    @default(5) // Điểm tối thiểu để qua môn điều kiện (5 đối với QS, =scoreToPass đối với DS)
+  scoreToTakeExam           Float                       @default(0) // Điểm tối thiểu để được thi (điểm liệt)
+  scoreToPass               Float                       @default(4) // Điểm tối thiểu để qua môn
+  scoreToPassConditional    Float                       @default(5) // Điểm tối thiểu để qua môn điều kiện (5 đối với QS, =scoreToPass đối với DS)
 
-  scoreToTakeGraduation  Float                    @default(5) // Điểm liệt môn tốt nghiệp
-  scoreToPassGraduation  Float                    @default(5.5) // Điểm tối để qua môn tốt nghiệp
+  scoreToTakeGraduation     Float                       @default(5) // Điểm liệt môn tốt nghiệp
+  scoreToPassGraduation     Float                       @default(5.5) // Điểm tối để qua môn tốt nghiệp
 
   // TODO: Thêm các quy chế về học bổng, cảnh cáo học tập
 
-  trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
-  trainingObjectTypeId   String
+  trainingObjectType        TrainingObjectType          @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId      String
 
-  fixedClass             FixedClass[]
-  scoreConverts          ScoreConvert[]
-  academicRankingConvert AcademicRankingConvert[]
-  studentTrainingCourse  StudentTrainingCourse[]
-  scholarships           Scholarship[]
-  academicWarningRule    AcademicWarningRule[]
-  academicActionConfig   AcademicActionConfig[]
+  fixedClass                FixedClass[]
+  scoreConverts             ScoreConvert[]
+  academicRankingConvert    AcademicRankingConvert[]
+  studentTrainingCourse     StudentTrainingCourse[]
+  scholarships              Scholarship[]
+  academicWarningRule       AcademicWarningRule[]
+  academicActionConfig      AcademicActionConfig[]
+  graduationConditionConfig GraduationConditionConfig[]
 
   @@schema("ql-dao-tao")
 }

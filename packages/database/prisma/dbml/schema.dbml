@@ -300,6 +300,7 @@ Table TrainingCourse {
   scholarships Scholarship [not null]
   academicWarningRule AcademicWarningRule [not null]
   academicActionConfig AcademicActionConfig [not null]
+  graduationConditionConfig GraduationConditionConfig [not null]
 
   Note: 'Khoá học'
 }
@@ -912,6 +913,8 @@ Table Student {
   scholarshipAwards ScholarshipAward [not null]
   academicWarning AcademicWarning [not null]
   studentAcademicDecision StudentAcademicDecision [not null]
+  graduationApplications StudentGraduationApplication [not null]
+  graduationDecision GraduationDecision
 
   Note: 'HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang'
 }
@@ -2169,6 +2172,7 @@ Table Scholarship {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
+  rankOrder Int [not null]
   baseAmount Decimal [not null]
   multiplier Float [not null, default: 1]
   effectiveFrom DateTime
@@ -2401,6 +2405,123 @@ Table DocumentFile {
   subjectVersionId String
   studentAcademicDecision StudentAcademicDecision
   studentAcademicDecisionId String
+}
+
+Table GraduationSession {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  sessionDate DateTime [not null]
+  applicationStart DateTime [not null]
+  applicationEnd DateTime [not null]
+  status GraduationSessionStatus [not null, default: 'PLANNING']
+  applications StudentGraduationApplication [not null]
+
+  Note: 'Đợt xét tốt nghiệp '
+}
+
+Table StudentGraduationApplication {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  session GraduationSession [not null]
+  sessionId String [not null]
+  applicationDate DateTime [default: `now()`, not null]
+  status ApplicationStatus [not null, default: 'SUBMITTED']
+  checkResults Json
+  applicationCheckResult ApplicationCheckResult [not null]
+  decision GraduationDecision
+
+  indexes {
+    (studentId, sessionId) [unique]
+  }
+
+  Note: 'Quản lý đơn đăng ký xét tốt nghiệp của sinh viên'
+}
+
+Table ApplicationCheckResult {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  studentGraduationApplication StudentGraduationApplication [not null]
+  studentGraduationApplicationId String [unique, not null]
+  graduationCondition GraduationCondition [not null]
+  graduationConditionId String [not null]
+  passed Boolean [not null]
+  actualValue Float
+
+  Note: 'Kết quả kiểm tra điều kiện tự động của hệ thống'
+}
+
+Table GraduationDecision {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  application StudentGraduationApplication [not null]
+  applicationId String [unique, not null]
+  student Student [not null]
+  studentId String [unique, not null]
+  decisionDate DateTime [default: `now()`, not null]
+  notes String
+  finalGpa Float [not null]
+  finalRank String [not null]
+  diplomaNumber String
+  diplomaIssueDate DateTime
+
+  Note: 'Lưu trữ quyết định tốt nghiệp cuối cùng cho một sinh viên'
+}
+
+Table GraduationConditionConfig {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [unique, not null]
+  conditions GraduationCondition [not null]
+
+  Note: 'Cấu hình bộ điều kiện để được xét tốt nghiệp, áp dụng cho một khoá học'
+}
+
+Table GraduationCondition {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  config GraduationConditionConfig [not null]
+  configId String [not null]
+  field CriteriaField [not null]
+  operator CriteriaOperator [not null]
+  value Float [not null]
+  applicationCheckResult ApplicationCheckResult [not null]
+
+  Note: 'Một điều kiện cụ thể trong bộ điều kiện tốt nghiệp'
 }
 
 Table AcademicRankingConvert {
@@ -2747,6 +2868,21 @@ Enum DecisionStatus {
   APPEALED
 }
 
+Enum GraduationSessionStatus {
+  PLANNING
+  OPEN_FOR_APPLICATION
+  IN_REVIEW
+  COMPLETED
+  CLOSED
+}
+
+Enum ApplicationStatus {
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
 Enum RankingContext {
   STUDYING
   GRADUATION
@@ -3079,6 +3215,22 @@ Ref: DocumentFile.curriculumVersionId > CurriculumVersion.id
 Ref: DocumentFile.subjectVersionId > SubjectVersion.id
 
 Ref: DocumentFile.studentAcademicDecisionId > StudentAcademicDecision.id
+
+Ref: StudentGraduationApplication.studentId > Student.id
+
+Ref: StudentGraduationApplication.sessionId > GraduationSession.id
+
+Ref: ApplicationCheckResult.studentGraduationApplicationId > StudentGraduationApplication.id
+
+Ref: ApplicationCheckResult.graduationConditionId > GraduationCondition.id
+
+Ref: GraduationDecision.applicationId - StudentGraduationApplication.id
+
+Ref: GraduationDecision.studentId - Student.id
+
+Ref: GraduationConditionConfig.trainingCourseId > TrainingCourse.id
+
+Ref: GraduationCondition.configId > GraduationConditionConfig.id
 
 Ref: AcademicRankingConvert.trainingCourseId > TrainingCourse.id
 
