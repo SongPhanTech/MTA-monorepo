@@ -26,7 +26,6 @@ model Lecturer extends Base {
   mainSubjectClasses  SubjectClass[] @relation("MainLecturer")
   extraSubjectClasses SubjectClass[] @relation("ExtraLecturer")
   enterGradeClasses   SubjectClass[] @relation("EnterGradeLecturer")
-
   manageFixedClass    FixedClass[]   @relation("ManageLecturer")
 
   @@schema("ql-dao-tao")

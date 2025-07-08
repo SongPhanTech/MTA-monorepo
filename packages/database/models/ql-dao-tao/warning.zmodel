@@ -7,7 +7,7 @@ import 'plan-training'
 import 'scholarship'
 import 'criteria'
 
-/// Quy tắc cấu hình Cảnh báo học tập (phiên bản cải tiến)
+/// Quy tắc cấu hình Cảnh báo học tập
 model AcademicWarningRule extends Base {
   field             CriteriaField      // Trường dữ liệu để kiểm tra, ví dụ: SEMESTER_GPA
   operator          CriteriaOperator   // Toán tử so sánh, ví dụ: LTE (nhỏ hơn hoặc bằng)
@@ -46,8 +46,10 @@ model AcademicWarning extends Base {
 
 /// Cảnh cáo học đường
 model DisciplinaryWarning extends Base {
+  student       Student                     @relation(fields: [studentId], references: [id])
   studentId     String
-  semesterId    String
+  semester      Semester?                   @relation(fields: [semesterId], references: [id])
+  semesterId    String?
   level         Int      // Mức CCHĐ hiện tại (0–4)
   increasedFrom Int?
 
@@ -56,10 +58,16 @@ model DisciplinaryWarning extends Base {
   @@schema("ql-dao-tao")
 }
 
+// Bị kỷ luật từ cảnh cáo trở lên
+// Bị đình chỉ hoặc cảnh cáo thi
+// Thi hộ lần đầu
+// Thi hộ lần hai
+// Nộp học phí muộn <= 4 tuần
+// Nộp học phí muộn > 4 tuần
 model DisciplinaryWarningReason extends Base {
-  warning       DisciplinaryWarning           @relation(fields: [warningId], references: [id])
+  name          String              @unique
+  warning       DisciplinaryWarning @relation(fields: [warningId], references: [id])
   warningId     String
-  reasonType    DisciplinaryWarningReasonType
   severityLevel Int      // 1 hoặc 2 mức nâng
 
   @@schema("ql-dao-tao")

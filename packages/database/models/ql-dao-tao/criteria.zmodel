@@ -36,18 +36,6 @@ enum CriteriaField {
   @@schema("ql-dao-tao")
 }
 
-/// Enum cảnh cáo học đường
-enum DisciplinaryWarningReasonType {
-  DISCIPLINE_PENALTY                 // Bị kỷ luật từ cảnh cáo trở lên
-  EXAM_VIOLATION                     // Bị đình chỉ hoặc cảnh cáo thi
-  EXAM_PROXY_FIRST                   // Thi hộ lần đầu
-  EXAM_PROXY_REPEAT                  // Thi hộ lần hai
-  LATE_TUITION_1                     // Nộp học phí muộn <= 4 tuần
-  LATE_TUITION_2                     // Nộp học phí muộn > 4 tuần
-
-  @@schema("ql-dao-tao")
-}
-
 enum CriteriaOperator {
   GTE // >=
   LTE // <=
