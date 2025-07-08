@@ -8,17 +8,19 @@ import {
     useCreateTrainingCourse,
     useFindManySchoolYear,
     useFindManySemester,
+    useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useFindUniqueTrainingCourse,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
+    trainingCourseClone: string | null
 }
 dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
@@ -32,6 +34,9 @@ const PutTrainingCourseModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
+    const [selectedId, setSelectedId] = useState<string | undefined>(undefined)
+
+    const { data: trainingCourse = [] } = useFindManyTrainingCourse()
 
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
@@ -40,7 +45,13 @@ const PutTrainingCourseModal = () => {
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function onOk(output?: PutTrainingCourse) {
         if (!output) return
-        const { trainingObjectTypeId, semesterStartId, schoolYearId, ...rest } = output
+        const {
+            trainingObjectTypeId,
+            semesterStartId,
+            trainingCourseClone,
+            schoolYearId,
+            ...rest
+        } = output
         try {
             showSpinner()
             const data: Prisma.TrainingCourseCreateInput = {
@@ -94,19 +105,47 @@ const PutTrainingCourseModal = () => {
         }
     )
 
+    const { data: selectedTraniningCourse } = useFindUniqueTrainingCourse(
+        {
+            where: {
+                id: selectedId,
+            },
+        },
+        {
+            enabled: !!selectedId,
+        }
+    )
+
+    const handleSelectChange = async (value: string) => {
+        setSelectedId(value)
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue({
                 ...level,
-                schoolYearId: level.semesterStart.schoolYearId,
+                schoolYearId: level.semesterStart?.schoolYearId,
+            })
+        } else if (selectedTraniningCourse) {
+            form.setFieldsValue({
+                coef_1: selectedTraniningCourse.coef_1,
+                coef_2: selectedTraniningCourse.coef_2,
+                coef_3: selectedTraniningCourse.coef_3,
+                scoreToTakeExam: selectedTraniningCourse.scoreToTakeExam,
+                scoreToPass: selectedTraniningCourse.scoreToPass,
+                scoreToPassConditional: selectedTraniningCourse.scoreToPassConditional,
+                scoreToTakeGraduation: selectedTraniningCourse.scoreToTakeGraduation,
+                scoreToPassGraduation: selectedTraniningCourse.scoreToPassGraduation,
+                admissionQuota: selectedTraniningCourse.admissionQuota,
+                maxTrainingTime: selectedTraniningCourse.maxTrainingTime,
             })
         } else {
             form.setFieldsValue({
                 active: true,
             })
         }
-    }, [level])
+    }, [level, selectedTraniningCourse])
 
     return (
         <PutFormModal
@@ -116,7 +155,7 @@ const PutTrainingCourseModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa khóa' : 'Thêm mới khóa'}
-            className="w-[35vw]"
+            className="w-[60vw]"
         >
             <Col span={12}>
                 <FormItem
@@ -179,18 +218,50 @@ const PutTrainingCourseModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
+                    <Select
+                        placeholder="Chọn khóa để sao chép"
+                        options={trainingCourse.map((i) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                        onChange={handleSelectChange}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem form={form} name="coef_1" label="Hệ số điểm chuyên cần">
-                    <InputNumber placeholder="Nhập hệ số điểm chuyên cần" className="w-full" />
+                    <InputNumber
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        placeholder="Nhập hệ số điểm chuyên cần"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="coef_2" label="Hệ số điểm thường xuyên">
-                    <InputNumber placeholder="Nhập hệ số điểm thường xuyên" className="w-full" />
+                    <InputNumber
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        placeholder="Nhập hệ số điểm thường xuyên"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="coef_3" label="Hệ số điểm điểm thi">
-                    <InputNumber placeholder="Nhập hệ số điểm điểm thi" className="w-full" />
+                    <InputNumber
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        placeholder="Nhập hệ số điểm điểm thi"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -215,12 +286,22 @@ const PutTrainingCourseModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="maxTrainingTime" label="Thời gian đào tạo Max">
-                    <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        min={0}
+                        step={1}
+                        placeholder="Nhập thời gian đào tạo"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
-                    <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        min={0}
+                        step={1}
+                        placeholder="Nhập chỉ tiêu tuyển sinh"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

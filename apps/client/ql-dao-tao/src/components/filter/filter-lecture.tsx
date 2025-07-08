@@ -1,4 +1,3 @@
-import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import {
     useFindManyDM_DanToc,
@@ -13,7 +12,6 @@ import {
     Flex,
     Form,
     Input,
-    Popover,
     Row,
     //   Select,
     Space,
@@ -210,7 +208,7 @@ const FilterLecture = (props: Props) => {
                 allowClear
                 onChange={(e) => onSearchChange('searchText', e.target.value)}
             />
-            <Popover
+            {/* <Popover
                 content={filterContent}
                 trigger="click"
                 open={open}
@@ -236,7 +234,7 @@ const FilterLecture = (props: Props) => {
                         justifyContent: 'center',
                     }}
                 />
-            </Popover>
+            </Popover> */}
         </Flex>
     )
 }

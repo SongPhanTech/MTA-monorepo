@@ -175,7 +175,7 @@ export default function TrainingBlock() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
@@ -196,7 +196,7 @@ export default function TrainingBlock() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Form.Item
                                         className="mb-0"
                                         name="trainingObjectId"
@@ -242,7 +242,7 @@ export default function TrainingBlock() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={8}>
                                     <Form.Item
                                         className="mb-0"
                                         name="trainingObjectId"

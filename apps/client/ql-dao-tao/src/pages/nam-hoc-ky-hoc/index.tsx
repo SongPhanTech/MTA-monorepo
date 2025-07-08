@@ -282,6 +282,9 @@ function YearAndSemester() {
                     headerTitleKey={'name'}
                     childrenFieldName="semesters"
                     currentPage={currentPage}
+                    onRowClick={({ id }) => {
+                        router.push(`${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`)
+                    }}
                     columns={[
                         {
                             title: 'Mã kỳ',
@@ -378,15 +381,7 @@ function YearAndSemester() {
                             render: (_, { id, schoolYearId }) => (
                                 <Row className="justify-center gap-2">
                                     <Tooltip title="Cảnh cáo học tập, Xét học bổng" placement="top">
-                                        <EyeOutlined
-                                            onClick={(e: any) => {
-                                                e.stopPropagation()
-                                                router.push(
-                                                    `${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`
-                                                )
-                                            }}
-                                            className="text-sm cursor-pointer"
-                                        />
+                                        <EyeOutlined className="text-sm cursor-pointer" />
                                     </Tooltip>
                                     <EditIcon
                                         onClick={(e) => {

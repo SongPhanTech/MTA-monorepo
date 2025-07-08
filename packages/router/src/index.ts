@@ -443,7 +443,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_KHOA_HUAN_LUYEN,
                         description: 'Danh mục khoá đào tạo',
                     },
-
+                    {
+                        id: 'xep-loai-hoc-luc',
+                        label: 'Xếp loại học lực',
+                        icon: BookOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_HOC_LUC,
+                        description: 'Xếp loại học lực',
+                    },
                     {
                         id: 'danh-muc-danh-muc-phong-hoc',
                         label: 'Danh mục phòng học',
@@ -510,6 +516,13 @@ const NAVIGATION: NavigationType = {
                         icon: IdcardOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
                         description: 'Quản lý hồ sơ sinh viên',
+                    },
+                    {
+                        id: 'ql-hoc-vien',
+                        label: 'Quản lý hồ sơ học viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_HOC_VIEN,
+                        description: 'Quản lý hồ sơ học viên',
                     },
                     {
                         id: 'user-profile-lecture',

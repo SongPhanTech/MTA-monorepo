@@ -1,16 +1,19 @@
-import { Col, Flex, Form, Input, Row, Select } from 'antd'
+import { Button, Col, Flex, Form, Row, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
-import TableCollapse from '@components/commons/tableCollapse'
-import type { TrainingCourse, TrainingField, TrainingObjectType } from '@workspace/db'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import {
-    useFindManyTrainingCourse,
-    useFindManyTrainingField,
-    useFindManyTrainingObjectType,
+    useDeleteManyScholarshipAward,
+    useFindManyScholarship,
+    useUpsertScholarshipAward,
 } from '@workspace/db/hooks'
 import { useExportStudentScholarshipJson } from '@workspace/libs/api/training'
-import { Search } from 'lucide-react'
+import _ from 'lodash'
+import { BookPlus } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 dayjs.locale('vi')
 
@@ -18,55 +21,23 @@ interface XetHocBongProps {
     semesterId: string
 }
 
-const XetHocBong = ({ semesterId }: XetHocBongProps) => {
-    const fakeData = [
-        {
-            id: '1',
-            code: 'lql_1',
-            name: 'lớp quản lý 1',
-            children: [
-                {
-                    id: '2',
-                    code: 'sv_1',
-                    name: 'sinh viên 1',
-                    gpa: 3.32,
-                    totalCredit: 15,
-                },
-                {
-                    id: '3',
-                    code: 'sv_2',
-                    name: 'sinh viên 2',
-                    gpa: 3.05,
-                    totalCredit: 15,
-                },
-            ],
-        },
-        {
-            id: '12',
-            code: 'lql_2',
-            name: 'lớp quản lý 2',
-            children: [
-                {
-                    id: '22',
-                    code: 'sv_3',
-                    name: 'sinh viên 3',
-                    gpa: 3.32,
-                    totalCredit: 15,
-                },
-                {
-                    id: '32',
-                    code: 'sv_4',
-                    name: 'sinh viên 4',
-                    gpa: 3.05,
-                    totalCredit: 15,
-                },
-            ],
-        },
-    ]
+interface FilterProps {
+    scholarshipId: string | null
+}
 
-    const { data: students } = useExportStudentScholarshipJson(
+const XetHocBong = ({ semesterId }: XetHocBongProps) => {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>([])
+    const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
+        useStudentTrainingTypeOptions()
+    const [filters, setFilters] = useState<FilterProps>({
+        scholarshipId: '',
+    })
+    const { data: students = [], refetch } = useExportStudentScholarshipJson(
         {
             semesterId: semesterId || '',
+            scholarshipId: filters?.scholarshipId || '',
         },
         {
             query: {
@@ -76,15 +47,120 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         queryClient
     )
 
-    console.log(students)
+    const studentData = useMemo(() => {
+        return students?.data || []
+    }, [students?.data])
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
-
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+    const { data: scholarshipData = [] } = useFindManyScholarship({
+        include: {
+            trainingCourse: true,
+        },
         orderBy: { name: 'asc' },
     })
 
-    const { data: trainingFieldData = [] } = useFindManyTrainingField()
+    useEffect(() => {
+        if (studentData) {
+            const checkedStudentIds = studentData
+                .filter((item: any) => item.checked)
+                .map((item: any) => item.id)
+
+            setSelectedRowKeys(checkedStudentIds)
+            setInitialSelectedKeys(checkedStudentIds)
+        }
+    }, [studentData])
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    const { mutateAsync: upsertScholarshipAward } = useUpsertScholarshipAward()
+    const { mutateAsync: deleteManyScholarshipAward } = useDeleteManyScholarshipAward()
+    // const handleSaveScholarshipAward = async () => {
+    // 	if (!filters.scholarshipId || !semesterId) {
+    // 		message.error('Vui lòng chọn học bổng và học kỳ');
+    // 		return;
+    // 	}
+
+    // 	try {
+    // 		// Xác định các sinh viên được thêm mới (selected nhưng không có trong initial)
+    // 		const studentsToAdd = selectedRowKeys.filter(
+    // 			(id) => !initialSelectedKeys.includes(id)
+    // 		);
+
+    // 		// Xác định các sinh viên bị bỏ chọn (có trong initial nhưng không có trong selected)
+    // 		const studentsToRemove = initialSelectedKeys.filter(
+    // 			(id) => !selectedRowKeys.includes(id)
+    // 		);
+
+    // 		// Xử lý thêm học bổng cho sinh viên mới được chọn
+    // 		if (studentsToAdd.length > 0) {
+    // 			const awardsToAdd = studentsToAdd.map((studentId) => {
+    // 				const student = studentData.find((s: any) => s.id === studentId);
+    // 				return {
+    // 					studentId: studentId as string,
+    // 					scholarshipId: filters.scholarshipId as string,
+    // 					semesterId: semesterId,
+    // 					amount: student?.amount || 0, // Lấy từ dữ liệu sinh viên
+    // 					gpaAtAward: student?.gpa || 0, // Lấy từ dữ liệu sinh viên
+    // 					priorityRank: student?.rank || 0, // Lấy từ dữ liệu sinh viên
+    // 				};
+    // 			});
+
+    // 			await Promise.all(
+    // 				awardsToAdd.map((award) =>
+    // 					upsertScholarshipAward({
+    // 						where: {
+    // 							studentId_scholarshipId_semesterId: {
+    // 								studentId: award.studentId,
+    // 								scholarshipId: award.scholarshipId,
+    // 								semesterId: award.semesterId,
+    // 							},
+    // 						},
+    // 						create: award,
+    // 						update: award,
+    // 					})
+    // 				)
+    // 			);
+    // 		}
+
+    // 		// Xử lý xóa học bổng cho sinh viên bị bỏ chọn
+    // 		if (studentsToRemove.length > 0) {
+    // 			// Giả sử bạn có hook useDeleteScholarshipAward
+    // 			await Promise.all(
+    // 				studentsToRemove.map((studentId) =>
+    // 					deleteManyScholarshipAward({
+    // 						where: {
+    // 							studentId_scholarshipId_semesterId: {
+    // 								studentId: studentId as string,
+    // 								scholarshipId: filters.scholarshipId as string,
+    // 								semesterId: semesterId,
+    // 							},
+    // 						},
+    // 					})
+    // 				)
+    // 			);
+    // 		}
+
+    // 		// Cập nhật danh sách ban đầu
+    // 		setInitialSelectedKeys(selectedRowKeys);
+    // 		message.success('Cập nhật học bổng thành công');
+    // 		refetch();
+    // 	} catch (error) {
+    // 		console.error('Lỗi khi lưu học bổng:', error);
+    // 		message.error('Có lỗi xảy ra khi lưu học bổng');
+    // 	}
+    // };
 
     return (
         <div>
@@ -93,124 +169,103 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Col span={12}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            // onChange={(e) =>
-                                            //     handleFilterChange(
-                                            //         'searchText',
-                                            //         e.target.value
-                                            //     )
-                                            // }
-                                            className="py-0"
-                                            placeholder="Nhập tên học viên, lớp niên chế"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
                                 <Col span={10}>
                                     <Form.Item className="mb-0" name="trainingObjectId">
                                         <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Item className="mb-0" name="trainingCourseId">
-                                        <Select
-                                            placeholder="Khoá đào tạo"
-                                            options={trainingCourseData.map(
-                                                (i: TrainingCourse) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingCourseId',
-                                            //         val
-                                            //     )
-                                            // }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={10}>
-                                    <Form.Item className="mb-0" name="trainingMajorId">
-                                        <Select
-                                            placeholder="Chọn ngành đào tạo"
-                                            options={trainingFieldData.map((i: TrainingField) => ({
+                                            placeholder="Chọn học bổng"
+                                            options={scholarshipData.map((i: any) => ({
                                                 value: i.id,
-                                                label: i.name,
+                                                label: `${i.name} - ${i?.trainingCourse?.name}`,
                                             }))}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingMajorId',
-                                            //         val
-                                            //     )
-                                            // }
+                                            onChange={(val) =>
+                                                handleFilterChange('scholarshipId', val)
+                                            }
+                                            style={{ width: '350px' }}
                                             allowClear
                                         />
                                     </Form.Item>
                                 </Col>
                             </Flex>
                         </Col>
+                        <Col span={6}>
+                            <Flex justify="end">
+                                <Button
+                                    type="primary"
+                                    className="h-[32px] px-4"
+                                    // onClick={handleSaveScholarshipAward}
+                                    disabled={!semesterId || selectedRowKeys.length <= 0}
+                                >
+                                    <BookPlus />
+                                    Lưu
+                                </Button>
+                            </Flex>
+                        </Col>
                     </Row>
                 </Col>
                 <Col span={24}>
-                    <TableCollapse
-                        rowKey="key"
-                        headerTitleKey="name"
-                        childrenFieldName="children"
-                        defaultExpandAll
+                    <Table
+                        rowKey="id"
                         columns={[
                             {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
                                 title: 'Mã sinh viên',
-                                dataIndex: 'code',
+                                dataIndex: ['userProfile', 'code'],
                                 width: 120,
                                 align: 'center',
                             },
                             {
                                 title: 'Tên sinh viên',
-                                dataIndex: 'name',
+                                dataIndex: ['userProfile', 'fullname'],
                                 width: 200,
                             },
                             {
-                                title: 'Tổng số tín chỉ đăng ký',
-                                dataIndex: 'totalCredit',
+                                title: 'Chuyên ngành',
+                                dataIndex: 'chuyenNganh',
                                 width: 150,
                                 align: 'center',
                             },
                             {
-                                title: 'GPA',
-                                dataIndex: 'gpa',
+                                title: 'Đối tượng đào tạo',
+                                dataIndex: 'doiTuong',
                                 width: 120,
                                 align: 'center',
                             },
+                            {
+                                title: 'Xếp loại học tập',
+                                dataIndex: 'xepLoaiHocTap',
+                                width: 120,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Xếp loại rèn luyện',
+                                dataIndex: 'xepLoaiRenLuyen',
+                                width: 120,
+                                align: 'center',
+                                render: (value) => (
+                                    <Tag color={getStudentTrainingTypeColor(value)}>
+                                        {getStudentTrainingTypeLabel(value)}
+                                    </Tag>
+                                ),
+                            },
                         ]}
-                        data={fakeData}
+                        data={studentData}
+                        pagination={{
+                            current: currentPage,
+                            onChange: setCurrentPage,
+                        }}
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (selectedKeys) => {
+                                setSelectedRowKeys(selectedKeys)
+                            },
+                        }}
                     />
                 </Col>
             </Row>
