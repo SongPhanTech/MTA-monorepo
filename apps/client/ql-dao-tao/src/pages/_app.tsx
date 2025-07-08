@@ -11,6 +11,12 @@ import { SessionProvider } from '@workspace/auth/react'
 import { Provider as ZenStackHooksProvider } from '@workspace/db/hooks'
 import { ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+import isLeapYear from 'dayjs/plugin/isLeapYear'
+import isoWeeksInYear from 'dayjs/plugin/isoWeeksInYear'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import quarterOfYear from 'dayjs/plugin/quarterOfYear'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
 import { StoreProvider } from 'easy-peasy'
 import type { NextComponentType } from 'next'
 import type { AppProps } from 'next/app'
@@ -20,6 +26,14 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
+
+dayjs.locale('vi')
+dayjs.extend(weekOfYear)
+dayjs.extend(isoWeeksInYear)
+dayjs.extend(isLeapYear)
+dayjs.extend(isSameOrBefore)
+dayjs.extend(quarterOfYear)
+dayjs.extend(isBetween)
 
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {

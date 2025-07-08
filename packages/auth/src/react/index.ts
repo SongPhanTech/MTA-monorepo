@@ -3,7 +3,7 @@ import { useSession } from './hook'
 import SessionProvider from './provider'
 
 const signIn = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin`
+    window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin?appCode=${process.env.NEXT_PUBLIC_APP_CODE}&sRedirectDefault=${process.env.NEXT_PUBLIC_APP_URL}`
 }
 const fetchSession = async (): Promise<{
     status: SessionStatus
@@ -29,7 +29,7 @@ const fetchSession = async (): Promise<{
         }
     } catch (error) {
         // TODO!: toggle comment
-        // signIn()
+        signIn()
         return {
             status: 'unauthenticated',
             data: null,
