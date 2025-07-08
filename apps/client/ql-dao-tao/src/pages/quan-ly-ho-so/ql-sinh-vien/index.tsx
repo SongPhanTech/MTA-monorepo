@@ -26,7 +26,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Menu, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -43,17 +43,8 @@ export default function UserProfilePageDs() {
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
-    const [open, setOpen] = useState(false)
-
-    const handleOpenChange = (newOpen: boolean) => {
-        setOpen(newOpen)
-    }
 
     const router = useRouter()
-
-    // const [selectedTrainingObjectType, setSelectedTrainingObjectType] = useState<string>()
-    const [selectedTrainingCourse, setSelectedTrainingCourse] = useState<string>()
-    const [selectedFixedClass, setSelectedFixedClass] = useState<string>()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const { data = [], refetch } = useFindManyStudent({
@@ -77,18 +68,6 @@ export default function UserProfilePageDs() {
                     equals: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
             },
-            ...(selectedTrainingCourse && {
-                fixedClass: {
-                    trainingCourseId: {
-                        equals: selectedTrainingCourse,
-                    },
-                },
-            }),
-            ...(selectedFixedClass && {
-                fixedClassId: {
-                    equals: selectedFixedClass,
-                },
-            }),
         },
         include: {
             userProfile: true,
@@ -121,14 +100,6 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    // const { data: TrainingOnjectTypeData = [], refetch: refetchTrainingObjectType } =
-    //     useFindManyTrainingObjectType()
-
-    // const handleTrainingObjectTypeChange = (value: string) => {
-    //     setSelectedTrainingObjectType(value)
-    //     refetch()
-    // }
-
     const { data: TrainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
             include: {
@@ -137,29 +108,29 @@ export default function UserProfilePageDs() {
             orderBy: { name: 'asc' },
         })
 
-    const handleTrainingCourseChange = (value: string) => {
-        setSelectedTrainingCourse(value)
+    // const handleTrainingCourseChange = (value: string) => {
+    //     setSelectedTrainingCourse(value)
 
-        // Kiểm tra xem lớp hiện tại có thuộc khóa mới không
-        if (selectedFixedClass) {
-            const selectedClass = FixedClassData?.find((cls) => cls.id === selectedFixedClass)
+    //     // Kiểm tra xem lớp hiện tại có thuộc khóa mới không
+    //     if (selectedFixedClass) {
+    //         const selectedClass = FixedClassData?.find((cls) => cls.id === selectedFixedClass)
 
-            // Nếu lớp hiện tại không thuộc khóa mới được chọn
-            if (selectedClass?.trainingCourseId !== value) {
-                setSelectedFixedClass(undefined) // Reset lớp
-            }
-        }
+    //         // Nếu lớp hiện tại không thuộc khóa mới được chọn
+    //         if (selectedClass?.trainingCourseId !== value) {
+    //             setSelectedFixedClass(undefined) // Reset lớp
+    //         }
+    //     }
 
-        // Nếu khóa chỉ có 1 lớp, tự động chọn lớp đó
-        const classesInCourse =
-            FixedClassData?.filter((cls) => cls.trainingCourseId === value) || []
+    //     // Nếu khóa chỉ có 1 lớp, tự động chọn lớp đó
+    //     const classesInCourse =
+    //         FixedClassData?.filter((cls) => cls.trainingCourseId === value) || []
 
-        if (classesInCourse.length === 1 && !selectedFixedClass) {
-            setSelectedFixedClass(classesInCourse[0].id)
-        }
+    //     if (classesInCourse.length === 1 && !selectedFixedClass) {
+    //         setSelectedFixedClass(classesInCourse[0].id)
+    //     }
 
-        refetch()
-    }
+    //     refetch()
+    // }
 
     const { data: FixedClassData = [] } = useFindManyFixedClass({
         include: {
@@ -198,18 +169,6 @@ export default function UserProfilePageDs() {
                     equals: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
             },
-            ...(selectedTrainingCourse && {
-                fixedClass: {
-                    trainingCourseId: {
-                        equals: selectedTrainingCourse,
-                    },
-                },
-            }),
-            ...(selectedFixedClass && {
-                fixedClassId: {
-                    equals: selectedFixedClass,
-                },
-            }),
         },
     })
 
@@ -231,13 +190,13 @@ export default function UserProfilePageDs() {
         tag: PutStudentModal.name,
     })
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
+    const { onOpen: onOpenUpload } = useDisclosure<string>({
         tag: PutUploadProfileModal.name,
     })
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
+    const { onOpen: onOpenUpdateFile } = useDisclosure<string>({
         tag: PutUpdateProfileModal.name,
     })
-    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
+    const { onOpen: onOpenUpdate } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
             trainingObjectTypeId?: string
@@ -253,10 +212,7 @@ export default function UserProfilePageDs() {
 
     const handleModal = () => {
         onOpen({
-            preSelectedValues: {
-                trainingCourseId: selectedTrainingCourse,
-                fixedClassId: selectedFixedClass,
-            },
+            preSelectedValues: {},
         })
     }
     const handleModalUpload = (type: string) => {
@@ -337,71 +293,6 @@ export default function UserProfilePageDs() {
             onClick: () => handleModalUpload('update'),
         },
     ]
-    const menuDownload = (
-        <Menu>
-            {itemsDownload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
-    const menuUpload = (
-        <Menu>
-            {itemsUpload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
-    const handleImportConfirm = (importedData: any) => {
-        showSpinner()
-
-        try {
-            // const updatedScores = dataTable.map((record) => {
-            //     const importedScore = importedData.find(
-            //         (item) => item.studentCode === record.student?.code
-            //     )
-
-            //     if (importedScore) {
-            //         return {
-            //             id: record.id,
-            //             attendanceScore: importedScore.attendanceScore,
-            //             midtermScore: importedScore.midtermScore,
-            //             examScore: importedScore.examScore,
-            //         }
-            //     }
-            //     return record
-            // })
-
-            // // Cập nhật state
-            // const newScoreCC = updatedScores.map((item) => ({
-            //     id: item.id,
-            //     value: item.attendanceScore || 0,
-            // }))
-            // const newScoreTX = updatedScores.map((item) => ({
-            //     id: item.id,
-            //     value: item.midtermScore || 0,
-            // }))
-            // const newScoreThi = updatedScores.map((item) => ({
-            //     id: item.id,
-            //     value: item.examScore || 0,
-            // }))
-
-            // setScoreCC(newScoreCC)
-            // setScoreTX(newScoreTX)
-            // setScoreThi(newScoreThi)
-
-            message.success('Nhập dữ liệu từ file thành công!')
-        } catch (_error) {
-            message.error('Có lỗi xảy ra khi nhập dữ liệu từ file')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     return (
         <div>
@@ -430,22 +321,10 @@ export default function UserProfilePageDs() {
                                 <ImportStudentModal
                                     visible={importModalVisible}
                                     onCancel={() => setImportModalVisible(false)}
-                                    onConfirm={handleImportConfirm}
-                                    existingStudents={[]}
                                 />
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
-                                {/* <Dropdown overlay={menuDownload} trigger={['hover']}>
-                                    <Button type="primary" icon={<DownloadOutlined />}>
-                                        Tải file mẫu
-                                    </Button>
-                                </Dropdown> */}
-                                {/* <Dropdown overlay={menuUpload} trigger={['hover']}>
-                                    <Button type="primary" icon={<UploadOutlined />}>
-                                        Nhập file
-                                    </Button>
-                                </Dropdown> */}
                             </Flex>
                         </Col>
                     </Row>

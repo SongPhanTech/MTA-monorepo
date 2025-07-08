@@ -161,6 +161,7 @@ model Semester extends Base {
   studentSemesterResult   StudentSemesterResult[]
   scholarshipAward        ScholarshipAward[]
   academicWarning         AcademicWarning[]
+  disciplinaryWarning     DisciplinaryWarning[]
   studentAcademicDecision StudentAcademicDecision[]
 
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)

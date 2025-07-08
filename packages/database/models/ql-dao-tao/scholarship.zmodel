@@ -18,6 +18,7 @@ model Scholarship extends Base {
   criteria         ScholarshipCriteria[] // tiêu chí
   awards           ScholarshipAward[]
 
+  @@unique([trainingCourseId, name])
   @@schema("ql-dao-tao")
 }
 

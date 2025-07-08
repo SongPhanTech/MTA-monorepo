@@ -163,113 +163,139 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     // };
 
     return (
-        <div>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={10}>
-                                    <Form.Item className="mb-0" name="trainingObjectId">
-                                        <Select
-                                            placeholder="Chọn học bổng"
-                                            options={scholarshipData.map((i: any) => ({
-                                                value: i.id,
-                                                label: `${i.name} - ${i?.trainingCourse?.name}`,
-                                            }))}
-                                            onChange={(val) =>
-                                                handleFilterChange('scholarshipId', val)
-                                            }
-                                            style={{ width: '350px' }}
-                                            allowClear
-                                        />
-                                    </Form.Item>
+        <Row gutter={[16, 0]}>
+            <Col span={24} className="!p-0">
+                <Flex>
+                    <Col span={14}>
+                        <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
+                            <Row gutter={[16, 0]}>
+                                <Col span={24}>
+                                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                                        <Col span={12}>
+                                            <Flex>
+                                                <Col span={10}>
+                                                    <Form.Item
+                                                        className="mb-0"
+                                                        name="trainingObjectId"
+                                                    >
+                                                        <Select
+                                                            placeholder="Chọn học bổng"
+                                                            options={scholarshipData.map(
+                                                                (i: any) => ({
+                                                                    value: i.id,
+                                                                    label: `${i.name} - ${i?.trainingCourse?.name}`,
+                                                                })
+                                                            )}
+                                                            onChange={(val) =>
+                                                                handleFilterChange(
+                                                                    'scholarshipId',
+                                                                    val
+                                                                )
+                                                            }
+                                                            style={{ width: '350px' }}
+                                                            allowClear
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                            </Flex>
+                                        </Col>
+                                        <Col span={6}>
+                                            <Flex justify="end">
+                                                <Button
+                                                    type="primary"
+                                                    className="h-[32px] px-4"
+                                                    // onClick={handleSaveScholarshipAward}
+                                                    disabled={
+                                                        !semesterId || selectedRowKeys.length <= 0
+                                                    }
+                                                >
+                                                    <BookPlus />
+                                                    Lưu
+                                                </Button>
+                                            </Flex>
+                                        </Col>
+                                    </Row>
                                 </Col>
-                            </Flex>
-                        </Col>
-                        <Col span={6}>
-                            <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    className="h-[32px] px-4"
-                                    // onClick={handleSaveScholarshipAward}
-                                    disabled={!semesterId || selectedRowKeys.length <= 0}
-                                >
-                                    <BookPlus />
-                                    Lưu
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã sinh viên',
-                                dataIndex: ['userProfile', 'code'],
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tên sinh viên',
-                                dataIndex: ['userProfile', 'fullname'],
-                                width: 200,
-                            },
-                            {
-                                title: 'Chuyên ngành',
-                                dataIndex: 'chuyenNganh',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Đối tượng đào tạo',
-                                dataIndex: 'doiTuong',
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Xếp loại học tập',
-                                dataIndex: 'xepLoaiHocTap',
-                                width: 120,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Xếp loại rèn luyện',
-                                dataIndex: 'xepLoaiRenLuyen',
-                                width: 120,
-                                align: 'center',
-                                render: (value) => (
-                                    <Tag color={getStudentTrainingTypeColor(value)}>
-                                        {getStudentTrainingTypeLabel(value)}
-                                    </Tag>
-                                ),
-                            },
-                        ]}
-                        data={studentData}
-                        pagination={{
-                            current: currentPage,
-                            onChange: setCurrentPage,
-                        }}
-                        rowSelection={{
-                            selectedRowKeys,
-                            onChange: (selectedKeys) => {
-                                setSelectedRowKeys(selectedKeys)
-                            },
-                        }}
-                    />
-                </Col>
-            </Row>
-        </div>
+                                <Col span={24}>
+                                    <Table
+                                        rowKey="id"
+                                        columns={[
+                                            {
+                                                title: 'STT',
+                                                width: 60,
+                                                align: 'center',
+                                                fixed: 'left',
+                                                render: (_, __, index) =>
+                                                    index +
+                                                    1 +
+                                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                            },
+                                            {
+                                                title: 'Mã sinh viên',
+                                                dataIndex: ['userProfile', 'code'],
+                                                width: 120,
+                                                align: 'center',
+                                            },
+                                            {
+                                                title: 'Tên sinh viên',
+                                                dataIndex: ['userProfile', 'fullname'],
+                                                width: 200,
+                                            },
+                                            {
+                                                title: 'Chuyên ngành',
+                                                dataIndex: 'chuyenNganh',
+                                                width: 150,
+                                                align: 'center',
+                                            },
+                                            {
+                                                title: 'Đối tượng đào tạo',
+                                                dataIndex: 'doiTuong',
+                                                width: 120,
+                                                align: 'center',
+                                            },
+                                            {
+                                                title: 'Xếp loại học tập',
+                                                dataIndex: 'xepLoaiHocTap',
+                                                width: 120,
+                                                align: 'center',
+                                            },
+                                            {
+                                                title: 'Xếp loại rèn luyện',
+                                                dataIndex: 'xepLoaiRenLuyen',
+                                                width: 120,
+                                                align: 'center',
+                                                render: (value) => (
+                                                    <Tag color={getStudentTrainingTypeColor(value)}>
+                                                        {getStudentTrainingTypeLabel(value)}
+                                                    </Tag>
+                                                ),
+                                            },
+                                        ]}
+                                        data={studentData}
+                                        pagination={{
+                                            current: currentPage,
+                                            onChange: setCurrentPage,
+                                        }}
+                                        rowSelection={{
+                                            selectedRowKeys,
+                                            onChange: (selectedKeys) => {
+                                                setSelectedRowKeys(selectedKeys)
+                                            },
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+
+                    <Col span={10}>
+                        <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
+                            123
+                        </div>
+                    </Col>
+                </Flex>
+            </Col>
+        </Row>
     )
 }
 

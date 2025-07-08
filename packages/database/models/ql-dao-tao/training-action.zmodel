@@ -23,6 +23,7 @@ model AcademicActionConfig extends Base {
   // Các quyết định đã được đưa ra dựa trên cấu hình này
   decisions        StudentAcademicDecision[]
 
+  @@unique([trainingCourseId, name])
   @@schema("ql-dao-tao")
 }
 

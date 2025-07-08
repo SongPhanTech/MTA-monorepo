@@ -22,6 +22,7 @@ enum CriteriaField {
   ACADEMIC_WARNING_LEVEL            // Mức Cảnh báo học tập hiện tại của sinh viên (0-4)
   DISCIPLINARY_WARNING_LEVEL        // Mức Cảnh cáo học đường hiện tại của sinh viên (0-4)
   REPEAT_YEAR_COUNT                 // Số lần sinh viên đã bị lưu ban (học lại cả năm)
+  SUSPENSION_COUNT                  // Số lần bị đình chỉ
 
   // --- Nhóm 4: Rèn luyện & Điều kiện khác ---
   CONDUCT_SCORE                     // Điểm rèn luyện của kỳ hoặc năm đang xét
@@ -32,18 +33,6 @@ enum CriteriaField {
   IS_STUDY_DURATION_EXCEEDED        // Đã vượt quá thời gian đào tạo tối đa (boolean)
   IS_DEBT_SUBJECT_CONSECUTIVE       // Có nợ một môn học trong 2 học kỳ chính liên tiếp (boolean)
   HAS_IMPROVEMENT_REGISTRATION      // Có đăng ký học cải thiện hoặc học lại trong kỳ (boolean)
-
-  @@schema("ql-dao-tao")
-}
-
-/// Enum cảnh cáo học đường
-enum DisciplinaryWarningReasonType {
-  DISCIPLINE_PENALTY                 // Bị kỷ luật từ cảnh cáo trở lên
-  EXAM_VIOLATION                     // Bị đình chỉ hoặc cảnh cáo thi
-  EXAM_PROXY_FIRST                   // Thi hộ lần đầu
-  EXAM_PROXY_REPEAT                  // Thi hộ lần hai
-  LATE_TUITION_1                     // Nộp học phí muộn <= 4 tuần
-  LATE_TUITION_2                     // Nộp học phí muộn > 4 tuần
 
   @@schema("ql-dao-tao")
 }

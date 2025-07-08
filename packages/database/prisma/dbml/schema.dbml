@@ -240,6 +240,7 @@ Table Semester {
   studentSemesterResult StudentSemesterResult [not null]
   scholarshipAward ScholarshipAward [not null]
   academicWarning AcademicWarning [not null]
+  disciplinaryWarning DisciplinaryWarning [not null]
   studentAcademicDecision StudentAcademicDecision [not null]
 
   indexes {
@@ -732,6 +733,10 @@ Table TrainingMajor {
   trainingObjectTypes TrainingMajorOnTrainingObjectType [not null]
   curriculum Curriculum [not null]
 
+  indexes {
+    (trainingFieldId, name) [unique]
+  }
+
   Note: 'chuyên ngành đào tạo'
 }
 
@@ -761,7 +766,7 @@ Table TrainingBlock {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
+  name String [unique, not null]
   priority Int [not null, default: 0, note: 'ưu tiên sắp xếp']
   curriculumVersions TrainingBlockOnCurriculumVersion [not null]
 
@@ -912,6 +917,7 @@ Table Student {
   studentYearResult StudentYearResult [not null]
   scholarshipAwards ScholarshipAward [not null]
   academicWarning AcademicWarning [not null]
+  disciplinaryWarning DisciplinaryWarning [not null]
   studentAcademicDecision StudentAcademicDecision [not null]
   graduationApplications StudentGraduationApplication [not null]
   graduationDecision GraduationDecision
@@ -960,6 +966,10 @@ Table StudentSemesterResult {
   disciplinaryWarningLevel Int [not null, default: 0]
   suspended Boolean [not null, default: false]
   expelled Boolean [not null, default: false]
+
+  indexes {
+    (studentId, semesterId) [unique]
+  }
 }
 
 Table StudentYearResult {
@@ -990,6 +1000,10 @@ Table StudentYearResult {
   disciplinaryWarningLevel Int [not null, default: 0]
   suspended Boolean [not null, default: false]
   expelled Boolean [not null, default: false]
+
+  indexes {
+    (studentId, schoolYearId) [unique]
+  }
 }
 
 Table User {
@@ -2181,6 +2195,10 @@ Table Scholarship {
   trainingCourseId String [not null]
   criteria ScholarshipCriteria [not null]
   awards ScholarshipAward [not null]
+
+  indexes {
+    (trainingCourseId, name) [unique]
+  }
 }
 
 Table ScholarshipCriteria {
@@ -2243,7 +2261,7 @@ Table AcademicWarningRule {
   trainingCourseId String [not null]
   academicWarning AcademicWarning [not null]
 
-  Note: 'Quy tắc cấu hình Cảnh báo học tập (phiên bản cải tiến)'
+  Note: 'Quy tắc cấu hình Cảnh báo học tập'
 }
 
 Table AcademicWarning {
@@ -2274,8 +2292,10 @@ Table DisciplinaryWarning {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  student Student [not null]
   studentId String [not null]
-  semesterId String [not null]
+  semester Semester
+  semesterId String
   level Int [not null]
   increasedFrom Int
   reasonDetails DisciplinaryWarningReason [not null]
@@ -2291,9 +2311,9 @@ Table DisciplinaryWarningReason {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  warning DisciplinaryWarning [not null]
-  warningId String [not null]
-  reasonType DisciplinaryWarningReasonType [not null]
+  name String [unique, not null]
+  warning DisciplinaryWarning
+  warningId String
   severityLevel Int [not null]
 }
 
@@ -2311,6 +2331,10 @@ Table AcademicActionConfig {
   trainingCourseId String [not null]
   ruleSets AcademicActionRuleSet [not null]
   decisions StudentAcademicDecision [not null]
+
+  indexes {
+    (trainingCourseId, name) [unique]
+  }
 
   Note: 'Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)'
 }
@@ -2464,6 +2488,10 @@ Table ApplicationCheckResult {
   graduationConditionId String [not null]
   passed Boolean [not null]
   actualValue Float
+
+  indexes {
+    (studentGraduationApplicationId, graduationConditionId) [unique]
+  }
 
   Note: 'Kết quả kiểm tra điều kiện tự động của hệ thống'
 }
@@ -2829,6 +2857,7 @@ Enum CriteriaField {
   ACADEMIC_WARNING_LEVEL
   DISCIPLINARY_WARNING_LEVEL
   REPEAT_YEAR_COUNT
+  SUSPENSION_COUNT
   CONDUCT_SCORE
   HAS_PASSED_FOREIGN_LANGUAGE
   HAS_REGISTERED_FOR_SEMESTER
@@ -2837,15 +2866,6 @@ Enum CriteriaField {
   IS_STUDY_DURATION_EXCEEDED
   IS_DEBT_SUBJECT_CONSECUTIVE
   HAS_IMPROVEMENT_REGISTRATION
-}
-
-Enum DisciplinaryWarningReasonType {
-  DISCIPLINE_PENALTY
-  EXAM_VIOLATION
-  EXAM_PROXY_FIRST
-  EXAM_PROXY_REPEAT
-  LATE_TUITION_1
-  LATE_TUITION_2
 }
 
 Enum CriteriaOperator {
@@ -3187,6 +3207,10 @@ Ref: AcademicWarningRule.trainingCourseId > TrainingCourse.id
 Ref: AcademicWarning.studentId > Student.id
 
 Ref: AcademicWarning.semesterId > Semester.id
+
+Ref: DisciplinaryWarning.studentId > Student.id
+
+Ref: DisciplinaryWarning.semesterId > Semester.id
 
 Ref: DisciplinaryWarningReason.warningId > DisciplinaryWarning.id
 
