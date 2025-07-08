@@ -10,16 +10,9 @@ const { Panel } = Collapse
 interface ImportStudentModalProps {
     visible: boolean
     onCancel: () => void
-    onConfirm: (data: any[]) => void
-    existingStudents: any[]
 }
 
-const ImportStudentModal = ({
-    visible,
-    onCancel,
-    onConfirm,
-    existingStudents,
-}: ImportStudentModalProps) => {
+const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
     const [currentPage, _setCurrentPage] = useState(1)
     const [_numberOfPages, _setNumberOfPages] = useState(10)
     const [previewData, setPreviewData] = useState<any[]>([])

@@ -50,10 +50,8 @@ type PreFillFormFields = {
 
 const PutStudentModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
-
-    const [activeKey, setActiveKey] = useState<string>('1')
+    const [userSelected, setUserSelected] = useState<UserProfileType | undefined>(undefined)
     const [avatar, setAvatar] = useState<UploadFile[]>([])
-
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: PutStudentModal.name,
         onClose: form.resetFields,
@@ -68,32 +66,37 @@ const PutStudentModal = () => {
         },
     })
 
-    const { data: studentData } = useFindUniqueStudent({
-        where: { id: id || '' },
-        include: {
-            userProfile: {
-                include: {
-                    nationality: true,
-                    religion: true,
-                    ethnicity: true,
-                    rank: true,
-                    academicRankType: true,
-                    academicDegreeType: true,
-                    positionCPV: true,
+    const { data: studentData } = useFindUniqueStudent(
+        {
+            where: { id: id },
+            include: {
+                userProfile: {
+                    include: {
+                        nationality: true,
+                        religion: true,
+                        ethnicity: true,
+                        rank: true,
+                        academicRankType: true,
+                        academicDegreeType: true,
+                        positionCPV: true,
+                    },
                 },
-            },
-            trainingObjectType: true,
-            fixedClass: {
-                include: {
-                    trainingCourse: true,
+                trainingObjectType: true,
+                fixedClass: {
+                    include: {
+                        trainingCourse: true,
+                    },
                 },
+                trainingType: true,
+                registrationArea: true,
+                trainingLevel: true,
+                priorityObject: true,
             },
-            trainingType: true,
-            registrationArea: true,
-            trainingLevel: true,
-            priorityObject: true,
         },
-    })
+        {
+            enabled: !!id,
+        }
+    )
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
@@ -289,6 +292,7 @@ const PutStudentModal = () => {
                                 setAvatar={setAvatar}
                                 id={id}
                                 type={'CIVILIAN_STUDENT'}
+                                setUserSelected={setUserSelected}
                             />
                         </Col>
                     </Row>
@@ -325,7 +329,7 @@ const PutStudentModal = () => {
                 forceRender: true,
             },
         ]
-    }, [avatar, id])
+    }, [id, avatar])
 
     useEffect(() => {
         if (studentData) {
