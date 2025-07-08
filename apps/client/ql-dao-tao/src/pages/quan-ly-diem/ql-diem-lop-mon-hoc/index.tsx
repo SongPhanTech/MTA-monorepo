@@ -7,7 +7,6 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { ModalPrintStudentSubjectScore } from '@components/modal'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
@@ -52,8 +51,6 @@ interface FilterProps {
 
 export default function SubjectClassScore() {
     const router = useRouter()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const [subjectClassFullData, setSubjectClassFullData] = useState<SubjectClass[]>([])
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
@@ -795,8 +792,7 @@ export default function SubjectClassScore() {
                                 width: 60,
                                 align: 'center',
                                 fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                render: (_, __, index) => index + 1,
                             },
                             {
                                 title: 'Mã sinh viên',
@@ -1270,13 +1266,8 @@ export default function SubjectClassScore() {
                         ]}
                         data={dataTable}
                         pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                            pageSize: dataTable.length,
+                            hideOnSinglePage: true,
                         }}
                     />
                     {selectedFixedClass && (
