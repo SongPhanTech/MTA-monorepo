@@ -7,9 +7,9 @@ import type { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { checkWarningEligibility, listStudentWarning } from '../services/academic-warning'
 import {
-    checkScholarshipEligibility,
     listStudentInfo,
     populateExcelTemplate,
+    resultCourseStudentScholarship,
     sanitizeFilename,
 } from '../services/scholarship.service'
 import { calculateStudentSemesterResult } from '../services/studen-result.service'
@@ -121,10 +121,6 @@ const dsRaSoatHocBongJson = createRoute({
         query: z.object({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kì học',
-            }),
-            scholarshipId: z.string().optional().openapi('scholarshipId', {
-                description:
-                    'ID của học bổng, nếu không sẽ hiển thị thông tin của tất cả sinh viên',
             }),
         }),
     },
@@ -412,26 +408,13 @@ app.openapi(dsRaSoatHocBongExcel, async (c) => {
 })
 
 app.openapi(dsRaSoatHocBongJson, async (c) => {
-    const { semesterId, scholarshipId } = c.req.valid('query')
+    const { semesterId } = c.req.valid('query')
     const students = await listStudentInfo(semesterId)
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-
-    if (scholarshipId) {
-        const scholarship = await prisma.scholarship.findUnique({
-            where: { id: scholarshipId },
-        })
-        if (!scholarship) {
-            return c.json({ message: 'Học bổng không tồn tại' }, 404)
-        }
-        console.log(`Xét học bổng: ${scholarship.name} (${scholarshipId})`)
-        // Filter students based on scholarship criteria
-        const filteredStudents = await checkScholarshipEligibility(students, scholarshipId)
-        return c.json(filteredStudents, 200)
-    }
-    // If no scholarshipId is provided, return all students
-    return c.json(students, 200)
+    const filteredStudents = await resultCourseStudentScholarship(students)
+    return c.json(filteredStudents, 200)
 })
 
 app.openapi(dsRaKyLuatHocTapJson, async (c) => {

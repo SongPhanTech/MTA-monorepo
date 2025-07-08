@@ -1,4 +1,4 @@
-import { AcademicRankingBaseType, AcademicWarningRuleType } from '@workspace/db'
+import { AcademicRankingBaseType } from '@workspace/db'
 import * as XLSX from 'xlsx'
 import { prisma } from '..'
 import type { StudentAcademicWarning, StudentTemplateData } from '../dto/student-info.dto'
@@ -150,7 +150,11 @@ export const listStudentWarning = async (semesterId: string) => {
                                     include: {
                                         curriculum: {
                                             include: {
-                                                trainingMajor: true,
+                                                trainingMajor: {
+                                                    include: {
+                                                        trainingField: true, // Bao gồm thông tin ngành
+                                                    },
+                                                },
                                             },
                                         },
                                     },
@@ -182,9 +186,19 @@ export const listStudentWarning = async (semesterId: string) => {
                     maSinhVien: userProfile?.code || '',
                     doiTuong: item.student.trainingObjectType?.name || '',
                     khoa: item.student.fixedClass?.trainingCourse?.name || '',
+                    khoaId: item.student.fixedClass?.trainingCourse?.id || '',
                     chuyenNganh:
                         item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
                             ?.name || '',
+                    chuyenNganhId:
+                        item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.id ||
+                        '',
+                    nganh:
+                        item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    nganhId:
+                        item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.id || '',
                     ngaySinh: userProfile?.dateOfBirth
                         ? new Date(userProfile.dateOfBirth).toLocaleDateString('vi-VN')
                         : '',
@@ -328,50 +342,50 @@ export const checkWarningEligibility = async (
         console.log('Checking eligibility for student:', student.hoTen)
         const heSoDiem = student.heSoDiem || 10 // Mặc định là 10 nếu không có thông tin
         // Xét điểm trung bình học kì
-        const diemTrungBinhHocKyGioiHan =
-            warningRuleList.find(
-                (rule) => rule.ruleType === AcademicWarningRuleType.GPA_SEMESTER_BELOW
-            )?.threshold || 0 // Mặc định là 0 nếu không có thông tin
+        // const diemTrungBinhHocKyGioiHan =
+        //     warningRuleList.find(
+        //         (rule) => rule.ruleType === AcademicWarningRuleType.GPA_SEMESTER_BELOW
+        //     )?.threshold || 0 // Mặc định là 0 nếu không có thông tin
 
-        if (heSoDiem === 10 && student.diemTrungBinh10 <= diemTrungBinhHocKyGioiHan) {
-            return true
-        }
-        if (heSoDiem === 4 && student.diemTrungBinh4 <= diemTrungBinhHocKyGioiHan) {
-            return true
-        }
+        // if (heSoDiem === 10 && student.diemTrungBinh10 <= diemTrungBinhHocKyGioiHan) {
+        //     return true
+        // }
+        // if (heSoDiem === 4 && student.diemTrungBinh4 <= diemTrungBinhHocKyGioiHan) {
+        //     return true
+        // }
 
-        // Xét điểm trung bình tích lũy
-        const namHocHienTai = student.namDangHoc || 0 // Năm học hiện tại, mặc định là 0 nếu không có thông tin
-        // Lọc theo năm học
-        const diemTrungBinhNamHocGioiHan =
-            warningRuleList.find(
-                (rule) => rule.ruleType === AcademicWarningRuleType.GPA_CUMULATIVE_BELOW
-            )?.threshold || 0 // M
-        if (heSoDiem === 10 && student.diemHe10TichLuy <= diemTrungBinhNamHocGioiHan) {
-            return true
-        }
-        if (heSoDiem === 4 && student.diemHe4TichLuy <= diemTrungBinhNamHocGioiHan) {
-            return true
-        }
+        // // Xét điểm trung bình tích lũy
+        // const namHocHienTai = student.namDangHoc || 0 // Năm học hiện tại, mặc định là 0 nếu không có thông tin
+        // // Lọc theo năm học
+        // const diemTrungBinhNamHocGioiHan =
+        //     warningRuleList.find(
+        //         (rule) => rule.ruleType === AcademicWarningRuleType.GPA_CUMULATIVE_BELOW
+        //     )?.threshold || 0 // M
+        // if (heSoDiem === 10 && student.diemHe10TichLuy <= diemTrungBinhNamHocGioiHan) {
+        //     return true
+        // }
+        // if (heSoDiem === 4 && student.diemHe4TichLuy <= diemTrungBinhNamHocGioiHan) {
+        //     return true
+        // }
 
-        // Xét số tín chỉ không qua
-        const soTinChiKhongQuaGioiHanHocKy =
-            warningRuleList.find(
-                (rule) => rule.ruleType === AcademicWarningRuleType.FAILED_CREDITS_SEMESTER
-            )?.threshold || 0 // Mặc định là 0 nếu không có thông tin
+        // // Xét số tín chỉ không qua
+        // const soTinChiKhongQuaGioiHanHocKy =
+        //     warningRuleList.find(
+        //         (rule) => rule.ruleType === AcademicWarningRuleType.FAILED_CREDITS_SEMESTER
+        //     )?.threshold || 0 // Mặc định là 0 nếu không có thông tin
 
-        if (student.noTinChiTrongKy >= soTinChiKhongQuaGioiHanHocKy) {
-            return true
-        }
+        // if (student.noTinChiTrongKy >= soTinChiKhongQuaGioiHanHocKy) {
+        //     return true
+        // }
 
-        // Xét số tín chỉ không qua tích lũy
-        const soTinChiKhongQuaTichLuyGioiHan =
-            warningRuleList.find(
-                (rule) => rule.ruleType === AcademicWarningRuleType.FAILED_CREDITS_TOTAL
-            )?.threshold || 0 // Mặc định là
+        // // Xét số tín chỉ không qua tích lũy
+        // const soTinChiKhongQuaTichLuyGioiHan =
+        //     warningRuleList.find(
+        //         (rule) => rule.ruleType === AcademicWarningRuleType.FAILED_CREDITS_TOTAL
+        //     )?.threshold || 0 // Mặc định là
 
-        if (student.tongSoTinChiNo >= soTinChiKhongQuaTichLuyGioiHan) {
-            return true
-        }
+        // if (student.tongSoTinChiNo >= soTinChiKhongQuaTichLuyGioiHan) {
+        //     return true
+        // }
     })
 }
