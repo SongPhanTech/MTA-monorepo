@@ -198,35 +198,34 @@ const checkStudentEligible = async (
                         criteria.value,
                         criteria.operator
                     )
-                // TODO: CSDL thiếu
-                // case CriteriaField.COURSE_GRADE_MIN: // Điểm thấp nhất trong các học phần bình thường
-                //     console.log(
-                //         'Course Grade Min: ',
-                //         student.diemMonThuongNhoNhat,
-                //         criteria.value,
-                //         criteria.operator
-                //     )
-                //     return checkEligible(
-                //         student.diemMonThuongNhoNhat,
-                //         criteria.value,
-                //         criteria.operator
-                //     )
-                // case CriteriaField.GRADUATION_GRADE_MIN: // Điểm thấp nhất trong các học phần tốt nghiệp
-                //     console.log(
-                //         'Graduation Grade Min: ',
-                //         student.diemMonTotNghiepNhoNhat,
-                //         criteria.value,
-                //         criteria.operator
-                //     )
-                //     if (student.diemMonTotNghiepNhoNhat === undefined) {
-                //         return true
-                //     }
+                case CriteriaField.COURSE_GRADE_LOWEST: // Điểm thấp nhất trong các học phần bình thường
+                    console.log(
+                        'Course Grade Min: ',
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                case CriteriaField.GRADUATION_COURSE_GRADE_LOWEST: // Điểm thấp nhất trong các học phần tốt nghiệp
+                    console.log(
+                        'Graduation Grade Min: ',
+                        student.diemMonTotNghiepNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    if (student.diemMonTotNghiepNhoNhat === undefined) {
+                        return true
+                    }
 
-                //     return checkEligible(
-                //         student.diemMonThuongNhoNhat,
-                //         criteria.value,
-                //         criteria.operator
-                //     )
+                    return checkEligible(
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
                 case CriteriaField.SEMESTER_GPA: // Điểm trung bình học ksỳ
                     console.log(
                         'Semester GPA: ',
@@ -305,8 +304,7 @@ const getScholarship = async (
             scholarships.push({
                 id: scholarship.id,
                 name: scholarship.name,
-                //TODO: Chưa có thứ tự học bổng
-                order: 1,
+                order: scholarship.rankOrder,
             })
         }
     }
