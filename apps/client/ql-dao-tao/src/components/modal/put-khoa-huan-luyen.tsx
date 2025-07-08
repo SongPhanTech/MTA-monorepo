@@ -111,9 +111,7 @@ const PutTrainingCourseModal = () => {
                 id: selectedId,
             },
         },
-        {
-            enabled: !!selectedId,
-        }
+        { enabled: !!selectedId }
     )
 
     const handleSelectChange = async (value: string) => {
@@ -128,6 +126,7 @@ const PutTrainingCourseModal = () => {
                 schoolYearId: level.semesterStart?.schoolYearId,
             })
         } else if (selectedTraniningCourse) {
+            //TODO: clone trainingCourse
             form.setFieldsValue({
                 coef_1: selectedTraniningCourse.coef_1,
                 coef_2: selectedTraniningCourse.coef_2,

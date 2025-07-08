@@ -12,6 +12,7 @@ import PutCloneConvertScore from './put-clone-convert-score'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutOlympicScoreModal from './put-diem-cong'
+import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
 import PutUserProfileLectureModal from './put-giang-vien'
@@ -97,4 +98,5 @@ export {
     PutScholarshipCriteria,
     PutAcademicRanking,
     PutCloneAcademicRanking,
+    PutGraduationSession,
 }
