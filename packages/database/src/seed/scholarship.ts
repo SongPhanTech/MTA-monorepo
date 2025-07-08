@@ -22,6 +22,7 @@ async function seedScholarshipCriteria() {
     const civilianScholarships = [
         {
             name: 'Học bổng KKHT loại Xuất sắc - Dân sự',
+            rankOrder: 1,
             criteria: [
                 // Tiêu chí riêng
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 3.6 },
@@ -51,6 +52,7 @@ async function seedScholarshipCriteria() {
         },
         {
             name: 'Học bổng KKHT loại Giỏi - Dân sự',
+            rankOrder: 2,
             criteria: [
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 3.2 },
                 { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 3 }, // Rèn luyện Tốt trở lên
@@ -78,6 +80,7 @@ async function seedScholarshipCriteria() {
         },
         {
             name: 'Học bổng KKHT loại Khá - Dân sự',
+            rankOrder: 3,
             criteria: [
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 2.5 },
                 { field: CriteriaField.CONDUCT_SCORE, operator: CriteriaOperator.GTE, value: 2 }, // Rèn luyện Khá trở lên
@@ -111,6 +114,7 @@ async function seedScholarshipCriteria() {
     const militaryScholarships = [
         {
             name: 'Học bổng Lê Quý Đôn - Quân sự',
+            rankOrder: 1,
             criteria: [
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 9.0 },
                 {
@@ -133,6 +137,7 @@ async function seedScholarshipCriteria() {
         },
         {
             name: 'Học bổng loại A - Quân sự',
+            rankOrder: 2,
             criteria: [
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 8.5 },
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 8.99 }, // <= 8.99
@@ -156,6 +161,7 @@ async function seedScholarshipCriteria() {
         },
         {
             name: 'Học bổng loại B - Quân sự',
+            rankOrder: 3,
             criteria: [
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 8.0 },
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 8.49 }, // <= 8.49
@@ -186,9 +192,10 @@ async function seedScholarshipCriteria() {
         }))
 
         await prisma.scholarship.createMany({
-            data: scholarships.map(({ id, name }) => ({
+            data: scholarships.map(({ id, name, rankOrder }) => ({
                 id,
                 name,
+                rankOrder,
                 trainingCourseId: course.id,
                 baseAmount: 1000,
             })),
@@ -211,9 +218,10 @@ async function seedScholarshipCriteria() {
         }))
 
         await prisma.scholarship.createMany({
-            data: scholarships.map(({ id, name }) => ({
+            data: scholarships.map(({ id, name, rankOrder }) => ({
                 id,
                 name,
+                rankOrder,
                 trainingCourseId: course.id,
                 baseAmount: 1000,
             })),

@@ -2643,6 +2643,7 @@ model Scholarship {
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt()
   name             String
+  rankOrder        Int
   baseAmount       Decimal
   multiplier       Float                 @default(1)
   effectiveFrom    DateTime?
