@@ -385,7 +385,7 @@ export default function ThongTinCaNhanTab({
     useEffect(() => {
         if (cccdUserProfileData && !id) {
             fillUserInfo(cccdUserProfileData)
-            setUserSelected(cccdUserProfileData)
+            setUserSelected?.(cccdUserProfileData)
         }
     }, [cccdUserProfileData, fillUserInfo, id, setUserSelected])
 

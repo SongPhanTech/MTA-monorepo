@@ -18,7 +18,6 @@ import {
     useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
-import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookPlus, Check, X } from 'lucide-react'
 import type React from 'react'
@@ -79,7 +78,7 @@ export default function Scholarship() {
             },
         },
         orderBy: {
-            createdAt: 'asc',
+            rankOrder: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -240,14 +239,8 @@ export default function Scholarship() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="id"
-                        headerTitleKey={({
-                            code,
-                            name,
-                            trainingCourse,
-                            effectiveFrom,
-                            effectiveTo,
-                        }) =>
-                            `${code || ''} - ${name || ''} - ${trainingCourse?.name || ''} - ${trainingCourse?.trainingObjectType?.name || ''} - ${(effectiveFrom && dayjs(effectiveFrom).format('DD/MM/YYYY')) || ''} - ${(effectiveTo && dayjs(effectiveTo).format('DD/MM/YYYY')) || ''}`
+                        headerTitleKey={({ code, name, trainingCourse, rankOrder }) =>
+                            `${[trainingCourse.name, code, name].filter(Boolean).join(' - ')} (${rankOrder})`
                         }
                         defaultExpandAll
                         currentPage={currentPage}
