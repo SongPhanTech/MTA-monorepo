@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutGraduationSession } from '@components/modal'
+import { PutGraduationApplication } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import useSpinner from '@hooks/spinner'
@@ -36,12 +36,14 @@ export default function StudentGraduationApplication() {
         trainingCourseId: null,
         trainingObjectTypeId: null,
     })
-    const { id } = router.query
+    const { id: graduationSessionId } = router.query
 
     const { data: studentGraduationApplicationData, refetch } =
         useFindManyStudentGraduationApplication({
             where: {
-                sessionId: Array.isArray(id) ? id[0] : id,
+                sessionId: Array.isArray(graduationSessionId)
+                    ? graduationSessionId[0]
+                    : graduationSessionId,
             },
             include: {
                 student: {
@@ -56,7 +58,9 @@ export default function StudentGraduationApplication() {
 
     const { data: count } = useCountStudentGraduationApplication({
         where: {
-            sessionId: Array.isArray(id) ? id[0] : id,
+            sessionId: Array.isArray(graduationSessionId)
+                ? graduationSessionId[0]
+                : graduationSessionId,
         },
     })
 
@@ -66,14 +70,17 @@ export default function StudentGraduationApplication() {
         }, 500),
         []
     )
-    const { onOpen } = useDisclosure<string>({
-        tag: PutGraduationSession.name,
+    const { onOpen } = useDisclosure<{
+        id: string | null
+        graduationSessionId: string | string[] | undefined
+    }>({
+        tag: PutGraduationApplication.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen()
+        onOpen({ id: null, graduationSessionId })
     }
     const { mutateAsync: updateGraduationSession } = useUpdateGraduationSession()
     async function handleDelete(id: string) {
@@ -211,7 +218,9 @@ export default function StudentGraduationApplication() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
+                                                    onClick={() => {
+                                                        onOpen({ id, graduationSessionId })
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
