@@ -24,6 +24,7 @@ import type {
     UserProfile,
 } from '@workspace/db'
 import type { UploadFile, UploadProps } from 'antd'
+import type { ColumnsType } from 'antd/es/table'
 
 export type SibarItem = {
     key: string
@@ -62,6 +63,19 @@ export type TabThongTinCaNhan = {
     setAvatar: (avatar: UploadFile[]) => void
     userSelected?: UserProfileType | undefined
     setUserSelected?: (userSelected: any) => void
+}
+
+export type FilterProps = {
+    searchText?: string | undefined
+    trainingObjectTypes?: string[] | [] | undefined
+    name?: string | ''
+    code?: string | ''
+}
+export type ColumnTypeProps = ColumnsType & {
+    type?: string
+    multiple?: string[]
+    options?: { value: string; label: string }[]
+    dataIndex?: string
 }
 
 export type StudentModalProps = {

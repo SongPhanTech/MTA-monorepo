@@ -1,58 +1,65 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingFieldModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { emptyObjectIf } from '@workspace/constant'
-import type { DM_DonVi, Prisma, TrainingObjectType } from '@workspace/db'
+import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectTypeId: string | undefined
-}
 
 export default function TrainingFieldPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined,
+        trainingObjectTypes: undefined,
+        name: '',
+        code: '',
     })
 
-    const where: Prisma.TrainingFieldWhereInput = {
-        OR: [
-            { name: { contains: filters.searchText, mode: 'insensitive' } },
-            { code: { contains: filters.searchText, mode: 'insensitive' } },
-        ],
-        ...emptyObjectIf(
-            {
-                trainingObjectTypes: {
-                    some: {
-                        trainingObjectTypeId: filters.trainingObjectTypeId,
+    const { data = [], refetch } = useFindManyTrainingField({
+        where: {
+            OR: [
+                {
+                    name: {
+                        contains: filters.name,
+                        mode: 'insensitive',
                     },
                 },
-            },
-            !!filters.trainingObjectTypeId
-        ),
-    }
-
-    const { data = [], refetch } = useFindManyTrainingField({
+                {
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive',
+                    },
+                },
+                ...(filters.trainingObjectTypes
+                    ? [
+                          {
+                              trainingObjectTypes: {
+                                  some: {
+                                      trainingObjectTypeId: {
+                                          in: filters.trainingObjectTypes,
+                                      },
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
+            ],
+        },
         include: {
             organization: true,
             trainingObjectTypes: {
@@ -68,7 +75,37 @@ export default function TrainingFieldPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingField()
+    const { data: count } = useCountTrainingField({
+        where: {
+            OR: [
+                {
+                    name: {
+                        contains: filters.name,
+                        mode: 'insensitive',
+                    },
+                },
+                {
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive',
+                    },
+                },
+                ...(filters.trainingObjectTypes
+                    ? [
+                          {
+                              trainingObjectTypes: {
+                                  some: {
+                                      trainingObjectTypeId: {
+                                          in: filters.trainingObjectTypes,
+                                      },
+                                  },
+                              },
+                          },
+                      ]
+                    : []),
+            ],
+        },
+    })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -121,32 +158,32 @@ export default function TrainingFieldPage() {
                         <Col span={12}>
                             <Flex>
                                 <Col span={8}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
-                                            }
-                                            placeholder="Tìm kiếm"
-                                            style={{
-                                                maxWidth: 300,
-                                                marginRight: 8,
-                                                height: 32,
-                                            }}
-                                            prefix={
-                                                <Search
-                                                    size={16}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
+                                    {/* <Form.Item name="name">
+										<Input
+											id="search"
+											onChange={(e) =>
+												handleFilterChange("searchText", e.target.value)
+											}
+											placeholder="Tìm kiếm"
+											style={{
+												maxWidth: 300,
+												marginRight: 8,
+												height: 32,
+											}}
+											prefix={
+												<Search
+													size={16}
+													style={{
+														color: "rgba(0, 0, 0, 0.25)",
+													}}
+												/>
+											}
+											allowClear
+										/>
+									</Form.Item> */}
                                 </Col>
 
-                                <Col span={8}>
+                                {/* <Col span={8}>
                                     <Form.Item
                                         name="trainingObjectId"
                                         labelCol={{ span: 24 }}
@@ -165,12 +202,12 @@ export default function TrainingFieldPage() {
                                                 marginRight: 8,
                                             }}
                                             onChange={(val) =>
-                                                handleFilterChange('trainingObjectTypeId', val)
+                                                handleFilterChange('trainingObjectTypes', val)
                                             }
                                             allowClear
                                         />
                                     </Form.Item>
-                                </Col>
+                                </Col> */}
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -188,6 +225,8 @@ export default function TrainingFieldPage() {
                         rowKey="id"
                         id="training-category"
                         data={data}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -203,6 +242,7 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 fixed: 'left',
                                 width: 150,
+                                type: 'input',
                             },
                             {
                                 title: 'Tên ngành',
@@ -210,18 +250,22 @@ export default function TrainingFieldPage() {
                                 width: 200,
                                 fixed: 'left',
                                 align: 'center',
-                            },
-                            {
-                                title: 'Tên tiếng anh',
-                                dataIndex: 'englishName',
-                                align: 'center',
-                                width: 150,
+                                type: 'input',
+                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
                                 dataIndex: 'trainingObjectTypes',
                                 align: 'center',
-                                width: 150,
+                                width: 175,
+                                type: 'select',
+                                multiple: ['name'],
+                                options: trainingObjectTypeData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                }),
                                 render: (trainingObjectTypes) =>
                                     trainingObjectTypes
                                         .map(
@@ -237,11 +281,12 @@ export default function TrainingFieldPage() {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'organization',
                                 align: 'center',
+                                type: 'order',
+
                                 width: 150,
                                 render: (organization: DM_DonVi) =>
                                     organization?.sTen ? organization?.sTen : '',
                             },
-
                             {
                                 title: 'Ngày ban hành',
                                 align: 'center',
