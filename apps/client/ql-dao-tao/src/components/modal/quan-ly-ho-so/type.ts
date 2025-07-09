@@ -61,7 +61,7 @@ export type TabThongTinCaNhan = {
     avatar: UploadFile[]
     setAvatar: (avatar: UploadFile[]) => void
     userSelected?: UserProfileType | undefined
-    setUserSelected: (userSelected: any) => void
+    setUserSelected?: (userSelected: any) => void
 }
 
 export type StudentModalProps = {

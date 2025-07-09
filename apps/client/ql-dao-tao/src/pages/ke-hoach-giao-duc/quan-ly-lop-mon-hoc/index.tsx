@@ -26,6 +26,7 @@ import {
 import { putManySubjectClass } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, Input, message, Row } from 'antd'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -327,7 +328,15 @@ export default function TeachingAssignment() {
                             <Input
                                 id="search"
                                 onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', height: 32 }}
+                                prefix={
+                                    <Search
+                                        size={15}
+                                        style={{
+                                            color: 'rgba(0, 0, 0, 0.25)',
+                                        }}
+                                    />
+                                }
                                 placeholder="Tìm kiếm"
                                 allowClear
                             />

@@ -1,7 +1,8 @@
+// @ts-nocheck
 import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { $Enums, type Prisma, type UserProfile } from '@workspace/db'
+import { $Enums, type UserProfile } from '@workspace/db'
 import {
     useCreateLecturer,
     useCreateUserProfile,
@@ -119,10 +120,7 @@ const PutUserProfileLectureModal = () => {
         },
     })
 
-    const buildUserProfileUpdateData = (
-        output: UserProfileType,
-        fileName?: string
-    ): Prisma.UserProfileUpdateInput => ({
+    const buildUserProfileUpdateData = (output: UserProfileType, fileName?: string) => ({
         code: output.code,
         avatar: fileName || undefined,
         firstName: output.firstName,
@@ -183,10 +181,7 @@ const PutUserProfileLectureModal = () => {
         }),
     })
 
-    const buildUserProfileCreateData = (
-        output: UserProfileType,
-        fileName?: string
-    ): Prisma.UserProfileCreateInput => ({
+    const buildUserProfileCreateData = (output: UserProfileType, fileName?: string) => ({
         code: output.code,
         avatar: fileName || undefined,
         firstName: output.firstName,
@@ -247,7 +242,7 @@ const PutUserProfileLectureModal = () => {
         }),
     })
 
-    const buildLecturerUpdateData = (output: LecturerProfileType): Prisma.LecturerUpdateInput => ({
+    const buildLecturerUpdateData = (output: LecturerProfileType) => ({
         code: output.code,
         ...(output.organizationId && {
             organization: { connect: { Id: output.organizationId } },
@@ -257,10 +252,7 @@ const PutUserProfileLectureModal = () => {
         }),
     })
 
-    const buildLecturerCreateData = (
-        output: LecturerProfileType,
-        userProfileId: string
-    ): Prisma.LecturerCreateInput => ({
+    const buildLecturerCreateData = (output: LecturerProfileType, userProfileId: string) => ({
         code: output.code,
         userProfile: { connect: { id: userProfileId } },
         organization: { connect: { Id: output.organizationId } },

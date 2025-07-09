@@ -143,6 +143,7 @@ export default function StudentCourseByPlan({
                                             }}
                                         />
                                     }
+                                    className="h-8"
                                     allowClear
                                 />
                             </Form.Item>

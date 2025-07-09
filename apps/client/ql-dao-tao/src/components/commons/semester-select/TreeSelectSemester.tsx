@@ -41,6 +41,9 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     })
 
     const { data: semesters, isLoading: semesterLoading } = useFindManySemester({
+        include: {
+            schoolYear: true,
+        },
         orderBy: { startDate: 'desc' },
     })
 
@@ -56,7 +59,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
                         ?.filter((semester) => semester.schoolYearId === schoolYear.id)
                         .map((semester) => ({
                             value: semester.id,
-                            title: semester.name,
+                            title: `${semester.name} - ${semester?.schoolYear?.name}`,
                         })) || [],
             })) || []
         )

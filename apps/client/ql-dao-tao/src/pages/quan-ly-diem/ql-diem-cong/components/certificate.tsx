@@ -145,7 +145,7 @@ export default function ArchivedCertificate() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 30,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>

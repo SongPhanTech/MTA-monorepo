@@ -17,6 +17,7 @@ const auth = async (token?: string): Promise<Session | null> => {
         console.log('[auth] response', response)
         return null
     }
+
     const isAuthenticated = await response.json()
     if (!isAuthenticated) {
         throw new Error('User is not authenticated')

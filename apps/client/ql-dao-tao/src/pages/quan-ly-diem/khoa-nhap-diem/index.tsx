@@ -17,7 +17,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 // const { Option } = Select;
@@ -39,7 +39,7 @@ export default function SubjectClassScore() {
         },
     })
 
-    const latestSemester = semesters?.[0]?.id || null
+    const latestSemester = useMemo(() => semesters?.[0]?.id || null, [semesters])
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',

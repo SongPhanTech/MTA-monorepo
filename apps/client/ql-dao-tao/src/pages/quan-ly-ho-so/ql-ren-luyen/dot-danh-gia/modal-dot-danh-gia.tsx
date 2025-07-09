@@ -1,5 +1,4 @@
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
-import { CUSTOM_VI_LOCALE } from '@constants/constants'
 import type { TrainingScoreSession } from '@workspace/db'
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
 import { DatePicker, Form, Input, Modal, Select } from 'antd'
@@ -102,8 +101,7 @@ const ModalDotDanhGia: React.FC<ModalDotDanhGiaProps> = ({
                 >
                     <DatePicker
                         style={{ width: '100%' }}
-                        locale={CUSTOM_VI_LOCALE}
-                        format="DD/MM/YYYY"
+                        format={{ format: 'DD/MM/YYYY', type: 'mask' }}
                     />
                 </Form.Item>
                 <Form.Item name="ghiChu" label="Ghi chú">
