@@ -6,7 +6,7 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao"]
+  schemas  = ["mta", "he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao"]
 }
 
 generator client {
@@ -1629,7 +1629,7 @@ model DM_CapBac {
   sTen           String        @unique()
   profiles       UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ChucDanh {
@@ -1652,7 +1652,7 @@ model DM_ChucDanh {
   DM_ViTriCongViec DM_ViTriCongViec[]
   userProfile      UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ChucVu {
@@ -1673,7 +1673,7 @@ model DM_ChucVu {
   sTen           String        @unique()
   userProfile    UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_HocHam {
@@ -1694,7 +1694,7 @@ model DM_HocHam {
   sTen           String        @unique()
   profiles       UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_HocVi {
@@ -1715,7 +1715,7 @@ model DM_HocVi {
   sTen           String        @unique()
   profiles       UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ChungChiTinHoc {
@@ -1735,7 +1735,7 @@ model DM_ChungChiTinHoc {
   sThietBiSua    String?
   sTen           String    @unique()
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_DanToc {
@@ -1758,7 +1758,7 @@ model DM_DanToc {
   sDiaChiCuTru   String?
   userProfile    UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_DonVi {
@@ -1799,7 +1799,7 @@ model DM_DonVi {
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_DonViHanhChinh {
@@ -1823,7 +1823,7 @@ model DM_DonViHanhChinh {
   huyen          DM_QuanHuyen[]
   xaPhuong       DM_XaPhuong[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_KhuVuc_DiaLy {
@@ -1846,7 +1846,7 @@ model DM_KhuVuc_DiaLy {
   tinh           DM_Tinh[]
   student        Student[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NgoaiNgu {
@@ -1866,7 +1866,7 @@ model DM_NgoaiNgu {
   sThietBiSua    String?
   sTen           String    @unique()
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_TonGiao {
@@ -1887,7 +1887,7 @@ model DM_TonGiao {
   sTen           String        @unique()
   userProfile    UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_TrinhDoNgoaiNgu {
@@ -1908,7 +1908,7 @@ model DM_TrinhDoNgoaiNgu {
   sTen           String    @unique()
   sKhung         String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_TrinhDoTinHoc {
@@ -1928,7 +1928,7 @@ model DM_TrinhDoTinHoc {
   sThietBiSua    String?
   sTen           String    @unique()
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_UngDung {
@@ -1956,7 +1956,7 @@ model DM_UngDung {
   sClientSecret    String?
   sRedirectDefault String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NhanVien {
@@ -1997,7 +1997,7 @@ model DM_NhanVien {
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
   @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
   @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NhomNguoiDung {
@@ -2019,7 +2019,7 @@ model DM_NhomNguoiDung {
   vaiTroTrongNhom    VaiTroTrongNhom[]
   nguoiDungTrongNhom NguoiDungTrongNhom[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NhomUngDung {
@@ -2040,7 +2040,7 @@ model DM_NhomUngDung {
   sTen           String    @unique()
   sMoTa          String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_QuocGia {
@@ -2063,7 +2063,7 @@ model DM_QuocGia {
   userProfile    UserProfile[]
   tinh           DM_Tinh[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_Tinh {
@@ -2096,7 +2096,7 @@ model DM_Tinh {
   userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_QuanHuyen {
@@ -2128,7 +2128,7 @@ model DM_QuanHuyen {
 
   @@unique([sDM_TinhId, sTen])
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_XaPhuong {
@@ -2162,7 +2162,7 @@ model DM_XaPhuong {
 
   @@unique([sDM_QuanHuyenId, sTen])
   @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_VaiTro {
@@ -2184,7 +2184,7 @@ model DM_VaiTro {
   Quyen_VaiTro    Quyen_VaiTro[]
   VaiTroTrongNhom VaiTroTrongNhom[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ViTriCongViec {
@@ -2208,7 +2208,7 @@ model DM_ViTriCongViec {
   DM_NhanVien     DM_NhanVien[]
   DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model NguoiDungTrongNhom {
@@ -2232,7 +2232,7 @@ model NguoiDungTrongNhom {
   sDM_NhanVienId      String?
 
   @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model NhatKyHoatDong {
@@ -2259,7 +2259,7 @@ model NhatKyHoatDong {
   sDescription   String?
   sIPAddress     String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model Policy {
@@ -2283,7 +2283,7 @@ model Policy {
   bGioiHanTG     Boolean?  @default(false)
   iApDungChoUD   Int?      @default(0)
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model Quyen_VaiTro {
@@ -2309,7 +2309,7 @@ model Quyen_VaiTro {
   DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
   DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model TaiKhoan {
@@ -2333,7 +2333,7 @@ model TaiKhoan {
   sDM_NhanVienId String?      @unique()
   nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model VaiTroTrongNhom {
@@ -2356,7 +2356,7 @@ model VaiTroTrongNhom {
   DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
   sDM_VaiTroId        String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model Lecturer {
