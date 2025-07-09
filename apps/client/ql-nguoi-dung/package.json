@@ -49,8 +49,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
-		"@openapi-codegen/cli": "catalog:",
-		"@openapi-codegen/typescript": "catalog:",
 		"@types/lodash": "catalog:",
 		"@types/node": "catalog:",
 		"@types/qs": "catalog:",
