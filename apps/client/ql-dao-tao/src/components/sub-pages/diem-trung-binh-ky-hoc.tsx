@@ -1,4 +1,16 @@
-import { Button, Col, Flex, Form, Input, message, Row, Select, Tag, TreeSelect } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+    Select,
+    Tag,
+    TreeSelect,
+} from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -17,7 +29,7 @@ import {
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import _ from 'lodash'
-import { Check, Search, X } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
 dayjs.locale('vi')
@@ -539,11 +551,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },
@@ -556,11 +564,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },
@@ -573,11 +577,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },
@@ -596,11 +596,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },
@@ -613,11 +609,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },
@@ -652,11 +644,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },
@@ -669,11 +657,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },

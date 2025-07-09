@@ -476,7 +476,7 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
-                                width: 180,
+                                width: 250,
                             },
                             {
                                 title: 'Tổng tín chỉ',
@@ -518,13 +518,13 @@ export default function TrainingProgramCatalog() {
                                 title: 'Số TC bắt buộc',
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
-                                width: 120,
+                                width: 80,
                             },
                             {
                                 title: 'Số TC tự chọn',
                                 dataIndex: 'electiveCredits',
                                 align: 'center',
-                                width: 110,
+                                width: 70,
                             },
                             {
                                 title: 'Số kỳ học',

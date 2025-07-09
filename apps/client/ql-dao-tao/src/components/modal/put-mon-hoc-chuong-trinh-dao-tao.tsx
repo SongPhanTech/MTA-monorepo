@@ -196,11 +196,13 @@ const PutTrainingBlockSubject = () => {
                         mode={input?.trainingBlockSubjectId ? undefined : 'multiple'}
                         allowClear
                         showSearch
-                        placeholder="Chọn môn học"
+                        placeholder="Chọn phiên bản môn học"
                         options={subjectVersionData.map((item: SubjectVersion) => {
                             return {
                                 ...item,
-                                label: item?.code ? `${item?.code} - ${item?.name}` : item?.name,
+                                label: item?.code
+                                    ? `${item?.code} - ${item?.name} - ${item?.period}`
+                                    : `${item?.name} - ${item?.period}`,
                                 value: item.id,
                             }
                         })}

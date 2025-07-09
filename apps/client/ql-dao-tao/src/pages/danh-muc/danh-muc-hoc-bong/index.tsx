@@ -17,9 +17,9 @@ import {
     useUpdateScholarship,
     useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { BookPlus, Check, X } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -187,7 +187,15 @@ export default function Scholarship() {
                                     onChange={(e) =>
                                         handleFilterChange('searchText', e.target.value)
                                     }
-                                    style={{ width: '100%' }}
+                                    style={{ width: '100%', height: 32 }}
+                                    prefix={
+                                        <Search
+                                            size={15}
+                                            style={{
+                                                color: 'rgba(0, 0, 0, 0.25)',
+                                            }}
+                                        />
+                                    }
                                     placeholder="Tìm kiếm tên học bổng"
                                     allowClear
                                 />
@@ -268,11 +276,7 @@ export default function Scholarship() {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },
