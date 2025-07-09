@@ -51,10 +51,6 @@ const PutGraduationSession = () => {
                     ? dayjs(graduationSession.applicationEnd)
                     : undefined,
             })
-        } else {
-            form.setFieldsValue({
-                active: true,
-            })
         }
     }, [graduationSession, form])
 
@@ -157,7 +153,7 @@ const PutGraduationSession = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="status" label="Trạng thái" required>
+                <FormItem form={form} name="status" label="Trạng thái">
                     <Select
                         placeholder="Chọn trạng thái"
                         options={graduationSessionStatusOptions?.map((item) => ({

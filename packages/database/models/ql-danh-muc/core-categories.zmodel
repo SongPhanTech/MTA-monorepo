@@ -20,7 +20,8 @@ abstract model CoreBase {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  @@schema("ql-danh-muc")
+
+  @@schema("mta")
 
   // TODO: change this
   @@allow('all', auth() != null)
@@ -34,7 +35,7 @@ abstract model CoreBase {
 model DM_CapBac extends CoreBase {
   sTen     String        @unique
   profiles UserProfile[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ChucDanh extends CoreBase {
@@ -42,30 +43,30 @@ model DM_ChucDanh extends CoreBase {
   iLoaiChucDanh    Int?               @default(0)
   DM_ViTriCongViec DM_ViTriCongViec[]
   userProfile      UserProfile[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ChucVu extends CoreBase {
   sTen        String        @unique
   userProfile UserProfile[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_HocHam extends CoreBase {
   sTen     String        @unique
   profiles UserProfile[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_HocVi extends CoreBase {
   sTen     String        @unique
   profiles UserProfile[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ChungChiTinHoc extends CoreBase {
   sTen String @unique
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_DanToc extends CoreBase {
@@ -75,7 +76,7 @@ model DM_DanToc extends CoreBase {
 
   userProfile  UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_DonVi extends CoreBase {
@@ -104,7 +105,7 @@ model DM_DonVi extends CoreBase {
   trainingMajors   TrainingMajor[]
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_DonViHanhChinh extends CoreBase {
@@ -114,7 +115,7 @@ model DM_DonViHanhChinh extends CoreBase {
   tinh     DM_Tinh[]
   huyen    DM_QuanHuyen[]
   xaPhuong DM_XaPhuong[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_KhuVuc_DiaLy extends CoreBase {
@@ -123,29 +124,29 @@ model DM_KhuVuc_DiaLy extends CoreBase {
 
   tinh    DM_Tinh[]
   student Student[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NgoaiNgu extends CoreBase {
   sTen String @unique
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_TonGiao extends CoreBase {
   sTen        String        @unique
   userProfile UserProfile[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_TrinhDoNgoaiNgu extends CoreBase {
   sTen   String  @unique
   sKhung String?
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_TrinhDoTinHoc extends CoreBase {
   sTen String @unique
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_UngDung extends CoreBase {
@@ -158,7 +159,7 @@ model DM_UngDung extends CoreBase {
   sClientId        String?
   sClientSecret    String?
   sRedirectDefault String?
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NhanVien extends CoreBase {
@@ -188,20 +189,20 @@ model DM_NhanVien extends CoreBase {
   @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
 
   @@auth()
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NhomNguoiDung extends CoreBase {
   sTen               String               @unique
   vaiTroTrongNhom    VaiTroTrongNhom[]
   nguoiDungTrongNhom NguoiDungTrongNhom[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_NhomUngDung extends CoreBase {
   sTen  String  @unique
   sMoTa String?
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_QuocGia extends CoreBase {
@@ -210,7 +211,7 @@ model DM_QuocGia extends CoreBase {
 
   userProfile UserProfile[]
   tinh        DM_Tinh[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_Tinh extends CoreBase {
@@ -230,7 +231,7 @@ model DM_Tinh extends CoreBase {
   userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_QuanHuyen extends CoreBase {
@@ -249,7 +250,7 @@ model DM_QuanHuyen extends CoreBase {
 
   @@unique([sDM_TinhId, sTen])
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_XaPhuong extends CoreBase {
@@ -270,14 +271,14 @@ model DM_XaPhuong extends CoreBase {
 
   @@unique([sDM_QuanHuyenId, sTen])
   @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_VaiTro extends CoreBase {
   sTen            String            @unique
   Quyen_VaiTro    Quyen_VaiTro[]
   VaiTroTrongNhom VaiTroTrongNhom[]
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model DM_ViTriCongViec extends CoreBase {
@@ -286,7 +287,7 @@ model DM_ViTriCongViec extends CoreBase {
   sDM_NhomViTriId String
   DM_NhanVien     DM_NhanVien[]
   DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model NguoiDungTrongNhom extends CoreBase {
@@ -296,7 +297,7 @@ model NguoiDungTrongNhom extends CoreBase {
   sDM_NhanVienId      String?
 
   @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model NhatKyHoatDong extends CoreBase {
@@ -308,7 +309,7 @@ model NhatKyHoatDong extends CoreBase {
   sReferenceName String?
   sDescription   String?
   sIPAddress     String?
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model Policy extends CoreBase {
@@ -317,7 +318,7 @@ model Policy extends CoreBase {
   bGioiHanTCIP   Boolean? @default(false)
   bGioiHanTG     Boolean? @default(false)
   iApDungChoUD   Int?     @default(0)
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model Quyen_VaiTro extends CoreBase {
@@ -328,7 +329,7 @@ model Quyen_VaiTro extends CoreBase {
   fValue         Int?
   DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
   DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model TaiKhoan extends CoreBase {
@@ -338,7 +339,7 @@ model TaiKhoan extends CoreBase {
   sDM_NhanVienId String?      @unique // TODO: maybe remove unique constraint
 
   nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 model VaiTroTrongNhom extends CoreBase {
@@ -346,5 +347,5 @@ model VaiTroTrongNhom extends CoreBase {
   sDM_NhomNguoiDungId String?
   DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
   sDM_VaiTroId        String?
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }

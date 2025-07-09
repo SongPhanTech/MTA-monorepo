@@ -54,7 +54,7 @@ export const populateExcelTemplate = (
         throw new Error('No valid worksheet found in the template.')
     }
 
-    worksheet.A1 = { t: 's', v: `Class: ${templateData.className}` }
+    worksheet.A1 = { t: 's', v: `Class: ${templateData.date}` }
     worksheet.A2 = {
         t: 's',
         v: `Date: ${templateData.date}/${templateData.month}/${templateData.year}`,
@@ -68,10 +68,9 @@ export const populateExcelTemplate = (
         const row = startRow + index
         const cells = [
             { t: 'n', v: student.stt },
-            { t: 's', v: student.code },
-            { t: 's', v: student.name },
-            { t: 's', v: student.birth },
-            { t: 's', v: templateData.className || '' },
+            { t: 's', v: student.maSinhVien },
+            { t: 's', v: student.hoTen },
+            { t: 's', v: student.ngaySinh },
         ]
 
         cells.forEach((cell, colIndex) => {

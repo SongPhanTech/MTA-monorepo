@@ -5,15 +5,19 @@ import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
 import type { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { checkWarningEligibility, listStudentWarning } from '../services/academic-warning'
+import { listStudentWarning, resultCourseStudentWarning } from '../services/academic-warning'
 import {
-    checkScholarshipEligibility,
     listStudentInfo,
     populateExcelTemplate,
+    resultCourseStudentScholarship,
     sanitizeFilename,
 } from '../services/scholarship.service'
 import { calculateStudentSemesterResult } from '../services/studen-result.service'
 import { getBufferFromUrl } from '../services/template.service'
+import {
+    listStudentAcademicAction,
+    resultCourseStudentAcademicAction,
+} from '../services/training-action'
 import {
     buildCurriculumMapOrThrow,
     buildDistrictMapOrThrow,
@@ -122,10 +126,6 @@ const dsRaSoatHocBongJson = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kì học',
             }),
-            scholarshipId: z.string().optional().openapi('scholarshipId', {
-                description:
-                    'ID của học bổng, nếu không sẽ hiển thị thông tin của tất cả sinh viên',
-            }),
         }),
     },
     responses: {
@@ -162,9 +162,6 @@ const dsRaKyLuatHocTapJson = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kì học',
             }),
-            trainingCourseId: z.string().openapi('trainingCourseId', {
-                description: 'ID của khoá đào tạo',
-            }),
         }),
     },
     responses: {
@@ -195,7 +192,7 @@ const tongKetHocKyHVSV = createRoute({
     tags: ['Student'],
     summary: 'Tổng kết kết quả học kỳ của học viên, sinh viên',
     description: 'Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON',
-    method: 'get',
+    method: 'post',
     request: {
         query: z.object({
             semesterId: z.string().openapi('semesterId', {
@@ -233,6 +230,51 @@ const tongKetHocKyHVSV = createRoute({
             },
         },
     },
+})
+const dsLuuBanThoiHocJson = createRoute({
+    operationId: 'exportStudentActionAcademic',
+    path: '/export-json-list-student-to-check-action-academic',
+    tags: ['Student'],
+    summary: 'Danh sách sinh viên bị lưu ban, thôi học',
+    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện lưu ban, thôi học dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kì học',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student action academic as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(dsLuuBanThoiHocJson, async (c) => {
+    const { semesterId } = c.req.valid('query')
+    const students = await listStudentAcademicAction(semesterId)
+    if (!students || students.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+    const filteredStudents = await resultCourseStudentAcademicAction(students)
+    return c.json(filteredStudents, 200)
 })
 
 app.openapi(tongKetHocKyHVSV, async (c) => {
@@ -412,36 +454,23 @@ app.openapi(dsRaSoatHocBongExcel, async (c) => {
 })
 
 app.openapi(dsRaSoatHocBongJson, async (c) => {
-    const { semesterId, scholarshipId } = c.req.valid('query')
+    const { semesterId } = c.req.valid('query')
     const students = await listStudentInfo(semesterId)
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-
-    if (scholarshipId) {
-        const scholarship = await prisma.scholarship.findUnique({
-            where: { id: scholarshipId },
-        })
-        if (!scholarship) {
-            return c.json({ message: 'Học bổng không tồn tại' }, 404)
-        }
-        console.log(`Xét học bổng: ${scholarship.name} (${scholarshipId})`)
-        // Filter students based on scholarship criteria
-        const filteredStudents = await checkScholarshipEligibility(students, scholarshipId)
-        return c.json(filteredStudents, 200)
-    }
-    // If no scholarshipId is provided, return all students
-    return c.json(students, 200)
+    const filteredStudents = await resultCourseStudentScholarship(students)
+    return c.json(filteredStudents, 200)
 })
 
 app.openapi(dsRaKyLuatHocTapJson, async (c) => {
-    const { semesterId, trainingCourseId } = c.req.valid('query')
+    const { semesterId } = c.req.valid('query')
     const students = await listStudentWarning(semesterId)
 
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-    const filteredStudents = await checkWarningEligibility(students, trainingCourseId)
+    const filteredStudents = await resultCourseStudentWarning(students)
     return c.json(filteredStudents, 200)
 })
 

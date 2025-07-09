@@ -41,10 +41,6 @@ export interface EnrollFixedClassOnSubjectClass {
     /** @nullable */
     registrationAreaId: string | null
     curriculumVersionId: string
-    /** @nullable */
-    studyRankId: string | null
-    /** @nullable */
-    trainingRankId: string | null
     userProfile: EnrollFixedClassOnSubjectClassUserProfile
     fixedClass: EnrollFixedClassOnSubjectClassFixedClass
 }

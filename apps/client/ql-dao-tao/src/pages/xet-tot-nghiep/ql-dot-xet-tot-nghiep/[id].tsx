@@ -3,7 +3,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutGraduationSession } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useGraduationSessionStatusOptions } from '@hooks/graduationSessionStatus'
+import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -15,6 +15,7 @@ import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -26,8 +27,8 @@ interface FilterProps {
 }
 
 export default function StudentGraduationApplication() {
-    const { getGraduationSessionStatusLabel, getGraduationSessionStatusColor } =
-        useGraduationSessionStatusOptions()
+    const router = useRouter()
+    const { getApplicationStatusLabel, getApplicationStatusColor } = useApplicationStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -35,11 +36,12 @@ export default function StudentGraduationApplication() {
         trainingCourseId: null,
         trainingObjectTypeId: null,
     })
+    const { id } = router.query
 
     const { data: studentGraduationApplicationData, refetch } =
         useFindManyStudentGraduationApplication({
             where: {
-                sessionId: 'XTNT8',
+                sessionId: Array.isArray(id) ? id[0] : id,
             },
             include: {
                 student: {
@@ -54,7 +56,7 @@ export default function StudentGraduationApplication() {
 
     const { data: count } = useCountStudentGraduationApplication({
         where: {
-            sessionId: 'XTNT8',
+            sessionId: Array.isArray(id) ? id[0] : id,
         },
     })
 
@@ -114,7 +116,7 @@ export default function StudentGraduationApplication() {
                                             onChange={(e) =>
                                                 handleFilterChange('searchText', e.target.value)
                                             }
-                                            placeholder="Tìm kiếm đợt..."
+                                            placeholder="Tìm kiếm đơn..."
                                             className="py-0"
                                             prefix={
                                                 <Search
@@ -158,13 +160,27 @@ export default function StudentGraduationApplication() {
                                 title: 'Mã đơn xét tốt nghiệp',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
+                                width: 120,
+                            },
+                            {
+                                title: 'Mã sinh viên',
+                                align: 'center',
+                                width: 100,
+                                fixed: 'left',
+                                render: (_, record) => record.student?.code || '',
                             },
                             {
                                 title: 'Tên sinh viên',
                                 width: 150,
                                 render: (record) =>
                                     `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
+                            },
+                            {
+                                title: 'Ngày sinh',
+                                dataIndex: ['student', 'userProfile', 'dateOfBirth'],
+                                width: 150,
+                                render: (record) =>
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Ngày nộp đơn',
@@ -180,8 +196,8 @@ export default function StudentGraduationApplication() {
                                 width: 140,
                                 fixed: 'right',
                                 render: (record) => {
-                                    const label = getGraduationSessionStatusLabel(record)
-                                    const color = getGraduationSessionStatusColor(record)
+                                    const label = getApplicationStatusLabel(record)
+                                    const color = getApplicationStatusColor(record)
                                     return <Tag color={color}>{label}</Tag>
                                 },
                             },

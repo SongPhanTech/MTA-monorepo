@@ -11,14 +11,24 @@ export const StudentInfo = z
     })
     .openapi('StudentInfo')
 
+export const ListScholarship = z.object({
+    id: z.string().describe('ID của tiêu chí học bổng'),
+    name: z.string().describe('Tên tiêu chí học bổng'),
+    order: z.number().describe('Thứ tự trong danh sách'),
+})
+
 export const StudentScholarship = z.object({
     id: z.string().describe('ID của sinh viên'),
     stt: z.number().describe('STT'),
     hoTen: z.string().describe('Họ tên sinh viên'),
     maSinhVien: z.string().describe('Mã sinh viên'),
     doiTuong: z.string().describe('Đối tượng'),
-    khoa: z.string().describe('Khoa'),
+    khoa: z.string().describe('Khoá'),
+    khoaId: z.string().describe('ID Khoá'),
     chuyenNganh: z.string().describe('Chuyên ngành'),
+    chuyenNganhId: z.string().describe('ID Chuyên ngành'),
+    nganh: z.string().describe('Ngành'),
+    nganhId: z.string().describe('ID Ngành'),
     kyDangHoc: z.number().describe('Kỳ đăng học'),
     kyCuoi: z.boolean().describe('Kỳ cuối'),
     ngaySinh: z.string().describe('Ngày sinh'),
@@ -42,7 +52,7 @@ export const StudentScholarship = z.object({
     chucVuHocVien: z.string().describe('Chức vụ học viên'),
     diemThuong: z.number().describe('Điểm thưởng chức vụ'),
     quocTich: z.string().describe('Quốc tịch'),
-    // duDieuKienHocBong: z.boolean().describe('Đủ điều kiện học bổng'),
+    hocBong: z.array(ListScholarship).describe('Danh sách học bổng đạt được'),
     ghiChu: z.string().describe('Ghi chú'),
 
     userProfile: z.any().describe('Thông tin người dùng'),
@@ -54,8 +64,12 @@ export const StudentAcademicWarning = z.object({
     hoTen: z.string().describe('Họ tên sinh viên'),
     maSinhVien: z.string().describe('Mã sinh viên'),
     doiTuong: z.string().describe('Đối tượng'),
-    khoa: z.string().describe('Khoa'),
+    khoa: z.string().describe('Khóa'),
+    khoaId: z.string().describe('ID Khoá'),
     chuyenNganh: z.string().describe('Chuyên ngành'),
+    chuyenNganhId: z.string().describe('ID Chuyên ngành'),
+    nganh: z.string().describe('Ngành'),
+    nganhId: z.string().describe('ID Ngành'),
     kyDangHoc: z.number().describe('Kỳ đăng học'),
     namDangHoc: z.number().describe('Năm đang học'),
     heSoDiem: z.number().describe('Loại hệ số điểm'),
@@ -73,6 +87,38 @@ export const StudentAcademicWarning = z.object({
 
     userProfile: z.any().describe('Thông tin người dùng'),
 })
+export const StudentAcademicAction = z.object({
+    id: z.string().describe('ID của sinh viên'),
+    stt: z.number().describe('STT'),
+    hoTen: z.string().describe('Họ tên sinh viên'),
+    maSinhVien: z.string().describe('Mã sinh viên'),
+    doiTuong: z.string().describe('Đối tượng'),
+    khoa: z.string().describe('Khóa'),
+    khoaId: z.string().describe('ID Khoá'),
+    chuyenNganh: z.string().describe('Chuyên ngành'),
+    chuyenNganhId: z.string().describe('ID Chuyên ngành'),
+    nganh: z.string().describe('Ngành'),
+    nganhId: z.string().describe('ID Ngành'),
+    kyDangHoc: z.number().describe('Kỳ đăng học'),
+    namDangHoc: z.number().describe('Năm đang học'),
+    heSoDiem: z.number().describe('Loại hệ số điểm'),
+    kyCuoi: z.boolean().describe('Kỳ cuối'),
+    ngaySinh: z.string().describe('Ngày sinh'),
+    diemTrungBinh4: z.number().describe('Điểm trung bình hệ 4'),
+    diemTrungBinh10: z.number().describe('Điểm trung bình hệ 10'),
+    xepLoaiHocTap: z.string().describe('Xếp loại học tập'),
+    soTinChiDangKy: z.number().describe('Số tín chỉ đăng ký trong học kỳ'),
+    soTinChiTichLuy: z.number().describe('Số tín chỉ tích lũy'),
+    soTinChiYeuCau: z.number().describe('Số tín chỉ yêu cầu theo CTDT'),
+    diemHe10TichLuy: z.number().describe('Điểm hệ 10 tích lũy'),
+    diemHe4TichLuy: z.number().describe('Điểm hệ 4 tích lũy'),
+    noTinChiTrongKy: z.number().describe('Nợ tín chỉ trong kỳ (số môn thi trong kỳ không đạt)'),
+    tongSoTinChiNo: z.number().describe('Số tín chỉ nợ'),
+    mucCanhCaoHocTap: z.number().describe('Mức cảnh cáo học tập'),
+    mucCanhCaoHocDuong: z.number().describe('Mức cảnh cáo học đường'),
+    xepLoaiRenLuyenKy: z.string().describe('Xếp loại rèn luyện'),
+    userProfile: z.any().describe('Thông tin người dùng'),
+})
 
 export const StudentTemplateData = z.object({
     date: z.string().describe('Ngày'),
@@ -80,7 +126,35 @@ export const StudentTemplateData = z.object({
     year: z.number().describe('Năm'),
     student: z.array(StudentScholarship).describe('Danh sách sinh viên'),
 })
+
+export const CourseStudentScholarship = z.object({
+    courseId: z.string().describe('ID khóa học'),
+    courseName: z.string().describe('Tên khóa học'),
+    students: z
+        .array(StudentScholarship)
+        .describe('Danh sách sinh viên đạt học bổng trong khóa học'),
+})
+export const CourseStudentAcademicWarning = z.object({
+    courseId: z.string().describe('ID khóa học'),
+    courseName: z.string().describe('Tên khóa học'),
+    students: z
+        .array(StudentAcademicWarning)
+        .describe('Danh sách sinh viên có cảnh báo học vụ trong khóa học'),
+})
+export const CourseStudentAcademicAction = z.object({
+    courseId: z.string().describe('ID khóa học'),
+    courseName: z.string().describe('Tên khóa học'),
+    students: z
+        .array(StudentAcademicAction)
+        .describe('Danh sách sinh viên lưu ban, thôi học trong khóa học'),
+})
+
 export type StudentInfo = z.infer<typeof StudentInfo>
 export type StudentTemplateData = z.infer<typeof StudentTemplateData>
 export type StudentScholarship = z.infer<typeof StudentScholarship>
+export type ListScholarship = z.infer<typeof ListScholarship>
 export type StudentAcademicWarning = z.infer<typeof StudentAcademicWarning>
+export type CourseStudentScholarship = z.infer<typeof CourseStudentScholarship>
+export type CourseStudentAcademicWarning = z.infer<typeof CourseStudentAcademicWarning>
+export type CourseStudentAcademicAction = z.infer<typeof CourseStudentAcademicAction>
+export type StudentAcademicAction = z.infer<typeof StudentAcademicAction>

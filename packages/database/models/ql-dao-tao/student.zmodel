@@ -57,14 +57,6 @@ model Student extends Base {
   curriculumVersion        CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
 
-  // maybe can remove
-  studyRank                StudyRank?                     @relation(fields: [studyRankId], references: [id])
-  studyRankId              String?
-
-  // maybe can remove
-  trainingRank             TrainingRank?                  @relation(fields: [trainingRankId], references: [id])
-  trainingRankId           String?
-
   // Giảm 1 khi kỳ hiện tại không vi phạm
   academicWarningLevel     Int                            @default(0) // mức cảnh cáo học tập
   disciplinaryWarningLevel Int                            @default(0) // mức cảnh cáo học đường

@@ -11,10 +11,12 @@ import {
     useFindManyGraduationSession,
     useUpdateGraduationSession,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus, Eye, Search } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -26,6 +28,7 @@ interface FilterProps {
 }
 
 export default function GraduationSession() {
+    const router = useRouter()
     const { getGraduationSessionStatusLabel, getGraduationSessionStatusColor } =
         useGraduationSessionStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
@@ -126,6 +129,14 @@ export default function GraduationSession() {
         })
     }
 
+    const handleRowClick = (record: { id?: string }) => {
+        if (record?.id) {
+            router.push(
+                `${ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP}/${record.id}`
+            )
+        }
+    }
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -169,8 +180,9 @@ export default function GraduationSession() {
 
                 <Col span={24}>
                     <Table
-                        rowKey="id"
-                        id="training-block"
+                        rowKey="key"
+                        id="graduation-session"
+                        onRowClick={(record) => handleRowClick(record)}
                         columns={[
                             {
                                 title: 'STT',
@@ -189,7 +201,7 @@ export default function GraduationSession() {
                             {
                                 title: 'Tên đợt',
                                 dataIndex: 'name',
-                                width: 150,
+                                width: 180,
                             },
                             {
                                 title: 'Ngày họp hội đồng',
@@ -233,13 +245,26 @@ export default function GraduationSession() {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
+                                                <Tooltip title="Xem chi tiết" placement="top">
+                                                    <Eye
+                                                        size={16}
+                                                        strokeWidth={1.5}
+                                                        className="text-base cursor-pointer"
+                                                    />
+                                                </Tooltip>
                                                 <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpen(id)
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
+                                                        onConfirm: (e) => {
+                                                            e?.stopPropagation()
+                                                            handleDelete(id)
+                                                        },
                                                     }}
                                                 />
                                             </Row>
