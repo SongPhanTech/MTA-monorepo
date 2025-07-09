@@ -120,7 +120,10 @@ const PutUserProfileLectureModal = () => {
         },
     })
 
-    const buildUserProfileUpdateData = (output: UserProfileType, fileName?: string) => ({
+    const buildUserProfileUpdateData = (
+        output: UserProfileType,
+        fileName?: string
+    ): Prisma.UserProfileUpdateInput => ({
         code: output.code,
         avatar: fileName || undefined,
         firstName: output.firstName,
@@ -181,7 +184,10 @@ const PutUserProfileLectureModal = () => {
         }),
     })
 
-    const buildUserProfileCreateData = (output: UserProfileType, fileName?: string) => ({
+    const buildUserProfileCreateData = (
+        output: UserProfileType,
+        fileName?: string
+    ): Prisma.UserProfileCreateInput => ({
         code: output.code,
         avatar: fileName || undefined,
         firstName: output.firstName,
@@ -242,7 +248,7 @@ const PutUserProfileLectureModal = () => {
         }),
     })
 
-    const buildLecturerUpdateData = (output: LecturerProfileType) => ({
+    const buildLecturerUpdateData = (output: LecturerProfileType): Prisma.LecturerUpdateInput => ({
         code: output.code,
         ...(output.organizationId && {
             organization: { connect: { Id: output.organizationId } },
@@ -252,7 +258,10 @@ const PutUserProfileLectureModal = () => {
         }),
     })
 
-    const buildLecturerCreateData = (output: LecturerProfileType, userProfileId: string) => ({
+    const buildLecturerCreateData = (
+        output: LecturerProfileType,
+        userProfileId: string
+    ): Prisma.LecturerCreateInput => ({
         code: output.code,
         userProfile: { connect: { id: userProfileId } },
         organization: { connect: { Id: output.organizationId } },

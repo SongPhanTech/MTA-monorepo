@@ -36,34 +36,15 @@ const PutHocBong = () => {
 
     const { mutateAsync: createScholarship } = useCreateScholarship()
     const { mutateAsync: updateScholarship } = useUpdateScholarship()
-    async function onOk(output?: Scholarship) {
-        if (!output) return
+    async function onOk(data?: Scholarship) {
+        if (!data) return
         try {
             showSpinner()
-            const data = {
-                code: output?.code,
-                name: output?.name,
-                baseAmount: output?.baseAmount,
-                multiplier: output?.multiplier,
-                effectiveFrom: output?.effectiveFrom,
-                effectiveTo: output?.effectiveTo,
-                trainingCourseId: output?.trainingCourseId,
-                description: output?.description,
-                active: output?.active,
-            }
             if (id) {
-                await updateScholarship({
-                    data: data,
-                    where: { id },
-                })
+                await updateScholarship({ data, where: { id } })
                 message.success('Cập nhật thành công')
             } else {
-                await createScholarship({
-                    data: {
-                        ...data,
-                        rankOrder: 1,
-                    },
-                })
+                await createScholarship({ data })
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
@@ -85,8 +66,6 @@ const PutHocBong = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        console.log(initialValue)
-
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,

@@ -18,14 +18,7 @@ import {
     listStudentAcademicAction,
     resultCourseStudentAcademicAction,
 } from '../services/training-action'
-import {
-    buildCurriculumMapOrThrow,
-    buildDistrictMapOrThrow,
-    buildEthnicityMapOrThrow,
-    buildNationalityMapOrThrow,
-    buildProvinceMapOrThrow,
-    getCurrentDateForReport,
-} from '../utils'
+import { buildCurriculumMapOrThrow, getCurrentDateForReport } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -50,7 +43,7 @@ const importHeQuanSu = createRoute({
             description: 'Import He quan su successfully',
             content: {
                 'application/json': {
-                    schema: z.object({ message: z.string() }),
+                    schema: z.object({ message: z.string(), time: z.number() }),
                 },
             },
         },
@@ -328,62 +321,75 @@ app.openapi(importHeQuanSu, async (c) => {
         return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
     }
 
-    const ethnicityMap = await buildEthnicityMapOrThrow(
-        prisma,
-        data.students.map((student) => student.ethnicity)
-    )
+    const ethnicityMap = new Map()
+    //  await buildEthnicityMapOrThrow(
+    //     prisma,
+    //     data.students.map((student) => student.ethnicity)
+    // )
 
-    const nationalityMap = await buildNationalityMapOrThrow(
-        prisma,
-        data.students.map((student) => student.nationality)
-    )
+    const nationalityMap = new Map()
+    // await buildNationalityMapOrThrow(
+    //     prisma,
+    //     data.students.map((student) => student.nationality)
+    // )
 
-    const provinceMap = await buildProvinceMapOrThrow(
-        prisma,
-        data.students.map((student) => student.provinceHometown)
-    )
+    const provinceMap = new Map()
+    //  await buildProvinceMapOrThrow(
+    //     prisma,
+    //     data.students.map((student) => student.provinceHometown)
+    // )
 
-    const districtMap = await buildDistrictMapOrThrow(
-        prisma,
-        data.students.map((student) => student.districtHometown)
-    )
+    const districtMap = new Map()
+    //  await buildDistrictMapOrThrow(
+    //     prisma,
+    //     data.students.map((student) => student.districtHometown)
+    // )
 
     const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
 
+    const existingStudent = await prisma.student.findMany({
+        where: { code: { in: data.students.map((student) => student.code) } },
+        select: { id: true, code: true },
+    })
+
+    const existingStudentMap = new Map(existingStudent.map(({ code, id }) => [code, id]))
+
+    const start = Date.now()
     await prisma.$transaction(
         async (tx) => {
+            await tx.fixedClass.createMany({
+                skipDuplicates: true,
+                data: data.students.map(({ fixedClass, curriculum }) => ({
+                    name: fixedClass,
+                    trainingCourseId: trainingCourse.id,
+                    curriculumVersionId: curriculumVersionMap.get(curriculum),
+                    startYear: new Date().getFullYear(),
+                })),
+            })
+
+            const fixedClass = await prisma.fixedClass.findMany({
+                where: {
+                    OR: data.students.map(({ fixedClass, curriculum }) => ({
+                        name: fixedClass,
+                        trainingCourseId: trainingCourse.id,
+                        curriculumVersionId: curriculumVersionMap.get(curriculum),
+                    })),
+                },
+                select: { id: true, name: true },
+            })
+
+            const fixedClassMap = new Map(fixedClass.map(({ name, id }) => [name, id]))
+
             for (const student of data.students) {
-                const existsFixedClass = await tx.fixedClass.findFirst({
-                    where: {
-                        name: student.fixedClass,
-                        curriculumVersionId: curriculumVersionMap.get(student.curriculum),
-                    },
-                })
-
-                const fixedClass = existsFixedClass
-                    ? existsFixedClass
-                    : await tx.fixedClass.create({
-                          data: {
-                              name: student.fixedClass,
-                              curriculumVersionId: curriculumVersionMap.get(student.curriculum),
-                              startYear: new Date().getFullYear(),
-                              trainingCourseId: trainingCourse.id,
-                          },
-                      })
-
-                const existingStudent = await tx.student.findFirst({
-                    where: { code: student.code },
-                })
-
                 const studentData: Prisma.StudentCreateInput = {
                     trainingObjectType: {
                         connect: { id: trainingObjectType.id },
                     },
-                    fixedClass: { connect: { id: fixedClass.id } },
+                    fixedClass: {
+                        connect: { id: fixedClassMap.get(student.fixedClass) },
+                    },
                     curriculumVersion: {
-                        connect: {
-                            id: curriculumVersionMap.get(student.curriculum),
-                        },
+                        connect: { id: curriculumVersionMap.get(student.curriculum) },
                     },
                     userProfile: {},
                 }
@@ -400,9 +406,10 @@ app.openapi(importHeQuanSu, async (c) => {
                         districtHometownId: districtMap.get(student.districtHometown ?? '') || null,
                     }
 
-                if (existingStudent) {
+                const existingId = existingStudentMap.get(student.code)
+                if (existingId) {
                     await tx.student.update({
-                        where: { id: existingStudent.id },
+                        where: { id: existingId },
                         data: {
                             ...studentData,
                             userProfile: { update: profileData },
@@ -426,7 +433,13 @@ app.openapi(importHeQuanSu, async (c) => {
         { timeout: timeout * 1000 }
     )
 
-    return c.json({ message: `Import students successfully: ${data.students.length}` }, 200)
+    return c.json(
+        {
+            message: `Import students successfully: ${data.students.length}`,
+            time: Date.now() - start,
+        },
+        200
+    )
 })
 
 app.openapi(dsRaSoatHocBongExcel, async (c) => {
