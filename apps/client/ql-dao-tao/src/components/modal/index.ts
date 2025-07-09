@@ -46,6 +46,7 @@ import PutTrainingTimeModal from './put-training-time'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutAcademicRanking from './put-xep-loai-hoc-luc'
+import PutDisciplinaryWarning from './put-xet-canh-cao-hoc-duong'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 export {
@@ -99,4 +100,5 @@ export {
     PutCloneAcademicRanking,
     PutDisciplinaryWarningReason,
     PutAcademicWarningRule,
+    PutDisciplinaryWarning,
 }

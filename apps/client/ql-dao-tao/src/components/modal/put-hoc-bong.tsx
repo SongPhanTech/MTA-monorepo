@@ -85,8 +85,6 @@ const PutHocBong = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        console.log(initialValue)
-
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
