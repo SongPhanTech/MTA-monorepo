@@ -109,6 +109,7 @@ export const StudentAcademicAction = z.object({
     xepLoaiHocTap: z.string().describe('Xếp loại học tập'),
     soTinChiDangKy: z.number().describe('Số tín chỉ đăng ký trong học kỳ'),
     soTinChiTichLuy: z.number().describe('Số tín chỉ tích lũy'),
+    soTinChiYeuCau: z.number().describe('Số tín chỉ yêu cầu theo CTDT'),
     diemHe10TichLuy: z.number().describe('Điểm hệ 10 tích lũy'),
     diemHe4TichLuy: z.number().describe('Điểm hệ 4 tích lũy'),
     noTinChiTrongKy: z.number().describe('Nợ tín chỉ trong kỳ (số môn thi trong kỳ không đạt)'),

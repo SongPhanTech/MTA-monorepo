@@ -15,6 +15,10 @@ import {
 import { calculateStudentSemesterResult } from '../services/studen-result.service'
 import { getBufferFromUrl } from '../services/template.service'
 import {
+    listStudentAcademicAction,
+    resultCourseStudentAcademicAction,
+} from '../services/training-action'
+import {
     buildCurriculumMapOrThrow,
     buildDistrictMapOrThrow,
     buildEthnicityMapOrThrow,
@@ -226,6 +230,51 @@ const tongKetHocKyHVSV = createRoute({
             },
         },
     },
+})
+const dsLuuBanThoiHocJson = createRoute({
+    operationId: 'exportStudentActionAcademic',
+    path: '/export-json-list-student-to-check-action-academic',
+    tags: ['Student'],
+    summary: 'Danh sách sinh viên bị lưu ban, thôi học',
+    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện lưu ban, thôi học dưới dạng JSON',
+    method: 'get',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kì học',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student action academic as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(dsLuuBanThoiHocJson, async (c) => {
+    const { semesterId } = c.req.valid('query')
+    const students = await listStudentAcademicAction(semesterId)
+    if (!students || students.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+    const filteredStudents = await resultCourseStudentAcademicAction(students)
+    return c.json(filteredStudents, 200)
 })
 
 app.openapi(tongKetHocKyHVSV, async (c) => {

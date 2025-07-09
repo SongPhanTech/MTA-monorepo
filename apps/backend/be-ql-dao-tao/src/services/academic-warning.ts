@@ -157,7 +157,7 @@ const checkStudentEligible = async (
     trainingCourseId: string
 ): Promise<boolean> => {
     try {
-        // Lấy thông tin tiêu chí học bổng
+        // Lấy thông tin tiêu chí cảnh cáo
         const warningCriteriaList = await prisma.academicWarningRule.findMany({
             where: {
                 trainingCourseId: trainingCourseId,
@@ -240,7 +240,7 @@ const checkStudentEligible = async (
                     )
 
                 default:
-                    return true // Mặc định là đủ điều kiện nếu không có tiêu chí
+                    return false
             }
         })
         return isEligible
@@ -256,12 +256,12 @@ const checkStudentEligible = async (
 // Lọc danh sách sinh viên bị cảnh báo học tập
 export const ListWarningEligibility = async (
     students: StudentAcademicWarning[],
-    scholarshipId: string
+    trainingCourseId: string
 ): Promise<StudentAcademicWarning[]> => {
     // Lấy thông tin tiêu chí học bổng
     return students.filter((student) => {
         // Kiểm tra điều kiện học bổng
-        return checkStudentEligible(student, scholarshipId)
+        return checkStudentEligible(student, trainingCourseId)
     })
 }
 
@@ -359,7 +359,7 @@ export const listStudentWarning = async (semesterId: string) => {
                     trinhDoTinHoc: false,
                     kyDangHoc: item.semesterIndexInCourse || 0,
                     kyCuoi: item.isLastSemester || false,
-                    namDangHoc: item.semesterIndexInCourse / 2, // Năm đang học
+                    namDangHoc: item.studyYear, // Năm đang học
                     chucVuHocVien: item.isClassMonitor
                         ? 'Lớp trưởng'
                         : item.isUnionLeader
@@ -369,7 +369,6 @@ export const listStudentWarning = async (semesterId: string) => {
                     ghiChu: '', // Ghi chú,
                     diemThuong: item.isClassMonitor || item.isUnionLeader ? 0.1 : 0, // Điểm thưởng
                     userProfile: userProfile, // Thông tin người dùng
-
                     diemHe10TichLuy: item.cumulativeGpaBase10 ?? 0,
                     diemHe4TichLuy: item.cumulativeGpaBase4 ?? 0,
                     noTinChiTrongKy: item.failedCredits ?? 0,
@@ -476,6 +475,10 @@ export const resultCourseStudentWarning = async (
                 courseName: student.khoa,
                 students: [],
             }
+        }
+        const checkStudent = await checkStudentEligible(student, courseId)
+        if (!checkStudent) {
+            return
         }
         courseMap[courseId].students.push(student)
     })
