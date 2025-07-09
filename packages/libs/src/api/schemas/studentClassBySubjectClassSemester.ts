@@ -41,10 +41,6 @@ export interface StudentClassBySubjectClassSemester {
     /** @nullable */
     registrationAreaId: string | null
     curriculumVersionId: string
-    /** @nullable */
-    studyRankId: string | null
-    /** @nullable */
-    trainingRankId: string | null
     userProfile: StudentClassBySubjectClassSemesterUserProfile
     checked: boolean
     fixedClass: StudentClassBySubjectClassSemesterFixedClass

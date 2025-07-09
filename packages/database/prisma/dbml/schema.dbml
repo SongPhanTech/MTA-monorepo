@@ -355,19 +355,6 @@ Table Curriculum {
   Note: 'chương trình đào tạo'
 }
 
-Table DiplomaType {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [unique, not null]
-  englishName String
-  curriculumVersion CurriculumVersion [not null]
-}
-
 Table CurriculumVersion {
   id String [pk]
   code String [unique]
@@ -803,7 +790,7 @@ Table TrainingTime {
   Note: 'thời gian đào tạo'
 }
 
-Table StudyRank {
+Table DiplomaType {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -811,24 +798,10 @@ Table StudyRank {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  students Student [not null]
-
-  Note: 'xếp loại học tập'
-}
-
-Table TrainingRank {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  students Student [not null]
-
-  Note: 'Xếp loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)'
+  name String [unique, not null]
+  englishName String
+  curriculumVersion CurriculumVersion [not null]
+  graduationDecision GraduationDecision [not null]
 }
 
 Table ScoreConvert {
@@ -899,10 +872,6 @@ Table Student {
   registrationAreaId String
   curriculumVersion CurriculumVersion
   curriculumVersionId String
-  studyRank StudyRank
-  studyRankId String
-  trainingRank TrainingRank
-  trainingRankId String
   academicWarningLevel Int [not null, default: 0]
   disciplinaryWarningLevel Int [not null, default: 0]
   studentTrainingScore StudentTrainingScore [not null]
@@ -2456,7 +2425,10 @@ Table GraduationDecision {
   decisionDate DateTime [default: `now()`, not null]
   notes String
   finalGpa Float [not null]
-  finalRank String [not null]
+  finalRanking AcademicRankingConvert [not null]
+  finalRankingId String [not null]
+  diplomaType DiplomaType
+  diplomaTypeId String
   diplomaNumber String
   diplomaIssueDate DateTime
 
@@ -2484,12 +2456,13 @@ Table AcademicRankingConvert {
   trainingCourseId String [not null]
   rankingCondition RankingCondition [not null]
   downgradeRules GraduationRankDowngradeRule [not null]
+  graduationDecision GraduationDecision [not null]
 
   indexes {
     (trainingCourseId, context, rankOrder) [unique]
   }
 
-  Note: 'Xếp loại học lực'
+  Note: 'Xếp loại học tập'
 }
 
 Table GraduationRankDowngradeRule {
@@ -2971,10 +2944,6 @@ Ref: Student.registrationAreaId > DM_KhuVuc_DiaLy.Id
 
 Ref: Student.curriculumVersionId > CurriculumVersion.id
 
-Ref: Student.studyRankId > StudyRank.id
-
-Ref: Student.trainingRankId > TrainingRank.id
-
 Ref: StudentSemesterResult.studentId > Student.id
 
 Ref: StudentSemesterResult.semesterId > Semester.id
@@ -3172,6 +3141,10 @@ Ref: ApplicationCheckResult.rankingConditionId > RankingCondition.id
 Ref: GraduationDecision.applicationId - StudentGraduationApplication.id
 
 Ref: GraduationDecision.studentId - Student.id
+
+Ref: GraduationDecision.finalRankingId > AcademicRankingConvert.id
+
+Ref: GraduationDecision.diplomaTypeId > DiplomaType.id
 
 Ref: AcademicRankingConvert.trainingCourseId > TrainingCourse.id
 

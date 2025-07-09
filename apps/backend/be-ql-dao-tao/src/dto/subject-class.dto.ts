@@ -106,9 +106,6 @@ export const StudentClassBySubjectClassSemester = z
         trainingFormId: z.string().nullable(),
         registrationAreaId: z.string().nullable(),
         curriculumVersionId: z.string(),
-        studyRankId: z.string().nullable(),
-        trainingRankId: z.string().nullable(),
-
         userProfile: z.object({
             id: z.string(),
             code: z.string().nullable(),
@@ -170,9 +167,6 @@ export const EnrollFixedClassOnSubjectClass = z
         trainingFormId: z.string().nullable(),
         registrationAreaId: z.string().nullable(),
         curriculumVersionId: z.string(),
-        studyRankId: z.string().nullable(),
-        trainingRankId: z.string().nullable(),
-
         userProfile: z.object({
             id: z.string(),
             code: z.string().nullable(),

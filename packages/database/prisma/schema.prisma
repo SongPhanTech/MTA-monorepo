@@ -11,7 +11,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema", "typedSql"]
+  previewFeatures = ["multiSchema", "typedSql", "fullTextSearchPostgres"]
   binaryTargets   = ["native"]
 }
 
@@ -683,21 +683,6 @@ model Curriculum {
   @@schema("ql-dao-tao")
 }
 
-model DiplomaType {
-  id                String              @id() @default(cuid())
-  code              String?             @unique()
-  active            Boolean             @default(true)
-  description       String?             @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt()
-  name              String              @unique()
-  englishName       String?
-  curriculumVersion CurriculumVersion[]
-
-  @@schema("ql-dao-tao")
-}
-
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion {
   id                    String                             @id() @default(cuid())
@@ -1148,32 +1133,18 @@ model TrainingTime {
   @@schema("ql-dao-tao")
 }
 
-/// xếp loại học tập
-model StudyRank {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  students    Student[]
-
-  @@schema("ql-dao-tao")
-}
-
-/// Xếp loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)
-model TrainingRank {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  students    Student[]
+model DiplomaType {
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt()
+  name               String               @unique()
+  englishName        String?
+  curriculumVersion  CurriculumVersion[]
+  graduationDecision GraduationDecision[]
 
   @@schema("ql-dao-tao")
 }
@@ -1250,10 +1221,6 @@ model Student {
   registrationAreaId       String?
   curriculumVersion        CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
-  studyRank                StudyRank?                     @relation(fields: [studyRankId], references: [id])
-  studyRankId              String?
-  trainingRank             TrainingRank?                  @relation(fields: [trainingRankId], references: [id])
-  trainingRankId           String?
   academicWarningLevel     Int                            @default(0)
   disciplinaryWarningLevel Int                            @default(0)
   studentTrainingScore     StudentTrainingScore[]
@@ -2904,35 +2871,39 @@ model GraduationDecision {
   decisionDate     DateTime                     @default(now())
   notes            String?
   finalGpa         Float
-  finalRank        String
+  finalRanking     AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
+  finalRankingId   String
+  diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId    String?
   diplomaNumber    String?
   diplomaIssueDate DateTime?
 
   @@schema("ql-dao-tao")
 }
 
-/// Xếp loại học lực
+/// Xếp loại học tập
 model AcademicRankingConvert {
-  id               String                        @id() @default(cuid())
-  code             String?                       @unique()
-  active           Boolean                       @default(true)
-  description      String?                       @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime                      @default(now())
-  updatedAt        DateTime                      @updatedAt()
-  classification   String
-  context          RankingContext
-  rankOrder        Int
-  baseScore        AcademicRankingBaseType
-  base10Min        Float?
-  base10Max        Float?
-  base4Min         Float?
-  base4Max         Float?
-  graduated        Boolean
-  trainingCourse   TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
-  rankingCondition RankingCondition[]
-  downgradeRules   GraduationRankDowngradeRule[]
+  id                 String                        @id() @default(cuid())
+  code               String?                       @unique()
+  active             Boolean                       @default(true)
+  description        String?                       @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime                      @default(now())
+  updatedAt          DateTime                      @updatedAt()
+  classification     String
+  context            RankingContext
+  rankOrder          Int
+  baseScore          AcademicRankingBaseType
+  base10Min          Float?
+  base10Max          Float?
+  base4Min           Float?
+  base4Max           Float?
+  graduated          Boolean
+  trainingCourse     TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId   String
+  rankingCondition   RankingCondition[]
+  downgradeRules     GraduationRankDowngradeRule[]
+  graduationDecision GraduationDecision[]
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")

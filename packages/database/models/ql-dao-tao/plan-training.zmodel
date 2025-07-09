@@ -274,14 +274,6 @@ enum TrainingLanguage {
   @@schema("ql-dao-tao")
 }
 
-model DiplomaType extends Base {
-  name              String              @unique
-  englishName       String?
-
-  curriculumVersion CurriculumVersion[]
-  @@schema("ql-dao-tao")
-}
-
 /// Phiên bản chương trình đào tạo
 model CurriculumVersion extends Base {
   name                  String

@@ -79,7 +79,6 @@ model ApplicationCheckResult extends Base {
 model GraduationDecision extends Base {
   application      StudentGraduationApplication @relation(fields: [applicationId], references: [id])
   applicationId    String                       @unique
-
   student          Student                      @relation(fields: [studentId], references: [id])
   studentId        String                       @unique // Mỗi sinh viên chỉ có 1 quyết định tốt nghiệp
 
@@ -88,7 +87,11 @@ model GraduationDecision extends Base {
 
   // Thông tin tại thời điểm tốt nghiệp (snapshot)
   finalGpa         Float            // GPA cuối cùng
-  finalRank        String           // Xếp hạng cuối cùng (sau khi xét hạ bậc)
+  finalRanking     AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
+  finalRankingId   String
+
+  diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId    String?
   diplomaNumber    String?          // Số hiệu văn bằng
   diplomaIssueDate DateTime?        // Ngày cấp bằng
 
@@ -102,32 +105,34 @@ enum RankingContext {
   @@schema("ql-dao-tao")
 }
 
-/// Xếp loại học lực
+/// Xếp loại học tập
 model AcademicRankingConvert extends Base {
-  classification   String           // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
-  context          RankingContext   // Bối cảnh áp dụng: Học tập hay Tốt nghiệp
-  rankOrder        Int              // Thứ tự ưu tiên của xếp loại (1 là cao nhất)
+  classification     String           // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
+  context            RankingContext   // Bối cảnh áp dụng: Học tập hay Tốt nghiệp
+  rankOrder          Int              // Thứ tự ưu tiên của xếp loại (1 là cao nhất)
 
   // dựa vào type yêu cầu người dùng nhập hệ 10 hoặc hệ 4
   // dựa vào type để xếp loại học lực theo hệ 10 hoặc hệ 4
-  baseScore        AcademicRankingBaseType
-  base10Min        Float?
-  base10Max        Float?
-  base4Min         Float?
-  base4Max         Float?
-  graduated        Boolean
+  baseScore          AcademicRankingBaseType
+  base10Min          Float?
+  base10Max          Float?
+  base4Min           Float?
+  base4Max           Float?
+  graduated          Boolean
 
-  trainingCourse   TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
+  trainingCourse     TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId   String
 
-  rankingCondition RankingCondition[]
-  downgradeRules   GraduationRankDowngradeRule[]
+  rankingCondition   RankingCondition[]
+  downgradeRules     GraduationRankDowngradeRule[]
 
   @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
   @@validate(!(baseScore == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")
+
+  graduationDecision GraduationDecision[]
 }
 
 /// Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp
