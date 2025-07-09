@@ -17,10 +17,9 @@ import {
     useUpdateScholarship,
     useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
-import dayjs from 'dayjs'
+import { Button, Checkbox, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { BookPlus, Check, X } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -79,7 +78,7 @@ export default function Scholarship() {
             },
         },
         orderBy: {
-            createdAt: 'asc',
+            rankOrder: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -188,7 +187,15 @@ export default function Scholarship() {
                                     onChange={(e) =>
                                         handleFilterChange('searchText', e.target.value)
                                     }
-                                    style={{ width: '100%' }}
+                                    style={{ width: '100%', height: 32 }}
+                                    prefix={
+                                        <Search
+                                            size={15}
+                                            style={{
+                                                color: 'rgba(0, 0, 0, 0.25)',
+                                            }}
+                                        />
+                                    }
                                     placeholder="Tìm kiếm tên học bổng"
                                     allowClear
                                 />
@@ -240,14 +247,8 @@ export default function Scholarship() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="id"
-                        headerTitleKey={({
-                            code,
-                            name,
-                            trainingCourse,
-                            effectiveFrom,
-                            effectiveTo,
-                        }) =>
-                            `${code || ''} - ${name || ''} - ${trainingCourse?.name || ''} - ${trainingCourse?.trainingObjectType?.name || ''} - ${(effectiveFrom && dayjs(effectiveFrom).format('DD/MM/YYYY')) || ''} - ${(effectiveTo && dayjs(effectiveTo).format('DD/MM/YYYY')) || ''}`
+                        headerTitleKey={({ code, name, trainingCourse, rankOrder }) =>
+                            `${[trainingCourse.name, code, name].filter(Boolean).join(' - ')} (${rankOrder})`
                         }
                         defaultExpandAll
                         currentPage={currentPage}
@@ -275,11 +276,7 @@ export default function Scholarship() {
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
-                                            {value ? (
-                                                <Check size={18} color="green" />
-                                            ) : (
-                                                <X size={18} color="red" />
-                                            )}
+                                            <Checkbox checked={value} disabled />
                                         </div>
                                     )
                                 },

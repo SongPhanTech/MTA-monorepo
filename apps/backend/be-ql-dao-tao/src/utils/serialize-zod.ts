@@ -49,7 +49,7 @@ function getType(schema: ZodTypeAny): string {
 
 export function serializeZodSchema(schema: ZodObject<any>): SerializedField[] {
     const shape = schema.shape
-    return Object.entries(shape).map(([key, value]) => {
+    return Object.entries(shape).map(([key, value]: [string, any]) => {
         const unwrapped = unwrap(value)
         const type = getType(unwrapped)
 

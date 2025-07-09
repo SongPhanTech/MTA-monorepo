@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { Prisma, SchoolYear, TrainingCourse, TrainingObjectType } from '@workspace/db'
+import type { SchoolYear, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingCourse,
     useFindManySchoolYear,
@@ -54,13 +54,9 @@ const PutTrainingCourseModal = () => {
         } = output
         try {
             showSpinner()
-            const data: Prisma.TrainingCourseCreateInput = {
-                trainingObjectType: {
-                    connect: { id: trainingObjectTypeId },
-                },
-                semesterStart: {
-                    connect: { id: semesterStartId },
-                },
+            const data = {
+                trainingObjectType: { connect: { id: trainingObjectTypeId } },
+                semesterStart: { connect: { id: semesterStartId } },
                 ...rest,
             }
             if (id) {

@@ -35,7 +35,6 @@ import PutTrainingFieldModal from './put-nganh'
 import PutUserProfileStaffModal from './put-nhan-vien'
 import PutSubjectGroupModal from './put-nhom-mon-hoc'
 import PutOneSubjectClassModal from './put-one-subject-class'
-import PutOrganizationUser from './put-organization-user'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
@@ -64,7 +63,6 @@ export {
     PutSubjectGroupModal,
     PutSubjectModal,
     PutUserProfileLectureModal,
-    PutOrganizationUser,
     ThongTinBaoCaoModal,
     PutTrainingFieldModal,
     PutTrainingMajorModal,

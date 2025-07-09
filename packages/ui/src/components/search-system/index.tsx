@@ -42,22 +42,20 @@ const filter = (inputValue: string, path: SearchSystemOptionType[]) =>
     )
 const SearchSystem = () => {
     return (
-        <>
-            <Cascader<SearchSystemOptionType>
-                options={options}
-                value={[]}
-                optionRender={({ label, Icon, path }) => (
-                    <a href={path ?? '#'} className="flex gap-2">
-                        {Icon && <Icon />}
-                        {label}
-                    </a>
-                )}
-                onChange={onChange}
-                placeholder="Tìm kiếm hệ thống"
-                showSearch={{ filter }}
-                onSearch={(value) => console.log(value)}
-            />
-        </>
+        <Cascader<SearchSystemOptionType>
+            options={options}
+            value={[]}
+            optionRender={({ label, Icon, path }) => (
+                <a href={path ?? '#'} className="flex gap-2">
+                    {Icon && <Icon />}
+                    {label}
+                </a>
+            )}
+            onChange={onChange}
+            placeholder="Tìm kiếm hệ thống"
+            showSearch={{ filter }}
+            onSearch={(value) => console.log(value)}
+        />
     )
 }
 

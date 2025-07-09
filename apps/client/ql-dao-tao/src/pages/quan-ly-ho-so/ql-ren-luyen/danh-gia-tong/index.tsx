@@ -2,7 +2,7 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { PutOpenClassModal } from '@components/modal'
-import { CUSTOM_VI_LOCALE, DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Semester, TrainingObjectType } from '@workspace/db'
@@ -324,8 +324,7 @@ export default function SubjectClassScore() {
                                                                 : null,
                                                         }))
                                                     }}
-                                                    locale={CUSTOM_VI_LOCALE}
-                                                    format="DD/MM/YYYY"
+                                                    format={{ format: 'DD/MM/YYYY', type: 'mask' }}
                                                 />
                                             </Form.Item>
                                         </Col>

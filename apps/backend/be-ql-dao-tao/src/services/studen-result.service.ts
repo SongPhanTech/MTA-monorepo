@@ -562,10 +562,19 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 return
             }
             console.log('có thông tin điểm của học viên: ', student.id, exists)
+
+            const conductScore = await prisma.studentTrainingScore.findFirst({
+                where: {
+                    studentId: student.id,
+                    trainingScoreSession: { semesterId },
+                },
+            })
+
             if (!exists) {
                 // Nếu không có kết quả, tạo mới
                 const newResult: StudentSemesterResult = {
                     id: crypto.randomUUID(), // Tạo ID ngẫu nhiên
+                    conductScore: conductScore?.score || 0,
                     studentId: student.id,
                     semesterId,
                     createdAt: new Date(),
@@ -637,6 +646,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 const updatedResult: StudentSemesterResult = {
                     id: existingResult.id, // Giữ nguyên ID để cập nhật
                     studentId: student.id,
+                    conductScore: conductScore?.score || 0,
                     semesterId,
                     createdAt: new Date(),
                     updatedAt: new Date(),

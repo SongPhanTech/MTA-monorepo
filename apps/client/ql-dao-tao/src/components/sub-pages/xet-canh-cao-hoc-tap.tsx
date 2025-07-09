@@ -56,15 +56,10 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         },
     ]
 
-    const { data: students = [], refetch } = useExportStudentLearningDisciplineJson(
-        {
-            semesterId: semesterId || '',
-        },
-        {
-            query: {
-                enabled: !!semesterId,
-            },
-        },
+    // TODO: remove any when have openapi schema
+    const { data: students = [] }: any = useExportStudentLearningDisciplineJson(
+        { semesterId: semesterId || '' },
+        { query: { enabled: !!semesterId } },
         queryClient
     )
 

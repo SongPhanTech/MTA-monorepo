@@ -7,7 +7,6 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { ModalPrintStudentSubjectScore } from '@components/modal'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
@@ -18,6 +17,7 @@ import type {
 } from '@workspace/db'
 import {
     useCountStudentSubjectScore,
+    useFindManySemester,
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
@@ -30,7 +30,7 @@ import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopMonHocItem from './lop-mon-hoc'
 
@@ -52,8 +52,6 @@ interface FilterProps {
 
 export default function SubjectClassScore() {
     const router = useRouter()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const [subjectClassFullData, setSubjectClassFullData] = useState<SubjectClass[]>([])
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
@@ -79,6 +77,14 @@ export default function SubjectClassScore() {
         tag: ModalPrintStudentSubjectScore.name,
     })
 
+    const { data: semesters = [] } = useFindManySemester({
+        orderBy: {
+            createdAt: 'desc',
+        },
+    })
+
+    const latestSemester = useMemo(() => semesters?.[0]?.id || null, [semesters])
+
     useEffect(() => {
         if (subjectId) {
             setSelectedFixedClass(subjectId as string)
@@ -87,7 +93,7 @@ export default function SubjectClassScore() {
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        semesterId: null,
+        semesterId: latestSemester,
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
@@ -638,9 +644,9 @@ export default function SubjectClassScore() {
             >
                 <Col span={24}>
                     <Row gutter={[0, 16]} align="top" justify="space-between">
-                        <Col span={12}>
+                        <Col span={15}>
                             <Flex gap={4}>
-                                <Col span={8}>
+                                <Col span={10}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
@@ -662,7 +668,7 @@ export default function SubjectClassScore() {
                                     </Form.Item>
                                 </Col>
 
-                                <Col span={8}>
+                                <Col span={10}>
                                     <Form.Item
                                         className="mb-0"
                                         name="semesterId"
@@ -671,14 +677,16 @@ export default function SubjectClassScore() {
                                         labelAlign="left"
                                     >
                                         <TreeSelectSemester
-                                            placeholder="Học kỳ"
+                                            style={{ width: '250px' }}
+                                            defaultValue={latestSemester || ''}
+                                            value={filters.semesterId || ''}
                                             onChange={(val) =>
                                                 handleFilterChange('semesterId', val)
                                             }
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
+                                <Col span={10}>
                                     <Form.Item
                                         className="mb-0"
                                         name="trainingObjectId"
@@ -795,8 +803,7 @@ export default function SubjectClassScore() {
                                 width: 60,
                                 align: 'center',
                                 fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                render: (_, __, index) => index + 1,
                             },
                             {
                                 title: 'Mã sinh viên',
@@ -1270,13 +1277,8 @@ export default function SubjectClassScore() {
                         ]}
                         data={dataTable}
                         pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                            pageSize: dataTable.length,
+                            hideOnSinglePage: true,
                         }}
                     />
                     {selectedFixedClass && (

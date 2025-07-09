@@ -16,12 +16,10 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
-export type PutScholarship = Scholarship & {
-    trainingObjectTypeIds: string[]
-}
+
 dayjs.locale('vi')
 const PutHocBong = () => {
-    const [form] = Form.useForm<PutScholarship>()
+    const [form] = Form.useForm<Scholarship>()
     const {
         isOpen,
         onClose,
@@ -38,7 +36,7 @@ const PutHocBong = () => {
 
     const { mutateAsync: createScholarship } = useCreateScholarship()
     const { mutateAsync: updateScholarship } = useUpdateScholarship()
-    async function onOk(output?: PutScholarship) {
+    async function onOk(output?: Scholarship) {
         if (!output) return
         try {
             showSpinner()
@@ -56,18 +54,18 @@ const PutHocBong = () => {
             if (id) {
                 await updateScholarship({
                     data: data,
-                    where: {
-                        id,
-                    },
+                    where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createScholarship({
-                    data: data,
+                    data: {
+                        ...data,
+                        rankOrder: 1,
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['Scholarship'],
             })
@@ -87,18 +85,18 @@ const PutHocBong = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
+        console.log(initialValue)
+
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                effectiveFrom: dayjs(initialValue.effectiveFrom),
+                effectiveFrom: initialValue.effectiveFrom
+                    ? dayjs(initialValue.effectiveFrom)
+                    : undefined,
                 effectiveTo: initialValue.effectiveTo ? dayjs(initialValue.effectiveTo) : undefined,
             })
         } else {
-            form.setFieldsValue({
-                multiplier: 1,
-                effectiveFrom: dayjs(),
-                active: true,
-            })
+            form.setFieldsValue({ multiplier: 1, active: true })
         }
     }, [initialValue])
 
@@ -126,13 +124,23 @@ const PutHocBong = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã học bổng" required>
+                <FormItem form={form} name="code" label="Mã học bổng">
                     <Input placeholder="Nhập mã học bổng" />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên học bổng" required>
                     <Input placeholder="Nhập tên học bổng" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="rankOrder" label="Độ ưu tiên" required>
+                    <InputNumber
+                        placeholder="Nhập độ ưu tiên"
+                        className="w-full"
+                        min={1}
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -180,7 +188,7 @@ const PutHocBong = () => {
                 </FormItem>
             </Col>
             {id && (
-                <Col span={24}>
+                <Col span={12}>
                     <FormItem form={form} name={'active'} label="Trạng thái" required>
                         <Radio.Group buttonStyle="solid">
                             <Radio value={true}>Đang hoạt động</Radio>

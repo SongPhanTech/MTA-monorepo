@@ -497,8 +497,6 @@ export default function UserProfilePageDs() {
                                 <ImportStudentModal
                                     visible={importModalVisible}
                                     onCancel={() => setImportModalVisible(false)}
-                                    onConfirm={handleImportConfirm}
-                                    existingStudents={[]}
                                 />
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới

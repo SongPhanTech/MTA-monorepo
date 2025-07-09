@@ -34,7 +34,9 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     const [filters, setFilters] = useState<FilterProps>({
         scholarshipId: '',
     })
-    const { data: students = [], refetch } = useExportStudentScholarshipJson(
+
+    // TODO: remove any when have openapi schema
+    const { data: students = [], refetch }: any = useExportStudentScholarshipJson(
         {
             semesterId: semesterId || '',
             scholarshipId: filters?.scholarshipId || '',
