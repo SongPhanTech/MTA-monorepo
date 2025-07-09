@@ -25,8 +25,8 @@
     "pizzip": "catalog:",
     "prom-client": "catalog:",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
-    "xlsx-style": "^0.8.13",
-    "xlsx-template": "^1.4.4",
+    "xlsx-style": "catalog:",
+    "xlsx-template": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

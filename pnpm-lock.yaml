@@ -20,13 +20,19 @@ catalogs:
       version: 2.6.0
     '@biomejs/biome':
       specifier: ^2
-      version: 2.1.0
+      version: 2.1.1
     '@casl/ability':
       specifier: ^6.7.2
       version: 6.7.3
     '@casl/react':
       specifier: ^4.0.0
       version: 4.0.0
+    '@commitlint/cli':
+      specifier: ^19.8.1
+      version: 19.8.1
+    '@commitlint/config-conventional':
+      specifier: ^19.8.1
+      version: 19.8.1
     '@hono/oidc-auth':
       specifier: ^1.4.1
       version: 1.7.0
@@ -72,6 +78,9 @@ catalogs:
     '@types/bun':
       specifier: ^1.2.2
       version: 1.2.18
+    '@types/file-saver':
+      specifier: ^2.0.7
+      version: 2.0.7
     '@types/lodash':
       specifier: ^4.17.13
       version: 4.17.20
@@ -80,7 +89,7 @@ catalogs:
       version: 7.1.1
     '@types/node':
       specifier: ^20
-      version: 20.19.4
+      version: 20.19.6
     '@types/qs':
       specifier: ^6.9.17
       version: 6.14.0
@@ -156,6 +165,18 @@ catalogs:
     hono:
       specifier: ^4.7.2
       version: 4.8.4
+    husky:
+      specifier: ^9.1.7
+      version: 9.1.7
+    jose:
+      specifier: ^6.0.11
+      version: 6.0.11
+    jwt-decode:
+      specifier: ^4.0.0
+      version: 4.0.0
+    lint-staged:
+      specifier: ^16.1.0
+      version: 16.1.2
     lodash:
       specifier: ^4.17.21
       version: 4.17.21
@@ -177,6 +198,9 @@ catalogs:
     orval:
       specifier: 7.9.0
       version: 7.9.0
+    oxlint:
+      specifier: ^1.3.0
+      version: 1.6.0
     patch-package:
       specifier: ^8.0.0
       version: 8.0.0
@@ -213,6 +237,12 @@ catalogs:
     react-day-picker:
       specifier: 8.10.1
       version: 8.10.1
+    react-dnd:
+      specifier: ^16.0.1
+      version: 16.0.1
+    react-dnd-html5-backend:
+      specifier: ^16.0.1
+      version: 16.0.1
     react-dom:
       specifier: ^18.3.1
       version: 18.3.1
@@ -258,18 +288,30 @@ catalogs:
     ts-node:
       specifier: ^10.9.2
       version: 10.9.2
+    ts-to-zod:
+      specifier: ^3.15.0
+      version: 3.15.0
+    turbo:
+      specifier: ^2.5.4
+      version: 2.5.4
     typescript:
       specifier: ^5.8.3
       version: 5.8.3
     xlsx:
       specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
       version: 0.20.3
+    xlsx-style:
+      specifier: ^0.8.13
+      version: 0.8.13
+    xlsx-template:
+      specifier: ^1.4.4
+      version: 1.4.4
     zenstack:
       specifier: ^2.16.1
       version: 2.16.1
     zod:
-      specifier: 3.24.2
-      version: 3.24.2
+      specifier: ^3.25.76
+      version: 3.25.76
 
 importers:
 
@@ -284,24 +326,24 @@ importers:
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
-        version: 2.1.0
+        version: 2.1.1
       '@commitlint/cli':
-        specifier: ^19.8.1
-        version: 19.8.1(@types/node@24.0.10)(typescript@5.8.3)
+        specifier: 'catalog:'
+        version: 19.8.1(@types/node@24.0.12)(typescript@5.8.3)
       '@commitlint/config-conventional':
-        specifier: ^19.8.1
+        specifier: 'catalog:'
         version: 19.8.1
       husky:
-        specifier: ^9.1.7
+        specifier: 'catalog:'
         version: 9.1.7
       lint-staged:
-        specifier: ^16.1.0
+        specifier: 'catalog:'
         version: 16.1.2
       oxlint:
-        specifier: ^1.3.0
+        specifier: 'catalog:'
         version: 1.6.0
       turbo:
-        specifier: ^2.5.4
+        specifier: 'catalog:'
         version: 2.5.4
       typescript:
         specifier: 'catalog:'
@@ -314,7 +356,7 @@ importers:
         version: 1.7.0(hono@4.8.4)
       '@hono/zod-openapi':
         specifier: 'catalog:'
-        version: 0.18.4(hono@4.8.4)(zod@3.24.2)
+        version: 0.18.4(hono@4.8.4)(zod@3.25.76)
       '@scalar/hono-api-reference':
         specifier: 'catalog:'
         version: 0.5.184(hono@4.8.4)
@@ -332,7 +374,7 @@ importers:
         version: 15.1.3
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@types/bun':
         specifier: 'catalog:'
@@ -354,7 +396,7 @@ importers:
         version: 1.7.0(hono@4.8.4)
       '@hono/zod-openapi':
         specifier: 'catalog:'
-        version: 0.18.4(hono@4.8.4)(zod@3.24.2)
+        version: 0.18.4(hono@4.8.4)(zod@3.25.76)
       '@opentelemetry/api':
         specifier: 'catalog:'
         version: 1.9.0
@@ -381,7 +423,7 @@ importers:
         version: 15.1.3
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@types/bun':
         specifier: 'catalog:'
@@ -403,7 +445,7 @@ importers:
         version: 1.7.0(hono@4.8.4)
       '@hono/zod-openapi':
         specifier: 'catalog:'
-        version: 0.18.4(hono@4.8.4)(zod@3.24.2)
+        version: 0.18.4(hono@4.8.4)(zod@3.25.76)
       '@opentelemetry/api':
         specifier: 'catalog:'
         version: 1.9.0
@@ -447,14 +489,14 @@ importers:
         specifier: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
       xlsx-style:
-        specifier: ^0.8.13
+        specifier: 'catalog:'
         version: 0.8.13
       xlsx-template:
-        specifier: ^1.4.4
+        specifier: 'catalog:'
         version: 1.4.4
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@types/bun':
         specifier: 'catalog:'
@@ -476,7 +518,7 @@ importers:
         version: 1.7.0(hono@4.8.4)
       '@hono/zod-openapi':
         specifier: 'catalog:'
-        version: 0.18.4(hono@4.8.4)(zod@3.24.2)
+        version: 0.18.4(hono@4.8.4)(zod@3.25.76)
       '@opentelemetry/api':
         specifier: 'catalog:'
         version: 1.9.0
@@ -503,7 +545,7 @@ importers:
         version: 15.1.3
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@types/bun':
         specifier: 'catalog:'
@@ -521,7 +563,7 @@ importers:
   apps/backend/ql-dao-tao:
     dependencies:
       ts-to-zod:
-        specifier: ^3.15.0
+        specifier: 'catalog:'
         version: 3.15.0
 
   apps/client/khao-thi:
@@ -543,7 +585,7 @@ importers:
         version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
-        version: 0.12.0(typescript@5.8.3)(zod@3.24.2)
+        version: 0.12.0(typescript@5.8.3)(zod@3.25.76)
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.81.5(react@18.3.1)
@@ -627,11 +669,11 @@ importers:
         version: 2.6.0
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
-        version: 2.1.0
+        version: 2.1.1
       '@openapi-codegen/cli':
         specifier: 'catalog:'
         version: 2.0.4(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -646,7 +688,7 @@ importers:
         version: 4.17.20
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@types/qs':
         specifier: 'catalog:'
         version: 6.14.0
@@ -685,13 +727,13 @@ importers:
         version: 0.6.13(prettier@3.6.2)
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
       terser-webpack-plugin:
         specifier: 'catalog:'
         version: 5.3.14(@swc/core@1.12.11)(esbuild@0.24.2)(webpack@5.99.9(@swc/core@1.12.11)(esbuild@0.24.2))
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)
+        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -718,7 +760,7 @@ importers:
         version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
-        version: 0.12.0(typescript@5.8.3)(zod@3.24.2)
+        version: 0.12.0(typescript@5.8.3)(zod@3.25.76)
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.81.5(react@18.3.1)
@@ -789,10 +831,10 @@ importers:
         specifier: 'catalog:'
         version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
       react-dnd:
-        specifier: ^16.0.1
-        version: 16.0.1(@types/node@20.19.4)(@types/react@18.3.23)(react@18.3.1)
+        specifier: 'catalog:'
+        version: 16.0.1(@types/node@20.19.6)(@types/react@18.3.23)(react@18.3.1)
       react-dnd-html5-backend:
-        specifier: ^16.0.1
+        specifier: 'catalog:'
         version: 16.0.1
       react-dom:
         specifier: 'catalog:'
@@ -826,13 +868,13 @@ importers:
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
-        version: 2.1.0
+        version: 2.1.1
       '@types/file-saver':
-        specifier: ^2.0.7
+        specifier: 'catalog:'
         version: 2.0.7
       '@types/lodash':
         specifier: 'catalog:'
@@ -842,7 +884,7 @@ importers:
         version: 7.1.1
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@types/qs':
         specifier: 'catalog:'
         version: 6.14.0
@@ -893,13 +935,13 @@ importers:
         version: 3.0.0
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
       terser-webpack-plugin:
         specifier: 'catalog:'
         version: 5.3.14(@swc/core@1.12.11)(esbuild@0.24.2)(webpack@5.99.9(@swc/core@1.12.11)(esbuild@0.24.2))
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)
+        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -923,7 +965,7 @@ importers:
         version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
-        version: 0.12.0(typescript@5.8.3)(zod@3.24.2)
+        version: 0.12.0(typescript@5.8.3)(zod@3.25.76)
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.81.5(react@18.3.1)
@@ -1007,11 +1049,11 @@ importers:
         version: 2.6.0
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
-        version: 2.1.0
+        version: 2.1.1
       '@openapi-codegen/cli':
         specifier: 'catalog:'
         version: 2.0.4(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1023,7 +1065,7 @@ importers:
         version: 4.17.20
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@types/qs':
         specifier: 'catalog:'
         version: 6.14.0
@@ -1062,13 +1104,13 @@ importers:
         version: 0.6.13(prettier@3.6.2)
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
       terser-webpack-plugin:
         specifier: 'catalog:'
         version: 5.3.14(@swc/core@1.12.11)(esbuild@0.24.2)(webpack@5.99.9(@swc/core@1.12.11)(esbuild@0.24.2))
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)
+        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -1092,7 +1134,7 @@ importers:
         version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
-        version: 0.12.0(typescript@5.8.3)(zod@3.24.2)
+        version: 0.12.0(typescript@5.8.3)(zod@3.25.76)
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.81.5(react@18.3.1)
@@ -1179,11 +1221,11 @@ importers:
         version: 2.6.0
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
-        version: 2.1.0
+        version: 2.1.1
       '@openapi-codegen/cli':
         specifier: 'catalog:'
         version: 2.0.4(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1198,7 +1240,7 @@ importers:
         version: 4.17.20
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@types/qs':
         specifier: 'catalog:'
         version: 6.14.0
@@ -1237,13 +1279,13 @@ importers:
         version: 0.6.13(prettier@3.6.2)
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
       terser-webpack-plugin:
         specifier: 'catalog:'
         version: 5.3.14(@swc/core@1.12.11)(esbuild@0.24.2)(webpack@5.99.9(@swc/core@1.12.11)(esbuild@0.24.2))
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)
+        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -1257,10 +1299,10 @@ importers:
         specifier: 'catalog:'
         version: 4.8.4
       jose:
-        specifier: ^6.0.11
+        specifier: 'catalog:'
         version: 6.0.11
       jwt-decode:
-        specifier: ^4.0.0
+        specifier: 'catalog:'
         version: 4.0.0
       next:
         specifier: 'catalog:'
@@ -1271,7 +1313,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@types/react':
         specifier: 'catalog:'
         version: 18.3.23
@@ -1290,7 +1332,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
@@ -1311,7 +1353,7 @@ importers:
         version: 1.11.13
       zod:
         specifier: 'catalog:'
-        version: 3.24.2
+        version: 3.25.76
     devDependencies:
       '@paralleldrive/cuid2':
         specifier: github:paralleldrive/cuid2
@@ -1355,7 +1397,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
@@ -1386,7 +1428,7 @@ importers:
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@types/react':
         specifier: 'catalog:'
         version: 18.3.23
@@ -1433,14 +1475,14 @@ importers:
         version: 2.6.0
       tailwindcss-animate:
         specifier: 'catalog:'
-        version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)))
+        version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)))
     devDependencies:
       '@turbo/gen':
         specifier: 'catalog:'
-        version: 1.13.4(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)
+        version: 1.13.4(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
       '@types/node':
         specifier: 'catalog:'
-        version: 20.19.4
+        version: 20.19.6
       '@types/react':
         specifier: 'catalog:'
         version: 18.3.23
@@ -1458,7 +1500,7 @@ importers:
         version: 8.5.6
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -1752,55 +1794,55 @@ packages:
     resolution: {integrity: sha512-jYnje+JyZG5YThjHiF28oT4SIZLnYOcSBb6+SDaFIyzDVSkXQmQQYclJ2R+YxcdmK0AX6x1E5OQNtuh3jHDrUg==}
     engines: {node: '>=6.9.0'}
 
-  '@biomejs/biome@2.1.0':
-    resolution: {integrity: sha512-K2UDr1dCiaOWegp4yQLMC4Evgl85ze1O7r+WxPeO7cNl0XrIcTshvdQGMDB23c/2afXz6RsOKYfWLErNbBbjmA==}
+  '@biomejs/biome@2.1.1':
+    resolution: {integrity: sha512-HFGYkxG714KzG+8tvtXCJ1t1qXQMzgWzfvQaUjxN6UeKv+KvMEuliInnbZLJm6DXFXwqVi6446EGI0sGBLIYng==}
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@2.1.0':
-    resolution: {integrity: sha512-RDXEUGSCvUx3PKWRt95WRtwH+l01slm7r2zaotDwWERn/RITMcdet21rI5q5cYhL4XJiAvLHG8qyLNSXqIOCwQ==}
+  '@biomejs/cli-darwin-arm64@2.1.1':
+    resolution: {integrity: sha512-2Muinu5ok4tWxq4nu5l19el48cwCY/vzvI7Vjbkf3CYIQkjxZLyj0Ad37Jv2OtlXYaLvv+Sfu1hFeXt/JwRRXQ==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@2.1.0':
-    resolution: {integrity: sha512-epLFRbMjYS/Cu9Kc5gM3wzUExsKj2Z0oxIiuxlI4ZterIqm19yvTOtJoqSec8gjUXOTNvPVoEIfSSXg37yepow==}
+  '@biomejs/cli-darwin-x64@2.1.1':
+    resolution: {integrity: sha512-cC8HM5lrgKQXLAK+6Iz2FrYW5A62pAAX6KAnRlEyLb+Q3+Kr6ur/sSuoIacqlp1yvmjHJqjYfZjPvHWnqxoEIA==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@2.1.0':
-    resolution: {integrity: sha512-J7z6s/M50wt5lhSkivAs2GJHPhiah3hkdg1LipM6wlK6cVC3YeIA/X6pgWBfjEwyfsFlpc3nRM+pQ17DI8FpDQ==}
+  '@biomejs/cli-linux-arm64-musl@2.1.1':
+    resolution: {integrity: sha512-/7FBLnTswu4jgV9ttI3AMIdDGqVEPIZd8I5u2D4tfCoj8rl9dnjrEQbAIDlWhUXdyWlFSz8JypH3swU9h9P+2A==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-arm64@2.1.0':
-    resolution: {integrity: sha512-HZys1/TeIH5lagwtf9yKSO+gtA+cYMJW22ckDGuKt2xIvPu7VqgTNjJtTdRcetXe0+benlMMo+KFs3xL2b/2QA==}
+  '@biomejs/cli-linux-arm64@2.1.1':
+    resolution: {integrity: sha512-tw4BEbhAUkWPe4WBr6IX04DJo+2jz5qpPzpW/SWvqMjb9QuHY8+J0M23V8EPY/zWU4IG8Ui0XESapR1CB49Q7g==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64-musl@2.1.0':
-    resolution: {integrity: sha512-uj8felYcBeXh32kznnKrAQoZ9pLqta/6qvwLJ4AZtUmY6cSUUa5c+VLnFtxMfuhvps/M4D55VGnwSINOEblPQg==}
+  '@biomejs/cli-linux-x64-musl@2.1.1':
+    resolution: {integrity: sha512-kUu+loNI3OCD2c12cUt7M5yaaSjDnGIksZwKnueubX6c/HWUyi/0mPbTBHR49Me3F0KKjWiKM+ZOjsmC+lUt9g==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64@2.1.0':
-    resolution: {integrity: sha512-nAVAP1ov/zcXMhNq3WCbYZmlU/YTF3ZT+LeXR1CEJnDgunPC/Srp7j1LWlrIx6wxNOCDOFow8fmyfC7c/BKLig==}
+  '@biomejs/cli-linux-x64@2.1.1':
+    resolution: {integrity: sha512-3WJ1GKjU7NzZb6RTbwLB59v9cTIlzjbiFLDB0z4376TkDqoNYilJaC37IomCr/aXwuU8QKkrYoHrgpSq5ffJ4Q==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-win32-arm64@2.1.0':
-    resolution: {integrity: sha512-eGGqGs+8Q34n1zp/rEadFRKjzwFszpZ2+p6B1Dmi7dn1DNEYhNXoRWLcjyca+ZSTrdV7COx0scyjgF9Tg73kBw==}
+  '@biomejs/cli-win32-arm64@2.1.1':
+    resolution: {integrity: sha512-vEHK0v0oW+E6RUWLoxb2isI3rZo57OX9ZNyyGH701fZPj6Il0Rn1f5DMNyCmyflMwTnIQstEbs7n2BxYSqQx4Q==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@2.1.0':
-    resolution: {integrity: sha512-pkp6jucyvE8DJSXXwSKs+Mxx1KXkMJ2d8GbBu4Lf0nAQHl40TZjjp1RuNEo9Z7NNXPQzbLACDtK6/vDalO2WRg==}
+  '@biomejs/cli-win32-x64@2.1.1':
+    resolution: {integrity: sha512-i2PKdn70kY++KEF/zkQFvQfX1e8SkA8hq4BgC+yE9dZqyLzB/XStY2MvwI3qswlRgnGpgncgqe0QYKVS1blksg==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
@@ -3216,11 +3258,11 @@ packages:
   '@types/node@14.18.63':
     resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
 
-  '@types/node@20.19.4':
-    resolution: {integrity: sha512-OP+We5WV8Xnbuvw0zC2m4qfB/BJvjyCwtNjhHdJxV1639SGSKrLmJkc3fMnp2Qy8nJyHp8RO6umxELN/dS1/EA==}
+  '@types/node@20.19.6':
+    resolution: {integrity: sha512-uYssdp9z5zH5GQ0L4zEJ2ZuavYsJwkozjiUzCRfGtaaQcyjAMJ34aP8idv61QlqTozu6kudyr6JMq9Chf09dfA==}
 
-  '@types/node@24.0.10':
-    resolution: {integrity: sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==}
+  '@types/node@24.0.12':
+    resolution: {integrity: sha512-LtOrbvDf5ndC9Xi+4QZjVL0woFymF/xSTKZKPgrrl7H7XoeDvnD+E2IclKVDyaK9UM756W/3BXqSU+JEHopA9g==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -4532,8 +4574,8 @@ packages:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.39.6:
-    resolution: {integrity: sha512-uiVjnLem6kkfXumlwUEWEKnwUN5QbSEB0DHy2rNJt0nkYcob5K0TXJ7oJRzhAcvx+SRmz4TahKyN5V9cly/IPA==}
+  es-toolkit@1.39.7:
+    resolution: {integrity: sha512-ek/wWryKouBrZIjkwW2BFf91CWOIMvoy2AE5YYgUrfWsJQM2Su1LoLtrw8uusEpN9RfqLlV/0FVNjT0WMv8Bxw==}
 
   es6-promise@3.3.1:
     resolution: {integrity: sha512-SOp9Phqvqn7jtEUxPWdWfWoLmyt2VaJ6MpvP9Comy1MceMXqE6bxvaTu4iaxpYYPzhny28Lc+M87/c2cPK6lDg==}
@@ -8162,9 +8204,6 @@ packages:
     peerDependencies:
       zod: ^3.18.0
 
-  zod@3.24.2:
-    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
-
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
@@ -8521,11 +8560,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@asteasolutions/zod-to-openapi@7.3.4(zod@3.24.2)':
-    dependencies:
-      openapi3-ts: 4.5.0
-      zod: 3.24.2
-
   '@asteasolutions/zod-to-openapi@7.3.4(zod@3.25.76)':
     dependencies:
       openapi3-ts: 4.5.0
@@ -8651,39 +8685,39 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@biomejs/biome@2.1.0':
+  '@biomejs/biome@2.1.1':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.1.0
-      '@biomejs/cli-darwin-x64': 2.1.0
-      '@biomejs/cli-linux-arm64': 2.1.0
-      '@biomejs/cli-linux-arm64-musl': 2.1.0
-      '@biomejs/cli-linux-x64': 2.1.0
-      '@biomejs/cli-linux-x64-musl': 2.1.0
-      '@biomejs/cli-win32-arm64': 2.1.0
-      '@biomejs/cli-win32-x64': 2.1.0
+      '@biomejs/cli-darwin-arm64': 2.1.1
+      '@biomejs/cli-darwin-x64': 2.1.1
+      '@biomejs/cli-linux-arm64': 2.1.1
+      '@biomejs/cli-linux-arm64-musl': 2.1.1
+      '@biomejs/cli-linux-x64': 2.1.1
+      '@biomejs/cli-linux-x64-musl': 2.1.1
+      '@biomejs/cli-win32-arm64': 2.1.1
+      '@biomejs/cli-win32-x64': 2.1.1
 
-  '@biomejs/cli-darwin-arm64@2.1.0':
+  '@biomejs/cli-darwin-arm64@2.1.1':
     optional: true
 
-  '@biomejs/cli-darwin-x64@2.1.0':
+  '@biomejs/cli-darwin-x64@2.1.1':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@2.1.0':
+  '@biomejs/cli-linux-arm64-musl@2.1.1':
     optional: true
 
-  '@biomejs/cli-linux-arm64@2.1.0':
+  '@biomejs/cli-linux-arm64@2.1.1':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@2.1.0':
+  '@biomejs/cli-linux-x64-musl@2.1.1':
     optional: true
 
-  '@biomejs/cli-linux-x64@2.1.0':
+  '@biomejs/cli-linux-x64@2.1.1':
     optional: true
 
-  '@biomejs/cli-win32-arm64@2.1.0':
+  '@biomejs/cli-win32-arm64@2.1.1':
     optional: true
 
-  '@biomejs/cli-win32-x64@2.1.0':
+  '@biomejs/cli-win32-x64@2.1.1':
     optional: true
 
   '@casl/ability@6.7.3':
@@ -8710,11 +8744,11 @@ snapshots:
 
   '@chevrotain/utils@10.4.2': {}
 
-  '@commitlint/cli@19.8.1(@types/node@24.0.10)(typescript@5.8.3)':
+  '@commitlint/cli@19.8.1(@types/node@24.0.12)(typescript@5.8.3)':
     dependencies:
       '@commitlint/format': 19.8.1
       '@commitlint/lint': 19.8.1
-      '@commitlint/load': 19.8.1(@types/node@24.0.10)(typescript@5.8.3)
+      '@commitlint/load': 19.8.1(@types/node@24.0.12)(typescript@5.8.3)
       '@commitlint/read': 19.8.1
       '@commitlint/types': 19.8.1
       tinyexec: 1.0.1
@@ -8761,7 +8795,7 @@ snapshots:
       '@commitlint/rules': 19.8.1
       '@commitlint/types': 19.8.1
 
-  '@commitlint/load@19.8.1(@types/node@24.0.10)(typescript@5.8.3)':
+  '@commitlint/load@19.8.1(@types/node@24.0.12)(typescript@5.8.3)':
     dependencies:
       '@commitlint/config-validator': 19.8.1
       '@commitlint/execute-rule': 19.8.1
@@ -8769,7 +8803,7 @@ snapshots:
       '@commitlint/types': 19.8.1
       chalk: 5.4.1
       cosmiconfig: 9.0.0(typescript@5.8.3)
-      cosmiconfig-typescript-loader: 6.1.0(@types/node@24.0.10)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3)
+      cosmiconfig-typescript-loader: 6.1.0(@types/node@24.0.12)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -9024,24 +9058,12 @@ snapshots:
       hono: 4.8.4
       oauth4webapi: 2.17.0
 
-  '@hono/zod-openapi@0.18.4(hono@4.8.4)(zod@3.24.2)':
-    dependencies:
-      '@asteasolutions/zod-to-openapi': 7.3.4(zod@3.24.2)
-      '@hono/zod-validator': 0.4.3(hono@4.8.4)(zod@3.24.2)
-      hono: 4.8.4
-      zod: 3.24.2
-
   '@hono/zod-openapi@0.18.4(hono@4.8.4)(zod@3.25.76)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 7.3.4(zod@3.25.76)
       '@hono/zod-validator': 0.4.3(hono@4.8.4)(zod@3.25.76)
       hono: 4.8.4
       zod: 3.25.76
-
-  '@hono/zod-validator@0.4.3(hono@4.8.4)(zod@3.24.2)':
-    dependencies:
-      hono: 4.8.4
-      zod: 3.24.2
 
   '@hono/zod-validator@0.4.3(hono@4.8.4)(zod@3.25.76)':
     dependencies:
@@ -9814,7 +9836,7 @@ snapshots:
     dependencies:
       '@scalar/openapi-types': 0.1.9
       '@unhead/schema': 1.11.20
-      zod: 3.24.2
+      zod: 3.25.76
 
   '@shikijs/engine-oniguruma@3.7.0':
     dependencies:
@@ -10061,17 +10083,17 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.12.0(typescript@5.8.3)(zod@3.24.2)':
+  '@t3-oss/env-core@0.12.0(typescript@5.8.3)(zod@3.25.76)':
     optionalDependencies:
       typescript: 5.8.3
-      zod: 3.24.2
+      zod: 3.25.76
 
-  '@t3-oss/env-nextjs@0.12.0(typescript@5.8.3)(zod@3.24.2)':
+  '@t3-oss/env-nextjs@0.12.0(typescript@5.8.3)(zod@3.25.76)':
     dependencies:
-      '@t3-oss/env-core': 0.12.0(typescript@5.8.3)(zod@3.24.2)
+      '@t3-oss/env-core': 0.12.0(typescript@5.8.3)(zod@3.25.76)
     optionalDependencies:
       typescript: 5.8.3
-      zod: 3.24.2
+      zod: 3.25.76
 
   '@tanstack/query-core@5.81.5': {}
 
@@ -10097,7 +10119,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@turbo/gen@1.13.4(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)':
+  '@turbo/gen@1.13.4(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)':
     dependencies:
       '@turbo/workspaces': 1.13.4
       chalk: 2.4.2
@@ -10107,7 +10129,7 @@ snapshots:
       minimatch: 9.0.5
       node-plop: 0.26.3
       proxy-agent: 6.5.0
-      ts-node: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)
+      ts-node: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.1
     transitivePeerDependencies:
@@ -10146,13 +10168,13 @@ snapshots:
 
   '@types/conventional-commits-parser@5.0.1':
     dependencies:
-      '@types/node': 24.0.10
+      '@types/node': 24.0.12
 
   '@types/cookie@0.6.0': {}
 
   '@types/cross-spawn@6.0.2':
     dependencies:
-      '@types/node': 24.0.10
+      '@types/node': 24.0.12
 
   '@types/d3-array@3.2.1': {}
 
@@ -10212,7 +10234,7 @@ snapshots:
 
   '@types/es-aggregate-error@1.0.6':
     dependencies:
-      '@types/node': 24.0.10
+      '@types/node': 24.0.12
 
   '@types/eslint-scope@3.7.7':
     dependencies:
@@ -10237,7 +10259,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 6.0.0
-      '@types/node': 20.19.4
+      '@types/node': 20.19.6
 
   '@types/hast@3.0.4':
     dependencies:
@@ -10270,11 +10292,11 @@ snapshots:
 
   '@types/node@14.18.63': {}
 
-  '@types/node@20.19.4':
+  '@types/node@20.19.6':
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@24.0.10':
+  '@types/node@24.0.12':
     dependencies:
       undici-types: 7.8.0
 
@@ -10301,7 +10323,7 @@ snapshots:
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 20.19.4
+      '@types/node': 20.19.6
 
   '@types/tinycolor2@1.4.6': {}
 
@@ -10455,8 +10477,8 @@ snapshots:
       semver: 7.7.2
       ts-pattern: 4.3.0
       yaml: 2.8.0
-      zod: 3.24.2
-      zod-validation-error: 1.5.0(zod@3.24.2)
+      zod: 3.25.76
+      zod-validation-error: 1.5.0(zod@3.25.76)
     transitivePeerDependencies:
       - '@prisma/client'
       - typescript
@@ -10476,8 +10498,8 @@ snapshots:
       ts-pattern: 4.3.0
       tslib: 2.8.1
       uuid: 9.0.1
-      zod: 3.24.2
-      zod-validation-error: 1.5.0(zod@3.24.2)
+      zod: 3.25.76
+      zod-validation-error: 1.5.0(zod@3.25.76)
 
   '@zenstackhq/sdk@2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)':
     dependencies:
@@ -10500,8 +10522,8 @@ snapshots:
       superjson: 1.13.3
       ts-japi: 1.12.0
       url-pattern: 1.0.3
-      zod: 3.24.2
-      zod-validation-error: 1.5.0(zod@3.24.2)
+      zod: 3.25.76
+      zod-validation-error: 1.5.0(zod@3.25.76)
     transitivePeerDependencies:
       - '@prisma/client'
 
@@ -10932,7 +10954,7 @@ snapshots:
 
   bun-types@1.2.18(@types/react@18.3.23):
     dependencies:
-      '@types/node': 24.0.10
+      '@types/node': 24.0.12
       '@types/react': 18.3.23
 
   busboy@1.6.0:
@@ -11299,9 +11321,9 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@6.1.0(@types/node@24.0.10)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3):
+  cosmiconfig-typescript-loader@6.1.0(@types/node@24.0.12)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3):
     dependencies:
-      '@types/node': 24.0.10
+      '@types/node': 24.0.12
       cosmiconfig: 9.0.0(typescript@5.8.3)
       jiti: 2.4.2
       typescript: 5.8.3
@@ -11841,7 +11863,7 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-  es-toolkit@1.39.6: {}
+  es-toolkit@1.39.7: {}
 
   es6-promise@3.3.1: {}
 
@@ -12541,7 +12563,7 @@ snapshots:
       cli-cursor: 4.0.0
       cli-truncate: 4.0.0
       code-excerpt: 4.0.0
-      es-toolkit: 1.39.6
+      es-toolkit: 1.39.7
       indent-string: 5.0.0
       is-in-ci: 1.0.0
       patch-console: 2.0.0
@@ -12826,7 +12848,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.19.4
+      '@types/node': 20.19.6
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -13972,13 +13994,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.5.6
 
-  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)):
+  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.8.0
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)
+      ts-node: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
 
   postcss-nested@6.2.0(postcss@8.5.6):
     dependencies:
@@ -14077,7 +14099,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 24.0.10
+      '@types/node': 24.0.12
       long: 5.3.2
 
   proxy-agent@6.5.0:
@@ -14481,7 +14503,7 @@ snapshots:
     dependencies:
       dnd-core: 16.0.1
 
-  react-dnd@16.0.1(@types/node@20.19.4)(@types/react@18.3.23)(react@18.3.1):
+  react-dnd@16.0.1(@types/node@20.19.6)(@types/react@18.3.23)(react@18.3.1):
     dependencies:
       '@react-dnd/invariant': 4.0.2
       '@react-dnd/shallowequal': 4.0.2
@@ -14490,7 +14512,7 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       react: 18.3.1
     optionalDependencies:
-      '@types/node': 20.19.4
+      '@types/node': 20.19.6
       '@types/react': 18.3.23
 
   react-dom@18.3.1(react@18.3.1):
@@ -15242,11 +15264,11 @@ snapshots:
 
   tailwind-merge@2.6.0: {}
 
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))):
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))):
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
 
-  tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3)):
+  tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -15265,7 +15287,7 @@ snapshots:
       postcss: 8.5.6
       postcss-import: 15.1.0(postcss@8.5.6)
       postcss-js: 4.0.1(postcss@8.5.6)
-      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3))
+      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
       postcss-nested: 6.2.0(postcss@8.5.6)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.10
@@ -15427,14 +15449,14 @@ snapshots:
       '@ts-morph/common': 0.17.0
       code-block-writer: 11.0.3
 
-  ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.4)(typescript@5.8.3):
+  ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.19.4
+      '@types/node': 20.19.6
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -15983,7 +16005,7 @@ snapshots:
   zenstack@2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3):
     dependencies:
       '@paralleldrive/cuid2': 2.2.2
-      '@types/node': 20.19.4
+      '@types/node': 20.19.6
       '@zenstackhq/language': 2.16.1
       '@zenstackhq/sdk': 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)
       async-exit-hook: 2.0.1
@@ -16007,8 +16029,8 @@ snapshots:
       vscode-languageserver: 8.1.0
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
-      zod: 3.24.2
-      zod-validation-error: 1.5.0(zod@3.24.2)
+      zod: 3.25.76
+      zod-validation-error: 1.5.0(zod@3.25.76)
     transitivePeerDependencies:
       - '@prisma/client'
       - supports-color
@@ -16022,11 +16044,9 @@ snapshots:
       compress-commons: 4.1.2
       readable-stream: 3.6.2
 
-  zod-validation-error@1.5.0(zod@3.24.2):
+  zod-validation-error@1.5.0(zod@3.25.76):
     dependencies:
-      zod: 3.24.2
-
-  zod@3.24.2: {}
+      zod: 3.25.76
 
   zod@3.25.76: {}
 
