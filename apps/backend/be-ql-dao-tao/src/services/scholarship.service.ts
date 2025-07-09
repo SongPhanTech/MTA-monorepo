@@ -1,7 +1,17 @@
-import { AcademicRankingBaseType, CriteriaField, CriteriaOperator } from '@workspace/db'
+import {
+    AcademicRankingBaseType,
+    CriteriaField,
+    CriteriaOperator,
+    type Scholarship,
+} from '@workspace/db'
 import * as XLSX from 'xlsx'
 import { prisma } from '..'
-import type { StudentScholarship, StudentTemplateData } from '../dto/student-info.dto'
+import {
+    CourseStudentScholarship,
+    type ListScholarship,
+    type StudentScholarship,
+    type StudentTemplateData,
+} from '../dto/student-info.dto'
 
 // Lấy giá trị điểm C và D từ bảng chuyển đổi điểm ứng với từng khóa học
 interface ScoreConvertResult {
@@ -131,13 +141,182 @@ const phanLoaiDiemHe10 = async (diemHe10: number, trainingCourseId: string): Pro
         await prisma.$disconnect()
     }
 }
+const checkEligible = (
+    studentValue: any,
+    criteriaValue: any,
+    operator: CriteriaOperator
+): boolean => {
+    switch (operator) {
+        case CriteriaOperator.EQ:
+            return studentValue === criteriaValue
+        case CriteriaOperator.GTE:
+            return studentValue >= criteriaValue
+        case CriteriaOperator.LTE:
+            return studentValue <= criteriaValue
+        default:
+            console.warn(`Unknown operator: ${operator}`)
+            return false // Mặc định là không đủ điều kiện nếu không nhận diện được toán tử
+    }
+}
+const checkStudentEligible = async (
+    student: StudentScholarship,
+    scholarshipId: string
+): Promise<boolean> => {
+    try {
+        // Lấy thông tin tiêu chí học bổng
+        const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
+            where: { scholarshipId: scholarshipId },
+        })
+        const isEligible = scholarshipCriteriaList.every((criteria) => {
+            switch (criteria.field) {
+                case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
+                    console.log(
+                        'Total Credits: ',
+                        student.soTinChiDangKy,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
+                case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
+                    console.log(
+                        'Registered Credits: ',
+                        student.soTinChiDangKy,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
+                case CriteriaField.CUMULATIVE_PROGRESS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
+                    console.log(
+                        'Accumulated Credits Percent: ',
+                        student.soTinChiTichLuy,
+                        student.soTinChiYeuCau,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(
+                        student.soTinChiTichLuy / student.soTinChiYeuCau,
+                        criteria.value,
+                        criteria.operator
+                    )
+                case CriteriaField.COURSE_GRADE_LOWEST: // Điểm thấp nhất trong các học phần bình thường
+                    console.log(
+                        'Course Grade Min: ',
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                case CriteriaField.GRADUATION_COURSE_GRADE_LOWEST: // Điểm thấp nhất trong các học phần tốt nghiệp
+                    console.log(
+                        'Graduation Grade Min: ',
+                        student.diemMonTotNghiepNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    if (student.diemMonTotNghiepNhoNhat === undefined) {
+                        return true
+                    }
+
+                    return checkEligible(
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                case CriteriaField.SEMESTER_GPA: // Điểm trung bình học ksỳ
+                    console.log(
+                        'Semester GPA: ',
+                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(
+                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+                        criteria.value,
+                        criteria.operator
+                    )
+                case CriteriaField.ENTRY_SCORE: // Điểm thi đầu vào (cho học viên mới)
+                    console.log(
+                        'Entry Score: ',
+                        student.diemDauVao,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(
+                        student.diemMonThuongNhoNhat,
+                        criteria.value,
+                        criteria.operator
+                    )
+                case CriteriaField.CONDUCT_SCORE: // Mức rèn luyện
+                    console.log(
+                        'Conduct: ',
+                        student.xepLoaiRenLuyen,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(student.xepLoaiRenLuyen, criteria.value, criteria.operator)
+                case CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE: // Đạt chuẩn đầu ra ngoại ngữ (boolean)
+                    console.log(
+                        'Foreign Language: ',
+                        student.trinhDoNgoaiNgu,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(student.trinhDoNgoaiNgu, criteria.value, criteria.operator)
+                default:
+                    return true // Mặc định là đủ điều kiện nếu không có tiêu chí
+            }
+        })
+        return isEligible
+    } catch (error) {
+        console.error('Error checking student eligibility:', error)
+        return false // Trả về false nếu có lỗi xảy ra
+    } finally {
+        // Đóng kết nối Prisma nếu cần thiết
+        await prisma.$disconnect()
+    }
+}
+// Lọc danh sách sinh viên đủ điều kiện học bổng
+export const checkScholarshipEligibility = async (
+    students: StudentScholarship[],
+    scholarshipId: string
+): Promise<StudentScholarship[]> => {
+    // Lấy thông tin tiêu chí học bổng
+    return students.filter((student) => {
+        // Kiểm tra điều kiện học bổng
+        return checkStudentEligible(student, scholarshipId)
+    })
+}
+const getScholarship = async (
+    student: StudentScholarship,
+    courseId: string,
+    semesterScholarship: Scholarship[]
+): Promise<ListScholarship[]> => {
+    // Lấy danh sách học bổng của sinh viên
+
+    const scholarships: ListScholarship[] = []
+    for (const scholarship of semesterScholarship) {
+        const isEligible = await checkStudentEligible(student, scholarship.id)
+        if (isEligible) {
+            scholarships.push({
+                id: scholarship.id,
+                name: scholarship.name,
+                order: scholarship.rankOrder,
+            })
+        }
+    }
+    return scholarships
+}
 
 export const listStudentInfo = async (semesterId: string) => {
     try {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                // studentId: "cmc8rjif40002o00197ct07wy"
+                // studentId: 'cmc8rjif40002o00197ct07wy',
             },
             include: {
                 student: {
@@ -150,7 +329,11 @@ export const listStudentInfo = async (semesterId: string) => {
                                     include: {
                                         curriculum: {
                                             include: {
-                                                trainingMajor: true,
+                                                trainingMajor: {
+                                                    include: {
+                                                        trainingField: true, // Bao gồm thông tin ngành
+                                                    },
+                                                },
                                             },
                                         },
                                     },
@@ -182,9 +365,19 @@ export const listStudentInfo = async (semesterId: string) => {
                     maSinhVien: userProfile?.code || '',
                     doiTuong: item.student.trainingObjectType?.name || '',
                     khoa: item.student.fixedClass?.trainingCourse?.name || '',
+                    khoaId: item.student.fixedClass?.trainingCourse?.id || '',
                     chuyenNganh:
                         item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
                             ?.name || '',
+                    chuyenNganhId:
+                        item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.id ||
+                        '',
+                    nganh:
+                        item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.name || '',
+                    nganhId:
+                        item.student.fixedClass?.curriculumVersion?.curriculum?.trainingMajor
+                            ?.trainingField?.id || '',
                     ngaySinh: userProfile?.dateOfBirth
                         ? new Date(userProfile.dateOfBirth).toLocaleDateString('vi-VN')
                         : '',
@@ -221,6 +414,7 @@ export const listStudentInfo = async (semesterId: string) => {
                     // duDieuKienHocBong: true, // Điều kiện học bổng
                     ghiChu: '', // Ghi chú,
                     diemThuong: item.isClassMonitor || item.isUnionLeader ? 0.1 : 0, // Điểm thưởng
+                    hocBong: [], // Danh sách học bổng đạt được
                     userProfile: userProfile, // Thông tin người dùng
                 }
             })
@@ -308,142 +502,47 @@ export const populateExcelTemplate = (
     })
 }
 
-const checkEligible = (
-    studentValue: any,
-    criteriaValue: any,
-    operator: CriteriaOperator
-): boolean => {
-    switch (operator) {
-        case CriteriaOperator.EQ:
-            return studentValue === criteriaValue
-        case CriteriaOperator.GTE:
-            return studentValue >= criteriaValue
-        case CriteriaOperator.LTE:
-            return studentValue <= criteriaValue
-        default:
-            console.warn(`Unknown operator: ${operator}`)
-            return false // Mặc định là không đủ điều kiện nếu không nhận diện được toán tử
-    }
-}
+export const resultCourseStudentScholarship = async (
+    students: StudentScholarship[]
+): Promise<CourseStudentScholarship[]> => {
+    const courseMap: Record<string, CourseStudentScholarship> = {}
 
-// Lọc danh sách sinh viên đủ điều kiện học bổng
-export const checkScholarshipEligibility = async (
-    students: StudentScholarship[],
-    scholarshipId: string
-): Promise<StudentScholarship[]> => {
-    // Lấy thông tin tiêu chí học bổng
-    const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
-        where: { scholarshipId: scholarshipId },
+    const semesterScholarship = await prisma.scholarship.findMany({
+        where: {
+            effectiveFrom: {
+                lte: new Date(),
+            },
+            effectiveTo: {
+                gte: new Date(),
+            },
+        },
     })
 
-    return students.filter((student) => {
-        // Kiểm tra điều kiện học bổng
-        const isEligible = scholarshipCriteriaList.every((criteria) => {
-            switch (criteria.field) {
-                case CriteriaField.TOTAL_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
-                    console.log(
-                        'Total Credits: ',
-                        student.soTinChiDangKy,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                case CriteriaField.REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
-                    console.log(
-                        'Registered Credits: ',
-                        student.soTinChiDangKy,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                case CriteriaField.ACCUMULATED_CREDITS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
-                    console.log(
-                        'Accumulated Credits Percent: ',
-                        student.soTinChiTichLuy,
-                        student.soTinChiYeuCau,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(
-                        student.soTinChiTichLuy / student.soTinChiYeuCau,
-                        criteria.value,
-                        criteria.operator
-                    )
-                case CriteriaField.COURSE_GRADE_MIN: // Điểm thấp nhất trong các học phần bình thường
-                    console.log(
-                        'Course Grade Min: ',
-                        student.diemMonThuongNhoNhat,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(
-                        student.diemMonThuongNhoNhat,
-                        criteria.value,
-                        criteria.operator
-                    )
-                case CriteriaField.GRADUATION_GRADE_MIN: // Điểm thấp nhất trong các học phần tốt nghiệp
-                    console.log(
-                        'Graduation Grade Min: ',
-                        student.diemMonTotNghiepNhoNhat,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    if (student.diemMonTotNghiepNhoNhat === undefined) {
-                        return true
-                    }
-
-                    return checkEligible(
-                        student.diemMonThuongNhoNhat,
-                        criteria.value,
-                        criteria.operator
-                    )
-                case CriteriaField.SEMESTER_GPA: // Điểm trung bình học ksỳ
-                    console.log(
-                        'Semester GPA: ',
-                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(
-                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
-                        criteria.value,
-                        criteria.operator
-                    )
-                case CriteriaField.ENTRY_SCORE: // Điểm thi đầu vào (cho học viên mới)
-                    console.log(
-                        'Entry Score: ',
-                        student.diemDauVao,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(
-                        student.diemMonThuongNhoNhat,
-                        criteria.value,
-                        criteria.operator
-                    )
-                case CriteriaField.CONDUCT: // Mức rèn luyện
-                    console.log(
-                        'Conduct: ',
-                        student.xepLoaiRenLuyen,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.xepLoaiRenLuyen, criteria.value, criteria.operator)
-                case CriteriaField.FOREIGN_LANGUAGE: // Đạt chuẩn đầu ra ngoại ngữ (boolean)
-                    console.log(
-                        'Foreign Language: ',
-                        student.trinhDoNgoaiNgu,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.trinhDoNgoaiNgu, criteria.value, criteria.operator)
-                default:
-                    return true // Mặc định là đủ điều kiện nếu không có tiêu chí
+    // Process students in parallel
+    await Promise.all(
+        students.map(async (student) => {
+            console.log('student', student.hoTen)
+            const courseId = student.khoaId
+            // Synchronize access to courseMap to avoid race conditions
+            if (!courseMap[courseId]) {
+                courseMap[courseId] = {
+                    courseId,
+                    courseName: student.khoa,
+                    students: [],
+                }
             }
+            const scholarships = await getScholarship(student, student.khoaId, semesterScholarship)
+            if (scholarships.length === 0) {
+                console.log(`No scholarships found for student ${student.hoTen}`)
+                return // Skip if no scholarships found
+            }
+            console.log('scholarships', scholarships)
+            student.hocBong = scholarships
+            courseMap[courseId].students.push(student)
         })
-        console.log(
-            `Sinh viên ${student.hoTen} (${student.maSinhVien}) đủ điều kiện học bổng: ${isEligible}`
-        )
-        return isEligible
-    })
+    )
+
+    console.log('courseMap', courseMap)
+    const result = Object.values(courseMap)
+    return result.map((course) => CourseStudentScholarship.parse(course))
 }
