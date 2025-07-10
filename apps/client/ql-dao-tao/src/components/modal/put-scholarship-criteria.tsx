@@ -7,7 +7,7 @@ import {
     useFindUniqueScholarshipCriteria,
     useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, InputNumber, message } from 'antd'
+import { Checkbox, Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -120,7 +120,7 @@ const PutScholarshipCriteria = () => {
                     : 'Thêm tiêu chí xét học bổng'
             }
         >
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} label="Trường được đánh giá" name="field" required>
                     <Select
                         placeholder="Chọn trường được đánh giá"
@@ -129,7 +129,17 @@ const PutScholarshipCriteria = () => {
                     />
                 </FormItem>
             </Col>
-
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="invert"
+                    valuePropName="checked"
+                    className="mb-0"
+                    label="Đảo ngược so sánh"
+                >
+                    <Checkbox />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} label="So sánh" name="operator" required>
                     <Select
@@ -149,17 +159,7 @@ const PutScholarshipCriteria = () => {
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col> */}
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="invert"
-                    valuePropName="checked"
-                    className="mb-0"
-                    label="Đảo ngược so sánh"
-                >
-                    <Checkbox />
-                </FormItem>
-            </Col>
+
             <Col span={12}>
                 <FormItem form={form} name="bonusValue" label="Cộng thêm điểm nếu đúng tiêu chí">
                     <InputNumber
@@ -169,6 +169,16 @@ const PutScholarshipCriteria = () => {
                     />
                 </FormItem>
             </Col>
+            {input?.scholarshipCriteriaId && (
+                <Col span={12}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            )}
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
