@@ -442,6 +442,7 @@ const ThongTinDiemHocKy = async (
             }
 
             const soTinChi = item.subjectVersion?.credit || 0 // Số tín chỉ của môn học
+            console.log('Số tín chỉ của môn học:', soTinChi)
             TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
             const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, DsDiemChuyenDoi)
             DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
@@ -471,7 +472,8 @@ const ThongTinDiemHocKy = async (
             Math.round(
                 (DSDiemHe10.reduce((sum, diem) => sum + diem, 0) / TongTinChiDangKy || 0) * 100
             ) / 100
-
+        console.log('Điểm trung bình hệ 4:', diemTrungBinh4)
+        console.log('Điểm trung bình hệ 10:', diemTrungBinh10)
         // Điểm thấp nhất
         let diemThapNhat = Math.min(...DsDiemHe4) || 0
         if (baseType === AcademicRankingBaseType.Base10) {
@@ -530,7 +532,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 // 		},
                 // 	},
                 // },
-                // id: "cmc8rjif40002o00197ct07wy"
+                // id: "cmcvrfn5k0002okmgkp2k2cwp"
             },
             include: {
                 fixedClass: {
@@ -633,12 +635,10 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     cumulativeGpaBase10: thongTinTichLuy.diemTrungBinh10TichLuy,
 
                     lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
-                    //TODO: Chưa cập nhật
                     lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
                     totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
 
                     registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
-
                     //TODO: Chưa biết xác định thi lại ntn
                     retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
                     passedCredits: thongTinDiemHocKy.soTinChiDat,
@@ -652,7 +652,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     foreignLangPass: true, // Đạt trình độ ngoại nsgữ theo quy định
                     isClassMonitor: false, // Chức vụ học viên (hiện tại chưa có thông tin này)
                     isUnionLeader: false, // Chức vụ đoàn viên (hiện tại chưa có thông tin này)
-                    entryScore: null, // Điểm đầu vào (hiện tại chưa có thông tin này)
+                    entryScore: student.entryScore, // Điểm đầu vào
                     isImproving: false, // Đang cải thiện (hiện tại chưa có thông tin này)
                     postponeWithReason: false, // tạm ngưng có lý do
                     academicWarningLevel: 0, // mức cảnh cáo học tập
@@ -765,7 +765,13 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                // studentId: 'cmc8rjif40002o00197ct07wy',
+                studentId: 'cmcvrfn5k0002okmgkp2k2cwp',
+                student: {
+                    status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
+                    fixedClass: {
+                        id: { not: undefined }, // Chỉ lấy sinh viên có lớp học cố định
+                    },
+                },
             },
             include: {
                 student: {
@@ -828,7 +834,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
                         : await phanLoaiDiemHe4(item.gpaBase4, trainingCourseId, scoreConvert)
                 return {
                     stt: 0,
-                    id: userProfile?.id ?? '',
+                    id: item.student.id ?? '',
                     hoTen: `${userProfile?.lastName ?? ''} ${userProfile?.firstName ?? ''}`.trim(),
                     maSinhVien: userProfile?.code || '',
                     doiTuong: item.student.trainingObjectType?.name || '',
@@ -863,8 +869,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     soTinChiNo: item.failedCredits || 0,
                     soTinChiDangKy: item.registeredCredits || 0,
                     xepLoaiRenLuyen: item.studentTrainingType,
-                    //TODO: Chưa có dữ liệu
-                    diemDauVao: 0, // Điểm đầu vào
+                    diemDauVao: item.student.entryScore ?? 0, // Điểm đầu vào (default to 0 if null)
                     soLanViPham: 0,
                     biKyLuat: false,
                     queQuan: userProfile?.homeTown || '',
@@ -958,29 +963,55 @@ const checkAcademicActionRule = async (
             return false
         }
         // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
-        const isEligible = actionCriteriaList.every((criteria) => {
-            switch (criteria.field) {
-                case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
-                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
-                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                case CriteriaField.CUMULATIVE_PROGRESS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
-                    return checkEligible(
+        for (const criteria of actionCriteriaList) {
+            if (criteria.field === CriteriaField.SEMESTER_PASSED_CREDITS) {
+                if (!checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)) {
+                    return false
+                }
+            } else if (criteria.field === CriteriaField.SEMESTER_REGISTERED_CREDITS) {
+                if (!checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)) {
+                    return false
+                }
+            } else if (criteria.field === CriteriaField.CUMULATIVE_PROGRESS_PERCENT) {
+                if (
+                    !checkEligible(
                         student.soTinChiTichLuy / student.soTinChiYeuCau,
                         criteria.value,
                         criteria.operator
                     )
-                case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
-                    return checkEligible(
+                ) {
+                    return false
+                }
+            } else if (criteria.field === CriteriaField.SEMESTER_GPA) {
+                console.log(
+                    'Checking GPA for ruleSet:',
+                    ruleSetId,
+                    'Value:',
+                    criteria.value,
+                    'Operator:',
+                    criteria.operator
+                )
+                // Kiểm tra điểm trung bình học kỳ
+                console.log(
+                    'Student GPA:',
+                    student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4
+                )
+
+                if (
+                    !checkEligible(
                         student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
                         criteria.value,
                         criteria.operator
                     )
-                default:
-                    return false // Nếu có tiêu chí không xác định, trả về false để mọi điều kiện đều phải đúng mới true
+                ) {
+                    return false
+                }
+            } else {
+                return false // Unrecognized criterion
             }
-        })
-        return isEligible
+        }
+        console.log('All criteria passed for ruleSet:', ruleSetId)
+        return true // All criteria passed
     } catch (error) {
         console.error('Error fetching action criteria:', error)
         throw new Error('Failed to fetch action checkStudentEligible')
@@ -1055,7 +1086,7 @@ const checkAcademicWarning = async (
                 ],
             },
         })
-        console.log('Warning Criteria List:', warningCriteriaList)
+        // console.log('Warning Criteria List:', warningCriteriaList)
         const isEligible = warningCriteriaList.every((criteria) => {
             switch (criteria.field) {
                 case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
@@ -1113,41 +1144,47 @@ const checkScholarship = async (
     scholarshipId: string
 ): Promise<boolean> => {
     try {
+        console.log(
+            'Checking scholarship eligibility for student:',
+            student.id,
+            'Scholarship ID:',
+            scholarshipId
+        )
         // Lấy thông tin tiêu chí học bổng
         const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
             where: { scholarshipId: scholarshipId },
         })
         const isEligible = scholarshipCriteriaList.every((criteria) => {
             switch (criteria.field) {
-                case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
-                    console.log(
-                        'Total Credits: ',
-                        student.soTinChiDangKy,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
-                    console.log(
-                        'Registered Credits: ',
-                        student.soTinChiDangKy,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                case CriteriaField.CUMULATIVE_PROGRESS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
-                    console.log(
-                        'Accumulated Credits Percent: ',
-                        student.soTinChiTichLuy,
-                        student.soTinChiYeuCau,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(
-                        student.soTinChiTichLuy / student.soTinChiYeuCau,
-                        criteria.value,
-                        criteria.operator
-                    )
+                //     case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
+                //         console.log(
+                //             'Total Credits: ',
+                //             student.soTinChiDangKy,
+                //             criteria.value,
+                //             criteria.operator
+                //         )
+                //         return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
+                // case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
+                //     console.log(
+                //         'Registered Credits: ',
+                //         student.soTinChiDangKy,
+                //         criteria.value,
+                //         criteria.operator
+                //     )
+                //     return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
+                // case CriteriaField.CUMULATIVE_PROGRESS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
+                //     console.log(
+                //         'Accumulated Credits Percent: ',
+                //         student.soTinChiTichLuy,
+                //         student.soTinChiYeuCau,
+                //         criteria.value,
+                //         criteria.operator
+                //     )
+                //     return checkEligible(
+                //         student.soTinChiTichLuy / student.soTinChiYeuCau,
+                //         criteria.value,
+                //         criteria.operator
+                //     )
                 case CriteriaField.COURSE_GRADE_LOWEST: // Điểm thấp nhất trong các học phần bình thường
                     console.log(
                         'Course Grade Min: ',
@@ -1200,22 +1237,22 @@ const checkScholarship = async (
                         criteria.value,
                         criteria.operator
                     )
-                case CriteriaField.CONDUCT_SCORE: // Mức rèn luyện
-                    console.log(
-                        'Conduct: ',
-                        student.xepLoaiRenLuyen,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.xepLoaiRenLuyen, criteria.value, criteria.operator)
-                case CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE: // Đạt chuẩn đầu ra ngoại ngữ (boolean)
-                    console.log(
-                        'Foreign Language: ',
-                        student.trinhDoNgoaiNgu,
-                        criteria.value,
-                        criteria.operator
-                    )
-                    return checkEligible(student.trinhDoNgoaiNgu, criteria.value, criteria.operator)
+                // case CriteriaField.CONDUCT_SCORE: // Mức rèn luyện
+                //     console.log(
+                //         'Conduct: ',
+                //         student.xepLoaiRenLuyen,
+                //         criteria.value,
+                //         criteria.operator
+                //     )
+                //     return checkEligible(student.xepLoaiRenLuyen, criteria.value, criteria.operator)
+                // case CriteriaField.HAS_PASSED_FOREIGN_LANGUAGE: // Đạt chuẩn đầu ra ngoại ngữ (boolean)
+                //     console.log(
+                //         'Foreign Language: ',
+                //         student.trinhDoNgoaiNgu,
+                //         criteria.value,
+                //         criteria.operator
+                //     )
+                //     return checkEligible(student.trinhDoNgoaiNgu, criteria.value, criteria.operator)
                 default:
                     return true // Mặc định là đủ điều kiện nếu không có tiêu chí
             }
@@ -1242,6 +1279,7 @@ const getScholarship = async (
             rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
         },
     })
+    console.log('semesterScholarship', semesterScholarship)
     // Lấy danh sách học bổng của sinh viên
     const scholarships: ListScholarship[] = []
     for (const scholarship of semesterScholarship) {
@@ -1262,12 +1300,11 @@ const getStudentResult = async (
     semesterId: string
 ): Promise<StudentResult> => {
     try {
-        const studentSemesterResult = await prisma.studentSemesterResult.findUnique({
+        console.log('Fetching result for student:', student.id, 'in semester:', semesterId)
+        const studentSemesterResult = await prisma.studentSemesterResult.findFirst({
             where: {
-                studentId_semesterId: {
-                    studentId: student.id,
-                    semesterId,
-                },
+                studentId: student.id,
+                semesterId,
             },
             include: {
                 student: {
@@ -1314,8 +1351,8 @@ const getStudentResult = async (
                 where: { id: studentSemesterResult.student.userProfileId },
             }),
             hasScholarship: !!scholarshipInfo.length,
-            hasAcademicAction: false, // Chưa có thông tin hành động học tập
-            hasAcademicWarning: checkAcademicWarningResult, // Chưa có thông tin cảnh cáo học tập
+            hasAcademicAction: !!academicActionInfo.length,
+            hasAcademicWarning: checkAcademicWarningResult,
             scholarship: scholarshipInfo,
             academicAction: academicActionInfo,
             trainingMajor:
@@ -1363,7 +1400,7 @@ export const resultCourseStudentResult = async (
         })
     )
 
-    console.log('courseMap', courseMap)
+    // console.log('courseMap', courseMap)
     const result = Object.values(courseMap)
     return result.map((course) => CourseStudentResult.parse(course))
 }
