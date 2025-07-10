@@ -158,11 +158,17 @@ export default function StudentScoreClassPage() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                {student?.code} - {student?.userProfile?.lastName} {student?.userProfile?.firstName}{' '}
-                - {student?.trainingObjectType?.name} - {student?.fixedClass?.trainingCourse?.name}{' '}
-                - {student?.curriculumVersion?.name} -{' '}
-                {student?.curriculumVersion?.curriculum.trainingMajor.name} -{' '}
-                {student?.curriculumVersion?.curriculum.trainingMajor.trainingField.name}
+                {[
+                    student?.code,
+                    student?.userProfile?.fullname,
+                    student?.trainingObjectType?.name,
+                    student?.fixedClass?.trainingCourse?.name,
+                    student?.curriculumVersion?.name,
+                    student?.curriculumVersion?.curriculum.trainingMajor.name,
+                    student?.curriculumVersion?.curriculum.trainingMajor.trainingField.name,
+                ]
+                    .filter(Boolean)
+                    .join(' - ')}
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>

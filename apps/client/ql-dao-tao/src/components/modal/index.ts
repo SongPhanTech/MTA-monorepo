@@ -14,6 +14,7 @@ import PutCloneConvertScore from './put-clone-convert-score'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutOlympicScoreModal from './put-diem-cong'
+import PutAcademicActionCondition from './put-dieu-kien-xu-ly-hoc-tap'
 import PutGraduationApplication from './put-don-xet-tot-nghiep'
 import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
@@ -49,6 +50,7 @@ import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutAcademicRanking from './put-xep-loai-hoc-luc'
 import PutDisciplinaryWarning from './put-xet-canh-cao-hoc-duong'
+import PutAcademicActionConfig from './put-xu-ly-hoc-tap'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 export {
@@ -104,5 +106,7 @@ export {
     PutDisciplinaryWarningReason,
     PutAcademicWarningRule,
     PutDisciplinaryWarning,
+    PutAcademicActionConfig,
     PutGraduationApplication,
+    PutAcademicActionCondition,
 }

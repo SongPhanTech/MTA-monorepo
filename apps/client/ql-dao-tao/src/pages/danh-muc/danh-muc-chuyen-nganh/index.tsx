@@ -272,7 +272,7 @@ export default function TrainingMajorPage() {
                     <TableCollapse
                         rowKey="id"
                         headerTitleKey={({ code, name, trainingMajors }) =>
-                            `${code} - ${name} (${trainingMajors.length})`
+                            `${[code, name].filter(Boolean).join(' - ')} (${trainingMajors.length})`
                         }
                         defaultExpandAll
                         currentPage={currentPage}

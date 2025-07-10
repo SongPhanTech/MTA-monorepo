@@ -483,6 +483,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh mục cảnh cáo học đường',
                     },
                     {
+                        id: 'xu-ly-hoc-tap',
+                        label: 'Danh mục xử lý học tập',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
+                        description: 'Danh mục xử lý học tập',
+                    },
+                    {
                         id: 'thoi-gian-dao-tao',
                         label: 'Danh mục thời gian đào tạo',
                         icon: TeamOutlined,
