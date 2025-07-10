@@ -1,12 +1,14 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import { useFindUniqueSubjectClass } from '@workspace/db/hooks'
 import type { FixedClassBySubjectClassSemester } from '@workspace/libs/api/schemas/fixedClassBySubjectClassSemester'
 import {
     enrollFixedClassOnSubjectClass,
     useFixedClassBySubjectClassSemester,
 } from '@workspace/libs/api/training'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -24,9 +26,24 @@ interface FixedClassProps {
 
 export default function FixedClass({ semesterId, subjectClassId }: FixedClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
+    const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
+    })
+
+    const { data: initialValue } = useFindUniqueSubjectClass({
+        where: {
+            semesterId: semesterId as string,
+            id: subjectClassId as string,
+        },
+        include: {
+            mainLecturer: {
+                include: {
+                    userProfile: true,
+                },
+            },
+        },
     })
 
     const { data: fixedClass } = useFixedClassBySubjectClassSemester(
@@ -80,6 +97,16 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
 
     return (
         <div>
+            <Divider orientation="left" orientationMargin={0}>
+                {[
+                    initialValue?.code,
+                    initialValue?.name,
+                    initialValue?.schedule && getScheduleLabel(initialValue.schedule),
+                    initialValue?.mainLecturer?.userProfile?.fullname,
+                ]
+                    .filter(Boolean)
+                    .join(' - ')}
+            </Divider>
             <Row gutter={[16, 16]} align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>

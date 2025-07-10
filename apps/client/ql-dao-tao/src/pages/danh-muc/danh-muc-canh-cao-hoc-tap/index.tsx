@@ -184,7 +184,7 @@ export default function AcademicWarningRule() {
                     <TableCollapse
                         rowKey="id"
                         headerTitleKey={({ code, name, trainingObjectType }) =>
-                            `${code || ''} - ${name || ''} - ${trainingObjectType?.name || ''}`
+                            `${[code, name, trainingObjectType?.name].filter(Boolean).join(' - ')}`
                         }
                         defaultExpandAll
                         currentPage={currentPage}

@@ -57,7 +57,7 @@ interface FilterProps {
 
 export default function TrainingProgramSubjects() {
     const router = useRouter()
-    const { id } = router.query
+    const id = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -71,7 +71,7 @@ export default function TrainingProgramSubjects() {
 
     const { data: initialValue } = useFindUniqueCurriculumVersion(
         {
-            where: { id: Array.isArray(id) ? id[0] : id },
+            where: { id },
             include: {
                 curriculum: {
                     include: {
@@ -99,7 +99,7 @@ export default function TrainingProgramSubjects() {
 
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
-            curriculumVersionId: id as string,
+            curriculumVersionId: id,
             curriculumVersion: {
                 deletedAt: null,
             },
@@ -279,7 +279,7 @@ export default function TrainingProgramSubjects() {
 
     const { data: count } = useCountTrainingBlockOnCurriculumVersion({
         where: {
-            curriculumVersionId: id as string,
+            curriculumVersionId: id,
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
@@ -466,9 +466,15 @@ export default function TrainingProgramSubjects() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Phiên bản CTĐT: {initialValue?.code} - {initialValue?.name} -{' '}
-                {initialValue?.curriculum?.trainingMajor?.name} -{' '}
-                {initialValue?.curriculum?.managementOrganization?.sTen}
+                Phiên bản CTĐT:{' '}
+                {[
+                    initialValue?.code,
+                    initialValue?.name,
+                    initialValue?.curriculum?.trainingMajor?.name,
+                    initialValue?.curriculum?.managementOrganization?.sTen,
+                ]
+                    .filter(Boolean)
+                    .join(' - ')}
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
