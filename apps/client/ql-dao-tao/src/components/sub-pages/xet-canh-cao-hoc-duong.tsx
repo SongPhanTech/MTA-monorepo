@@ -1,64 +1,109 @@
 import DeleteIcon from '@components/icons/delete'
-import { Col, Flex, Form, Input, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import TableCollapse from '@components/commons/tableCollapse'
+import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
+import { PutDisciplinaryWarning } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
+import useSpinner from '@hooks/spinner'
+import type { DisciplinaryWarning, DisciplinaryWarningReason } from '@workspace/db'
+import {
+    useFindManyDisciplinaryWarning,
+    useUpdateDisciplinaryWarning,
+    useUpdateStudent,
+} from '@workspace/db/hooks'
 import { Search } from 'lucide-react'
+import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
-const XetCanhCaoHocDuong = () => {
-    async function _onOk(output?: any) {
-        if (!output) return
-    }
+interface FilterProps {
+    searchText: string | undefined
+    trainingObjectId: string | undefined
+    trainingCourseId: string | undefined
+    managementOrganizationId: string | undefined
+}
 
-    const fakeData = [
+interface XetCanhCaoHocDuongProps {
+    semesterId: string
+}
+
+const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+        trainingObjectId: '',
+        trainingCourseId: '',
+        managementOrganizationId: '',
+    })
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { data } = useFindManyDisciplinaryWarning(
         {
-            id: '1',
-            code: 'lql_1',
-            name: 'lớp quản lý 1',
-            children: [
-                {
-                    id: '2',
-                    code: 'sv_1',
-                    name: 'sinh viên 1',
-                    gpa: 1.2,
-                    totalCredit: 15,
-                    mccht: 2,
+            where: {
+                semesterId,
+            },
+            include: {
+                student: {
+                    include: {
+                        fixedClass: {
+                            include: {
+                                trainingCourse: true,
+                                managementOrganization: true,
+                            },
+                        },
+                        userProfile: true,
+                    },
                 },
-                {
-                    id: '3',
-                    code: 'sv_2',
-                    name: 'sinh viên 2',
-                    gpa: 0.98,
-                    totalCredit: 15,
-                },
-            ],
+                reasonDetails: true,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        {
-            id: '12',
-            code: 'lql_2',
-            name: 'lớp quản lý 2',
-            children: [
-                {
-                    id: '22',
-                    code: 'sv_3',
-                    name: 'sinh viên 3',
-                    gpa: 1.02,
-                    totalCredit: 15,
-                    mccht: 1,
+        { enabled: !!semesterId }
+    )
+
+    const { onOpen: onOpenPutDisciplinaryWarning } = useDisclosure<{
+        id: string
+        semesterId: string
+    }>({
+        tag: PutDisciplinaryWarning.name,
+    })
+
+    const { mutateAsync: updateDisciplinaryWarning } = useUpdateDisciplinaryWarning()
+    const { mutateAsync: updateStudent } = useUpdateStudent()
+    async function handleDeleteDisciplinaryWarning({
+        id,
+        studentId,
+        increasedFrom,
+        level,
+    }: DisciplinaryWarning) {
+        try {
+            showSpinner()
+            await updateDisciplinaryWarning({
+                where: { id },
+                data: { deletedAt: new Date() },
+            })
+            await updateStudent({
+                where: { id: studentId },
+                data: {
+                    disciplinaryWarningLevel: {
+                        decrement: level - (increasedFrom || 0),
+                    },
                 },
-                {
-                    id: '32',
-                    code: 'sv_4',
-                    name: 'sinh viên 4',
-                    gpa: 1.32,
-                    totalCredit: 15,
-                },
-            ],
-        },
-    ]
+            })
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
 
     return (
         <div>
@@ -93,50 +138,102 @@ const XetCanhCaoHocDuong = () => {
                                 </Col>
                             </Flex>
                         </Col>
+                        <Col span={6}>
+                            <Flex justify="end">
+                                <Button
+                                    type="primary"
+                                    onClick={() =>
+                                        onOpenPutDisciplinaryWarning({
+                                            id: '',
+                                            semesterId: semesterId,
+                                        })
+                                    }
+                                >
+                                    Thêm sinh viên
+                                </Button>
+                            </Flex>
+                        </Col>
                     </Row>
                 </Col>
                 <Col span={24}>
-                    <TableCollapse
-                        rowKey="key"
-                        headerTitleKey="name"
-                        childrenFieldName="children"
-                        defaultExpandAll
-                        data={fakeData}
+                    <Table
+                        rowKey="id"
+                        data={data}
                         columns={[
                             {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
                                 title: 'Mã sinh viên',
-                                dataIndex: 'code',
+                                dataIndex: ['student', 'code'],
                                 width: 120,
                                 align: 'center',
+                                fixed: 'left',
                             },
                             {
                                 title: 'Tên sinh viên',
-                                dataIndex: 'name',
+                                dataIndex: ['student', 'userProfile', 'fullname'],
                                 width: 200,
+                                fixed: 'left',
                             },
                             {
-                                title: 'Tổng số tín chỉ đăng ký',
-                                dataIndex: 'totalCredit',
+                                title: 'Lớp niên chế',
+                                dataIndex: ['student', 'fixedClass', 'name'],
                                 width: 150,
                                 align: 'center',
                             },
                             {
-                                title: 'GPA',
-                                dataIndex: 'gpa',
-                                width: 120,
+                                title: 'Khóa',
+                                dataIndex: ['student', 'fixedClass', 'trainingCourse', 'name'],
+                                width: 150,
                                 align: 'center',
                             },
                             {
-                                title: 'Mức CCHĐ hiện tại',
-                                dataIndex: 'mccht',
-                                width: 120,
+                                title: 'Đơn vị quản lý',
+                                dataIndex: [
+                                    'student',
+                                    'fixedClass',
+                                    'managementOrganization',
+                                    'sTen',
+                                ],
+                                width: 150,
                                 align: 'center',
                             },
                             {
-                                title: 'Nâng mức CCHĐ',
-                                dataIndex: '',
+                                title: 'Mức CCHĐ',
+                                dataIndex: 'level',
+                                width: 150,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (value: number) => (
+                                    <Tag color={getWarningLevelColor(value)}>{value}</Tag>
+                                ),
+                            },
+                            {
+                                title: 'Mức CCHĐ trước đó',
+                                // dataIndex: 'increasedFrom',
                                 width: 120,
                                 align: 'center',
+                                fixed: 'right',
+                                render: (record) => record?.increasedFrom || '-',
+                            },
+                            {
+                                title: 'Nguyên do',
+                                width: 120,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (record) =>
+                                    record?.reasonDetails
+                                        ?.map(
+                                            ({ name, severityLevel }: DisciplinaryWarningReason) =>
+                                                `${name} (${severityLevel})`
+                                        )
+                                        .join(', '),
                             },
                             {
                                 title: 'Thao tác',
@@ -148,21 +245,21 @@ const XetCanhCaoHocDuong = () => {
                                     return studentId ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
-                                                // onClick={() =>
-                                                //     onOpenSubjectVersion({
-                                                //         subjectId,
-                                                //         subjectVersionId,
-                                                //     })
-                                                // }
+                                                onClick={() =>
+                                                    onOpenPutDisciplinaryWarning({
+                                                        id: studentId,
+                                                        semesterId,
+                                                    })
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon
-                                            // popConfirm={{
-                                            //     onConfirm: () =>
-                                            //         handleDelete(
-                                            //             subjectVersionId
-                                            //         ),
-                                            // }}
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteDisciplinaryWarning(
+                                                            record as DisciplinaryWarning
+                                                        ),
+                                                }}
                                             />
                                         </Row>
                                     ) : null

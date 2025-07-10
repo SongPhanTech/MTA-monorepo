@@ -56,6 +56,7 @@ model AcademicActionCondition extends Base {
 
   field             CriteriaField         // Trường dữ liệu để kiểm tra (tái sử dụng từ ScholarshipCriteria)
   operator          CriteriaOperator      // Toán tử so sánh (GTE, LTE, EQ)
+  invert            Boolean               @default(false) // đảo ngược operator
   value             Float                 // Giá trị để so sánh
   tuple             String[]              @default([]) // giá trị sử dụng cho operator IN
 

@@ -9,7 +9,13 @@ import {
     listStudentResultInfo,
     resultCourseStudentResult,
 } from '../services/studen-result.service'
-import { buildCurriculumMapOrThrow } from '../utils'
+import {
+    buildCurriculumMapOrThrow,
+    buildDistrictMapOrThrow,
+    buildEthnicityMapOrThrow,
+    buildNationalityMapOrThrow,
+    buildProvinceMapOrThrow,
+} from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -51,52 +57,6 @@ const importHeQuanSu = createRoute({
         },
     },
 })
-
-// const dsRaSoatHocBongExcel = createRoute({
-//     operationId: 'exportStudentScholarship',
-//     path: '/export-xlsx-list-student-to-check-scholarship',
-//     tags: ['Student'],
-//     summary: 'Xuất file xlsx danh sách sinh viên trong rà soát học bổng',
-//     description: 'xuất tất cả học viên, sinh viên để rà soát',
-//     method: 'get',
-//     request: {
-//         query: z.object({
-//             semesterId: z.string().openapi('semesterId', {
-//                 description: 'ID của kì học',
-//             }),
-//         }),
-//     },
-//     responses: {
-//         200: {
-//             description: 'Export list of student scholarship as .xlsx',
-//             content: {
-//                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
-//                     schema: z.any().openapi({ type: 'string', format: 'binary' }),
-//                 },
-//             },
-//         },
-//         400: {
-//             description: 'Invalid file upload',
-//             content: {
-//                 'application/json': {
-//                     schema: z.object({
-//                         message: z.string(),
-//                     }),
-//                 },
-//             },
-//         },
-//         404: {
-//             description: 'Not found',
-//             content: {
-//                 'application/json': {
-//                     schema: z.object({
-//                         message: z.string(),
-//                     }),
-//                 },
-//             },
-//         },
-//     },
-// })
 
 const tongKetHocKyHVSV = createRoute({
     operationId: 'calculateStudentSemesterResultJson',
@@ -208,6 +168,7 @@ app.openapi(tongKetHocKyHVSV, async (c) => {
         return c.json({ message: `Lỗi khi tính toán kết quả học kỳ: ${errorMessage}` }, 500)
     }
 })
+
 app.openapi(importHeQuanSu, async (c) => {
     const { file, timeout } = c.req.valid('form')
 
@@ -239,29 +200,25 @@ app.openapi(importHeQuanSu, async (c) => {
         return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
     }
 
-    const ethnicityMap = new Map()
-    //  await buildEthnicityMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.ethnicity)
-    // )
+    const ethnicityMap = await buildEthnicityMapOrThrow(
+        prisma,
+        data.students.map((student) => student.ethnicity)
+    )
 
-    const nationalityMap = new Map()
-    // await buildNationalityMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.nationality)
-    // )
+    const nationalityMap = await buildNationalityMapOrThrow(
+        prisma,
+        data.students.map((student) => student.nationality)
+    )
 
-    const provinceMap = new Map()
-    //  await buildProvinceMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.provinceHometown)
-    // )
+    const provinceMap = await buildProvinceMapOrThrow(
+        prisma,
+        data.students.map((student) => student.provinceHometown)
+    )
 
-    const districtMap = new Map()
-    //  await buildDistrictMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.districtHometown)
-    // )
+    const districtMap = await buildDistrictMapOrThrow(
+        prisma,
+        data.students.map((student) => student.districtHometown)
+    )
 
     const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
 
@@ -359,60 +316,5 @@ app.openapi(importHeQuanSu, async (c) => {
         200
     )
 })
-
-// app.openapi(dsLuuBanThoiHocJson, async (c) => {
-//     const { semesterId } = c.req.valid('query')
-//     const students = await listStudentAcademicAction(semesterId)
-//     if (!students || students.length === 0) {
-//         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
-//     }
-//     const filteredStudents = await resultCourseStudentAcademicAction(students)
-//     return c.json(filteredStudents, 200)
-// })
-
-// app.openapi(dsRaSoatHocBongExcel, async (c) => {
-//     const { semesterId } = c.req.valid('query')
-//     const student = await listStudentInfo(semesterId)
-
-//     const { date, month, year } = getCurrentDateForReport()
-
-//     const templateData: StudentTemplateData = {
-//         date,
-//         month,
-//         year,
-//         student,
-//     }
-
-//     const templateBuffer = await getBufferFromUrl('SCHOLARSHIP_LIST')
-//     const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
-
-//     // Set response headers
-//     const sanitizedClassName = sanitizeFilename('Class')
-//     return c.body(excelBuffer, 200, {
-//         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-//         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
-//     })
-// })
-
-// app.openapi(dsRaSoatHocBongJson, async (c) => {
-//     const { semesterId } = c.req.valid('query')
-//     const students = await listStudentInfo(semesterId)
-//     if (!students || students.length === 0) {
-//         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
-//     }
-//     const filteredStudents = await resultCourseStudentScholarship(students)
-//     return c.json(filteredStudents, 200)
-// })
-
-// app.openapi(dsRaKyLuatHocTapJson, async (c) => {
-//     const { semesterId } = c.req.valid('query')
-//     const students = await listStudentWarning(semesterId)
-
-//     if (!students || students.length === 0) {
-//         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
-//     }
-//     const filteredStudents = await resultCourseStudentWarning(students)
-//     return c.json(filteredStudents, 200)
-// })
 
 export default app

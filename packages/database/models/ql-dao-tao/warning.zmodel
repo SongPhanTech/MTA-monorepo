@@ -11,6 +11,7 @@ import 'criteria'
 model AcademicWarningRule extends Base {
   field             CriteriaField      // Trường dữ liệu để kiểm tra, ví dụ: SEMESTER_GPA
   operator          CriteriaOperator   // Toán tử so sánh, ví dụ: LTE (nhỏ hơn hoặc bằng)
+  invert            Boolean           @default(false) // đảo ngược operator
   threshold         Float              // Ngưỡng giá trị để so sánh
   tuple             String[]          @default([]) // giá trị sử dụng cho operator IN
 

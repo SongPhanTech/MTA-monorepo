@@ -1,5 +1,5 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.1.0/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
     "files": {
         "ignoreUnknown": true,
         "includes": [
@@ -9,6 +9,7 @@
             "!**/.vscode",
             "!**/package.json",
             "!**/.next/**/*",
+            "!**/out/**/*",
             "!**/generated/**/*",
             "!**/open-api/**/*",
             "!**/*.json",
@@ -16,7 +17,8 @@
             "!**/packages/libs/src/api/schemas/**/*",
             "!**/.env",
             "!**/.env.*"
-        ]
+        ],
+        "experimentalScannerIgnores": ["lodash", "dist", ".next", "out"]
     },
     "vcs": {
         "enabled": true,

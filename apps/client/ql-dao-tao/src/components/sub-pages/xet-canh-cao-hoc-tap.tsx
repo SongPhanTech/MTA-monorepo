@@ -64,9 +64,11 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     )
 
     const studentData = useMemo(() => {
-        return students?.data || []
-    }, [students?.data])
-    console.log(studentData)
+        if (!students) return []
+        if (Array.isArray(students)) return students
+        if (students.data && Array.isArray(students.data)) return students.data
+        return []
+    }, [students])
 
     return (
         <div>

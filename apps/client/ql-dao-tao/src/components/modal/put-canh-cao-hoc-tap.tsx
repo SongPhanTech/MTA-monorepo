@@ -7,7 +7,7 @@ import {
     useFindUniqueAcademicWarningRule,
     useUpdateAcademicWarningRule,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
+import { Checkbox, Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -120,17 +120,23 @@ const PutAcademicWarningRule = () => {
             }
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã tiêu chí" required>
-                    <Input placeholder="Nhập mã tiêu chí" className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} label="Trường được đánh giá" name="field" required>
                     <Select
                         placeholder="Chọn trường được đánh giá"
                         options={criteriaFieldOptions}
                         allowClear
                     />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="invert"
+                    valuePropName="checked"
+                    className="mb-0"
+                    label="Đảo ngược so sánh"
+                >
+                    <Checkbox />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -163,11 +169,7 @@ const PutAcademicWarningRule = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="yearCondition" label="Áp dụng cho sinh viên năm thứ...">
-                    <InputNumber
-                        placeholder="Nhập mức độ cảnh cáo sẽ tăng"
-                        className="w-full"
-                        step={1}
-                    />
+                    <InputNumber placeholder="Nhập thứ tự" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -176,16 +178,7 @@ const PutAcademicWarningRule = () => {
                     name="semesterCondition"
                     label="Áp dụng cho học kỳ thứ ... trong năm"
                 >
-                    <InputNumber
-                        placeholder="Nhập mức độ cảnh cáo sẽ tăng"
-                        className="w-full"
-                        step={1}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+                    <InputNumber placeholder="Nhập thứ tự" className="w-full" step={1} />
                 </FormItem>
             </Col>
             {input?.academicWarningRuleId && (
@@ -198,6 +191,11 @@ const PutAcademicWarningRule = () => {
                     </FormItem>
                 </Col>
             )}
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
+                </FormItem>
+            </Col>
         </PutFormModal>
     )
 }

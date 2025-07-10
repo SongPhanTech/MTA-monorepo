@@ -2,8 +2,7 @@ import { Button, Col, Flex, Form, Row, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
-import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import TableCollapse from '@components/commons/tableCollapse'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import {
     useDeleteManyScholarshipAward,
@@ -26,7 +25,6 @@ interface FilterProps {
 }
 
 const XetHocBong = ({ semesterId }: XetHocBongProps) => {
-    const [currentPage, setCurrentPage] = useState(1)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>([])
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
@@ -50,8 +48,11 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     )
 
     const studentData = useMemo(() => {
-        return students?.data || []
-    }, [students?.data])
+        if (!students) return []
+        if (Array.isArray(students)) return students
+        if (students.data && Array.isArray(students.data)) return students.data
+        return []
+    }, [students])
 
     const { data: scholarshipData = [] } = useFindManyScholarship({
         include: {
@@ -219,19 +220,12 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                     </Row>
                                 </Col>
                                 <Col span={24}>
-                                    <Table
+                                    <TableCollapse
                                         rowKey="id"
+                                        headerTitleKey="courseName"
+                                        childrenFieldName="students"
+                                        defaultExpandAll
                                         columns={[
-                                            {
-                                                title: 'STT',
-                                                width: 60,
-                                                align: 'center',
-                                                fixed: 'left',
-                                                render: (_, __, index) =>
-                                                    index +
-                                                    1 +
-                                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                            },
                                             {
                                                 title: 'Mã sinh viên',
                                                 dataIndex: ['userProfile', 'code'],
@@ -275,15 +269,15 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         ]}
                                         data={studentData}
                                         pagination={{
-                                            current: currentPage,
-                                            onChange: setCurrentPage,
+                                            pageSize: studentData.length,
+                                            hideOnSinglePage: true,
                                         }}
-                                        rowSelection={{
-                                            selectedRowKeys,
-                                            onChange: (selectedKeys) => {
-                                                setSelectedRowKeys(selectedKeys)
-                                            },
-                                        }}
+                                        // rowSelection={{
+                                        //     selectedRowKeys,
+                                        //     onChange: (selectedKeys) => {
+                                        //         setSelectedRowKeys(selectedKeys)
+                                        //     },
+                                        // }}
                                     />
                                 </Col>
                             </Row>
