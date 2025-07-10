@@ -121,11 +121,6 @@ const PutScholarshipCriteria = () => {
             }
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã tiêu chí" required>
-                    <Input placeholder="Nhập mã tiêu chí" className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} label="Trường được đánh giá" name="field" required>
                     <Select
                         placeholder="Chọn trường được đánh giá"
@@ -134,7 +129,7 @@ const PutScholarshipCriteria = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name="invert"
@@ -145,7 +140,7 @@ const PutScholarshipCriteria = () => {
                     <Checkbox />
                 </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
                 <FormItem form={form} label="So sánh" name="operator" required>
                     <Select
                         placeholder="Chọn so sánh"
@@ -154,7 +149,7 @@ const PutScholarshipCriteria = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
                 <FormItem form={form} name="value" label="Giá trị ngưỡng để so sánh" required>
                     <InputNumber placeholder="Nhập giá trị ngưỡng" className="w-full" step={1} />
                 </FormItem>
@@ -164,6 +159,7 @@ const PutScholarshipCriteria = () => {
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col> */}
+
             <Col span={12}>
                 <FormItem form={form} name="bonusValue" label="Cộng thêm điểm nếu đúng tiêu chí">
                     <InputNumber
@@ -171,11 +167,6 @@ const PutScholarshipCriteria = () => {
                         className="w-full"
                         step={0.1}
                     />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
             {input?.scholarshipCriteriaId && (
@@ -188,6 +179,11 @@ const PutScholarshipCriteria = () => {
                     </FormItem>
                 </Col>
             )}
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
+                </FormItem>
+            </Col>
         </PutFormModal>
     )
 }

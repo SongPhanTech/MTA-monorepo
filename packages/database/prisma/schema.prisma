@@ -253,7 +253,9 @@ enum CriteriaField {
 }
 
 enum CriteriaOperator {
+  GT
   GTE
+  LE
   LTE
   EQ
   IN
@@ -2613,6 +2615,7 @@ model AcademicWarningRule {
   updatedAt         DateTime          @updatedAt()
   field             CriteriaField
   operator          CriteriaOperator
+  invert            Boolean           @default(false)
   threshold         Float
   tuple             String[]          @default([])
   severity          Int
@@ -2732,6 +2735,7 @@ model AcademicActionCondition {
   ruleSetId         String
   field             CriteriaField
   operator          CriteriaOperator
+  invert            Boolean               @default(false)
   value             Float
   tuple             String[]              @default([])
   yearCondition     Int?
@@ -2939,7 +2943,9 @@ model GraduationRankDowngradeCondition {
   downgradeRuleId String
   field           CriteriaField
   operator        CriteriaOperator
+  invert          Boolean                     @default(false)
   value           Float
+  tuple           String[]                    @default([])
 
   @@schema("ql-dao-tao")
 }
@@ -2957,7 +2963,9 @@ model RankingCondition {
   rankingId              String
   field                  CriteriaField
   operator               CriteriaOperator
+  invert                 Boolean                  @default(false)
   value                  Float
+  tuple                  String[]                 @default([])
   applicationCheckResult ApplicationCheckResult[]
 
   @@schema("ql-dao-tao")

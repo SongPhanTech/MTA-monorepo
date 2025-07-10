@@ -41,12 +41,11 @@ const ExportTemplateExam = ({
 
         // Thiết lập style
         const golbalFontStyle = {
-            font: { name: 'Times New Roman' },
+            name: 'Times New Roman',
         }
 
         const headerTitleStyle = {
-            ...golbalFontStyle,
-            font: { bold: true, size: 14 },
+            font: { ...golbalFontStyle, bold: true, size: 14 },
             alignment: {
                 horizontal: 'center' as const,
                 vertical: 'middle' as const,
@@ -55,8 +54,7 @@ const ExportTemplateExam = ({
         }
 
         const headerSubtitleStyle = {
-            ...golbalFontStyle,
-            font: { bold: true, size: 14 },
+            font: { ...golbalFontStyle, bold: true, size: 14 },
             alignment: {
                 horizontal: 'center' as const,
                 vertical: 'middle' as const,
@@ -65,8 +63,7 @@ const ExportTemplateExam = ({
         }
 
         const _headerStyleNormal = {
-            ...golbalFontStyle,
-            font: { size: 14 },
+            font: { ...golbalFontStyle, size: 14 },
             alignment: {
                 horizontal: 'right' as const,
                 vertical: 'middle' as const,
@@ -75,8 +72,7 @@ const ExportTemplateExam = ({
         }
 
         const _headerSubtitleStyleCenter = {
-            ...golbalFontStyle,
-            font: { bold: true, size: 14 },
+            font: { ...golbalFontStyle, bold: true, size: 14 },
             alignment: {
                 horizontal: 'center' as const,
                 vertical: 'middle' as const,
@@ -84,8 +80,7 @@ const ExportTemplateExam = ({
         }
 
         const _headerSubtitleStyleRight = {
-            ...golbalFontStyle,
-            font: { bold: true, size: 14 },
+            font: { ...golbalFontStyle, bold: true, size: 14 },
             alignment: {
                 horizontal: 'right' as const,
                 vertical: 'middle' as const,
@@ -93,8 +88,7 @@ const ExportTemplateExam = ({
         }
 
         const headerSubtitleStyleLeft = {
-            ...golbalFontStyle,
-            font: { bold: true, size: 14 },
+            font: { ...golbalFontStyle, bold: true, size: 14 },
             alignment: {
                 horizontal: 'left' as const,
                 vertical: 'middle' as const,
@@ -102,8 +96,8 @@ const ExportTemplateExam = ({
         }
 
         const tableHeaderStyle = {
-            ...golbalFontStyle,
             font: {
+                ...golbalFontStyle,
                 bold: true,
                 size: 14,
                 color: { argb: 'FF000000' },
@@ -138,8 +132,7 @@ const ExportTemplateExam = ({
         }
 
         const dataCellStyle = {
-            ...golbalFontStyle,
-            font: { size: 14 },
+            font: { ...golbalFontStyle, size: 14 },
             alignment: {
                 horizontal: 'center' as const,
                 vertical: 'middle' as const,
@@ -173,8 +166,7 @@ const ExportTemplateExam = ({
         }
 
         const _italicTextStyle = {
-            ...golbalFontStyle,
-            font: { italic: true },
+            font: { ...golbalFontStyle, italic: true },
             alignment: {
                 horizontal: 'left' as const,
                 vertical: 'middle' as const,

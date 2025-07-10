@@ -59,7 +59,7 @@ export default function CanhCaoHocBong() {
                     {
                         key: '4',
                         label: 'Xét cảnh cáo học đường',
-                        children: <XetCanhCaoHocDuong />,
+                        children: <XetCanhCaoHocDuong semesterId={semesterId} />,
                     },
                     {
                         key: '5',
