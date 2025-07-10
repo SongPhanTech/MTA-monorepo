@@ -499,6 +499,19 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
+                id: 'ql-xet-tot-nghiep',
+                label: 'Xét tốt nghiệp',
+                icon: CalendarFold,
+                children: [
+                    {
+                        id: 'ql-dot-xet-tot-nghiep',
+                        label: 'Đợt xét tốt nghiệp',
+                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+                        description: 'Đợt xét tốt nghiệp',
+                    },
+                ],
+            },
+            {
                 id: 'ql-ho-so',
                 label: 'Quản lý hồ sơ',
                 icon: FileUser,
