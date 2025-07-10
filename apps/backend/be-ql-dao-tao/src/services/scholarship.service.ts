@@ -41,49 +41,13 @@ interface ScoreConvertItem {
     base10Max: number
     base4: number
 }
-const layGiaTriDiem4 = (
-    diemHe10: number,
+
+const phanLoaiDiemHe4 = async (
+    diemHe4: number,
     trainingCourseId: string,
-    scoreConvert: ScoreConvertItem[]
-): number => {
-    if (!scoreConvert?.length || typeof diemHe10 !== 'number' || Number.isNaN(diemHe10)) {
-        console.error('Invalid inputs:', { diemHe10, scoreConvert })
-        return 0
-    }
-
-    const diemHe4 = scoreConvert.find(
-        (item) =>
-            item.trainingCourseId === trainingCourseId &&
-            diemHe10 >= item.base10Min &&
-            diemHe10 <= item.base10Max
-    )
-
-    if (!diemHe4) return 0
-    // Lấy classification của điểm nhỏ hơn hoặc bằng gần nhất đối với diemHe4
-    const sorted = scoreConvert
-        .filter((item) => item.trainingCourseId === trainingCourseId && item.base4 <= diemHe4.base4)
-        .sort((a, b) => b.base4 - a.base4)
-    const closest = sorted[0]
-    const classification = closest ? closest.classification : ''
-    return diemHe4 ? diemHe4.base4 : 0
-}
-
-const phanLoaiDiemHe4 = async (diemHe4: number, trainingCourseId: string): Promise<string> => {
+    scoreConvert: ScoreConvertItem[] = []
+): Promise<string> => {
     try {
-        const scoreConvert = await prisma.scoreConvert.findMany({
-            where: {
-                trainingCourseId,
-            },
-            select: {
-                trainingCourseId: true,
-                letter: true,
-                base10Min: true,
-                base10Max: true,
-                base4: true,
-                classification: true,
-            },
-        })
-
         if (!scoreConvert?.length || typeof diemHe4 !== 'number' || Number.isNaN(diemHe4)) {
             console.error('Invalid inputs:', { diemHe4, scoreConvert })
             return ''
@@ -99,33 +63,19 @@ const phanLoaiDiemHe4 = async (diemHe4: number, trainingCourseId: string): Promi
     } catch (error) {
         console.error('Error in phanLoaiDiemHe4:', error)
         return ''
-    } finally {
-        // Đóng kết nối Prisma nếu cần thiết
-        await prisma.$disconnect()
     }
 }
 
-const phanLoaiDiemHe10 = async (diemHe10: number, trainingCourseId: string): Promise<string> => {
+const phanLoaiDiemHe10 = async (
+    diemHe10: number,
+    trainingCourseId: string,
+    scoreConvert: ScoreConvertItem[] = []
+): Promise<string> => {
     try {
-        const scoreConvert = await prisma.scoreConvert.findMany({
-            where: {
-                trainingCourseId,
-            },
-            select: {
-                trainingCourseId: true,
-                letter: true,
-                base10Min: true,
-                base10Max: true,
-                base4: true,
-                classification: true,
-            },
-        })
-
         if (!scoreConvert?.length || typeof diemHe10 !== 'number' || Number.isNaN(diemHe10)) {
             console.error('Invalid inputs:', { diemHe10, scoreConvert })
             return ''
         }
-
         const phanLoai = scoreConvert.find(
             (item) =>
                 item.trainingCourseId === trainingCourseId &&
@@ -136,9 +86,6 @@ const phanLoaiDiemHe10 = async (diemHe10: number, trainingCourseId: string): Pro
     } catch (error) {
         console.error('Error in phanLoaiDiemHe10:', error)
         return ''
-    } finally {
-        // Đóng kết nối Prisma nếu cần thiết
-        await prisma.$disconnect()
     }
 }
 const checkEligible = (
@@ -346,6 +293,25 @@ export const listStudentInfo = async (semesterId: string) => {
             },
         })
 
+        const listTrainingCourseId = DsHocVien.map(
+            (item) => item.student.fixedClass?.trainingCourse?.id || ''
+        )
+        const scoreConvert = await prisma.scoreConvert.findMany({
+            where: {
+                trainingCourseId: {
+                    in: listTrainingCourseId,
+                },
+            },
+            select: {
+                trainingCourseId: true,
+                letter: true,
+                base10Min: true,
+                base10Max: true,
+                base4: true,
+                classification: true,
+            },
+        })
+
         const studentsInfo: StudentScholarship[] = await Promise.all(
             DsHocVien.map(async (item) => {
                 const userProfile = item.student.userProfile
@@ -356,8 +322,8 @@ export const listStudentInfo = async (semesterId: string) => {
                     item.student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là 10 nếu không có thông tin
                 const xepLoaiHocTap =
                     baseScore === AcademicRankingBaseType.Base10
-                        ? await phanLoaiDiemHe10(item.gpaBase10, trainingCourseId)
-                        : await phanLoaiDiemHe4(item.gpaBase4, trainingCourseId)
+                        ? await phanLoaiDiemHe10(item.gpaBase10, trainingCourseId, scoreConvert)
+                        : await phanLoaiDiemHe4(item.gpaBase4, trainingCourseId, scoreConvert)
                 return {
                     stt: 0,
                     id: userProfile?.id ?? '',
@@ -411,10 +377,11 @@ export const listStudentInfo = async (semesterId: string) => {
                           ? 'Bí thư'
                           : '', // Chức vụ học viên
                     quocTich: userProfile.nationalityId ?? '', // Quốc tịch
-                    // duDieuKienHocBong: true, // Điều kiện học bổng
+                    hocBong: [], // Danh sách học bổng, sẽ được cập nhật sau
                     ghiChu: '', // Ghi chú,
+                    //TODO: Chưa có dữ liệu điểm thưởng
                     diemThuong: item.isClassMonitor || item.isUnionLeader ? 0.1 : 0, // Điểm thưởng
-                    hocBong: [], // Danh sách học bổng đạt được
+
                     userProfile: userProfile, // Thông tin người dùng
                 }
             })

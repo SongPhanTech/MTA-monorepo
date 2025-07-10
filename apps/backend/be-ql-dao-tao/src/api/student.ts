@@ -3,22 +3,13 @@ import { Gender, type Prisma } from '@workspace/db'
 import { parseSheetHeQuanSu, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
-import type { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { listStudentWarning, resultCourseStudentWarning } from '../services/academic-warning'
 import {
-    listStudentInfo,
-    populateExcelTemplate,
-    resultCourseStudentScholarship,
-    sanitizeFilename,
-} from '../services/scholarship.service'
-import { calculateStudentSemesterResult } from '../services/studen-result.service'
-import { getBufferFromUrl } from '../services/template.service'
-import {
-    listStudentAcademicAction,
-    resultCourseStudentAcademicAction,
-} from '../services/training-action'
-import { buildCurriculumMapOrThrow, getCurrentDateForReport } from '../utils'
+    calculateStudentSemesterResult,
+    listStudentResultInfo,
+    resultCourseStudentResult,
+} from '../services/studen-result.service'
+import { buildCurriculumMapOrThrow } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -61,123 +52,51 @@ const importHeQuanSu = createRoute({
     },
 })
 
-const dsRaSoatHocBongExcel = createRoute({
-    operationId: 'exportStudentScholarship',
-    path: '/export-xlsx-list-student-to-check-scholarship',
-    tags: ['Student'],
-    summary: 'Xuất file xlsx danh sách sinh viên trong rà soát học bổng',
-    description: 'xuất tất cả học viên, sinh viên để rà soát',
-    method: 'get',
-    request: {
-        query: z.object({
-            semesterId: z.string().openapi('semesterId', {
-                description: 'ID của kì học',
-            }),
-        }),
-    },
-    responses: {
-        200: {
-            description: 'Export list of student scholarship as .xlsx',
-            content: {
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
-                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
-                },
-            },
-        },
-        400: {
-            description: 'Invalid file upload',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
-        },
-        404: {
-            description: 'Not found',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
-        },
-    },
-})
-
-const dsRaSoatHocBongJson = createRoute({
-    operationId: 'exportStudentScholarshipJson',
-    path: '/export-json-list-student-to-check-scholarship',
-    tags: ['Student'],
-    summary: 'Danh sách sinh viên trong rà soát học bổng',
-    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện học bổng dưới dạng JSON',
-    method: 'get',
-    request: {
-        query: z.object({
-            semesterId: z.string().openapi('semesterId', {
-                description: 'ID của kì học',
-            }),
-        }),
-    },
-    responses: {
-        200: {
-            description: 'Export list of student scholarship as JSON',
-            content: {
-                'application/json': {
-                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
-                },
-            },
-        },
-        404: {
-            description: 'Not found',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
-        },
-    },
-})
-
-const dsRaKyLuatHocTapJson = createRoute({
-    operationId: 'exportStudentLearningDisciplineJson',
-    path: '/export-json-list-student-to-check-learning-discipline',
-    tags: ['Student'],
-    summary: 'Danh sách sinh viên trong rà soát kỷ luật học tập',
-    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện kỷ luật dưới dạng JSON',
-    method: 'get',
-    request: {
-        query: z.object({
-            semesterId: z.string().openapi('semesterId', {
-                description: 'ID của kì học',
-            }),
-        }),
-    },
-    responses: {
-        200: {
-            description: 'Export list of student scholarship as JSON',
-            content: {
-                'application/json': {
-                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
-                },
-            },
-        },
-        404: {
-            description: 'Not found',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
-        },
-    },
-})
+// const dsRaSoatHocBongExcel = createRoute({
+//     operationId: 'exportStudentScholarship',
+//     path: '/export-xlsx-list-student-to-check-scholarship',
+//     tags: ['Student'],
+//     summary: 'Xuất file xlsx danh sách sinh viên trong rà soát học bổng',
+//     description: 'xuất tất cả học viên, sinh viên để rà soát',
+//     method: 'get',
+//     request: {
+//         query: z.object({
+//             semesterId: z.string().openapi('semesterId', {
+//                 description: 'ID của kì học',
+//             }),
+//         }),
+//     },
+//     responses: {
+//         200: {
+//             description: 'Export list of student scholarship as .xlsx',
+//             content: {
+//                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+//                     schema: z.any().openapi({ type: 'string', format: 'binary' }),
+//                 },
+//             },
+//         },
+//         400: {
+//             description: 'Invalid file upload',
+//             content: {
+//                 'application/json': {
+//                     schema: z.object({
+//                         message: z.string(),
+//                     }),
+//                 },
+//             },
+//         },
+//         404: {
+//             description: 'Not found',
+//             content: {
+//                 'application/json': {
+//                     schema: z.object({
+//                         message: z.string(),
+//                     }),
+//                 },
+//             },
+//         },
+//     },
+// })
 
 const tongKetHocKyHVSV = createRoute({
     operationId: 'calculateStudentSemesterResultJson',
@@ -224,12 +143,13 @@ const tongKetHocKyHVSV = createRoute({
         },
     },
 })
-const dsLuuBanThoiHocJson = createRoute({
-    operationId: 'exportStudentActionAcademic',
-    path: '/export-json-list-student-to-check-action-academic',
+
+const dsKetQuaHocKySinhVienJson = createRoute({
+    operationId: 'exportStudentResultSemesterJson',
+    path: '/export-json-list-student-to-check-academic',
     tags: ['Student'],
-    summary: 'Danh sách sinh viên bị lưu ban, thôi học',
-    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện lưu ban, thôi học dưới dạng JSON',
+    summary: 'Danh sách học bổng, kỷ luật học tập, lưu ban, thôi học của học viên',
+    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện JSON',
     method: 'get',
     request: {
         query: z.object({
@@ -259,17 +179,15 @@ const dsLuuBanThoiHocJson = createRoute({
         },
     },
 })
-
-app.openapi(dsLuuBanThoiHocJson, async (c) => {
+app.openapi(dsKetQuaHocKySinhVienJson, async (c) => {
     const { semesterId } = c.req.valid('query')
-    const students = await listStudentAcademicAction(semesterId)
+    const students = await listStudentResultInfo(semesterId)
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-    const filteredStudents = await resultCourseStudentAcademicAction(students)
+    const filteredStudents = await resultCourseStudentResult(students, semesterId)
     return c.json(filteredStudents, 200)
 })
-
 app.openapi(tongKetHocKyHVSV, async (c) => {
     const { semesterId } = c.req.valid('query')
     // Validate semester existence
@@ -442,49 +360,59 @@ app.openapi(importHeQuanSu, async (c) => {
     )
 })
 
-app.openapi(dsRaSoatHocBongExcel, async (c) => {
-    const { semesterId } = c.req.valid('query')
-    const student = await listStudentInfo(semesterId)
+// app.openapi(dsLuuBanThoiHocJson, async (c) => {
+//     const { semesterId } = c.req.valid('query')
+//     const students = await listStudentAcademicAction(semesterId)
+//     if (!students || students.length === 0) {
+//         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+//     }
+//     const filteredStudents = await resultCourseStudentAcademicAction(students)
+//     return c.json(filteredStudents, 200)
+// })
 
-    const { date, month, year } = getCurrentDateForReport()
+// app.openapi(dsRaSoatHocBongExcel, async (c) => {
+//     const { semesterId } = c.req.valid('query')
+//     const student = await listStudentInfo(semesterId)
 
-    const templateData: StudentTemplateData = {
-        date,
-        month,
-        year,
-        student,
-    }
+//     const { date, month, year } = getCurrentDateForReport()
 
-    const templateBuffer = await getBufferFromUrl('SCHOLARSHIP_LIST')
-    const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
+//     const templateData: StudentTemplateData = {
+//         date,
+//         month,
+//         year,
+//         student,
+//     }
 
-    // Set response headers
-    const sanitizedClassName = sanitizeFilename('Class')
-    return c.body(excelBuffer, 200, {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
-    })
-})
+//     const templateBuffer = await getBufferFromUrl('SCHOLARSHIP_LIST')
+//     const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
 
-app.openapi(dsRaSoatHocBongJson, async (c) => {
-    const { semesterId } = c.req.valid('query')
-    const students = await listStudentInfo(semesterId)
-    if (!students || students.length === 0) {
-        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
-    }
-    const filteredStudents = await resultCourseStudentScholarship(students)
-    return c.json(filteredStudents, 200)
-})
+//     // Set response headers
+//     const sanitizedClassName = sanitizeFilename('Class')
+//     return c.body(excelBuffer, 200, {
+//         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+//         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
+//     })
+// })
 
-app.openapi(dsRaKyLuatHocTapJson, async (c) => {
-    const { semesterId } = c.req.valid('query')
-    const students = await listStudentWarning(semesterId)
+// app.openapi(dsRaSoatHocBongJson, async (c) => {
+//     const { semesterId } = c.req.valid('query')
+//     const students = await listStudentInfo(semesterId)
+//     if (!students || students.length === 0) {
+//         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+//     }
+//     const filteredStudents = await resultCourseStudentScholarship(students)
+//     return c.json(filteredStudents, 200)
+// })
 
-    if (!students || students.length === 0) {
-        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
-    }
-    const filteredStudents = await resultCourseStudentWarning(students)
-    return c.json(filteredStudents, 200)
-})
+// app.openapi(dsRaKyLuatHocTapJson, async (c) => {
+//     const { semesterId } = c.req.valid('query')
+//     const students = await listStudentWarning(semesterId)
+
+//     if (!students || students.length === 0) {
+//         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+//     }
+//     const filteredStudents = await resultCourseStudentWarning(students)
+//     return c.json(filteredStudents, 200)
+// })
 
 export default app
