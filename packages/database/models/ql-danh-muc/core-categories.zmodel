@@ -163,6 +163,7 @@ model DM_UngDung extends CoreBase {
 }
 
 model DM_NhanVien extends CoreBase {
+  sTen                String?
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -191,6 +192,17 @@ model DM_NhanVien extends CoreBase {
   @@auth()
   @@schema("mta")
 }
+
+model DM_PhanCap_ChatLuong_TrangThietBi extends CoreBase {
+  sTen String @unique
+  @@schema("mta")
+}
+
+model DM_PhanLoai_CSKT extends CoreBase {
+  sTen String @unique
+  @@schema("mta")
+}
+
 
 model DM_NhomNguoiDung extends CoreBase {
   sTen               String               @unique

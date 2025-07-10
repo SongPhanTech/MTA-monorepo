@@ -1967,6 +1967,7 @@ model DM_NhanVien {
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
+  sTen                String?
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -1990,6 +1991,46 @@ model DM_NhanVien {
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
   @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
   @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
+  @@schema("mta")
+}
+
+model DM_PhanCap_ChatLuong_TrangThietBi {
+  Id             String    @id() @default(cuid())
+  sMa            String?   @unique()
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen           String    @unique()
+
+  @@schema("mta")
+}
+
+model DM_PhanLoai_CSKT {
+  Id             String    @id() @default(cuid())
+  sMa            String?   @unique()
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen           String    @unique()
+
   @@schema("mta")
 }
 

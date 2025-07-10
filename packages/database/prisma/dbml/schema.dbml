@@ -1575,6 +1575,7 @@ Table DM_NhanVien {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
+  sTen String
   sHoVaDem String
   sTenDayDu String
   dNgaySinh DateTime
@@ -1593,6 +1594,42 @@ Table DM_NhanVien {
   NguoiDungTrongNhom NguoiDungTrongNhom [not null]
   Quyen_VaiTro Quyen_VaiTro [not null]
   nhatKyHoatDong NhatKyHoatDong [not null]
+}
+
+Table DM_PhanCap_ChatLuong_TrangThietBi {
+  Id String [pk]
+  sMa String [unique]
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sTen String [unique, not null]
+}
+
+Table DM_PhanLoai_CSKT {
+  Id String [pk]
+  sMa String [unique]
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sTen String [unique, not null]
 }
 
 Table DM_NhomNguoiDung {
