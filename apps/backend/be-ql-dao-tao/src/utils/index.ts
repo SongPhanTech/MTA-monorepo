@@ -314,3 +314,30 @@ export const buildOrganizationMapOrThrow = async (
 
     return new Map(existing.map(({ sMa, Id }) => [sMa, Id]))
 }
+
+export const buildFixedClassMap = async (
+    prisma: PrismaClient,
+    classes: { name: string; trainingCourseId: string; curriculumVersionId: string }[]
+) => {
+    const subjectSet = new Set<string>(
+        classes.map((s) => JSON.stringify([s.name, s.trainingCourseId, s.curriculumVersionId]))
+    )
+
+    const uniqueTuples = Array.from(subjectSet).map(
+        (s) => JSON.parse(s) as [string, string, string]
+    )
+
+    const existing = await prisma.fixedClass.findMany({
+        where: {
+            OR: uniqueTuples.map(([name, trainingCourseId, curriculumVersionId]) => ({
+                name,
+                trainingCourseId,
+                curriculumVersionId,
+            })),
+        },
+        select: { id: true, name: true },
+    })
+
+    // const missing = uniqueTuples.filter(([name]) => !existing.some((cls) => cls.name === name))
+    return new Map(existing.map(({ name, id }) => [name, id]))
+}

@@ -244,6 +244,7 @@ model FixedClass extends Base {
 
   subjectClasses           SubjectClass[]
 
+  @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
 }
 

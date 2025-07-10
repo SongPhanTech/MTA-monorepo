@@ -16,6 +16,7 @@ import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
 import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from '@constants/constants'
 import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
+import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { buildOrgTree } from '@lib/utils'
@@ -43,23 +44,6 @@ interface FilterProps {
 
 interface DiemTrungBinhKyHocProps {
     semesterId: string
-}
-
-const getWarningLevelColor = (level: number) => {
-    switch (level) {
-        case 0:
-            return 'green' // Không cảnh cáo
-        case 1:
-            return 'lime' // Mức nhẹ
-        case 2:
-            return 'orange' // Mức trung bình
-        case 3:
-            return 'volcano' // Mức nặng
-        case 4:
-            return 'red' // Mức nguy hiểm
-        default:
-            return 'default'
-    }
 }
 
 const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {

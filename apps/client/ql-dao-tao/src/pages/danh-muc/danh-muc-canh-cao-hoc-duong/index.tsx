@@ -162,6 +162,13 @@ export default function DisciplinaryWarningReason() {
                         rowKey="id"
                         columns={[
                             {
+                                title: 'STT',
+                                width: 30,
+                                align: 'center',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
                                 title: 'Mã tiêu chí',
                                 dataIndex: 'code',
                                 align: 'center',

@@ -1,10 +1,6 @@
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { Resource } from '@opentelemetry/resources'
-import {
-    ConsoleSpanExporter,
-    SimpleSpanProcessor,
-    WebTracerProvider,
-} from '@opentelemetry/sdk-trace-web'
+import { SimpleSpanProcessor, WebTracerProvider } from '@opentelemetry/sdk-trace-web'
 
 const baseUrl = process.env.OPEN_OBSERVE_URL
 const username = process.env.OPEN_OBSERVE_USERNAME
@@ -28,7 +24,7 @@ if (baseUrl && username && password) {
         }),
         spanProcessors: [
             new SimpleSpanProcessor(traceExporter),
-            new SimpleSpanProcessor(new ConsoleSpanExporter()),
+            // new SimpleSpanProcessor(new ConsoleSpanExporter()),
         ],
     })
 

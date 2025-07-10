@@ -330,6 +330,10 @@ Table FixedClass {
   curriculumVersionId String
   subjectClasses SubjectClass [not null]
 
+  indexes {
+    (name, trainingCourseId, curriculumVersionId) [unique]
+  }
+
   Note: 'lớp niên chế'
 }
 

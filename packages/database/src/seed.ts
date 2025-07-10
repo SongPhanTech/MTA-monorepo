@@ -20,7 +20,7 @@ async function main() {
             {
                 Id: '550e8400-1234-41d4-a716-446655440001',
                 sTen: 'Khoa Công nghệ thông tin',
-                sMa: 'K31',
+                sMa: 'K58',
                 sGhiChu: 'Khoa Công nghệ thông tin',
                 sParentId: '550e8400-1234-41d4-a716-446655440000',
             },
@@ -308,9 +308,9 @@ async function main() {
         data: [
             {
                 id: '550e8406-e29b-41d4-a716-446655440000',
-                code: 'K31',
-                name: 'Khóa 31',
-                description: 'Khóa 31',
+                code: 'K58',
+                name: 'Khóa 58',
+                description: 'Khóa 58',
                 semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
                 trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
@@ -318,9 +318,9 @@ async function main() {
             },
             {
                 id: '550e8406-e29b-41d4-a716-446655440001',
-                code: 'K32',
-                name: 'Khóa 32',
-                description: 'Khóa 32',
+                code: 'K59',
+                name: 'Khóa 58',
+                description: 'Khóa 58',
                 semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
                 trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440001',
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
@@ -358,7 +358,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440000',
                 name: 'CNTT',
-                code: 'CNTT_K31',
+                code: 'CNTT_K58',
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:40.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
@@ -367,7 +367,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440001',
                 name: 'VK',
-                code: 'VK_K31',
+                code: 'VK_K58',
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:41.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
@@ -376,7 +376,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440002',
                 name: 'CNTT',
-                code: 'CNTT_K32',
+                code: 'CNTT_K59',
                 createdAt: new Date('2025-04-03T12:58:42.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:42.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
@@ -385,7 +385,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440003',
                 name: 'VK',
-                code: 'VK_K32',
+                code: 'VK_K59',
                 createdAt: new Date('2025-04-03T12:58:43.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:43.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',

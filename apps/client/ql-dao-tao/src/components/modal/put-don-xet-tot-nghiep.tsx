@@ -64,8 +64,9 @@ const PutGraduationApplication = () => {
             const payload = {
                 code: output.code,
                 status: output.status,
-                sessionId: input?.graduationSessionId,
+                sessionId: input?.graduationSessionId || '',
                 studentId: output.studentId,
+                applicationDate: output.applicationDate,
             }
 
             if (input?.id) {
@@ -133,7 +134,6 @@ const PutGraduationApplication = () => {
             <Col span={12}>
                 <FormItem form={form} name="status" label="Trạng thái">
                     <Select
-                        showSearch
                         placeholder="Chọn trạng thái"
                         options={applicationStatusOptions?.map((item) => ({
                             label: item.label,

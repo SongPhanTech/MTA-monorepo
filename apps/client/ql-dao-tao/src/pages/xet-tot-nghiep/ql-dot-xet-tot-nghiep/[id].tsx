@@ -14,7 +14,7 @@ import {
 import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus, FileUp, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -140,7 +140,11 @@ export default function StudentGraduationApplication() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={4}>
+                                <Button type="primary">
+                                    <FileUp />
+                                    Nhập đơn xét tốt nghiệp
+                                </Button>
                                 <Button onClick={handleModal} type="primary">
                                     <BookPlus />
                                     Thêm
