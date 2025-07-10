@@ -87,7 +87,7 @@ app.use(
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {
-        return err.getResponse()
+        return c.json({ message: err.message }, err.status)
     }
 
     const tracer = trace.getTracer('InternalError')

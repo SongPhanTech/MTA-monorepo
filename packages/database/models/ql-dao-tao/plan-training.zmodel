@@ -244,6 +244,7 @@ model FixedClass extends Base {
 
   subjectClasses           SubjectClass[]
 
+  @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -271,14 +272,6 @@ enum TrainingLanguage {
   Vietnamese // Tiếng Việt
   English // Tiếng Anh
 
-  @@schema("ql-dao-tao")
-}
-
-model DiplomaType extends Base {
-  name              String              @unique
-  englishName       String?
-
-  curriculumVersion CurriculumVersion[]
   @@schema("ql-dao-tao")
 }
 

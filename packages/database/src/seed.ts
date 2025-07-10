@@ -20,7 +20,7 @@ async function main() {
             {
                 Id: '550e8400-1234-41d4-a716-446655440001',
                 sTen: 'Khoa Công nghệ thông tin',
-                sMa: 'K31',
+                sMa: 'K58',
                 sGhiChu: 'Khoa Công nghệ thông tin',
                 sParentId: '550e8400-1234-41d4-a716-446655440000',
             },
@@ -41,6 +41,7 @@ async function main() {
             {
                 id: '550e8402-e29b-41d4-a716-446655440000',
                 name: 'Đại học quân sự',
+                baseScore: 'Base10',
                 code: 'QS',
                 type: $Enums.TrainingObjectTypes.MILITARY,
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
@@ -49,6 +50,7 @@ async function main() {
             {
                 id: '550e8402-e29b-41d4-a716-446655440001',
                 name: 'Đại học dân sự',
+                baseScore: 'Base4',
                 code: 'DS',
                 type: $Enums.TrainingObjectTypes.CIVILIAN,
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
@@ -170,7 +172,6 @@ async function main() {
                 id: '550e8408-e29b-41d4-a716-446655440000',
                 name: '2025-2026',
                 code: '2025-2026',
-                order: 1,
                 startDate: new Date('2025-04-03T12:58:40.507Z'),
                 endDate: new Date('2026-04-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:10.507Z'),
@@ -180,7 +181,6 @@ async function main() {
                 id: '550e8408-e29b-41d4-a716-446655440001',
                 name: '2026-2027',
                 code: '2026-2027',
-                order: 2,
                 startDate: new Date('2026-04-03T12:58:40.507Z'),
                 endDate: new Date('2027-04-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:11.507Z'),
@@ -190,7 +190,6 @@ async function main() {
                 id: '550e8408-e29b-41d4-a716-446655440002',
                 name: '2027-2028',
                 code: '2027-2028',
-                order: 3,
                 startDate: new Date('2027-04-03T12:58:40.507Z'),
                 endDate: new Date('2028-04-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:12.507Z'),
@@ -208,7 +207,6 @@ async function main() {
                 name: 'Học kỳ 1',
                 shortName: 'HK1',
                 semesterType: $Enums.SemesterType.FIRST,
-                order: 1,
                 startDate: new Date('2025-04-03T12:58:40.507Z'),
                 endDate: new Date('2025-10-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:13.507Z'),
@@ -220,7 +218,6 @@ async function main() {
                 name: 'Học kỳ 2',
                 shortName: 'HK2',
                 semesterType: $Enums.SemesterType.SECOND,
-                order: 2,
                 startDate: new Date('2025-10-03T12:58:40.507Z'),
                 endDate: new Date('2026-04-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:14.507Z'),
@@ -231,7 +228,6 @@ async function main() {
                 id: '550e8409-e29b-41d4-a716-446655440002',
                 name: 'Học kỳ hè',
                 shortName: 'HKHE',
-                order: 3,
                 startDate: new Date('2026-04-03T12:58:40.507Z'),
                 endDate: new Date('2026-10-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:15.507Z'),
@@ -243,7 +239,6 @@ async function main() {
                 name: 'Học kỳ 1',
                 shortName: 'HK1',
                 semesterType: $Enums.SemesterType.FIRST,
-                order: 1,
                 startDate: new Date('2026-04-03T12:58:40.507Z'),
                 endDate: new Date('2026-10-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:16.507Z'),
@@ -255,7 +250,6 @@ async function main() {
                 name: 'Học kỳ 2',
                 shortName: 'HK2',
                 semesterType: $Enums.SemesterType.SECOND,
-                order: 2,
                 startDate: new Date('2026-10-03T12:58:40.507Z'),
                 endDate: new Date('2027-04-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:17.507Z'),
@@ -266,7 +260,6 @@ async function main() {
                 id: '550e8409-e29b-41d4-a716-446655440005',
                 name: 'Học kỳ hè',
                 shortName: 'HKHE',
-                order: 3,
                 startDate: new Date('2027-04-03T12:58:40.507Z'),
                 endDate: new Date('2027-10-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:18.507Z'),
@@ -278,7 +271,6 @@ async function main() {
                 name: 'Học kỳ 1',
                 shortName: 'HK1',
                 semesterType: $Enums.SemesterType.FIRST,
-                order: 1,
                 startDate: new Date('2027-04-03T12:58:40.507Z'),
                 endDate: new Date('2027-10-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:19.507Z'),
@@ -290,7 +282,6 @@ async function main() {
                 name: 'Học kỳ 2',
                 shortName: 'HK2',
                 semesterType: $Enums.SemesterType.SECOND,
-                order: 2,
                 startDate: new Date('2027-10-03T12:58:40.507Z'),
                 endDate: new Date('2028-04-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:20.507Z'),
@@ -301,7 +292,6 @@ async function main() {
                 id: '550e8409-e29b-41d4-a716-446655440008',
                 name: 'Học kỳ hè',
                 shortName: 'HKHE',
-                order: 3,
                 startDate: new Date('2028-04-03T12:58:40.507Z'),
                 endDate: new Date('2028-10-03T12:58:40.507Z'),
                 createdAt: new Date('2025-04-03T12:59:21.507Z'),
@@ -318,9 +308,9 @@ async function main() {
         data: [
             {
                 id: '550e8406-e29b-41d4-a716-446655440000',
-                code: 'K31',
-                name: 'Khóa 31',
-                description: 'Khóa 31',
+                code: 'K58',
+                name: 'Khóa 58',
+                description: 'Khóa 58',
                 semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
                 trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
@@ -328,9 +318,9 @@ async function main() {
             },
             {
                 id: '550e8406-e29b-41d4-a716-446655440001',
-                code: 'K32',
-                name: 'Khóa 32',
-                description: 'Khóa 32',
+                code: 'K59',
+                name: 'Khóa 58',
+                description: 'Khóa 58',
                 semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
                 trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440001',
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
@@ -368,7 +358,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440000',
                 name: 'CNTT',
-                code: 'CNTT_K31',
+                code: 'CNTT_K58',
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:40.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
@@ -377,7 +367,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440001',
                 name: 'VK',
-                code: 'VK_K31',
+                code: 'VK_K58',
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:41.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
@@ -386,7 +376,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440002',
                 name: 'CNTT',
-                code: 'CNTT_K32',
+                code: 'CNTT_K59',
                 createdAt: new Date('2025-04-03T12:58:42.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:42.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
@@ -395,7 +385,7 @@ async function main() {
             {
                 id: '550e8407-e29b-41d4-a716-446655440003',
                 name: 'VK',
-                code: 'VK_K32',
+                code: 'VK_K59',
                 createdAt: new Date('2025-04-03T12:58:43.507Z'),
                 updatedAt: new Date('2025-04-03T12:58:43.507Z'),
                 trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
@@ -607,34 +597,6 @@ async function main() {
         ],
     })
 
-    // Seed TrainingRank
-    await prisma.trainingRank.createMany({
-        skipDuplicates: true,
-        data: [
-            {
-                id: '550e840e-e29b-41d4-a716-446655440000',
-                name: 'Xuất sắc',
-                code: 'SX',
-                createdAt: new Date('2025-04-03T12:59:04.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840e-e29b-41d4-a716-446655440001',
-                name: 'Tốt',
-                code: 'T',
-                createdAt: new Date('2025-04-03T12:59:05.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-            {
-                id: '550e840e-e29b-41d4-a716-446655440002',
-                name: 'Khá',
-                code: 'K',
-                createdAt: new Date('2025-04-03T12:59:06.507Z'),
-                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
-            },
-        ],
-    })
-
     // Seed TrainingLocation
     await prisma.trainingLocation.createMany({
         skipDuplicates: true,
@@ -661,13 +623,6 @@ async function main() {
                 updatedAt: new Date('2025-04-03T12:58:40.507Z'),
             },
         ],
-    })
-
-    const organization = await prisma.dM_DonVi.create({
-        data: {
-            sTen: 'Khoa CNTT',
-            // type: { create: { name: 'Khoa' } },
-        },
     })
 
     const firstOrg = await prisma.dM_DonVi.findFirstOrThrow()
@@ -701,7 +656,6 @@ async function main() {
                 id,
                 name: trainingMajor,
                 managementOrganizationId: firstOrg.Id,
-                summary: '',
                 trainingMajorId: id,
             }))
         ),
@@ -725,30 +679,30 @@ async function main() {
 
     const _curriculum = await prisma.curriculum.create({
         data: {
-            name: 'Công nghệ thông tin',
+            name: 'Công nghệ thông tin seed',
             code: 'CNTT-2023',
             information: 'Công nghệ thông tin là ngành học về máy tính và công nghệ thông tin.',
             description:
                 'Chương trình đào tạo Công nghệ thông tin cung cấp kiến thức và kỹ năng về lập trình, quản trị hệ thống, và phát triển phần mềm.',
-            managementOrganization: { connect: { Id: organization.Id } },
+            managementOrganization: { connect: { Id: firstOrg.Id } },
 
             trainingMajor: {
                 create: {
-                    name: 'Công nghệ thông tin',
+                    name: 'Công nghệ thông tin seed',
                     code: 'CNTT',
                     englishName: 'Information Technology',
                     description:
                         'Chuyên ngành Công nghệ thông tin tập trung vào phát triển phần mềm và quản trị hệ thống.',
                     summary:
                         'Chuyên ngành Công nghệ thông tin cung cấp kiến thức về lập trình, cơ sở dữ liệu, và mạng máy tính.',
-                    organization: { connect: { Id: organization.Id } },
+                    organization: { connect: { Id: firstOrg.Id } },
                     trainingField: {
                         create: {
-                            name: 'Công nghệ thông tin',
+                            name: 'Công nghệ thông tin seed',
                             englishName: 'Information Technology',
                             publishDate: new Date(),
                             organization: {
-                                connect: { Id: organization.Id },
+                                connect: { Id: firstOrg.Id },
                             },
                         },
                     },
@@ -757,7 +711,7 @@ async function main() {
 
             curriculumVersion: {
                 create: {
-                    name: 'Công nghệ thông tin 2023',
+                    name: 'Công nghệ thông tin 2023 seed',
                     code: 'CNTT-DS-2023',
                     numberOfSemesters: 10,
 
@@ -767,6 +721,7 @@ async function main() {
                             create: {
                                 name: 'Đại học quân sự',
                                 type: $Enums.TrainingObjectTypes.MILITARY,
+                                baseScore: 'Base10',
                             },
                         },
                     },
