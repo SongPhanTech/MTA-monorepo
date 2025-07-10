@@ -1,10 +1,10 @@
-import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
@@ -12,9 +12,9 @@ import DefaultLayout from '@layouts/default-layout'
 import type {
     CurriculumVersion,
     DocumentFile,
+    FixedClass,
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
-    TrainingMajor,
     TrainingObjectType,
 } from '@workspace/db'
 import {
@@ -27,21 +27,14 @@ import {
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookPlus, Eye, Search } from 'lucide-react'
+import { BookPlus, Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectId: string | undefined
-    trainingCourseId: string | undefined
-    trainingMajorId: string | undefined
-}
 
 export default function TrainingProgramCatalog() {
     const router = useRouter()
@@ -49,123 +42,103 @@ export default function TrainingProgramCatalog() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectId: '',
-        trainingCourseId: '',
-        trainingMajorId: '',
+        trainingObjectTypes: undefined,
+        trainingCourses: undefined,
+        code: '',
+        name: '',
+        // trainingMajorId: '',
     })
 
     const { data = [], refetch } = useFindManyCurriculum({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              curriculumVersion: {
-                                  some: {
-                                      OR: [
-                                          {
-                                              name: {
-                                                  contains: filters.searchText,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                          {
-                                              code: {
-                                                  contains: filters.searchText,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                      ],
-                                  },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                ? {
-                      curriculumVersion: {
-                          some: {
+            curriculumVersion: {
+                some: {
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.name,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.code,
+                                mode: 'insensitive',
+                            },
+                        },
+                    ],
+                    ...(filters.trainingObjectTypes
+                        ? {
                               trainingObjectTypeId: {
-                                  contains: filters.trainingObjectId,
-                                  mode: 'insensitive',
+                                  in: filters.trainingObjectTypes,
                               },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      curriculumVersion: {
-                          some: {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          contains: filters.trainingCourseId,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.trainingMajorId && filters.trainingMajorId !== ''
-                ? {
-                      trainingMajorId: {
-                          contains: filters.trainingMajorId,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
+                          }
+                        : {}),
+                },
+            },
+
+            // ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+            //     ? {
+            //           curriculumVersion: {
+            //               some: {
+            //                   fixedClasses: {
+            //                       some: {
+            //                           trainingCourseId: {
+            //                               contains: filters.trainingCourseId,
+            //                               mode: 'insensitive',
+            //                           },
+            //                       },
+            //                   },
+            //               },
+            //           },
+            //       }
+            //     : {}),
+            // ...(filters.trainingMajorId && filters.trainingMajorId !== ''
+            //     ? {
+            //           trainingMajorId: {
+            //               contains: filters.trainingMajorId,
+            //               mode: 'insensitive',
+            //           },
+            //       }
+            //     : {}),
         },
         include: {
             curriculumVersion: {
                 where: {
-                    ...(filters.searchText && filters.searchText !== ''
-                        ? {
-                              OR: [
-                                  {
-                                      name: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      code: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              ],
-                          }
-                        : {}),
-                    ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.name,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.code,
+                                mode: 'insensitive',
+                            },
+                        },
+                    ],
+                    ...(filters.trainingObjectTypes
                         ? {
                               trainingObjectTypeId: {
-                                  contains: filters.trainingObjectId,
-                                  mode: 'insensitive',
+                                  in: filters.trainingObjectTypes,
                               },
                           }
                         : {}),
-                    ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                        ? {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          contains: filters.trainingCourseId,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              },
-                          }
-                        : {}),
+
+                    // ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                    //     ? {
+                    //           fixedClasses: {
+                    //               some: {
+                    //                   trainingCourseId: {
+                    //                       contains: filters.trainingCourseId,
+                    //                       mode: 'insensitive',
+                    //                   },
+                    //               },
+                    //           },
+                    //       }
+                    //     : {}),
                 },
                 include: {
                     trainingTime: true,
@@ -178,7 +151,13 @@ export default function TrainingProgramCatalog() {
                             },
                         },
                     },
+                    trainingObjectType: true,
                     documentFiles: true,
+                    fixedClasses: {
+                        include: {
+                            trainingCourse: true,
+                        },
+                    },
                 },
             },
             managementOrganization: true,
@@ -193,74 +172,55 @@ export default function TrainingProgramCatalog() {
 
     const { data: count } = useCountCurriculum({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              curriculumVersion: {
-                                  some: {
-                                      OR: [
-                                          {
-                                              name: {
-                                                  contains: filters.searchText,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                          {
-                                              code: {
-                                                  contains: filters.searchText,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                      ],
-                                  },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                ? {
-                      curriculumVersion: {
-                          some: {
+            curriculumVersion: {
+                some: {
+                    OR: [
+                        {
+                            name: {
+                                contains: filters.name,
+                                mode: 'insensitive',
+                            },
+                        },
+                        {
+                            code: {
+                                contains: filters.code,
+                                mode: 'insensitive',
+                            },
+                        },
+                    ],
+                    ...(filters.trainingObjectTypes
+                        ? {
                               trainingObjectTypeId: {
-                                  contains: filters.trainingObjectId,
-                                  mode: 'insensitive',
+                                  in: filters.trainingObjectTypes,
                               },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      curriculumVersion: {
-                          some: {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          contains: filters.trainingCourseId,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.trainingMajorId && filters.trainingMajorId !== ''
-                ? {
-                      trainingMajorId: {
-                          contains: filters.trainingMajorId,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
+                          }
+                        : {}),
+                },
+            },
+            // ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+            //     ? {
+            //           curriculumVersion: {
+            //               some: {
+            //                   fixedClasses: {
+            //                       some: {
+            //                           trainingCourseId: {
+            //                               contains: filters.trainingCourseId,
+            //                               mode: 'insensitive',
+            //                           },
+            //                       },
+            //                   },
+            //               },
+            //           },
+            //       }
+            //     : {}),
+            // ...(filters.trainingMajorId && filters.trainingMajorId !== ''
+            //     ? {
+            //           trainingMajorId: {
+            //               contains: filters.trainingMajorId,
+            //               mode: 'insensitive',
+            //           },
+            //       }
+            //     : {}),
         },
     })
 
@@ -370,7 +330,7 @@ export default function TrainingProgramCatalog() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            <Flex>
+                            {/* <Flex>
                                 <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
@@ -441,7 +401,7 @@ export default function TrainingProgramCatalog() {
                                         />
                                     </Form.Item>
                                 </Col>
-                            </Flex>
+                            </Flex> */}
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
@@ -463,6 +423,8 @@ export default function TrainingProgramCatalog() {
                         currentPage={currentPage}
                         defaultExpandAll
                         onRowClick={(record) => handleRowClick(record)}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'Mã CTĐT',
@@ -470,6 +432,8 @@ export default function TrainingProgramCatalog() {
                                 align: 'center',
                                 fixed: 'left',
                                 width: 120,
+                                type: 'input',
+                                multiple: [],
                             },
                             {
                                 title: 'Tên chương trình',
@@ -477,6 +441,55 @@ export default function TrainingProgramCatalog() {
                                 align: 'center',
                                 fixed: 'left',
                                 width: 250,
+                                type: 'input',
+                            },
+                            {
+                                title: 'ĐTĐT',
+                                dataIndex: 'trainingObjectTypes',
+                                align: 'center',
+                                width: 150,
+                                type: 'select',
+                                options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                })),
+                                multiple: ['name', 'code'],
+                                render: (
+                                    __,
+                                    record: { trainingObjectType?: TrainingObjectType }
+                                ) => {
+                                    return record.trainingObjectType
+                                        ? record.trainingObjectType.name
+                                        : ''
+                                },
+                            },
+                            {
+                                title: 'Khoá',
+                                dataIndex: 'trainingCourses',
+                                align: 'center',
+                                width: 150,
+                                type: 'select',
+                                options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                })),
+                                multiple: ['name', 'code'],
+                                render: (
+                                    __,
+                                    record: {
+                                        fixedClasses?: (FixedClass & {
+                                            trainingCourse: TrainingCourse
+                                        })[]
+                                    }
+                                ) => {
+                                    const map = new Map(
+                                        record?.fixedClasses?.map(({ trainingCourse }) => [
+                                            trainingCourse.id,
+                                            trainingCourse.name,
+                                        ])
+                                    )
+                                    return Array.from(map.values()).join(', ')
+                                },
                             },
                             {
                                 title: 'Tổng tín chỉ',
@@ -578,6 +591,8 @@ export default function TrainingProgramCatalog() {
                                 fixed: 'right',
                                 align: 'center',
                                 render: (_, record) => {
+                                    console.log(record, 121)
+
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -603,7 +618,9 @@ export default function TrainingProgramCatalog() {
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         onOpenCurriculumVersion({
-                                                            curriculumId: record?.curriculumId,
+                                                            curriculumId: (
+                                                                record as CurriculumVersion
+                                                            ).curriculumId,
                                                             versionId: record?.id,
                                                         })
                                                     }}

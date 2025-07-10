@@ -70,12 +70,19 @@ export type FilterProps = {
     trainingObjectTypes?: string[] | [] | undefined
     name?: string | ''
     code?: string | ''
+    sort?: string | undefined
+    numberCreditsMajor?: 'asc' | 'desc' | undefined
+    numberCreditsRequired?: 'asc' | 'desc' | undefined
+    numberCreditsElective?: 'asc' | 'desc' | undefined
+    organization?: string[] | [] | undefined
+    trainingCourses?: string[] | [] | undefined
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
     multiple?: string[]
     options?: { value: string; label: string }[]
     dataIndex?: string
+    slot?: any
 }
 
 export type StudentModalProps = {

@@ -28,6 +28,7 @@ export default function TrainingFieldPage() {
         trainingObjectTypes: undefined,
         name: '',
         code: '',
+        sort: 'asc',
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
@@ -243,6 +244,7 @@ export default function TrainingFieldPage() {
                                 fixed: 'left',
                                 width: 150,
                                 type: 'input',
+                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Tên ngành',
@@ -259,7 +261,7 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 175,
                                 type: 'select',
-                                multiple: ['name'],
+                                multiple: ['name', 'code'],
                                 options: trainingObjectTypeData.map((i) => {
                                     return {
                                         value: i.id,
@@ -281,8 +283,6 @@ export default function TrainingFieldPage() {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'organization',
                                 align: 'center',
-                                type: 'order',
-
                                 width: 150,
                                 render: (organization: DM_DonVi) =>
                                     organization?.sTen ? organization?.sTen : '',
