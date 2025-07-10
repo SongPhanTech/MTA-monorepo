@@ -69,7 +69,7 @@ export const populateExcelTemplate = (
         throw new Error('No valid worksheet found in the template.')
     }
 
-    worksheet.A1 = { t: 's', v: `Class: ${templateData.className}` }
+    worksheet.A1 = { t: 's', v: 'Class' }
     worksheet.A2 = {
         t: 's',
         v: `Date: ${templateData.date}/${templateData.month}/${templateData.year}`,
@@ -84,23 +84,23 @@ export const populateExcelTemplate = (
         worksheet[cellRef] = { t: 's', v: header }
     })
 
-    // Write student data
-    templateData.student.forEach((student, index) => {
-        const row = startRow + index
-        const cells = [
-            { t: 'n', v: student.stt },
-            { t: 's', v: student.id },
-            { t: 's', v: student.name },
-            { t: 's', v: student.code },
-            { t: 's', v: student.birth },
-            { t: 's', v: student.hometown },
-        ]
+    // // Write student data
+    // templateData.student.forEach((student, index) => {
+    //     const row = startRow + index
+    //     const cells = [
+    //         { t: 'n', v: student.stt },
+    //         { t: 's', v: student.id },
+    //         { t: 's', v: student.name },
+    //         { t: 's', v: student.code },
+    //         { t: 's', v: student.birth },
+    //         { t: 's', v: student.hometown },
+    //     ]
 
-        cells.forEach((cell, colIndex) => {
-            const cellRef = XLSX.utils.encode_cell({ r: row - 1, c: colIndex })
-            worksheet[cellRef] = cell
-        })
-    })
+    //     cells.forEach((cell, colIndex) => {
+    //         const cellRef = XLSX.utils.encode_cell({ r: row - 1, c: colIndex })
+    //         worksheet[cellRef] = cell
+    //     })
+    // })
 
     // Update worksheet range to include new data
     const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1:A1')
