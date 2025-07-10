@@ -783,6 +783,8 @@ async function main() {
         data: [
             {
                 id: 'TOT1',
+                baseScore: 'Base10',
+                type: 'MILITARY',
                 name: 'Quân sự 1',
             },
         ],

@@ -1,4 +1,4 @@
-import { $Enums, SubjectClassStudentStatus } from '@workspace/db'
+import { $Enums } from '@workspace/db'
 import { env } from '@/env'
 
 const DEFAULT_PAGINATE_SIZE = 10
@@ -125,14 +125,6 @@ const STUDENT_STATUS_OPTIONS = [
     },
 ]
 
-const SUBJECT_CLASS_STUDENT_STATUS_OPTIONS = [
-    { value: SubjectClassStudentStatus.Registered, label: 'Đã đăng ký' },
-    { value: SubjectClassStudentStatus.Studying, label: 'Đang học' },
-    { value: SubjectClassStudentStatus.NotPassed, label: 'Chưa đạt' },
-    { value: SubjectClassStudentStatus.Passed, label: 'Đạt' },
-    { value: SubjectClassStudentStatus.CancelClass, label: 'Hủy lớp' },
-]
-
 const SUBJECT_CLASS_SCHEDULE_TYPE = {
     MORNING: 'Sáng',
     AFTERNOON: 'Chiều',
@@ -192,6 +184,5 @@ export {
     FIXED_CLASS_STUDENT_STATUS,
     STUDENT_STATUS_OPTIONS,
     SUBJECT_CLASS_SCHEDULE_TYPE,
-    SUBJECT_CLASS_STUDENT_STATUS_OPTIONS,
     CUSTOM_VI_LOCALE,
 }
