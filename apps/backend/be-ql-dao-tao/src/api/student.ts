@@ -18,7 +18,14 @@ import {
     listStudentAcademicAction,
     resultCourseStudentAcademicAction,
 } from '../services/training-action'
-import { buildCurriculumMapOrThrow, getCurrentDateForReport } from '../utils'
+import {
+    buildCurriculumMapOrThrow,
+    buildDistrictMapOrThrow,
+    buildEthnicityMapOrThrow,
+    buildNationalityMapOrThrow,
+    buildProvinceMapOrThrow,
+    getCurrentDateForReport,
+} from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -290,6 +297,7 @@ app.openapi(tongKetHocKyHVSV, async (c) => {
         return c.json({ message: `Lỗi khi tính toán kết quả học kỳ: ${errorMessage}` }, 500)
     }
 })
+
 app.openapi(importHeQuanSu, async (c) => {
     const { file, timeout } = c.req.valid('form')
 
@@ -321,29 +329,25 @@ app.openapi(importHeQuanSu, async (c) => {
         return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
     }
 
-    const ethnicityMap = new Map()
-    //  await buildEthnicityMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.ethnicity)
-    // )
+    const ethnicityMap = await buildEthnicityMapOrThrow(
+        prisma,
+        data.students.map((student) => student.ethnicity)
+    )
 
-    const nationalityMap = new Map()
-    // await buildNationalityMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.nationality)
-    // )
+    const nationalityMap = await buildNationalityMapOrThrow(
+        prisma,
+        data.students.map((student) => student.nationality)
+    )
 
-    const provinceMap = new Map()
-    //  await buildProvinceMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.provinceHometown)
-    // )
+    const provinceMap = await buildProvinceMapOrThrow(
+        prisma,
+        data.students.map((student) => student.provinceHometown)
+    )
 
-    const districtMap = new Map()
-    //  await buildDistrictMapOrThrow(
-    //     prisma,
-    //     data.students.map((student) => student.districtHometown)
-    // )
+    const districtMap = await buildDistrictMapOrThrow(
+        prisma,
+        data.students.map((student) => student.districtHometown)
+    )
 
     const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
 

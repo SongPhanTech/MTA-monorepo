@@ -2172,6 +2172,7 @@ Table AcademicWarningRule {
   updatedAt DateTime [not null]
   field CriteriaField [not null]
   operator CriteriaOperator [not null]
+  invert Boolean [not null, default: false]
   threshold Float [not null]
   tuple String[] [not null]
   severity Int [not null]
@@ -2287,6 +2288,7 @@ Table AcademicActionCondition {
   ruleSetId String [not null]
   field CriteriaField [not null]
   operator CriteriaOperator [not null]
+  invert Boolean [not null, default: false]
   value Float [not null]
   tuple String[] [not null]
   yearCondition Int
@@ -2496,7 +2498,9 @@ Table GraduationRankDowngradeCondition {
   downgradeRuleId String [not null]
   field CriteriaField [not null]
   operator CriteriaOperator [not null]
+  invert Boolean [not null, default: false]
   value Float [not null]
+  tuple String[] [not null]
 
   Note: 'Một điều kiện cụ thể trong bộ quy tắc hạ bậc'
 }
@@ -2513,7 +2517,9 @@ Table RankingCondition {
   rankingId String [not null]
   field CriteriaField [not null]
   operator CriteriaOperator [not null]
+  invert Boolean [not null, default: false]
   value Float [not null]
+  tuple String[] [not null]
   applicationCheckResult ApplicationCheckResult [not null]
 
   Note: 'Điều kiện để đạt được một mức xếp loại'

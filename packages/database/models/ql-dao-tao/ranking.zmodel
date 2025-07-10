@@ -155,8 +155,9 @@ model GraduationRankDowngradeCondition extends Base {
 
   field           CriteriaField  // Trường dữ liệu để kiểm tra
   operator        CriteriaOperator // Toán tử so sánh (GTE, LTE...)
+  invert          Boolean                     @default(false) // đảo ngược operator
   value           Float          // Giá trị ngưỡng
-
+  tuple           String[]                    @default([]) // giá trị sử dụng cho operator IN
 
   @@schema("ql-dao-tao")
 }
@@ -169,7 +170,9 @@ model RankingCondition extends Base {
   // Quy tắc điều kiện
   field                  CriteriaField    // Trường dữ liệu để kiểm tra (ví dụ: CUMULATIVE_GPA)
   operator               CriteriaOperator // Toán tử so sánh (ví dụ: GTE)
+  invert                 Boolean                  @default(false) // đảo ngược operator
   value                  Float            // Giá trị ngưỡng (ví dụ: 5.5 đối với hệ QS)
+  tuple                  String[]                 @default([]) // giá trị sử dụng cho operator IN
 
   applicationCheckResult ApplicationCheckResult[]
 
