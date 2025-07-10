@@ -2787,7 +2787,9 @@ Enum CriteriaField {
 }
 
 Enum CriteriaOperator {
+  GT
   GTE
+  LE
   LTE
   EQ
   IN
