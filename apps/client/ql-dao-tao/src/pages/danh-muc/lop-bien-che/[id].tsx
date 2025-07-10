@@ -355,10 +355,15 @@ export default function StudentFixedClassPage() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                {fixedClass?.trainingCourse?.trainingObjectType.name} -{' '}
-                {fixedClass?.trainingCourse?.name} - {fixedClass?.curriculumVersion?.name} -{' '}
-                {fixedClass?.curriculumVersion?.curriculum.trainingMajor.name} -{' '}
-                {fixedClass?.curriculumVersion?.curriculum.trainingMajor.trainingField.name}
+                {[
+                    fixedClass?.trainingCourse?.trainingObjectType?.name,
+                    fixedClass?.trainingCourse?.name,
+                    fixedClass?.curriculumVersion?.name,
+                    fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name,
+                    fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.trainingField?.name,
+                ]
+                    .filter(Boolean)
+                    .join(' - ')}
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
@@ -428,7 +433,10 @@ export default function StudentFixedClassPage() {
                                         )
                                     }}
                                     locale={CUSSTOM_VI_LOCALE}
-                                    format="DD/MM/YYYY"
+                                    format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                        }}
                                 /> */}
                             </Flex>
                         </Col>

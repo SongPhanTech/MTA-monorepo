@@ -13,16 +13,6 @@ import 'warning'
 import 'training-action'
 import 'ranking'
 
-enum SubjectClassStudentStatus {
-  Registered
-  Studying
-  NotPassed
-  Passed
-  CancelClass
-
-  @@schema("ql-dao-tao")
-}
-
 /// Điểm môn học SV - lớp môn học
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
 // Lấy bản ghi có finalScore cao nhất làm kết quả cuối cùng
@@ -35,9 +25,6 @@ model StudentSubjectScore extends Base {
 
   student          Student                                    @relation(fields: [studentId], references: [id])
   studentId        String
-
-  // cần cập nhật khi: huỷ lớp | thay đổi điểm
-  status           SubjectClassStudentStatus                  @default(Studying)
 
   attendanceScore  Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm chuyên cần
   midtermScore     Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
@@ -458,6 +445,7 @@ model SubjectClass extends Base {
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
 
+  cancelled                  Boolean               @default(false) // đã hủy lớp
   lecturerAssignmentDeadline DateTime? // hạn phân công giảng dạy
   examDate                   DateTime? // ngày thi
 

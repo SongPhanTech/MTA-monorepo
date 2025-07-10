@@ -390,7 +390,15 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                     <TableCollapse
                         rowKey="key"
                         headerTitleKey={({ code, name, trainingCourse, managementOrganization }) =>
-                            `${code || ''} - ${name || ''} - ${trainingCourse?.name || ''} - ${trainingCourse?.trainingObjectType?.name || ''} - ${managementOrganization?.sTen || ''}`
+                            `${[
+                                code,
+                                name,
+                                trainingCourse?.name,
+                                trainingCourse?.trainingObjectType?.name,
+                                managementOrganization?.sTen,
+                            ]
+                                .filter(Boolean)
+                                .join(' - ')}`
                         }
                         childrenFieldName="students"
                         defaultExpandAll

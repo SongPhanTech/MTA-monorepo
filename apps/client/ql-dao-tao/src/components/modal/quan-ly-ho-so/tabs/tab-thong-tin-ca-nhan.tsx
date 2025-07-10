@@ -793,7 +793,10 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                 >
                                     <DatePicker
-                                        format="DD/MM/YYYY"
+                                        format={{
+                                            format: 'DD/MM/YYYY',
+                                            type: 'mask',
+                                        }}
                                         className="w-full"
                                         disabledDate={(date) => date && date > dayjs().endOf('day')}
                                     />
@@ -808,7 +811,10 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                 >
                                     <DatePicker
-                                        format="DD/MM/YYYY"
+                                        format={{
+                                            format: 'DD/MM/YYYY',
+                                            type: 'mask',
+                                        }}
                                         className="w-full"
                                         disabledDate={(date) => date && date > dayjs().endOf('day')}
                                     />
@@ -1003,7 +1009,10 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                 >
                                     <DatePicker
-                                        format="DD/MM/YYYY"
+                                        format={{
+                                            format: 'DD/MM/YYYY',
+                                            type: 'mask',
+                                        }}
                                         className="w-full"
                                         disabledDate={(date) => date && date > dayjs().endOf('day')}
                                     />
@@ -1027,7 +1036,10 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                 >
                                     <DatePicker
-                                        format="DD/MM/YYYY"
+                                        format={{
+                                            format: 'DD/MM/YYYY',
+                                            type: 'mask',
+                                        }}
                                         className="w-full"
                                         disabledDate={(date) => date && date > dayjs().endOf('day')}
                                     />
@@ -1041,7 +1053,10 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                 >
                                     <DatePicker
-                                        format="DD/MM/YYYY"
+                                        format={{
+                                            format: 'DD/MM/YYYY',
+                                            type: 'mask',
+                                        }}
                                         className="w-full"
                                         disabledDate={(date) => date && date > dayjs().endOf('day')}
                                     />
@@ -1065,7 +1080,10 @@ export default function ThongTinCaNhanTab({
                                     className="mb-0"
                                 >
                                     <DatePicker
-                                        format="DD/MM/YYYY"
+                                        format={{
+                                            format: 'DD/MM/YYYY',
+                                            type: 'mask',
+                                        }}
                                         className="w-full"
                                         disabledDate={(date) => date && date > dayjs().endOf('day')}
                                     />

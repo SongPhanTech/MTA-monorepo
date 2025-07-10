@@ -553,7 +553,10 @@ export default function UserProfilePageLecture() {
                                                     setSelectedKeys([])
                                                 }
                                             }}
-                                            format="DD/MM/YYYY"
+                                            format={{
+                                                format: 'DD/MM/YYYY',
+                                                type: 'mask',
+                                            }}
                                             placeholder={['Từ ngày', 'Đến ngày']}
                                             style={{ width: '100%' }}
                                         />
@@ -662,7 +665,10 @@ export default function UserProfilePageLecture() {
                                                     : null
                                                 setSelectedKeys(formatted ? [formatted] : [])
                                             }}
-                                            format="DD/MM/YYYY"
+                                            format={{
+                                                format: 'DD/MM/YYYY',
+                                                type: 'mask',
+                                            }}
                                             placeholder="Chọn năm học hàm"
                                             style={{ width: '100%' }}
                                         />
