@@ -2311,8 +2311,8 @@ Table StudentAcademicDecision {
   semesterId String
   schoolYear SchoolYear
   schoolYearId String
-  appliedConfig AcademicActionConfig [not null]
-  appliedConfigId String [not null]
+  appliedConfig AcademicActionConfig
+  appliedConfigId String
   actionTaken AcademicActionType [not null]
   decisionDate DateTime [default: `now()`, not null]
   reason String

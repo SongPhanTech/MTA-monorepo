@@ -69,26 +69,26 @@ model AcademicActionCondition extends Base {
 
 /// Quyết định xử lý học tập cho sinh viên
 model StudentAcademicDecision extends Base {
-  student          Student              @relation(fields: [studentId], references: [id])
+  student          Student               @relation(fields: [studentId], references: [id])
   studentId        String
 
-  semester         Semester?            @relation(fields: [semesterId], references: [id])
+  semester         Semester?             @relation(fields: [semesterId], references: [id])
   semesterId       String?
 
-  schoolYear       SchoolYear?          @relation(fields: [schoolYearId], references: [id])
+  schoolYear       SchoolYear?           @relation(fields: [schoolYearId], references: [id])
   schoolYearId     String?
 
   // Cấu hình đã được áp dụng để đưa ra quyết định này
-  appliedConfig    AcademicActionConfig @relation(fields: [appliedConfigId], references: [id])
-  appliedConfigId  String
+  appliedConfig    AcademicActionConfig? @relation(fields: [appliedConfigId], references: [id])
+  appliedConfigId  String?
 
   actionTaken      AcademicActionType   // Hành động đã thực hiện
-  decisionDate     DateTime             @default(now())
+  decisionDate     DateTime              @default(now())
   reason           String?              // Ghi chú lý do, ví dụ: "Vi phạm CBHT mức 4"
   documentEvidence DocumentFile[]       // Minh chứng (biên bản họp, quyết định...)
 
   // Trạng thái của quyết định
-  status           DecisionStatus       @default(PENDING)
+  status           DecisionStatus        @default(PENDING)
 
   @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
   @@schema("ql-dao-tao")
