@@ -5,13 +5,12 @@ import {
     PutAddCertificateScoreModal,
     PutAddOlympicScoreModal,
 } from '@components/modal'
-import { SUBJECT_CLASS_STUDENT_STATUS } from '@constants/constants'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db'
 import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Flex, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon, Check, X } from 'lucide-react'
@@ -346,26 +345,6 @@ export default function StudentScoreClassPage() {
                                 width: 200,
                                 render: (value: string) => {
                                     return <span className="line-clamp-1">{value}</span>
-                                },
-                            },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                width: 120,
-                                render: (_, record) => {
-                                    const status = record.subjectClassStudent?.[0]?.status
-
-                                    const statusInfo = status
-                                        ? SUBJECT_CLASS_STUDENT_STATUS[
-                                              status as keyof typeof SUBJECT_CLASS_STUDENT_STATUS
-                                          ]
-                                        : undefined
-
-                                    return (
-                                        <Tag color={statusInfo?.color ?? 'default'}>
-                                            {statusInfo?.label ?? 'Không xác định'}
-                                        </Tag>
-                                    )
                                 },
                             },
                             {

@@ -111,7 +111,6 @@ Table StudentSubjectScore {
   subjectVersionId String [not null]
   student Student [not null]
   studentId String [not null]
-  status SubjectClassStudentStatus [not null, default: 'Studying']
   attendanceScore Float
   midtermScore Float
   examScore Float
@@ -506,6 +505,7 @@ Table SubjectClass {
   maxStudent Int [not null]
   semester Semester [not null]
   semesterId String [not null]
+  cancelled Boolean [not null, default: false]
   lecturerAssignmentDeadline DateTime
   examDate DateTime
   scoreDeadline DateTime
@@ -2596,14 +2596,6 @@ Table AcademicWarningToAcademicWarningRule {
 Table DisciplinaryWarningToDisciplinaryWarningReason {
   reasondetailsId String [ref: > DisciplinaryWarningReason.id]
   warningId String [ref: > DisciplinaryWarning.id]
-}
-
-Enum SubjectClassStudentStatus {
-  Registered
-  Studying
-  NotPassed
-  Passed
-  CancelClass
 }
 
 Enum SemesterType {

@@ -125,14 +125,6 @@ const STUDENT_STATUS_OPTIONS = [
     },
 ]
 
-const SUBJECT_CLASS_STUDENT_STATUS = {
-    Registered: { label: 'Đã đăng ký', color: 'blue' },
-    Studying: { label: 'Đang học', color: 'cyan' },
-    NotPassed: { label: 'Chưa đạt', color: 'warning' },
-    Passed: { label: 'Đạt', color: 'success' },
-    CancelClass: { label: 'Hủy lớp', color: 'error' },
-} as const
-
 const SUBJECT_CLASS_STUDENT_STATUS_OPTIONS = [
     { value: SubjectClassStudentStatus.Registered, label: 'Đã đăng ký' },
     { value: SubjectClassStudentStatus.Studying, label: 'Đang học' },
@@ -200,7 +192,6 @@ export {
     FIXED_CLASS_STUDENT_STATUS,
     STUDENT_STATUS_OPTIONS,
     SUBJECT_CLASS_SCHEDULE_TYPE,
-    SUBJECT_CLASS_STUDENT_STATUS,
     SUBJECT_CLASS_STUDENT_STATUS_OPTIONS,
     CUSTOM_VI_LOCALE,
 }

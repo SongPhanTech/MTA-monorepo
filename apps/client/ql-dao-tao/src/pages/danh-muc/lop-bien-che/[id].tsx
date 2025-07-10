@@ -428,7 +428,10 @@ export default function StudentFixedClassPage() {
                                         )
                                     }}
                                     locale={CUSSTOM_VI_LOCALE}
-                                    format="DD/MM/YYYY"
+                                    format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                        }}
                                 /> */}
                             </Flex>
                         </Col>

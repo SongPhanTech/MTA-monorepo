@@ -19,16 +19,6 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
-enum SubjectClassStudentStatus {
-  Registered
-  Studying
-  NotPassed
-  Passed
-  CancelClass
-
-  @@schema("ql-dao-tao")
-}
-
 enum SemesterType {
   FIRST
   SECOND
@@ -439,7 +429,6 @@ model StudentSubjectScore {
   subjectVersionId String
   student          Student                                    @relation(fields: [studentId], references: [id])
   studentId        String
-  status           SubjectClassStudentStatus                  @default(Studying)
   attendanceScore  Float?
   midtermScore     Float?
   examScore        Float?
@@ -840,6 +829,7 @@ model SubjectClass {
   maxStudent                 Int
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
+  cancelled                  Boolean               @default(false)
   lecturerAssignmentDeadline DateTime?
   examDate                   DateTime?
   scoreDeadline              DateTime?

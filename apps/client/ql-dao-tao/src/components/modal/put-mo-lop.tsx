@@ -432,7 +432,10 @@ const PutOpenClassModal = () => {
                                         label=""
                                     >
                                         <DatePicker
-                                            format="DD/MM/YYYY"
+                                            format={{
+                                                format: 'DD/MM/YYYY',
+                                                type: 'mask',
+                                            }}
                                             className="w-full"
                                             disabledDate={(date) =>
                                                 date && date < dayjs().startOf('day')
@@ -452,7 +455,10 @@ const PutOpenClassModal = () => {
                                         label=""
                                     >
                                         <DatePicker
-                                            format="DD/MM/YYYY"
+                                            format={{
+                                                format: 'DD/MM/YYYY',
+                                                type: 'mask',
+                                            }}
                                             className="w-full"
                                             disabledDate={(date) =>
                                                 date && date < dayjs().startOf('day')
@@ -473,7 +479,10 @@ const PutOpenClassModal = () => {
                                         label=""
                                     >
                                         <DatePicker
-                                            format="DD/MM/YYYY"
+                                            format={{
+                                                format: 'DD/MM/YYYY',
+                                                type: 'mask',
+                                            }}
                                             className="w-full"
                                             disabledDate={(date) =>
                                                 date && date < dayjs().startOf('day')
@@ -493,7 +502,10 @@ const PutOpenClassModal = () => {
                                         label=""
                                     >
                                         <DatePicker
-                                            format="DD/MM/YYYY"
+                                            format={{
+                                                format: 'DD/MM/YYYY',
+                                                type: 'mask',
+                                            }}
                                             className="w-full"
                                             disabledDate={(date) =>
                                                 date && date < dayjs().startOf('day')

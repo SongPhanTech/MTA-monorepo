@@ -1,4 +1,5 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -13,7 +14,7 @@ import {
     useFindUniqueSubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
-import { Col, DatePicker, Form, InputNumber, message } from 'antd'
+import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -315,7 +316,10 @@ const PutOneSubjectClassModal = () => {
                     <DatePicker
                         onChange={handleChangeDate}
                         placeholder="DD/MM/YYYY"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                         className="w-full"
                     />
                 </FormItem>
