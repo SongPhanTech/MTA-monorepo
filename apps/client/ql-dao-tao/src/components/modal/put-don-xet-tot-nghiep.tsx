@@ -15,7 +15,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import { useApplicationStatusOptions } from '@hooks/applicationStatus'
-import { useEffect } from 'react'
+import { debounce } from 'lodash'
+import { useCallback, useEffect, useState } from 'react'
 
 export type PutGraduationApplication = StudentGraduationApplication
 dayjs.locale('vi')
@@ -27,6 +28,7 @@ const PutGraduationApplication = () => {
         tag: PutGraduationApplication.name,
         onClose: form.resetFields,
     })
+    const [searchText, setSearchText] = useState('')
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -35,11 +37,38 @@ const PutGraduationApplication = () => {
         { enabled: !!input?.id }
     )
 
-    const { data: student } = useFindManyStudent({
+    const { data: student, refetch } = useFindManyStudent({
+        where: {
+            ...(searchText && searchText !== ''
+                ? {
+                      OR: [
+                          { code: { contains: searchText, mode: 'insensitive' } },
+                          {
+                              userProfile: {
+                                  fullname: { contains: searchText, mode: 'insensitive' },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+        },
         include: {
             userProfile: true,
         },
+        take: 500,
     })
+
+    const debouncedRefetch = useCallback(
+        debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    const handleSearch = (value: string) => {
+        setSearchText(value)
+        debouncedRefetch()
+    }
 
     useEffect(() => {
         if (graduationApplication) {
@@ -51,8 +80,6 @@ const PutGraduationApplication = () => {
             })
         }
     }, [graduationApplication, form])
-
-    console.log(input?.graduationSessionId)
 
     const { mutateAsync: createGraduationApplication } = useCreateStudentGraduationApplication()
     const { mutateAsync: updateGraduationApplication } = useUpdateStudentGraduationApplication()
@@ -109,19 +136,22 @@ const PutGraduationApplication = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="studentId" label="Sinh viên">
+                <FormItem form={form} name="studentId" label="Sinh viên" required>
                     <Select
                         placeholder="Chọn sinh viên"
                         options={student?.map((item) => ({
-                            label: `${item.userProfile.lastName} ${item.userProfile.firstName} - ${item.code}`,
+                            label: `${item.userProfile.fullname} - ${item.code}`,
                             value: item.id,
                         }))}
+                        showSearch
+                        onSearch={handleSearch}
+                        filterOption={false}
                         allowClear
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="applicationDate" label="Ngày gửi đơn" required>
+                <FormItem form={form} name="applicationDate" label="Ngày gửi đơn">
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',

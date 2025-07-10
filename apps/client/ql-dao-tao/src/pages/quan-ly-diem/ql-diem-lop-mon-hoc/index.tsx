@@ -34,7 +34,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopMonHocItem from './lop-mon-hoc'
 
-// const { Option } = Select;
 interface FilterProps {
     schoolYearId: string | null //Năm học
     semesterId: string | null //Học kỳ
@@ -56,10 +55,6 @@ export default function SubjectClassScore() {
     const [subjectClassFullData, setSubjectClassFullData] = useState<SubjectClass[]>([])
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
-    const [_nhapDiemCC, setNhapDiemCC] = useState<boolean>(false)
-    const [_nhapDiemTX, setNhapDiemTX] = useState<boolean>(false)
-    const [_nhapDiemThi, setNhapDiemThi] = useState<boolean>(false)
-    const [_nhapDiemCong, _setNhapDiemCong] = useState<boolean>(false)
     const [camThi, setCamThi] = useState<boolean>(false)
     const { subjectId } = router.query
 
@@ -221,7 +216,6 @@ export default function SubjectClassScore() {
         {
             where: {
                 subjectClassId: selectedFixedClass || '',
-                deletedAt: null,
             },
             include: {
                 student: {
@@ -363,13 +357,6 @@ export default function SubjectClassScore() {
         }
     }
 
-    const clearCheckbox = () => {
-        setNhapDiemCC(false)
-        setNhapDiemTX(false)
-        setNhapDiemThi(false)
-        setCamThi(false)
-    }
-
     const handleSaveScores = async () => {
         try {
             showSpinner()
@@ -451,8 +438,6 @@ export default function SubjectClassScore() {
             } else {
                 message.info('Không có thay đổi nào để cập nhật')
             }
-
-            clearCheckbox()
         } catch (_error) {
             message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
         } finally {

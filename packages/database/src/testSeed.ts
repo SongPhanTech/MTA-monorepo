@@ -86,6 +86,35 @@ async function main() {
         ],
     })
 
+    await prisma.trainingObjectType.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: 'TOT1',
+                name: 'Quân sự 1',
+                type: 'CIVILIAN',
+                baseScore: 'Base10',
+            },
+        ],
+    })
+
+    await prisma.trainingCourse.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: 'TC1',
+                name: 'K30',
+                coef_1: 0.2,
+                coef_2: 0.2,
+                coef_3: 0.6,
+                scoreToPass: 4,
+                scoreToTakeExam: 4,
+                semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
+                trainingObjectTypeId: 'TOT1',
+            },
+        ],
+    })
+
     await prisma.userProfile.createMany({
         skipDuplicates: true,
         data: [
@@ -782,7 +811,7 @@ async function main() {
         skipDuplicates: true,
         data: [
             {
-                id: 'TOT1',
+                id: 'TOT2',
                 baseScore: 'Base10',
                 type: 'MILITARY',
                 name: 'Quân sự 1',

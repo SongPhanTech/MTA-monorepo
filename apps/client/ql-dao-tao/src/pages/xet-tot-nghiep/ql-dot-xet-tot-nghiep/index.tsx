@@ -206,7 +206,7 @@ export default function GraduationSession() {
                             {
                                 title: 'Ngày họp hội đồng',
                                 dataIndex: 'sessionDate',
-                                width: 150,
+                                width: 120,
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -228,7 +228,7 @@ export default function GraduationSession() {
                                 title: 'Trạng thái',
                                 dataIndex: 'status',
                                 align: 'center',
-                                width: 140,
+                                width: 160,
                                 fixed: 'right',
                                 render: (record) => {
                                     const label = getGraduationSessionStatusLabel(record)
