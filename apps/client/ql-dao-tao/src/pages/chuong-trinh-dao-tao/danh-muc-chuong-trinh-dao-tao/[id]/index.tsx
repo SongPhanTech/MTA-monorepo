@@ -1,14 +1,14 @@
-import { FilterFilled } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingBlockOnCurriculumVersion, PutTrainingBlockSubject } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
+import { emptyObjectIf } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
@@ -16,7 +16,6 @@ import type {
     TrainingBlockOnCurriculumVersion,
 } from '@workspace/db'
 import {
-    useCountTrainingBlockOnCurriculumVersion,
     useDeleteManyTrainingBlockSubject,
     useDeleteTrainingBlockOnCurriculumVersion,
     useFindManyDM_DonVi,
@@ -25,48 +24,22 @@ import {
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    message,
-    Row,
-    Select,
-    Tag,
-    TreeSelect,
-} from 'antd'
+import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { BookPlus, CopyPlus, Search } from 'lucide-react'
+import { BookPlus, CopyPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
 
-interface FilterProps {
-    searchText: string | null
-    managementOrganizationId: string | undefined
-    trainingObjectId: string | undefined
-    trainingCourseId: string | undefined
-    subjectCode: string | undefined
-    examTypes: string | undefined
-}
-
 export default function TrainingProgramSubjects() {
     const router = useRouter()
     const id = router.query.id as string
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        managementOrganizationId: '',
-        trainingObjectId: '',
-        trainingCourseId: '',
-        subjectCode: '',
-        examTypes: '',
+        organization: undefined,
+        code: '',
+        name: '',
     })
 
     const { data: initialValue } = useFindUniqueCurriculumVersion(
@@ -103,155 +76,62 @@ export default function TrainingProgramSubjects() {
             curriculumVersion: {
                 deletedAt: null,
             },
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              trainingBlock: {
-                                  name: {
-                                      contains: filters.searchText,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              subjects: {
-                                  some: {
-                                      subject: {
-                                          OR: [
-                                              {
-                                                  name: {
-                                                      contains: filters.searchText,
-                                                      mode: 'insensitive',
-                                                  },
-                                              },
-                                              {
-                                                  code: {
-                                                      contains: filters.searchText,
-                                                      mode: 'insensitive',
-                                                  },
-                                              },
-                                          ],
-                                      },
-                                  },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
-                ? {
-                      subjects: {
-                          some: {
-                              subject: {
-                                  managementOrganizationId: filters.managementOrganizationId,
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                ? {
-                      curriculumVersion: {
-                          trainingObjectTypeId: filters.trainingObjectId,
-                      },
-                  }
-                : {}),
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      curriculumVersion: {
-                          fixedClasses: {
-                              some: {
-                                  trainingCourseId: {
-                                      contains: filters.trainingCourseId,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.subjectCode && filters.subjectCode !== ''
-                ? {
-                      subjects: {
-                          some: {
-                              subject: {
-                                  code: {
-                                      contains: filters.subjectCode,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.examTypes && filters.examTypes !== ''
-                ? {
-                      subjects: {
-                          some: {
-                              subject: {
-                                  examType: {
-                                      in: filters.examTypes
-                                          .split(',')
-                                          .filter(Boolean) as ExamType[],
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
+            subjects: {
+                some: {
+                    subject: {
+                        OR: [
+                            {
+                                name: {
+                                    contains: filters.name,
+                                    mode: 'insensitive',
+                                },
+                            },
+                            {
+                                code: {
+                                    contains: filters.code,
+                                    mode: 'insensitive',
+                                },
+                            },
+                        ],
+                        ...emptyObjectIf(
+                            {
+                                managementOrganizationId: {
+                                    in: filters.organization,
+                                },
+                            },
+                            !!filters.organization
+                        ),
+                    },
+                },
+            },
         },
         include: {
             subjects: {
                 where: {
-                    ...(filters.subjectCode && filters.subjectCode !== ''
-                        ? {
-                              subject: {
-                                  code: {
-                                      contains: filters.subjectCode,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          }
-                        : {}),
-                    ...(filters.searchText && filters.searchText !== ''
-                        ? {
-                              subject: {
-                                  OR: [
-                                      {
-                                          name: {
-                                              contains: filters.searchText,
-                                              mode: 'insensitive',
-                                          },
-                                      },
-                                      {
-                                          code: {
-                                              contains: filters.searchText,
-                                              mode: 'insensitive',
-                                          },
-                                      },
-                                  ],
-                              },
-                          }
-                        : {}),
-                    ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
-                        ? {
-                              subject: {
-                                  managementOrganizationId: filters.managementOrganizationId,
-                              },
-                          }
-                        : {}),
-                    ...(filters.examTypes && filters.examTypes !== ''
-                        ? {
-                              subject: {
-                                  examType: {
-                                      in: filters.examTypes
-                                          .split(',')
-                                          .filter(Boolean) as ExamType[],
-                                  },
-                              },
-                          }
-                        : {}),
+                    subject: {
+                        OR: [
+                            {
+                                name: {
+                                    contains: filters.name,
+                                    mode: 'insensitive',
+                                },
+                            },
+                            {
+                                code: {
+                                    contains: filters.code,
+                                    mode: 'insensitive',
+                                },
+                            },
+                        ],
+                        ...emptyObjectIf(
+                            {
+                                managementOrganizationId: {
+                                    in: filters.organization,
+                                },
+                            },
+                            !!filters.organization
+                        ),
+                    },
                 },
                 include: {
                     subject: {
@@ -273,114 +153,9 @@ export default function TrainingProgramSubjects() {
         orderBy: {
             priority: 'asc',
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingBlockOnCurriculumVersion({
-        where: {
-            curriculumVersionId: id,
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              trainingBlock: {
-                                  name: {
-                                      contains: filters.searchText,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              subjects: {
-                                  some: {
-                                      subject: {
-                                          OR: [
-                                              {
-                                                  name: {
-                                                      contains: filters.searchText,
-                                                      mode: 'insensitive',
-                                                  },
-                                              },
-                                              {
-                                                  code: {
-                                                      contains: filters.searchText,
-                                                      mode: 'insensitive',
-                                                  },
-                                              },
-                                          ],
-                                      },
-                                  },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
-                ? {
-                      subjects: {
-                          some: {
-                              subject: {
-                                  managementOrganizationId: filters.managementOrganizationId,
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                ? {
-                      curriculumVersion: {
-                          trainingObjectTypeId: filters.trainingObjectId,
-                      },
-                  }
-                : {}),
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      curriculumVersion: {
-                          fixedClasses: {
-                              some: {
-                                  trainingCourseId: {
-                                      contains: filters.trainingCourseId,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.subjectCode && filters.subjectCode !== ''
-                ? {
-                      subjects: {
-                          some: {
-                              subject: {
-                                  code: {
-                                      contains: filters.subjectCode,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.examTypes && filters.examTypes !== ''
-                ? {
-                      subjects: {
-                          some: {
-                              subject: {
-                                  examType: {
-                                      in: filters.examTypes
-                                          .split(',')
-                                          .filter(Boolean) as ExamType[],
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-        },
-    })
-
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -444,14 +219,6 @@ export default function TrainingProgramSubjects() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     const processedData = useMemo(() => {
         return data?.map((item) => ({
             ...item,
@@ -480,7 +247,7 @@ export default function TrainingProgramSubjects() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            <Flex>
+                            {/* <Flex>
                                 <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
@@ -506,46 +273,42 @@ export default function TrainingProgramSubjects() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                {/* <Col span={6}>
-                                    <Flex justify="space-between" align="center">
-                                        <FilterMonHocCTDT
-                                            filters={filters}
-                                            setFilters={setFilters}
-                                            debouncedRefetch={debouncedRefetch}
-                                        />
-                                    </Flex>
-                                </Col> */}
-                            </Flex>
+          
+                            </Flex> */}
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={() =>
-                                        initialValue &&
-                                        handleCloneCurriculumVersion(
-                                            initialValue as CurriculumVersion & {
-                                                trainingBlocks: TrainingBlockOnCurriculumVersion[]
-                                                documentFiles: DocumentFile[]
-                                            }
-                                        )
-                                    }
-                                    className="text-primary border-primary mr-2"
-                                    disabled={!initialValue}
-                                >
-                                    <CopyPlus />
-                                    Sao chép phiên bản CTĐT
-                                </Button>
-                                <Button
-                                    onClick={() =>
-                                        onOpenTrainingBlock({
-                                            curriculumVersionId: initialValue?.id as string,
-                                        })
-                                    }
-                                    type="primary"
-                                >
-                                    <BookPlus />
-                                    Cập nhật khối kiến thức
-                                </Button>
+                                <Tooltip title="Sao chép phiên bản CTĐT">
+                                    <Button
+                                        onClick={() =>
+                                            initialValue &&
+                                            handleCloneCurriculumVersion(
+                                                initialValue as CurriculumVersion & {
+                                                    trainingBlocks: TrainingBlockOnCurriculumVersion[]
+                                                    documentFiles: DocumentFile[]
+                                                }
+                                            )
+                                        }
+                                        className="text-primary border-primary mr-2"
+                                        disabled={!initialValue}
+                                    >
+                                        <CopyPlus />
+                                        Sao chép
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title="Cập nhật khối kiến thức cho CTĐT">
+                                    <Button
+                                        onClick={() =>
+                                            onOpenTrainingBlock({
+                                                curriculumVersionId: initialValue?.id as string,
+                                            })
+                                        }
+                                        type="primary"
+                                    >
+                                        <BookPlus />
+                                        Cập nhật
+                                    </Button>
+                                </Tooltip>
                             </Flex>
                         </Col>
                     </Row>
@@ -556,158 +319,56 @@ export default function TrainingProgramSubjects() {
                         rowKey="key"
                         headerTitleKey="name"
                         childrenFieldName="subjects"
-                        currentPage={currentPage}
                         defaultExpandAll
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'Mã môn học',
-                                dataIndex: ['subject', 'code'],
+                                dataIndex: 'code',
                                 width: 145,
                                 align: 'center',
                                 fixed: 'left',
-                                filterDropdown: ({
-                                    setSelectedKeys,
-                                    selectedKeys,
-                                    confirm,
-                                    clearFilters,
-                                }) => (
-                                    <div className="p-2 flex flex-col">
-                                        <Input
-                                            placeholder="Nhập mã môn học"
-                                            value={selectedKeys[0]}
-                                            onChange={(e) =>
-                                                setSelectedKeys(
-                                                    e.target.value ? [e.target.value] : []
-                                                )
-                                            }
-                                            onPressEnter={() => {
-                                                handleFilterChange(
-                                                    'subjectCode',
-                                                    String(selectedKeys[0] || '')
-                                                )
-                                                confirm()
-                                            }}
-                                            style={{
-                                                width: 188,
-                                                marginBottom: 8,
-                                            }}
-                                        />
-                                        <div className="flex justify-end gap-2">
-                                            <Button
-                                                size="small"
-                                                onClick={() => {
-                                                    if (clearFilters) clearFilters()
-                                                    handleFilterChange('subjectCode', '')
-                                                }}
-                                            >
-                                                Bỏ lọc
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                size="small"
-                                                onClick={() => {
-                                                    handleFilterChange(
-                                                        'subjectCode',
-                                                        String(selectedKeys[0] || '')
-                                                    )
-                                                    confirm()
-                                                }}
-                                            >
-                                                Lọc
-                                            </Button>
-                                        </div>
-                                    </div>
-                                ),
-                                filterIcon: () => (
-                                    <FilterFilled
-                                        style={{
-                                            color: filters.subjectCode ? '#005f37' : undefined,
-                                        }}
-                                    />
-                                ),
+                                type: 'input',
+                                multiple: ['organization'],
+                                render: (__, record) => {
+                                    return record?.subject?.code
+                                },
                             },
                             {
                                 title: 'Mã TKB',
-                                dataIndex: ['subject', 'code'],
+                                // TODO: thêm vào database
+                                dataIndex: 'codeTkb',
                                 width: 145,
                                 align: 'center',
                                 fixed: 'left',
+                                // render:(__,record)=>{
+                                //     return record?.subject?.name
+                                // }
                             },
                             {
                                 title: 'Tên môn học',
-                                dataIndex: ['subject', 'name'],
+                                dataIndex: 'name',
                                 width: 200,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'input',
+                                multiple: ['organization'],
+                                render: (__, record) => {
+                                    return record?.subject?.name
+                                },
                             },
                             {
                                 title: 'Đơn vị quản lý',
-                                dataIndex: ['subject', 'managementOrganization', 'sTen'],
+                                dataIndex: 'organization',
                                 width: 200,
                                 align: 'center',
-                                filterDropdown: ({
-                                    setSelectedKeys,
-                                    selectedKeys,
-                                    confirm,
-                                    clearFilters,
-                                }) => (
-                                    <div className="p-2 flex flex-col w-60">
-                                        <TreeSelect
-                                            placeholder="Chọn đơn vị quản lý"
-                                            allowClear
-                                            showSearch
-                                            treeDefaultExpandAll
-                                            value={selectedKeys[0] as string}
-                                            onChange={(val) => {
-                                                setSelectedKeys(val ? [val] : [])
-                                            }}
-                                            treeData={treeData}
-                                            filterTreeNode={(input, node) =>
-                                                (node.title as string)
-                                                    .toLowerCase()
-                                                    .includes(input.toLowerCase())
-                                            }
-                                            style={{ width: '100%' }}
-                                        />
-                                        <div className="flex justify-end gap-2 mt-2">
-                                            <Button
-                                                size="small"
-                                                onClick={() => {
-                                                    if (clearFilters) clearFilters()
-                                                    handleFilterChange(
-                                                        'managementOrganizationId',
-                                                        ''
-                                                    )
-                                                    confirm()
-                                                }}
-                                            >
-                                                Bỏ lọc
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                size="small"
-                                                onClick={() => {
-                                                    handleFilterChange(
-                                                        'managementOrganizationId',
-                                                        selectedKeys[0]?.toString() || ''
-                                                    )
-                                                    confirm()
-                                                }}
-                                            >
-                                                Lọc
-                                            </Button>
-                                        </div>
-                                    </div>
-                                ),
-                                filterIcon: () => (
-                                    <FilterFilled
-                                        style={{
-                                            color: filters.managementOrganizationId
-                                                ? '#005f37'
-                                                : undefined,
-                                        }}
-                                    />
-                                ),
+                                type: 'tree_select',
+                                options: treeData,
+                                multiple: ['name', 'code'],
+                                render: (__, record) => {
+                                    return record?.subject?.managementOrganization?.sTen
+                                },
                             },
                             {
                                 title: 'Chuyên ngành',
@@ -722,126 +383,54 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: ['subject', 'credit'],
                                 width: 80,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.credit || 0
-                                    const sortB = b.subject?.credit || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'Học kỳ dự kiến',
                                 dataIndex: 'semester',
                                 width: 140,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.semester || 0
-                                    const sortB = b.semester || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
-                            // {
-                            //     title: 'Học kỳ giảng dạy',
-                            //     dataIndex: 'shortName',
-                            //     width: 140,
-                            //     align: 'center',
-                            // },
-                            // {
-                            //     title: 'BB/TC',
-                            //     dataIndex: 'shortName',
-                            //     width: 100,
-                            //     align: 'center',
-                            // },
-                            // {
-                            //     title: 'ĐK',
-                            //     dataIndex: 'shortName',
-                            //     width: 100,
-                            //     align: 'center',
-                            // },
                             {
                                 title: 'Số tiết TKB',
                                 dataIndex: ['subject', 'period'],
                                 width: 120,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.period || 0
-                                    const sortB = b.subject?.period || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'LT',
                                 dataIndex: ['subject', 'numberOfTheory'],
                                 width: 80,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.numberOfTheory || 0
-                                    const sortB = b.subject?.numberOfTheory || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'BT',
                                 dataIndex: ['subject', 'numberOfPractical'],
                                 width: 80,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.numberOfPractical || 0
-                                    const sortB = b.subject?.numberOfPractical || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'ThL',
                                 dataIndex: ['subject', 'numberOfSelfStudy'],
                                 width: 80,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.numberOfSelfStudy || 0
-                                    const sortB = b.subject?.numberOfSelfStudy || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'TN, TH',
                                 dataIndex: ['subject', 'numberOfPractice'],
                                 width: 90,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.numberOfPractice || 0
-                                    const sortB = b.subject?.numberOfPractice || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'Ôn',
                                 dataIndex: ['subject', 'numberOfReview'],
                                 width: 80,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.numberOfReview || 0
-                                    const sortB = b.subject?.numberOfReview || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'KT, Thi',
                                 dataIndex: ['subject', 'numberOfExam'],
                                 width: 100,
                                 align: 'center',
-                                sorter: (a, b) => {
-                                    const sortA = a.subject?.numberOfExam || 0
-                                    const sortB = b.subject?.numberOfExam || 0
-                                    return sortA - sortB
-                                },
-                                sortDirections: ['ascend', 'descend'],
                             },
                             {
                                 title: 'Thi',
@@ -849,59 +438,6 @@ export default function TrainingProgramSubjects() {
                                 width: 150,
                                 align: 'center',
                                 render: (record: ExamType) => getExamTypeLabel(record),
-                                filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
-                                    <div className="p-2">
-                                        <Select
-                                            mode="multiple"
-                                            style={{ width: 200 }}
-                                            placeholder="Chọn loại thi"
-                                            value={selectedKeys}
-                                            onChange={(values) => setSelectedKeys(values)}
-                                            options={options}
-                                            allowClear
-                                            showSearch
-                                            optionFilterProp="label"
-                                            filterOption={(input, option) =>
-                                                !!option?.label &&
-                                                option.label
-                                                    .toLowerCase()
-                                                    .includes(input.toLowerCase())
-                                            }
-                                        />
-                                        <div className="pt-2 flex gap-2 justify-end">
-                                            <Button
-                                                size="small"
-                                                onClick={() => {
-                                                    setSelectedKeys([])
-                                                    handleFilterChange('examTypes', '')
-                                                    confirm()
-                                                }}
-                                            >
-                                                Bỏ lọc
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                size="small"
-                                                onClick={() => {
-                                                    handleFilterChange(
-                                                        'examTypes',
-                                                        selectedKeys.join(',')
-                                                    )
-                                                    confirm()
-                                                }}
-                                            >
-                                                Lọc
-                                            </Button>
-                                        </div>
-                                    </div>
-                                ),
-                                filterIcon: (filtered) => (
-                                    <FilterFilled
-                                        style={{
-                                            color: filtered ? '#005f37' : undefined,
-                                        }}
-                                    />
-                                ),
                             },
                             {
                                 title: 'Trạng thái',
@@ -914,27 +450,6 @@ export default function TrainingProgramSubjects() {
                                         <Tag color="success">Đang hoạt động</Tag>
                                     )
                                 },
-                                filters: [
-                                    {
-                                        text: 'Đang hoạt động',
-                                        value: true,
-                                    },
-                                    {
-                                        text: 'Ngừng đào tạo',
-                                        value: false,
-                                    },
-                                ],
-                                filterMultiple: false,
-                                onFilter: (value, record) => {
-                                    return record.active === value
-                                },
-                                filterIcon: (filtered) => (
-                                    <FilterFilled
-                                        style={{
-                                            color: filtered ? '#005f37' : undefined,
-                                        }}
-                                    />
-                                ),
                             },
                             {
                                 title: 'Thao tác',

@@ -76,11 +76,15 @@ export type FilterProps = {
     numberCreditsElective?: 'asc' | 'desc' | undefined
     organization?: string[] | [] | undefined
     trainingCourses?: string[] | [] | undefined
+    numberOfSemesters?: 'asc' | 'desc' | undefined
+    requiredCredits?: 'asc' | 'desc' | undefined
+    electiveCredits?: 'asc' | 'desc' | undefined
+    trainingTime?: string[] | [] | undefined
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
     multiple?: string[]
-    options?: { value: string; label: string }[]
+    options?: any[]
     dataIndex?: string
     slot?: any
 }
