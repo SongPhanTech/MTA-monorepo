@@ -1,6 +1,8 @@
 import type {
     $Enums,
+    AcademicActionType,
     CurriculumVersion,
+    DecisionStatus,
     DM_CapBac,
     DM_ChucDanh,
     DM_ChucVu,
@@ -80,6 +82,10 @@ export type FilterProps = {
     requiredCredits?: 'asc' | 'desc' | undefined
     electiveCredits?: 'asc' | 'desc' | undefined
     trainingTime?: string[] | [] | undefined
+    fixedClass?: string[] | [] | undefined
+    trainingCourse?: string[] | [] | undefined
+    actionTaken?: AcademicActionType[] | [] | undefined
+    status?: DecisionStatus[] | [] | undefined
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

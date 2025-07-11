@@ -4,50 +4,50 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { SubjectClassesExamType } from './subjectClassesExamType'
-import type { SubjectClassesSchedule } from './subjectClassesSchedule'
+import type { SubjectClassesSchedule } from './subjectClassesSchedule';
+import type { SubjectClassesExamType } from './subjectClassesExamType';
 
 export interface SubjectClasses {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    name?: string
-    /** @nullable */
-    startDate?: string | null
-    /** @nullable */
-    endDate?: string | null
-    schedule?: SubjectClassesSchedule
-    maxStudent?: number
-    /** @nullable */
-    lecturerAssignmentDeadline?: string | null
-    /** @nullable */
-    examDate?: string | null
-    /** @nullable */
-    scoreDeadline?: string | null
-    /** @nullable */
-    examScoreDeadline?: string | null
-    /** @nullable */
-    examType?: SubjectClassesExamType
-    isLockScore?: boolean
-    isLockExamScore?: boolean
-    /** @nullable */
-    issuedScoreAt?: string | null
-    /** @nullable */
-    roomId?: string | null
-    /** @nullable */
-    lecturerId?: string | null
-    /** @nullable */
-    extraLecturerId?: string | null
-    /** @nullable */
-    enterGradeLecturerId?: string | null
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  name?: string;
+  /** @nullable */
+  startDate?: string | null;
+  /** @nullable */
+  endDate?: string | null;
+  schedule?: SubjectClassesSchedule;
+  maxStudent?: number;
+  cancelled?: boolean;
+  /** @nullable */
+  lecturerAssignmentDeadline?: string | null;
+  /** @nullable */
+  examDate?: string | null;
+  /** @nullable */
+  scoreDeadline?: string | null;
+  /** @nullable */
+  examScoreDeadline?: string | null;
+  /** @nullable */
+  examType?: SubjectClassesExamType;
+  isLockScore?: boolean;
+  isLockExamScore?: boolean;
+  /** @nullable */
+  issuedScoreAt?: string | null;
+  /** @nullable */
+  roomId?: string | null;
+  /** @nullable */
+  lecturerId?: string | null;
+  /** @nullable */
+  extraLecturerId?: string | null;
+  /** @nullable */
+  enterGradeLecturerId?: string | null;
 }

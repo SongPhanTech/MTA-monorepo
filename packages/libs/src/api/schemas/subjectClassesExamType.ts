@@ -8,18 +8,17 @@
 /**
  * @nullable
  */
-export type SubjectClassesExamType =
-    | (typeof SubjectClassesExamType)[keyof typeof SubjectClassesExamType]
-    | null
+export type SubjectClassesExamType = typeof SubjectClassesExamType[keyof typeof SubjectClassesExamType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SubjectClassesExamType = {
-    OfflineWritten: 'OfflineWritten',
-    OnlineWritten: 'OnlineWritten',
-    OfflineChoices: 'OfflineChoices',
-    OnlineChoices: 'OnlineChoices',
-    Oral: 'Oral',
-    Practice: 'Practice',
-    Project: 'Project',
-    Other: 'Other',
-} as const
+  OfflineWritten: 'OfflineWritten',
+  OnlineWritten: 'OnlineWritten',
+  OfflineChoices: 'OfflineChoices',
+  OnlineChoices: 'OnlineChoices',
+  Oral: 'Oral',
+  Practice: 'Practice',
+  Project: 'Project',
+  Other: 'Other',
+} as const;

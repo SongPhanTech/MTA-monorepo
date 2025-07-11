@@ -14,7 +14,7 @@ import {
     useUpdateDisciplinaryWarning,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { Search } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -149,7 +149,8 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                                         })
                                     }
                                 >
-                                    Thêm sinh viên
+                                    <BookPlus />
+                                    Thêm học viên
                                 </Button>
                             </Flex>
                         </Col>

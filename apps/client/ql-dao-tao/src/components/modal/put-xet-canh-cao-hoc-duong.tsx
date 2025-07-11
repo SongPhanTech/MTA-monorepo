@@ -165,7 +165,7 @@ const PutDisciplinaryWarning = () => {
                         options={studentData.map((i) => {
                             return {
                                 value: i.id,
-                                label: `${i.code} - ${i.userProfile.fullname}`,
+                                label: [i.code, i.userProfile.fullname].filter(Boolean).join(' - '),
                             }
                         })}
                         disabled={!!input?.id}

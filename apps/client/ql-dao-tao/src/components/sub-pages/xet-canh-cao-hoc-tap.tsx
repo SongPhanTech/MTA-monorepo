@@ -2,12 +2,10 @@ import DeleteIcon from '@components/icons/delete'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
-import { useExportStudentLearningDisciplineJson } from '@workspace/libs/api/training'
+// import { useExportStudentLearningDisciplineJson } from '@workspace/libs/api/training'
 import { Search } from 'lucide-react'
-import { useMemo } from 'react'
 
 dayjs.locale('vi')
 
@@ -57,18 +55,18 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     ]
 
     // TODO: remove any when have openapi schema
-    const { data: students = [] }: any = useExportStudentLearningDisciplineJson(
-        { semesterId: semesterId || '' },
-        { query: { enabled: !!semesterId } },
-        queryClient
-    )
+    // const { data: students = [] }: any = useExportStudentLearningDisciplineJson(
+    //     { semesterId: semesterId || '' },
+    //     { query: { enabled: !!semesterId } },
+    //     queryClient
+    // )
 
-    const studentData = useMemo(() => {
-        if (!students) return []
-        if (Array.isArray(students)) return students
-        if (students.data && Array.isArray(students.data)) return students.data
-        return []
-    }, [students])
+    // const studentData = useMemo(() => {
+    //     if (!students) return []
+    //     if (Array.isArray(students)) return students
+    //     if (students.data && Array.isArray(students.data)) return students.data
+    //     return []
+    // }, [students])
 
     return (
         <div>

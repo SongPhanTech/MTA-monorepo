@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SubjectClassesSchedule =
-    (typeof SubjectClassesSchedule)[keyof typeof SubjectClassesSchedule]
+export type SubjectClassesSchedule = typeof SubjectClassesSchedule[keyof typeof SubjectClassesSchedule];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SubjectClassesSchedule = {
-    MORNING: 'MORNING',
-    AFTERNOON: 'AFTERNOON',
-    EVENING: 'EVENING',
-} as const
+  MORNING: 'MORNING',
+  AFTERNOON: 'AFTERNOON',
+  EVENING: 'EVENING',
+} as const;

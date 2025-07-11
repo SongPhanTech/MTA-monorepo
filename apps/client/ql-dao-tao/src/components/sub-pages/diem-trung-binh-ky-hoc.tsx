@@ -67,7 +67,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                     some: {
                         studentSemesterResult: {
                             some: {
-                                semesterId,
+                                semesterId: semesterId,
                             },
                         },
                         ...(filters.searchText && filters.searchText !== ''
@@ -152,7 +152,11 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                             : {}),
                     },
                     include: {
-                        studentSemesterResult: true,
+                        studentSemesterResult: {
+                            where: {
+                                semesterId,
+                            },
+                        },
                         userProfile: true,
                     },
                 },

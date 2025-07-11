@@ -57,7 +57,7 @@ export default function CanhCaoHocBong() {
                     {
                         key: '5',
                         label: 'Xét thôi học',
-                        children: <XetThoiHoc />,
+                        children: <XetThoiHoc semesterId={semesterId} />,
                     },
                     {
                         key: '6',

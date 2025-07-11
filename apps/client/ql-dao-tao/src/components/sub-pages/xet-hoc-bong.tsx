@@ -1,4 +1,4 @@
-import { Button, Col, Flex, Form, Row, Select, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Row, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -9,7 +9,7 @@ import {
     useFindManyScholarship,
     useUpsertScholarshipAward,
 } from '@workspace/db/hooks'
-import { useExportStudentScholarshipJson } from '@workspace/libs/api/training'
+import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -34,10 +34,10 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     })
 
     // TODO: remove any when have openapi schema
-    const { data: students = [], refetch }: any = useExportStudentScholarshipJson(
+    const { data: students = [], refetch } = useExportStudentResultSemesterJson(
         {
             semesterId: semesterId || '',
-            scholarshipId: filters?.scholarshipId || '',
+            type: 'scholarship',
         },
         {
             query: {
@@ -186,7 +186,12 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                             options={scholarshipData.map(
                                                                 (i: any) => ({
                                                                     value: i.id,
-                                                                    label: `${i.name} - ${i?.trainingCourse?.name}`,
+                                                                    label: [
+                                                                        i.name,
+                                                                        i?.trainingCourse?.name,
+                                                                    ]
+                                                                        .filter(Boolean)
+                                                                        .join(' - '),
                                                                 })
                                                             )}
                                                             onChange={(val) =>
@@ -235,35 +240,46 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                             {
                                                 title: 'Tên sinh viên',
                                                 dataIndex: ['userProfile', 'fullname'],
-                                                width: 200,
-                                            },
-                                            {
-                                                title: 'Chuyên ngành',
-                                                dataIndex: 'chuyenNganh',
                                                 width: 150,
-                                                align: 'center',
-                                            },
-                                            {
-                                                title: 'Đối tượng đào tạo',
-                                                dataIndex: 'doiTuong',
-                                                width: 120,
-                                                align: 'center',
-                                            },
-                                            {
-                                                title: 'Xếp loại học tập',
-                                                dataIndex: 'xepLoaiHocTap',
-                                                width: 120,
-                                                align: 'center',
                                             },
                                             {
                                                 title: 'Xếp loại rèn luyện',
-                                                dataIndex: 'xepLoaiRenLuyen',
+                                                dataIndex: [
+                                                    'studentSemesterResult',
+                                                    'studentTrainingType',
+                                                ],
                                                 width: 120,
                                                 align: 'center',
                                                 render: (value) => (
                                                     <Tag color={getStudentTrainingTypeColor(value)}>
                                                         {getStudentTrainingTypeLabel(value)}
                                                     </Tag>
+                                                ),
+                                            },
+                                            {
+                                                title: 'Học bổng',
+                                                dataIndex: ['scholarship'],
+                                                width: 200,
+                                                fixed: 'right',
+                                                render: (scholarships) => (
+                                                    <div className="flex flex-col gap-2">
+                                                        {Array.isArray(scholarships) &&
+                                                            scholarships.map((scholarship) => (
+                                                                <div
+                                                                    key={scholarship.id}
+                                                                    className="flex items-center"
+                                                                >
+                                                                    <Checkbox className="mr-2" />
+                                                                    <span className="text-gray-800">
+                                                                        {scholarship.name}{' '}
+                                                                        <span className="text-gray-500">
+                                                                            (Order:{' '}
+                                                                            {scholarship.order})
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                    </div>
                                                 ),
                                             },
                                         ]}

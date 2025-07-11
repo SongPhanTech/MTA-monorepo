@@ -35,7 +35,7 @@ import _ from 'lodash'
 import { BookPlus, Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingProgramCatalog() {
@@ -338,15 +338,6 @@ export default function TrainingProgramCatalog() {
         }
     }
 
-    const processedData = useMemo(() => {
-        return data?.map((item) => ({
-            ...item,
-            name: `${item?.name}${
-                item?.managementOrganization?.sTen ? ` - ${item?.managementOrganization?.sTen}` : ''
-            }`,
-        }))
-    }, [data])
-
     const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({
         refetch,
     })
@@ -445,7 +436,9 @@ export default function TrainingProgramCatalog() {
                     <TableCollapse
                         rowKey="key"
                         id="version-category"
-                        headerTitleKey="name"
+                        headerTitleKey={({ code, name, managementOrganization }) =>
+                            `${[code, name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
+                        }
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
                         defaultExpandAll
@@ -720,7 +713,7 @@ export default function TrainingProgramCatalog() {
                                 />
                             </div>
                         )}
-                        data={processedData}
+                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
