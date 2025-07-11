@@ -823,8 +823,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                 // studentId: 'cmcvrfn5k0002okmgkp2k2cwp',
                 student: {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
-                    fixedClass: {
-                        id: { not: undefined }, // Chỉ lấy sinh viên có lớp học cố định
+                    fixedClassId: {
+                        not: null, // Chỉ lấy sinh viên có lớp học cố định
                     },
                 },
             },
@@ -973,47 +973,36 @@ export const listStudentResultInfo = async (semesterId: string) => {
     }
 }
 
-const checkEligible = (
-    studentValue: any,
-    criteriaValue: any,
+const checkEligible = <T extends number | string>(
+    studentValue: T,
+    criteriaValue: T | T[],
     operator: CriteriaOperator,
-    invert = false
+    invert: boolean
 ): boolean => {
-    if (invert) {
-        // Nếu cần đảo ngược điều kiện
+    const criteria = (() => {
         switch (operator) {
-            case CriteriaOperator.EQ:
-                return studentValue !== criteriaValue
+            case CriteriaOperator.GT:
+                return studentValue > criteriaValue
             case CriteriaOperator.GTE:
+                return studentValue >= criteriaValue
+            case CriteriaOperator.LE:
                 return studentValue < criteriaValue
             case CriteriaOperator.LTE:
-                return studentValue > criteriaValue
+                return studentValue <= criteriaValue
+            case CriteriaOperator.EQ:
+                return studentValue === criteriaValue
             case CriteriaOperator.IN:
                 if (Array.isArray(criteriaValue)) {
-                    return !criteriaValue.includes(studentValue)
+                    return criteriaValue.includes(studentValue)
                 }
-                return true
+                return false
             default:
                 console.warn(`Unknown operator: ${operator}`)
                 return false
         }
-    }
-    switch (operator) {
-        case CriteriaOperator.EQ:
-            return studentValue === criteriaValue
-        case CriteriaOperator.GTE:
-            return studentValue >= criteriaValue
-        case CriteriaOperator.LTE:
-            return studentValue <= criteriaValue
-        case CriteriaOperator.IN:
-            if (Array.isArray(criteriaValue)) {
-                return criteriaValue.includes(studentValue)
-            }
-            return false
-        default:
-            console.warn(`Unknown operator: ${operator}`)
-            return false
-    }
+    })()
+
+    return invert ? !criteria : criteria
 }
 const checkAcademicActionRule = async (
     student: StudentInfoCheck,
@@ -1178,7 +1167,6 @@ const checkAcademicWarning = async (
                 ],
             },
         })
-        // console.log('Warning Criteria List:', warningCriteriaList)
         const isEligible = warningCriteriaList.every((criteria) => {
             switch (criteria.field) {
                 case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
@@ -1515,7 +1503,6 @@ export const resultCourseStudentResult = async (
         })
     )
 
-    // console.log('courseMap', courseMap)
     const result = Object.values(courseMap)
     return result.map((course) => CourseStudentResult.parse(course))
 }

@@ -878,6 +878,12 @@ Table Student {
   curriculumVersionId String
   academicWarningLevel Int [not null, default: 0]
   disciplinaryWarningLevel Int [not null, default: 0]
+  suspended Boolean [not null, default: false]
+  expelled Boolean [not null, default: false]
+  foreignLangPass Boolean [not null, default: false]
+  ITCertificationPass Boolean [not null, default: false]
+  strengthTrainingPass Boolean [not null, default: false]
+  militaryTrainingPass Boolean [not null, default: false]
   studentTrainingScore StudentTrainingScore [not null]
   studentSemesterResult StudentSemesterResult [not null]
   studentYearResult StudentYearResult [not null]
