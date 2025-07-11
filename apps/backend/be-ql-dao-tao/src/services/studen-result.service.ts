@@ -1479,7 +1479,8 @@ const getStudentResult = async (
 
 export const resultCourseStudentResult = async (
     students: StudentInfoCheck[],
-    semesterId: string
+    semesterId: string,
+    type: 'scholarship' | 'academicWarning' | 'academicAction'
 ): Promise<CourseStudentResult[]> => {
     const courseMap: Record<string, CourseStudentResult> = {}
 
@@ -1497,6 +1498,19 @@ export const resultCourseStudentResult = async (
                 }
             }
             const studentResult = await getStudentResult(student, semesterId)
+            if (!studentResult) {
+                console.warn(`No result found for student ${student.id} in semester ${semesterId}`)
+                return
+            }
+            // Filter based on type
+            if (
+                (type === 'scholarship' && !studentResult.hasScholarship) ||
+                (type === 'academicWarning' && !studentResult.hasAcademicWarning) ||
+                (type === 'academicAction' && !studentResult.hasAcademicAction)
+            ) {
+                console.log(`Skipping student ${student.id} in course ${courseId} for type ${type}`)
+                return
+            }
             courseMap[courseId].students.push(studentResult)
         })
     )
