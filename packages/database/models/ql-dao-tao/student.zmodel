@@ -67,7 +67,6 @@ model Student extends Base {
   // Điều kiện để xét tốt nghiệp
   foreignLangPass          Boolean                        @default(false) // Đạt chuẩn ngoại ngữ
   ITCertificationPass      Boolean                        @default(false) // Đạt chứng chỉ CNTT
-  requestGraduation        Boolean                        @default(false) // Đã nộp đơn xin tốt nghiệp
   strengthTrainingPass     Boolean                        @default(false) // Đạt yêu cầu rèn luyện sức khoẻ
   militaryTrainingPass     Boolean                        @default(false) // Đạt yêu cầu giáo dục quốc phòng, quân sự
 

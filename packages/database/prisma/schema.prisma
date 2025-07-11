@@ -1216,6 +1216,12 @@ model Student {
   curriculumVersionId      String?
   academicWarningLevel     Int                            @default(0)
   disciplinaryWarningLevel Int                            @default(0)
+  suspended                Boolean                        @default(false)
+  expelled                 Boolean                        @default(false)
+  foreignLangPass          Boolean                        @default(false)
+  ITCertificationPass      Boolean                        @default(false)
+  strengthTrainingPass     Boolean                        @default(false)
+  militaryTrainingPass     Boolean                        @default(false)
   studentTrainingScore     StudentTrainingScore[]
   studentSemesterResult    StudentSemesterResult[]
   studentYearResult        StudentYearResult[]
