@@ -11,6 +11,7 @@ import {
     Radio,
     Table as TableAntd,
     type TableProps as TableAntdProps,
+    Tree,
 } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
@@ -20,7 +21,7 @@ type TableProps<T> = {
     columns?: ColumnsType<T> & {
         type?: string
         multiple?: string[]
-        options?: { value: string; label: string }[]
+        options?: any[]
     }
     data?: T[]
     pagination?: TablePaginationConfig & {
@@ -291,9 +292,9 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
                     return (
-                        <div className="p-4 w-full min-w-[200px] max-w-[300px]">
+                        <div className="p-4 w-full min-w-[200px] max-w-[300px] ">
                             {item.options.length > 0 && (
-                                <div>
+                                <div className="max-h-[500px] overflow-y-auto">
                                     <Checkbox
                                         onChange={(e: CheckboxChangeEvent) =>
                                             onCheckAllChange(item, e)
@@ -374,6 +375,85 @@ const Table = <T extends Record<string, unknown>>({
                 },
             }
         }
+        if (item?.type === 'tree_select') {
+            return {
+                filterDropdown: (props: FilterDropdownProps) => {
+                    if (!item.options) return
+                    return (
+                        <div className="p-4 w-full min-w-[200px] max-w-[300px]">
+                            <div className="mb-2">Tìm kiếm</div>
+                            <Tree
+                                autoExpandParent={true}
+                                checkable={true}
+                                defaultExpandAll={true}
+                                multiple={true}
+                                treeData={item.options}
+                                checkedKeys={
+                                    filtersTable[item.dataIndex as keyof FilterProps] as string[]
+                                }
+                                onCheck={(checkedKeys) => {
+                                    console.log(checkedKeys)
+                                    setFiltersTable({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]: checkedKeys,
+                                    })
+                                }}
+                                fieldNames={{ title: 'title', key: 'value', children: 'children' }}
+                                className="w-full mb-3 max-h-[500px] overflow-y-auto"
+                            />
+                            <ListButton
+                                clear={() => {
+                                    setFiltersTable({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]: undefined,
+                                    })
+                                    setFilters?.({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]: undefined,
+                                    })
+                                    props.confirm()
+                                }}
+                                click={() => {
+                                    if (item.multiple) {
+                                        const result = {
+                                            ...updateObjectExcept(filtersTable, [
+                                                ...item.multiple,
+                                                item.dataIndex as keyof FilterProps,
+                                            ]),
+                                            [item.dataIndex as keyof FilterProps]: filtersTable[
+                                                item.dataIndex as keyof FilterProps
+                                            ]?.length
+                                                ? filtersTable[item.dataIndex as keyof FilterProps]
+                                                : undefined,
+                                        }
+                                        setFilters?.(result)
+                                        props.confirm()
+                                        return
+                                    }
+                                    const result = {
+                                        [item.dataIndex as keyof FilterProps]:
+                                            filtersTable[item.dataIndex as keyof FilterProps],
+                                    }
+                                    setFilters?.(result)
+                                    props.confirm()
+                                }}
+                            />
+                        </div>
+                    )
+                },
+                filterIcon: () => {
+                    return (
+                        <FilterFilled
+                            style={{
+                                color: filters?.[item.dataIndex as keyof FilterProps]
+                                    ? '#005f37'
+                                    : undefined,
+                            }}
+                        />
+                    )
+                },
+            }
+        }
         if (item?.type === 'order') {
             return {
                 filterDropdown: (props: FilterDropdownProps) => {
@@ -397,34 +477,35 @@ const Table = <T extends Record<string, unknown>>({
                                     <Radio value={'desc'}>Giảm dần</Radio>
                                 </Radio.Group>
                             </div>
-                            {/* {item.options && (
-                                 <div>
-                                <div className="mb-2">Tìm kiếm</div>
-                                <Radio.Group
-                                    onChange={(e) => {
-                                        setFiltersTable({
-                                            ...filters,
-                                            [item.dataIndex as keyof FilterProps]: e.target.value
-                                                ? e.target.value
-                                                : undefined,
-                                        })
-                                    }}
-                                    buttonStyle="solid"
-                                    className="w-full mb-3"
-                                >
-                                    {item.options.map(
-                                        (option: { value: string; label: string }) => (
-                                            <Radio
-                                                key={option.value}
-                                                value={option}
-                                                style={{ display: 'block', marginBottom: 8 }}
-                                            >
-                                                {option.label}
-                                            </Radio>
-                                        )
-                                    )}
-                                </Radio.Group>
-                                  <Checkbox
+                            {item.options && (
+                                <div>
+                                    <div className="mb-2">Tìm kiếm</div>
+                                    <Radio.Group
+                                        onChange={(e) => {
+                                            setFiltersTable({
+                                                ...filters,
+                                                [item.dataIndex as keyof FilterProps]: e.target
+                                                    .value
+                                                    ? e.target.value
+                                                    : undefined,
+                                            })
+                                        }}
+                                        buttonStyle="solid"
+                                        className="w-full mb-3"
+                                    >
+                                        {item.options.map(
+                                            (option: { value: string; label: string }) => (
+                                                <Radio
+                                                    key={option.value}
+                                                    value={option}
+                                                    style={{ display: 'block', marginBottom: 8 }}
+                                                >
+                                                    {option.label}
+                                                </Radio>
+                                            )
+                                        )}
+                                    </Radio.Group>
+                                    <Checkbox
                                         onChange={(e: CheckboxChangeEvent) =>
                                             onCheckAllChange(item, e)
                                         }
@@ -448,8 +529,8 @@ const Table = <T extends Record<string, unknown>>({
                                         onChange={(e: string[]) => onCheckChange(item, e)}
                                         options={item.options}
                                     />
-                            </div>
-                            )} */}
+                                </div>
+                            )}
 
                             <ListButton
                                 clear={() => {
@@ -524,20 +605,24 @@ const Table = <T extends Record<string, unknown>>({
             locale={{
                 emptyText: <Empty description="Không có dữ liệu" />,
             }}
-            pagination={{
-                position: ['bottomRight'],
-                defaultPageSize: DEFAULT_PAGINATE_SIZE,
-                showSizeChanger: {
-                    labelRender: ({ value }) => `${value} / trang`,
-                    optionRender: (oriOption) => `${oriOption.value} / trang`,
-                },
-                showTotal: (total, range) =>
-                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                onShowSizeChange(current, size) {
-                    pagination?.onShowSizeChange?.(size)
-                },
-                ...pagination,
-            }}
+            pagination={
+                pagination !== false
+                    ? {
+                          position: ['bottomRight'],
+                          defaultPageSize: DEFAULT_PAGINATE_SIZE,
+                          showSizeChanger: {
+                              labelRender: ({ value }) => `${value} / trang`,
+                              optionRender: (oriOption) => `${oriOption.value} / trang`,
+                          },
+                          showTotal: (total, range) =>
+                              `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                          onShowSizeChange(current, size) {
+                              pagination?.onShowSizeChange?.(size)
+                          },
+                          ...pagination,
+                      }
+                    : false
+            }
             expandable={expandable}
             onRow={(record) => ({
                 onClick: () => {

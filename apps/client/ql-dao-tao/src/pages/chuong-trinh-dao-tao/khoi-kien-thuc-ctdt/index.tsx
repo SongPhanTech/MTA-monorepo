@@ -1,4 +1,3 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -6,7 +5,6 @@ import { PutTrainingBlock } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Curriculum, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingBlock,
     useFindManyCurriculum,
@@ -23,9 +21,11 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
-    searchText: string | null
-    trainingCourseId: string | null
-    trainingObjectTypeId: string | null
+    searchText?: string
+    trainingCourseId?: string
+    trainingObjectTypeId?: string
+    code?: string
+    name?: string
 }
 
 export default function TrainingBlock() {
@@ -33,8 +33,10 @@ export default function TrainingBlock() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingCourseId: null,
-        trainingObjectTypeId: null,
+        trainingCourseId: undefined,
+        trainingObjectTypeId: undefined,
+        code: undefined,
+        name: undefined,
     })
 
     const { data: trainingBlockData, refetch } = useFindManyTrainingBlock({
@@ -57,6 +59,8 @@ export default function TrainingBlock() {
                       ],
                   }
                 : {}),
+            ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
+            ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
             ...(filters.trainingObjectTypeId
                 ? {
                       curriculumVersions: {
@@ -196,7 +200,7 @@ export default function TrainingBlock() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
+                                {/* <Col span={8}>
                                     <Form.Item
                                         className="mb-0"
                                         name="trainingObjectId"
@@ -265,7 +269,7 @@ export default function TrainingBlock() {
                                             allowClear
                                         />
                                     </Form.Item>
-                                </Col>
+                                </Col> */}
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -283,6 +287,8 @@ export default function TrainingBlock() {
                     <Table
                         rowKey="id"
                         id="training-block"
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -297,11 +303,13 @@ export default function TrainingBlock() {
                                 dataIndex: 'code',
                                 align: 'center',
                                 width: 150,
+                                type: 'input',
                             },
                             {
                                 title: 'Tên khối kiến thức',
                                 dataIndex: 'name',
                                 width: 150,
+                                type: 'input',
                             },
                             // {
                             //     title: 'Tổng tín chỉ',

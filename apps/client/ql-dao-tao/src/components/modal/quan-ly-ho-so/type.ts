@@ -66,21 +66,36 @@ export type TabThongTinCaNhan = {
 }
 
 export type FilterProps = {
-    searchText?: string | undefined
-    trainingObjectTypes?: string[] | [] | undefined
+    searchText?: string
+    trainingObjectTypes?: string[]
     name?: string | ''
     code?: string | ''
-    sort?: string | undefined
-    numberCreditsMajor?: 'asc' | 'desc' | undefined
-    numberCreditsRequired?: 'asc' | 'desc' | undefined
-    numberCreditsElective?: 'asc' | 'desc' | undefined
-    organization?: string[] | [] | undefined
-    trainingCourses?: string[] | [] | undefined
+    sort?: string
+    numberCreditsMajor?: 'asc' | 'desc'
+    numberCreditsRequired?: 'asc' | 'desc'
+    numberCreditsElective?: 'asc' | 'desc'
+    organization?: string[]
+    trainingCourses?: string[]
+    numberOfSemesters?: 'asc' | 'desc'
+    requiredCredits?: 'asc' | 'desc'
+    electiveCredits?: 'asc' | 'desc'
+    trainingTime?: string[]
+    trainingMajors?: string[]
+    credit?: 'asc' | 'desc'
+    semester?: 'asc' | 'desc'
+    period?: 'asc' | 'desc'
+    numberOfTheory?: 'asc' | 'desc'
+    numberOfPractical?: 'asc' | 'desc'
+    numberOfSelfStudy?: 'asc' | 'desc'
+    numberOfPractice?: 'asc' | 'desc'
+    numberOfReview?: 'asc' | 'desc'
+    numberOfExam?: 'asc' | 'desc'
+    examType?: string[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
     multiple?: string[]
-    options?: { value: string; label: string }[]
+    options?: any[]
     dataIndex?: string
     slot?: any
 }

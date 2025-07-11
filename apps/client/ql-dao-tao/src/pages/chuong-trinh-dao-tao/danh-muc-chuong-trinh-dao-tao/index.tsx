@@ -9,6 +9,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
@@ -16,13 +17,14 @@ import type {
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
     TrainingObjectType,
+    TrainingTime,
 } from '@workspace/db'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
     useFindManyTrainingCourse,
-    useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
+    useFindManyTrainingTime,
     useUpdateCurriculum,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
@@ -46,6 +48,10 @@ export default function TrainingProgramCatalog() {
         trainingCourses: undefined,
         code: '',
         name: '',
+        numberOfSemesters: undefined,
+        requiredCredits: undefined,
+        electiveCredits: undefined,
+        trainingTime: undefined,
         // trainingMajorId: '',
     })
 
@@ -53,72 +59,53 @@ export default function TrainingProgramCatalog() {
         where: {
             curriculumVersion: {
                 some: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
+                    name: {
+                        contains: filters.name,
+                        mode: 'insensitive',
+                    },
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive',
+                    },
                     ...(filters.trainingObjectTypes
                         ? {
                               trainingObjectTypeId: {
                                   in: filters.trainingObjectTypes,
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingCourses
+                        ? {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          in: filters.trainingCourses,
+                                      },
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingTime
+                        ? {
+                              trainingTimeId: {
+                                  in: filters.trainingTime,
                               },
                           }
                         : {}),
                 },
             },
-
-            // ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-            //     ? {
-            //           curriculumVersion: {
-            //               some: {
-            //                   fixedClasses: {
-            //                       some: {
-            //                           trainingCourseId: {
-            //                               contains: filters.trainingCourseId,
-            //                               mode: 'insensitive',
-            //                           },
-            //                       },
-            //                   },
-            //               },
-            //           },
-            //       }
-            //     : {}),
-            // ...(filters.trainingMajorId && filters.trainingMajorId !== ''
-            //     ? {
-            //           trainingMajorId: {
-            //               contains: filters.trainingMajorId,
-            //               mode: 'insensitive',
-            //           },
-            //       }
-            //     : {}),
         },
         include: {
             curriculumVersion: {
                 where: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
+                    name: {
+                        contains: filters.name,
+                        mode: 'insensitive',
+                    },
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive',
+                    },
                     ...(filters.trainingObjectTypes
                         ? {
                               trainingObjectTypeId: {
@@ -126,19 +113,24 @@ export default function TrainingProgramCatalog() {
                               },
                           }
                         : {}),
-
-                    // ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                    //     ? {
-                    //           fixedClasses: {
-                    //               some: {
-                    //                   trainingCourseId: {
-                    //                       contains: filters.trainingCourseId,
-                    //                       mode: 'insensitive',
-                    //                   },
-                    //               },
-                    //           },
-                    //       }
-                    //     : {}),
+                    ...(filters.trainingCourses
+                        ? {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          in: filters.trainingCourses,
+                                      },
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingTime
+                        ? {
+                              trainingTimeId: {
+                                  in: filters.trainingTime,
+                              },
+                          }
+                        : {}),
                 },
                 include: {
                     trainingTime: true,
@@ -159,6 +151,35 @@ export default function TrainingProgramCatalog() {
                         },
                     },
                 },
+                orderBy: [
+                    ...emptyObjectIf(
+                        [
+                            {
+                                numberOfSemesters: filters.numberOfSemesters,
+                            },
+                        ],
+                        !!filters.numberOfSemesters
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                requiredCredits: filters.requiredCredits,
+                            },
+                        ],
+                        !!filters.requiredCredits
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                electiveCredits: filters.electiveCredits,
+                            },
+                        ],
+                        !!filters.electiveCredits
+                    ),
+                    {
+                        name: 'asc',
+                    },
+                ],
             },
             managementOrganization: true,
             trainingMajor: true,
@@ -195,32 +216,26 @@ export default function TrainingProgramCatalog() {
                               },
                           }
                         : {}),
+                    ...(filters.trainingCourses
+                        ? {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          in: filters.trainingCourses,
+                                      },
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingTime
+                        ? {
+                              trainingTimeId: {
+                                  in: filters.trainingTime,
+                              },
+                          }
+                        : {}),
                 },
             },
-            // ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-            //     ? {
-            //           curriculumVersion: {
-            //               some: {
-            //                   fixedClasses: {
-            //                       some: {
-            //                           trainingCourseId: {
-            //                               contains: filters.trainingCourseId,
-            //                               mode: 'insensitive',
-            //                           },
-            //                       },
-            //                   },
-            //               },
-            //           },
-            //       }
-            //     : {}),
-            // ...(filters.trainingMajorId && filters.trainingMajorId !== ''
-            //     ? {
-            //           trainingMajorId: {
-            //               contains: filters.trainingMajorId,
-            //               mode: 'insensitive',
-            //           },
-            //       }
-            //     : {}),
         },
     })
 
@@ -230,7 +245,7 @@ export default function TrainingProgramCatalog() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+    const { data: trainingTimeData = [] } = useFindManyTrainingTime({
         orderBy: { name: 'asc' },
     })
 
@@ -291,14 +306,6 @@ export default function TrainingProgramCatalog() {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
-    }
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
     }
 
     const handleRowClick = (record: { id?: string }) => {
@@ -433,13 +440,22 @@ export default function TrainingProgramCatalog() {
                                 fixed: 'left',
                                 width: 120,
                                 type: 'input',
-                                multiple: [],
+                                multiple: [
+                                    'trainingObjectTypes',
+                                    'trainingCourses',
+                                    'trainingTime',
+                                ],
                             },
                             {
                                 title: 'Tên chương trình',
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
+                                multiple: [
+                                    'trainingObjectTypes',
+                                    'trainingCourses',
+                                    'trainingTime',
+                                ],
                                 width: 250,
                                 type: 'input',
                             },
@@ -453,7 +469,7 @@ export default function TrainingProgramCatalog() {
                                     value: i.id,
                                     label: i.name,
                                 })),
-                                multiple: ['name', 'code'],
+                                multiple: ['name', 'code', 'trainingCourses', 'trainingTime'],
                                 render: (
                                     __,
                                     record: { trainingObjectType?: TrainingObjectType }
@@ -469,11 +485,11 @@ export default function TrainingProgramCatalog() {
                                 align: 'center',
                                 width: 150,
                                 type: 'select',
-                                options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                                options: trainingCourseData.map((i: TrainingCourse) => ({
                                     value: i.id,
                                     label: i.name,
                                 })),
-                                multiple: ['name', 'code'],
+                                multiple: ['name', 'code', 'trainingObjectTypes', 'trainingTime'],
                                 render: (
                                     __,
                                     record: {
@@ -528,28 +544,43 @@ export default function TrainingProgramCatalog() {
                                 },
                             },
                             {
-                                title: 'Số TC bắt buộc',
+                                title: 'Số TCBB',
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
-                                width: 80,
+                                type: 'order',
+                                width: 100,
                             },
                             {
-                                title: 'Số TC tự chọn',
+                                title: 'Số TCTC',
                                 dataIndex: 'electiveCredits',
                                 align: 'center',
-                                width: 70,
+                                type: 'order',
+                                width: 100,
                             },
                             {
                                 title: 'Số kỳ học',
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
-                                width: 100,
+                                type: 'order',
+                                width: 120,
                             },
                             {
                                 title: 'Thời gian đào tạo',
-                                dataIndex: ['trainingTime', 'name'],
+                                dataIndex: 'trainingTime',
                                 align: 'center',
-                                width: 140,
+                                width: 170,
+                                type: 'select',
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'trainingObjectTypes',
+                                    'trainingCourses',
+                                ],
+                                options: trainingTimeData.map((i: TrainingTime) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                })),
+                                render: (value: TrainingTime) => (value?.name ? value.name : ''),
                             },
                             {
                                 title: 'Năm khởi tạo',
@@ -591,8 +622,6 @@ export default function TrainingProgramCatalog() {
                                 fixed: 'right',
                                 align: 'center',
                                 render: (_, record) => {
-                                    console.log(record, 121)
-
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
