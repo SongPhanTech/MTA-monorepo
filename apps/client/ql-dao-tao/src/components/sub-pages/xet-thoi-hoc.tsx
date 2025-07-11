@@ -163,7 +163,7 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
     const treeData = buildOrgTree(manageOrgData)
 
     return (
-        <div>
+        <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
