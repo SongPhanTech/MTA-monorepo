@@ -84,6 +84,7 @@ model StudentAcademicDecision extends Base {
 
   actionTaken      AcademicActionType   // Hành động đã thực hiện
   decisionDate     DateTime              @default(now())
+  validUntil       DateTime?
   reason           String?              // Ghi chú lý do, ví dụ: "Vi phạm CBHT mức 4"
   documentEvidence DocumentFile[]       // Minh chứng (biên bản họp, quyết định...)
 

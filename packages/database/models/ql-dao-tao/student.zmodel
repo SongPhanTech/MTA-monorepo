@@ -30,6 +30,7 @@ model Student extends Base {
   status                   StudentStatus                  @default(ENROLLED)
 
   classMonitor             FixedClass?                    @relation("ClassMonitor")
+  unionLeaderOf            FixedClass?                    @relation("UnionLeader")
   fixedClass               FixedClass?                    @relation(fields: [fixedClassId], references: [id])
   fixedClassId             String?
   subjectClassStudent      StudentSubjectScore[]
