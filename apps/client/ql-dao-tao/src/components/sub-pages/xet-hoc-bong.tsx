@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Flex, Form, Row, Select, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -10,9 +10,8 @@ import {
     useUpsertScholarshipAward,
 } from '@workspace/db/hooks'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
-import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 
 dayjs.locale('vi')
 
@@ -20,18 +19,9 @@ interface XetHocBongProps {
     semesterId: string
 }
 
-interface FilterProps {
-    scholarshipId: string | null
-}
-
 const XetHocBong = ({ semesterId }: XetHocBongProps) => {
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>([])
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
         useStudentTrainingTypeOptions()
-    const [filters, setFilters] = useState<FilterProps>({
-        scholarshipId: '',
-    })
 
     // TODO: remove any when have openapi schema
     const { data: students = [], refetch } = useExportStudentResultSemesterJson(
@@ -66,26 +56,8 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
             const checkedStudentIds = studentData
                 .filter((item: any) => item.checked)
                 .map((item: any) => item.id)
-
-            setSelectedRowKeys(checkedStudentIds)
-            setInitialSelectedKeys(checkedStudentIds)
         }
     }, [studentData])
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
 
     const { mutateAsync: upsertScholarshipAward } = useUpsertScholarshipAward()
     const { mutateAsync: deleteManyScholarshipAward } = useDeleteManyScholarshipAward()
@@ -174,51 +146,11 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                             <Row gutter={[16, 0]}>
                                 <Col span={24}>
                                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                                        <Col span={12}>
-                                            <Flex>
-                                                <Col span={10}>
-                                                    <Form.Item
-                                                        className="mb-0"
-                                                        name="trainingObjectId"
-                                                    >
-                                                        <Select
-                                                            placeholder="Chọn học bổng"
-                                                            options={scholarshipData.map(
-                                                                (i: any) => ({
-                                                                    value: i.id,
-                                                                    label: [
-                                                                        i.name,
-                                                                        i?.trainingCourse?.name,
-                                                                    ]
-                                                                        .filter(Boolean)
-                                                                        .join(' - '),
-                                                                })
-                                                            )}
-                                                            onChange={(val) =>
-                                                                handleFilterChange(
-                                                                    'scholarshipId',
-                                                                    val
-                                                                )
-                                                            }
-                                                            style={{ width: '350px' }}
-                                                            allowClear
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                            </Flex>
-                                        </Col>
-                                        <Col span={6}>
+                                        <Col span={24}>
                                             <Flex justify="end">
-                                                <Button
-                                                    type="primary"
-                                                    className="h-[32px] px-4"
-                                                    // onClick={handleSaveScholarshipAward}
-                                                    disabled={
-                                                        !semesterId || selectedRowKeys.length <= 0
-                                                    }
-                                                >
+                                                <Button type="primary" className="h-[32px] px-4">
                                                     <BookPlus />
-                                                    Lưu
+                                                    Chuyển dữ liệu
                                                 </Button>
                                             </Flex>
                                         </Col>
