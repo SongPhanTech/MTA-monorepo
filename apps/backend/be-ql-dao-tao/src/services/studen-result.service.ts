@@ -1386,7 +1386,8 @@ const getScholarship = async (
 
 const getStudentResult = async (
     student: StudentInfoCheck,
-    semesterId: string
+    semesterId: string,
+    type: 'scholarship' | 'academicWarning' | 'academicAction'
 ): Promise<StudentResult> => {
     try {
         console.log('Fetching result for student:', student.id, 'in semester:', semesterId)
@@ -1430,9 +1431,15 @@ const getStudentResult = async (
         const trainingCourseId = studentSemesterResult.student.fixedClass?.trainingCourseId
         if (!trainingCourseId)
             throw new Error(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
-        const scholarshipInfo = await getScholarship(student, trainingCourseId)
-        const checkAcademicWarningResult = await checkAcademicWarning(student, trainingCourseId)
-        const academicActionInfo = await getAcademicAction(student, trainingCourseId)
+        // Kiểm tra loại kết quả cần lấy
+        const scholarshipInfo =
+            type === 'scholarship' ? await getScholarship(student, trainingCourseId) : []
+        const checkAcademicWarningResult =
+            type === 'academicWarning'
+                ? await checkAcademicWarning(student, trainingCourseId)
+                : false
+        const academicActionInfo =
+            type === 'academicAction' ? await getAcademicAction(student, trainingCourseId) : []
         return StudentResult.parse({
             id: studentSemesterResult.studentId,
             studentSemesterResult: studentSemesterResult,
@@ -1485,7 +1492,7 @@ export const resultCourseStudentResult = async (
                     students: [],
                 }
             }
-            const studentResult = await getStudentResult(student, semesterId)
+            const studentResult = await getStudentResult(student, semesterId, type)
             if (!studentResult) {
                 console.warn(`No result found for student ${student.id} in semester ${semesterId}`)
                 return
