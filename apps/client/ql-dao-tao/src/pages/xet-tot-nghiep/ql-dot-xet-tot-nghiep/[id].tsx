@@ -6,10 +6,11 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { Gender } from '@workspace/db'
 import {
     useCountStudentGraduationApplication,
     useFindManyStudentGraduationApplication,
-    useUpdateGraduationSession,
+    useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -84,11 +85,12 @@ export default function StudentGraduationApplication() {
     const handleModal = () => {
         onOpen({ id: null, graduationSessionId })
     }
-    const { mutateAsync: updateGraduationSession } = useUpdateGraduationSession()
+    const { mutateAsync: updateStudentGraduationApplication } =
+        useUpdateStudentGraduationApplication()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateGraduationSession({
+            await updateStudentGraduationApplication({
                 where: {
                     id,
                 },
@@ -159,7 +161,7 @@ export default function StudentGraduationApplication() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        id="training-block"
+                        id="student-graduation-application"
                         columns={[
                             {
                                 title: 'STT',
@@ -183,7 +185,7 @@ export default function StudentGraduationApplication() {
                                 render: (_, record) => record.student?.code || '',
                             },
                             {
-                                title: 'Tên sinh viên',
+                                title: 'Họ và tên',
                                 width: 150,
                                 render: (record) =>
                                     `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
@@ -194,6 +196,31 @@ export default function StudentGraduationApplication() {
                                 width: 150,
                                 render: (record) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
+                            },
+                            {
+                                title: 'Giới tính',
+                                dataIndex: ['student', 'userProfile', 'gender'],
+                                width: 70,
+                                render: (record: Gender) => {
+                                    switch (record) {
+                                        case Gender.Male:
+                                            return 'Nam'
+                                        case Gender.Female:
+                                            return 'Nữ'
+                                        default:
+                                            return ''
+                                    }
+                                },
+                            },
+                            {
+                                title: 'Nơi sinh',
+                                dataIndex: ['student', 'userProfile', 'placeOfBirth'],
+                                width: 150,
+                            },
+                            {
+                                title: 'Dân tộc',
+                                dataIndex: '',
+                                width: 100,
                             },
                             {
                                 title: 'Ngày nộp đơn',
