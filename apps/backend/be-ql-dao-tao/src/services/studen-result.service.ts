@@ -2,6 +2,7 @@ import {
     AcademicRankingBaseType,
     CriteriaField,
     CriteriaOperator,
+    type Scholarship,
     SemesterType,
     type StudentSemesterResult,
     StudentStatus,
@@ -11,7 +12,6 @@ import { prisma } from '..'
 import {
     CourseStudentResult,
     type ListAcademicAction,
-    type ListScholarship,
     type StudentInfoCheck,
     StudentResult,
 } from '../dto/student-info.dto'
@@ -1358,7 +1358,7 @@ const checkScholarship = async (
 const getScholarship = async (
     student: StudentInfoCheck,
     trainingCourseId: string
-): Promise<ListScholarship[]> => {
+): Promise<Scholarship[]> => {
     const semesterScholarship = await prisma.scholarship.findMany({
         where: {
             trainingCourseId: trainingCourseId, // Lấy học bổng theo khóa học
@@ -1370,15 +1370,11 @@ const getScholarship = async (
     })
     console.log('semesterScholarship', semesterScholarship)
     // Lấy danh sách học bổng của sinh viên
-    const scholarships: ListScholarship[] = []
+    const scholarships: Scholarship[] = []
     for (const scholarship of semesterScholarship) {
         const isEligible = await checkScholarship(student, scholarship.id)
         if (isEligible) {
-            scholarships.push({
-                id: scholarship.id,
-                name: scholarship.name,
-                order: scholarship.rankOrder,
-            })
+            scholarships.push(scholarship)
         }
     }
     return scholarships
