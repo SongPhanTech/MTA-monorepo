@@ -19,16 +19,6 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
-enum SubjectClassStudentStatus {
-  Registered
-  Studying
-  NotPassed
-  Passed
-  CancelClass
-
-  @@schema("ql-dao-tao")
-}
-
 enum SemesterType {
   FIRST
   SECOND
@@ -439,7 +429,6 @@ model StudentSubjectScore {
   subjectVersionId String
   student          Student                                    @relation(fields: [studentId], references: [id])
   studentId        String
-  status           SubjectClassStudentStatus                  @default(Studying)
   attendanceScore  Float?
   midtermScore     Float?
   examScore        Float?
@@ -840,6 +829,7 @@ model SubjectClass {
   maxStudent                 Int
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
+  cancelled                  Boolean               @default(false)
   lecturerAssignmentDeadline DateTime?
   examDate                   DateTime?
   scoreDeadline              DateTime?
@@ -1977,6 +1967,7 @@ model DM_NhanVien {
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
+  sTen                String?
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -2000,6 +1991,46 @@ model DM_NhanVien {
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
   @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
   @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
+  @@schema("mta")
+}
+
+model DM_PhanCap_ChatLuong_TrangThietBi {
+  Id             String    @id() @default(cuid())
+  sMa            String?   @unique()
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen           String    @unique()
+
+  @@schema("mta")
+}
+
+model DM_PhanLoai_CSKT {
+  Id             String    @id() @default(cuid())
+  sMa            String?   @unique()
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen           String    @unique()
+
   @@schema("mta")
 }
 
@@ -2746,26 +2777,26 @@ model AcademicActionCondition {
 
 /// Quyết định xử lý học tập cho sinh viên
 model StudentAcademicDecision {
-  id               String               @id() @default(cuid())
-  code             String?              @unique()
-  active           Boolean              @default(true)
-  description      String?              @db.Text()
+  id               String                @id() @default(cuid())
+  code             String?               @unique()
+  active           Boolean               @default(true)
+  description      String?               @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt()
-  student          Student              @relation(fields: [studentId], references: [id])
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt()
+  student          Student               @relation(fields: [studentId], references: [id])
   studentId        String
-  semester         Semester?            @relation(fields: [semesterId], references: [id])
+  semester         Semester?             @relation(fields: [semesterId], references: [id])
   semesterId       String?
-  schoolYear       SchoolYear?          @relation(fields: [schoolYearId], references: [id])
+  schoolYear       SchoolYear?           @relation(fields: [schoolYearId], references: [id])
   schoolYearId     String?
-  appliedConfig    AcademicActionConfig @relation(fields: [appliedConfigId], references: [id])
-  appliedConfigId  String
+  appliedConfig    AcademicActionConfig? @relation(fields: [appliedConfigId], references: [id])
+  appliedConfigId  String?
   actionTaken      AcademicActionType
-  decisionDate     DateTime             @default(now())
+  decisionDate     DateTime              @default(now())
   reason           String?
   documentEvidence DocumentFile[]
-  status           DecisionStatus       @default(PENDING)
+  status           DecisionStatus        @default(PENDING)
 
   @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
   @@schema("ql-dao-tao")

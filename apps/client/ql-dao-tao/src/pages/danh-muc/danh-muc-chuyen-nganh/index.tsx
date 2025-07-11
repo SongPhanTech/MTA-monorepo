@@ -1,30 +1,25 @@
-import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingMajorModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
-import type { TrainingObjectType } from '@workspace/db'
+import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
+    useFindManyDM_DonVi,
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectTypeId: string | undefined
-}
 
 interface DataType {
     key: React.Key
@@ -47,7 +42,13 @@ export default function TrainingMajorPage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: undefined,
+        trainingObjectTypes: undefined,
+        code: '',
+        name: '',
+        numberCreditsMajor: undefined,
+        numberCreditsRequired: undefined,
+        numberCreditsElective: undefined,
+        organization: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
@@ -57,26 +58,32 @@ export default function TrainingMajorPage() {
                     OR: [
                         {
                             name: {
-                                contains: filters.searchText,
+                                contains: filters.name,
                                 mode: 'insensitive',
                             },
                         },
                         {
                             code: {
-                                contains: filters.searchText,
+                                contains: filters.code,
                                 mode: 'insensitive',
                             },
                         },
                     ],
                     ...emptyObjectIf(
                         {
-                            trainingObjectTypes: {
-                                some: {
-                                    trainingObjectTypeId: filters.trainingObjectTypeId,
-                                },
+                            trainingObjectTypeId: {
+                                in: filters.trainingObjectTypes,
                             },
                         },
-                        !!filters.trainingObjectTypeId
+                        !!filters.trainingObjectTypes
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            organizationId: {
+                                in: filters.organization,
+                            },
+                        },
+                        !!filters.organization
                     ),
                 },
             },
@@ -88,13 +95,13 @@ export default function TrainingMajorPage() {
                     OR: [
                         {
                             name: {
-                                contains: filters.searchText,
+                                contains: filters.name,
                                 mode: 'insensitive',
                             },
                         },
                         {
                             code: {
-                                contains: filters.searchText,
+                                contains: filters.code,
                                 mode: 'insensitive',
                             },
                         },
@@ -103,11 +110,21 @@ export default function TrainingMajorPage() {
                         {
                             trainingObjectTypes: {
                                 some: {
-                                    trainingObjectTypeId: filters.trainingObjectTypeId,
+                                    trainingObjectTypeId: {
+                                        in: filters.trainingObjectTypes,
+                                    },
                                 },
                             },
                         },
-                        !!filters.trainingObjectTypeId
+                        !!filters.trainingObjectTypes
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            organizationId: {
+                                in: filters.organization,
+                            },
+                        },
+                        !!filters.organization
                     ),
                 },
                 include: {
@@ -118,6 +135,35 @@ export default function TrainingMajorPage() {
                         },
                     },
                 },
+                orderBy: [
+                    ...emptyObjectIf(
+                        [
+                            {
+                                numberCreditsMajor: filters.numberCreditsMajor,
+                            },
+                        ],
+                        !!filters.numberCreditsMajor
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                numberCreditsRequired: filters.numberCreditsRequired,
+                            },
+                        ],
+                        !!filters.numberCreditsRequired
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                numberCreditsElective: filters.numberCreditsElective,
+                            },
+                        ],
+                        !!filters.numberCreditsElective
+                    ),
+                    {
+                        name: 'asc',
+                    },
+                ],
             },
         },
         orderBy: {
@@ -134,31 +180,40 @@ export default function TrainingMajorPage() {
                     OR: [
                         {
                             name: {
-                                contains: filters.searchText,
+                                contains: filters.name,
                                 mode: 'insensitive',
                             },
                         },
                         {
                             code: {
-                                contains: filters.searchText,
+                                contains: filters.code,
                                 mode: 'insensitive',
                             },
                         },
                     ],
                     ...emptyObjectIf(
                         {
-                            trainingObjectTypes: {
-                                some: {
-                                    trainingObjectTypeId: filters.trainingObjectTypeId,
-                                },
+                            trainingObjectTypeId: {
+                                in: filters.trainingObjectTypes,
                             },
                         },
-                        !!filters.trainingObjectTypeId
+                        !!filters.trainingObjectTypes
+                    ),
+
+                    ...emptyObjectIf(
+                        {
+                            organizationId: {
+                                in: filters.organization,
+                            },
+                        },
+                        !!filters.organization
                     ),
                 },
             },
         },
     })
+
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -205,7 +260,7 @@ export default function TrainingMajorPage() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            <Flex>
+                            {/* <Flex>
                                 <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
@@ -256,7 +311,7 @@ export default function TrainingMajorPage() {
                                         />
                                     </Form.Item>
                                 </Col>
-                            </Flex>
+                            </Flex> */}
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
@@ -272,17 +327,27 @@ export default function TrainingMajorPage() {
                     <TableCollapse
                         rowKey="id"
                         headerTitleKey={({ code, name, trainingMajors }) =>
-                            `${code} - ${name} (${trainingMajors.length})`
+                            `${[code, name].filter(Boolean).join(' - ')} (${trainingMajors.length})`
                         }
                         defaultExpandAll
                         currentPage={currentPage}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'Mã chuyên ngành',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 fixed: 'left',
+                                type: 'input',
+                                multiple: [
+                                    'trainingObjectTypes',
+                                    'organization',
+                                    'numberCreditsMajor',
+                                    'numberCreditsRequired',
+                                    'numberCreditsElective',
+                                ],
                             },
                             {
                                 title: 'Tên chuyên ngành',
@@ -290,18 +355,38 @@ export default function TrainingMajorPage() {
                                 width: 200,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'input',
+                                multiple: [
+                                    'trainingObjectTypes',
+                                    'organization',
+                                    'numberCreditsMajor',
+                                    'numberCreditsRequired',
+                                    'numberCreditsElective',
+                                ],
                             },
-                            {
-                                title: 'Tên tiếng anh',
-                                dataIndex: 'englishName',
-                                align: 'center',
-                                width: 150,
-                            },
+                            // {
+                            //     title: 'Tên tiếng anh',
+                            //     dataIndex: 'englishName',
+                            //     align: 'center',
+                            //     width: 150,
+                            // },
                             {
                                 title: 'ĐTĐT',
                                 dataIndex: 'trainingObjectTypes',
                                 align: 'center',
                                 width: 150,
+                                type: 'select',
+                                options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                })),
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'numberCreditsMajor',
+                                    'numberCreditsRequired',
+                                    'numberCreditsElective',
+                                ],
                                 render: (value) =>
                                     value?.length > 0
                                         ? value.map(
@@ -324,7 +409,19 @@ export default function TrainingMajorPage() {
                                 dataIndex: 'organization',
                                 align: 'center',
                                 width: 150,
-                                render: (value) => value?.name,
+                                render: (value) => value?.sTen,
+                                type: 'select',
+                                options: manageOrgData.map((i: DM_DonVi) => ({
+                                    value: i.Id,
+                                    label: i.sTen,
+                                })),
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'numberCreditsMajor',
+                                    'numberCreditsRequired',
+                                    'numberCreditsElective',
+                                ],
                             },
 
                             {
@@ -332,18 +429,24 @@ export default function TrainingMajorPage() {
                                 width: 150,
                                 align: 'center',
                                 dataIndex: 'numberCreditsMajor',
+                                type: 'order',
+                                multiple: ['name', 'code', 'trainingObjectTypes'],
                             },
                             {
                                 title: 'Số TC bắt buộc',
                                 width: 150,
                                 align: 'center',
                                 dataIndex: 'numberCreditsRequired',
+                                type: 'order',
+                                multiple: ['name', 'code', 'trainingObjectTypes'],
                             },
                             {
                                 title: 'Số TC lựa chọn',
                                 width: 150,
                                 align: 'center',
                                 dataIndex: 'numberCreditsElective',
+                                type: 'order',
+                                multiple: ['name', 'code', 'trainingObjectTypes'],
                             },
                             {
                                 title: 'Mô tả',

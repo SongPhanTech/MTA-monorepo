@@ -44,8 +44,12 @@ const HanNhapDiem = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                scoreDeadline: dayjs(initialValue.scoreDeadline),
-                examScoreDeadline: dayjs(initialValue.examScoreDeadline),
+                scoreDeadline: initialValue.scoreDeadline
+                    ? dayjs(initialValue.scoreDeadline)
+                    : undefined,
+                examScoreDeadline: initialValue.examScoreDeadline
+                    ? dayjs(initialValue.examScoreDeadline)
+                    : undefined,
                 isLockScore: initialValue.isLockScore,
                 isLockExamScore: initialValue.isLockExamScore,
             })

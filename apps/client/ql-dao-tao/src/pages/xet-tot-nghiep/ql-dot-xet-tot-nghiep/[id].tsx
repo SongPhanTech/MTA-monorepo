@@ -22,8 +22,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
     searchText: string | null
-    trainingCourseId: string | null
-    trainingObjectTypeId: string | null
 }
 
 export default function StudentGraduationApplication() {
@@ -33,14 +31,18 @@ export default function StudentGraduationApplication() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingCourseId: null,
-        trainingObjectTypeId: null,
     })
+
     const { id: graduationSessionId } = router.query
 
     const { data: studentGraduationApplicationData, refetch } =
         useFindManyStudentGraduationApplication({
             where: {
+                ...(filters.searchText && filters.searchText !== ''
+                    ? {
+                          code: { contains: filters.searchText, mode: 'insensitive' },
+                      }
+                    : {}),
                 sessionId: Array.isArray(graduationSessionId)
                     ? graduationSessionId[0]
                     : graduationSessionId,

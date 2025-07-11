@@ -1,4 +1,5 @@
 import { DownOutlined } from '@ant-design/icons'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { TableProps as TableAntdProps } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
@@ -13,6 +14,11 @@ type Data = Record<string, unknown> & {
 
 type TableProps<T extends Data> = {
     data?: T[]
+    columns?: ColumnsType<T> & {
+        type?: string
+        multiple?: string[]
+        options?: { value: string; label: string }[]
+    }
     pagination?: TablePaginationConfig & {
         onShowSizeChange?: ((size: number) => void) | undefined
     }
@@ -25,6 +31,8 @@ type TableProps<T extends Data> = {
     scrollable?: boolean
     maxHeight?: number | string
     currentPage?: number
+    filters?: FilterProps
+    setFilters?: (record: FilterProps) => void
     headerRight?: (record: T) => ReactNode | ReactNode[]
     childrenFieldName?: keyof T
     onRowDoubleClick?: (record: T) => void
@@ -33,6 +41,7 @@ type TableProps<T extends Data> = {
 
 const TableCollapse = <T extends Data>({
     data = [],
+    columns = [],
     headerTitleKey,
     headerRight,
     pagination,
@@ -47,6 +56,8 @@ const TableCollapse = <T extends Data>({
     childrenFieldName = 'children',
     onRowDoubleClick,
     defaultExpandAll,
+    filters,
+    setFilters,
     ...rest
 }: TableProps<T>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
@@ -133,14 +144,14 @@ const TableCollapse = <T extends Data>({
         return children
     }, [dataWithKey, childrenFieldName])
 
-    const columns: ColumnsType<T> = useMemo(() => {
-        const baseColumns: ColumnsType<T> = [
+    const restColumns = useMemo(() => {
+        const baseColumns = [
             {
                 title: 'STT',
                 align: 'center',
                 width: 60,
                 fixed: 'left',
-                render: (_, record) => {
+                render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
                     const order = allChildren.findIndex((item) => item.key === record.key)
@@ -152,7 +163,7 @@ const TableCollapse = <T extends Data>({
                         : ''
                 },
             },
-            ...(rest.columns as ColumnsType<T>),
+            ...columns,
         ]
 
         // Merge onCell for colSpan handling
@@ -166,7 +177,7 @@ const TableCollapse = <T extends Data>({
                     : 1,
             }),
         }))
-    }, [rest.columns, childrenFieldName, allChildren, currentPage, pagination?.current])
+    }, [columns, childrenFieldName, allChildren, currentPage, pagination?.current])
 
     return (
         <>
@@ -214,12 +225,12 @@ const TableCollapse = <T extends Data>({
                     expandedRowKeys: expandedKeys,
                     onExpand: handleExpand,
                     rowExpandable: (record) => {
-                        const children = record[childrenFieldName]
+                        const children = record[childrenFieldName as string]
                         return Array.isArray(children) && children.length > 0
                     },
                     expandRowByClick: true,
                     expandIcon: ({ expanded, onExpand, record }) => {
-                        const children = record[childrenFieldName]
+                        const children = record[childrenFieldName as string]
                         return Array.isArray(children) ? (
                             <div className="flex w-full">
                                 {children.length > 0 && (
@@ -242,7 +253,7 @@ const TableCollapse = <T extends Data>({
                                 <div className="flex w-full items-center justify-between">
                                     <strong className="select-none sticky left-[30px]">
                                         {typeof headerTitleKey === 'function'
-                                            ? headerTitleKey(record)
+                                            ? headerTitleKey(record as T)
                                             : ((record as T)[
                                                   headerTitleKey as keyof T
                                               ] as ReactNode)}
@@ -251,7 +262,7 @@ const TableCollapse = <T extends Data>({
                                         onClick={(e) => e.stopPropagation()}
                                         className="select-none sticky right-[11px]"
                                     >
-                                        {headerRight?.(record)}
+                                        {headerRight?.(record as T)}
                                     </div>
                                 </div>
                             </div>
@@ -261,7 +272,9 @@ const TableCollapse = <T extends Data>({
                     ...expandable,
                 }}
                 {...rest}
-                columns={columns}
+                columns={restColumns as any[]}
+                filters={filters}
+                setFilters={setFilters}
             />
             <style>
                 {`

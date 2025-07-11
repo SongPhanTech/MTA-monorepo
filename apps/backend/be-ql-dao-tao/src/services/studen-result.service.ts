@@ -315,13 +315,7 @@ const layGiaTriDiem4 = (
             diemHe10 <= item.base10Max
     )
 
-    if (!diemHe4) return 0
-    // Lấy classification của điểm nhỏ hơn hoặc bằng gần nhất đối với diemHe4
-    const sorted = scoreConvert
-        .filter((item) => item.trainingCourseId === trainingCourseId && item.base4 <= diemHe4.base4)
-        .sort((a, b) => b.base4 - a.base4)
-
-    return diemHe4 ? diemHe4.base4 : 0
+    return diemHe4?.base4 ?? 0
 }
 
 const phanLoaiDiemHe4 = async (
@@ -379,9 +373,7 @@ const ThongTinDiemHocKy = async (
     try {
         const DsDiem = await prisma.studentSubjectScore.findMany({
             where: {
-                subjectClass: {
-                    semesterId,
-                },
+                subjectClass: { semesterId },
                 studentId,
                 status: {
                     in: [SubjectClassStudentStatus.Passed, SubjectClassStudentStatus.NotPassed],
@@ -409,9 +401,7 @@ const ThongTinDiemHocKy = async (
 
         // Danh sách chuyển đổi
         const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
-            where: {
-                trainingCourseId,
-            },
+            where: { trainingCourseId },
             select: {
                 trainingCourseId: true,
                 letter: true,
@@ -430,25 +420,25 @@ const ThongTinDiemHocKy = async (
         let TongTinChiDangKy = 0
         let diemHe10ThapNhat = 0
         DsDiem.forEach((item) => {
-            if (item.subjectVersion?.trainingBlocks.some((block) => !block.useForFinalScore)) {
+            if (item.subjectVersion.trainingBlocks.some((block) => !block.useForFinalScore)) {
                 return // Bỏ qua nếu môn không tính điểm
             }
-            const diemHe10 = item.manualFinalScore ? item.manualFinalScore : item.finalScore
-            if (diemHe10 === null || diemHe10 === undefined) {
+            const diemHe10 = item.manualFinalScore ?? item.finalScore
+            if (diemHe10 === null) {
                 return // Bỏ qua nếu điểm không hợp lệ
             }
             if (diemHe10 < diemHe10ThapNhat || diemHe10ThapNhat === 0) {
                 diemHe10ThapNhat = diemHe10 // Cập nhật điểm thấp nhất
             }
 
-            const soTinChi = item.subjectVersion?.credit || 0 // Số tín chỉ của môn học
-            console.log('Số tín chỉ của môn học:', soTinChi)
+            const soTinChi = item.subjectVersion.credit // Số tín chỉ của môn học
             TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
             const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, DsDiemChuyenDoi)
             DsDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
             DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ
         })
 
+        // TODO: maybe don't throw
         if (TongTinChiDangKy === 0) {
             // console.log('Không có tín chỉ nào, không thể tính điểm trung bình hệ 4')
             throw new Error('Không có tín chỉ nào để tính điểm trung bình hệ 4')

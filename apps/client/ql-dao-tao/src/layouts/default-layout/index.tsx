@@ -1,6 +1,5 @@
 import { HomeOutlined } from '@ant-design/icons'
 import logo_mta from '@assets/images/logo_mta.png'
-import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
@@ -8,7 +7,6 @@ import { getDynamicBreadcrum } from '@lib/casl/hooks'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-import { SearchSystem } from '@workspace/ui'
 import { Breadcrumb, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -145,16 +143,16 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
+                    <Header className="flex items-center bg-white shadow-sm rounded-lg m-2">
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
                         <div>{<Breadcrumb items={listBreadcrumb} />}</div>
 
-                        <div className="flex gap-2 items-center">
+                        {/* <div className="flex gap-2 items-center">
                             <SearchSystem />
                             <AvatarDropdown />
-                        </div>
+                        </div> */}
                     </Header>
                     <Content className="mx-2">
                         {unLayout ? (

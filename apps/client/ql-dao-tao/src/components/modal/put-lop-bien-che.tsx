@@ -47,26 +47,27 @@ const PutFixedClassModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const [dataOutput, setDataOutput] = useState<PutFixedClass>()
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
     const { onOpen: onOpenModalConfirm } = useDisclosure<string>({
         tag: ConfirmModal.name,
-        onOk: () => {
+        onOk: (value: any) => {
             updateFixedClassWithStudent()
         },
     })
 
     const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
     const curriculumVersionIdForm = Form.useWatch('curriculumVersionId', form)
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        where: trainingObjectTypeForm
-            ? {
-                  trainingObjectTypeId: trainingObjectTypeForm || '',
-              }
-            : {},
-        orderBy: { name: 'asc' },
-    })
+    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
+        useFindManyTrainingCourse({
+            where: trainingObjectTypeForm
+                ? {
+                      trainingObjectTypeId: trainingObjectTypeForm || '',
+                  }
+                : {},
+            orderBy: { name: 'asc' },
+        })
     // const trainingMajorForm = Form.useWatch('trainingMajorId', form)
-    const { data: curriculumData = [] } = useFindManyCurriculum({
+    const { data: curriculumData = [], refetch: refetchCurriculum } = useFindManyCurriculum({
         where: {},
         include: {
             curriculumVersion: {
@@ -88,7 +89,7 @@ const PutFixedClassModal = () => {
         },
         orderBy: { name: 'asc' },
     })
-    const { data: lecturerData = [] } = useFindManyLecturer({
+    const { data: lecturerData = [], refetch: refetchLecturer } = useFindManyLecturer({
         include: {
             userProfile: true,
         },
@@ -99,7 +100,7 @@ const PutFixedClassModal = () => {
         },
     })
 
-    const { data: staffData = [] } = useFindManyStaff({
+    const { data: staffData = [], refetch: refetchStaff } = useFindManyStaff({
         include: {
             userProfile: true,
         },
@@ -110,34 +111,36 @@ const PutFixedClassModal = () => {
         },
     })
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
-        where: {
-            curriculumVersion: curriculumVersionIdForm
-                ? {
-                      some: {
-                          id: curriculumVersionIdForm ?? undefined,
-                      },
-                  }
-                : {},
-        },
-    })
+    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
+        useFindManyTrainingObjectType({
+            where: {
+                curriculumVersion: curriculumVersionIdForm
+                    ? {
+                          some: {
+                              id: curriculumVersionIdForm ?? undefined,
+                          },
+                      }
+                    : {},
+            },
+        })
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        where: {
-            curriculum: {
-                some: {
-                    curriculumVersion: {
-                        some: {
-                            id: curriculumVersionIdForm ?? undefined,
+    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
+        useFindManyTrainingMajor({
+            where: {
+                curriculum: {
+                    some: {
+                        curriculumVersion: {
+                            some: {
+                                id: curriculumVersionIdForm ?? undefined,
+                            },
                         },
                     },
                 },
             },
-        },
-        orderBy: {
-            name: 'asc',
-        },
-    })
+            orderBy: {
+                name: 'asc',
+            },
+        })
     const { data: curriculumVersionData } = useFindUniqueCurriculumVersion(
         {
             where: { id: curriculumVersionIdForm ?? undefined },
@@ -160,19 +163,38 @@ const PutFixedClassModal = () => {
 
     const updateFixedClassWithStudent = async () => {
         if (!dataOutput) return
-        const { curriculumVersionId, ...rest } = dataOutput
+        const payload = {
+            code: dataOutput.code,
+            name: dataOutput.name,
+            description: dataOutput.description,
+            startYear: dataOutput.startYear,
+            graduated: dataOutput.graduated,
+            active: dataOutput.active,
+            summary: dataOutput.summary,
+            initSize: dataOutput.initSize,
+        }
         await updateFixedClass({
             data: {
+                ...payload,
                 students: {
                     updateMany: {
-                        where: { fixedClassId: id },
-                        data: { curriculumVersionId: curriculumVersionId },
+                        where: {
+                            fixedClassId: id,
+                        },
+                        data: {
+                            curriculumVersionId: dataOutput?.curriculumVersionId,
+                        },
                     },
                 },
-                curriculumVersionId,
-                ...rest,
+                trainingCourseId: dataOutput.trainingCourseId,
+                managementOrganizationId: dataOutput.managementOrganizationId,
+                curriculumVersionId: dataOutput.curriculumVersionId,
+                staffManagementId: dataOutput.staffManagementId,
+                lecturerManagementId: dataOutput.lecturerManagementId,
             },
-            where: { id },
+            where: {
+                id,
+            },
         })
         message.success('Cập nhật thành công')
         queryClient.invalidateQueries({
@@ -185,6 +207,16 @@ const PutFixedClassModal = () => {
         if (!output) return
         try {
             showSpinner()
+            const payload = {
+                code: output.code,
+                name: output.name,
+                description: output.description,
+                startYear: output.startYear,
+                graduated: output.graduated,
+                active: output.active,
+                summary: output.summary,
+                initSize: output.initSize,
+            }
             if (id) {
                 if (
                     oldFixedClass &&
@@ -195,8 +227,17 @@ const PutFixedClassModal = () => {
                     setDataOutput(output)
                 } else {
                     await updateFixedClass({
-                        data: output,
-                        where: { id },
+                        data: {
+                            ...payload,
+                            trainingCourseId: output.trainingCourseId,
+                            managementOrganizationId: output.managementOrganizationId,
+                            curriculumVersionId: output.curriculumVersionId,
+                            staffManagementId: output.staffManagementId,
+                            lecturerManagementId: output.lecturerManagementId,
+                        },
+                        where: {
+                            id,
+                        },
                     })
                     message.success('Cập nhật thành công')
                     queryClient.invalidateQueries({
@@ -206,7 +247,14 @@ const PutFixedClassModal = () => {
                 }
             } else {
                 await createFixedClass({
-                    data: output,
+                    data: {
+                        ...payload,
+                        trainingCourseId: output.trainingCourseId,
+                        managementOrganizationId: output.managementOrganizationId,
+                        curriculumVersionId: output.curriculumVersionId,
+                        staffManagementId: output.staffManagementId,
+                        lecturerManagementId: output.lecturerManagementId,
+                    },
                 })
                 message.success('Thêm mới thành công')
                 queryClient.invalidateQueries({

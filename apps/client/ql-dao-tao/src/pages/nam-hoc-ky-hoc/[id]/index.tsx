@@ -12,15 +12,6 @@ import { Divider } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 
-interface FilterProps {
-    searchText: string | null
-    managementOrganizationId: string | undefined
-    trainingObjectId: string | undefined
-    trainingCourseId: string | undefined
-    subjectCode: string | undefined
-    examTypes: string | undefined
-}
-
 export default function CanhCaoHocBong() {
     const router = useRouter()
     const semesterId = router.query.id as string
@@ -37,7 +28,9 @@ export default function CanhCaoHocBong() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                {initialValue?.code} - {initialValue?.name} - {initialValue?.schoolYear?.name}
+                {[initialValue?.code, initialValue?.name, initialValue?.schoolYear?.name]
+                    .filter(Boolean)
+                    .join(' - ')}
             </Divider>
             <Tabs
                 items={[

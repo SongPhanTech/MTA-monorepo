@@ -118,10 +118,14 @@ export default function StudentCourseByPlan({
     return (
         <App>
             <Divider orientation="left" orientationMargin={0}>
-                {initialValue?.code} - {initialValue?.name} -{' '}
-                {initialValue?.schedule ? getScheduleLabel(initialValue.schedule) : ''} -{' '}
-                {initialValue?.mainLecturer?.userProfile?.lastName}{' '}
-                {initialValue?.mainLecturer?.userProfile?.firstName}
+                {[
+                    initialValue?.code,
+                    initialValue?.name,
+                    initialValue?.schedule && getScheduleLabel(initialValue.schedule),
+                    initialValue?.mainLecturer?.userProfile?.fullname,
+                ]
+                    .filter(Boolean)
+                    .join(' - ')}
             </Divider>
 
             <Row gutter={[16, 16]} align="top" justify="space-between">

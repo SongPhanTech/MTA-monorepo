@@ -144,3 +144,13 @@ export const searchTree = (data: any, searchText: any) => {
         })
         .filter(Boolean)
 }
+
+export const genOptionsFilter = (data: any[], key: string) => {
+    const uniqueAges = [...new Set(data.map((item) => item.age))]
+    return uniqueAges.map((i) => {
+        return {
+            value: i,
+            label: i,
+        }
+    })
+}
