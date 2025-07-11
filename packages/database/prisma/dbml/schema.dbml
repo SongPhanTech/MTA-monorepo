@@ -315,6 +315,8 @@ Table FixedClass {
   graduated Boolean [default: false]
   classMonitor Student
   classMonitorId String [unique]
+  unionLeader Student
+  unionLeaderId String [unique]
   trainingCourse TrainingCourse [not null]
   trainingCourseId String [not null]
   managementOrganization DM_DonVi
@@ -859,6 +861,7 @@ Table Student {
   unionLeader String
   status StudentStatus [not null, default: 'ENROLLED']
   classMonitor FixedClass
+  unionLeaderOf FixedClass
   fixedClass FixedClass
   fixedClassId String
   subjectClassStudent StudentSubjectScore [not null]
@@ -2358,6 +2361,7 @@ Table StudentAcademicDecision {
   appliedConfigId String
   actionTaken AcademicActionType [not null]
   decisionDate DateTime [default: `now()`, not null]
+  validUntil DateTime
   reason String
   documentEvidence DocumentFile [not null]
   status DecisionStatus [not null, default: 'PENDING']
@@ -2902,6 +2906,8 @@ Ref: TrainingCourse.semesterStartId > Semester.id
 Ref: TrainingCourse.trainingObjectTypeId > TrainingObjectType.id
 
 Ref: FixedClass.classMonitorId - Student.id
+
+Ref: FixedClass.unionLeaderId - Student.id
 
 Ref: FixedClass.trainingCourseId > TrainingCourse.id
 
