@@ -292,9 +292,9 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
                     return (
-                        <div className="p-4 w-full min-w-[200px] max-w-[300px]">
+                        <div className="p-4 w-full min-w-[200px] max-w-[300px] ">
                             {item.options.length > 0 && (
-                                <div>
+                                <div className="max-h-[500px] overflow-y-auto">
                                     <Checkbox
                                         onChange={(e: CheckboxChangeEvent) =>
                                             onCheckAllChange(item, e)
@@ -399,7 +399,7 @@ const Table = <T extends Record<string, unknown>>({
                                     })
                                 }}
                                 fieldNames={{ title: 'title', key: 'value', children: 'children' }}
-                                className="w-full mb-3"
+                                className="w-full mb-3 max-h-[500px] overflow-y-auto"
                             />
                             <ListButton
                                 clear={() => {

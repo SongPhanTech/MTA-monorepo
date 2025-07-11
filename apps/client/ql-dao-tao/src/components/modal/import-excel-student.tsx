@@ -79,7 +79,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 message.error(res?.data?.message || 'Nhâp dữ liệu sinh viên từ file thất bại')
             }
         } catch (_error) {
-            message.error('Có lỗi xảy ra khi nhập điểm từ file')
+            message.error('Có lỗi xảy ra khi nhập dữ liệu từ file')
         } finally {
             hideSpinner()
         }

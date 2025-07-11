@@ -59,20 +59,14 @@ export default function TrainingProgramCatalog() {
         where: {
             curriculumVersion: {
                 some: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
+                    name: {
+                        contains: filters.name,
+                        mode: 'insensitive',
+                    },
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive',
+                    },
                     ...(filters.trainingObjectTypes
                         ? {
                               trainingObjectTypeId: {
@@ -104,20 +98,14 @@ export default function TrainingProgramCatalog() {
         include: {
             curriculumVersion: {
                 where: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
+                    name: {
+                        contains: filters.name,
+                        mode: 'insensitive',
+                    },
+                    code: {
+                        contains: filters.code,
+                        mode: 'insensitive',
+                    },
                     ...(filters.trainingObjectTypes
                         ? {
                               trainingObjectTypeId: {
@@ -318,14 +306,6 @@ export default function TrainingProgramCatalog() {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
-    }
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
     }
 
     const handleRowClick = (record: { id?: string }) => {

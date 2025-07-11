@@ -799,11 +799,9 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Họ và tên',
-                                dataIndex: 'name',
                                 width: 150,
                                 fixed: 'left',
-                                render: (text, record) =>
-                                    `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
+                                render: (text, record) => record.student?.userProfile?.fullname,
                             },
                             {
                                 title: 'Ngày sinh',

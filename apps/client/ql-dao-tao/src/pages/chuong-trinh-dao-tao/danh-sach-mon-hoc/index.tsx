@@ -1,4 +1,3 @@
-import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -7,6 +6,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
 import type { DM_DonVi, ExamType } from '@workspace/db'
 import {
     useCountSubject,
@@ -15,7 +15,7 @@ import {
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Select, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
@@ -23,10 +23,21 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
-    searchText: string | null
-    managementOrganizationId: string | null
-    examType: ExamType[] | null
-    active: boolean | null
+    searchText?: string
+    managementOrganizationId?: string
+    examType?: ExamType[]
+    active?: boolean
+    code?: string
+    name?: string
+    credit?: 'asc' | 'desc'
+    period?: 'asc' | 'desc'
+    numberOfTheory?: 'asc' | 'desc'
+    numberOfPractical?: 'asc' | 'desc'
+    numberOfSelfStudy?: 'asc' | 'desc'
+    numberOfPractice?: 'asc' | 'desc'
+    numberOfReview?: 'asc' | 'desc'
+    numberOfExam?: 'asc' | 'desc'
+    numberOfOther?: 'asc' | 'desc'
 }
 
 export default function SubjectList() {
@@ -35,8 +46,19 @@ export default function SubjectList() {
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         managementOrganizationId: '',
-        examType: null,
-        active: null,
+        examType: undefined,
+        active: undefined,
+        code: '',
+        name: '',
+        credit: undefined,
+        period: undefined,
+        numberOfTheory: undefined,
+        numberOfPractical: undefined,
+        numberOfSelfStudy: undefined,
+        numberOfPractice: undefined,
+        numberOfReview: undefined,
+        numberOfExam: undefined,
+        numberOfOther: undefined,
     })
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
@@ -66,18 +88,26 @@ export default function SubjectList() {
                       ],
                   }
                 : {}),
+            ...(filters.code
+                ? {
+                      subjectVersion: {
+                          some: { code: { contains: filters.code, mode: 'insensitive' } },
+                      },
+                  }
+                : {}),
+            ...(filters.name
+                ? {
+                      subjectVersion: {
+                          some: { name: { contains: filters.name, mode: 'insensitive' } },
+                      },
+                  }
+                : {}),
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
             ...(filters.examType
                 ? {
-                      subjectVersion: {
-                          some: {
-                              examType: {
-                                  in: filters.examType,
-                              },
-                          },
-                      },
+                      subjectVersion: { some: { examType: { in: filters.examType } } },
                   }
                 : {}),
             ...(typeof filters.active === 'boolean'
@@ -91,13 +121,47 @@ export default function SubjectList() {
                 : {}),
         },
         include: {
+            _count: true,
             subjectVersion: {
-                orderBy: {
-                    createdAt: 'desc',
-                },
+                orderBy: [
+                    ...emptyObjectIf([{ credit: filters.credit }], !!filters.credit),
+                    ...emptyObjectIf([{ period: filters.period }], !!filters.period),
+                    ...emptyObjectIf(
+                        [{ numberOfTheory: filters.numberOfTheory }],
+                        !!filters.numberOfTheory
+                    ),
+                    ...emptyObjectIf(
+                        [{ numberOfPractical: filters.numberOfPractical }],
+                        !!filters.numberOfPractical
+                    ),
+                    ...emptyObjectIf(
+                        [{ numberOfSelfStudy: filters.numberOfSelfStudy }],
+                        !!filters.numberOfSelfStudy
+                    ),
+                    ...emptyObjectIf(
+                        [{ numberOfPractice: filters.numberOfPractice }],
+                        !!filters.numberOfPractice
+                    ),
+                    ...emptyObjectIf(
+                        [{ numberOfReview: filters.numberOfReview }],
+                        !!filters.numberOfReview
+                    ),
+                    ...emptyObjectIf(
+                        [{ numberOfExam: filters.numberOfExam }],
+                        !!filters.numberOfExam
+                    ),
+                    ...emptyObjectIf(
+                        [{ numberOfOther: filters.numberOfOther }],
+                        !!filters.numberOfOther
+                    ),
+                    {
+                        createdAt: 'desc',
+                    },
+                ],
             },
             managementOrganization: true,
         },
+
         orderBy: {
             name: 'asc',
         },
@@ -299,6 +363,8 @@ export default function SubjectList() {
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
                         defaultExpandAll
+                        filters={filters}
+                        setFilters={setFilters}
                         onChange={(pagination, filters) => {
                             if (filters.examType) {
                                 handleFilterChange('examType', filters.examType as ExamType[])
@@ -317,11 +383,13 @@ export default function SubjectList() {
                                 dataIndex: 'code',
                                 width: 120,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Tên phiên bản',
                                 dataIndex: 'name',
                                 width: 200,
+                                type: 'input',
                             },
                             {
                                 title: 'Mã TKB',
@@ -333,57 +401,57 @@ export default function SubjectList() {
                                 title: 'Số tín chỉ',
                                 dataIndex: 'credit',
                                 width: 150,
-                                sorter: (a, b) => a.credit - b.credit,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'Số tiết',
                                 dataIndex: 'period',
                                 width: 150,
-                                sorter: (a, b) => a.period - b.period,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'LT',
                                 dataIndex: 'numberOfTheory',
                                 width: 120,
-                                sorter: (a, b) => a.numberOfTheory - b.numberOfTheory,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'BT',
                                 dataIndex: 'numberOfPractical',
                                 width: 120,
-                                sorter: (a, b) => a.numberOfPractical - b.numberOfPractical,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'ThL',
                                 dataIndex: 'numberOfSelfStudy',
                                 width: 120,
-                                sorter: (a, b) => a.numberOfSelfStudy - b.numberOfSelfStudy,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'TN, TH',
                                 dataIndex: 'numberOfPractice',
                                 width: 120,
-                                sorter: (a, b) => a.numberOfPractice - b.numberOfPractice,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'Ôn',
                                 dataIndex: 'numberOfReview',
                                 width: 120,
-                                sorter: (a, b) => a.numberOfReview - b.numberOfReview,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'KT, Thi',
                                 dataIndex: 'numberOfExam',
                                 width: 120,
-                                sorter: (a, b) => a.numberOfExam - b.numberOfExam,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'Hình thức thi',

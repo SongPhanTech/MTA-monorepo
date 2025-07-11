@@ -1,7 +1,9 @@
+import { EllipsisOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingBlockOnCurriculumVersion, PutTrainingBlockSubject } from '@components/modal'
+import ImportCurriculumVersionModal from '@components/modal/import-ctdt'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -12,7 +14,6 @@ import { emptyObjectIf } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
-    ExamType,
     TrainingBlockOnCurriculumVersion,
 } from '@workspace/db'
 import {
@@ -24,22 +25,32 @@ import {
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
-import _ from 'lodash'
+import { Button, Col, Divider, Dropdown, Flex, Menu, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, CopyPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
-
 export default function TrainingProgramSubjects() {
     const router = useRouter()
     const id = router.query.id as string
+    const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
         organization: undefined,
         code: '',
         name: '',
+        trainingMajors: undefined,
+        credit: undefined,
+        semester: undefined,
+        period: undefined,
+        numberOfTheory: undefined,
+        numberOfPractical: undefined,
+        numberOfSelfStudy: undefined,
+        numberOfPractice: undefined,
+        numberOfReview: undefined,
+        numberOfExam: undefined,
+        examType: undefined,
     })
 
     const { data: initialValue } = useFindUniqueCurriculumVersion(
@@ -79,20 +90,14 @@ export default function TrainingProgramSubjects() {
             subjects: {
                 some: {
                     subject: {
-                        OR: [
-                            {
-                                name: {
-                                    contains: filters.name,
-                                    mode: 'insensitive',
-                                },
-                            },
-                            {
-                                code: {
-                                    contains: filters.code,
-                                    mode: 'insensitive',
-                                },
-                            },
-                        ],
+                        name: {
+                            contains: filters.name,
+                            mode: 'insensitive',
+                        },
+                        code: {
+                            contains: filters.code,
+                            mode: 'insensitive',
+                        },
                         ...emptyObjectIf(
                             {
                                 managementOrganizationId: {
@@ -100,6 +105,14 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             !!filters.organization
+                        ),
+                        ...emptyObjectIf(
+                            {
+                                examType: {
+                                    in: filters.examType,
+                                },
+                            },
+                            !!filters.examType
                         ),
                     },
                 },
@@ -109,20 +122,14 @@ export default function TrainingProgramSubjects() {
             subjects: {
                 where: {
                     subject: {
-                        OR: [
-                            {
-                                name: {
-                                    contains: filters.name,
-                                    mode: 'insensitive',
-                                },
-                            },
-                            {
-                                code: {
-                                    contains: filters.code,
-                                    mode: 'insensitive',
-                                },
-                            },
-                        ],
+                        name: {
+                            contains: filters.name,
+                            mode: 'insensitive',
+                        },
+                        code: {
+                            contains: filters.code,
+                            mode: 'insensitive',
+                        },
                         ...emptyObjectIf(
                             {
                                 managementOrganizationId: {
@@ -130,6 +137,14 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             !!filters.organization
+                        ),
+                        ...emptyObjectIf(
+                            {
+                                examType: {
+                                    in: filters.examType,
+                                },
+                            },
+                            !!filters.examType
                         ),
                     },
                 },
@@ -144,9 +159,91 @@ export default function TrainingProgramSubjects() {
                         },
                     },
                 },
-                orderBy: {
-                    semester: 'asc',
-                },
+                orderBy: [
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    credit: filters.credit,
+                                },
+                            },
+                        ],
+                        !!filters.credit
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    period: filters.period,
+                                },
+                            },
+                        ],
+                        !!filters.period
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    numberOfTheory: filters.numberOfTheory,
+                                },
+                            },
+                        ],
+                        !!filters.numberOfTheory
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    numberOfSelfStudy: filters.numberOfSelfStudy,
+                                },
+                            },
+                        ],
+                        !!filters.numberOfSelfStudy
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    numberOfPractical: filters.numberOfPractical,
+                                },
+                            },
+                        ],
+                        !!filters.numberOfPractical
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    numberOfPractice: filters.numberOfPractice,
+                                },
+                            },
+                        ],
+                        !!filters.numberOfPractice
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    numberOfReview: filters.numberOfReview,
+                                },
+                            },
+                        ],
+                        !!filters.numberOfReview
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                subject: {
+                                    numberOfExam: filters.numberOfExam,
+                                },
+                            },
+                        ],
+                        !!filters.numberOfExam
+                    ),
+                    {
+                        semester: filters.semester ? filters.semester : 'asc',
+                    },
+                ],
             },
             trainingBlock: true,
         },
@@ -156,13 +253,10 @@ export default function TrainingProgramSubjects() {
     })
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+    //     orderBy: { name: 'asc' },
+    // })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
@@ -218,9 +312,31 @@ export default function TrainingProgramSubjects() {
         }
         hideSpinner()
     }
+
     const treeData = buildOrgTree(manageOrgData)
 
     const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({})
+    const itemsDownload = [
+        {
+            key: 'import',
+            label: 'Nhập dữ liệu bằng excel',
+            onClick: () => setImportModalVisible(true),
+        },
+        {
+            key: 'update',
+            label: 'Tải file mẫu excel',
+            onClick: () => onOpenTrainingBlock,
+        },
+    ]
+    const menuDownload = (
+        <Menu>
+            {itemsDownload.map((item) => (
+                <Menu.Item key={item.key} onClick={item.onClick}>
+                    {item.label}
+                </Menu.Item>
+            ))}
+        </Menu>
+    )
 
     return (
         <div>
@@ -270,6 +386,16 @@ export default function TrainingProgramSubjects() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
+                                <Dropdown overlay={menuDownload} trigger={['hover']}>
+                                    <Button
+                                        className="text-primary border-primary mr-2"
+                                        icon={<EllipsisOutlined />}
+                                    />
+                                </Dropdown>
+                                <ImportCurriculumVersionModal
+                                    visible={importModalVisible}
+                                    onCancel={() => setImportModalVisible(false)}
+                                />
                                 <Tooltip title="Sao chép phiên bản CTĐT">
                                     <Button
                                         onClick={() =>
@@ -288,6 +414,7 @@ export default function TrainingProgramSubjects() {
                                         Sao chép
                                     </Button>
                                 </Tooltip>
+
                                 <Tooltip title="Cập nhật khối kiến thức cho CTĐT">
                                     <Button
                                         onClick={() =>
@@ -365,73 +492,99 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'Chuyên ngành',
-                                width: 160,
-                                align: 'center',
-                                render: (record) =>
-                                    record?.subject?.managementOrganization?.trainingMajors?.[0]
-                                        ?.name,
-                            },
-                            {
                                 title: 'Số TC',
-                                dataIndex: ['subject', 'credit'],
+                                dataIndex: 'credit',
                                 width: 80,
+                                type: 'order',
                                 align: 'center',
+                                render: (__, record) => {
+                                    return record?.subject?.credit
+                                },
                             },
                             {
                                 title: 'Học kỳ dự kiến',
                                 dataIndex: 'semester',
                                 width: 140,
+                                type: 'order',
                                 align: 'center',
                             },
                             {
                                 title: 'Số tiết TKB',
-                                dataIndex: ['subject', 'period'],
+                                dataIndex: 'period',
                                 width: 120,
                                 align: 'center',
+                                type: 'order',
+                                render: (__, record) => {
+                                    return record?.subject?.period
+                                },
                             },
                             {
                                 title: 'LT',
-                                dataIndex: ['subject', 'numberOfTheory'],
+                                dataIndex: 'numberOfTheory',
                                 width: 80,
+                                type: 'order',
                                 align: 'center',
+                                render: (__, record) => {
+                                    return record?.subject?.numberOfTheory
+                                },
                             },
                             {
                                 title: 'BT',
-                                dataIndex: ['subject', 'numberOfPractical'],
-                                width: 80,
+                                dataIndex: 'numberOfPractical',
+                                type: 'order',
                                 align: 'center',
+                                render: (__, record) => {
+                                    return record?.subject?.numberOfPractical
+                                },
                             },
                             {
                                 title: 'ThL',
-                                dataIndex: ['subject', 'numberOfSelfStudy'],
+                                dataIndex: 'numberOfSelfStudy',
                                 width: 80,
                                 align: 'center',
+                                type: 'order',
+                                render: (__, record) => {
+                                    return record?.subject?.numberOfSelfStudy
+                                },
                             },
                             {
                                 title: 'TN, TH',
-                                dataIndex: ['subject', 'numberOfPractice'],
+                                dataIndex: 'numberOfPractice',
                                 width: 90,
                                 align: 'center',
+                                type: 'order',
+                                render: (__, record) => {
+                                    return record?.subject?.numberOfPractice
+                                },
                             },
                             {
                                 title: 'Ôn',
-                                dataIndex: ['subject', 'numberOfReview'],
+                                dataIndex: 'numberOfReview',
                                 width: 80,
                                 align: 'center',
+                                type: 'order',
+                                render: (__, record) => {
+                                    return record?.subject?.numberOfReview
+                                },
                             },
                             {
                                 title: 'KT, Thi',
-                                dataIndex: ['subject', 'numberOfExam'],
+                                dataIndex: 'numberOfExam',
                                 width: 100,
                                 align: 'center',
+                                type: 'order',
+                                render: (__, record) => {
+                                    return record?.subject?.numberOfExam
+                                },
                             },
                             {
                                 title: 'Thi',
-                                dataIndex: ['subject', 'examType'],
+                                dataIndex: 'examType',
                                 width: 150,
                                 align: 'center',
-                                render: (record: ExamType) => getExamTypeLabel(record),
+                                type: 'select',
+                                options: options,
+                                render: (__, record) => getExamTypeLabel(record?.subject?.examType),
                             },
                             {
                                 title: 'Trạng thái',

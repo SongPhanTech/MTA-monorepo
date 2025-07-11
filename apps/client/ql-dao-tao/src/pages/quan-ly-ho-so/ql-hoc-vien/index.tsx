@@ -354,7 +354,7 @@ export default function UserProfilePageDs() {
         {
             key: 'upload',
             label: 'Nhập file nhập thông tin sinh viên',
-            onClick: () => handleModalUpload('upload'),
+            onClick: () => () => setImportModalVisible(true),
         },
         {
             key: 'update',
