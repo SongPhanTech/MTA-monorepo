@@ -5,6 +5,36 @@ const prisma = new PrismaClient()
 async function main() {
     //#region Delete existing data before import
     console.log('Deleting existing data...')
+    await prisma.studentSubjectScore.deleteMany({
+        where: {
+            studentId: {
+                startsWith: 'student_CDT_K6_',
+            },
+        },
+    })
+    await prisma.userProfile.deleteMany({
+        where: {
+            id: {
+                in: [
+                    'student_CDT_K6_1',
+                    'student_CDT_K6_2',
+                    'student_CDT_K6_3',
+                    'student_CDT_K6_4',
+                    'student_CDT_K6_5',
+                    'student_CDT_K6_6',
+                    'student_CDT_K6_7',
+                    'student_CDT_K6_8',
+                    'student_CDT_K6_9',
+                    'student_CDT_K6_10',
+                ],
+            },
+        },
+    })
+    await prisma.student.deleteMany({
+        where: {
+            fixedClassId: 'K25_CĐT',
+        },
+    })
 
     // Delete in reverse order of dependencies
     await prisma.fixedClass.deleteMany({
@@ -51,6 +81,87 @@ async function main() {
         where: {
             id: {
                 in: ['CDT_K6'],
+            },
+        },
+    })
+
+    await prisma.subjectClass.deleteMany({
+        where: {
+            id: {
+                in: [
+                    // Đại cương subjects
+                    'VLĐC1_CĐT_1',
+                    'TNVLĐC1_CĐT_1',
+                    'VLĐC2_CĐT_1',
+                    'TNVLĐC2_CĐT_1',
+                    'CSLTHH_1',
+                    'TNCSDLTHH_1',
+                    'DSTTHGT_1',
+                    'GT1_1',
+                    'GT2_1',
+                    'LTXSTK_1',
+                    'LTCB_1',
+                    'TA_B11_1',
+                    'TA_B12_1',
+                    'HHVKTCB_1',
+                    'NNLCBCNMLN1_1',
+                    'NNLCBCNMLN2_1',
+                    'PLĐC_1',
+                    'TTHCM_1',
+                    'DLCM_1',
+                    // Cơ sở ngành subjects
+                    'CLT1_1',
+                    'SBVL1_1',
+                    'TNCH_1',
+                    'CLT2_1',
+                    'SBVL2_1',
+                    'VKTCK_1',
+                    'NLM_1',
+                    'CTM_1',
+                    'DACTM_1',
+                    'TLMTL_1',
+                    'DSBTL_1',
+                    'CNKL_1',
+                    'CSCNCTM_1',
+                    'VLHĐC_1',
+                    'TNVL_1',
+                    'DCD_1',
+                    'CADCAE_1',
+                    'CKDT_1',
+                    'TNCKDT_1',
+                    'LTMBTL_1',
+                    'TNLTM_1',
+                    'LTDKTD1_1',
+                    'ATLDVBVMT_1',
+                    'LTDKTD2_1',
+                    // Chuyên ngành subjects
+                    'HTTDTK_1',
+                    'PTCHNVNMT_1',
+                    'KTRB_1',
+                    'PTVTHHTCDT_1',
+                    'DAPTVTHHTCDT_1',
+                    'DKMTHTSX_1',
+                    'DACNCAD_1',
+                    'HTSXLHVTH_1',
+                    'DTSBTL_1',
+                    'TNDTS_1',
+                    'DTTTBTL_1',
+                    'TNDTTT_1',
+                    'TKHTN_1',
+                    'DATKHTN_1',
+                    'PLCPCMTTCN_1',
+                    'DTCSVKTBD_1',
+                    'CSTDD_1',
+                    'LTPTCADCAE_1',
+                    'CSTDHMCC_1',
+                    'TTCK_1',
+                    'TTCDT_1',
+                    'TTD_1',
+                    'TTDTCB_1',
+                    'ATDKCD_1',
+                    'TTTN_K6_1',
+                    'DATN_1',
+                ],
             },
         },
     })
