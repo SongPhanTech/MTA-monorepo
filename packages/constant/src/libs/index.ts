@@ -6,10 +6,7 @@ export const getMinioUrl = (uri: string | undefined | null) => {
     return url.href
 }
 
-export const emptyObjectIf = <T extends Record<string, unknown> | Array<unknown>>(
-    obj: T,
-    condition: boolean
-): T => {
+export const emptyObjectIf = <T>(obj: T, condition: boolean): T => {
     if (condition) {
         return obj
     }
