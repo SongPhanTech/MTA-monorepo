@@ -140,7 +140,9 @@ const PutGraduationApplication = () => {
                     <Select
                         placeholder="Chọn sinh viên"
                         options={student?.map((item) => ({
-                            label: `${item.userProfile.fullname} - ${item.code}`,
+                            label: [item.userProfile.fullname, item.code]
+                                .filter(Boolean)
+                                .join(' - '),
                             value: item.id,
                         }))}
                         showSearch

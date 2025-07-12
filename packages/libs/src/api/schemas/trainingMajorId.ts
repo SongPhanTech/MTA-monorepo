@@ -8,4 +8,4 @@
 /**
  * ID của chuyên ngành đào tạo
  */
-export type TrainingMajorId = string
+export type TrainingMajorId = string;

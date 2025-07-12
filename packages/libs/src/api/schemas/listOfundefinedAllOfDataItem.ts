@@ -4,85 +4,84 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { ListOfundefinedAllOfDataItemGender } from './listOfundefinedAllOfDataItemGender'
-import type { ListOfundefinedAllOfDataItemUserType } from './listOfundefinedAllOfDataItemUserType'
+import type { ListOfundefinedAllOfDataItemUserType } from './listOfundefinedAllOfDataItemUserType';
+import type { ListOfundefinedAllOfDataItemGender } from './listOfundefinedAllOfDataItemGender';
 
 export type ListOfundefinedAllOfDataItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt: string | null
-    userType: ListOfundefinedAllOfDataItemUserType
-    /** @nullable */
-    avatar?: string | null
-    firstName: string
-    lastName: string
-    idCardNumber: string
-    /** @nullable */
-    fullname?: string | null
-    /** @nullable */
-    healthInsuranceNumber?: string | null
-    /** @nullable */
-    bankAccountNumber?: string | null
-    /** @nullable */
-    bankName?: string | null
-    /** @nullable */
-    currentAddress?: string | null
-    /** @nullable */
-    dateOfBirth?: string | null
-    /** @nullable */
-    placeOfBirth?: string | null
-    /** @nullable */
-    homeTown?: string | null
-    /** @nullable */
-    idCardDate?: string | null
-    /** @nullable */
-    gender?: ListOfundefinedAllOfDataItemGender
-    /** @nullable */
-    permanentAddress?: string | null
-    /** @nullable */
-    temporaryAddress?: string | null
-    /** @nullable */
-    contactAddress?: string | null
-    /** @nullable */
-    phoneNumber?: string | null
-    /** @nullable */
-    email?: string | null
-    /** @nullable */
-    officerNumber?: string | null
-    /** @nullable */
-    rankDate?: string | null
-    /** @nullable */
-    academicDegreeDate?: string | null
-    /** @nullable */
-    academicRankDate?: string | null
-    /** @nullable */
-    unionDate?: string | null
-    /** @nullable */
-    unionPlace?: string | null
-    /** @nullable */
-    CPVJoinDate?: string | null
-    /** @nullable */
-    officialCPVDate?: string | null
-    /** @nullable */
-    CPVJoinPlace?: string | null
-    /** @nullable */
-    tenureDate?: string | null
-    /** @nullable */
-    enlistmentDate?: string | null
-    /** @nullable */
-    dischargeDate?: string | null
-    /** @nullable */
-    familyPhone?: string | null
-    /** @nullable */
-    familyName?: string | null
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt: string | null;
+  userType: ListOfundefinedAllOfDataItemUserType;
+  /** @nullable */
+  avatar?: string | null;
+  firstName: string;
+  lastName: string;
+  idCardNumber: string;
+  /** @nullable */
+  fullname?: string | null;
+  /** @nullable */
+  healthInsuranceNumber?: string | null;
+  /** @nullable */
+  bankAccountNumber?: string | null;
+  /** @nullable */
+  bankName?: string | null;
+  /** @nullable */
+  currentAddress?: string | null;
+  /** @nullable */
+  dateOfBirth?: string | null;
+  /** @nullable */
+  placeOfBirth?: string | null;
+  /** @nullable */
+  homeTown?: string | null;
+  /** @nullable */
+  idCardDate?: string | null;
+  /** @nullable */
+  gender?: ListOfundefinedAllOfDataItemGender;
+  /** @nullable */
+  permanentAddress?: string | null;
+  /** @nullable */
+  temporaryAddress?: string | null;
+  /** @nullable */
+  contactAddress?: string | null;
+  /** @nullable */
+  phoneNumber?: string | null;
+  /** @nullable */
+  email?: string | null;
+  /** @nullable */
+  officerNumber?: string | null;
+  /** @nullable */
+  rankDate?: string | null;
+  /** @nullable */
+  academicDegreeDate?: string | null;
+  /** @nullable */
+  academicRankDate?: string | null;
+  /** @nullable */
+  unionDate?: string | null;
+  /** @nullable */
+  unionPlace?: string | null;
+  /** @nullable */
+  CPVJoinDate?: string | null;
+  /** @nullable */
+  officialCPVDate?: string | null;
+  /** @nullable */
+  CPVJoinPlace?: string | null;
+  /** @nullable */
+  tenureDate?: string | null;
+  /** @nullable */
+  enlistmentDate?: string | null;
+  /** @nullable */
+  dischargeDate?: string | null;
+  /** @nullable */
+  familyPhone?: string | null;
+  /** @nullable */
+  familyName?: string | null;
+};

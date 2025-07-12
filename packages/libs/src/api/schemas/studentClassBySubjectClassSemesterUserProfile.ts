@@ -4,17 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { StudentClassBySubjectClassSemesterUserProfileGender } from './studentClassBySubjectClassSemesterUserProfileGender'
+import type { StudentClassBySubjectClassSemesterUserProfileGender } from './studentClassBySubjectClassSemesterUserProfileGender';
 
 export type StudentClassBySubjectClassSemesterUserProfile = {
-    id: string
-    /** @nullable */
-    code: string | null
-    lastName: string
-    firstName: string
-    /** @nullable */
-    familyName: string | null
-    gender: StudentClassBySubjectClassSemesterUserProfileGender
-    /** @nullable */
-    dateOfBirth: string | null
-}
+  id: string;
+  /** @nullable */
+  code: string | null;
+  lastName: string;
+  firstName: string;
+  /** @nullable */
+  familyName: string | null;
+  gender: StudentClassBySubjectClassSemesterUserProfileGender;
+  /** @nullable */
+  dateOfBirth: string | null;
+};

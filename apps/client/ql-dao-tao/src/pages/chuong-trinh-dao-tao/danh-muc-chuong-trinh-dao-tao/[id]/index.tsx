@@ -26,11 +26,10 @@ import {
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Dropdown, Flex, Menu, message, Row, Tag, Tooltip } from 'antd'
-import _ from 'lodash'
 import { BookPlus, CopyPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
@@ -257,12 +256,7 @@ export default function TrainingProgramSubjects() {
     // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
     //     orderBy: { name: 'asc' },
     // })
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
+
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
@@ -318,14 +312,6 @@ export default function TrainingProgramSubjects() {
         }
         hideSpinner()
     }
-
-    const processedData = useMemo(() => {
-        return data?.map((item) => ({
-            ...item,
-            key: item.id,
-            name: `Khối kiến thức: ${item?.trainingBlock?.name}`,
-        }))
-    }, [data])
 
     const treeData = buildOrgTree(manageOrgData)
 
@@ -450,8 +436,9 @@ export default function TrainingProgramSubjects() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        id="version-curriculum"
-                        headerTitleKey="name"
+                        headerTitleKey={({ trainingBlock }) =>
+                            `Khối kiến thức: ${[trainingBlock?.name].filter(Boolean).join(' - ')}`
+                        }
                         childrenFieldName="subjects"
                         defaultExpandAll
                         filters={filters}
@@ -647,7 +634,7 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                         ]}
-                        data={processedData}
+                        data={data}
                         headerRight={({ id }) => (
                             <div className="flex gap-2.5 w-[80px] justify-center items-center">
                                 <CreateIcon

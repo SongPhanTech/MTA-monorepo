@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type ListOfundefinedAllOfDataItemConversationItem = unknown | null
+export type ListOfundefinedAllOfDataItemConversationItem = unknown | null;

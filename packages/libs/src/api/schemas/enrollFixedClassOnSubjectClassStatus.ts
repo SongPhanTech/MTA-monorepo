@@ -5,17 +5,17 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EnrollFixedClassOnSubjectClassStatus =
-    (typeof EnrollFixedClassOnSubjectClassStatus)[keyof typeof EnrollFixedClassOnSubjectClassStatus]
+export type EnrollFixedClassOnSubjectClassStatus = typeof EnrollFixedClassOnSubjectClassStatus[keyof typeof EnrollFixedClassOnSubjectClassStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EnrollFixedClassOnSubjectClassStatus = {
-    ENROLLED: 'ENROLLED',
-    GRADUATED: 'GRADUATED',
-    DEFERRED_STUDY: 'DEFERRED_STUDY',
-    SUSPENDED_STUDY: 'SUSPENDED_STUDY',
-    WITHDRAWN: 'WITHDRAWN',
-    TRANSFERRED: 'TRANSFERRED',
-    PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
-    ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
-} as const
+  ENROLLED: 'ENROLLED',
+  GRADUATED: 'GRADUATED',
+  DEFERRED_STUDY: 'DEFERRED_STUDY',
+  SUSPENDED_STUDY: 'SUSPENDED_STUDY',
+  WITHDRAWN: 'WITHDRAWN',
+  TRANSFERRED: 'TRANSFERRED',
+  PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
+  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
+} as const;

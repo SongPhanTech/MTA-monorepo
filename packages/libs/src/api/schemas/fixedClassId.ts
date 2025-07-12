@@ -8,4 +8,4 @@
 /**
  * ID của lớp niên chế
  */
-export type FixedClassId = string
+export type FixedClassId = string;

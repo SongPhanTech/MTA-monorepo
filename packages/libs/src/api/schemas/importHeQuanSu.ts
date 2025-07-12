@@ -6,7 +6,7 @@
  */
 
 export interface ImportHeQuanSu {
-    file: Blob
-    /** @nullable */
-    timeout?: number | null
+  file: Blob;
+  /** @nullable */
+  timeout?: number | null;
 }

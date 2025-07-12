@@ -166,7 +166,7 @@ const PutTrainingMajorModal = () => {
                         options={trainingFieldData.map((i: TrainingField) => {
                             return {
                                 value: i.id,
-                                label: i?.code ? `${i?.code} - ${i.name}` : i?.name,
+                                label: [i.code, i.name].filter(Boolean).join(' - '),
                             }
                         })}
                         onChange={(val) => handleMajorChange(val)}

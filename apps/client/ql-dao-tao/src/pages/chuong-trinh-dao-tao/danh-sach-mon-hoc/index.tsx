@@ -19,7 +19,7 @@ import { Button, Col, Flex, Form, Input, message, Row, Select, Tag, Tooltip } fr
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -292,15 +292,6 @@ export default function SubjectList() {
         })
     }
 
-    const processedData = useMemo(() => {
-        return SubjectData?.map((item) => ({
-            ...item,
-            name: `${item?.name}${
-                item?.managementOrganization?.sTen ? ` - ${item?.managementOrganization?.sTen}` : ''
-            }`,
-        }))
-    }, [SubjectData])
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -366,7 +357,9 @@ export default function SubjectList() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey="name"
+                        headerTitleKey={({ code, name, managementOrganization }) =>
+                            `${[code, name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
+                        }
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
                         defaultExpandAll
@@ -552,7 +545,7 @@ export default function SubjectList() {
                                 />
                             </Flex>
                         )}
-                        data={processedData}
+                        data={SubjectData}
                     />
                 </Col>
             </Row>

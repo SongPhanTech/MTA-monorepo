@@ -6,7 +6,7 @@
  */
 
 export type StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor = {
-    id: string
-    name: string
-    code: string
-}
+  id: string;
+  name: string;
+  code: string;
+};
