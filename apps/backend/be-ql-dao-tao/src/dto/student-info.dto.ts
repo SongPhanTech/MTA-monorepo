@@ -57,7 +57,7 @@ export const StudentScholarship = z.object({
     chucVuHocVien: z.string().describe('Chức vụ học viên'),
     diemThuong: z.number().describe('Điểm thưởng chức vụ'),
     quocTich: z.string().describe('Quốc tịch'),
-    hocBong: z.array(ListScholarship).describe('Danh sách học bổng đạt được'),
+    hocBong: z.array(z.any()).describe('Danh sách học bổng đạt được'),
     ghiChu: z.string().describe('Ghi chú'),
 
     userProfile: z.any().describe('Thông tin người dùng'),
@@ -179,7 +179,7 @@ export const StudentResult = z.object({
     trainingFieldId: z.string().describe('ID Ngành'),
     userProfile: z.any().describe('Thông tin người dùng'),
     hasScholarship: z.boolean().describe('Có học bổng hay không'),
-    scholarship: z.array(ListScholarship).describe('Danh sách học bổng của sinh viên'),
+    scholarship: z.array(z.any()).describe('Danh sách học bổng của sinh viên'),
     hasAcademicAction: z.boolean().describe('Có hành động học vụ hay không'),
     academicAction: z
         .array(ListAcademicAction)
