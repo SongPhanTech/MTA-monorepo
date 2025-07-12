@@ -15,6 +15,7 @@ import {
     type StudentInfoCheck,
     StudentResult,
 } from '../dto/student-info.dto'
+import type { StudentCondition, StudentDataContext } from '../types/student-context'
 
 const checkStudentSemesterResult = async (
     semesterId: string,
@@ -1004,6 +1005,46 @@ const checkEligible = <T extends number | string>(
 
     return invert ? !criteria : criteria
 }
+
+export function evaluateCondition(
+    studentData: StudentDataContext,
+    condition: StudentCondition
+): boolean {
+    const actualValue = studentData[condition.field]
+
+    // Nếu không có dữ liệu cho tiêu chí này, coi như không thoả mãn
+    if (actualValue === null || actualValue === undefined) {
+        return false
+    }
+
+    const value = Number(actualValue)
+
+    switch (condition.operator) {
+        case 'GTE': // Lớn hơn hoặc bằng (>=)
+            return value >= condition.value
+
+        case 'GT': // Lớn hơn (>)
+            return value > condition.value
+
+        case 'LTE': // Nhỏ hơn hoặc bằng (<=)
+            return value <= condition.value
+
+        case 'LE': // Nhỏ hơn (<)
+            return value < condition.value
+
+        case 'EQ': // Bằng (==)
+            return value === condition.value
+
+        // Toán tử 'IN' cần xử lý đặc biệt nếu giá trị là một mảng
+        case 'IN':
+            return condition.tuple?.includes(`${value}`) || false
+
+        default:
+            // Nếu toán tử không hợp lệ, trả về false
+            return false
+    }
+}
+
 const checkAcademicActionRule = async (
     student: StudentInfoCheck,
     ruleSetId: string
