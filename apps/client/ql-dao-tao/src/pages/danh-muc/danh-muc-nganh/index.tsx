@@ -24,42 +24,24 @@ export default function TrainingFieldPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
         trainingObjectTypes: undefined,
         name: '',
         code: '',
-        sort: 'asc',
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
         where: {
             OR: [
-                {
-                    name: {
-                        contains: filters.name,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    code: {
-                        contains: filters.code,
-                        mode: 'insensitive',
-                    },
-                },
-                ...(filters.trainingObjectTypes
-                    ? [
-                          {
-                              trainingObjectTypes: {
-                                  some: {
-                                      trainingObjectTypeId: {
-                                          in: filters.trainingObjectTypes,
-                                      },
-                                  },
-                              },
-                          },
-                      ]
-                    : []),
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
         },
         include: {
             organization: true,
@@ -79,32 +61,16 @@ export default function TrainingFieldPage() {
     const { data: count } = useCountTrainingField({
         where: {
             OR: [
-                {
-                    name: {
-                        contains: filters.name,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    code: {
-                        contains: filters.code,
-                        mode: 'insensitive',
-                    },
-                },
-                ...(filters.trainingObjectTypes
-                    ? [
-                          {
-                              trainingObjectTypes: {
-                                  some: {
-                                      trainingObjectTypeId: {
-                                          in: filters.trainingObjectTypes,
-                                      },
-                                  },
-                              },
-                          },
-                      ]
-                    : []),
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
         },
     })
 

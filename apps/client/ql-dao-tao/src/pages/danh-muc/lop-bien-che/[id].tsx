@@ -7,6 +7,7 @@ import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
 } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
@@ -16,32 +17,22 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountStudent,
+    useFindManyCurriculumVersion,
     useFindManyStudent,
     useFindManyTemplateFile,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
     useFindUniqueFixedClass,
     useUpdateManyStudent,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Menu,
-    message,
-    Popconfirm,
-    Row,
-    Tag,
-    Tooltip,
-} from 'antd'
+import { Button, Col, Divider, Flex, Menu, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookCheckIcon, Search } from 'lucide-react'
+import { BookCheckIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
-import type React from 'react'
+
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -54,10 +45,20 @@ export default function StudentFixedClassPage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [open, setOpen] = useState(false)
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        dateOfBirth: [],
-        gender: null,
+        gender: undefined,
+    })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
     })
 
     const { data: fixedClass } = useFindUniqueFixedClass(
@@ -98,21 +99,43 @@ export default function StudentFixedClassPage() {
                 OR: [
                     {
                         firstName: {
-                            contains: filters.searchText,
+                            contains: filters.name,
                         },
                     },
                     {
                         lastName: {
-                            contains: filters.searchText,
+                            contains: filters.name,
                         },
                     },
                 ],
-                dateOfBirth: {
-                    gte: filters.dateOfBirth?.[0],
-                    lte: filters.dateOfBirth?.[1],
-                },
-                ...(filters.gender ? { gender: filters.gender } : {}),
+
+                //                ...(filters.curriculumVersion
+                // ? {
+                //       curriculumVersionId: {
+                //           in: filters.curriculumVersion,
+                //       },
+                //   }
+                // : {}),
+                //    ...(filters.gender
+                // ? {
+                //       gender: {
+                //           in: filters.gender,
+                //       },
+                //   }
+                // : {}),
+                // dateOfBirth: {
+                //     gte: filters.dateOfBirth?.[0],
+                //     lte: filters.dateOfBirth?.[1],
+                // },
+                // ...(filters.gender ? { gender: filters.gender } : {}),
             },
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
         },
         include: {
             userProfile: true,
@@ -177,12 +200,12 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
-                dateOfBirth: {
-                    gte: filters.dateOfBirth?.[0],
-                    lte: filters.dateOfBirth?.[1],
-                },
+                // dateOfBirth: {
+                //     gte: filters.dateOfBirth?.[0],
+                //     lte: filters.dateOfBirth?.[1],
+                // },
 
-                ...(filters.gender ? { gender: filters.gender } : {}),
+                // ...(filters.gender ? { gender: filters.gender } : {}),
             },
         },
     })
@@ -369,77 +392,7 @@ export default function StudentFixedClassPage() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm"
-                                        style={{
-                                            width: 200,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        prefix={
-                                            <Search
-                                                size={16}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                {/* <Form.Item
-                                    className="mb-0"
-                                    name="gender"
-                                    labelCol={{ span: 24 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn giới tính"
-                                        options={GENDER_LIST.map((i) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
-                                        style={{
-                                            width: 200,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        onChange={(val) => handleFilterChange('gender', val)}
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                <DatePicker.RangePicker
-                                    placeholder={['Từ ngày', 'Đến ngày']}
-                                    style={{
-                                        width: 300,
-                                        marginRight: 8,
-                                        height: 32,
-                                    }}
-                                    allowClear
-                                    onChange={(dates, dateStrings) => {
-                                        handleFilterChange(
-                                            'dateOfBirth',
-                                            dates ? [dateStrings[0], dateStrings[1]] : []
-                                        )
-                                    }}
-                                    locale={CUSSTOM_VI_LOCALE}
-                                    format={{
-                                    format: 'DD/MM/YYYY',
-                                    type: 'mask',
-                        }}
-                                /> */}
-                            </Flex>
-                        </Col>
+                        <Col span={12} />
 
                         {/* Hàng chứa các button */}
                         <Col xs={12}>
@@ -487,6 +440,8 @@ export default function StudentFixedClassPage() {
                             selectedRowKeys,
                             onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),
                         }}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -502,12 +457,14 @@ export default function StudentFixedClassPage() {
                                 fixed: 'left',
                                 width: 120,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Họ và tên',
                                 width: 150,
                                 fixed: 'left',
                                 align: 'center',
+                                type: 'input',
                                 render: (record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
@@ -516,7 +473,7 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
-                                width: 100,
+                                width: 150,
                                 render: (record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
@@ -525,8 +482,15 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Giới tính',
                                 align: 'center',
-                                width: 80,
-                                render: (record) =>
+                                width: 120,
+                                type: 'select',
+                                dataIndex: 'gender',
+                                options: [
+                                    { label: 'Nam', value: 'male' },
+                                    { label: 'Nữ', value: 'female' },
+                                ],
+
+                                render: (__, record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
@@ -537,7 +501,13 @@ export default function StudentFixedClassPage() {
                                 title: 'Ngành',
                                 width: 150,
                                 align: 'center',
-                                render: (record) => {
+                                type: 'select',
+                                dataIndex: 'trainingFields',
+                                options: trainingFieldData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
                                             ?.trainingMajor?.trainingField?.name || ''
@@ -548,7 +518,13 @@ export default function StudentFixedClassPage() {
                                 title: 'Chuyên ngành',
                                 width: 180,
                                 align: 'center',
-                                render: (record) => {
+                                type: 'select',
+                                dataIndex: 'trainingMajors',
+                                options: trainingMajorData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
                                             ?.trainingMajor?.name || ''
@@ -559,7 +535,13 @@ export default function StudentFixedClassPage() {
                                 title: 'Chương trình đào tạo',
                                 width: 250,
                                 align: 'center',
-                                render: (record) => {
+                                dataIndex: 'curriculumVersion',
+                                type: 'select',
+                                options: curriculumVersionData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) => {
                                     const curriculum = record.curriculumVersion
                                     return curriculum ? curriculum.name : ''
                                 },

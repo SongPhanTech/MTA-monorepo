@@ -93,10 +93,18 @@ export type FilterProps = {
     numberOfReview?: 'asc' | 'desc'
     numberOfExam?: 'asc' | 'desc'
     examType?: string[]
-    fixedClass?: string[] | []
-    trainingCourse?: string[] | []
-    actionTaken?: AcademicActionType[] | []
-    status?: DecisionStatus[] | []
+    fixedClass?: string[]
+    trainingCourse?: string[]
+    actionTaken?: AcademicActionType[]
+    status?: DecisionStatus[]
+    admissionQuota?: 'asc' | 'desc'
+    semesterStart?: string
+    curriculumVersion?: string[]
+    managementOrganization?: string[]
+    graduated?: boolean
+    trainingLevel?: string[]
+    startYear?: 'asc' | 'desc'
+    gender?: string[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

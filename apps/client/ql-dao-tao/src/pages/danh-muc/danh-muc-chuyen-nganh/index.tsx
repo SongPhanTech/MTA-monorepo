@@ -426,7 +426,7 @@ export default function TrainingMajorPage() {
 
                             {
                                 title: 'Số TC chuyên ngành',
-                                width: 150,
+                                width: 200,
                                 align: 'center',
                                 dataIndex: 'numberCreditsMajor',
                                 type: 'order',

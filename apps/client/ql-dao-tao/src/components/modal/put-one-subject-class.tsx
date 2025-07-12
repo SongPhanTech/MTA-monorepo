@@ -94,7 +94,7 @@ const PutOneSubjectClassModal = () => {
 
     const { data: subjectVersionData = [] } = useFindManySubjectVersion({})
 
-    const { data: semesterData = [] } = useFindManySemester({})
+    const { data: semesterData = [] } = useFindManySemester()
 
     const TrainingLocationForm = Form.useWatch('trainingLocationId', form)
 
