@@ -2,28 +2,27 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutOlympicScoreModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountArchivedAward,
     useFindManyArchivedAward,
     useUpdateArchivedAward,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-// const { Option } = Select;
-interface FilterProps {
-    searchText: string | ''
-}
 
 export default function OplympicAwards() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        name: '',
+        bonusScore: undefined,
+        count: undefined,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -54,25 +53,34 @@ export default function OplympicAwards() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
         },
         include: { _count: true },
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        bonusScore: filters.bonusScore,
+                    },
+                ],
+                !!filters.bonusScore
+            ),
+            ...emptyObjectIf(
+                [
+                    {
+                        studentSubjectScore: {
+                            _count: filters.count,
+                        },
+                    },
+                ],
+                !!filters.count
+            ),
+            {
+                createdAt: 'desc',
+            },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -86,10 +94,7 @@ export default function OplympicAwards() {
 
     const { data: count } = useCountArchivedAward({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
         },
     })
 
@@ -101,7 +106,7 @@ export default function OplympicAwards() {
                         <Col span={24} className="mt-3">
                             <Flex justify="space-between">
                                 <Col span={6}>
-                                    <Form.Item className="mb-0" name="searchText">
+                                    {/* <Form.Item className="mb-0" name="searchText">
                                         <Input
                                             id="search"
                                             onChange={(e) =>
@@ -110,7 +115,7 @@ export default function OplympicAwards() {
                                             placeholder="Tìm kiếm"
                                             allowClear
                                         />
-                                    </Form.Item>
+                                    </Form.Item> */}
                                 </Col>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
@@ -136,36 +141,43 @@ export default function OplympicAwards() {
                     <Table
                         rowKey="id"
                         id="training-category"
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
-                                width: 30,
+                                width: 50,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Tên giải thưỏng',
+                                title: 'Tên giải thưởng',
                                 dataIndex: 'name',
                                 align: 'center',
-                                width: 200,
+                                type: 'input',
                             },
                             {
                                 title: 'Điểm cộng',
                                 dataIndex: 'bonusScore',
-                                width: 150,
+                                width: 250,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'Số SV đã được cộng',
-                                dataIndex: ['_count', 'studentSubjectScore'],
-                                width: 150,
+                                dataIndex: 'count',
+                                width: 250,
                                 align: 'center',
+                                type: 'order',
+                                render: (__, record) => {
+                                    return record._count?.studentSubjectScore
+                                },
                             },
                             {
                                 title: 'Thao tác',
-                                width: 60,
+                                width: 150,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, { id, _count }) => {

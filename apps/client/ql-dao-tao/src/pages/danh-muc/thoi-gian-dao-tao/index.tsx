@@ -2,6 +2,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingTimeModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -10,7 +11,7 @@ import {
     useFindManyTrainingTime,
     useUpdateTrainingTime,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -19,16 +20,15 @@ export default function TrainingTimePage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_searchText, _setSearchText] = useState<string>('')
-    const [filters, setFilters] = useState({
-        searchText: '',
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
     })
 
     const { data = [], refetch } = useFindManyTrainingTime({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
+            code: { contains: filters.code, mode: 'insensitive' },
         },
         orderBy: {
             name: 'asc',
@@ -43,10 +43,8 @@ export default function TrainingTimePage() {
 
     const { data: count } = useCountTrainingTime({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
+            code: { contains: filters.code, mode: 'insensitive' },
         },
     })
 
@@ -95,37 +93,7 @@ export default function TrainingTimePage() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={6}>
-                            <Form.Item label="" name="search">
-                                <Input
-                                    id="search"
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
-                                    }
-                                    placeholder="Tìm kiếm"
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
-                        {/* 
-                        <Col span={6}>
-                            <Form.Item name="curriculumVersionId" label="">
-                                <Select
-                                    placeholder="Chọn chương trình đào tạo"
-                                    options={curriculumVersionData.map((i: CurriculumVersion) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                    onChange={(val) =>
-                                        handleFilterChange('curriculumVersionId', val)
-                                    }
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col> */}
+                    <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
                                 <Button onClick={handleModal} type="primary">
@@ -139,6 +107,8 @@ export default function TrainingTimePage() {
                     <Table
                         rowKey="id"
                         id="fixed-class"
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -153,12 +123,16 @@ export default function TrainingTimePage() {
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'code',
+                                type: 'input',
+                                multiple: ['name'],
                             },
                             {
                                 title: 'Tên thời gian đào tạo',
                                 align: 'center',
                                 width: 200,
                                 dataIndex: 'name',
+                                type: 'input',
+                                multiple: ['code'],
                             },
                             {
                                 title: 'Thao tác',

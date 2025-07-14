@@ -115,6 +115,10 @@ export type FilterProps = {
     officerNumber?: string
     lecturerType?: string[]
     staffType?: string[]
+    bonusScore?: 'asc' | 'desc'
+    finalScore?: 'asc' | 'desc'
+    count?: 'asc' | 'desc'
+    publishDate?: Date[]
     scholarship?: string[]
     decisionDate?: Date[]
 }
