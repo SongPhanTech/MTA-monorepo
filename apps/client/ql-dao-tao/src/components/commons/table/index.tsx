@@ -599,6 +599,8 @@ const Table = <T extends Record<string, unknown>>({
                                 className="w-full mb-3"
                                 allowClear
                                 onChange={(dates, dateStrings) => {
+                                    console.log(dateStrings, 'dates', dates)
+
                                     setFiltersTable({
                                         ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]: dateStrings.length

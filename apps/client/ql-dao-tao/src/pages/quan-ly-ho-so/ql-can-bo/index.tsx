@@ -70,8 +70,8 @@ export default function StaffManagement() {
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0]).toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1]).toDate(),
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
                           },
                       }
                     : {}),
@@ -173,8 +173,8 @@ export default function StaffManagement() {
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0]).toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1]).toDate(),
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
                           },
                       }
                     : {}),
