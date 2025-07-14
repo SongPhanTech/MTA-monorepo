@@ -12,8 +12,8 @@ enum CriteriaField {
   SEMESTER_REGISTERED_CREDITS       // Số tín chỉ đã đăng ký trong học kỳ
   SEMESTER_PASSED_CREDITS           // Số tín chỉ đã đạt trong học kỳ
   SEMESTER_FAILED_CREDITS           // Số tín chỉ không đạt trong học kỳ
-  SEMESTER_FAILED_CREDITS_PERCENT   // Tỷ lệ % tín chỉ không đạt trên tổng số đăng ký trong kỳ
   YEAR_FAILED_CREDITS               // Tổng số tín chỉ không đạt trong năm học
+  FAILED_CREDITS_PERCENT            // Tỷ lệ % tín chỉ không đạt
   CUMULATIVE_PASSED_CREDITS         // Tổng số tín chỉ tích lũy từ đầu khóa học
   CUMULATIVE_DEBT_CREDITS           // Tổng số tín chỉ còn nợ tích lũy từ đầu khóa học
   CUMULATIVE_PROGRESS_PERCENT       // Tỷ lệ % tín chỉ đã tích lũy so với tổng tín chỉ yêu cầu của CTĐT

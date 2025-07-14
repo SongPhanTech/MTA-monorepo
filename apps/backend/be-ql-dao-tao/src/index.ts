@@ -11,6 +11,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 import CurriculumApp from './api/curriculum'
 import FixedClassApp from './api/fixed-class'
+import GraduationApp from './api/graduation'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
 import TrainingScoreApp from './api/training-score'
@@ -73,6 +74,7 @@ app.route('/api/subject-class', SubjectClassApp)
 app.route('/api/student', StudentApp)
 app.route('/api/training-score', TrainingScoreApp)
 app.route('/api/curriculum', CurriculumApp)
+app.route('/api/graduation', GraduationApp)
 
 const nv = await prisma.dM_NhanVien.findFirstOrThrow()
 
