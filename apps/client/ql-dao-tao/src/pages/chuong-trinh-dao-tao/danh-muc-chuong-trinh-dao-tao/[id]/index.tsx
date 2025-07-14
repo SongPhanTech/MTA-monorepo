@@ -423,7 +423,7 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['organization'],
+                                multiple: ['organization', 'name', 'examType'],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.code ? record?.subject?.code : ''
                                 },
@@ -446,7 +446,7 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['organization'],
+                                multiple: ['organization', 'code', 'examType'],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
                                 },
@@ -458,7 +458,7 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
-                                multiple: ['name', 'code'],
+                                multiple: ['name', 'code', 'examType'],
                                 render: (
                                     __,
                                     record: {
@@ -565,6 +565,7 @@ export default function TrainingProgramSubjects() {
                                 options: options,
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     getExamTypeLabel(record?.subject?.examType),
+                                multiple: ['organization', 'code', 'name'],
                             },
                             {
                                 title: 'Trạng thái',
@@ -588,7 +589,7 @@ export default function TrainingProgramSubjects() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={(e) => {
+                                                    onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
                                                             trainingBlockOnCurriculumVersionId:
                                                                 record?.trainingBlockOnCurriculumVersionId,

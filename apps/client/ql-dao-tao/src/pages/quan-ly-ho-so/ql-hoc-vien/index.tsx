@@ -99,11 +99,11 @@ export default function UserProfilePageDs() {
                           },
                       }
                     : {}),
-                ...(filters.dateOfBirth
+                ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
-                              gte: filters.dateOfBirth?.[0],
-                              lte: filters.dateOfBirth?.[1],
+                              gte: dayjs(filters.dateOfBirth?.[0]).toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1]).toDate(),
                           },
                       }
                     : {}),
@@ -239,11 +239,11 @@ export default function UserProfilePageDs() {
                           },
                       }
                     : {}),
-                ...(filters.dateOfBirth
+                ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
-                              gte: filters.dateOfBirth?.[0],
-                              lte: filters.dateOfBirth?.[1],
+                              gte: dayjs(filters.dateOfBirth?.[0]).toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1]).toDate(),
                           },
                       }
                     : {}),
@@ -860,10 +860,10 @@ export default function UserProfilePageDs() {
                             },
                         ]}
                         rowKey="id"
-                        rowSelection={{
-                            selectedRowKeys,
-                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                        }}
+                        // rowSelection={{
+                        //     selectedRowKeys,
+                        //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                        // }}
                         data={data}
                         pagination={{
                             current: currentPage,

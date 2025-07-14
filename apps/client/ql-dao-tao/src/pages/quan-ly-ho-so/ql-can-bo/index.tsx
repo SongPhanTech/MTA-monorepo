@@ -67,11 +67,11 @@ export default function StaffManagement() {
                           },
                       }
                     : {}),
-                ...(filters.dateOfBirth
+                ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
-                              gte: filters.dateOfBirth?.[0],
-                              lte: filters.dateOfBirth?.[1],
+                              gte: dayjs(filters.dateOfBirth?.[0]).toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1]).toDate(),
                           },
                       }
                     : {}),
@@ -170,11 +170,11 @@ export default function StaffManagement() {
                           },
                       }
                     : {}),
-                ...(filters.dateOfBirth
+                ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
-                              gte: filters.dateOfBirth?.[0],
-                              lte: filters.dateOfBirth?.[1],
+                              gte: dayjs(filters.dateOfBirth?.[0]).toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1]).toDate(),
                           },
                       }
                     : {}),
