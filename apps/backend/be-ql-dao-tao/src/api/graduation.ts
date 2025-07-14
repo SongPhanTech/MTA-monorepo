@@ -5,7 +5,7 @@ import {
     GraduationRankDowngradeConditionScalarSchema,
 } from '@workspace/db/zod/models'
 import { prisma } from '..'
-import { evaluateCondition } from '../services/studen-result.service'
+import { evaluateCondition } from '../services/student-result.service'
 import type { StudentDataContext } from '../types/student-context'
 
 const app = new OpenAPIHono({ strict: false })
