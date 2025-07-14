@@ -592,8 +592,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
         const studentsIDs = await prisma.student.findMany({
             where: {
                 status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
-                fixedClassId: 'K25_CĐT',
-                // id: {endsWith: '1'}
+                // fixedClassId: 'K25_CĐT',
+                // id: {endsWith: '4'}
                 // id: "cmcvrfn5k0002okmgkp2k2cwp"
             },
             include: {
@@ -637,13 +637,11 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
         // Kiểm tra xem có kết quả sinh viên trong học kỳ này không
         studentsIDs.forEach(async (student) => {
             const existingResult = await checkStudentSemesterResult(semesterId, student.id)
-
             // lấy khóa học
             const trainingCourseId = student.fixedClass?.trainingCourseId
             if (!trainingCourseId) {
                 throw new Error(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
             }
-
             // Lấy thông tin tích lũy của sinh viên
             const thongTinTichLuy = await ThongTinTichLuy(
                 student.id,
@@ -675,6 +673,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     trainingScoreSession: { semesterId },
                 },
             })
+            // const studentTraining = await prisma.tra.findFirst({
 
             if (!existingResult) {
                 console.log(`Không tìm thấy kết quả học kỳ cho sinh viên ${student.id}, tạo mới...`)
@@ -758,7 +757,6 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     cumulativeGpaBase10: thongTinTichLuy.diemTrungBinh10TichLuy,
 
                     lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
-                    //TODO: Chưa cập nhật
                     lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
                     totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
 
@@ -801,6 +799,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 })
             }
         })
+
         console.log('Tính toán kết quả học kỳ cho tất cả sinh viên đã hoàn thành.')
 
         return 'Successfully calculated semester results for all students.'
@@ -818,7 +817,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                // studentId: 'cmcvrfn5k0002okmgkp2k2cwp',
+                // studentId: {endsWith: '4'},
                 student: {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
                     fixedClassId: {
@@ -1165,8 +1164,26 @@ const checkAcademicWarning = async (
                 ],
             },
         })
-        const isEligible = warningCriteriaList.every((criteria) => {
+        // console.log('Checking academic warning :',warningCriteriaList)
+
+        const _isEligible = warningCriteriaList.every((criteria) => {
+            console.log('Checking criteria:', criteria.field, 'with value:', criteria.threshold)
+
             switch (criteria.field) {
+                case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
+                    console.log(
+                        'Semester GPA: ',
+                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+                        criteria.threshold,
+                        criteria.operator,
+                        criteria.invert
+                    )
+                    return checkEligible(
+                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+                        criteria.threshold,
+                        criteria.operator,
+                        criteria.invert
+                    )
                 case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
                     console.log(
                         'Total Credits: ',
@@ -1194,26 +1211,14 @@ const checkAcademicWarning = async (
                         criteria.operator,
                         criteria.invert
                     )
-                case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
-                    console.log(
-                        'Semester GPA: ',
-                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
-                        criteria.threshold,
-                        criteria.operator,
-                        criteria.invert
-                    )
-                    return checkEligible(
-                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
-                        criteria.threshold,
-                        criteria.operator,
-                        criteria.invert
-                    )
 
                 default:
-                    return false
+                    return true
             }
         })
-        return isEligible
+
+        console.log('Academic warning eligibility:', _isEligible, student.id)
+        return _isEligible
     } catch (error) {
         console.error('Error checking student eligibility:', error)
         return false // Trả về false nếu có lỗi xảy ra
@@ -1412,6 +1417,13 @@ const getStudentResult = async (
                             },
                         },
                         trainingObjectType: true,
+                    },
+                },
+            },
+            orderBy: {
+                student: {
+                    userProfile: {
+                        firstName: 'asc',
                     },
                 },
             },
