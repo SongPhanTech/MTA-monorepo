@@ -1,0 +1,140 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+import '../ql-dao-tao/student'
+
+// Enum trạng thái bài thi của sinh viên
+enum StudentExamStatus {
+  NOT_TAKEN       // Chưa thi
+  COMPLETED       // Đã thi xong
+
+  @@schema("ql-dao-tao")
+}
+
+// Bảng ngân hàng câu hỏi
+model QuestionBank extends Base {
+  name            String           // Tên ngân hàng câu hỏi
+  
+  subjectVersion  SubjectVersion   @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  
+  questions       Question[]
+  
+  @@unique([subjectVersionId, name])
+  @@schema("ql-dao-tao")
+}
+
+// Bảng câu hỏi
+model Question extends Base {
+  content         String           @db.Text() // Nội dung câu hỏi
+  points          Float            @default(1) // Điểm số
+  explanation     String?          @db.Text() // Giải thích đáp án
+  
+  questionBank    QuestionBank     @relation(fields: [questionBankId], references: [id])
+  questionBankId  String
+  
+  answers         Answer[]         // Các đáp án
+  examQuestions   ExamQuestion[]   // Câu hỏi trong đề thi
+  studentAnswers  StudentAnswer[]  // Câu trả lời của sinh viên
+  
+  @@schema("ql-dao-tao")
+}
+
+// Bảng đáp án
+model Answer extends Base {
+  content         String           @db.Text() // Nội dung đáp án
+  isCorrect       Boolean          @default(false) // Đáp án đúng
+  orderIndex      Int              @default(0) // Thứ tự hiển thị
+  
+  question        Question         @relation(fields: [questionId], references: [id])
+  questionId      String
+  
+  studentAnswers  StudentAnswer[]  // Sinh viên chọn đáp án này
+  
+  @@schema("ql-dao-tao")
+}
+
+// Bảng kỳ thi
+model ExamSession extends Base {
+  title           String             // Tiêu đề kỳ thi
+  
+  subjectVersion  SubjectVersion     @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  
+  // Thời gian thi
+  startTime       DateTime           // Thời gian bắt đầu
+  endTime         DateTime           // Thời gian kết thúc
+  duration        Int                // Thời lượng thi (phút)
+  
+  // Cài đặt thi
+  totalQuestions  Int                // Tổng số câu hỏi
+  totalPoints     Float              // Tổng điểm
+  passScore       Float              @default(5) // Điểm đạt
+  shuffleQuestions Boolean           @default(true) // Xáo trộn câu hỏi
+  shuffleAnswers  Boolean            @default(true) // Xáo trộn đáp án
+  showResult      Boolean            @default(false) // Hiển thị kết quả ngay
+  
+  examQuestions   ExamQuestion[]     // Câu hỏi trong đề thi
+  studentExams    StudentExam[]      // Bài thi của sinh viên
+  
+  @@schema("ql-dao-tao")
+}
+
+// Bảng câu hỏi trong đề thi (từ ngân hàng câu hỏi)
+model ExamQuestion extends Base {
+  examSession     ExamSession      @relation(fields: [examSessionId], references: [id])
+  examSessionId   String
+  
+  question        Question         @relation(fields: [questionId], references: [id])
+  questionId      String
+  
+  orderIndex      Int              @default(0) // Thứ tự câu hỏi trong đề thi
+  points          Float            @default(1) // Điểm cho câu hỏi này
+  
+  @@unique([examSessionId, questionId])
+  @@schema("ql-dao-tao")
+}
+
+// Bảng bài thi của sinh viên
+model StudentExam extends Base {
+  student         Student            @relation(fields: [studentId], references: [id])
+  studentId       String
+  
+  examSession     ExamSession        @relation(fields: [examSessionId], references: [id])
+  examSessionId   String
+  
+  // Thời gian
+  startedAt       DateTime?          // Thời gian bắt đầu làm bài
+  submittedAt     DateTime?          // Thời gian nộp bài
+  timeSpent       Int?               // Thời gian làm bài (giây)
+  
+  // Kết quả
+  totalScore      Float              @default(0) // Tổng điểm
+  correctAnswers  Int                @default(0) // Số câu đúng
+  totalQuestions  Int                @default(0) // Tổng số câu
+  passed          Boolean            @default(false) // Đạt hay không
+  
+  status          StudentExamStatus  @default(NOT_TAKEN)
+  
+  answers         StudentAnswer[]    // Câu trả lời của sinh viên
+  
+  @@unique([studentId, examSessionId])
+  @@schema("ql-dao-tao")
+}
+
+// Bảng câu trả lời của sinh viên
+model StudentAnswer extends Base {
+  studentExam     StudentExam      @relation(fields: [studentExamId], references: [id])
+  studentExamId   String
+  
+  question        Question         @relation(fields: [questionId], references: [id])
+  questionId      String
+  
+  selectedAnswer  Answer           @relation(fields: [selectedAnswerId], references: [id])
+  selectedAnswerId String
+  
+  isCorrect       Boolean          @default(false) // Đáp án có đúng không
+  points          Float            @default(0) // Điểm nhận được
+  
+  @@unique([studentExamId, questionId])
+  @@schema("ql-dao-tao")
+}

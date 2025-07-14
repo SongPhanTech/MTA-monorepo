@@ -80,7 +80,13 @@ model Student extends Base {
   studentAcademicDecision  StudentAcademicDecision[]
   graduationApplications   StudentGraduationApplication[]
   graduationDecision       GraduationDecision?
-
+  surveySessions           SurveySession[]   // Thêm relation với khảo sát
+  notifications     Notification[]     // Thông báo cá nhân
+  notificationReads NotificationRead[] // Lịch sử đọc thông báo
+  studentExams    StudentExam[]
+  researchRegistrations StudentResearchRegistration[] // Đăng ký đề tài nghiên cứu
+  thesisRegistrations   StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
+  
   @@schema("ql-dao-tao")
 }
 

@@ -101,6 +101,7 @@ model Room extends Base {
   buildingId     String?
 
   subjectClasses SubjectClass[]
+  classSchedules ClassSchedule[]
 
   @@unique([buildingId, name])
   @@schema("ql-dao-tao")

@@ -1,0 +1,85 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+import '../ql-dao-tao/student'
+import '../ql-nguoi-dung/user'
+
+// Enum loại thông báo
+enum NotificationType {
+  GENERAL           // Thông báo chung
+  ACADEMIC          // Học vụ
+  EXAM              // Thi cử
+  EVENT             // Sự kiện
+  SCHOLARSHIP       // Học bổng
+  TUITION           // Học phí
+  URGENT            // Khẩn cấp
+  MAINTENANCE       // Bảo trì hệ thống
+
+  @@schema("ql-dao-tao")
+}
+
+// Enum mức độ ưu tiên
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+
+  @@schema("ql-dao-tao")
+}
+
+// Bảng thông báo
+model Notification extends Base {
+  title           String               // Tiêu đề thông báo
+  content         String               @db.Text() // Nội dung
+  type            NotificationType     @default(GENERAL)
+  priority        NotificationPriority @default(NORMAL)
+
+  // Thời gian hiển thị
+  publishedAt     DateTime             @default(now())
+  expiresAt       DateTime?            // Hết hạn hiển thị
+
+  // Đối tượng nhận thông báo
+  targetAll       Boolean              @default(false) // Gửi cho tất cả
+  targetCourses   TrainingCourse[]     // Gửi cho các khoá cụ thể
+  targetClasses   FixedClass[]         // Gửi cho các lớp cụ thể
+  targetStudents  Student[]            // Gửi cho sinh viên cụ thể
+
+  // Thông tin tác giả
+  createdBy       User                 @relation(fields: [createdById], references: [id])
+  createdById     String
+
+  // Tệp đính kèm
+  attachments     NotificationFile[]
+
+  // Theo dõi đọc thông báo
+  readReceipts    NotificationRead[]
+
+  @@schema("ql-dao-tao")
+}
+
+// Bảng tệp đính kèm thông báo
+model NotificationFile extends Base {
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String
+
+  fileName       String
+  filePath       String
+  fileSize       BigInt
+  mimeType       String?
+
+  @@schema("ql-dao-tao")
+}
+
+// Bảng theo dõi sinh viên đã đọc thông báo
+model NotificationRead extends Base {
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String
+  
+  student        Student      @relation(fields: [studentId], references: [id])
+  studentId      String
+
+  readAt         DateTime     @default(now())
+
+  @@unique([notificationId, studentId])
+  @@schema("ql-dao-tao")
+}

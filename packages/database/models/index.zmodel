@@ -5,9 +5,22 @@ import './khao-thi/survey'
 import './ql-danh-muc/categories'
 import './ql-danh-muc/common'
 import './ql-danh-muc/template-file'
+import './ql-danh-muc/core-categories.zmodel'
+import './ql-danh-muc/document.zmodel
 
 import './ql-dao-tao/plan-training'
 import './ql-dao-tao/categories'
+import './ql-dao-tao/criteria.zmodel'
+import './ql-dao-tao/exam.zmodel'
+import './ql-dao-tao/lecturer.zmodel'
+import './ql-dao-tao/notification.zmodel'
+import './ql-dao-tao/ranking.zmodel'
+import './ql-dao-tao/research.zmodel'
+import './ql-dao-tao/scholarship.zmodel'
+import './ql-dao-tao/staff.zmodel'
+import './ql-dao-tao/student.zmodel'
+import './ql-dao-tao/thesis.zmodel'
+
 
 import './ql-nguoi-dung/blocked-ip'
 import './ql-nguoi-dung/feedback'

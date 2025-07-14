@@ -4,6 +4,8 @@ import '../ql-dao-tao/categories'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/staff'
 import '../ql-dao-tao/student'
+import '../ql-dao-tao/research'
+import '../ql-dao-tao/thesis'
 
 abstract model CoreBase {
   Id             String    @id() @default(cuid())
@@ -103,6 +105,9 @@ model DM_DonVi extends CoreBase {
   subjects         Subject[]
   trainingFields   TrainingField[]
   trainingMajors   TrainingMajor[]
+  researchProjects      ResearchProject[]         // Đề tài của đơn vị
+  thesisProjects        ThesisProject[]             // Đồ án của đơn vị
+
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
   @@schema("mta")
