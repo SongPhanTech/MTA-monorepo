@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { StudentGraduationApplication } from '@workspace/db'
 import {
-    useCreateStudentGraduationApplication,
+    useCreateManyStudentGraduationApplication,
     useFindManyStudent,
     useFindUniqueStudentGraduationApplication,
     useUpdateStudentGraduationApplication,
@@ -18,7 +18,9 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
-export type PutGraduationApplication = StudentGraduationApplication
+export type PutGraduationApplication = StudentGraduationApplication & {
+    studentIds?: string[]
+}
 dayjs.locale('vi')
 
 const PutGraduationApplication = () => {
@@ -29,6 +31,7 @@ const PutGraduationApplication = () => {
         onClose: form.resetFields,
     })
     const [searchText, setSearchText] = useState('')
+    const [selectedStudents, setSelectedStudents] = useState<string[]>([])
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -37,7 +40,7 @@ const PutGraduationApplication = () => {
         { enabled: !!input?.id }
     )
 
-    const { data: student, refetch } = useFindManyStudent({
+    const { data: students, refetch } = useFindManyStudent({
         where: {
             ...(searchText && searchText !== ''
                 ? {
@@ -70,6 +73,15 @@ const PutGraduationApplication = () => {
         debouncedRefetch()
     }
 
+    const handleStudentChange = (value: string | string[]) => {
+        if (Array.isArray(value)) {
+            setSelectedStudents(value)
+        } else {
+            // Trường hợp chỉnh sửa (single select)
+            form.setFieldValue('studentId', value)
+        }
+    }
+
     useEffect(() => {
         if (graduationApplication) {
             form.setFieldsValue({
@@ -77,46 +89,62 @@ const PutGraduationApplication = () => {
                 applicationDate: graduationApplication.applicationDate
                     ? dayjs(graduationApplication.applicationDate)
                     : undefined,
+                studentId: graduationApplication.studentId,
             })
+        } else {
+            form.resetFields()
         }
     }, [graduationApplication, form])
 
-    const { mutateAsync: createGraduationApplication } = useCreateStudentGraduationApplication()
+    const { mutateAsync: createManyGraduationApplication } =
+        useCreateManyStudentGraduationApplication()
     const { mutateAsync: updateGraduationApplication } = useUpdateStudentGraduationApplication()
     async function onOk(output?: PutGraduationApplication) {
         if (!output) return
 
         try {
             showSpinner()
-            const payload = {
-                status: output.status,
-                sessionId: input?.graduationSessionId || '',
-                studentId: output.studentId,
-                applicationDate: output.applicationDate,
-            }
-
             if (input?.id) {
+                const payload = {
+                    status: output.status,
+                    sessionId: input?.graduationSessionId || '',
+                    studentId: output.studentId,
+                    applicationDate: output.applicationDate,
+                }
+
                 await updateGraduationApplication({
                     data: payload,
                     where: { id: input.id },
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createGraduationApplication({
+                if (selectedStudents.length === 0) {
+                    message.error('Vui lòng chọn ít nhất một sinh viên')
+                    return
+                }
+
+                const payload = selectedStudents.map((studentId) => ({
+                    status: output.status,
+                    sessionId: input?.graduationSessionId || '',
+                    studentId,
+                    applicationDate: output.applicationDate,
+                }))
+
+                await createManyGraduationApplication({
                     data: payload,
                 })
-                message.success('Thêm mới thành công')
+                message.success(`Đã thêm ${selectedStudents.length} sinh viên`)
             }
 
             queryClient.invalidateQueries({
-                queryKey: [''],
+                queryKey: ['studentGraduationApplications'],
             })
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-
-        hideSpinner()
     }
 
     return (
@@ -130,10 +158,16 @@ const PutGraduationApplication = () => {
             className="w-[50vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="studentId" label="Sinh viên" required>
+                <FormItem
+                    form={form}
+                    name={input?.id ? 'studentId' : 'studentIds'}
+                    label={input?.id ? 'Sinh viên' : 'Danh sách sinh viên'}
+                    required
+                >
                     <Select
-                        placeholder="Chọn sinh viên"
-                        options={student?.map((item) => ({
+                        mode={input?.id ? undefined : 'multiple'}
+                        placeholder={input?.id ? 'Chọn sinh viên' : 'Chọn nhiều sinh viên'}
+                        options={students?.map((item) => ({
                             label: [item.userProfile.fullname, item.code]
                                 .filter(Boolean)
                                 .join(' - '),
@@ -143,6 +177,8 @@ const PutGraduationApplication = () => {
                         onSearch={handleSearch}
                         filterOption={false}
                         allowClear
+                        disabled={!!input?.id}
+                        onChange={handleStudentChange}
                     />
                 </FormItem>
             </Col>
