@@ -19,7 +19,7 @@ import {
 const checkStudentSemesterResult = async (
     semesterId: string,
     studentId: string
-): Promise<boolean> => {
+): Promise<StudentSemesterResult | null> => {
     try {
         const result = await prisma.studentSemesterResult.findFirst({
             where: {
@@ -27,10 +27,10 @@ const checkStudentSemesterResult = async (
                 studentId,
             },
         })
-        return !!result
+        return result
     } catch (error) {
         console.error('Error checking student semester result:', error)
-        return false
+        return null
     } finally {
         await prisma.$disconnect()
     }
@@ -135,6 +135,13 @@ const ThongTinTichLuy = async (
         const DsCacMonDaHocRaw = await prisma.studentSubjectScore.findMany({
             where: {
                 studentId,
+                subjectClass: {
+                    semester: {
+                        startDate: {
+                            lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
+                        },
+                    },
+                },
             },
             select: {
                 subjectVersionId: true,
@@ -191,6 +198,7 @@ const ThongTinTichLuy = async (
         })
         const DSDiemHe4: number[] = []
         const DSDiemHe10: number[] = []
+        let TongTinChiTichLuy = 0
         let TongTinChiDangKy = 0
         DsCacMonDaHocRaw.forEach((item) => {
             if (item.subjectVersion?.trainingBlocks.some((block) => !block.useForFinalScore)) {
@@ -211,7 +219,11 @@ const ThongTinTichLuy = async (
                 return // Bỏ qua nếu chưa có điểm hoặc điểm không hợp lệ
             }
             const soTinChi = item.subjectVersion?.credit || 0 // Số tín chỉ của môn học
-            TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ
+            console.log(' môn học:', item.subjectVersionId, 'Số tín chỉ:', soTinChi)
+            if (checkScorePassed(AcademicRankingBaseType.Base10, diemHe10, DsDiemChuyenDoi)) {
+                TongTinChiTichLuy += soTinChi // chỉ tính môn đã qua
+            }
+            TongTinChiDangKy += soTinChi // Cộng dồn số tín chỉ đăng ký
             const diemHe4 = layGiaTriDiem4(diemHe10, trainingCourseId, DsDiemChuyenDoi)
             DSDiemHe4.push(diemHe4 * soTinChi) // Nhân điểm hệ 4 với số tín chỉ
             DSDiemHe10.push(diemHe10 * soTinChi) // Nhân điểm hệ 10 với số tín chỉ
@@ -280,23 +292,22 @@ const ThongTinTichLuy = async (
                 },
             },
         })
-
+        // console.log('Số môn học yêu cầu:', MonHocYeuCau, phienBanCTDT.curriculumVersionId)
+        // Tính tổng số tín chỉ yêu cầu đến thời điểm hiện tại (chỉ tính các môn có kỳ dự kiến <= kỳ đang học)
         const TongTinChiYeuCau = MonHocYeuCau.reduce((tong, item) => {
-            if (
-                item.subjects
-                    .map((subject) => subject.semester)
-                    .some((semester) => (semester ?? 0) >= kyDangHoc)
-            ) {
-                return tong // Bỏ qua nếu môn học chưa đến kỳ hiện tại
-            }
+            const filteredSubjects = item.subjects.filter(
+                (subject) => (subject.semester ?? 0) <= kyDangHoc
+            )
             return (
                 tong +
-                item.subjects.reduce((tongMon, mon) => {
+                filteredSubjects.reduce((tongMon, mon) => {
                     return tongMon + (mon.subject?.credit || 0)
                 }, 0)
             )
         }, 0)
-
+        console.log('Tổng số tín chỉ yêu cầu đến thời điểm hiện tại:', TongTinChiYeuCau)
+        console.log('Tổng số tín chỉ đã tích lũy:', TongTinChiTichLuy)
+        console.log('Tổng số tín chỉ đã mở:', TongTinChiDangKy)
         // Tìm số tín chỉ mở trong kỳ hiện tại
         const TongTinChiMoTrongKy = MonHocYeuCau.reduce((tong, item) => {
             return (
@@ -321,7 +332,7 @@ const ThongTinTichLuy = async (
             kyCuoi: kyDangHoc === maxSemester,
             diemTrungBinh4TichLuy: diemTrungBinh4,
             diemTrungBinh10TichLuy: diemTrungBinh10,
-            tongTinChiDaTichLuy: TongTinChiDangKy,
+            tongTinChiDaTichLuy: TongTinChiTichLuy, // Số tín chỉ đã tích lũy
             tongTinChiYeuCauDenThoiDiemHienTai: TongTinChiYeuCau,
             tongTinChiMoTrongKy: TongTinChiMoTrongKy,
             tongTinChiNoTichLuy: TongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
@@ -470,7 +481,7 @@ const ThongTinDiemHocKy = async (
         })
 
         // Tính điểm trung bình của sinh viên
-        console.log('Điểm của sinh viên:', studentId, DsDiem)
+        // console.log('Điểm của sinh viên:', studentId, DsDiem)
 
         const DsDiemHe4: number[] = []
         const DSDiemHe10: number[] = []
@@ -500,7 +511,7 @@ const ThongTinDiemHocKy = async (
             }
 
             const soTinChi = item.subjectVersion.credit // Số tín chỉ của môn học
-            if (!checkScorePassed(baseType, diemHe10, DsDiemChuyenDoi)) {
+            if (!checkScorePassed(AcademicRankingBaseType.Base10, diemHe10, DsDiemChuyenDoi)) {
                 soTinChiKhongDat += soTinChi // Cộng dồn số tín chỉ không đạt
             } else {
                 soTinChiDat += soTinChi // Cộng dồn số tín chỉ đạt
@@ -560,6 +571,7 @@ const ThongTinDiemHocKy = async (
     }
 }
 
+//#region ThongTinDiemHocKy
 // Main function
 export const calculateStudentSemesterResult = async (semesterId: string): Promise<string> => {
     const results: StudentSemesterResult[] = []
@@ -580,13 +592,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
         const studentsIDs = await prisma.student.findMany({
             where: {
                 status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
-                // subjectClassStudent: {
-                // 	some: {
-                // 		subjectClass: {
-                // 			semesterId: semesterId, // Lớp môn học trong học kỳ này
-                // 		},
-                // 	},
-                // },
+                fixedClassId: 'K25_CĐT',
+                // id: {endsWith: '1'}
                 // id: "cmcvrfn5k0002okmgkp2k2cwp"
             },
             include: {
@@ -595,6 +602,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                         id: true,
                         trainingCourseId: true, // Lấy ID khóa học
                         classMonitorId: true, // Lấy ID lớp trưởng
+                        unionLeaderId: true, // Lấy ID bí thư
                     },
                 },
                 trainingObjectType: {
@@ -628,7 +636,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
 
         // Kiểm tra xem có kết quả sinh viên trong học kỳ này không
         studentsIDs.forEach(async (student) => {
-            const exists = await checkStudentSemesterResult(semesterId, student.id)
+            const existingResult = await checkStudentSemesterResult(semesterId, student.id)
 
             // lấy khóa học
             const trainingCourseId = student.fixedClass?.trainingCourseId
@@ -640,7 +648,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
             const thongTinTichLuy = await ThongTinTichLuy(
                 student.id,
                 trainingCourseId,
-                hocKyDauVao?.startDate || new Date() // Sử dụng ngày bắt đầu học
+                hocKyDauVao?.startDate || new Date() // Sử dụng ngày bắt đầu của học kỳ check
             )
             if (!thongTinTichLuy) {
                 throw new Error(`Không tìm thấy thông tin học kỳ cho sinh viên ${student.id}`)
@@ -660,7 +668,6 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 console.error(`Không tìm thấy thông tin điểm học kỳ cho sinh viên ${student.id}`)
                 return
             }
-            console.log('có thông tin điểm của học viên: ', student.id, exists)
 
             const conductScore = await prisma.studentTrainingScore.findFirst({
                 where: {
@@ -669,7 +676,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 },
             })
 
-            if (!exists) {
+            if (!existingResult) {
+                console.log(`Không tìm thấy kết quả học kỳ cho sinh viên ${student.id}, tạo mới...`)
                 // Nếu không có kết quả, tạo mới
                 const newResult: StudentSemesterResult = {
                     id: crypto.randomUUID(), // Tạo ID ngẫu nhiên
@@ -692,29 +700,26 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
                     lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
                     totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
-
                     registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
-                    //TODO: Chưa biết xác định thi lại ntn
-                    retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
                     passedCredits: thongTinDiemHocKy.soTinChiDat,
                     failedCredits: thongTinDiemHocKy.soTinChiKhongDat,
-
                     accumulatedCredits: thongTinTichLuy.tongTinChiDaTichLuy, // Số tín chỉ đã tích lũy
                     totalCreditsByCurriculum: thongTinTichLuy.tongTinChiYeuCauDenThoiDiemHienTai, // Số tín chỉ yêu cầu theo CTDT
                     totalFailedCredits: thongTinTichLuy.tongTinChiNoTichLuy, // Số tín chỉ nợ tích lũy
                     studentTrainingType: StudentTrainingType.GOOD,
-                    //TODO: Chưa có thông tin này
-                    foreignLangPass: true, // Đạt trình độ ngoại nsgữ theo quy định
-                    isClassMonitor: student.id === student.fixedClass?.classMonitorId, // Chức vụ học viên (là lớp trưởng nếu id trùng classMonitorId)
-                    isUnionLeader: false, // Chức vụ đoàn viên (hiện tại chưa có thông tin này)
+                    foreignLangPass: student.foreignLangPass, // Đạt trình độ ngoại nsgữ theo quy định
+                    isClassMonitor: student.id === student.fixedClass?.classMonitorId, // là lớp trưởng nếu id trùng classMonitorId)
+                    isUnionLeader: student.id === student.fixedClass?.unionLeaderId, // là bí thư nếu id trùng unionLeaderId)
                     entryScore: student.entryScore, // Điểm đầu vào
+                    academicWarningLevel: student.academicWarningLevel, // mức cảnh cáo học tập
+                    disciplinaryWarningLevel: student.disciplinaryWarningLevel, // mức cảnh cáo học đường
+                    suspended: student.suspended, // đình chỉ học
+                    expelled: student.expelled, // đuổi học
+                    //TODO: Chưa có thông tin này
+                    retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
                     isImproving: false, // Đang cải thiện (hiện tại chưa có thông tin này)
                     postponeWithReason: false, // tạm ngưng có lý do
-                    academicWarningLevel: 0, // mức cảnh cáo học tập
-                    disciplinaryWarningLevel: 0, // mức cảnh cáo học đường
-                    suspended: false, // đình chỉ học
-                    expelled: false, // đuổi học
-                    code: null,
+                    code: student.code || null, // Mã sinh viên
                     active: true,
                     description: null,
                     deletedAt: null,
@@ -722,18 +727,12 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 // Lưu kết quả học kỳ mới
                 results.push(newResult)
                 console.log(`Tạo mới kết quả học kỳ cho sinh viên ${student.id}`)
-                console.log('Kết quả:', newResult)
                 await prisma.studentSemesterResult.create({
                     data: newResult,
                 })
             } else {
                 // Cập nhật kết quả học kỳ nếu đã tồn tại
-                const existingResult = await prisma.studentSemesterResult.findFirst({
-                    where: {
-                        studentId: student.id,
-                        semesterId,
-                    },
-                })
+
                 if (!existingResult) {
                     console.error(
                         `Không tìm thấy kết quả học kỳ để cập nhật cho sinh viên ${student.id}`
@@ -794,7 +793,6 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 // Cập nhật kết quả học kỳ
                 results.push(updatedResult)
                 console.log(`Cập nhật kết quả học kỳ cho sinh viên ${student.id}`)
-                console.log('Kết quả:', updatedResult)
                 await prisma.studentSemesterResult.update({
                     where: {
                         id: existingResult.id,

@@ -27,7 +27,11 @@ export default function CanhCaoHocBong() {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider
+                orientation="left"
+                orientationMargin={0}
+                className="bg-white rounded-lg shadow-sm p-4"
+            >
                 {[initialValue?.code, initialValue?.name, initialValue?.schoolYear?.name]
                     .filter(Boolean)
                     .join(' - ')}
@@ -57,7 +61,7 @@ export default function CanhCaoHocBong() {
                     {
                         key: '5',
                         label: 'Xét thôi học',
-                        children: <XetThoiHoc />,
+                        children: <XetThoiHoc semesterId={semesterId} />,
                     },
                     {
                         key: '6',
@@ -79,6 +83,7 @@ CanhCaoHocBong.getLayout = function getLayout(page: React.ReactElement) {
                     title: 'Cảnh cáo học tập, xét học bổng',
                 },
             ]}
+            unLayout={true}
         >
             {page}
         </DefaultLayout>

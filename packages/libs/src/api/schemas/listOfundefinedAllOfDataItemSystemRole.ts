@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ListOfundefinedAllOfDataItemSystemRole =
-    (typeof ListOfundefinedAllOfDataItemSystemRole)[keyof typeof ListOfundefinedAllOfDataItemSystemRole]
+export type ListOfundefinedAllOfDataItemSystemRole = typeof ListOfundefinedAllOfDataItemSystemRole[keyof typeof ListOfundefinedAllOfDataItemSystemRole];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ListOfundefinedAllOfDataItemSystemRole = {
-    ADMIN: 'ADMIN',
-    USER: 'USER',
-} as const
+  ADMIN: 'ADMIN',
+  USER: 'USER',
+} as const;

@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionsByUserIdSessionsItem } from './sessionsByUserIdSessionsItem'
+import type { SessionsByUserIdSessionsItem } from './sessionsByUserIdSessionsItem';
 
 export interface SessionsByUserId {
-    userId?: string
-    /** List of active sessions. */
-    sessions?: SessionsByUserIdSessionsItem[]
+  userId?: string;
+  /** List of active sessions. */
+  sessions?: SessionsByUserIdSessionsItem[];
 }

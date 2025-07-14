@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type StudentClassBySubjectClassSemesterUserProfileGender =
-    (typeof StudentClassBySubjectClassSemesterUserProfileGender)[keyof typeof StudentClassBySubjectClassSemesterUserProfileGender]
+export type StudentClassBySubjectClassSemesterUserProfileGender = typeof StudentClassBySubjectClassSemesterUserProfileGender[keyof typeof StudentClassBySubjectClassSemesterUserProfileGender];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const StudentClassBySubjectClassSemesterUserProfileGender = {
-    Male: 'Male',
-    Female: 'Female',
-} as const
+  Male: 'Male',
+  Female: 'Female',
+} as const;

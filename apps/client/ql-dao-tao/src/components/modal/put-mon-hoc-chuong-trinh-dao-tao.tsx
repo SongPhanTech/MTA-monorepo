@@ -200,9 +200,9 @@ const PutTrainingBlockSubject = () => {
                         options={subjectVersionData.map((item: SubjectVersion) => {
                             return {
                                 ...item,
-                                label: item?.code
-                                    ? `${item?.code} - ${item?.name} - ${item?.period}`
-                                    : `${item?.name} - ${item?.period}`,
+                                label: [item?.code, item?.name, item?.period]
+                                    .filter(Boolean)
+                                    .join(' - '),
                                 value: item.id,
                             }
                         })}

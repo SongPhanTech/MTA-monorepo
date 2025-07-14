@@ -227,7 +227,7 @@ export default function TrainingLocationPage() {
                     <TableCollapse
                         rowKey="id"
                         headerTitleKey={({ code, name, buildings }) =>
-                            `${code} - ${name} (${buildings.length})`
+                            `${[code, name].filter(Boolean).join(' - ')} (${buildings.length})`
                         }
                         childrenFieldName="buildings"
                         onRowClick={(record) => {

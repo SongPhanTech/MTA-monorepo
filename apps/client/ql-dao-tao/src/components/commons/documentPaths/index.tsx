@@ -19,6 +19,8 @@ interface DocumentPathsComponentProps {
         | 'curriculumId'
         | 'curriculumVersionId'
         | 'subjectVersionId'
+        | 'studentAcademicDecisionId'
+    titleForm?: string
 }
 
 interface UploadedFileItem {
@@ -35,6 +37,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     data,
     relationId,
     relationType,
+    titleForm = 'documentFiles',
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
 
@@ -51,7 +54,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
             [relationType]: relationId,
         }))
 
-        form.setFieldValue('documentFiles', updatedFiles)
+        form.setFieldValue(titleForm, updatedFiles)
     }
 
     const handleCustomUpload = async (file: File) => {
@@ -99,7 +102,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     [relationType]: relationId,
                 }))
 
-                form.setFieldValue('documentFiles', documentFiles)
+                form.setFieldValue(titleForm, documentFiles)
                 return newList
             })
         } catch (err) {
@@ -122,7 +125,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
         // Set initial value for form
         if (data.length > 0) {
             form.setFieldValue(
-                'documentFiles',
+                titleForm,
                 initial.map((item) => ({
                     name: item.name,
                     path: item.path,
@@ -132,7 +135,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 }))
             )
         }
-    }, [data, relationId, relationType, form.setFieldValue])
+    }, [data, relationId, relationType, form.setFieldValue, titleForm])
 
     return (
         <>

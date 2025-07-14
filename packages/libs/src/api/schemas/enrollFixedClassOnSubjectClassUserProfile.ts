@@ -4,17 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { EnrollFixedClassOnSubjectClassUserProfileGender } from './enrollFixedClassOnSubjectClassUserProfileGender'
+import type { EnrollFixedClassOnSubjectClassUserProfileGender } from './enrollFixedClassOnSubjectClassUserProfileGender';
 
 export type EnrollFixedClassOnSubjectClassUserProfile = {
-    id: string
-    /** @nullable */
-    code: string | null
-    lastName: string
-    firstName: string
-    /** @nullable */
-    familyName: string | null
-    gender: EnrollFixedClassOnSubjectClassUserProfileGender
-    /** @nullable */
-    dateOfBirth: string | null
-}
+  id: string;
+  /** @nullable */
+  code: string | null;
+  lastName: string;
+  firstName: string;
+  /** @nullable */
+  familyName: string | null;
+  gender: EnrollFixedClassOnSubjectClassUserProfileGender;
+  /** @nullable */
+  dateOfBirth: string | null;
+};

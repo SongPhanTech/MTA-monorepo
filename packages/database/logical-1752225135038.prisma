@@ -6,28 +6,18 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao"]
+  schemas  = ["mta", "he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao"]
 }
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema", "typedSql"]
+  previewFeatures = ["multiSchema", "typedSql", "fullTextSearchPostgres"]
   binaryTargets   = ["native"]
-  output          = "..\\..\\node_modules\\.pnpm\\@zenstackhq+runtime@2.16.0__d72ed985629baed6ee0a2e0aec22cc0a\\node_modules\\.zenstack\\logical-prisma-client"
+  output          = "..\\..\\node_modules\\.pnpm\\@zenstackhq+runtime@2.16.1__f96c17795314e29e55dade47a2216b5d\\node_modules\\.zenstack\\logical-prisma-client"
 }
 
 generator dbml {
   provider = "prisma-dbml-generator"
-}
-
-enum SubjectClassStudentStatus {
-  Registered
-  Studying
-  NotPassed
-  Passed
-  CancelClass
-
-  @@schema("ql-dao-tao")
 }
 
 enum SemesterType {
@@ -221,24 +211,42 @@ enum StudentTrainingType {
   @@schema("ql-dao-tao")
 }
 
+/// Enum hệ thống đánh giá (Học bổng, Cảnh báo, Xử lý học tập).
 enum CriteriaField {
-  TOTAL_CREDITS
-  REGISTERED_CREDITS
-  ACCUMULATED_CREDITS_PERCENT
-  COURSE_GRADE_MIN
-  GRADUATION_GRADE_MIN
   SEMESTER_GPA
+  YEARLY_GPA
+  CUMULATIVE_GPA
   ENTRY_SCORE
-  CONDUCT
-  FOREIGN_LANGUAGE
+  COURSE_GRADE_LOWEST
+  GRADUATION_COURSE_GRADE_LOWEST
+  SEMESTER_REGISTERED_CREDITS
+  SEMESTER_PASSED_CREDITS
+  SEMESTER_FAILED_CREDITS
+  SEMESTER_FAILED_CREDITS_PERCENT
+  YEAR_FAILED_CREDITS
+  CUMULATIVE_PASSED_CREDITS
+  CUMULATIVE_DEBT_CREDITS
+  CUMULATIVE_PROGRESS_PERCENT
   ACADEMIC_WARNING_LEVEL
   DISCIPLINARY_WARNING_LEVEL
+  REPEAT_YEAR_COUNT
+  SUSPENSION_COUNT
+  CONDUCT_SCORE
+  HAS_PASSED_FOREIGN_LANGUAGE
+  HAS_REGISTERED_FOR_SEMESTER
+  IS_PRIORITY_STUDENT
+  IS_CLASS_MONITOR_OR_LEADER
+  IS_STUDY_DURATION_EXCEEDED
+  IS_DEBT_SUBJECT_CONSECUTIVE
+  HAS_IMPROVEMENT_REGISTRATION
 
   @@schema("ql-dao-tao")
 }
 
 enum CriteriaOperator {
+  GT
   GTE
+  LE
   LTE
   EQ
   IN
@@ -246,24 +254,46 @@ enum CriteriaOperator {
   @@schema("ql-dao-tao")
 }
 
-enum AcademicWarningRuleType {
-  GPA_SEMESTER_BELOW
-  GPA_CUMULATIVE_BELOW
-  FAILED_CREDITS_SEMESTER
-  FAILED_CREDITS_TOTAL
-  GPA_ZERO
-  NO_REGISTRATION
+/// Loại hành động xử lý học tập
+enum AcademicActionType {
+  REPEAT_YEAR
+  SUSPENSION
+  EXPULSION
 
   @@schema("ql-dao-tao")
 }
 
-enum DisciplinaryWarningReasonType {
-  DISCIPLINE_PENALTY
-  EXAM_VIOLATION
-  EXAM_PROXY_FIRST
-  EXAM_PROXY_REPEAT
-  LATE_TUITION_1
-  LATE_TUITION_2
+enum DecisionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  APPEALED
+
+  @@schema("ql-dao-tao")
+}
+
+enum GraduationSessionStatus {
+  PLANNING
+  OPEN_FOR_APPLICATION
+  IN_REVIEW
+  COMPLETED
+  CLOSED
+
+  @@schema("ql-dao-tao")
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
+enum RankingContext {
+  STUDYING
+  GRADUATION
 
   @@schema("ql-dao-tao")
 }
@@ -278,7 +308,6 @@ enum TemplateFileType {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Config {
   id          String    @id() @default(cuid())
@@ -296,7 +325,6 @@ model Config {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SurveyObjectType {
   id          String    @id() @default(cuid())
@@ -314,7 +342,6 @@ model SurveyObjectType {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SurveyTopic {
   id          String    @id() @default(cuid())
@@ -332,7 +359,6 @@ model SurveyTopic {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SurveyQuestionType {
   id             String           @id() @default(cuid())
@@ -350,7 +376,6 @@ model SurveyQuestionType {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Survey {
   id               String           @id() @default(cuid())
@@ -374,7 +399,6 @@ model Survey {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SurveyQuestion {
   id                   String             @id() @default(cuid())
@@ -396,7 +420,6 @@ model SurveyQuestion {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SurveyAnswer {
   id               String         @id() @default(cuid())
@@ -416,7 +439,6 @@ model SurveyAnswer {
 /// Điểm môn học SV - lớp môn học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model StudentSubjectScore {
   id               String                                     @id() @default(cuid())
@@ -432,7 +454,6 @@ model StudentSubjectScore {
   subjectVersionId String
   student          Student                                    @relation(fields: [studentId], references: [id])
   studentId        String
-  status           SubjectClassStudentStatus                  @default(Studying)
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
   attendanceScore  Float?
@@ -462,7 +483,6 @@ model StudentSubjectScore {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ArchivedCertificateOnStudentSubjectScore {
   id                    String              @id() @default(cuid())
@@ -483,7 +503,6 @@ model ArchivedCertificateOnStudentSubjectScore {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ArchivedCertificate {
   id                  String                                     @id() @default(cuid())
@@ -506,7 +525,6 @@ model ArchivedCertificate {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ArchivedAwardOnStudentSubjectScore {
   id                    String              @id() @default(cuid())
@@ -527,7 +545,6 @@ model ArchivedAwardOnStudentSubjectScore {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ArchivedAward {
   id                  String                               @id() @default(cuid())
@@ -549,23 +566,22 @@ model ArchivedAward {
 /// Năm học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SchoolYear {
-  id                        String                      @id() @default(cuid())
-  code                      String?                     @unique()
-  active                    Boolean                     @default(true)
-  description               String?                     @db.Text()
-  deletedAt                 DateTime?
-  createdAt                 DateTime                    @default(now())
-  updatedAt                 DateTime                    @updatedAt()
-  name                      String
-  startDate                 DateTime
-  endDate                   DateTime?
-  semesters                 Semester[]
-  milestone                 Milestone[]
-  studentTrainingSchoolYear StudentTrainingSchoolYear[]
-  studentYearResult         StudentYearResult[]
+  id                      String                    @id() @default(cuid())
+  code                    String?                   @unique()
+  active                  Boolean                   @default(true)
+  description             String?                   @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt()
+  name                    String
+  startDate               DateTime
+  endDate                 DateTime?
+  semesters               Semester[]
+  milestone               Milestone[]
+  studentYearResult       StudentYearResult[]
+  studentAcademicDecision StudentAcademicDecision[]
 
   @@schema("ql-dao-tao")
 }
@@ -573,7 +589,6 @@ model SchoolYear {
 /// Kỳ học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Semester {
   id                      String                    @id() @default(cuid())
@@ -593,10 +608,11 @@ model Semester {
   subjectClasses          SubjectClass[]
   trainingCoursesStart    TrainingCourse[]
   trainingScoreSession    TrainingScoreSession[]
-  studentTrainingSemester StudentTrainingSemester[]
   studentSemesterResult   StudentSemesterResult[]
   scholarshipAward        ScholarshipAward[]
   academicWarning         AcademicWarning[]
+  disciplinaryWarning     DisciplinaryWarning[]
+  studentAcademicDecision StudentAcademicDecision[]
 
   @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
@@ -605,7 +621,6 @@ model Semester {
 /// Mốc huấn luyện
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Milestone {
   id           String     @id() @default(cuid())
@@ -628,7 +643,6 @@ model Milestone {
 /// Khoá học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingCourse {
   id                     String                   @id() @default(cuid())
@@ -659,9 +673,9 @@ model TrainingCourse {
   fixedClass             FixedClass[]
   scoreConverts          ScoreConvert[]
   academicRankingConvert AcademicRankingConvert[]
-  studentTrainingCourse  StudentTrainingCourse[]
   scholarships           Scholarship[]
   academicWarningRule    AcademicWarningRule[]
+  academicActionConfig   AcademicActionConfig[]
 
   @@schema("ql-dao-tao")
 }
@@ -669,7 +683,6 @@ model TrainingCourse {
 /// lớp niên chế
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model FixedClass {
   id                       String             @id() @default(cuid())
@@ -685,6 +698,8 @@ model FixedClass {
   graduated                Boolean?           @default(false)
   classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
   classMonitorId           String?            @unique()
+  unionLeader              Student?           @relation("UnionLeader", fields: [unionLeaderId], references: [id])
+  unionLeaderId            String?            @unique()
   trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String
   managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
@@ -699,13 +714,13 @@ model FixedClass {
   curriculumVersionId      String?
   subjectClasses           SubjectClass[]
 
+  @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
 }
 
 /// chương trình đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Curriculum {
   id                       String              @id() @default(cuid())
@@ -729,29 +744,9 @@ model Curriculum {
   @@schema("ql-dao-tao")
 }
 
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('read', auth() != null)
-model DiplomaType {
-  id                String              @id() @default(cuid())
-  code              String?             @unique()
-  active            Boolean             @default(true)
-  description       String?             @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt()
-  name              String              @unique()
-  englishName       String?
-  curriculumVersion CurriculumVersion[]
-
-  @@schema("ql-dao-tao")
-}
-
 /// Phiên bản chương trình đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model CurriculumVersion {
   id                    String                             @id() @default(cuid())
@@ -802,7 +797,6 @@ model CurriculumVersion {
 /// môn học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Subject {
   id                       String           @id() @default(cuid())
@@ -825,7 +819,6 @@ model Subject {
 /// Phiên bản môn học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SubjectVersion {
   id                       String                 @id() @default(cuid())
@@ -876,7 +869,6 @@ model SubjectVersion {
 /// môn học khối kiến thức chương trình
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingBlockSubject {
   id                                 String                           @id() @default(cuid())
@@ -903,7 +895,6 @@ model TrainingBlockSubject {
 /// Lớp môn học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model SubjectClass {
   id                         String                @id() @default(cuid())
@@ -922,6 +913,7 @@ model SubjectClass {
   maxStudent                 Int
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
+  cancelled                  Boolean               @default(false)
   lecturerAssignmentDeadline DateTime?
   examDate                   DateTime?
   scoreDeadline              DateTime?
@@ -946,7 +938,6 @@ model SubjectClass {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingObjectType {
   id                   String                              @id() @default(cuid())
@@ -972,7 +963,6 @@ model TrainingObjectType {
 /// đối tượng ưu tiên
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model PriorityObject {
   id          String    @id() @default(cuid())
@@ -991,7 +981,6 @@ model PriorityObject {
 /// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingType {
   id          String    @id() @default(cuid())
@@ -1010,7 +999,6 @@ model TrainingType {
 /// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingLevel {
   id                String              @id() @default(cuid())
@@ -1030,7 +1018,6 @@ model TrainingLevel {
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingForm {
   id          String    @id() @default(cuid())
@@ -1049,7 +1036,6 @@ model TrainingForm {
 /// địa điểm đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingLocation {
   id          String     @id() @default(cuid())
@@ -1068,7 +1054,6 @@ model TrainingLocation {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Building {
   id                 String            @id() @default(cuid())
@@ -1090,7 +1075,6 @@ model Building {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Room {
   id             String         @id() @default(cuid())
@@ -1118,7 +1102,6 @@ model Room {
 /// ngành đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingField {
   id                  String                              @id() @default(cuid())
@@ -1141,7 +1124,6 @@ model TrainingField {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingFieldOnTrainingObjectType {
   id                   String             @id() @default(cuid())
@@ -1163,7 +1145,6 @@ model TrainingFieldOnTrainingObjectType {
 /// chuyên ngành đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingMajor {
   id                    String                              @id() @default(cuid())
@@ -1189,12 +1170,12 @@ model TrainingMajor {
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
   curriculum            Curriculum[]
 
+  @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingMajorOnTrainingObjectType {
   id                   String             @id() @default(cuid())
@@ -1216,7 +1197,6 @@ model TrainingMajorOnTrainingObjectType {
 /// khối kiến thức
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingBlock {
   id                 String                             @id() @default(cuid())
@@ -1226,7 +1206,7 @@ model TrainingBlock {
   deletedAt          DateTime?
   createdAt          DateTime                           @default(now())
   updatedAt          DateTime                           @updatedAt()
-  name               String
+  name               String                             @unique()
   /// ưu tiên sắp xếp
   priority           Int                                @default(0)
   curriculumVersions TrainingBlockOnCurriculumVersion[]
@@ -1236,7 +1216,6 @@ model TrainingBlock {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingBlockOnCurriculumVersion {
   id                  String                 @id() @default(cuid())
@@ -1261,7 +1240,6 @@ model TrainingBlockOnCurriculumVersion {
 /// thời gian đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingTime {
   id                String              @id() @default(cuid())
@@ -1277,40 +1255,21 @@ model TrainingTime {
   @@schema("ql-dao-tao")
 }
 
-/// xếp loại học tập
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
-model StudyRank {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  students    Student[]
-
-  @@schema("ql-dao-tao")
-}
-
-/// Xếp loại rèn luyện (Xuất sắc, tốt, khá, trung bình, yếu)
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('read', auth() != null)
-model TrainingRank {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String
-  students    Student[]
+model DiplomaType {
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt()
+  name               String               @unique()
+  englishName        String?
+  curriculumVersion  CurriculumVersion[]
+  graduationDecision GraduationDecision[]
 
   @@schema("ql-dao-tao")
 }
@@ -1318,7 +1277,6 @@ model TrainingRank {
 /// Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ; order by base10Max desc
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ScoreConvert {
   id                  String         @id() @default(cuid())
@@ -1341,39 +1299,9 @@ model ScoreConvert {
   @@schema("ql-dao-tao")
 }
 
-/// Xếp loại học lực
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('read', auth() != null)
-/// @@validate(!baseScore == Base10 && (base10Min == null || base10Max == null), message: 'Xếp loại theo hệ 10 phải khai báo base10Min, base10Max')
-/// @@validate(!baseScore == Base4 && (base4Min == null || base4Max == null), message: 'Xếp loại theo hệ 4 phải khai báo base4Min, base4Max')
-/// @@allow('all', true)
-model AcademicRankingConvert {
-  id               String                  @id() @default(cuid())
-  code             String?                 @unique()
-  active           Boolean                 @default(true)
-  description      String?                 @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime                @default(now())
-  updatedAt        DateTime                @updatedAt()
-  classification   String
-  baseScore        AcademicRankingBaseType
-  base10Min        Float?
-  base10Max        Float?
-  base4Min         Float?
-  base4Max         Float?
-  graduated        Boolean
-  trainingCourse   TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
-
-  @@schema("ql-dao-tao")
-}
-
 /// Nội dung tính tải đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingKPI {
   id          String    @id() @default(cuid())
@@ -1391,64 +1319,66 @@ model TrainingKPI {
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Student {
-  id                        String                      @id() @default(cuid())
-  code                      String?                     @unique()
-  active                    Boolean                     @default(true)
-  description               String?                     @db.Text()
-  deletedAt                 DateTime?
-  createdAt                 DateTime                    @default(now())
-  updatedAt                 DateTime                    @updatedAt()
-  entryScore                Float?
-  from                      DateTime?
-  to                        DateTime?
-  trainingLocation          TrainingLocation?           @relation(fields: [trainingLocationId], references: [id])
-  trainingLocationId        String?
+  id                       String                         @id() @default(cuid())
+  code                     String?                        @unique()
+  active                   Boolean                        @default(true)
+  description              String?                        @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                       @default(now())
+  updatedAt                DateTime                       @updatedAt()
+  entryScore               Float?
+  from                     DateTime?
+  to                       DateTime?
+  trainingLocation         TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId       String?
   /// đối tượng ưu tiên
-  priorityObject            PriorityObject[]
-  unionLeader               String?
-  status                    StudentStatus               @default(ENROLLED)
-  classMonitor              FixedClass?                 @relation("ClassMonitor")
-  fixedClass                FixedClass?                 @relation(fields: [fixedClassId], references: [id])
-  fixedClassId              String?
-  subjectClassStudent       StudentSubjectScore[]
-  userProfileId             String
-  userProfile               UserProfile                 @relation(fields: [userProfileId], references: [id])
-  trainingLevel             TrainingLevel?              @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId           String?
-  trainingObjectType        TrainingObjectType?         @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId      String?
-  trainingType              TrainingType?               @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId            String?
-  trainingForm              TrainingForm?               @relation(fields: [trainingFormId], references: [id])
-  trainingFormId            String?
-  registrationArea          DM_KhuVuc_DiaLy?            @relation(fields: [registrationAreaId], references: [Id])
-  registrationAreaId        String?
-  curriculumVersion         CurriculumVersion?          @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId       String?
-  studyRank                 StudyRank?                  @relation(fields: [studyRankId], references: [id])
-  studyRankId               String?
-  trainingRank              TrainingRank?               @relation(fields: [trainingRankId], references: [id])
-  trainingRankId            String?
-  academicWarningLevel      Int                         @default(0)
-  disciplinaryWarningLevel  Int                         @default(0)
-  studentTrainingScore      StudentTrainingScore[]
-  studentTrainingSemester   StudentTrainingSemester[]
-  studentTrainingSchoolYear StudentTrainingSchoolYear[]
-  studentTrainingCourse     StudentTrainingCourse[]
-  studentSemesterResult     StudentSemesterResult[]
-  studentYearResult         StudentYearResult[]
-  scholarshipAwards         ScholarshipAward[]
-  academicWarning           AcademicWarning[]
+  priorityObject           PriorityObject[]
+  unionLeader              String?
+  status                   StudentStatus                  @default(ENROLLED)
+  classMonitor             FixedClass?                    @relation("ClassMonitor")
+  unionLeaderOf            FixedClass?                    @relation("UnionLeader")
+  fixedClass               FixedClass?                    @relation(fields: [fixedClassId], references: [id])
+  fixedClassId             String?
+  subjectClassStudent      StudentSubjectScore[]
+  userProfileId            String
+  userProfile              UserProfile                    @relation(fields: [userProfileId], references: [id])
+  trainingLevel            TrainingLevel?                 @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId          String?
+  trainingObjectType       TrainingObjectType?            @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String?
+  trainingType             TrainingType?                  @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId           String?
+  trainingForm             TrainingForm?                  @relation(fields: [trainingFormId], references: [id])
+  trainingFormId           String?
+  registrationArea         DM_KhuVuc_DiaLy?               @relation(fields: [registrationAreaId], references: [Id])
+  registrationAreaId       String?
+  curriculumVersion        CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId      String?
+  academicWarningLevel     Int                            @default(0)
+  disciplinaryWarningLevel Int                            @default(0)
+  suspended                Boolean                        @default(false)
+  expelled                 Boolean                        @default(false)
+  foreignLangPass          Boolean                        @default(false)
+  ITCertificationPass      Boolean                        @default(false)
+  strengthTrainingPass     Boolean                        @default(false)
+  militaryTrainingPass     Boolean                        @default(false)
+  studentTrainingScore     StudentTrainingScore[]
+  studentSemesterResult    StudentSemesterResult[]
+  studentYearResult        StudentYearResult[]
+  scholarshipAwards        ScholarshipAward[]
+  academicWarning          AcademicWarning[]
+  disciplinaryWarning      DisciplinaryWarning[]
+  studentAcademicDecision  StudentAcademicDecision[]
+  graduationApplications   StudentGraduationApplication[]
+  graduationDecision       GraduationDecision?
 
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model StudentSemesterResult {
   id                       String                  @id() @default(cuid())
@@ -1470,6 +1400,7 @@ model StudentSemesterResult {
   cumulativeGpaBase4       Float
   gpaBase10                Float
   cumulativeGpaBase10      Float
+  conductScore             Float?
   studentTrainingType      StudentTrainingType
   lowestFinalScore         Float
   lowestGraduationScore    Float?
@@ -1492,12 +1423,12 @@ model StudentSemesterResult {
   suspended                Boolean                 @default(false)
   expelled                 Boolean                 @default(false)
 
+  @@unique([studentId, semesterId])
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model StudentYearResult {
   id                       String                  @id() @default(cuid())
@@ -1518,6 +1449,7 @@ model StudentYearResult {
   cumulativeGpaBase4       Float
   gpaBase10                Float
   cumulativeGpaBase10      Float
+  conductScore             Float?
   studentTrainingType      StudentTrainingType
   totalCredits             Int
   failedCredits            Int
@@ -1528,12 +1460,12 @@ model StudentYearResult {
   suspended                Boolean                 @default(false)
   expelled                 Boolean                 @default(false)
 
+  @@unique([studentId, schoolYearId])
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model User {
   id               String         @id() @default(cuid())
@@ -1565,7 +1497,6 @@ model User {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Group {
   id          String    @id() @default(cuid())
@@ -1584,7 +1515,6 @@ model Group {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Role {
   id          String       @id() @default(cuid())
@@ -1603,7 +1533,6 @@ model Role {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Permission {
   id             String         @id() @default(cuid())
@@ -1624,7 +1553,6 @@ model Permission {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ChatBotConfig {
   id          String    @id() @default(cuid())
@@ -1642,7 +1570,6 @@ model ChatBotConfig {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Document {
   id           String         @id() @default(cuid())
@@ -1670,7 +1597,6 @@ model Document {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model FAQ {
   id           String         @id() @default(cuid())
@@ -1695,7 +1621,6 @@ model FAQ {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Prompt {
   id          String         @id() @default(cuid())
@@ -1715,7 +1640,6 @@ model Prompt {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Conversation {
   id          String        @id() @default(cuid())
@@ -1735,7 +1659,6 @@ model Conversation {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Message {
   id             String        @id() @default(cuid())
@@ -1755,11 +1678,8 @@ model Message {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 /// @@allow('create', auth() != null)
-/// @@allow('update', auth().role == 'ADMIN' || auth() == user && status == Pending)
-/// @@allow('delete', auth().role == 'ADMIN' || auth() == user)
 model Feedback {
   id           String         @id() @default(cuid())
   code         String?        @unique()
@@ -1779,7 +1699,6 @@ model Feedback {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model UserProfile {
   id                         String            @id() @default(cuid())
@@ -1879,7 +1798,6 @@ model UserProfile {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_CapBac {
   Id             String        @id() @default(cuid())
@@ -1899,12 +1817,11 @@ model DM_CapBac {
   sTen           String        @unique()
   profiles       UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_ChucDanh {
   Id               String             @id() @default(cuid())
@@ -1926,12 +1843,11 @@ model DM_ChucDanh {
   DM_ViTriCongViec DM_ViTriCongViec[]
   userProfile      UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_ChucVu {
   Id             String        @id() @default(cuid())
@@ -1951,12 +1867,11 @@ model DM_ChucVu {
   sTen           String        @unique()
   userProfile    UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_HocHam {
   Id             String        @id() @default(cuid())
@@ -1976,12 +1891,11 @@ model DM_HocHam {
   sTen           String        @unique()
   profiles       UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_HocVi {
   Id             String        @id() @default(cuid())
@@ -2001,12 +1915,11 @@ model DM_HocVi {
   sTen           String        @unique()
   profiles       UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_ChungChiTinHoc {
   Id             String    @id() @default(cuid())
@@ -2025,12 +1938,11 @@ model DM_ChungChiTinHoc {
   sThietBiSua    String?
   sTen           String    @unique()
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_DanToc {
   Id             String        @id() @default(cuid())
@@ -2052,12 +1964,11 @@ model DM_DanToc {
   sDiaChiCuTru   String?
   userProfile    UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_DonVi {
   Id               String            @id() @default(cuid())
@@ -2097,12 +2008,11 @@ model DM_DonVi {
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_DonViHanhChinh {
   Id             String         @id() @default(cuid())
@@ -2125,12 +2035,11 @@ model DM_DonViHanhChinh {
   huyen          DM_QuanHuyen[]
   xaPhuong       DM_XaPhuong[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_KhuVuc_DiaLy {
   Id             String    @id() @default(cuid())
@@ -2152,12 +2061,11 @@ model DM_KhuVuc_DiaLy {
   tinh           DM_Tinh[]
   student        Student[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_NgoaiNgu {
   Id             String    @id() @default(cuid())
@@ -2176,12 +2084,11 @@ model DM_NgoaiNgu {
   sThietBiSua    String?
   sTen           String    @unique()
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_TonGiao {
   Id             String        @id() @default(cuid())
@@ -2201,12 +2108,11 @@ model DM_TonGiao {
   sTen           String        @unique()
   userProfile    UserProfile[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_TrinhDoNgoaiNgu {
   Id             String    @id() @default(cuid())
@@ -2226,12 +2132,11 @@ model DM_TrinhDoNgoaiNgu {
   sTen           String    @unique()
   sKhung         String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_TrinhDoTinHoc {
   Id             String    @id() @default(cuid())
@@ -2250,12 +2155,11 @@ model DM_TrinhDoTinHoc {
   sThietBiSua    String?
   sTen           String    @unique()
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_UngDung {
   Id               String    @id() @default(cuid())
@@ -2282,13 +2186,13 @@ model DM_UngDung {
   sClientSecret    String?
   sRedirectDefault String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
+/// @@auth
 model DM_NhanVien {
   Id                  String               @id() @default(cuid())
   sMa                 String?              @unique()
@@ -2304,7 +2208,7 @@ model DM_NhanVien {
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
-  sTen                String
+  sTen                String?
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -2328,12 +2232,57 @@ model DM_NhanVien {
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
   @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
   @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
+/// @@allow('read', auth() != null)
+model DM_PhanCap_ChatLuong_TrangThietBi {
+  Id             String    @id() @default(cuid())
+  sMa            String?   @unique()
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen           String    @unique()
+
+  @@schema("mta")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', bDeleted == true)
+/// @@allow('read', auth() != null)
+model DM_PhanLoai_CSKT {
+  Id             String    @id() @default(cuid())
+  sMa            String?   @unique()
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen           String    @unique()
+
+  @@schema("mta")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', bDeleted == true)
 /// @@allow('read', auth() != null)
 model DM_NhomNguoiDung {
   Id                 String               @id() @default(cuid())
@@ -2354,12 +2303,11 @@ model DM_NhomNguoiDung {
   vaiTroTrongNhom    VaiTroTrongNhom[]
   nguoiDungTrongNhom NguoiDungTrongNhom[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_NhomUngDung {
   Id             String    @id() @default(cuid())
@@ -2379,12 +2327,11 @@ model DM_NhomUngDung {
   sTen           String    @unique()
   sMoTa          String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_QuocGia {
   Id             String        @id() @default(cuid())
@@ -2406,12 +2353,11 @@ model DM_QuocGia {
   userProfile    UserProfile[]
   tinh           DM_Tinh[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_Tinh {
   Id                          String             @id() @default(cuid())
@@ -2443,12 +2389,11 @@ model DM_Tinh {
   userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_QuanHuyen {
   Id                          String             @id() @default(cuid())
@@ -2479,12 +2424,11 @@ model DM_QuanHuyen {
 
   @@unique([sDM_TinhId, sTen])
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_XaPhuong {
   Id                          String             @id() @default(cuid())
@@ -2517,12 +2461,11 @@ model DM_XaPhuong {
 
   @@unique([sDM_QuanHuyenId, sTen])
   @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_VaiTro {
   Id              String            @id() @default(cuid())
@@ -2543,12 +2486,11 @@ model DM_VaiTro {
   Quyen_VaiTro    Quyen_VaiTro[]
   VaiTroTrongNhom VaiTroTrongNhom[]
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DM_ViTriCongViec {
   Id              String        @id() @default(cuid())
@@ -2571,12 +2513,11 @@ model DM_ViTriCongViec {
   DM_NhanVien     DM_NhanVien[]
   DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model NguoiDungTrongNhom {
   Id                  String            @id() @default(cuid())
@@ -2599,12 +2540,11 @@ model NguoiDungTrongNhom {
   sDM_NhanVienId      String?
 
   @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model NhatKyHoatDong {
   Id             String       @id() @default(cuid())
@@ -2630,12 +2570,11 @@ model NhatKyHoatDong {
   sDescription   String?
   sIPAddress     String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Policy {
   Id             String    @id() @default(cuid())
@@ -2658,12 +2597,11 @@ model Policy {
   bGioiHanTG     Boolean?  @default(false)
   iApDungChoUD   Int?      @default(0)
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Quyen_VaiTro {
   Id             String       @id() @default(cuid())
@@ -2688,12 +2626,11 @@ model Quyen_VaiTro {
   DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
   DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TaiKhoan {
   Id             String       @id() @default(cuid())
@@ -2716,12 +2653,11 @@ model TaiKhoan {
   sDM_NhanVienId String?      @unique()
   nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model VaiTroTrongNhom {
   Id                  String            @id() @default(cuid())
@@ -2743,12 +2679,11 @@ model VaiTroTrongNhom {
   DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
   sDM_VaiTroId        String?
 
-  @@schema("ql-danh-muc")
+  @@schema("mta")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Lecturer {
   id                  String         @id() @default(cuid())
@@ -2777,7 +2712,6 @@ model Lecturer {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model LecturerHistory {
   id             String       @id() @default(cuid())
@@ -2805,7 +2739,6 @@ model LecturerHistory {
 /// Loại giáo viên
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model LecturerType {
   id              String            @id() @default(cuid())
@@ -2825,7 +2758,6 @@ model LecturerType {
 /// Loại nhân viên
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model StaffType {
   id           String         @id() @default(cuid())
@@ -2845,7 +2777,6 @@ model StaffType {
 /// Chức vụ nhân viên
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model StaffPosition {
   id           String         @id() @default(cuid())
@@ -2864,7 +2795,6 @@ model StaffPosition {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Staff {
   id              String        @id() @default(cuid())
@@ -2890,7 +2820,6 @@ model Staff {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model StaffHistory {
   id              String        @id() @default(cuid())
@@ -2916,7 +2845,6 @@ model StaffHistory {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TrainingScoreSession {
   id                   String                 @id() @default(cuid())
@@ -2939,7 +2867,6 @@ model TrainingScoreSession {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model StudentTrainingScore {
   id                     String               @id() @default(cuid())
@@ -2961,73 +2888,6 @@ model StudentTrainingScore {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('read', auth() != null)
-model StudentTrainingSemester {
-  id           String              @id() @default(cuid())
-  code         String?             @unique()
-  active       Boolean             @default(true)
-  description  String?             @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt()
-  student      Student             @relation(fields: [studentId], references: [id])
-  studentId    String
-  semester     Semester            @relation(fields: [semesterId], references: [id])
-  semesterId   String
-  scoreAvg     Float               @default(0)
-  trainingType StudentTrainingType
-
-  @@schema("ql-dao-tao")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('read', auth() != null)
-model StudentTrainingSchoolYear {
-  id           String              @id() @default(cuid())
-  code         String?             @unique()
-  active       Boolean             @default(true)
-  description  String?             @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt()
-  student      Student             @relation(fields: [studentId], references: [id])
-  studentId    String
-  schoolYear   SchoolYear          @relation(fields: [schoolYearId], references: [id])
-  schoolYearId String
-  scoreAvg     Float               @default(0)
-  trainingType StudentTrainingType
-
-  @@schema("ql-dao-tao")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('read', auth() != null)
-model StudentTrainingCourse {
-  id               String              @id() @default(cuid())
-  code             String?             @unique()
-  active           Boolean             @default(true)
-  description      String?             @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt()
-  student          Student             @relation(fields: [studentId], references: [id])
-  studentId        String
-  TrainingCourse   TrainingCourse      @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId String
-  scoreAvg         Float               @default(0)
-  trainingType     StudentTrainingType
-
-  @@schema("ql-dao-tao")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model Scholarship {
   id               String                @id() @default(cuid())
@@ -3038,22 +2898,22 @@ model Scholarship {
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt()
   name             String
-  bonusGrade       Float                 @default(0)
+  rankOrder        Int
   baseAmount       Decimal
   multiplier       Float                 @default(1)
-  effectiveFrom    DateTime
+  effectiveFrom    DateTime?
   effectiveTo      DateTime?
   trainingCourse   TrainingCourse        @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
   criteria         ScholarshipCriteria[]
   awards           ScholarshipAward[]
 
+  @@unique([trainingCourseId, name])
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ScholarshipCriteria {
   id            String           @id() @default(cuid())
@@ -3077,7 +2937,6 @@ model ScholarshipCriteria {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model ScholarshipAward {
   id            String      @id() @default(cuid())
@@ -3101,24 +2960,27 @@ model ScholarshipAward {
   @@schema("ql-dao-tao")
 }
 
+/// Quy tắc cấu hình Cảnh báo học tập
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model AcademicWarningRule {
-  id                String                  @id() @default(cuid())
-  code              String?                 @unique()
-  active            Boolean                 @default(true)
-  description       String?                 @db.Text()
+  id                String            @id() @default(cuid())
+  code              String?           @unique()
+  active            Boolean           @default(true)
+  description       String?           @db.Text()
   deletedAt         DateTime?
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @updatedAt()
-  ruleType          AcademicWarningRuleType
-  threshold         Float?
-  semesterCondition Int?
-  yearCondition     Int?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt()
+  field             CriteriaField
+  operator          CriteriaOperator
+  invert            Boolean           @default(false)
+  threshold         Float
+  tuple             String[]          @default([])
   severity          Int
-  trainingCourse    TrainingCourse          @relation(fields: [trainingCourseId], references: [id])
+  yearCondition     Int?
+  semesterCondition Int?
+  trainingCourse    TrainingCourse    @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId  String
   academicWarning   AcademicWarning[]
 
@@ -3128,7 +2990,6 @@ model AcademicWarningRule {
 /// Cảnh cáo học tập
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model AcademicWarning {
   id            String                @id() @default(cuid())
@@ -3153,7 +3014,6 @@ model AcademicWarning {
 /// Cảnh cáo học đường
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DisciplinaryWarning {
   id            String                      @id() @default(cuid())
@@ -3163,8 +3023,10 @@ model DisciplinaryWarning {
   deletedAt     DateTime?
   createdAt     DateTime                    @default(now())
   updatedAt     DateTime                    @updatedAt()
+  student       Student                     @relation(fields: [studentId], references: [id])
   studentId     String
-  semesterId    String
+  semester      Semester?                   @relation(fields: [semesterId], references: [id])
+  semesterId    String?
   level         Int
   increasedFrom Int?
   reasonDetails DisciplinaryWarningReason[]
@@ -3174,57 +3036,353 @@ model DisciplinaryWarning {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model DisciplinaryWarningReason {
-  id            String                        @id() @default(cuid())
-  code          String?                       @unique()
-  active        Boolean                       @default(true)
-  description   String?                       @db.Text()
+  id            String                @id() @default(cuid())
+  code          String?               @unique()
+  active        Boolean               @default(true)
+  description   String?               @db.Text()
   deletedAt     DateTime?
-  createdAt     DateTime                      @default(now())
-  updatedAt     DateTime                      @updatedAt()
-  warning       DisciplinaryWarning           @relation(fields: [warningId], references: [id])
-  warningId     String
-  reasonType    DisciplinaryWarningReasonType
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt()
+  name          String                @unique()
+  warning       DisciplinaryWarning[]
   severityLevel Int
+
+  @@schema("ql-dao-tao")
+}
+
+/// Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model AcademicActionConfig {
+  id               String                    @id() @default(cuid())
+  code             String?                   @unique()
+  active           Boolean                   @default(true)
+  description      String?                   @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt()
+  name             String
+  actionType       AcademicActionType
+  trainingCourse   TrainingCourse            @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  ruleSets         AcademicActionRuleSet[]
+  decisions        StudentAcademicDecision[]
+
+  @@unique([trainingCourseId, name])
+  @@schema("ql-dao-tao")
+}
+
+/// Bộ quy tắc, chứa nhiều điều kiện (AND logic)
+/// Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
+/// Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model AcademicActionRuleSet {
+  id          String                    @id() @default(cuid())
+  code        String?                   @unique()
+  active      Boolean                   @default(true)
+  description String?                   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt()
+  config      AcademicActionConfig      @relation(fields: [configId], references: [id])
+  configId    String
+  conditions  AcademicActionCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Điều kiện cụ thể để kích hoạt xử lý
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model AcademicActionCondition {
+  id                String                @id() @default(cuid())
+  code              String?               @unique()
+  active            Boolean               @default(true)
+  description       String?               @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt()
+  ruleSet           AcademicActionRuleSet @relation(fields: [ruleSetId], references: [id])
+  ruleSetId         String
+  field             CriteriaField
+  operator          CriteriaOperator
+  invert            Boolean               @default(false)
+  value             Float
+  tuple             String[]              @default([])
+  yearCondition     Int?
+  isPriorityStudent Boolean?
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quyết định xử lý học tập cho sinh viên
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model StudentAcademicDecision {
+  id               String                @id() @default(cuid())
+  code             String?               @unique()
+  active           Boolean               @default(true)
+  description      String?               @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt()
+  student          Student               @relation(fields: [studentId], references: [id])
+  studentId        String
+  semester         Semester?             @relation(fields: [semesterId], references: [id])
+  semesterId       String?
+  schoolYear       SchoolYear?           @relation(fields: [schoolYearId], references: [id])
+  schoolYearId     String?
+  appliedConfig    AcademicActionConfig? @relation(fields: [appliedConfigId], references: [id])
+  appliedConfigId  String?
+  actionTaken      AcademicActionType
+  decisionDate     DateTime              @default(now())
+  validUntil       DateTime?
+  reason           String?
+  documentEvidence DocumentFile[]
+  status           DecisionStatus        @default(PENDING)
+
+  @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model DocumentFile {
+  id                        String                   @id() @default(cuid())
+  code                      String?                  @unique()
+  active                    Boolean                  @default(true)
+  description               String?                  @db.Text()
+  deletedAt                 DateTime?
+  createdAt                 DateTime                 @default(now())
+  updatedAt                 DateTime                 @updatedAt()
+  name                      String
+  path                      String
+  size                      BigInt
+  mimeType                  String?
+  archivedCertificate       ArchivedCertificate?     @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId     String?
+  archivedAward             ArchivedAward?           @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId           String?
+  curriculum                Curriculum?              @relation(fields: [curriculumId], references: [id])
+  curriculumId              String?
+  curriculumVersion         CurriculumVersion?       @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId       String?
+  subjectVersion            SubjectVersion?          @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId          String?
+  studentAcademicDecision   StudentAcademicDecision? @relation(fields: [studentAcademicDecisionId], references: [id])
+  studentAcademicDecisionId String?
+
+  @@schema("ql-danh-muc")
+}
+
+/// Đợt xét tốt nghiệp 
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model GraduationSession {
+  id               String                         @id() @default(cuid())
+  code             String?                        @unique()
+  active           Boolean                        @default(true)
+  description      String?                        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                       @default(now())
+  updatedAt        DateTime                       @updatedAt()
+  name             String
+  sessionDate      DateTime
+  applicationStart DateTime
+  applicationEnd   DateTime
+  status           GraduationSessionStatus        @default(PLANNING)
+  applications     StudentGraduationApplication[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quản lý đơn đăng ký xét tốt nghiệp của sinh viên
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model StudentGraduationApplication {
+  id                     String                   @id() @default(cuid())
+  code                   String?                  @unique()
+  active                 Boolean                  @default(true)
+  description            String?                  @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt()
+  student                Student                  @relation(fields: [studentId], references: [id])
+  studentId              String
+  session                GraduationSession        @relation(fields: [sessionId], references: [id])
+  sessionId              String
+  applicationDate        DateTime                 @default(now())
+  status                 ApplicationStatus        @default(SUBMITTED)
+  applicationCheckResult ApplicationCheckResult[]
+  decision               GraduationDecision?
+
+  @@unique([studentId, sessionId])
+  @@schema("ql-dao-tao")
+}
+
+/// Kết quả kiểm tra điều kiện tự động của hệ thống
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ApplicationCheckResult {
+  id                             String                       @id() @default(cuid())
+  code                           String?                      @unique()
+  active                         Boolean                      @default(true)
+  description                    String?                      @db.Text()
+  deletedAt                      DateTime?
+  createdAt                      DateTime                     @default(now())
+  updatedAt                      DateTime                     @updatedAt()
+  studentGraduationApplication   StudentGraduationApplication @relation(fields: [studentGraduationApplicationId], references: [id])
+  studentGraduationApplicationId String                       @unique()
+  rankingCondition               RankingCondition             @relation(fields: [rankingConditionId], references: [id])
+  rankingConditionId             String
+  passed                         Boolean
+  actualValue                    Float?
+
+  @@unique([studentGraduationApplicationId, rankingConditionId])
+  @@schema("ql-dao-tao")
+}
+
+/// Lưu trữ quyết định tốt nghiệp cuối cùng cho một sinh viên
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model GraduationDecision {
+  id               String                       @id() @default(cuid())
+  code             String?                      @unique()
+  active           Boolean                      @default(true)
+  description      String?                      @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                     @default(now())
+  updatedAt        DateTime                     @updatedAt()
+  application      StudentGraduationApplication @relation(fields: [applicationId], references: [id])
+  applicationId    String                       @unique()
+  student          Student                      @relation(fields: [studentId], references: [id])
+  studentId        String                       @unique()
+  decisionDate     DateTime                     @default(now())
+  notes            String?
+  finalGpa         Float
+  finalRanking     AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
+  finalRankingId   String
+  diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId    String?
+  diplomaNumber    String?
+  diplomaIssueDate DateTime?
+
+  @@schema("ql-dao-tao")
+}
+
+/// Xếp loại học tập
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+/// @@validate(!baseScore == Base10 && (base10Min == null || base10Max == null), message: 'Xếp loại theo hệ 10 phải khai báo base10Min, base10Max')
+/// @@validate(!baseScore == Base4 && (base4Min == null || base4Max == null), message: 'Xếp loại theo hệ 4 phải khai báo base4Min, base4Max')
+model AcademicRankingConvert {
+  id                 String                        @id() @default(cuid())
+  code               String?                       @unique()
+  active             Boolean                       @default(true)
+  description        String?                       @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime                      @default(now())
+  updatedAt          DateTime                      @updatedAt()
+  classification     String
+  context            RankingContext
+  rankOrder          Int
+  baseScore          AcademicRankingBaseType
+  base10Min          Float?
+  base10Max          Float?
+  base4Min           Float?
+  base4Max           Float?
+  graduated          Boolean
+  trainingCourse     TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId   String
+  rankingCondition   RankingCondition[]
+  downgradeRules     GraduationRankDowngradeRule[]
+  graduationDecision GraduationDecision[]
+
+  @@unique([trainingCourseId, context, rankOrder])
+  @@schema("ql-dao-tao")
+}
+
+/// Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model GraduationRankDowngradeRule {
+  id            String                             @id() @default(cuid())
+  code          String?                            @unique()
+  active        Boolean                            @default(true)
+  description   String?                            @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime                           @default(now())
+  updatedAt     DateTime                           @updatedAt()
+  initialRank   AcademicRankingConvert             @relation(fields: [initialRankId], references: [id])
+  initialRankId String                             @unique()
+  conditions    GraduationRankDowngradeCondition[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Một điều kiện cụ thể trong bộ quy tắc hạ bậc
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model GraduationRankDowngradeCondition {
+  id              String                      @id() @default(cuid())
+  code            String?                     @unique()
+  active          Boolean                     @default(true)
+  description     String?                     @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt()
+  downgradeRule   GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
+  downgradeRuleId String
+  field           CriteriaField
+  operator        CriteriaOperator
+  invert          Boolean                     @default(false)
+  value           Float
+  tuple           String[]                    @default([])
+
+  @@schema("ql-dao-tao")
+}
+
+/// Điều kiện để đạt được một mức xếp loại
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model RankingCondition {
+  id                     String                   @id() @default(cuid())
+  code                   String?                  @unique()
+  active                 Boolean                  @default(true)
+  description            String?                  @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt()
+  ranking                AcademicRankingConvert   @relation(fields: [rankingId], references: [id])
+  rankingId              String
+  field                  CriteriaField
+  operator               CriteriaOperator
+  invert                 Boolean                  @default(false)
+  value                  Float
+  tuple                  String[]                 @default([])
+  applicationCheckResult ApplicationCheckResult[]
 
   @@schema("ql-dao-tao")
 }
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
-/// @@allow('read', auth() != null)
-model DocumentFile {
-  id                    String               @id() @default(cuid())
-  code                  String?              @unique()
-  active                Boolean              @default(true)
-  description           String?              @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt()
-  name                  String
-  path                  String
-  size                  BigInt
-  mimeType              String?
-  archivedCertificate   ArchivedCertificate? @relation(fields: [archivedCertificateId], references: [id])
-  archivedCertificateId String?
-  archivedAward         ArchivedAward?       @relation(fields: [archivedAwardId], references: [id])
-  archivedAwardId       String?
-  curriculum            Curriculum?          @relation(fields: [curriculumId], references: [id])
-  curriculumId          String?
-  curriculumVersion     CurriculumVersion?   @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId   String?
-  subjectVersion        SubjectVersion?      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId      String?
-
-  @@schema("ql-danh-muc")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model TemplateFile {
   id          String            @id() @default(cuid())
@@ -3245,7 +3403,6 @@ model TemplateFile {
 
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
-/// @@allow('all', auth().role == 'ADMIN')
 /// @@allow('read', auth() != null)
 model BlockedIp {
   id          String    @id() @default(cuid())

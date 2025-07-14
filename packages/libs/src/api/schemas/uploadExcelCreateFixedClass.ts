@@ -6,6 +6,6 @@
  */
 
 export interface UploadExcelCreateFixedClass {
-    file: Blob
-    trainingCourseId: string
+  file: Blob;
+  trainingCourseId: string;
 }

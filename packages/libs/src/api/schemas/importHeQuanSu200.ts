@@ -6,5 +6,6 @@
  */
 
 export type ImportHeQuanSu200 = {
-    message: string
-}
+  message: string;
+  time: number;
+};

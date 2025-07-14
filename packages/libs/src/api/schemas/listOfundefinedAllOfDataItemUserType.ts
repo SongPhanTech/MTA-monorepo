@@ -5,18 +5,18 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ListOfundefinedAllOfDataItemUserType =
-    (typeof ListOfundefinedAllOfDataItemUserType)[keyof typeof ListOfundefinedAllOfDataItemUserType]
+export type ListOfundefinedAllOfDataItemUserType = typeof ListOfundefinedAllOfDataItemUserType[keyof typeof ListOfundefinedAllOfDataItemUserType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ListOfundefinedAllOfDataItemUserType = {
-    MILITARY_STUDENT: 'MILITARY_STUDENT',
-    CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
-    LECTURER: 'LECTURER',
-    STAFF: 'STAFF',
-    PROFESSIONAL: 'PROFESSIONAL',
-    CONTRACT: 'CONTRACT',
-    CIVIL_STUDENT: 'CIVIL_STUDENT',
-    TEACHER: 'TEACHER',
-    OTHER: 'OTHER',
-} as const
+  MILITARY_STUDENT: 'MILITARY_STUDENT',
+  CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
+  LECTURER: 'LECTURER',
+  STAFF: 'STAFF',
+  PROFESSIONAL: 'PROFESSIONAL',
+  CONTRACT: 'CONTRACT',
+  CIVIL_STUDENT: 'CIVIL_STUDENT',
+  TEACHER: 'TEACHER',
+  OTHER: 'OTHER',
+} as const;

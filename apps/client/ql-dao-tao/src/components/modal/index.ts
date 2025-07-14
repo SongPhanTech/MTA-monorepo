@@ -40,6 +40,7 @@ import PutOneSubjectClassModal from './put-one-subject-class'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
+import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
 import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
@@ -109,4 +110,5 @@ export {
     PutAcademicActionConfig,
     PutGraduationApplication,
     PutAcademicActionCondition,
+    PutStudentAcademicDecision,
 }

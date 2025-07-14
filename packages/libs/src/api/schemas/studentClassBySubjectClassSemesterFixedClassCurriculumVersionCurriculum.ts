@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor } from './studentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor'
+import type { StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor } from './studentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor';
 
 export type StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculum = {
-    id: string
-    name: string
-    code: string
-    trainingMajor: StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor
-}
+  id: string;
+  name: string;
+  code: string;
+  trainingMajor: StudentClassBySubjectClassSemesterFixedClassCurriculumVersionCurriculumTrainingMajor;
+};
