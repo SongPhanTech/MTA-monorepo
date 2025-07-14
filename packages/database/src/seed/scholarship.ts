@@ -192,6 +192,7 @@ async function seedScholarshipCriteria() {
         }))
 
         await prisma.scholarship.createMany({
+            skipDuplicates: true,
             data: scholarships.map(({ id, name, rankOrder }) => ({
                 id,
                 name,
@@ -202,6 +203,7 @@ async function seedScholarshipCriteria() {
         })
 
         await prisma.scholarshipCriteria.createMany({
+            skipDuplicates: true,
             data: scholarships.flatMap((scholarship) =>
                 scholarship.criteria.map((criterion) => ({
                     ...criterion,
