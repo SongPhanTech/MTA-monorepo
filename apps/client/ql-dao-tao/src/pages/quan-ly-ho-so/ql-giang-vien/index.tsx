@@ -1,7 +1,4 @@
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import { FilterLecture } from '@components/filter'
-import type { FilterProps } from '@components/filter/filter-lecture'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import {
@@ -10,9 +7,11 @@ import {
     PutUserProfileLectureModal,
 } from '@components/modal'
 import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import {
     useCountLecturer,
     useFindManyDM_CapBac,
@@ -24,38 +23,33 @@ import {
     useFindManyTemplateFile,
     useUpdateLecturer,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Dropdown, Flex, Input, Menu, message, Row } from 'antd'
-import dayjs, { type Dayjs } from 'dayjs'
+import { Button, Col, Flex, Menu, message, Row } from 'antd'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
 
-type Filter = FilterProps & {
-    searchText: string
-    organizationText: string
-}
 dayjs.locale('vi')
-
-const { RangePicker } = DatePicker
 
 export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_organizationIds, setOrganizationIds] = useState<string[]>([])
     const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
-    const [_searchOrganization, setSearchOrganization] = useState<string>('')
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-    const _debouncedSearchText = _.debounce(setSearchOrganization, 200)
-    const [filters, setFilters] = useState<Filter>({
-        searchText: '',
-        organizationText: '',
-        priorityObjectId: null,
-        nationalityId: null,
-        religionId: null,
-        ethnicityId: null,
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        dateOfBirth: undefined,
+        academicRankType: undefined,
+        academicDegreeType: undefined,
+        organization: undefined,
+        gender: undefined,
+        rankId: undefined,
+        officerNumber: undefined,
+        lecturerType: undefined,
     })
 
     // const { data: organization_data = [], refetch: refetch_organization } =
@@ -69,66 +63,86 @@ export default function UserProfilePageLecture() {
 
     const { data = [], refetch } = useFindManyLecturer({
         where: {
-            AND: [
-                ...(filters.searchText
-                    ? [
-                          {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                  ],
-                              },
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.name,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.name,
+                        },
+                    },
+                ],
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
                           },
-                      ]
-                    : []),
-                ...(filters.organizationText
-                    ? [
-                          {
-                              organization: {
-                                  sTen: {
-                                      contains: filters.organizationText,
-                                  },
-                              },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth
+                    ? {
+                          dateOfBirth: {
+                              gte: filters.dateOfBirth?.[0],
+                              lte: filters.dateOfBirth?.[1],
                           },
-                      ]
-                    : []),
-                ...(filters.nationalityId
-                    ? [
-                          {
-                              userProfile: {
-                                  nationalityId: filters.nationalityId,
-                              },
+                      }
+                    : {}),
+                ...(filters.officerNumber
+                    ? {
+                          officerNumber: {
+                              contains: filters.officerNumber,
+                              mode: 'insensitive',
                           },
-                      ]
-                    : []),
-                ...(filters.religionId
-                    ? [
-                          {
-                              userProfile: {
-                                  religionId: filters.religionId,
-                              },
+                      }
+                    : {}),
+                ...(filters.academicRankType
+                    ? {
+                          academicRankTypeId: {
+                              in: filters.academicRankType,
                           },
-                      ]
-                    : []),
-                ...(filters.ethnicityId
-                    ? [
-                          {
-                              userProfile: {
-                                  ethnicityId: filters.ethnicityId,
-                              },
+                      }
+                    : {}),
+                ...(filters.academicDegreeType
+                    ? {
+                          academicDegreeTypeId: {
+                              in: filters.academicDegreeType,
                           },
-                      ]
-                    : []),
-            ],
+                      }
+                    : {}),
+                ...(filters.rankId
+                    ? {
+                          rankId: {
+                              in: filters.rankId,
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.lecturerType
+                ? {
+                      lecturerTypeId: {
+                          in: filters.lecturerType,
+                      },
+                  }
+                : {}),
         },
         include: {
             userProfile: {
@@ -192,46 +206,94 @@ export default function UserProfilePageLecture() {
     // }
 
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
-    const { data: organizationData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
     const { data: academicRankTypeData = [] } = useFindManyDM_HocHam()
     const { data: academicDegreeTypeData = [] } = useFindManyDM_HocVi()
     const { data: rankTypeData = [] } = useFindManyDM_CapBac()
 
     const { data: count } = useCountLecturer({
         where: {
-            AND: [
-                ...(filters.searchText
-                    ? [
-                          {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                  ],
-                              },
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.name,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.name,
+                        },
+                    },
+                ],
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
                           },
-                      ]
-                    : []),
-                ...(filters.organizationText
-                    ? [
-                          {
-                              organization: {
-                                  sTen: {
-                                      contains: filters.organizationText,
-                                  },
-                              },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth
+                    ? {
+                          dateOfBirth: {
+                              gte: filters.dateOfBirth?.[0],
+                              lte: filters.dateOfBirth?.[1],
                           },
-                      ]
-                    : []),
-            ],
+                      }
+                    : {}),
+                ...(filters.officerNumber
+                    ? {
+                          officerNumber: {
+                              contains: filters.officerNumber,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+                ...(filters.academicRankType
+                    ? {
+                          academicRankTypeId: {
+                              in: filters.academicRankType,
+                          },
+                      }
+                    : {}),
+                ...(filters.academicDegreeType
+                    ? {
+                          academicDegreeTypeId: {
+                              in: filters.academicDegreeType,
+                          },
+                      }
+                    : {}),
+                ...(filters.rankId
+                    ? {
+                          rankId: {
+                              in: filters.rankId,
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.lecturerType
+                ? {
+                      lecturerTypeId: {
+                          in: filters.lecturerType,
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -348,97 +410,17 @@ export default function UserProfilePageLecture() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={7}>
-                            <Input
-                                id="search"
-                                onChange={(e) =>
-                                    handleFilterChange('organizationText', e.target.value)
-                                }
-                                placeholder="Tìm kiếm theo tên đơn vị"
-                            />
-                        </Col>
-                        <Col span={10}>
-                            <FilterLecture
-                                onSearchChange={handleFilterChange}
-                                onFilterChange={handleAdvancedFilter}
-                            />
-                        </Col>
-
+                    <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={7}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
-
-                                {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <Dropdown overlay={menuDownload} trigger={['hover']}>
-                                    <Button
-                                        className="ml-4"
-                                        type="primary"
-                                        icon={<DownloadOutlined />}
-                                    >
-                                        Tải file mẫu
-                                    </Button>
-                                </Dropdown>
-
-                                <Dropdown overlay={menuUpload} trigger={['hover']}>
-                                    <Button
-                                        className="ml-4"
-                                        type="primary"
-                                        icon={<UploadOutlined />}
-                                    >
-                                        Nhập file
-                                    </Button>
-                                </Dropdown>
                             </Flex>
                         </Col>
                     </Row>
-                    {/* Row ô tìm kiếm */}
-                    {/* <Row gutter={[16, 16]}>
-            <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-              <Col span={24}>
-                <FilterLecture
-                  onSearchChange={handleFilterChange}
-                  onFilterChange={handleAdvancedFilter}
-                />
-              </Col>
-            </Row>
-          </Row> */}
                 </Col>
-                {/* <Col span={7}>
-                    <Table
-                        columns={[
-                            {
-                                title: 'Mã đơn vị',
-                                dataIndex: 'code',
-                            },
-                            {
-                                title: 'Tên đơn vị',
-                                dataIndex: 'name',
-                            },
-                        ]}
-                        data={tree_search_organization}
-                        expandable={{
-                            defaultExpandedRowKeys: ['root'],
-                        }}
-                        onRowClick={(record) =>
-                            handleRowOrganizationClick(
-                                record as TreeNodeOrganization
-                            )
-                        }
-                        selectedRow={selectedRowId}
-                        pagination={{
-                            current: 1,
-                            pageSize: 10000,
-                            onChange: setCurrentPage,
-                            showSizeChanger: false,
-                            showTotal: () => null,
-                        }}
-                        scrollable={true}
-                        maxHeight={430}
-                    />
-                </Col> */}
+
                 <Col span={24}>
                     <Table
                         columns={[
@@ -476,231 +458,161 @@ export default function UserProfilePageLecture() {
                                 title: 'Mã giảng viên',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 120,
+                                width: 150,
+                                type: 'input',
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'organization',
+                                    'rankId',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'academicDegreeType',
+                                ],
                             },
                             {
                                 title: 'SHSQ/SHQN',
-                                render: (_, record) => record.userProfile?.officerNumber,
+                                dataIndex: 'officerNumber',
+                                render: (__, record) => record.userProfile?.officerNumber,
                                 align: 'center',
-                                width: 120,
+                                width: 150,
+                                type: 'input',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'organization',
+                                    'rankId',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'academicDegreeType',
+                                ],
                             },
                             {
                                 title: 'Họ và tên',
-                                render: (record) =>
+                                render: (__, record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
                                 align: 'center',
                                 width: 150,
-                            },
-                            {
-                                title: 'Giới tính',
-                                align: 'center',
-                                width: 100,
-                                filters: [
-                                    {
-                                        text: 'Nam',
-                                        value: 'Male',
-                                    },
-                                    {
-                                        text: 'Nữ',
-                                        value: 'Female',
-                                    },
+                                dataIndex: 'name',
+                                type: 'input',
+                                multiple: [
+                                    'code',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'organization',
+                                    'rankId',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'academicDegreeType',
                                 ],
-                                onFilter: (value, record) => record.userProfile?.gender === value,
-                                render: (record) =>
-                                    record.userProfile?.gender
-                                        ? GENDER_MEAN[
-                                              record.userProfile.gender as keyof typeof GENDER_MEAN
-                                          ]
-                                        : '',
                             },
                             {
                                 title: 'Ngày sinh',
-                                filterDropdown: ({
-                                    setSelectedKeys,
-                                    selectedKeys,
-                                    confirm,
-                                    clearFilters,
-                                }) => (
-                                    <div className="p-4 space-y-2">
-                                        <RangePicker
-                                            value={
-                                                selectedKeys.length > 0
-                                                    ? (() => {
-                                                          try {
-                                                              const [start, end] = JSON.parse(
-                                                                  selectedKeys[0] as string
-                                                              )
-                                                              return [
-                                                                  dayjs(start, 'DD/MM/YYYY'),
-                                                                  dayjs(end, 'DD/MM/YYYY'),
-                                                              ]
-                                                          } catch {
-                                                              return [null, null]
-                                                          }
-                                                      })()
-                                                    : [null, null]
-                                            }
-                                            onChange={(dates) => {
-                                                if (dates?.[0] && dates[1]) {
-                                                    const startDate = dates[0].format('DD/MM/YYYY')
-                                                    const endDate = dates[1].format('DD/MM/YYYY')
-                                                    setSelectedKeys([
-                                                        JSON.stringify([startDate, endDate]),
-                                                    ])
-                                                } else {
-                                                    setSelectedKeys([])
-                                                }
-                                            }}
-                                            format={{
-                                                format: 'DD/MM/YYYY',
-                                                type: 'mask',
-                                            }}
-                                            placeholder={['Từ ngày', 'Đến ngày']}
-                                            style={{ width: '100%' }}
-                                        />
-                                        <div className="flex justify-between gap-2">
-                                            <Button
-                                                size="small"
-                                                onClick={() => {
-                                                    clearFilters?.()
-                                                    confirm()
-                                                }}
-                                            >
-                                                Xóa
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                size="small"
-                                                onClick={() => confirm()}
-                                            >
-                                                Lọc
-                                            </Button>
-                                        </div>
-                                    </div>
-                                ),
-                                onFilter: (value, record) => {
-                                    if (
-                                        !value ||
-                                        typeof value !== 'string' ||
-                                        !record.userProfile?.dateOfBirth
-                                    ) {
-                                        return false
-                                    }
+                                dataIndex: 'dateOfBirth',
+                                type: 'date',
 
-                                    const [startDate, endDate] = JSON.parse(value) as string[]
-
-                                    const birthDate = dayjs(
-                                        record.userProfile?.dateOfBirth,
-                                        'DD/MM/YYYY'
-                                    )
-                                    const filterStartDate = dayjs(startDate, 'DD/MM/YYYY')
-                                    const filterEndDate = dayjs(endDate, 'DD/MM/YYYY')
-
-                                    console.log(filterStartDate)
-                                    console.log(filterEndDate)
-
-                                    return (
-                                        birthDate.isAfter(filterStartDate, 'day') &&
-                                        birthDate.isBefore(filterEndDate, 'day')
-                                    )
-                                },
-                                render: (_, record) =>
+                                render: (__, record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(record.userProfile?.dateOfBirth).format(
                                               'DD/MM/YYYY'
                                           )
                                         : '',
                                 align: 'center',
-                                width: 120,
+                                width: 150,
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'code',
+                                    'gender',
+                                    'organization',
+                                    'rankId',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'academicDegreeType',
+                                ],
                             },
                             {
-                                title: 'Đơn vị',
-                                width: 200,
-                                filters: organizationData.map((org) => ({
-                                    text: org.sTen,
-                                    value: org.Id,
-                                })),
-                                onFilter: (value, record) => {
-                                    return record.organization?.Id === value
-                                },
-                                render: (_, record) => {
-                                    return record.organization?.sTen || 'Chưa có'
-                                },
+                                title: 'Giới tính',
                                 align: 'center',
+                                width: 100,
+                                type: 'select',
+                                dataIndex: 'gender',
+                                options: [
+                                    { label: 'Nam', value: 'Male' },
+                                    { label: 'Nữ', value: 'Female' },
+                                ],
+                                render: (record) =>
+                                    record.userProfile?.gender
+                                        ? GENDER_MEAN[
+                                              record.userProfile.gender as keyof typeof GENDER_MEAN
+                                          ]
+                                        : '',
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'code',
+                                    'organization',
+                                    'rankId',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'academicDegreeType',
+                                ],
+                            },
+
+                            {
+                                title: 'Đơn vị',
+                                dataIndex: 'organization',
+                                align: 'center',
+                                width: 150,
+                                render: (value) => value?.sTen,
+                                type: 'tree_select',
+                                options: treeData,
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'code',
+                                    'rankId',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'academicDegreeType',
+                                ],
                             },
                             {
                                 title: 'Học hàm',
                                 width: 120,
-                                filters: academicRankTypeData.map((aca) => ({
-                                    text: aca.sTen,
+                                dataIndex: 'academicRankType',
+                                options: academicRankTypeData.map((aca) => ({
+                                    label: aca.sTen,
                                     value: aca.Id,
                                 })),
-                                onFilter: (value, record) => {
-                                    return record.organization?.academicRankTypeId === value
-                                },
+                                type: 'select',
                                 render: (_, record) =>
                                     record.userProfile?.academicRankType?.name || '',
                                 align: 'center',
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'organization',
+                                    'rankId',
+                                    'lecturerType',
+                                    'code',
+                                    'academicDegreeType',
+                                ],
                             },
                             {
                                 title: 'Năm HH',
-                                filterDropdown: ({
-                                    setSelectedKeys,
-                                    selectedKeys,
-                                    confirm,
-                                    clearFilters,
-                                }) => (
-                                    <div className="p-2 space-y-2">
-                                        <DatePicker
-                                            value={
-                                                selectedKeys[0]
-                                                    ? dayjs(selectedKeys[0] as string)
-                                                    : null
-                                            }
-                                            onChange={(date: Dayjs | null) => {
-                                                const formatted = date
-                                                    ? date.format('DD/MM/YYYY')
-                                                    : null
-                                                setSelectedKeys(formatted ? [formatted] : [])
-                                            }}
-                                            format={{
-                                                format: 'DD/MM/YYYY',
-                                                type: 'mask',
-                                            }}
-                                            placeholder="Chọn năm học hàm"
-                                            style={{ width: '100%' }}
-                                        />
-                                        <div className="flex justify-between gap-2">
-                                            <Button
-                                                size="small"
-                                                onClick={() => {
-                                                    clearFilters?.()
-                                                    confirm()
-                                                }}
-                                            >
-                                                Xóa
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                size="small"
-                                                onClick={() => confirm()}
-                                            >
-                                                Lọc
-                                            </Button>
-                                        </div>
-                                    </div>
-                                ),
-                                onFilter: (value, record) => {
-                                    if (!value || !record.userProfile?.academicRankDate)
-                                        return false
-
-                                    const filterDate = dayjs(value as string)
-                                    const recordDate = dayjs(record.userProfile.academicRankDate)
-
-                                    return filterDate.isSame(recordDate, 'day')
-                                },
                                 render: (_, record) =>
                                     record.userProfile?.academicRankDate
                                         ? dayjs(record.userProfile.academicRankDate).format(
@@ -712,17 +624,27 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'Học vị',
-                                filters: academicDegreeTypeData.map((hv) => ({
-                                    text: hv.sTen,
+                                dataIndex: 'academicDegreeType',
+                                options: academicDegreeTypeData.map((hv) => ({
+                                    label: hv.sTen,
                                     value: hv.Id,
                                 })),
-                                onFilter: (value, record) => {
-                                    return record.userProfile?.academicDegreeTypeId === value
-                                },
-                                render: (_, record) =>
+                                type: 'select',
+                                render: (__, record) =>
                                     record.userProfile?.academicDegreeType?.name || '',
                                 align: 'center',
                                 width: 120,
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'organization',
+                                    'rankId',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'code',
+                                ],
                             },
                             {
                                 title: 'Năm HV',
@@ -738,13 +660,25 @@ export default function UserProfilePageLecture() {
                             {
                                 title: 'Loại giảng viên',
                                 align: 'center',
-                                filters: lecturerTypeData.map((type) => ({
-                                    text: type.name,
+                                options: lecturerTypeData.map((type) => ({
+                                    label: type.name,
                                     value: type.id,
                                 })),
-                                onFilter: (value, record) => record.lecturerTypeId === value,
-                                width: 140,
-                                render: (_, record) => record.lecturerType?.name || '',
+                                dataIndex: 'lecturerType',
+                                type: 'select',
+                                width: 170,
+                                render: (__, record) => record?.lecturerType?.name || '',
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'organization',
+                                    'rankId',
+                                    'code',
+                                    'academicRankType',
+                                    'academicDegreeType',
+                                ],
                             },
                             // {
                             //     title: 'Năm CV',
@@ -759,20 +693,32 @@ export default function UserProfilePageLecture() {
                             //     width: 100,
                             // },
                             {
-                                title: 'Cập bậc hàm',
+                                title: 'Cấp bậc hàm',
                                 dataIndex: 'rankId',
-                                filters: rankTypeData.map((rank) => ({
-                                    text: rank.sTen,
+                                options: rankTypeData.map((rank) => ({
+                                    label: rank.sTen,
                                     value: rank.Id,
                                 })),
+                                type: 'select',
                                 render: (_, record) => record.userProfile?.rank?.name || '',
                                 align: 'center',
                                 width: 140,
+                                multiple: [
+                                    'name',
+                                    'officerNumber',
+                                    'dateOfBirth',
+                                    'gender',
+                                    'organization',
+                                    'code',
+                                    'lecturerType',
+                                    'academicRankType',
+                                    'academicDegreeType',
+                                ],
                             },
                             {
                                 title: 'Năm CB',
                                 dataIndex: 'rankDate',
-                                render: (_, record) =>
+                                render: (__, record) =>
                                     record.userProfile?.rankDate
                                         ? dayjs(record.userProfile.rankDate).format('DD/MM/YYYY')
                                         : '',
@@ -803,14 +749,18 @@ export default function UserProfilePageLecture() {
                         ]}
                         data={data}
                         rowKey="id"
-                        rowSelection={{
-                            selectedRowKeys,
-                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                        }}
+                        // rowSelection={{
+                        //     selectedRowKeys,
+                        //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                        // }}
                         pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>
