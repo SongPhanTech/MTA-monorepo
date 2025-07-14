@@ -1,48 +1,56 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingCourseModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
+import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountTrainingCourse,
+    useFindManySchoolYear,
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-// const { Option } = Select;
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectTypeId: string | undefined
-}
 
 export default function TrainingCoursePage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        trainingObjectTypeId: undefined,
+        code: '',
+        name: '',
+        trainingObjectTypes: undefined,
+        admissionQuota: undefined,
+        semesterStart: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
-            trainingObjectType: {
-                id: filters.trainingObjectTypeId,
-            },
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
+            ...(filters.semesterStart
+                ? {
+                      semesterStartId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
         },
         include: {
             trainingObjectType: true,
@@ -52,9 +60,18 @@ export default function TrainingCoursePage() {
                 },
             },
         },
-        orderBy: {
-            name: 'asc',
-        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        admissionQuota: filters.admissionQuota,
+                    },
+                ],
+                !!filters.admissionQuota
+            ),
+            { name: 'asc' },
+        ],
+
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -62,9 +79,16 @@ export default function TrainingCoursePage() {
     const { data: count } = useCountTrainingCourse({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -100,29 +124,11 @@ export default function TrainingCoursePage() {
         }
         hideSpinner()
     }
-
-    const handleFilterChange = (
-        key: string,
-        value: string | { startDate?: string; endDate?: string }
-    ) => {
-        if (key !== 'time') {
-            setFilters((prev) => {
-                const newFilters = { ...prev, [key]: value }
-                debouncedRefetch()
-                return newFilters
-            })
-        } else if (typeof value === 'object' && value !== null) {
-            setFilters((prev: FilterProps) => {
-                const newFilters = {
-                    ...prev,
-                    startDate: value.startDate ?? undefined,
-                    endDate: value.endDate ?? undefined,
-                }
-                debouncedRefetch()
-                return newFilters
-            })
-        }
-    }
+    const { data: schoolYearData = [] } = useFindManySchoolYear({
+        orderBy: {
+            name: 'asc',
+        },
+    })
 
     const _options = Object.entries(KHOA_HL_STATUS).map(([value, { label, color }]) => ({
         value,
@@ -138,7 +144,7 @@ export default function TrainingCoursePage() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            <Flex>
+                            {/* <Flex>
                                 <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
@@ -188,7 +194,7 @@ export default function TrainingCoursePage() {
                                         />
                                     </Form.Item>
                                 </Col>
-                            </Flex>
+                            </Flex> */}
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
@@ -204,6 +210,8 @@ export default function TrainingCoursePage() {
                     <Table
                         rowKey="id"
                         id="training-course"
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -219,6 +227,8 @@ export default function TrainingCoursePage() {
                                 width: 150,
                                 fixed: 'left',
                                 align: 'center',
+                                type: 'input',
+                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Tên khóa',
@@ -226,20 +236,39 @@ export default function TrainingCoursePage() {
                                 width: 200,
                                 fixed: 'left',
                                 align: 'center',
+                                type: 'input',
+                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
-                                dataIndex: 'trainingObjectType',
+                                dataIndex: 'trainingObjectTypes',
                                 align: 'center',
-                                width: 150,
-                                render: (value: TrainingObjectType) =>
-                                    value?.name ? value?.name : '',
+                                width: 175,
+                                type: 'select',
+                                multiple: ['name', 'code'],
+                                options: trainingObjectTypeData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                }),
+                                render: (__, record) =>
+                                    record?.trainingObjectType?.name
+                                        ? record?.trainingObjectType?.name
+                                        : '',
                             },
                             {
                                 title: 'Năm bắt đầu',
                                 align: 'center',
                                 dataIndex: 'semesterStart',
                                 width: 150,
+                                type: 'select',
+                                options: schoolYearData.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                }),
                                 render: (value) =>
                                     value?.schoolYear?.name ? value?.schoolYear?.name : '',
                             },
@@ -254,6 +283,7 @@ export default function TrainingCoursePage() {
                                 align: 'center',
                                 dataIndex: 'admissionQuota',
                                 width: 150,
+                                type: 'order',
                             },
                             {
                                 title: 'Mô tả',

@@ -6,6 +6,7 @@ import {
     Button,
     Checkbox,
     type CheckboxChangeEvent,
+    DatePicker,
     Empty,
     Input,
     Radio,
@@ -15,7 +16,10 @@ import {
 } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
+import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
+
+dayjs.locale('vi')
 
 type TableProps<T> = {
     columns?: ColumnsType<T> & {
@@ -81,13 +85,15 @@ const Table = <T extends Record<string, unknown>>({
     }
 
     const checkAll = (item: ColumnTypeProps) => {
-        return item.options?.length === filtersTable[item.dataIndex as keyof FilterProps]?.length
+        const filter = filtersTable[item.dataIndex as keyof FilterProps] as string[]
+        if (!item.options || !filter) return false
+        return item.options?.length === filter?.length
     }
 
     const indeterminate = (item: ColumnTypeProps) => {
-        const filter = filtersTable[item.dataIndex as keyof FilterProps]
+        const filter = filtersTable[item.dataIndex as keyof FilterProps] as string[]
         if (!item.options || !filter) return false
-        return item.options.length > filter.length && filter.length > 0
+        return item?.options.length > filter.length && filter.length > 0
     }
 
     function updateObjectExcept(obj: Record<string, any>, excludeKeys: string[]) {
@@ -136,7 +142,7 @@ const Table = <T extends Record<string, unknown>>({
                             <div className="mb-2">Tìm kiếm</div>
                             <Input
                                 placeholder="Tìm kiếm"
-                                value={filtersTable[item.dataIndex as keyof FilterProps]}
+                                value={filtersTable[item.dataIndex as keyof FilterProps] as string}
                                 onChange={(e) => {
                                     setFiltersTable({
                                         ...filters,
@@ -336,15 +342,16 @@ const Table = <T extends Record<string, unknown>>({
                                 }}
                                 click={() => {
                                     if (item.multiple) {
+                                        const filter = filtersTable[
+                                            item.dataIndex as keyof FilterProps
+                                        ] as string[]
                                         const result = {
                                             ...updateObjectExcept(filtersTable, [
                                                 ...item.multiple,
                                                 item.dataIndex as keyof FilterProps,
                                             ]),
-                                            [item.dataIndex as keyof FilterProps]: filtersTable[
-                                                item.dataIndex as keyof FilterProps
-                                            ]?.length
-                                                ? filtersTable[item.dataIndex as keyof FilterProps]
+                                            [item.dataIndex as keyof FilterProps]: filter?.length
+                                                ? filter
                                                 : undefined,
                                         }
                                         setFilters?.(result)
@@ -392,7 +399,6 @@ const Table = <T extends Record<string, unknown>>({
                                     filtersTable[item.dataIndex as keyof FilterProps] as string[]
                                 }
                                 onCheck={(checkedKeys) => {
-                                    console.log(checkedKeys)
                                     setFiltersTable({
                                         ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]: checkedKeys,
@@ -415,15 +421,16 @@ const Table = <T extends Record<string, unknown>>({
                                 }}
                                 click={() => {
                                     if (item.multiple) {
+                                        const filter = filtersTable[
+                                            item.dataIndex as keyof FilterProps
+                                        ] as string[]
                                         const result = {
                                             ...updateObjectExcept(filtersTable, [
                                                 ...item.multiple,
                                                 item.dataIndex as keyof FilterProps,
                                             ]),
-                                            [item.dataIndex as keyof FilterProps]: filtersTable[
-                                                item.dataIndex as keyof FilterProps
-                                            ]?.length
-                                                ? filtersTable[item.dataIndex as keyof FilterProps]
+                                            [item.dataIndex as keyof FilterProps]: filter?.length
+                                                ? filter
                                                 : undefined,
                                         }
                                         setFilters?.(result)
@@ -560,6 +567,78 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }
+                                    setFilters?.(result)
+                                    props.confirm()
+                                }}
+                            />
+                        </div>
+                    )
+                },
+                filterIcon: () => {
+                    return (
+                        <FilterFilled
+                            style={{
+                                color: filters?.[item.dataIndex as keyof FilterProps]
+                                    ? '#005f37'
+                                    : undefined,
+                            }}
+                        />
+                    )
+                },
+            }
+        }
+        if (item?.type === 'date') {
+            return {
+                filterDropdown: (props: FilterDropdownProps) => {
+                    // if (!item.options) return
+                    return (
+                        <div className="p-4 w-full min-w-[200px] max-w-[300px]">
+                            <DatePicker.RangePicker
+                                placeholder={['Từ ngày', 'Đến ngày']}
+                                className="w-full mb-3"
+                                allowClear
+                                onChange={(dates, dateStrings) => {
+                                    setFiltersTable({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]: dateStrings.length
+                                            ? [dateStrings[0], dateStrings[1]]
+                                            : null,
+                                    })
+                                }}
+                                format={{ format: 'DD/MM/YYYY', type: 'mask' }}
+                            />
+
+                            <ListButton
+                                clear={() => {
+                                    setFiltersTable({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]: undefined,
+                                    })
+                                    setFilters?.({
+                                        ...filtersTable,
+                                        [item.dataIndex as keyof FilterProps]: undefined,
+                                    })
+                                    props.confirm()
+                                }}
+                                click={() => {
+                                    if (item.multiple) {
+                                        const result = {
+                                            ...updateObjectExcept(filtersTable, [
+                                                ...item.multiple,
+                                                item.dataIndex as keyof FilterProps,
+                                            ]),
+                                        }
+
+                                        setFilters?.(result)
+                                        props.confirm()
+                                        return
+                                    }
+                                    const result = {
+                                        [item.dataIndex as keyof FilterProps]:
+                                            filtersTable[item.dataIndex as keyof FilterProps],
+                                    }
+                                    console.log(result)
+
                                     setFilters?.(result)
                                     props.confirm()
                                 }}

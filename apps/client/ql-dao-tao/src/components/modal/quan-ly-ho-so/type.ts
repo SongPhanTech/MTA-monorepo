@@ -14,7 +14,9 @@ import type {
     DM_Tinh,
     DM_TonGiao,
     DM_XaPhuong,
+    ExamType,
     FixedClass,
+    Gender,
     Lecturer,
     LecturerType,
     PriorityObject,
@@ -92,11 +94,31 @@ export type FilterProps = {
     numberOfPractice?: 'asc' | 'desc'
     numberOfReview?: 'asc' | 'desc'
     numberOfExam?: 'asc' | 'desc'
-    examType?: string[]
-    fixedClass?: string[] | []
-    trainingCourse?: string[] | []
-    actionTaken?: AcademicActionType[] | []
-    status?: DecisionStatus[] | []
+    examType?: ExamType[]
+    fixedClass?: string[]
+    trainingCourse?: string[]
+    actionTaken?: AcademicActionType[]
+    status?: DecisionStatus[]
+    admissionQuota?: 'asc' | 'desc'
+    semesterStart?: string
+    curriculumVersion?: string[]
+    managementOrganization?: string[]
+    graduated?: boolean
+    trainingLevel?: string[]
+    startYear?: 'asc' | 'desc'
+    gender?: Gender[]
+    trainingField?: string[]
+    dateOfBirth?: Date[]
+    academicRankType?: string[]
+    academicDegreeType?: string[]
+    rankId?: string[]
+    officerNumber?: string
+    lecturerType?: string[]
+    staffType?: string[]
+    bonusScore?: 'asc' | 'desc'
+    finalScore?: 'asc' | 'desc'
+    count?: 'asc' | 'desc'
+    publishDate?: Date[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

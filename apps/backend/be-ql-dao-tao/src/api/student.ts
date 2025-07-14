@@ -8,7 +8,7 @@ import {
     calculateStudentSemesterResult,
     listStudentResultInfo,
     resultCourseStudentResult,
-} from '../services/studen-result.service'
+} from '../services/student-result.service'
 import {
     buildCurriculumMapOrThrow,
     buildDistrictMapOrThrow,

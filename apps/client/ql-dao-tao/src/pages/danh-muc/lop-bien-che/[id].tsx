@@ -7,6 +7,7 @@ import {
     PutUpdateProfileModal,
     PutUploadProfileModal,
 } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
@@ -15,33 +16,22 @@ import {
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountStudent,
+    useFindManyCurriculumVersion,
     useFindManyStudent,
     useFindManyTemplateFile,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
     useFindUniqueFixedClass,
     useUpdateManyStudent,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import {
-    Button,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Input,
-    Menu,
-    message,
-    Popconfirm,
-    Row,
-    Tag,
-    Tooltip,
-} from 'antd'
+import { Button, Col, Divider, Flex, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookCheckIcon, Search } from 'lucide-react'
+import { BookCheckIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
-import type React from 'react'
+
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -54,10 +44,25 @@ export default function StudentFixedClassPage() {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [open, setOpen] = useState(false)
-    const [filters, setFilters] = useState({
-        searchText: '',
-        dateOfBirth: [],
-        gender: null,
+    const [filters, setFilters] = useState<FilterProps>({
+        gender: undefined,
+        name: '',
+        code: '',
+        curriculumVersion: undefined,
+        trainingMajors: undefined,
+        trainingField: undefined,
+        dateOfBirth: undefined,
+    })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
     })
 
     const { data: fixedClass } = useFindUniqueFixedClass(
@@ -98,20 +103,67 @@ export default function StudentFixedClassPage() {
                 OR: [
                     {
                         firstName: {
-                            contains: filters.searchText,
+                            contains: filters.name,
                         },
                     },
                     {
                         lastName: {
-                            contains: filters.searchText,
+                            contains: filters.name,
                         },
                     },
                 ],
-                dateOfBirth: {
-                    gte: filters.dateOfBirth?.[0],
-                    lte: filters.dateOfBirth?.[1],
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth?.length === 2
+                    ? {
+                          dateOfBirth: {
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+            fixedClass: {
+                curriculumVersion: {
+                    curriculum: {
+                        trainingMajor: {
+                            ...(filters.trainingMajors
+                                ? {
+                                      id: {
+                                          in: filters.trainingMajors,
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.trainingField
+                                ? {
+                                      trainingFieldId: {
+                                          in: filters.trainingField,
+                                      },
+                                  }
+                                : {}),
+                        },
+                    },
                 },
-                ...(filters.gender ? { gender: filters.gender } : {}),
             },
         },
         include: {
@@ -161,31 +213,77 @@ export default function StudentFixedClassPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountStudent({
-        where: {
-            fixedClassId,
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                ],
-                dateOfBirth: {
-                    gte: filters.dateOfBirth?.[0],
-                    lte: filters.dateOfBirth?.[1],
-                },
-
-                ...(filters.gender ? { gender: filters.gender } : {}),
-            },
-        },
-    })
+    // const { data: count } = useCountStudent({
+    //     where: {
+    //         fixedClassId,
+    //         userProfile: {
+    //             OR: [
+    //                 {
+    //                     firstName: {
+    //                         contains: filters.name,
+    //                     },
+    //                 },
+    //                 {
+    //                     lastName: {
+    //                         contains: filters.name,
+    //                     },
+    //                 },
+    //             ],
+    //             ...(filters.gender
+    //                 ? {
+    //                       gender: {
+    //                           in: filters.gender,
+    //                       },
+    //                   }
+    //                 : {}),
+    //             ...(filters.dateOfBirth
+    //                 ? {
+    //                       dateOfBirth: {
+    //                           gte: filters.dateOfBirth?.[0],
+    //                           lte: filters.dateOfBirth?.[1],
+    //                       },
+    //                   }
+    //                 : {}),
+    //         },
+    //         ...(filters.code
+    //             ? {
+    //                   code: {
+    //                       contains: filters.code,
+    //                       mode: 'insensitive',
+    //                   },
+    //               }
+    //             : {}),
+    //         ...(filters.curriculumVersion
+    //             ? {
+    //                   curriculumVersionId: {
+    //                       in: filters.curriculumVersion,
+    //                   },
+    //               }
+    //             : {}),
+    //         fixedClass: {
+    //             curriculumVersion: {
+    //                 curriculum: {
+    //                     trainingMajor: {
+    //                         ...(filters.trainingMajors
+    //                             ? {
+    //                                   id: {
+    //                                       in: filters.trainingMajors,
+    //                                   },
+    //                               }
+    //                             : {}),
+    //                         ...(filters.trainingField
+    //                             ? {
+    //                                   trainingFieldId: {
+    //                                       in: filters.trainingField,
+    //                                   },
+    //                               }
+    //                             : {}),
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     },
+    // })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -275,75 +373,6 @@ export default function StudentFixedClassPage() {
 
     const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
-    const handleFilterChange = (
-        key: string,
-        value: string | { startDate?: string; endDate?: string } | string[]
-    ) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const handleDownloadTemplate = (type: string) => {
-        const fileRecord = templateFile?.find((item) => item.code === type)
-        const fileLink = fileRecord ? fileRecord.path : null
-        if (fileLink) {
-            const link = document.createElement('a')
-            link.href = fileLink
-            link.setAttribute('download', '')
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-        }
-    }
-
-    const itemsDownload = [
-        {
-            key: 'import',
-            label: 'Tải file nhập thông tin sinh viên',
-            onClick: () => handleDownloadTemplate('IMPORT_USERPROFILE'),
-        },
-        {
-            key: 'update',
-            label: 'Tải file cập nhật thông tin sinh viên',
-            onClick: () => handleDownloadTemplate('UPDATE_USERPROFILE'),
-        },
-    ]
-
-    const itemsUpload = [
-        {
-            key: 'upload',
-            label: 'Nhập file nhập thông tin sinh viên',
-            onClick: () => handleModalUpload('upload'),
-        },
-        {
-            key: 'update',
-            label: 'Nhập file cập nhật thông tin sinh viên',
-            onClick: () => handleModalUpload('update'),
-        },
-    ]
-    const menuDownload = (
-        <Menu>
-            {itemsDownload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
-    const menuUpload = (
-        <Menu>
-            {itemsUpload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
     const handleCancel = () => {
         setOpen(false)
     }
@@ -369,77 +398,7 @@ export default function StudentFixedClassPage() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm"
-                                        style={{
-                                            width: 200,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        prefix={
-                                            <Search
-                                                size={16}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                {/* <Form.Item
-                                    className="mb-0"
-                                    name="gender"
-                                    labelCol={{ span: 24 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn giới tính"
-                                        options={GENDER_LIST.map((i) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
-                                        style={{
-                                            width: 200,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        onChange={(val) => handleFilterChange('gender', val)}
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                <DatePicker.RangePicker
-                                    placeholder={['Từ ngày', 'Đến ngày']}
-                                    style={{
-                                        width: 300,
-                                        marginRight: 8,
-                                        height: 32,
-                                    }}
-                                    allowClear
-                                    onChange={(dates, dateStrings) => {
-                                        handleFilterChange(
-                                            'dateOfBirth',
-                                            dates ? [dateStrings[0], dateStrings[1]] : []
-                                        )
-                                    }}
-                                    locale={CUSSTOM_VI_LOCALE}
-                                    format={{
-                                    format: 'DD/MM/YYYY',
-                                    type: 'mask',
-                        }}
-                                /> */}
-                            </Flex>
-                        </Col>
+                        <Col span={12} />
 
                         {/* Hàng chứa các button */}
                         <Col xs={12}>
@@ -487,6 +446,8 @@ export default function StudentFixedClassPage() {
                             selectedRowKeys,
                             onChange: (selectedKeys: any) => setSelectedRowKeys(selectedKeys),
                         }}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -500,15 +461,34 @@ export default function StudentFixedClassPage() {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
                                 fixed: 'left',
-                                width: 120,
+                                width: 150,
                                 align: 'center',
+                                type: 'input',
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                ],
                             },
                             {
                                 title: 'Họ và tên',
                                 width: 150,
                                 fixed: 'left',
                                 align: 'center',
-                                render: (record) =>
+                                type: 'input',
+                                dataIndex: 'name',
+                                multiple: [
+                                    'code',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                ],
+                                render: (__, record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
@@ -516,8 +496,18 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
-                                width: 100,
-                                render: (record) =>
+                                width: 150,
+                                dataIndex: 'dateOfBirth',
+                                multiple: [
+                                    'code',
+                                    'gender',
+                                    'name',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                ],
+                                type: 'date',
+                                render: (__, record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
@@ -525,8 +515,24 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Giới tính',
                                 align: 'center',
-                                width: 80,
-                                render: (record) =>
+                                width: 120,
+                                type: 'select',
+                                dataIndex: 'gender',
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                ],
+                                options: [
+                                    { label: 'Nam', value: 'Male' },
+                                    { label: 'Nữ', value: 'Female' },
+                                ],
+
+                                render: (__, record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
@@ -537,7 +543,22 @@ export default function StudentFixedClassPage() {
                                 title: 'Ngành',
                                 width: 150,
                                 align: 'center',
-                                render: (record) => {
+                                type: 'select',
+                                dataIndex: 'trainingField',
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                ],
+                                options: trainingFieldData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
                                             ?.trainingMajor?.trainingField?.name || ''
@@ -548,7 +569,22 @@ export default function StudentFixedClassPage() {
                                 title: 'Chuyên ngành',
                                 width: 180,
                                 align: 'center',
-                                render: (record) => {
+                                type: 'select',
+                                dataIndex: 'trainingMajors',
+                                options: trainingMajorData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                ],
+                                render: (__, record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
                                             ?.trainingMajor?.name || ''
@@ -559,7 +595,22 @@ export default function StudentFixedClassPage() {
                                 title: 'Chương trình đào tạo',
                                 width: 250,
                                 align: 'center',
-                                render: (record) => {
+                                dataIndex: 'curriculumVersion',
+                                type: 'select',
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                ],
+                                options: curriculumVersionData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) => {
                                     const curriculum = record.curriculumVersion
                                     return curriculum ? curriculum.name : ''
                                 },
@@ -618,15 +669,7 @@ export default function StudentFixedClassPage() {
                         ]}
                         data={data}
                         scroll={{ x: 'max-content' }}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

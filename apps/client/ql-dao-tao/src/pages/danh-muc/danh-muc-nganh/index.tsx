@@ -6,9 +6,11 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
+    useFindManyDM_DonVi,
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
     useUpdateTrainingField,
@@ -24,42 +26,41 @@ export default function TrainingFieldPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
         trainingObjectTypes: undefined,
         name: '',
         code: '',
-        sort: 'asc',
+        organization: undefined,
+        publishDate: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
         where: {
             OR: [
-                {
-                    name: {
-                        contains: filters.name,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    code: {
-                        contains: filters.code,
-                        mode: 'insensitive',
-                    },
-                },
-                ...(filters.trainingObjectTypes
-                    ? [
-                          {
-                              trainingObjectTypes: {
-                                  some: {
-                                      trainingObjectTypeId: {
-                                          in: filters.trainingObjectTypes,
-                                      },
-                                  },
-                              },
-                          },
-                      ]
-                    : []),
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.publishDate?.length === 2
+                ? {
+                      publishDate: {
+                          gte: dayjs(filters.publishDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.publishDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
         },
         include: {
             organization: true,
@@ -79,32 +80,31 @@ export default function TrainingFieldPage() {
     const { data: count } = useCountTrainingField({
         where: {
             OR: [
-                {
-                    name: {
-                        contains: filters.name,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    code: {
-                        contains: filters.code,
-                        mode: 'insensitive',
-                    },
-                },
-                ...(filters.trainingObjectTypes
-                    ? [
-                          {
-                              trainingObjectTypes: {
-                                  some: {
-                                      trainingObjectTypeId: {
-                                          in: filters.trainingObjectTypes,
-                                      },
-                                  },
-                              },
-                          },
-                      ]
-                    : []),
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.publishDate?.length === 2
+                ? {
+                      publishDate: {
+                          gte: dayjs(filters.publishDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.publishDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -141,13 +141,8 @@ export default function TrainingFieldPage() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
@@ -244,7 +239,7 @@ export default function TrainingFieldPage() {
                                 fixed: 'left',
                                 width: 150,
                                 type: 'input',
-                                multiple: ['trainingObjectTypes'],
+                                multiple: ['trainingObjectTypes', 'name', 'organization'],
                             },
                             {
                                 title: 'Tên ngành',
@@ -253,7 +248,7 @@ export default function TrainingFieldPage() {
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
-                                multiple: ['trainingObjectTypes'],
+                                multiple: ['trainingObjectTypes', 'code', 'organization'],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
@@ -261,7 +256,7 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 175,
                                 type: 'select',
-                                multiple: ['name', 'code'],
+                                multiple: ['name', 'code', 'organization'],
                                 options: trainingObjectTypeData.map((i) => {
                                     return {
                                         value: i.id,
@@ -284,6 +279,9 @@ export default function TrainingFieldPage() {
                                 dataIndex: 'organization',
                                 align: 'center',
                                 width: 150,
+                                type: 'tree_select',
+                                options: treeData,
+                                multiple: ['name', 'code', 'trainingObjectTypes'],
                                 render: (organization: DM_DonVi) =>
                                     organization?.sTen ? organization?.sTen : '',
                             },
@@ -291,7 +289,9 @@ export default function TrainingFieldPage() {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
-                                render: ({ publishDate }) =>
+                                dataIndex: 'publishDate',
+                                type: 'date',
+                                render: (__, { publishDate }) =>
                                     publishDate ? dayjs(publishDate).format('DD/MM/YYYY') : '',
                             },
                             {

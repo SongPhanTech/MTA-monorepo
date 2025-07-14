@@ -26,7 +26,7 @@ export const useCriteriaFieldOptions = () => {
         { value: CriteriaField.SEMESTER_PASSED_CREDITS, label: 'Tín chỉ đã đạt trong học kỳ' },
         { value: CriteriaField.SEMESTER_FAILED_CREDITS, label: 'Tín chỉ không đạt trong học kỳ' },
         {
-            value: CriteriaField.SEMESTER_FAILED_CREDITS_PERCENT,
+            value: CriteriaField.FAILED_CREDITS_PERCENT,
             label: 'Tỷ lệ % tín chỉ không đạt trong kỳ',
         },
         { value: CriteriaField.YEAR_FAILED_CREDITS, label: 'Tín chỉ không đạt trong năm học' },

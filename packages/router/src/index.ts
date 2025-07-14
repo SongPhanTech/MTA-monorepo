@@ -378,9 +378,9 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: 'ql-diem-lop-mon-hoc',
-                        label: 'Nhập điểm lớp môn học',
+                        label: 'Nhập điểm',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                        description: 'Nhập điểm lớp môn học',
+                        description: 'Nhập điểm',
                     },
                     {
                         id: 'ql-diem-ren-luyen',

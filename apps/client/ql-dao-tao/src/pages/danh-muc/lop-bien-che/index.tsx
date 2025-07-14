@@ -1,23 +1,28 @@
 import { CheckOutlined } from '@ant-design/icons'
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutFixedClassModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { CurriculumVersion, TrainingCourse, TrainingObjectType } from '@workspace/db'
+import { buildOrgTree } from '@lib/utils'
+import { emptyObjectIf } from '@workspace/constant'
+import type { TrainingCourse } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyCurriculumVersion,
+    useFindManyDM_DonVi,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
+    useFindManyTrainingLevel,
+    useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -28,25 +33,72 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_searchText, _setSearchText] = useState<string>('')
-    const [filters, setFilters] = useState({
-        searchText: '',
-        trainingCourseId: trainingCourse ? trainingCourse.id : undefined,
-        trainingObjectTypeId: undefined,
-        curriculumVersionId: undefined,
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        trainingObjectTypes: undefined,
+        managementOrganization: undefined,
+        trainingCourses: undefined,
+        curriculumVersion: undefined,
+        trainingMajors: undefined,
+        trainingLevel: undefined,
+        startYear: undefined,
     })
 
     const router = useRouter()
     const { data = [], refetch } = useFindManyFixedClass({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
-            trainingCourseId: filters.trainingCourseId,
-            trainingCourse: {
-                trainingObjectTypeId: filters.trainingObjectTypeId,
+            ...(filters.managementOrganization
+                ? {
+                      managementOrganizationId: {
+                          in: filters.managementOrganization,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourses
+                ? {
+                      trainingCourseId: {
+                          in: filters.trainingCourses,
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+
+            curriculumVersion: {
+                ...(filters.trainingMajors
+                    ? {
+                          curriculum: {
+                              trainingMajorId: {
+                                  in: filters.trainingMajors,
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filters.trainingObjectTypes
+                    ? {
+                          trainingObjectTypeId: {
+                              in: filters.trainingObjectTypes,
+                          },
+                      }
+                    : {}),
+                ...(filters.trainingLevel
+                    ? {
+                          trainingLevelId: {
+                              in: filters.trainingLevel,
+                          },
+                      }
+                    : {}),
             },
-            curriculumVersionId: filters.curriculumVersionId,
         },
         include: {
             students: {
@@ -76,9 +128,17 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                 },
             },
         },
-        orderBy: {
-            name: 'asc',
-        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        startYear: filters.startYear,
+                    },
+                ],
+                !!filters.startYear
+            ),
+            { name: 'asc' },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -91,20 +151,53 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         orderBy: { name: 'asc' },
     })
 
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: trainingLevelData = [] } = useFindManyTrainingLevel({
+        orderBy: { name: 'asc' },
+    })
+
     const { data: count } = useCountFixedClass({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
+                { name: { contains: filters.name, mode: 'insensitive' } },
+                { code: { contains: filters.code, mode: 'insensitive' } },
             ],
-            trainingCourseId: filters.trainingCourseId,
-            trainingCourse: {
-                trainingObjectTypeId: filters.trainingObjectTypeId,
-            },
-            curriculumVersionId: filters.curriculumVersionId,
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
+            ...(filters.managementOrganization
+                ? {
+                      managementOrganizationId: {
+                          in: filters.managementOrganization,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourses
+                ? {
+                      trainingCourseId: {
+                          in: filters.trainingCourses,
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
         },
     })
 
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(manageOrgData)
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -155,109 +248,13 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify={'space-between'}>
-                        <Flex>
-                            <Col span={8}>
-                                <Form.Item label="" name="search">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm"
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingObjectTypeId"
-                                    labelCol={{ span: 24 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn đối tượng đào tạo"
-                                        options={trainingObjectTypeData.map(
-                                            (i: TrainingObjectType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            })
-                                        )}
-                                        onChange={(val) =>
-                                            handleFilterChange('trainingObjectTypeId', val)
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={6}>
-                                <Form.Item name="trainingCourseId" label="">
-                                    <Select
-                                        placeholder="Chọn khóa"
-                                        options={trainingCourseData.map((i: TrainingCourse) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
-                                        onChange={(val) =>
-                                            handleFilterChange('trainingCourseId', val)
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-
-                            <Col span={8}>
-                                <Form.Item name="curriculumVersionId" label="">
-                                    <Select
-                                        placeholder="Chọn chương trình đào tạo"
-                                        options={curriculumVersionData.map(
-                                            (i: CurriculumVersion) => {
-                                                return {
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }
-                                            }
-                                        )}
-                                        onChange={(val) =>
-                                            handleFilterChange('curriculumVersionId', val)
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Flex>
-
+                    <Row gutter={[16, 16]} align="top" justify={'end'}>
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                {/* <Button onClick={handleOpenGPASemester} type="primary">
-                                    GPA kỳ học
-                                </Button> */}
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
                             </Flex>
-                            {/* <Flex justify="end">
-                                <Dropdown
-                                    overlay={menuImport}
-                                    trigger={['hover']}
-                                >
-                                    <Button className="ml-4" type="primary">
-                                        Thêm mới
-                                    </Button>
-                                </Dropdown>
-                                <Dropdown
-                                    overlay={menuDivision}
-                                    trigger={['hover']}
-                                >
-                                    <Button className="ml-4" type="primary">
-                                        Xếp lớp
-                                    </Button>
-                                </Dropdown>
-                            </Flex> */}
                         </Col>
                     </Row>
                 </Col>
@@ -265,6 +262,8 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                     <Table
                         rowKey="id"
                         id="fixed-class"
+                        filters={filters}
+                        setFilters={setFilters}
                         onRowClick={(record) => {
                             router.push(
                                 ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
@@ -288,6 +287,19 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 width: 150,
                                 fixed: 'left',
                                 dataIndex: 'code',
+                                type: 'input',
+                                multiple: [
+                                    'managementOrganization',
+                                    'trainingCourse',
+                                    'curriculumVersion',
+                                    'trainingObjectTypes',
+                                    'trainingLevel',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'trainingMajors',
+                                ],
                             },
                             {
                                 title: 'Tên lớp niên chế',
@@ -295,51 +307,171 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 width: 200,
                                 fixed: 'left',
                                 dataIndex: 'name',
+                                type: 'input',
+                                multiple: [
+                                    'managementOrganization',
+                                    'trainingCourse',
+                                    'curriculumVersion',
+                                    'trainingObjectTypes',
+                                    'trainingLevel',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'trainingMajors',
+                                ],
                             },
                             {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'managementOrganization',
                                 align: 'center',
                                 width: 200,
+                                type: 'tree_select',
+                                options: treeData,
                                 render: (value) => (value?.sTen ? value?.sTen : ''),
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingCourse',
+                                    'curriculumVersion',
+                                    'trainingObjectTypes',
+                                    'trainingLevel',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'trainingMajors',
+                                ],
                             },
                             {
                                 title: 'Chuyên ngành',
                                 align: 'center',
                                 width: 200,
-                                dataIndex: 'curriculumVersion',
+                                type: 'select',
+                                options: trainingMajorData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                dataIndex: 'trainingMajors',
                                 render: (_, record) =>
                                     record?.curriculumVersion?.curriculum?.trainingMajor?.name ||
                                     '',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingCourse',
+                                    'curriculumVersion',
+                                    'trainingObjectTypes',
+                                    'trainingLevel',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
                             {
                                 title: 'Khóa',
                                 dataIndex: 'trainingCourse',
                                 align: 'center',
-                                width: 100,
+                                width: 150,
+                                type: 'select',
+                                options: trainingCourseData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
                                 render: (value) => (value?.name ? value?.name : ''),
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'curriculumVersion',
+                                    'trainingObjectTypes',
+                                    'trainingLevel',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
                                 align: 'center',
+                                dataIndex: 'trainingObjectTypes',
                                 width: 180,
-                                render: (record) =>
+                                type: 'select',
+                                options: trainingObjectTypeData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) =>
                                     record?.trainingCourse?.trainingObjectType?.name || '',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'curriculumVersion',
+                                    'trainingCourse',
+                                    'trainingLevel',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
 
                             {
                                 title: 'Trình độ đào tạo',
                                 align: 'center',
                                 width: 150,
-                                dataIndex: 'curriculumVersion',
-                                render: (value) => value?.trainingLevel?.name || '',
+                                type: 'select',
+                                options: trainingLevelData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                dataIndex: 'trainingLevel',
+                                render: (__, record) =>
+                                    record?.curriculumVersion?.trainingLevel?.name || '',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'curriculumVersion',
+                                    'trainingCourse',
+                                    'trainingObjectTypes',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
                             {
                                 title: 'Chương trình đào tạo',
                                 dataIndex: 'curriculumVersion',
                                 align: 'center',
                                 width: 250,
+                                type: 'select',
+                                options: curriculumVersionData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
                                 render: (value) => (value?.name ? value?.name : ''),
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'trainingLevel',
+                                    'trainingCourse',
+                                    'trainingObjectTypes',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
 
                             {
@@ -347,34 +479,94 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'graduated',
+                                type: 'select',
+                                options: [
+                                    { value: true, label: 'Đã tốt nghiệp' },
+                                    { value: false, label: 'Chưa tốt nghiệp' },
+                                ],
                                 render: (value) =>
                                     value ? <CheckOutlined className="text-[#028850]" /> : '',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'trainingLevel',
+                                    'trainingCourse',
+                                    'trainingObjectTypes',
+                                    'curriculumVersion',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
                             {
                                 title: 'Giáo viên chủ nhiệm',
                                 dataIndex: 'lecturerManagement',
                                 align: 'center',
                                 width: 200,
+                                type: 'input',
                                 render: (value) =>
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'trainingLevel',
+                                    'trainingCourse',
+                                    'trainingObjectTypes',
+                                    'curriculumVersion',
+                                    'graduated',
+                                    'staffManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
                             {
                                 title: 'Cán bộ quản lý',
                                 dataIndex: 'staffManagement',
                                 align: 'center',
                                 width: 200,
+                                type: 'input',
                                 render: (value) =>
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'trainingLevel',
+                                    'trainingCourse',
+                                    'trainingObjectTypes',
+                                    'curriculumVersion',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'startYear',
+                                    'managementOrganization',
+                                ],
                             },
                             {
                                 title: 'Năm bắt đầu',
                                 dataIndex: 'startYear',
                                 width: 150,
+                                type: 'order',
                                 align: 'center',
+                                multiple: [
+                                    'code',
+                                    'name',
+                                    'trainingMajors',
+                                    'trainingLevel',
+                                    'trainingCourse',
+                                    'trainingObjectTypes',
+                                    'curriculumVersion',
+                                    'graduated',
+                                    'lecturerManagement',
+                                    'staffManagement',
+                                    'managementOrganization',
+                                ],
                             },
                             // {
                             //     title: 'Trạng thái',
