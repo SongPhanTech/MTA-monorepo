@@ -594,13 +594,10 @@ const Table = <T extends Record<string, unknown>>({
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
                             <DatePicker.RangePicker
-                                // value={filtersTable[item.dataIndex as keyof FilterProps]? filtersTable[item.dataIndex as keyof FilterProps] : []}
                                 placeholder={['Từ ngày', 'Đến ngày']}
                                 className="w-full mb-3"
                                 allowClear
                                 onChange={(dates, dateStrings) => {
-                                    console.log(dateStrings, 'dates', dates)
-
                                     setFiltersTable({
                                         ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]: dateStrings.length
@@ -631,6 +628,7 @@ const Table = <T extends Record<string, unknown>>({
                                                 item.dataIndex as keyof FilterProps,
                                             ]),
                                         }
+
                                         setFilters?.(result)
                                         props.confirm()
                                         return
@@ -639,6 +637,8 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }
+                                    console.log(result)
+
                                     setFilters?.(result)
                                     props.confirm()
                                 }}

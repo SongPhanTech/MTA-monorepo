@@ -2,8 +2,10 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutCertificateScoreModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountArchivedCertificate,
     useFindManyArchivedCertificate,
@@ -15,17 +17,14 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-// const { Option } = Select;
-interface FilterProps {
-    searchText: string | ''
-}
-
 export default function ArchivedCertificate() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_selectedRowKeys, _setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        name: '',
+        finalScore: undefined,
+        count: undefined,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -70,15 +69,32 @@ export default function ArchivedCertificate() {
 
     const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
         },
         include: { _count: true },
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        finalScore: filters.finalScore,
+                    },
+                ],
+                !!filters.finalScore
+            ),
+            ...emptyObjectIf(
+                [
+                    {
+                        studentSubjectScore: {
+                            _count: filters.count,
+                        },
+                    },
+                ],
+                !!filters.count
+            ),
+            {
+                createdAt: 'desc',
+            },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -92,10 +108,7 @@ export default function ArchivedCertificate() {
 
     const { data: count } = useCountArchivedCertificate({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
         },
     })
 
@@ -142,6 +155,8 @@ export default function ArchivedCertificate() {
                     <Table
                         rowKey="id"
                         id="training-category"
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -156,18 +171,24 @@ export default function ArchivedCertificate() {
                                 dataIndex: 'name',
                                 align: 'center',
                                 width: 200,
+                                type: 'input',
                             },
                             {
                                 title: 'Điểm tương đương hệ 10',
                                 dataIndex: 'finalScore',
                                 width: 150,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'Số SV đã đổi chứng chỉ',
-                                dataIndex: ['_count', 'studentSubjectScore'],
+                                dataIndex: 'count',
                                 width: 150,
                                 align: 'center',
+                                type: 'order',
+                                render: (__, record) => {
+                                    return record._count?.studentSubjectScore
+                                },
                             },
                             {
                                 title: 'Thao tác',
