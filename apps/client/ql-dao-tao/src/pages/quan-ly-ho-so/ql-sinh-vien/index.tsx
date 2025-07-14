@@ -1,11 +1,12 @@
 import { UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import { FilterSinhVien } from '@components/filter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { PutStudentModal, PutUpdateProfileModal, PutUploadProfileModal } from '@components/modal'
+import { PutStudentModal } from '@components/modal'
+import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
@@ -13,13 +14,18 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { $Enums } from '@workspace/db'
+import {
+    $Enums,
+    type FixedClass,
+    type TrainingCourse,
+    type TrainingField,
+    type TrainingMajor,
+} from '@workspace/db'
 import {
     useCountStudent,
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyStudent,
-    useFindManyTemplateFile,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
@@ -38,8 +44,16 @@ dayjs.locale('vi')
 export default function UserProfilePageDs() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState({
-        searchText: '',
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        dateOfBirth: undefined,
+        trainingField: undefined,
+        gender: undefined,
+        fixedClass: undefined,
+        trainingCourse: undefined,
+        trainingMajors: undefined,
+        curriculumVersion: undefined,
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
@@ -49,25 +63,88 @@ export default function UserProfilePageDs() {
 
     const { data = [], refetch } = useFindManyStudent({
         where: {
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                ],
-            },
             trainingObjectType: {
                 type: {
                     equals: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
             },
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.name,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.name,
+                        },
+                    },
+                ],
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth?.length === 2
+                    ? {
+                          dateOfBirth: {
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+            ...(filters.fixedClass
+                ? {
+                      fixedClassId: {
+                          in: filters.fixedClass,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingMajors || filters.trainingField
+                ? {
+                      fixedClass: {
+                          curriculumVersion: {
+                              curriculum: {
+                                  trainingMajor: {
+                                      ...(filters.trainingMajors
+                                          ? {
+                                                id: {
+                                                    in: filters.trainingMajors,
+                                                },
+                                            }
+                                          : {}),
+                                      ...(filters.trainingField
+                                          ? {
+                                                trainingFieldId: {
+                                                    in: filters.trainingField,
+                                                },
+                                            }
+                                          : {}),
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
         include: {
             userProfile: true,
@@ -100,47 +177,22 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: TrainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            include: {
-                fixedClass: true,
-            },
-            orderBy: { name: 'asc' },
-        })
+    const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
+        include: {
+            fixedClass: true,
+        },
+        orderBy: { name: 'asc' },
+    })
 
-    // const handleTrainingCourseChange = (value: string) => {
-    //     setSelectedTrainingCourse(value)
-
-    //     // Kiểm tra xem lớp hiện tại có thuộc khóa mới không
-    //     if (selectedFixedClass) {
-    //         const selectedClass = FixedClassData?.find((cls) => cls.id === selectedFixedClass)
-
-    //         // Nếu lớp hiện tại không thuộc khóa mới được chọn
-    //         if (selectedClass?.trainingCourseId !== value) {
-    //             setSelectedFixedClass(undefined) // Reset lớp
-    //         }
-    //     }
-
-    //     // Nếu khóa chỉ có 1 lớp, tự động chọn lớp đó
-    //     const classesInCourse =
-    //         FixedClassData?.filter((cls) => cls.trainingCourseId === value) || []
-
-    //     if (classesInCourse.length === 1 && !selectedFixedClass) {
-    //         setSelectedFixedClass(classesInCourse[0].id)
-    //     }
-
-    //     refetch()
-    // }
-
-    const { data: FixedClassData = [] } = useFindManyFixedClass({
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
         include: {
             trainingCourse: true,
         },
     })
 
-    const { data: TrainingFieldData = [] } = useFindManyTrainingField()
+    const { data: trainingFieldData = [] } = useFindManyTrainingField()
 
-    const { data: TrainingMajorData = [] } = useFindManyTrainingMajor({
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
     })
 
@@ -150,25 +202,88 @@ export default function UserProfilePageDs() {
 
     const { data: count } = useCountStudent({
         where: {
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                ],
-            },
             trainingObjectType: {
                 type: {
                     equals: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
             },
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.name,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.name,
+                        },
+                    },
+                ],
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth?.length === 2
+                    ? {
+                          dateOfBirth: {
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+            ...(filters.fixedClass
+                ? {
+                      fixedClassId: {
+                          in: filters.fixedClass,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingMajors || filters.trainingField
+                ? {
+                      fixedClass: {
+                          curriculumVersion: {
+                              curriculum: {
+                                  trainingMajor: {
+                                      ...(filters.trainingMajors
+                                          ? {
+                                                id: {
+                                                    in: filters.trainingMajors,
+                                                },
+                                            }
+                                          : {}),
+                                      ...(filters.trainingField
+                                          ? {
+                                                trainingFieldId: {
+                                                    in: filters.trainingField,
+                                                },
+                                            }
+                                          : {}),
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -190,12 +305,6 @@ export default function UserProfilePageDs() {
         tag: PutStudentModal.name,
     })
 
-    const { onOpen: onOpenUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
-    })
-    const { onOpen: onOpenUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
-    })
     const { onOpen: onOpenUpdate } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
@@ -214,13 +323,6 @@ export default function UserProfilePageDs() {
         onOpen({
             preSelectedValues: {},
         })
-    }
-    const handleModalUpload = (type: string) => {
-        if (type === 'upload') {
-            onOpenUpload('SV')
-        } else {
-            onOpenUpdateFile('SV')
-        }
     }
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
     async function handleDelete(id: string) {
@@ -242,71 +344,13 @@ export default function UserProfilePageDs() {
         hideSpinner()
     }
 
-    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
-
-    const handleFilterChange = (
-        key: string,
-        value: string | { startDate?: string; endDate?: string }
-    ) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const handleDownloadTemplate = (type: string) => {
-        const fileRecord = templateFile?.find((item) => item.code === type)
-        const fileLink = fileRecord ? fileRecord.path : null
-        if (fileLink) {
-            const link = document.createElement('a')
-            link.href = fileLink
-            link.setAttribute('download', '')
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-        }
-    }
-
-    const itemsDownload = [
-        {
-            key: 'import',
-            label: 'Tải file nhập thông tin sinh viên',
-            onClick: () => handleDownloadTemplate('IMPORT_USERPROFILE'),
-        },
-        {
-            key: 'update',
-            label: 'Tải file cập nhật thông tin sinh viên',
-            onClick: () => handleDownloadTemplate('UPDATE_USERPROFILE'),
-        },
-    ]
-
-    const itemsUpload = [
-        {
-            key: 'upload',
-            label: 'Nhập file nhập thông tin sinh viên',
-            onClick: () => handleModalUpload('upload'),
-        },
-        {
-            key: 'update',
-            label: 'Nhập file cập nhật thông tin sinh viên',
-            onClick: () => handleModalUpload('update'),
-        },
-    ]
-
     return (
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <FilterSinhVien
-                                handleFilterChange={handleFilterChange}
-                                filters={filters}
-                                setFilters={setFilters}
-                            />
-                        </Col>
+                        <Col span={12} />
 
                         {/* Hàng chứa các button */}
                         <Col xs={12}>
@@ -322,6 +366,7 @@ export default function UserProfilePageDs() {
                                     visible={importModalVisible}
                                     onCancel={() => setImportModalVisible(false)}
                                 />
+                                <ExportTemplateStudent />
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
@@ -331,6 +376,8 @@ export default function UserProfilePageDs() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -343,25 +390,60 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
-                                width: 120,
+                                width: 150,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'input',
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                    'fixedClass',
+                                    'trainingCourse',
+                                ],
                             },
                             {
                                 title: 'Họ và tên',
                                 align: 'center',
                                 width: 180,
                                 fixed: 'left',
-                                render: (record) =>
+                                render: (__, record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
+                                type: 'input',
+                                dataIndex: 'name',
+                                multiple: [
+                                    'code',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                    'fixedClass',
+                                    'trainingCourse',
+                                ],
                             },
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
                                 width: 150,
-                                render: (record) =>
+                                dataIndex: 'dateOfBirth',
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'code',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                    'fixedClass',
+                                    'trainingCourse',
+                                ],
+                                type: 'date',
+                                render: (__, record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
@@ -370,18 +452,24 @@ export default function UserProfilePageDs() {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 100,
-                                filters: [
-                                    {
-                                        text: 'Nam',
-                                        value: 'Male',
-                                    },
-                                    {
-                                        text: 'Nữ',
-                                        value: 'Female',
-                                    },
+                                type: 'select',
+                                dataIndex: 'gender',
+                                multiple: [
+                                    'name',
+                                    'code',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                    'fixedClass',
+                                    'trainingCourse',
                                 ],
-                                onFilter: (value, record) => record.userProfile?.gender === value,
-                                render: (record) =>
+                                options: [
+                                    { label: 'Nam', value: 'Male' },
+                                    { label: 'Nữ', value: 'Female' },
+                                ],
+
+                                render: (__, record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
@@ -389,31 +477,34 @@ export default function UserProfilePageDs() {
                                         : '',
                             },
                             {
-                                title: 'Đối tượng ĐT',
+                                title: 'ĐTĐT',
                                 align: 'center',
-                                width: 130,
-                                // filters: TrainingOnjectTypeData.map((item) => ({
-                                //     text: item.name,
-                                //     value: item.name,
-                                // })),
-                                // onFilter: (value, record) =>
-                                //     record.trainingObjectType.name === value,
-                                render: (record) =>
+                                width: 150,
+                                render: (__, record) =>
                                     record.trainingObjectType ? record.trainingObjectType.name : '',
                             },
                             {
                                 title: 'Lớp',
                                 align: 'center',
                                 width: 200,
-                                filters: FixedClassData.map((item) => ({
-                                    text: `${item.code}-${item.name}`,
-                                    value: `${item.code}-${item.name}`,
+                                dataIndex: 'fixedClass',
+                                type: 'select',
+                                options: fixedClassData.map((item: FixedClass) => ({
+                                    label: item.name,
+                                    value: item.id,
                                 })),
-                                onFilter: (value, record) => {
-                                    const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
-                                    return fiexedClass === value
-                                },
-                                render: (record) => {
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                    'code',
+                                    'trainingCourse',
+                                ],
+                                render: (__, record) => {
+                                    if (!record.fixedClass) return ''
                                     const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
                                     return fiexedClass || ''
                                 },
@@ -422,16 +513,23 @@ export default function UserProfilePageDs() {
                                 title: 'Khóa',
                                 align: 'center',
                                 width: 100,
-                                filters: TrainingCourseData.map((item) => ({
-                                    text: item.name,
-                                    value: item.name,
+                                dataIndex: 'trainingCourse',
+                                type: 'select',
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'trainingMajors',
+                                    'fixedClass',
+                                    'code',
+                                ],
+                                options: TrainingCourseData.map((item: TrainingCourse) => ({
+                                    label: item.name,
+                                    value: item.id,
                                 })),
-                                onFilter: (value, record) => {
-                                    const trainingCourseName =
-                                        record?.fixedClass?.trainingCourse?.name
-                                    return trainingCourseName === value
-                                },
-                                render: (record) => {
+                                render: (__, record) => {
                                     const trainingCourse = record?.fixedClass?.trainingCourse
                                     return trainingCourse ? trainingCourse?.name : ''
                                 },
@@ -440,17 +538,23 @@ export default function UserProfilePageDs() {
                                 title: 'Ngành',
                                 align: 'center',
                                 width: 160,
-                                filters: TrainingFieldData.map((item) => ({
-                                    text: item.name,
-                                    value: item.name,
+                                dataIndex: 'trainingField',
+                                type: 'select',
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'code',
+                                    'trainingMajors',
+                                    'fixedClass',
+                                    'trainingCourse',
+                                ],
+                                options: trainingFieldData.map((item: TrainingField) => ({
+                                    label: item.name,
+                                    value: item.id,
                                 })),
-                                onFilter: (value, record) => {
-                                    const trainingField =
-                                        record?.fixedClass?.curriculumVersion?.curriculum
-                                            ?.trainingMajor?.trainingField?.name
-                                    return trainingField === value
-                                },
-                                render: (record) => {
+                                render: (__, record) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum
                                         ?.trainingMajor?.trainingField?.name
                                 },
@@ -459,17 +563,23 @@ export default function UserProfilePageDs() {
                                 title: 'Chuyên ngành',
                                 align: 'center',
                                 width: 180,
-                                filters: TrainingMajorData.map((item) => ({
-                                    text: item.name,
-                                    value: item.name,
+                                type: 'select',
+                                dataIndex: 'trainingMajors',
+                                options: trainingMajorData.map((item: TrainingMajor) => ({
+                                    label: item.name,
+                                    value: item.id,
                                 })),
-                                onFilter: (value, record) => {
-                                    const trainingMajor =
-                                        record?.fixedClass?.curriculumVersion?.curriculum
-                                            ?.trainingMajor?.name
-                                    return trainingMajor === value
-                                },
-                                render: (record) => {
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'curriculumVersion',
+                                    'trainingField',
+                                    'code',
+                                    'fixedClass',
+                                    'trainingCourse',
+                                ],
+                                render: (__, record) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum
                                         ?.trainingMajor?.name
                                 },
@@ -477,12 +587,23 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'CTĐT',
                                 align: 'center',
+                                dataIndex: 'curriculumVersion',
                                 width: 180,
-                                filters: TrainingCurriculumVersionData.map((item) => ({
-                                    text: item.name,
+                                multiple: [
+                                    'name',
+                                    'gender',
+                                    'dateOfBirth',
+                                    'code',
+                                    'trainingField',
+                                    'trainingMajors',
+                                    'fixedClass',
+                                    'trainingCourse',
+                                ],
+                                options: TrainingCurriculumVersionData.map((item) => ({
+                                    label: item.name,
                                     value: item.name,
                                 })),
-                                render: (record) => {
+                                render: (__, record) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum?.name
                                 },
                             },
@@ -535,10 +656,10 @@ export default function UserProfilePageDs() {
                             },
                         ]}
                         rowKey="id"
-                        rowSelection={{
-                            selectedRowKeys,
-                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                        }}
+                        // rowSelection={{
+                        //     selectedRowKeys,
+                        //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                        // }}
                         data={data}
                         pagination={{
                             current: currentPage,

@@ -1,11 +1,7 @@
-import { Flex } from 'antd'
+import { DownloadOutlined } from '@ant-design/icons'
+import { Button, Flex } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
-
-interface ExportTemplateStudentProps {
-    selectedFixedClass: string | undefined
-    dataTable: any[]
-}
 
 const ExportTemplateStudent = () => {
     const exportTemplate = async () => {
@@ -238,10 +234,9 @@ const ExportTemplateStudent = () => {
 
     return (
         <Flex>
-            <div className="text-blue-500 cursor-pointer mr-1" onClick={exportTemplate}>
-                Xuất file mẫu
-            </div>
-            <div>(tải về mẫu Excel để điền dữ liệu)</div>
+            <Button type="primary" onClick={exportTemplate} icon={<DownloadOutlined />}>
+                Xuất file mẫu excel
+            </Button>
         </Flex>
     )
 }

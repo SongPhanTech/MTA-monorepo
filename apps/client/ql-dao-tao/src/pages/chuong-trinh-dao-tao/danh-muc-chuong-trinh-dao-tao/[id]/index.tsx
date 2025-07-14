@@ -13,7 +13,9 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import type {
     CurriculumVersion,
+    DM_DonVi,
     DocumentFile,
+    SubjectVersion,
     TrainingBlockOnCurriculumVersion,
 } from '@workspace/db'
 import {
@@ -353,42 +355,12 @@ export default function TrainingProgramSubjects() {
             </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                    <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={12}>
-                            {/* <Flex>
-                                <Col span={8}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
-                                            }
-                                            className="py-0"
-                                            placeholder="Tìm kiếm"
-                                            style={{
-                                                marginRight: 8,
-                                                height: '32px',
-                                            }}
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-          
-                            </Flex> */}
-                        </Col>
-                        <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 <Dropdown overlay={menuDownload} trigger={['hover']}>
                                     <Button
-                                        className="text-primary border-primary mr-2"
+                                        className="text-primary border-primary mr-2 min-w-[32px]"
                                         icon={<EllipsisOutlined />}
                                     />
                                 </Dropdown>
@@ -451,9 +423,9 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['organization'],
-                                render: (__, record) => {
-                                    return record?.subject?.code
+                                multiple: ['organization', 'name', 'examType'],
+                                render: (__, record: { subject?: SubjectVersion }) => {
+                                    return record?.subject?.code ? record?.subject?.code : ''
                                 },
                             },
                             {
@@ -474,8 +446,8 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['organization'],
-                                render: (__, record) => {
+                                multiple: ['organization', 'code', 'examType'],
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
                                 },
                             },
@@ -486,8 +458,15 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
-                                multiple: ['name', 'code'],
-                                render: (__, record) => {
+                                multiple: ['name', 'code', 'examType'],
+                                render: (
+                                    __,
+                                    record: {
+                                        subject?: SubjectVersion & {
+                                            managementOrganization?: DM_DonVi
+                                        }
+                                    }
+                                ) => {
                                     return record?.subject?.managementOrganization?.sTen
                                 },
                             },
@@ -497,7 +476,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 type: 'order',
                                 align: 'center',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.credit
                                 },
                             },
@@ -514,7 +493,7 @@ export default function TrainingProgramSubjects() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.period
                                 },
                             },
@@ -524,7 +503,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 type: 'order',
                                 align: 'center',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfTheory
                                 },
                             },
@@ -533,7 +512,7 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: 'numberOfPractical',
                                 type: 'order',
                                 align: 'center',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfPractical
                                 },
                             },
@@ -543,7 +522,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfSelfStudy
                                 },
                             },
@@ -553,7 +532,7 @@ export default function TrainingProgramSubjects() {
                                 width: 90,
                                 align: 'center',
                                 type: 'order',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfPractice
                                 },
                             },
@@ -563,7 +542,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfReview
                                 },
                             },
@@ -573,7 +552,7 @@ export default function TrainingProgramSubjects() {
                                 width: 100,
                                 align: 'center',
                                 type: 'order',
-                                render: (__, record) => {
+                                render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfExam
                                 },
                             },
@@ -584,7 +563,9 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 type: 'select',
                                 options: options,
-                                render: (__, record) => getExamTypeLabel(record?.subject?.examType),
+                                render: (__, record: { subject?: SubjectVersion }) =>
+                                    getExamTypeLabel(record?.subject?.examType),
+                                multiple: ['organization', 'code', 'name'],
                             },
                             {
                                 title: 'Trạng thái',
@@ -603,16 +584,16 @@ export default function TrainingProgramSubjects() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id, trainingBlockOnCurriculumVersionId }) => {
-                                    if (id) {
+                                render: (__, record: any) => {
+                                    if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={(e) => {
+                                                    onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
                                                             trainingBlockOnCurriculumVersionId:
-                                                                trainingBlockOnCurriculumVersionId,
-                                                            trainingBlockSubjectId: id,
+                                                                record?.trainingBlockOnCurriculumVersionId,
+                                                            trainingBlockSubjectId: record?.id,
                                                             managementOrganization:
                                                                 initialValue?.curriculum
                                                                     ?.managementOrganizationId ??

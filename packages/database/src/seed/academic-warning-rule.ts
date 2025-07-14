@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 const civilianWarningRules = [
     // --- Tăng 1 mức cảnh báo (severity: 1) ---
     {
-        field: CriteriaField.SEMESTER_FAILED_CREDITS_PERCENT,
+        field: CriteriaField.FAILED_CREDITS_PERCENT,
         operator: CriteriaOperator.GTE,
         threshold: 50, // Tỷ lệ tín chỉ không đạt > 50%
         severity: 1,

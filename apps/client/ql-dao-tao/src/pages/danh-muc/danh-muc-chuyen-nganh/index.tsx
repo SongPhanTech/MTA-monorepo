@@ -6,8 +6,9 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
+import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,
@@ -213,7 +214,8 @@ export default function TrainingMajorPage() {
         },
     })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -410,11 +412,8 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 width: 150,
                                 render: (value) => value?.sTen,
-                                type: 'select',
-                                options: manageOrgData.map((i: DM_DonVi) => ({
-                                    value: i.Id,
-                                    label: i.sTen,
-                                })),
+                                type: 'tree_select',
+                                options: treeData,
                                 multiple: [
                                     'name',
                                     'code',

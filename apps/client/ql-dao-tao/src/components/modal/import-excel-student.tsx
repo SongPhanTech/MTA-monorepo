@@ -4,7 +4,6 @@ import { importHeQuanSu } from '@workspace/libs/api/training'
 import { parseSheetHeQuanSu } from '@workspace/libs/parseExcel'
 import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
-import ExportTemplateStudent from './export-template-student'
 
 const { Panel } = Collapse
 interface ImportStudentModalProps {
@@ -134,9 +133,9 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 ) : (
                     <span className="ml-3">Chưa có tệp nào được chọn</span>
                 )}
-                <Row className="mb-2">
+                {/* <Row className="mb-2">
                     <ExportTemplateStudent />
-                </Row>
+                </Row> */}
                 <p className="">Chọn file Excel mẫu đã xuất từ hệ thống</p>
             </div>
 
