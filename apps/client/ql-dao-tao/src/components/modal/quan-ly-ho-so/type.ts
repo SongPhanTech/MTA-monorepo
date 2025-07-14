@@ -115,6 +115,8 @@ export type FilterProps = {
     officerNumber?: string
     lecturerType?: string[]
     staffType?: string[]
+    scholarship?: string[]
+    decisionDate?: Date[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

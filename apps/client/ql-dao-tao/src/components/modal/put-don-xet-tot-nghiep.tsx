@@ -9,7 +9,7 @@ import {
     useFindUniqueStudentGraduationApplication,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Select } from 'antd'
+import { Col, Form, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -89,7 +89,6 @@ const PutGraduationApplication = () => {
         try {
             showSpinner()
             const payload = {
-                code: output.code,
                 status: output.status,
                 sessionId: input?.graduationSessionId || '',
                 studentId: output.studentId,
@@ -130,11 +129,6 @@ const PutGraduationApplication = () => {
             title={input?.id ? 'Chỉnh sửa đơn xét tốt nghiệp' : 'Thêm mới đơn xét tốt nghiệp'}
             className="w-[50vw]"
         >
-            <Col span={12}>
-                <FormItem form={form} name="code" label="Mã đơn xét tốt nghiệp" required>
-                    <Input placeholder="Nhập mã đơn xét tốt nghiệp" />
-                </FormItem>
-            </Col>
             <Col span={12}>
                 <FormItem form={form} name="studentId" label="Sinh viên" required>
                     <Select
