@@ -1469,6 +1469,7 @@ const getStudentResult = async (
             trainingFieldId:
                 studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
                     ?.trainingMajor?.trainingField?.id || '',
+            highestScholarship: scholarshipInfo.length > 0 ? scholarshipInfo[0] : null,
         })
     } catch (error) {
         console.error('Error fetching student result:', error)
@@ -1476,6 +1477,32 @@ const getStudentResult = async (
     } finally {
         await prisma.$disconnect()
     }
+}
+
+export const sortStudentResultInfo = (
+    courseStudentResult: CourseStudentResult[]
+): CourseStudentResult[] => {
+    return courseStudentResult.map((course) => {
+        const sortedStudents = course.students.sort((a, b) => {
+            // Sắp xếp theo học bổng
+            const gpaA = a.highestScholarship?.rankOrder || 0
+            const gpaB = b.highestScholarship?.rankOrder || 0
+            if (gpaA !== gpaB) {
+                return gpaA - gpaB // Sắp xếp tăng dần (order 1 cao nhất)
+            }
+            // Nếu điểm trung bình bằng nhau, sắp xếp GPA
+            const studentGpaA = a.studentSemesterResult.gpaBase10 || 0
+            const studentGpaB = b.studentSemesterResult.gpaBase10 || 0
+            if (studentGpaA !== studentGpaB) {
+                return studentGpaB - studentGpaA // Sắp xếp giảm dần
+            }
+            return 0
+        })
+        return {
+            ...course,
+            students: sortedStudents,
+        }
+    })
 }
 
 export const resultCourseStudentResult = async (
@@ -1516,6 +1543,6 @@ export const resultCourseStudentResult = async (
         })
     )
 
-    const result = Object.values(courseMap)
+    const result = sortStudentResultInfo(Object.values(courseMap))
     return result.map((course) => CourseStudentResult.parse(course))
 }

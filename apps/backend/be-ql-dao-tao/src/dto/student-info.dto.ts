@@ -185,6 +185,7 @@ export const StudentResult = z.object({
         .array(ListAcademicAction)
         .describe('Danh sách hành động học vụ của sinh viên'),
     hasAcademicWarning: z.boolean().describe('Có cảnh báo học vụ hay không'),
+    highestScholarship: z.any().describe('Học bổng cao nhất của sinh viên'),
 })
 export const CourseStudentResult = z.object({
     courseId: z.string().describe('ID khóa học'),
