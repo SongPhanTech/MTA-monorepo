@@ -37,7 +37,11 @@ const graduationCheck = createRoute({
                 'application/json': {
                     schema: z.object({
                         sessionId: z.string(),
-                        applicationIds: z.array(z.string()),
+                        applicationIds: z
+                            .array(z.string())
+                            .default([])
+                            .optional()
+                            .describe('Không truyền hoặc truyền mảng rỗng sẽ xét hết'),
                     }),
                 },
             },
@@ -72,7 +76,7 @@ app.openapi(graduationCheck, async (c) => {
         where: { id: sessionId },
         include: {
             applications: {
-                ...(applicationIds.length ? { where: { id: { in: applicationIds } } } : {}),
+                ...(applicationIds?.length ? { where: { id: { in: applicationIds } } } : {}),
             },
         },
     })
