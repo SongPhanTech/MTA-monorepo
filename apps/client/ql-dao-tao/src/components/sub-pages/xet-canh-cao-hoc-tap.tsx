@@ -16,46 +16,6 @@ interface XetCanhCaoHocTapProps {
 }
 
 const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
-    const fakeData = [
-        {
-            id: '1',
-            code: 'lql_1',
-            name: 'lớp quản lý 1',
-            children: [
-                {
-                    id: '2',
-                    code: 'sv_1',
-                    name: 'sinh viên 1',
-                    gpa: 1.2,
-                    totalCredit: 15,
-                    mccht: 2,
-                },
-                {
-                    id: '3',
-                    code: 'sv_2',
-                    name: 'sinh viên 2',
-                    gpa: 0.98,
-                    totalCredit: 15,
-                },
-            ],
-        },
-        {
-            id: '12',
-            code: 'lql_2',
-            name: 'lớp quản lý 2',
-            children: [
-                {
-                    id: '22',
-                    code: 'sv_3',
-                    name: 'sinh viên 3',
-                    gpa: 1.02,
-                    totalCredit: 15,
-                    mccht: 1,
-                },
-            ],
-        },
-    ]
-
     // TODO: remove any when have openapi schema
     const { data: students = [] }: any = useExportStudentResultSemesterJson(
         { semesterId: semesterId || '', type: 'academicWarning' },
