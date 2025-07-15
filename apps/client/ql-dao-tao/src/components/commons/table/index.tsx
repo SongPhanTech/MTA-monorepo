@@ -65,7 +65,7 @@ const Table = <T extends Record<string, unknown>>({
         if (e.target.checked) {
             setFiltersTable({
                 ...filters,
-                trainingObjectTypes: item.options?.map(
+                [item.dataIndex as keyof FilterProps]: item.options?.map(
                     (item: { value: string; label: string }) => item.value
                 ),
             })
