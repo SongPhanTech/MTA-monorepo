@@ -5,6 +5,7 @@ import { Col, Form, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import TableCollapse from '@components/commons/tableCollapse'
 export type Student1 = Student
 dayjs.locale('vi')
 
@@ -42,11 +43,15 @@ const ModalLearningResult = () => {
                                                         where: {
                                                             studentId: id,
                                                         },
+                                                        orderBy: {
+                                                            finalScore: 'desc',
+                                                        },
                                                     },
                                                 },
                                             },
                                         },
                                     },
+                                    trainingBlock: true,
                                 },
                             },
                         },
@@ -58,20 +63,49 @@ const ModalLearningResult = () => {
 
     const trainingBlocks = learningResult?.fixedClass?.curriculumVersion?.trainingBlocks ?? []
 
-    const subjectsInCurriculum = trainingBlocks.flatMap((block) =>
-        block.subjects.map((s) => ({
-            id: s.subject.id,
-            code: s.subject.code,
-            name: s.subject.name,
-            credit: s.subject.credit,
-            finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
-            attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
-            examScore: s.subject.studentSubjectScore?.[0]?.examScore,
-            midtermScore: s.subject.studentSubjectScore?.[0]?.midtermScore,
-        }))
+    const subjectsInCurriculumByBlock = trainingBlocks.map((block) => {
+        const filteredSubjects = block.subjects
+            .filter((s) => s.useForFinalScore !== false)
+            .map((s) => ({
+                id: s.subject.id,
+                code: s.subject.code,
+                name: s.subject.name,
+                credit: s.subject.credit,
+                finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
+                attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
+                examScore: s.subject.studentSubjectScore?.[0]?.examScore,
+                midtermScore: s.subject.studentSubjectScore?.[0]?.midtermScore,
+            }))
+
+        return {
+            id: block.trainingBlock.id,
+            code: block.trainingBlock.code,
+            name: block.trainingBlock.name,
+            subjectsInCurriculum: filteredSubjects,
+        }
+    })
+
+    const nonFinalSubjects = trainingBlocks.flatMap((block) =>
+        block.subjects
+            .filter((s) => s.useForFinalScore === false)
+            .map((s) => ({
+                id: s.subject.id,
+                code: s.subject.code,
+                name: s.subject.name,
+                credit: s.subject.credit,
+                finalScore: s.subject.studentSubjectScore?.[0]?.finalScore,
+                attendanceScore: s.subject.studentSubjectScore?.[0]?.attendanceScore,
+                examScore: s.subject.studentSubjectScore?.[0]?.examScore,
+                midtermScore: s.subject.studentSubjectScore?.[0]?.midtermScore,
+            }))
     )
 
-    const subjectIdsInCurriculum = new Set(subjectsInCurriculum.map((s) => s.id))
+    const subjectIdsInCurriculum = new Set(
+        subjectsInCurriculumByBlock.flatMap((block) => block.subjectsInCurriculum.map((s) => s.id))
+    )
+    const subjectIdsInNonFinal = new Set(nonFinalSubjects.map((s) => s.id))
+
+    const allCurriculumSubjectIds = new Set([...subjectIdsInCurriculum, ...subjectIdsInNonFinal])
 
     const studentSubjectScores = learningResult?.subjectClassStudent ?? []
 
@@ -87,7 +121,7 @@ const ModalLearningResult = () => {
     }))
 
     const electiveSubjects = scoredSubjects.filter(
-        (subject) => !subjectIdsInCurriculum.has(subject.id)
+        (subject) => !allCurriculumSubjectIds.has(subject.id)
     )
 
     return (
@@ -101,10 +135,17 @@ const ModalLearningResult = () => {
             className="w-[80vw]"
         >
             <Col span={24}>
-                <Table
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
+                    MÔN HỌC CHƯƠNG TRÌNH ĐÀO TẠO
+                </div>
+                <TableCollapse
                     rowKey="key"
                     id="learning-result"
-                    dataSource={subjectsInCurriculum}
+                    headerTitleKey="name"
+                    defaultExpandAll
+                    data={subjectsInCurriculumByBlock}
+                    scroll={{ y: 500 }}
+                    childrenFieldName="subjectsInCurriculum"
                     columns={[
                         {
                             title: 'STT',
@@ -157,13 +198,20 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                     ]}
+                    pagination={{
+                        hideOnSinglePage: true,
+                    }}
                 />
             </Col>
 
-            <Col span={24} className="mt-8">
+            <Col span={24}>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
+                    MÔN HỌC TỰ CHỌN
+                </div>
                 <Table
                     rowKey="key"
                     id="learning-result"
+                    scroll={{ y: 500 }}
                     dataSource={electiveSubjects}
                     columns={[
                         {
@@ -217,6 +265,76 @@ const ModalLearningResult = () => {
                             align: 'center',
                         },
                     ]}
+                    pagination={{
+                        hideOnSinglePage: true,
+                    }}
+                />
+            </Col>
+
+            <Col span={24}>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
+                    MÔN HỌC ĐIỀU KIỆN
+                </div>
+                <Table
+                    rowKey="key"
+                    id="learning-result"
+                    scroll={{ y: 500 }}
+                    dataSource={nonFinalSubjects}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã môn học',
+                            dataIndex: 'code',
+                            width: 145,
+                            align: 'center',
+                            fixed: 'left',
+                        },
+                        {
+                            title: 'Tên môn học',
+                            dataIndex: 'name',
+                            width: 200,
+                            fixed: 'left',
+                        },
+                        {
+                            title: 'Số TC',
+                            dataIndex: 'credit',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Điểm chuyên cần',
+                            dataIndex: 'attendanceScore',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Điểm thường xuyên',
+                            dataIndex: 'midtermScore',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Điểm thi',
+                            dataIndex: 'examScore',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Điểm học phần',
+                            dataIndex: 'finalScore',
+                            width: 80,
+                            align: 'center',
+                        },
+                    ]}
+                    pagination={{
+                        hideOnSinglePage: true,
+                    }}
                 />
             </Col>
         </PutFormModal>

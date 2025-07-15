@@ -2,6 +2,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingFormModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -11,7 +12,7 @@ import {
     useFindManyTrainingForm,
     useUpdateTrainingForm,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -21,17 +22,16 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_searchText, _setSearchText] = useState<string>('')
-    const [filters, setFilters] = useState({
-        searchText: '',
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
     })
 
     const router = useRouter()
     const { data = [], refetch } = useFindManyTrainingForm({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
+            code: { contains: filters.code, mode: 'insensitive' },
         },
         orderBy: {
             name: 'asc',
@@ -42,10 +42,8 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
 
     const { data: count } = useCountTrainingForm({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
+            code: { contains: filters.code, mode: 'insensitive' },
         },
     })
 
@@ -94,20 +92,7 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={6}>
-                            <Form.Item label="" name="search">
-                                <Input
-                                    id="search"
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
-                                    }
-                                    placeholder="Tìm kiếm"
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
-
+                    <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
                                 <Button onClick={handleModal} type="primary">
@@ -135,12 +120,16 @@ export default function TrainingFormPage({ trainingCourse }: { trainingCourse?: 
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'code',
+                                type: 'input',
+                                multiple: ['name'],
                             },
                             {
                                 title: 'Tên hình thức huấn luyện',
                                 align: 'center',
                                 width: 200,
                                 dataIndex: 'name',
+                                type: 'input',
+                                multiple: ['code'],
                             },
                             {
                                 title: 'Thao tác',

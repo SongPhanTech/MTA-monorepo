@@ -6,8 +6,8 @@ import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
-// import { useExportStudentLearningDisciplineJson } from '@workspace/libs/api/training'
 import { Search } from 'lucide-react'
+import { useMemo } from 'react'
 
 dayjs.locale('vi')
 
@@ -63,12 +63,12 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         queryClient
     )
 
-    // const studentData = useMemo(() => {
-    //     if (!students) return []
-    //     if (Array.isArray(students)) return students
-    //     if (students.data && Array.isArray(students.data)) return students.data
-    //     return []
-    // }, [students])
+    const studentData = useMemo(() => {
+        if (!students) return []
+        if (Array.isArray(students)) return students
+        if (students.data && Array.isArray(students.data)) return students.data
+        return []
+    }, [students])
 
     return (
         <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
@@ -108,37 +108,55 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey="name"
-                        childrenFieldName="children"
+                        headerTitleKey="courseName"
+                        childrenFieldName="students"
                         defaultExpandAll
-                        data={fakeData}
+                        data={studentData}
                         columns={[
                             {
                                 title: 'Mã sinh viên',
-                                dataIndex: 'code',
+                                dataIndex: ['userProfile', 'code'],
                                 width: 120,
                                 align: 'center',
                             },
                             {
                                 title: 'Tên sinh viên',
-                                dataIndex: 'name',
+                                dataIndex: ['userProfile', 'fullname'],
                                 width: 200,
                             },
                             {
-                                title: 'Tổng số tín chỉ đăng ký',
-                                dataIndex: 'totalCredit',
-                                width: 150,
+                                title: 'Số TC đăng ký',
+                                dataIndex: ['studentSemesterResult', 'registeredCredits'],
+                                width: 90,
                                 align: 'center',
                             },
                             {
-                                title: 'GPA',
-                                dataIndex: 'gpa',
-                                width: 120,
+                                title: 'Số TC đạt',
+                                dataIndex: ['studentSemesterResult', 'passedCredits'],
+                                width: 60,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Tổng TC nợ',
+                                dataIndex: ['studentSemesterResult', 'totalFailedCredits'],
+                                width: 60,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Trung bình hệ 4',
+                                dataIndex: ['studentSemesterResult', 'gpaBase4'],
+                                width: 90,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Tích lỹ hệ 4',
+                                dataIndex: ['studentSemesterResult', 'cumulativeGpaBase4'],
+                                width: 90,
                                 align: 'center',
                             },
                             {
                                 title: 'Mức CCHT hiện tại',
-                                dataIndex: 'mccht',
+                                dataIndex: ['studentSemesterResult', 'academicWarningLevel'],
                                 width: 120,
                                 align: 'center',
                             },

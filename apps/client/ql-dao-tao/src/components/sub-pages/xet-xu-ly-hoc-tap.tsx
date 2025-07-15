@@ -12,7 +12,7 @@ import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { FixedClass, TrainingCourse } from '@workspace/db'
+import type { AcademicActionType, FixedClass, TrainingCourse } from '@workspace/db'
 import {
     useFindManyDM_DonVi,
     useFindManyFixedClass,
@@ -26,11 +26,12 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
-interface XetThoiHocProps {
+interface XetXuLyHocTapProps {
     semesterId: string
+    actionTaken: AcademicActionType
 }
 
-const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
+const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: academicActionTypeOption, getAcademicActionTypeLabel } =
@@ -47,14 +48,15 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
         fixedClass: undefined,
         trainingCourse: undefined,
         organization: undefined,
-        actionTaken: undefined,
         status: undefined,
+        decisionDate: undefined,
     })
 
     const { data, refetch } = useFindManyStudentAcademicDecision(
         {
             where: {
                 semesterId,
+                actionTaken,
                 student: {
                     userProfile: {
                         ...(filters.code && filters.code !== ''
@@ -95,14 +97,17 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                             : {}),
                     },
                 },
-                ...(filters.actionTaken
-                    ? {
-                          actionTaken: { in: filters.actionTaken },
-                      }
-                    : {}),
                 ...(filters.status
                     ? {
                           status: { in: filters.status },
+                      }
+                    : {}),
+                ...(filters.decisionDate?.length === 2
+                    ? {
+                          decisionDate: {
+                              gte: dayjs(filters.decisionDate?.[0]).toDate(),
+                              lte: dayjs(filters.decisionDate?.[1]).toDate(),
+                          },
                       }
                     : {}),
             },
@@ -142,7 +147,11 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
         hideSpinner()
     }
 
-    const { onOpen, onClose } = useDisclosure<{ id: string; semesterId: string }>({
+    const { onOpen, onClose } = useDisclosure<{
+        id: string
+        semesterId: string
+        actionTaken: AcademicActionType
+    }>({
         tag: PutStudentAcademicDecision.name,
     })
 
@@ -200,6 +209,7 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                         onOpen({
                                             id: '',
                                             semesterId,
+                                            actionTaken,
                                         })
                                     }
                                 >
@@ -237,10 +247,9 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                     'fixedClass',
                                     'trainingCourse',
                                     'organization',
-                                    'actionTaken',
                                     'status',
                                 ],
-                                render: (__, record) => record?.student?.code,
+                                render: (__, record) => record?.student?.userProfile?.code,
                             },
                             {
                                 title: 'Tên sinh viên',
@@ -253,7 +262,6 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                     'fixedClass',
                                     'trainingCourse',
                                     'organization',
-                                    'actionTaken',
                                     'status',
                                 ],
                                 render: (__, record) => record?.student?.userProfile?.fullname,
@@ -269,7 +277,6 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                     'name',
                                     'trainingCourse',
                                     'organization',
-                                    'actionTaken',
                                     'status',
                                 ],
                                 options: fixedClassData.map((i: FixedClass) => ({
@@ -284,14 +291,7 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                 width: 100,
                                 align: 'center',
                                 type: 'select',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'fixedClass',
-                                    'organization',
-                                    'actionTaken',
-                                    'status',
-                                ],
+                                multiple: ['code', 'name', 'fixedClass', 'organization', 'status'],
                                 options: trainingCourseData.map((i: TrainingCourse) => ({
                                     value: i.id,
                                     label: i.name,
@@ -311,7 +311,6 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                     'name',
                                     'fixedClass',
                                     'trainingCourse',
-                                    'actionTaken',
                                     'status',
                                 ],
                                 render: (__, record) =>
@@ -319,12 +318,15 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                             },
                             {
                                 title: 'Ngày quyết định',
-                                // dataIndex: 'decisionDate',
+                                dataIndex: 'decisionDate',
                                 width: 150,
                                 align: 'center',
                                 fixed: 'right',
-                                render: ({ decisionDate }) =>
-                                    decisionDate ? dayjs(decisionDate).format('DD/MM/YYYY') : '',
+                                type: 'date',
+                                render: (__, record) =>
+                                    record.decisionDate
+                                        ? dayjs(record.decisionDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Hành động đã thực hiện',
@@ -332,16 +334,6 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                 width: 150,
                                 align: 'center',
                                 fixed: 'right',
-                                type: 'select',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                    'organization',
-                                    'status',
-                                ],
-                                options: academicActionTypeOption,
                                 render: (value) => getAcademicActionTypeLabel(value),
                             },
                             {
@@ -357,7 +349,6 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                     'fixedClass',
                                     'trainingCourse',
                                     'organization',
-                                    'actionTaken',
                                 ],
                                 options: decisionStatusOption,
                                 render: (status) => (
@@ -387,6 +378,7 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
                                                     onOpen({
                                                         id: record?.id,
                                                         semesterId,
+                                                        actionTaken,
                                                     })
                                                 }
                                                 className="text-sm text-blue-700 cursor-pointer"
@@ -419,4 +411,4 @@ const XetThoiHoc = ({ semesterId }: XetThoiHocProps) => {
     )
 }
 
-export default XetThoiHoc
+export default XetXuLyHocTap

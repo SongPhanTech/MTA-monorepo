@@ -2828,7 +2828,7 @@ Enum CriteriaField {
 Enum CriteriaOperator {
   GT
   GTE
-  LE
+  LT
   LTE
   EQ
   IN

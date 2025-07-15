@@ -63,7 +63,7 @@ export default function SubjectOpeningPlan() {
             code: i?.code,
             children: i?.semesters?.length
                 ? i?.semesters.map((j: Semester) => ({
-                      title: j?.name,
+                      title: `${j?.name} năm ${i?.name}`,
                       key: j?.id,
                       value: j?.id,
                       code: j?.code,
@@ -184,7 +184,7 @@ export default function SubjectOpeningPlan() {
                                             labelAlign="left"
                                         >
                                             <TreeSelect
-                                                placeholder="Chọn đơn vị quản lý"
+                                                placeholder="Chọn học kỳ"
                                                 showSearch
                                                 treeDefaultExpandAll
                                                 treeData={treeData}

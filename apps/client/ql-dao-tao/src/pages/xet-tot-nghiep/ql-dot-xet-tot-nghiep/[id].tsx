@@ -12,41 +12,25 @@ import {
     useFindManyStudentGraduationApplication,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
-import { BookPlus, FileUp, Search } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | null
-}
-
 export default function StudentGraduationApplication() {
     const router = useRouter()
     const { getApplicationStatusLabel, getApplicationStatusColor } = useApplicationStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-    })
 
-    const { id: graduationSessionId } = router.query
+    const graduationSessionId = router.query.id as string
 
     const { data: studentGraduationApplicationData, refetch } =
         useFindManyStudentGraduationApplication({
             where: {
-                ...(filters.searchText && filters.searchText !== ''
-                    ? {
-                          code: { contains: filters.searchText, mode: 'insensitive' },
-                      }
-                    : {}),
-                sessionId: Array.isArray(graduationSessionId)
-                    ? graduationSessionId[0]
-                    : graduationSessionId,
+                sessionId: graduationSessionId,
             },
             include: {
                 student: {
@@ -61,21 +45,13 @@ export default function StudentGraduationApplication() {
 
     const { data: count } = useCountStudentGraduationApplication({
         where: {
-            sessionId: Array.isArray(graduationSessionId)
-                ? graduationSessionId[0]
-                : graduationSessionId,
+            sessionId: graduationSessionId,
         },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
     const { onOpen } = useDisclosure<{
         id: string | null
-        graduationSessionId: string | string[] | undefined
+        graduationSessionId: string | undefined
     }>({
         tag: PutGraduationApplication.name,
     })
@@ -91,8 +67,6 @@ export default function StudentGraduationApplication() {
     })
 
     const handleOpenModalLearningResult = (record: any) => {
-        console.log(record)
-
         onOpenModalLearningResult(record.student.id)
     }
 
@@ -116,185 +90,188 @@ export default function StudentGraduationApplication() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     return (
-        <div>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={12}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
+        <Row gutter={[16, 0]} className="mt-2">
+            <Col span={24} className="!p-0">
+                <Flex vertical gap={16}>
+                    <Col span={24}>
+                        <div className="bg-white rounded-lg shadow-sm p-4">123</div>
+                    </Col>
+                    <Flex>
+                        <Col span={24}>
+                            <div className="bg-white rounded-lg shadow-sm p-4">
+                                <Row gutter={[16, 0]}>
+                                    <Col span={24}>
+                                        <Row gutter={[16, 16]} align="top" justify="space-between">
+                                            <Col span={24}>
+                                                <Flex justify="end" gap={4} className="ml-auto">
+                                                    {/* <Button type="primary">
+                                                        <FileUp />
+                                                        Nhập đơn xét tốt nghiệp
+                                                    </Button> */}
+                                                    <Button onClick={handleModal} type="primary">
+                                                        <BookPlus />
+                                                        Thêm
+                                                    </Button>
+                                                    <Button
+                                                        type="primary"
+                                                        className="h-[32px] px-4"
+                                                        // onClick={handleTransferData}
+                                                        // disabled={transferDataDisabled}
+                                                    >
+                                                        <BookPlus />
+                                                        Xét
+                                                    </Button>
+                                                </Flex>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col span={24}>
+                                        <Table
+                                            rowKey="id"
+                                            id="student-graduation-application"
+                                            onRowClick={(record) =>
+                                                handleOpenModalLearningResult(record)
                                             }
-                                            placeholder="Tìm kiếm đơn..."
-                                            className="py-0"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
+                                            columns={[
+                                                {
+                                                    title: 'STT',
+                                                    width: 60,
+                                                    align: 'center',
+                                                    fixed: 'left',
+                                                    render: (_, __, index) =>
+                                                        index +
+                                                        1 +
+                                                        (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                                },
+                                                {
+                                                    title: 'Mã sinh viên',
+                                                    align: 'center',
+                                                    width: 100,
+                                                    fixed: 'left',
+                                                    render: (_, record) =>
+                                                        record.student?.userProfile?.code || '',
+                                                },
+                                                {
+                                                    title: 'Họ và tên',
+                                                    width: 150,
+                                                    render: (record) =>
+                                                        record.student?.userProfile?.fullname,
+                                                },
+                                                {
+                                                    title: 'Ngày sinh',
+                                                    width: 150,
+                                                    render: (record) =>
+                                                        record?.student?.userProfile?.dateOfBirth
+                                                            ? dayjs(
+                                                                  record?.student?.userProfile
+                                                                      ?.dateOfBirth
+                                                              ).format('DD/MM/YYYY')
+                                                            : '',
+                                                },
+                                                {
+                                                    title: 'Giới tính',
+                                                    dataIndex: ['student', 'userProfile', 'gender'],
+                                                    width: 70,
+                                                    render: (value: Gender) => {
+                                                        switch (value) {
+                                                            case Gender.Male:
+                                                                return 'Nam'
+                                                            case Gender.Female:
+                                                                return 'Nữ'
+                                                            default:
+                                                                return ''
+                                                        }
+                                                    },
+                                                },
+                                                {
+                                                    title: 'Nơi sinh',
+                                                    dataIndex: [
+                                                        'student',
+                                                        'userProfile',
+                                                        'placeOfBirth',
+                                                    ],
+                                                    width: 150,
+                                                },
+                                                {
+                                                    title: 'Dân tộc',
+                                                    dataIndex: '',
+                                                    width: 100,
+                                                },
+                                                {
+                                                    title: 'Ngày nộp đơn',
+                                                    dataIndex: 'applicationDate',
+                                                    width: 150,
+                                                    render: (record: string) =>
+                                                        record
+                                                            ? dayjs(record).format('DD/MM/YYYY')
+                                                            : '',
+                                                },
+                                                {
+                                                    title: 'Trạng thái',
+                                                    dataIndex: 'status',
+                                                    align: 'center',
+                                                    width: 140,
+                                                    fixed: 'right',
+                                                    render: (record) => {
+                                                        const label =
+                                                            getApplicationStatusLabel(record)
+                                                        const color =
+                                                            getApplicationStatusColor(record)
+                                                        return <Tag color={color}>{label}</Tag>
+                                                    },
+                                                },
+                                                {
+                                                    title: 'Thao tác',
+                                                    width: 100,
+                                                    align: 'center',
+                                                    fixed: 'right',
+                                                    render: (_, { id }) => {
+                                                        if (id) {
+                                                            return (
+                                                                <Row className="justify-center gap-2">
+                                                                    <EditIcon
+                                                                        onClick={() => {
+                                                                            onOpen({
+                                                                                id,
+                                                                                graduationSessionId,
+                                                                            })
+                                                                        }}
+                                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                                    />
+                                                                    <DeleteIcon
+                                                                        popConfirm={{
+                                                                            onConfirm: () =>
+                                                                                handleDelete(id),
+                                                                        }}
+                                                                    />
+                                                                </Row>
+                                                            )
+                                                        }
+                                                        return ''
+                                                    },
+                                                },
+                                            ]}
+                                            pagination={{
+                                                current: currentPage,
+                                                pageSize: numberOfPages,
+                                                total: count,
+                                                onChange: setCurrentPage,
+                                                onShowSizeChange: setNumberOfPages,
+                                            }}
+                                            data={studentGraduationApplicationData}
                                         />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
+                                    </Col>
+                                </Row>
+                            </div>
                         </Col>
-                        <Col span={6}>
-                            <Flex justify="end" gap={4}>
-                                <Button type="primary">
-                                    <FileUp />
-                                    Nhập đơn xét tốt nghiệp
-                                </Button>
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Col>
-
-                <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        id="student-graduation-application"
-                        onRowClick={(record) => handleOpenModalLearningResult(record)}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã đơn xét tốt nghiệp',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 120,
-                            },
-                            {
-                                title: 'Mã sinh viên',
-                                align: 'center',
-                                width: 100,
-                                fixed: 'left',
-                                render: (_, record) => record.student?.code || '',
-                            },
-                            {
-                                title: 'Họ và tên',
-                                width: 150,
-                                render: (record) =>
-                                    `${record.student?.userProfile?.lastName || ''} ${record.student?.userProfile?.firstName || ''}`,
-                            },
-                            {
-                                title: 'Ngày sinh',
-                                dataIndex: ['student', 'userProfile', 'dateOfBirth'],
-                                width: 150,
-                                render: (record) =>
-                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
-                            },
-                            {
-                                title: 'Giới tính',
-                                dataIndex: ['student', 'userProfile', 'gender'],
-                                width: 70,
-                                render: (record: Gender) => {
-                                    switch (record) {
-                                        case Gender.Male:
-                                            return 'Nam'
-                                        case Gender.Female:
-                                            return 'Nữ'
-                                        default:
-                                            return ''
-                                    }
-                                },
-                            },
-                            {
-                                title: 'Nơi sinh',
-                                dataIndex: ['student', 'userProfile', 'placeOfBirth'],
-                                width: 150,
-                            },
-                            {
-                                title: 'Dân tộc',
-                                dataIndex: '',
-                                width: 100,
-                            },
-                            {
-                                title: 'Ngày nộp đơn',
-                                dataIndex: 'applicationDate',
-                                width: 150,
-                                render: (record: string) =>
-                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
-                            },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'status',
-                                align: 'center',
-                                width: 140,
-                                fixed: 'right',
-                                render: (record) => {
-                                    const label = getApplicationStatusLabel(record)
-                                    const color = getApplicationStatusColor(record)
-                                    return <Tag color={color}>{label}</Tag>
-                                },
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                fixed: 'right',
-                                render: (_, { id }) => {
-                                    if (id) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={() => {
-                                                        onOpen({ id, graduationSessionId })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                        }}
-                        data={studentGraduationApplicationData}
-                    />
-                </Col>
-            </Row>
-        </div>
+                    </Flex>
+                </Flex>
+            </Col>
+        </Row>
     )
 }
 
 StudentGraduationApplication.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
 }

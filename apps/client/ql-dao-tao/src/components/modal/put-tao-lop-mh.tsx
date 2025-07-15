@@ -183,7 +183,7 @@ const PutOpenSubjectClassModal = () => {
             code: i?.code,
             children: i?.semesters?.length
                 ? i?.semesters.map((j) => ({
-                      title: j?.name,
+                      title: `${j?.name} năm ${i?.name}`,
                       key: j?.id,
                       value: j?.id,
                       code: j?.code,
