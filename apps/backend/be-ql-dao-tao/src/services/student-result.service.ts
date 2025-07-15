@@ -525,7 +525,6 @@ const ThongTinDiemHocKy = async (
 
         // TODO: maybe don't throw
         if (TongTinChiDangKy === 0) {
-            // console.log('Không có tín chỉ nào, không thể tính điểm trung bình hệ 4')
             throw new Error('Không có tín chỉ nào để tính điểm trung bình hệ 4')
         }
 
@@ -818,7 +817,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                // studentId: {endsWith: '4'},
+                studentId: { endsWith: 'K6_5' },
                 student: {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
                     fixedClassId: {
@@ -1065,12 +1064,15 @@ const checkAcademicActionRule = async (
             console.warn('No action criteria found for training ruleSet:', ruleSetId)
             return false
         }
+        console.log('Student Info:', student)
+        console.log('Checking action criteria for ruleSet:', actionCriteriaList)
         // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
         for (const criteria of actionCriteriaList) {
-            if (criteria.field === CriteriaField.SEMESTER_PASSED_CREDITS) {
+            // Cảnh cáo học tập
+            if (criteria.field === CriteriaField.ACADEMIC_WARNING_LEVEL) {
                 if (
                     !checkEligible(
-                        student.soTinChiDangKy,
+                        student.mucCanhCaoHocTap,
                         criteria.value,
                         criteria.operator,
                         criteria.invert
@@ -1078,10 +1080,10 @@ const checkAcademicActionRule = async (
                 ) {
                     return false
                 }
-            } else if (criteria.field === CriteriaField.SEMESTER_REGISTERED_CREDITS) {
+            } else if (criteria.field === CriteriaField.DISCIPLINARY_WARNING_LEVEL) {
                 if (
                     !checkEligible(
-                        student.soTinChiDangKy,
+                        student.mucCanhCaoHocDuong,
                         criteria.value,
                         criteria.operator,
                         criteria.invert
@@ -1143,6 +1145,11 @@ const checkAcademicActionConfig = async (
     configId: string
 ): Promise<boolean> => {
     try {
+        const isSecondSemester = student.kyDangHoc % 2 === 0 // Kiểm tra có phải học kỳ chẵn không
+        if (!isSecondSemester) {
+            console.log('Skipping action check for even semester:', student.kyDangHoc)
+            return false // Không kiểm tra nếu là học kỳ chẵn
+        }
         const actionRuleSet = await prisma.academicActionRuleSet.findMany({
             where: {
                 configId: configId,
