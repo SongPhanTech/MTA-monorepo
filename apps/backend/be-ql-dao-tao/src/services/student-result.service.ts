@@ -817,7 +817,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                studentId: { endsWith: 'K6_5' },
+                // studentId: { endsWith: 'K6_5' },
                 student: {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
                     fixedClassId: {
