@@ -10,6 +10,7 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { DM_DonVi, FixedClass, Student, TrainingCourse } from '@workspace/db'
 import {
     useFindManyCurriculumVersion,
     useFindManyStudent,
@@ -221,8 +222,11 @@ export default function StudentFixedClassPage() {
     })
 
     const { onOpen: onOpenPrint } = useDisclosure<{
-        dataTable: any
-        dataFixedClass: any
+        dataTable: Student[]
+        dataFixedClass: FixedClass & {
+            trainingCourse?: TrainingCourse
+            managementOrganization?: DM_DonVi
+        }
     }>({
         tag: ModalPrintToDSHV.name,
     })
