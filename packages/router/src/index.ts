@@ -451,6 +451,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Xếp loại học lực',
                     },
                     {
+                        id: 'xep-loai-tot-nghiep',
+                        label: 'Xếp loại tốt nghiệp',
+                        icon: BookOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_TOT_NGHIEP,
+                        description: 'Xếp loại tốt nghiệp',
+                    },
+                    {
                         id: 'danh-muc-danh-muc-phong-hoc',
                         label: 'Danh mục phòng học',
                         icon: TeamOutlined,

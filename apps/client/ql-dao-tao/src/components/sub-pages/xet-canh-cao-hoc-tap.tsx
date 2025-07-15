@@ -82,7 +82,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                             {
                                 title: 'Tên sinh viên',
                                 dataIndex: ['userProfile', 'fullname'],
-                                width: 200,
+                                width: 160,
                             },
                             {
                                 title: 'Số TC đăng ký',
