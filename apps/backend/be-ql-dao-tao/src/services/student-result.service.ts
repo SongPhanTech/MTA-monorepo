@@ -1604,7 +1604,8 @@ export const sortStudentResultInfo = (
 export const resultCourseStudentResult = async (
     students: StudentInfoCheck[],
     semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction'
+    type: 'scholarship' | 'academicWarning' | 'academicAction',
+    academicActionType?: 'REPEAT_YEAR' | 'SUSPENSION' | 'EXPULSION'
 ): Promise<CourseStudentResult[]> => {
     const courseMap: Record<string, CourseStudentResult> = {}
 
@@ -1645,6 +1646,7 @@ export const resultCourseStudentResult = async (
     const academicActionConfig = await prisma.academicActionConfig.findMany({
         where: {
             trainingCourseId: { in: Array.from(courseIds) },
+            actionType: academicActionType || undefined, // Chỉ lấy theo loại hành động học vụ nếu có
             active: true,
         },
     })
