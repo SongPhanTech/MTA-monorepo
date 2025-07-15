@@ -197,7 +197,7 @@ const PutStudentAcademicDecision = () => {
                         options={studentData.map((i) => {
                             return {
                                 value: i.id,
-                                label: [i.code, i.userProfile?.fullname]
+                                label: [i.userProfile?.code, i.userProfile?.fullname]
                                     .filter(Boolean)
                                     .join(' - '),
                             }
@@ -208,7 +208,14 @@ const PutStudentAcademicDecision = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="decisionDate" label="Ngày quyết định" required>
-                    <DatePicker format="DD/MM/YYYY" className="w-full" defaultValue={dayjs()} />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                        defaultValue={dayjs()}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

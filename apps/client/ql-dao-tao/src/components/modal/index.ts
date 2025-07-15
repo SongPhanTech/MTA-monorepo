@@ -42,6 +42,7 @@ import PutOneSubjectClassModal from './put-one-subject-class'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
+import PutGraduationDecision from './put-quyet-dinh-tot-nghiep'
 import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
 import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
@@ -115,4 +116,5 @@ export {
     PutStudentAcademicDecision,
     ModalLearningResult,
     ModalPrintToDSHV,
+    PutGraduationDecision,
 }
