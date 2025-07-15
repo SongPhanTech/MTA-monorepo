@@ -116,7 +116,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         },
     })
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen, onClose } = useDisclosure<{ id: string; trainingCourseId: string }>({
         tag: PutGraduationDecision.name,
     })
 
@@ -230,12 +230,16 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id, applicationId }) => (
+                                render: (_, record) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
                                             onClick={(e) => {
                                                 e.stopPropagation()
-                                                onOpen(id)
+                                                onOpen({
+                                                    id: record.id,
+                                                    trainingCourseId:
+                                                        record?.finalRanking?.trainingCourseId,
+                                                })
                                             }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
@@ -243,8 +247,8 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                             popConfirm={{
                                                 onConfirm: () =>
                                                     handleDeleteGraduationDecision(
-                                                        id,
-                                                        applicationId
+                                                        record.id,
+                                                        record.applicationId
                                                     ),
                                             }}
                                             onClick={(e) => {
