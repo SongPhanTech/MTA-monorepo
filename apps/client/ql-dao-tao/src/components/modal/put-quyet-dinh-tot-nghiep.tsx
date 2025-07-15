@@ -14,7 +14,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
-import type { GraduationDecision } from '@workspace/db'
+import { type GraduationDecision, RankingContext } from '@workspace/db'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
@@ -125,6 +125,7 @@ const PutGraduationDecision = () => {
         {
             where: {
                 trainingCourseId: input?.trainingCourseId,
+                context: RankingContext.GRADUATION,
             },
         },
         { enabled: !!input?.trainingCourseId }
