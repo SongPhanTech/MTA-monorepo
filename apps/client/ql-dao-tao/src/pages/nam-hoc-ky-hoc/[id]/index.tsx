@@ -3,9 +3,9 @@ import DiemTrungBinhKyHoc from '@components/sub-pages/diem-trung-binh-ky-hoc'
 import XetCanhCaoHocDuong from '@components/sub-pages/xet-canh-cao-hoc-duong'
 import XetCanhCaoHocTap from '@components/sub-pages/xet-canh-cao-hoc-tap'
 import XetHocBong from '@components/sub-pages/xet-hoc-bong'
-import XetLuuBan from '@components/sub-pages/xet-luu-ban'
-import XetThoiHoc from '@components/sub-pages/xet-thoi-hoc'
+import XetXuLyHocTap from '@components/sub-pages/xet-xu-ly-hoc-tap'
 import DefaultLayout from '@layouts/default-layout'
+import { AcademicActionType } from '@workspace/db'
 import { useFindUniqueSemester } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Divider } from 'antd'
@@ -30,7 +30,7 @@ export default function CanhCaoHocBong() {
             <Divider
                 orientation="left"
                 orientationMargin={0}
-                className="bg-white rounded-lg shadow-sm p-4"
+                className="bg-white rounded-lg shadow-sm p-4 mt-2"
             >
                 {[initialValue?.code, initialValue?.name, initialValue?.schoolYear?.name]
                     .filter(Boolean)
@@ -61,14 +61,43 @@ export default function CanhCaoHocBong() {
                     {
                         key: '5',
                         label: 'Xét thôi học',
-                        children: <XetThoiHoc semesterId={semesterId} />,
+                        children: (
+                            <XetXuLyHocTap
+                                semesterId={semesterId}
+                                actionTaken={AcademicActionType.EXPULSION}
+                            />
+                        ),
                     },
                     {
                         key: '6',
                         label: 'Xét lưu ban',
-                        children: <XetLuuBan />,
+                        children: (
+                            <XetXuLyHocTap
+                                semesterId={semesterId}
+                                actionTaken={AcademicActionType.REPEAT_YEAR}
+                            />
+                        ),
+                    },
+                    {
+                        key: '7',
+                        label: 'Xét đình chỉ',
+                        children: (
+                            <XetXuLyHocTap
+                                semesterId={semesterId}
+                                actionTaken={AcademicActionType.SUSPENSION}
+                            />
+                        ),
                     },
                 ]}
+                className="custom-tab-bar"
+                tabBarStyle={{
+                    backgroundColor: 'white',
+                    borderRadius: '8px',
+                    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                    paddingInline: '16px',
+                    paddingBlock: '8px',
+                    marginBottom: '0',
+                }}
             />
         </div>
     )

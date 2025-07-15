@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { DocumentFile, StudentAcademicDecision } from '@workspace/db'
+import type { AcademicActionType, DocumentFile, StudentAcademicDecision } from '@workspace/db'
 import {
     useCreateStudentAcademicDecision,
     useFindManyStudent,
@@ -28,6 +28,7 @@ dayjs.locale('vi')
 type StudentAcademicDecisionInput = {
     id: string
     semesterId: string
+    actionTaken: AcademicActionType
 }
 
 const PutStudentAcademicDecision = () => {
@@ -57,7 +58,7 @@ const PutStudentAcademicDecision = () => {
             const baseData = {
                 studentId: output?.studentId,
                 semesterId: input.semesterId,
-                actionTaken: output?.actionTaken,
+                actionTaken: input.actionTaken,
                 decisionDate: output?.decisionDate,
                 reason: output?.reason,
                 status: output?.status,
@@ -206,15 +207,6 @@ const PutStudentAcademicDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} label="Hành động đã thực hiện" name="actionTaken" required>
-                    <Select
-                        placeholder="Chọn hành động đã thực hiện"
-                        options={academicActionTypeOptions}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="decisionDate" label="Ngày quyết định" required>
                     <DatePicker format="DD/MM/YYYY" className="w-full" defaultValue={dayjs()} />
                 </FormItem>
@@ -229,6 +221,11 @@ const PutStudentAcademicDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="reason" label="Ghi chú lý do">
+                    <Input.TextArea placeholder="Nhập ghi chú" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="documentEvidence"
@@ -241,11 +238,6 @@ const PutStudentAcademicDecision = () => {
                         relationType="studentAcademicDecisionId"
                         titleForm="documentEvidence"
                     />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="reason" label="Ghi chú lý do">
-                    <Input.TextArea placeholder="Nhập ghi chú" />
                 </FormItem>
             </Col>
         </PutFormModal>

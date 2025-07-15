@@ -62,7 +62,6 @@ const PutGraduationSession = () => {
         try {
             showSpinner()
             const payload = {
-                code: output.code,
                 name: output.name,
                 sessionDate: output.sessionDate,
                 applicationStart: output.applicationStart,
@@ -107,11 +106,6 @@ const PutGraduationSession = () => {
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đợt xét tốt nghiệp" required>
                     <Input placeholder="Nhập tên đợt xét tốt nghiệp" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="code" label="Mã đợt xét tốt nghiệp" required>
-                    <Input placeholder="Nhập mã đợt xét tốt nghiệp" />
                 </FormItem>
             </Col>
             <Col span={12}>
