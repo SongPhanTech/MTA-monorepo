@@ -1463,9 +1463,7 @@ const getStudentResult = async (
         const scholarshipInfo =
             type === 'scholarship' ? await getScholarship(student, trainingCourseId) : []
         const checkAcademicWarningResult =
-            type === 'academicWarning'
-                ? await checkAcademicWarning(student, trainingCourseId)
-                : false
+            type === 'academicWarning' ? await checkAcademicWarning(student, trainingCourseId) : 0
         const academicActionInfo =
             type === 'academicAction' ? await getAcademicAction(student, trainingCourseId) : []
         return StudentResult.parse({
