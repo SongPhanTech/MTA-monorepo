@@ -1703,6 +1703,10 @@ export const resultCourseStudentResult = async (
                 console.log(`Skipping student ${student.id} in course ${courseId} for type ${type}`)
                 return
             }
+            // bỏ qua nếu đã có học bổng
+            if (studentResult.scholarshipRecived.length > 0) {
+                return
+            }
             courseMap[courseId].students.push(studentResult)
         })
     )
