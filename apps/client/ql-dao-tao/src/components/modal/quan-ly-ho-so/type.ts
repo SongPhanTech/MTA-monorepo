@@ -119,6 +119,8 @@ export type FilterProps = {
     finalScore?: 'asc' | 'desc'
     count?: 'asc' | 'desc'
     publishDate?: Date[]
+    scholarship?: string[]
+    decisionDate?: Date[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
