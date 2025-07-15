@@ -1,8 +1,13 @@
 import {
+    type AcademicActionCondition,
+    type AcademicActionConfig,
+    type AcademicActionRuleSet,
     AcademicRankingBaseType,
+    type AcademicWarningRule,
     CriteriaField,
     CriteriaOperator,
     type Scholarship,
+    type ScholarshipCriteria,
     SemesterType,
     type StudentSemesterResult,
     StudentStatus,
@@ -1043,31 +1048,38 @@ export function evaluateCondition(
 
 const checkAcademicActionRule = async (
     student: StudentInfoCheck,
-    ruleSetId: string
+    ruleSetId: string,
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<boolean> => {
     try {
-        const actionCriteriaList = await prisma.academicActionCondition.findMany({
-            where: {
-                ruleSetId: ruleSetId,
-                OR: [{ yearCondition: student.namDangHoc }, { yearCondition: null }],
-            },
-            include: {
-                ruleSet: {
-                    // AcademicActionRuleSet
-                    include: {
-                        config: true, // AcademicActionConditionConfig
-                    },
-                },
-            },
-        })
-        if (!actionCriteriaList || actionCriteriaList.length === 0) {
+        const actionCriteriaListFilter = actionCriteriaList.filter(
+            (criteria) =>
+                criteria.ruleSetId === ruleSetId &&
+                (criteria.yearCondition === student.namDangHoc || criteria.yearCondition === null)
+        )
+
+        // const actionCriteriaList = await prisma.academicActionCondition.findMany({
+        //     where: {
+        //         ruleSetId: ruleSetId,
+        //         OR: [{ yearCondition: student.namDangHoc }, { yearCondition: null }],
+        //     },
+        //     include: {
+        //         ruleSet: {
+        //             // AcademicActionRuleSet
+        //             include: {
+        //                 config: true, // AcademicActionConditionConfig
+        //             },
+        //         },
+        //     },
+        // })
+        if (!actionCriteriaListFilter || actionCriteriaListFilter.length === 0) {
             console.warn('No action criteria found for training ruleSet:', ruleSetId)
             return false
         }
         console.log('Student Info:', student)
-        console.log('Checking action criteria for ruleSet:', actionCriteriaList)
+        console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
         // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
-        for (const criteria of actionCriteriaList) {
+        for (const criteria of actionCriteriaListFilter) {
             // Cảnh cáo học tập
             if (criteria.field === CriteriaField.ACADEMIC_WARNING_LEVEL) {
                 if (
@@ -1106,21 +1118,32 @@ const checkAcademicActionRule = async (
 }
 const checkAcademicActionConfig = async (
     student: StudentInfoCheck,
-    configId: string
+    configId: string,
+    academicActionRuleSet: AcademicActionRuleSet[] = [],
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<boolean> => {
     try {
-        const actionRuleSet = await prisma.academicActionRuleSet.findMany({
-            where: {
-                configId: configId,
-            },
-        })
-        if (!actionRuleSet || actionRuleSet.length === 0) {
+        const academicActionRuleSetFilter = academicActionRuleSet.filter(
+            (ruleSet) => ruleSet.configId === configId
+        )
+        if (academicActionRuleSetFilter.length === 0) {
             console.warn('No action criteria found for training configId:', configId)
             return false
         }
+        // const actionRuleSet = await prisma.academicActionRuleSet.findMany({
+        //     where: {
+        //         configId: configId,
+        //     },
+        // })
+        // if (!actionRuleSet || actionRuleSet.length === 0) {
+        //     console.warn('No action criteria found for training configId:', configId)
+        //     return false
+        // }
         // Kiểm tra từng bộ tiêu chí
         const Eligible = await Promise.all(
-            actionRuleSet.map((ruleSet) => checkAcademicActionRule(student, ruleSet.id))
+            academicActionRuleSetFilter.map((ruleSet) =>
+                checkAcademicActionRule(student, ruleSet.id, actionCriteriaList)
+            )
         )
         return Eligible.includes(true)
     } catch (error) {
@@ -1132,18 +1155,24 @@ const checkAcademicActionConfig = async (
 }
 const getAcademicAction = async (
     student: StudentInfoCheck,
-    trainingCourseId: string
+    trainingCourseId: string,
+    academicActionConfig: AcademicActionConfig[] = [],
+    academicActionRuleSet: AcademicActionRuleSet[] = [],
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<ListAcademicAction[]> => {
-    const academicActionConfig = await prisma.academicActionConfig.findMany({
-        where: {
-            trainingCourseId: trainingCourseId,
-            active: true,
-        },
-    })
+    const academicActionConfigFilter = academicActionConfig.filter(
+        (config) => config.trainingCourseId === trainingCourseId && config.active
+    )
+
     // Lấy danh sách học bổng của sinh viên
     const academicAction: ListAcademicAction[] = []
-    for (const config of academicActionConfig) {
-        const isEligible = await checkAcademicActionConfig(student, config.id)
+    for (const config of academicActionConfigFilter) {
+        const isEligible = await checkAcademicActionConfig(
+            student,
+            config.id,
+            academicActionRuleSet,
+            actionCriteriaList
+        )
         if (isEligible) {
             academicAction.push({
                 id: config.id,
@@ -1156,24 +1185,32 @@ const getAcademicAction = async (
 }
 const checkAcademicWarning = async (
     student: StudentInfoCheck,
-    trainingCourseId: string
+    trainingCourseId: string,
+    warningCriteriaList: AcademicWarningRule[] = []
 ): Promise<number> => {
     try {
+        const warningCriteriaListFilter = warningCriteriaList.filter(
+            (criteria) =>
+                criteria.trainingCourseId === trainingCourseId &&
+                (criteria.semesterCondition === student.kyDangHoc ||
+                    criteria.semesterCondition === null) &&
+                (criteria.yearCondition === student.namDangHoc || criteria.yearCondition === null)
+        )
         // Lấy thông tin tiêu chí cảnh cáo
-        const warningCriteriaList = await prisma.academicWarningRule.findMany({
-            where: {
-                trainingCourseId: trainingCourseId,
-                OR: [
-                    { semesterCondition: student.kyDangHoc },
-                    { semesterCondition: null },
-                    { yearCondition: student.namDangHoc },
-                    { yearCondition: null },
-                ],
-            },
-        })
+        // const warningCriteriaList = await prisma.academicWarningRule.findMany({
+        //     where: {
+        //         trainingCourseId: trainingCourseId,
+        //         OR: [
+        //             { semesterCondition: student.kyDangHoc },
+        //             { semesterCondition: null },
+        //             { yearCondition: student.namDangHoc },
+        //             { yearCondition: null },
+        //         ],
+        //     },
+        // })
         // console.log('Checking academic warning :',warningCriteriaList)
 
-        const severities = warningCriteriaList.map((criteria) => {
+        const severities = warningCriteriaListFilter.map((criteria) => {
             console.log('Checking criteria:', criteria.field, 'with value:', criteria.threshold)
 
             switch (criteria.field) {
@@ -1240,20 +1277,11 @@ const checkAcademicWarning = async (
 }
 const checkScholarship = async (
     student: StudentInfoCheck,
-    scholarshipId: string
+    scholarshipId: string,
+    scholarshipCriteria: ScholarshipCriteria[]
 ): Promise<boolean> => {
     try {
-        console.log(
-            'Checking scholarship eligibility for student:',
-            student.id,
-            'Scholarship ID:',
-            scholarshipId
-        )
-        // Lấy thông tin tiêu chí học bổng
-        const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
-            where: { scholarshipId: scholarshipId },
-        })
-        const isEligible = scholarshipCriteriaList.every((criteria) => {
+        const isEligible = scholarshipCriteria.every((criteria) => {
             switch (criteria.field) {
                 case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
                     console.log(
@@ -1382,22 +1410,26 @@ const checkScholarship = async (
 }
 const getScholarship = async (
     student: StudentInfoCheck,
-    trainingCourseId: string
+    trainingCourseId: string,
+    semesterScholarship: Scholarship[] = [],
+    scholarshipCriteriaList: ScholarshipCriteria[] = []
 ): Promise<Scholarship[]> => {
-    const semesterScholarship = await prisma.scholarship.findMany({
-        where: {
-            trainingCourseId: trainingCourseId, // Lấy học bổng theo khóa học
-            active: true, // Chỉ lấy học bổng đang hoạt động
-        },
-        orderBy: {
-            rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
-        },
-    })
-    console.log('semesterScholarship', semesterScholarship)
+    const semesterScholarshipFilter = semesterScholarship.filter(
+        (scholarship) => scholarship.trainingCourseId === trainingCourseId
+    )
+    const scholarshipIds = semesterScholarshipFilter.map((s) => s.id)
+    const scholarshipCriteriaFilter = scholarshipCriteriaList.filter((criteria) =>
+        scholarshipIds.includes(criteria.scholarshipId)
+    )
+    console.log('semesterScholarship', semesterScholarshipFilter)
     // Lấy danh sách học bổng của sinh viên
     const scholarships: Scholarship[] = []
-    for (const scholarship of semesterScholarship) {
-        const isEligible = await checkScholarship(student, scholarship.id)
+    for (const scholarship of semesterScholarshipFilter) {
+        const isEligible = await checkScholarship(
+            student,
+            scholarship.id,
+            scholarshipCriteriaFilter
+        )
         if (isEligible) {
             scholarships.push(scholarship)
         }
@@ -1408,7 +1440,13 @@ const getScholarship = async (
 const getStudentResult = async (
     student: StudentInfoCheck,
     semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction'
+    type: 'scholarship' | 'academicWarning' | 'academicAction',
+    semesterScholarship: Scholarship[] = [],
+    scholarshipCriteriaList: ScholarshipCriteria[] = [],
+    warningCriteriaList: AcademicWarningRule[] = [],
+    academicActionConfig: AcademicActionConfig[] = [],
+    academicActionRuleSet: AcademicActionRuleSet[] = [],
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<StudentResult> => {
     try {
         console.log('Fetching result for student:', student.id, 'in semester:', semesterId)
@@ -1461,11 +1499,28 @@ const getStudentResult = async (
             throw new Error(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
         // Kiểm tra loại kết quả cần lấy
         const scholarshipInfo =
-            type === 'scholarship' ? await getScholarship(student, trainingCourseId) : []
+            type === 'scholarship'
+                ? await getScholarship(
+                      student,
+                      trainingCourseId,
+                      semesterScholarship,
+                      scholarshipCriteriaList
+                  )
+                : []
         const checkAcademicWarningResult =
-            type === 'academicWarning' ? await checkAcademicWarning(student, trainingCourseId) : 0
+            type === 'academicWarning'
+                ? await checkAcademicWarning(student, trainingCourseId, warningCriteriaList)
+                : 0
         const academicActionInfo =
-            type === 'academicAction' ? await getAcademicAction(student, trainingCourseId) : []
+            type === 'academicAction'
+                ? await getAcademicAction(
+                      student,
+                      trainingCourseId,
+                      academicActionConfig,
+                      academicActionRuleSet,
+                      actionCriteriaList
+                  )
+                : []
         return StudentResult.parse({
             id: studentSemesterResult.studentId,
             studentSemesterResult: studentSemesterResult,
@@ -1532,6 +1587,64 @@ export const resultCourseStudentResult = async (
 ): Promise<CourseStudentResult[]> => {
     const courseMap: Record<string, CourseStudentResult> = {}
 
+    // DS khóa học
+    const courseIds = new Set(students.map((student) => student.khoaId))
+    console.log('courseIds', courseIds)
+
+    // Ds tiêu chí học bổng
+    const semesterScholarship = await prisma.scholarship.findMany({
+        where: {
+            trainingCourseId: { in: Array.from(courseIds) }, // Lấy học bổng theo khóa học
+            active: true, // Chỉ lấy học bổng đang hoạt động
+        },
+        orderBy: {
+            rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
+        },
+    })
+    const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
+        where: {
+            scholarshipId: { in: semesterScholarship.map((s) => s.id) },
+            active: true,
+        },
+        orderBy: {
+            scholarship: {
+                rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
+            },
+        },
+    })
+
+    // Ds tiêu chỉ cảnh cáo học tập
+    const warningCriteriaList = await prisma.academicWarningRule.findMany({
+        where: {
+            trainingCourseId: { in: Array.from(courseIds) },
+        },
+    })
+
+    // Ds tiêu chí thôi học, lưu ban
+    const academicActionConfig = await prisma.academicActionConfig.findMany({
+        where: {
+            trainingCourseId: { in: Array.from(courseIds) },
+            active: true,
+        },
+    })
+    const actionRuleSet = await prisma.academicActionRuleSet.findMany({
+        where: {
+            configId: { in: academicActionConfig.map((c) => c.id) },
+        },
+    })
+    const actionCriteriaList = await prisma.academicActionCondition.findMany({
+        where: {
+            ruleSetId: { in: actionRuleSet.map((r) => r.id) },
+        },
+        include: {
+            ruleSet: {
+                // AcademicActionRuleSet
+                include: {
+                    config: true, // AcademicActionConditionConfig
+                },
+            },
+        },
+    })
     // Process students in parallel
     await Promise.all(
         students.map(async (student) => {
@@ -1545,7 +1658,17 @@ export const resultCourseStudentResult = async (
                     students: [],
                 }
             }
-            const studentResult = await getStudentResult(student, semesterId, type)
+            const studentResult = await getStudentResult(
+                student,
+                semesterId,
+                type,
+                semesterScholarship,
+                scholarshipCriteriaList,
+                warningCriteriaList,
+                academicActionConfig,
+                actionRuleSet,
+                actionCriteriaList
+            )
             if (!studentResult) {
                 console.warn(`No result found for student ${student.id} in semester ${semesterId}`)
                 return
