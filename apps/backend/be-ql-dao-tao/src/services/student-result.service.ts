@@ -1,8 +1,13 @@
 import {
+    type AcademicActionCondition,
+    type AcademicActionConfig,
+    type AcademicActionRuleSet,
     AcademicRankingBaseType,
+    type AcademicWarningRule,
     CriteriaField,
     CriteriaOperator,
     type Scholarship,
+    type ScholarshipCriteria,
     SemesterType,
     type StudentSemesterResult,
     StudentStatus,
@@ -525,7 +530,6 @@ const ThongTinDiemHocKy = async (
 
         // TODO: maybe don't throw
         if (TongTinChiDangKy === 0) {
-            // console.log('Không có tín chỉ nào, không thể tính điểm trung bình hệ 4')
             throw new Error('Không có tín chỉ nào để tính điểm trung bình hệ 4')
         }
 
@@ -818,7 +822,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                // studentId: {endsWith: '4'},
+                // studentId: { endsWith: 'K6_5' },
                 student: {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
                     fixedClassId: {
@@ -1044,33 +1048,43 @@ export function evaluateCondition(
 
 const checkAcademicActionRule = async (
     student: StudentInfoCheck,
-    ruleSetId: string
+    ruleSetId: string,
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<boolean> => {
     try {
-        const actionCriteriaList = await prisma.academicActionCondition.findMany({
-            where: {
-                ruleSetId: ruleSetId,
-                OR: [{ yearCondition: student.namDangHoc }, { yearCondition: null }],
-            },
-            include: {
-                ruleSet: {
-                    // AcademicActionRuleSet
-                    include: {
-                        config: true, // AcademicActionConditionConfig
-                    },
-                },
-            },
-        })
-        if (!actionCriteriaList || actionCriteriaList.length === 0) {
+        const actionCriteriaListFilter = actionCriteriaList.filter(
+            (criteria) =>
+                criteria.ruleSetId === ruleSetId &&
+                (criteria.yearCondition === student.namDangHoc || criteria.yearCondition === null)
+        )
+
+        // const actionCriteriaList = await prisma.academicActionCondition.findMany({
+        //     where: {
+        //         ruleSetId: ruleSetId,
+        //         OR: [{ yearCondition: student.namDangHoc }, { yearCondition: null }],
+        //     },
+        //     include: {
+        //         ruleSet: {
+        //             // AcademicActionRuleSet
+        //             include: {
+        //                 config: true, // AcademicActionConditionConfig
+        //             },
+        //         },
+        //     },
+        // })
+        if (!actionCriteriaListFilter || actionCriteriaListFilter.length === 0) {
             console.warn('No action criteria found for training ruleSet:', ruleSetId)
             return false
         }
+        console.log('Student Info:', student)
+        console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
         // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
-        for (const criteria of actionCriteriaList) {
-            if (criteria.field === CriteriaField.SEMESTER_PASSED_CREDITS) {
+        for (const criteria of actionCriteriaListFilter) {
+            // Cảnh cáo học tập
+            if (criteria.field === CriteriaField.ACADEMIC_WARNING_LEVEL) {
                 if (
                     !checkEligible(
-                        student.soTinChiDangKy,
+                        student.mucCanhCaoHocTap,
                         criteria.value,
                         criteria.operator,
                         criteria.invert
@@ -1078,46 +1092,10 @@ const checkAcademicActionRule = async (
                 ) {
                     return false
                 }
-            } else if (criteria.field === CriteriaField.SEMESTER_REGISTERED_CREDITS) {
+            } else if (criteria.field === CriteriaField.DISCIPLINARY_WARNING_LEVEL) {
                 if (
                     !checkEligible(
-                        student.soTinChiDangKy,
-                        criteria.value,
-                        criteria.operator,
-                        criteria.invert
-                    )
-                ) {
-                    return false
-                }
-            } else if (criteria.field === CriteriaField.CUMULATIVE_PROGRESS_PERCENT) {
-                if (
-                    !checkEligible(
-                        student.soTinChiTichLuy / student.soTinChiYeuCau,
-                        criteria.value,
-                        criteria.operator,
-                        criteria.invert
-                    )
-                ) {
-                    return false
-                }
-            } else if (criteria.field === CriteriaField.SEMESTER_GPA) {
-                console.log(
-                    'Checking GPA for ruleSet:',
-                    ruleSetId,
-                    'Value:',
-                    criteria.value,
-                    'Operator:',
-                    criteria.operator
-                )
-                // Kiểm tra điểm trung bình học kỳ
-                console.log(
-                    'Student GPA:',
-                    student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4
-                )
-
-                if (
-                    !checkEligible(
-                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+                        student.mucCanhCaoHocDuong,
                         criteria.value,
                         criteria.operator,
                         criteria.invert
@@ -1140,21 +1118,32 @@ const checkAcademicActionRule = async (
 }
 const checkAcademicActionConfig = async (
     student: StudentInfoCheck,
-    configId: string
+    configId: string,
+    academicActionRuleSet: AcademicActionRuleSet[] = [],
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<boolean> => {
     try {
-        const actionRuleSet = await prisma.academicActionRuleSet.findMany({
-            where: {
-                configId: configId,
-            },
-        })
-        if (!actionRuleSet || actionRuleSet.length === 0) {
+        const academicActionRuleSetFilter = academicActionRuleSet.filter(
+            (ruleSet) => ruleSet.configId === configId
+        )
+        if (academicActionRuleSetFilter.length === 0) {
             console.warn('No action criteria found for training configId:', configId)
             return false
         }
+        // const actionRuleSet = await prisma.academicActionRuleSet.findMany({
+        //     where: {
+        //         configId: configId,
+        //     },
+        // })
+        // if (!actionRuleSet || actionRuleSet.length === 0) {
+        //     console.warn('No action criteria found for training configId:', configId)
+        //     return false
+        // }
         // Kiểm tra từng bộ tiêu chí
         const Eligible = await Promise.all(
-            actionRuleSet.map((ruleSet) => checkAcademicActionRule(student, ruleSet.id))
+            academicActionRuleSetFilter.map((ruleSet) =>
+                checkAcademicActionRule(student, ruleSet.id, actionCriteriaList)
+            )
         )
         return Eligible.includes(true)
     } catch (error) {
@@ -1166,18 +1155,24 @@ const checkAcademicActionConfig = async (
 }
 const getAcademicAction = async (
     student: StudentInfoCheck,
-    trainingCourseId: string
+    trainingCourseId: string,
+    academicActionConfig: AcademicActionConfig[] = [],
+    academicActionRuleSet: AcademicActionRuleSet[] = [],
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<ListAcademicAction[]> => {
-    const academicActionConfig = await prisma.academicActionConfig.findMany({
-        where: {
-            trainingCourseId: trainingCourseId,
-            active: true,
-        },
-    })
+    const academicActionConfigFilter = academicActionConfig.filter(
+        (config) => config.trainingCourseId === trainingCourseId && config.active
+    )
+
     // Lấy danh sách học bổng của sinh viên
     const academicAction: ListAcademicAction[] = []
-    for (const config of academicActionConfig) {
-        const isEligible = await checkAcademicActionConfig(student, config.id)
+    for (const config of academicActionConfigFilter) {
+        const isEligible = await checkAcademicActionConfig(
+            student,
+            config.id,
+            academicActionRuleSet,
+            actionCriteriaList
+        )
         if (isEligible) {
             academicAction.push({
                 id: config.id,
@@ -1190,51 +1185,130 @@ const getAcademicAction = async (
 }
 const checkAcademicWarning = async (
     student: StudentInfoCheck,
-    trainingCourseId: string
-): Promise<boolean> => {
+    trainingCourseId: string,
+    warningCriteriaList: AcademicWarningRule[] = []
+): Promise<number> => {
     try {
+        const warningCriteriaListFilter = warningCriteriaList.filter(
+            (criteria) =>
+                criteria.trainingCourseId === trainingCourseId &&
+                (criteria.semesterCondition === student.kyDangHoc ||
+                    criteria.semesterCondition === null) &&
+                (criteria.yearCondition === student.namDangHoc || criteria.yearCondition === null)
+        )
         // Lấy thông tin tiêu chí cảnh cáo
-        const warningCriteriaList = await prisma.academicWarningRule.findMany({
-            where: {
-                trainingCourseId: trainingCourseId,
-                OR: [
-                    { semesterCondition: student.kyDangHoc },
-                    { semesterCondition: null },
-                    { yearCondition: student.namDangHoc },
-                    { yearCondition: null },
-                ],
-            },
-        })
+        // const warningCriteriaList = await prisma.academicWarningRule.findMany({
+        //     where: {
+        //         trainingCourseId: trainingCourseId,
+        //         OR: [
+        //             { semesterCondition: student.kyDangHoc },
+        //             { semesterCondition: null },
+        //             { yearCondition: student.namDangHoc },
+        //             { yearCondition: null },
+        //         ],
+        //     },
+        // })
         // console.log('Checking academic warning :',warningCriteriaList)
 
-        const _isEligible = warningCriteriaList.every((criteria) => {
+        const severities = warningCriteriaListFilter.map((criteria) => {
             console.log('Checking criteria:', criteria.field, 'with value:', criteria.threshold)
 
             switch (criteria.field) {
-                case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
-                    console.log(
-                        'Semester GPA: ',
-                        student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
+                case CriteriaField.FAILED_CREDITS_PERCENT: // Số tín chỉ không đạt trong kỳ
+                    return checkEligible(
+                        student.noTinChiTrongKy / student.soTinChiDangKy,
                         criteria.threshold,
                         criteria.operator,
                         criteria.invert
                     )
+                        ? criteria.severity
+                        : 0
+                case CriteriaField.CUMULATIVE_DEBT_CREDITS: // Số tín chỉ không đạt tích lũy
+                    return checkEligible(
+                        student.tongSoTinChiNo,
+                        criteria.threshold,
+                        criteria.operator,
+                        criteria.invert
+                    )
+                        ? criteria.severity
+                        : 0
+                case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
                     return checkEligible(
                         student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
                         criteria.threshold,
                         criteria.operator,
                         criteria.invert
                     )
+                        ? criteria.severity
+                        : 0
+                case CriteriaField.CUMULATIVE_GPA: // Điểm trung bình tích lũy
+                    return checkEligible(
+                        student.heSoDiem === 10 ? student.diemHe10TichLuy : student.diemHe4TichLuy,
+                        criteria.threshold,
+                        criteria.operator,
+                        criteria.invert
+                    )
+                        ? criteria.severity
+                        : 0
+                case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
+                    return checkEligible(
+                        student.soTinChiDangKy,
+                        criteria.threshold,
+                        criteria.operator,
+                        criteria.invert
+                    )
+                        ? criteria.severity
+                        : 0
+                default:
+                    return 0
+            }
+        })
+
+        const maxSeverity = Math.max(...severities, 0)
+        console.log('Academic warning severity:', maxSeverity, student.id)
+        return maxSeverity
+    } catch (error) {
+        console.error('Error checking student eligibility:', error)
+        return 0 // Trả về false nếu có lỗi xảy ra
+    } finally {
+        // Đóng kết nối Prisma nếu cần thiết
+        await prisma.$disconnect()
+    }
+}
+const checkScholarshipRecived = async (
+    student: StudentInfoCheck,
+    semesterId: string,
+    semesterScholarship: Scholarship[] = []
+): Promise<Scholarship[]> => {
+    // Lấy danh sách học bổng đã nhận của sinh viên trong học kỳ này
+    const scholarshipAward = await prisma.scholarshipAward.findMany({
+        where: {
+            studentId: student.id,
+            semesterId: semesterId,
+        },
+    })
+    return semesterScholarship.filter((scholarship) =>
+        scholarshipAward.some((award) => award.scholarshipId === scholarship.id)
+    )
+}
+const checkScholarship = async (
+    student: StudentInfoCheck,
+    scholarshipId: string,
+    scholarshipCriteria: ScholarshipCriteria[]
+): Promise<boolean> => {
+    try {
+        const isEligible = scholarshipCriteria.every((criteria) => {
+            switch (criteria.field) {
                 case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
                     console.log(
                         'Total Credits: ',
                         student.soTinChiDangKy,
-                        criteria.threshold,
+                        criteria.value,
                         criteria.operator
                     )
                     return checkEligible(
                         student.soTinChiDangKy,
-                        criteria.threshold,
+                        criteria.value,
                         criteria.operator,
                         criteria.invert
                     )
@@ -1242,78 +1316,29 @@ const checkAcademicWarning = async (
                     console.log(
                         'Registered Credits: ',
                         student.soTinChiDangKy,
-                        criteria.threshold,
-                        criteria.operator,
-                        criteria.invert
+                        criteria.value,
+                        criteria.operator
                     )
                     return checkEligible(
                         student.soTinChiDangKy,
-                        criteria.threshold,
+                        criteria.value,
                         criteria.operator,
                         criteria.invert
                     )
-
-                default:
-                    return true
-            }
-        })
-
-        console.log('Academic warning eligibility:', _isEligible, student.id)
-        return _isEligible
-    } catch (error) {
-        console.error('Error checking student eligibility:', error)
-        return false // Trả về false nếu có lỗi xảy ra
-    } finally {
-        // Đóng kết nối Prisma nếu cần thiết
-        await prisma.$disconnect()
-    }
-}
-const checkScholarship = async (
-    student: StudentInfoCheck,
-    scholarshipId: string
-): Promise<boolean> => {
-    try {
-        console.log(
-            'Checking scholarship eligibility for student:',
-            student.id,
-            'Scholarship ID:',
-            scholarshipId
-        )
-        // Lấy thông tin tiêu chí học bổng
-        const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
-            where: { scholarshipId: scholarshipId },
-        })
-        const isEligible = scholarshipCriteriaList.every((criteria) => {
-            switch (criteria.field) {
-                //     case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
-                //         console.log(
-                //             'Total Credits: ',
-                //             student.soTinChiDangKy,
-                //             criteria.value,
-                //             criteria.operator
-                //         )
-                //         return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                // case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
-                //     console.log(
-                //         'Registered Credits: ',
-                //         student.soTinChiDangKy,
-                //         criteria.value,
-                //         criteria.operator
-                //     )
-                //     return checkEligible(student.soTinChiDangKy, criteria.value, criteria.operator)
-                // case CriteriaField.CUMULATIVE_PROGRESS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
-                //     console.log(
-                //         'Accumulated Credits Percent: ',
-                //         student.soTinChiTichLuy,
-                //         student.soTinChiYeuCau,
-                //         criteria.value,
-                //         criteria.operator
-                //     )
-                //     return checkEligible(
-                //         student.soTinChiTichLuy / student.soTinChiYeuCau,
-                //         criteria.value,
-                //         criteria.operator
-                //     )
+                case CriteriaField.CUMULATIVE_PROGRESS_PERCENT: // % tín chỉ tích lũy so với kế hoạch
+                    console.log(
+                        'Accumulated Credits Percent: ',
+                        student.soTinChiTichLuy,
+                        student.soTinChiYeuCau,
+                        criteria.value,
+                        criteria.operator
+                    )
+                    return checkEligible(
+                        student.soTinChiTichLuy / student.soTinChiYeuCau,
+                        criteria.value,
+                        criteria.operator,
+                        criteria.invert
+                    )
                 case CriteriaField.COURSE_GRADE_LOWEST: // Điểm thấp nhất trong các học phần bình thường
                     console.log(
                         'Course Grade Min: ',
@@ -1401,22 +1426,26 @@ const checkScholarship = async (
 }
 const getScholarship = async (
     student: StudentInfoCheck,
-    trainingCourseId: string
+    trainingCourseId: string,
+    semesterScholarship: Scholarship[] = [],
+    scholarshipCriteriaList: ScholarshipCriteria[] = []
 ): Promise<Scholarship[]> => {
-    const semesterScholarship = await prisma.scholarship.findMany({
-        where: {
-            trainingCourseId: trainingCourseId, // Lấy học bổng theo khóa học
-            active: true, // Chỉ lấy học bổng đang hoạt động
-        },
-        orderBy: {
-            rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
-        },
-    })
-    console.log('semesterScholarship', semesterScholarship)
+    const semesterScholarshipFilter = semesterScholarship.filter(
+        (scholarship) => scholarship.trainingCourseId === trainingCourseId
+    )
+    const scholarshipIds = semesterScholarshipFilter.map((s) => s.id)
+    const scholarshipCriteriaFilter = scholarshipCriteriaList.filter((criteria) =>
+        scholarshipIds.includes(criteria.scholarshipId)
+    )
+    console.log('semesterScholarship', semesterScholarshipFilter)
     // Lấy danh sách học bổng của sinh viên
     const scholarships: Scholarship[] = []
-    for (const scholarship of semesterScholarship) {
-        const isEligible = await checkScholarship(student, scholarship.id)
+    for (const scholarship of semesterScholarshipFilter) {
+        const isEligible = await checkScholarship(
+            student,
+            scholarship.id,
+            scholarshipCriteriaFilter
+        )
         if (isEligible) {
             scholarships.push(scholarship)
         }
@@ -1427,7 +1456,13 @@ const getScholarship = async (
 const getStudentResult = async (
     student: StudentInfoCheck,
     semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction'
+    type: 'scholarship' | 'academicWarning' | 'academicAction',
+    semesterScholarship: Scholarship[] = [],
+    scholarshipCriteriaList: ScholarshipCriteria[] = [],
+    warningCriteriaList: AcademicWarningRule[] = [],
+    academicActionConfig: AcademicActionConfig[] = [],
+    academicActionRuleSet: AcademicActionRuleSet[] = [],
+    actionCriteriaList: AcademicActionCondition[] = []
 ): Promise<StudentResult> => {
     try {
         console.log('Fetching result for student:', student.id, 'in semester:', semesterId)
@@ -1480,13 +1515,32 @@ const getStudentResult = async (
             throw new Error(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
         // Kiểm tra loại kết quả cần lấy
         const scholarshipInfo =
-            type === 'scholarship' ? await getScholarship(student, trainingCourseId) : []
+            type === 'scholarship'
+                ? await getScholarship(
+                      student,
+                      trainingCourseId,
+                      semesterScholarship,
+                      scholarshipCriteriaList
+                  )
+                : []
+        const scholarshipRecive =
+            type === 'scholarship'
+                ? await checkScholarshipRecived(student, semesterId, semesterScholarship)
+                : []
         const checkAcademicWarningResult =
             type === 'academicWarning'
-                ? await checkAcademicWarning(student, trainingCourseId)
-                : false
+                ? await checkAcademicWarning(student, trainingCourseId, warningCriteriaList)
+                : 0
         const academicActionInfo =
-            type === 'academicAction' ? await getAcademicAction(student, trainingCourseId) : []
+            type === 'academicAction'
+                ? await getAcademicAction(
+                      student,
+                      trainingCourseId,
+                      academicActionConfig,
+                      academicActionRuleSet,
+                      actionCriteriaList
+                  )
+                : []
         return StudentResult.parse({
             id: studentSemesterResult.studentId,
             studentSemesterResult: studentSemesterResult,
@@ -1495,7 +1549,7 @@ const getStudentResult = async (
             }),
             hasScholarship: !!scholarshipInfo.length,
             hasAcademicAction: !!academicActionInfo.length,
-            hasAcademicWarning: checkAcademicWarningResult,
+            academicWarningSeverity: checkAcademicWarningResult,
             scholarship: scholarshipInfo,
             academicAction: academicActionInfo,
             trainingMajor:
@@ -1510,6 +1564,8 @@ const getStudentResult = async (
             trainingFieldId:
                 studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
                     ?.trainingMajor?.trainingField?.id || '',
+            highestScholarship: scholarshipInfo.length > 0 ? scholarshipInfo[0] : null,
+            scholarshipRecived: scholarshipRecive,
         })
     } catch (error) {
         console.error('Error fetching student result:', error)
@@ -1519,13 +1575,99 @@ const getStudentResult = async (
     }
 }
 
+export const sortStudentResultInfo = (
+    courseStudentResult: CourseStudentResult[]
+): CourseStudentResult[] => {
+    return courseStudentResult.map((course) => {
+        const sortedStudents = course.students.sort((a, b) => {
+            // Sắp xếp theo học bổng
+            const gpaA = a.highestScholarship?.rankOrder || 0
+            const gpaB = b.highestScholarship?.rankOrder || 0
+            if (gpaA !== gpaB) {
+                return gpaA - gpaB // Sắp xếp tăng dần (order 1 cao nhất)
+            }
+            // Nếu điểm trung bình bằng nhau, sắp xếp GPA
+            const studentGpaA = a.studentSemesterResult.gpaBase10 || 0
+            const studentGpaB = b.studentSemesterResult.gpaBase10 || 0
+            if (studentGpaA !== studentGpaB) {
+                return studentGpaB - studentGpaA // Sắp xếp giảm dần
+            }
+            return 0
+        })
+        return {
+            ...course,
+            students: sortedStudents,
+        }
+    })
+}
+
 export const resultCourseStudentResult = async (
     students: StudentInfoCheck[],
     semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction'
+    type: 'scholarship' | 'academicWarning' | 'academicAction',
+    academicActionType?: 'REPEAT_YEAR' | 'SUSPENSION' | 'EXPULSION'
 ): Promise<CourseStudentResult[]> => {
     const courseMap: Record<string, CourseStudentResult> = {}
 
+    // DS khóa học
+    const courseIds = new Set(students.map((student) => student.khoaId))
+    console.log('courseIds', courseIds)
+
+    // Ds tiêu chí học bổng
+    const semesterScholarship = await prisma.scholarship.findMany({
+        where: {
+            trainingCourseId: { in: Array.from(courseIds) }, // Lấy học bổng theo khóa học
+            active: true, // Chỉ lấy học bổng đang hoạt động
+        },
+        orderBy: {
+            rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
+        },
+    })
+    const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
+        where: {
+            scholarshipId: { in: semesterScholarship.map((s) => s.id) },
+            active: true,
+        },
+        orderBy: {
+            scholarship: {
+                rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
+            },
+        },
+    })
+
+    // Ds tiêu chỉ cảnh cáo học tập
+    const warningCriteriaList = await prisma.academicWarningRule.findMany({
+        where: {
+            trainingCourseId: { in: Array.from(courseIds) },
+        },
+    })
+
+    // Ds tiêu chí thôi học, lưu ban
+    const academicActionConfig = await prisma.academicActionConfig.findMany({
+        where: {
+            trainingCourseId: { in: Array.from(courseIds) },
+            actionType: academicActionType || undefined, // Chỉ lấy theo loại hành động học vụ nếu có
+            active: true,
+        },
+    })
+    const actionRuleSet = await prisma.academicActionRuleSet.findMany({
+        where: {
+            configId: { in: academicActionConfig.map((c) => c.id) },
+        },
+    })
+    const actionCriteriaList = await prisma.academicActionCondition.findMany({
+        where: {
+            ruleSetId: { in: actionRuleSet.map((r) => r.id) },
+        },
+        include: {
+            ruleSet: {
+                // AcademicActionRuleSet
+                include: {
+                    config: true, // AcademicActionConditionConfig
+                },
+            },
+        },
+    })
     // Process students in parallel
     await Promise.all(
         students.map(async (student) => {
@@ -1539,24 +1681,38 @@ export const resultCourseStudentResult = async (
                     students: [],
                 }
             }
-            const studentResult = await getStudentResult(student, semesterId, type)
+            const studentResult = await getStudentResult(
+                student,
+                semesterId,
+                type,
+                semesterScholarship,
+                scholarshipCriteriaList,
+                warningCriteriaList,
+                academicActionConfig,
+                actionRuleSet,
+                actionCriteriaList
+            )
             if (!studentResult) {
                 console.warn(`No result found for student ${student.id} in semester ${semesterId}`)
                 return
             }
             // Filter based on type
-            if (
+            const skip =
                 (type === 'scholarship' && !studentResult.hasScholarship) ||
-                (type === 'academicWarning' && !studentResult.hasAcademicWarning) ||
+                (type === 'academicWarning' && !studentResult.academicWarningSeverity) ||
                 (type === 'academicAction' && !studentResult.hasAcademicAction)
-            ) {
+            if (skip) {
                 console.log(`Skipping student ${student.id} in course ${courseId} for type ${type}`)
+                return
+            }
+            // bỏ qua nếu đã có học bổng
+            if (studentResult.scholarshipRecived.length > 0) {
                 return
             }
             courseMap[courseId].students.push(studentResult)
         })
     )
 
-    const result = Object.values(courseMap)
+    const result = sortStudentResultInfo(Object.values(courseMap))
     return result.map((course) => CourseStudentResult.parse(course))
 }

@@ -119,6 +119,12 @@ const dsKetQuaHocKySinhVienJson = createRoute({
             type: z.enum(['scholarship', 'academicWarning', 'academicAction']).openapi('type', {
                 description: 'Loại danh sách',
             }),
+            academicActionType: z
+                .enum(['REPEAT_YEAR', 'SUSPENSION', 'EXPULSION'])
+                .optional()
+                .openapi('academicActionType', {
+                    description: 'Loại hành động học vụ',
+                }),
         }),
     },
     responses: {
@@ -143,14 +149,19 @@ const dsKetQuaHocKySinhVienJson = createRoute({
     },
 })
 app.openapi(dsKetQuaHocKySinhVienJson, async (c) => {
-    const { semesterId, type } = c.req.valid('query')
+    const { semesterId, type, academicActionType } = c.req.valid('query')
     const students = await listStudentResultInfo(semesterId)
     console.log(`Found ${students.length} students for semester ${semesterId}`)
     console.log(`Students: ${JSON.stringify(students, null, 2)}`)
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
-    const filteredStudents = await resultCourseStudentResult(students, semesterId, type)
+    const filteredStudents = await resultCourseStudentResult(
+        students,
+        semesterId,
+        type,
+        academicActionType
+    )
     return c.json(filteredStudents, 200)
 })
 app.openapi(tongKetHocKyHVSV, async (c) => {
