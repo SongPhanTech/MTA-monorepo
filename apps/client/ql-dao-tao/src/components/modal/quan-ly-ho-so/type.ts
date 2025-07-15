@@ -1,6 +1,7 @@
 import type {
     $Enums,
     AcademicActionType,
+    ApplicationStatus,
     CurriculumVersion,
     DecisionStatus,
     DM_CapBac,
@@ -133,6 +134,8 @@ export type FilterProps = {
     enterGradeLecturer?: string
     schedule?: SubjectClassSchedule[]
     room?: string
+    applicationDate?: Date[]
+    statusApplication?: ApplicationStatus[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
