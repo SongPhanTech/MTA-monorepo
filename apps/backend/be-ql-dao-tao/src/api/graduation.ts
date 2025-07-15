@@ -82,7 +82,7 @@ app.openapi(graduationCheck, async (c) => {
     })
 
     const results: z.infer<typeof GraduationCheckResult>[] = []
-    for (const application of session.applications) {
+    for (const [idx, application] of session.applications.entries()) {
         const student = await prisma.student.findFirstOrThrow({
             where: { id: application.studentId },
             select: {
@@ -184,7 +184,6 @@ app.openapi(graduationCheck, async (c) => {
         let totalPassCredit = 0
         let courseGradeLowest = Number.POSITIVE_INFINITY
         let graduationCourseGradeLowest = Number.POSITIVE_INFINITY
-        console.log(111, application.studentId, subjectScores)
 
         for (const subjectScore of subjectScores) {
             const subjectInCurriculum = curriculumSubjects.find(
@@ -242,7 +241,9 @@ app.openapi(graduationCheck, async (c) => {
             continue
         }
 
-        const CUMULATIVE_GPA = baseScore === 'Base10' ? cumulativeBase10 : cumulativeBase4
+        const CUMULATIVE_GPA = Number(
+            (baseScore === 'Base10' ? cumulativeBase10 : cumulativeBase4).toFixed(2)
+        )
 
         const semesterRegisteredCredits = student.studentSemesterResult[0]?.passedCredits || 0
         const semesterFailedCredits = student.studentSemesterResult[0]?.failedCredits || 0
@@ -301,9 +302,31 @@ app.openapi(graduationCheck, async (c) => {
             idx,
             rank,
         ] of student.fixedClass.trainingCourse.academicRankingConvert.entries()) {
-            const isEligible = rank.rankingCondition.every((rule) =>
-                evaluateCondition(studentDataContext, rule)
-            )
+            const isEligible = rank.rankingCondition.every(async (rule) => {
+                const passed = evaluateCondition(studentDataContext, rule)
+                const actualValue = Number(studentDataContext[rule.field])
+                await prisma.applicationCheckResult
+                    .upsert({
+                        where: {
+                            studentGraduationApplicationId_rankingConditionId: {
+                                studentGraduationApplicationId: application.id,
+                                rankingConditionId: rule.id,
+                            },
+                        },
+                        create: {
+                            studentGraduationApplicationId: application.id,
+                            rankingConditionId: rule.id,
+                            passed,
+                            actualValue,
+                        },
+                        update: { passed, actualValue },
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
+                return passed
+            })
 
             const isCorrectScore =
                 rank.baseScore === 'Base10'
@@ -335,6 +358,7 @@ app.openapi(graduationCheck, async (c) => {
                     })
                     break
                 }
+
                 results.push({
                     applicationId: application.id,
                     graduation: true,
@@ -346,13 +370,15 @@ app.openapi(graduationCheck, async (c) => {
             }
         }
 
-        results.push({
-            applicationId: application.id,
-            graduation: false,
-            gpa: CUMULATIVE_GPA,
-            rank: null,
-            reason: 'Không thoả mãn xếp loại nào',
-        })
+        if (!results[idx]) {
+            results.push({
+                applicationId: application.id,
+                graduation: false,
+                gpa: CUMULATIVE_GPA,
+                rank: null,
+                reason: 'Không thoả mãn xếp loại nào',
+            })
+        }
     }
 
     return c.json({ results }, 200)
