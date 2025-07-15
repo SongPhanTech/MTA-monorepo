@@ -1275,6 +1275,22 @@ const checkAcademicWarning = async (
         await prisma.$disconnect()
     }
 }
+const checkScholarshipRecived = async (
+    student: StudentInfoCheck,
+    semesterId: string,
+    semesterScholarship: Scholarship[] = []
+): Promise<Scholarship[]> => {
+    // Lấy danh sách học bổng đã nhận của sinh viên trong học kỳ này
+    const scholarshipAward = await prisma.scholarshipAward.findMany({
+        where: {
+            studentId: student.id,
+            semesterId: semesterId,
+        },
+    })
+    return semesterScholarship.filter((scholarship) =>
+        scholarshipAward.some((award) => award.scholarshipId === scholarship.id)
+    )
+}
 const checkScholarship = async (
     student: StudentInfoCheck,
     scholarshipId: string,
@@ -1507,6 +1523,10 @@ const getStudentResult = async (
                       scholarshipCriteriaList
                   )
                 : []
+        const scholarshipRecive =
+            type === 'scholarship'
+                ? await checkScholarshipRecived(student, semesterId, semesterScholarship)
+                : []
         const checkAcademicWarningResult =
             type === 'academicWarning'
                 ? await checkAcademicWarning(student, trainingCourseId, warningCriteriaList)
@@ -1545,6 +1565,7 @@ const getStudentResult = async (
                 studentSemesterResult.student.fixedClass?.curriculumVersion?.curriculum
                     ?.trainingMajor?.trainingField?.id || '',
             highestScholarship: scholarshipInfo.length > 0 ? scholarshipInfo[0] : null,
+            scholarshipRecived: scholarshipRecive,
         })
     } catch (error) {
         console.error('Error fetching student result:', error)
