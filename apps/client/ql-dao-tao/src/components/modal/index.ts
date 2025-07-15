@@ -3,6 +3,7 @@ import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
+import ModalLearningResult from './modal-ket-qua-hoc-tap-ctdt'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
@@ -111,4 +112,5 @@ export {
     PutGraduationApplication,
     PutAcademicActionCondition,
     PutStudentAcademicDecision,
+    ModalLearningResult,
 }

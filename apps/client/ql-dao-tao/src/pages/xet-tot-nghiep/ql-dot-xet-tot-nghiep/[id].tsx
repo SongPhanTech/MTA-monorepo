@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutGraduationApplication } from '@components/modal'
+import { ModalLearningResult, PutGraduationApplication } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import useSpinner from '@hooks/spinner'
@@ -61,6 +61,15 @@ export default function StudentGraduationApplication() {
     const handleModal = () => {
         onOpen({ id: null, graduationSessionId })
     }
+
+    const { onOpen: onOpenModalLearningResult } = useDisclosure<string>({
+        tag: ModalLearningResult.name,
+    })
+
+    const handleOpenModalLearningResult = (record: any) => {
+        onOpenModalLearningResult(record.student.id)
+    }
+
     const { mutateAsync: updateStudentGraduationApplication } =
         useUpdateStudentGraduationApplication()
     async function handleDelete(id: string) {
@@ -121,6 +130,9 @@ export default function StudentGraduationApplication() {
                                         <Table
                                             rowKey="id"
                                             id="student-graduation-application"
+                                            onRowClick={(record) =>
+                                                handleOpenModalLearningResult(record)
+                                            }
                                             columns={[
                                                 {
                                                     title: 'STT',
