@@ -171,7 +171,7 @@ const PutGraduationApplication = () => {
                         mode={input?.id ? undefined : 'multiple'}
                         placeholder={input?.id ? 'Chọn sinh viên' : 'Chọn nhiều sinh viên'}
                         options={students?.map((item) => ({
-                            label: [item.userProfile.fullname, item.code]
+                            label: [item.userProfile.fullname, item.userProfile.code]
                                 .filter(Boolean)
                                 .join(' - '),
                             value: item.id,
