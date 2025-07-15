@@ -40,7 +40,7 @@ enum CriteriaField {
 enum CriteriaOperator {
   GT  // >
   GTE // >=
-  LE  // <
+  LT  // <
   LTE // <=
   EQ  // =
   IN  // in

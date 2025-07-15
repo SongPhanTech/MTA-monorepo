@@ -983,7 +983,7 @@ const checkEligible = <T extends number | string>(
                 return studentValue > criteriaValue
             case CriteriaOperator.GTE:
                 return studentValue >= criteriaValue
-            case CriteriaOperator.LE:
+            case CriteriaOperator.LT:
                 return studentValue < criteriaValue
             case CriteriaOperator.LTE:
                 return studentValue <= criteriaValue
@@ -1026,7 +1026,7 @@ export function evaluateCondition(
         case 'LTE': // Nhỏ hơn hoặc bằng (<=)
             return value <= condition.value
 
-        case 'LE': // Nhỏ hơn (<)
+        case 'LT': // Nhỏ hơn (<)
             return value < condition.value
 
         case 'EQ': // Bằng (==)

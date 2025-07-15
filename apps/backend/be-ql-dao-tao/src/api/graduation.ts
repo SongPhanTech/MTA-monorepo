@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { AcademicActionType } from '@workspace/db'
+import { AcademicActionType, RankingContext } from '@workspace/db'
 import {
     AcademicRankingConvertScalarSchema,
     GraduationRankDowngradeConditionScalarSchema,
@@ -111,10 +111,12 @@ app.openapi(graduationCheck, async (c) => {
                             include: {
                                 scoreConverts: true,
                                 academicRankingConvert: {
-                                    where: { graduated: true },
+                                    where: { context: RankingContext.GRADUATION },
                                     include: {
                                         rankingCondition: true,
-                                        downgradeRules: { include: { conditions: true } },
+                                        downgradeRules: {
+                                            include: { initialRank: true, conditions: true },
+                                        },
                                     },
                                     orderBy: { rankOrder: 'asc' },
                                 },
@@ -299,7 +301,7 @@ app.openapi(graduationCheck, async (c) => {
         }
 
         for (const [
-            idx,
+            rankIdx,
             rank,
         ] of student.fixedClass.trainingCourse.academicRankingConvert.entries()) {
             const isEligible = rank.rankingCondition.every(async (rule) => {
@@ -339,11 +341,13 @@ app.openapi(graduationCheck, async (c) => {
 
             // check downgrade or not
             if (eligibleRank) {
-                const rankDowngrade =
-                    student.fixedClass.trainingCourse.academicRankingConvert[idx + 1] || null
                 const downgrade = eligibleRank.downgradeRules.find(({ conditions }) =>
                     conditions.every((rule) => evaluateCondition(studentDataContext, rule))
                 )
+
+                const rankDowngrade =
+                    student.fixedClass.trainingCourse.academicRankingConvert[rankIdx + 1] || null
+
                 if (downgrade) {
                     results.push({
                         applicationId: application.id,
