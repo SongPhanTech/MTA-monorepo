@@ -88,6 +88,10 @@ function App({ Component, pageProps }: AppProps) {
                     onLoaderFinished={onRouteDone}
                 />
                 <Head>
+                    <link rel="stylesheet" href="/lms/mta-components.css" />
+                    <script src="/lms/mta-components.umd.js" />
+                </Head>
+                <Head>
                     <title>Học viện kỹ thuật quân sự</title>
                 </Head>
                 <ConfigProvider theme={lightThemeCustom}>
