@@ -961,6 +961,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     mucCanhCaoHocTap: item.academicWarningLevel || 0,
                     mucCanhCaoHocDuong: item.disciplinaryWarningLevel || 0,
                     xepLoaiRenLuyenKy: '', // or item.xepLoaiRenLuyenKy if available
+                    lyDoXepLoai: '', // tính sau
                 }
             })
         )
@@ -976,6 +977,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
 }
 
 const checkEligible = <T extends number | string>(
+    student: StudentInfoCheck,
+    fieldValue: string,
     studentValue: T,
     criteriaValue: T | T[],
     operator: CriteriaOperator,
@@ -1003,7 +1006,9 @@ const checkEligible = <T extends number | string>(
                 return false
         }
     })()
-
+    if ((criteria === true && !invert) || (criteria === false && invert)) {
+        student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${fieldValue}(${criteriaValue}): ${invert ? '!' : ''}${operator} ${studentValue}`
+    }
     return invert ? !criteria : criteria
 }
 
@@ -1084,6 +1089,8 @@ const checkAcademicActionRule = async (
             if (criteria.field === CriteriaField.ACADEMIC_WARNING_LEVEL) {
                 if (
                     !checkEligible(
+                        student,
+                        CriteriaField.ACADEMIC_WARNING_LEVEL,
                         student.mucCanhCaoHocTap,
                         criteria.value,
                         criteria.operator,
@@ -1095,6 +1102,8 @@ const checkAcademicActionRule = async (
             } else if (criteria.field === CriteriaField.DISCIPLINARY_WARNING_LEVEL) {
                 if (
                     !checkEligible(
+                        student,
+                        CriteriaField.DISCIPLINARY_WARNING_LEVEL,
                         student.mucCanhCaoHocDuong,
                         criteria.value,
                         criteria.operator,
@@ -1197,18 +1206,6 @@ const checkAcademicWarning = async (
                 (criteria.yearCondition === student.namDangHoc || criteria.yearCondition === null)
         )
         // Lấy thông tin tiêu chí cảnh cáo
-        // const warningCriteriaList = await prisma.academicWarningRule.findMany({
-        //     where: {
-        //         trainingCourseId: trainingCourseId,
-        //         OR: [
-        //             { semesterCondition: student.kyDangHoc },
-        //             { semesterCondition: null },
-        //             { yearCondition: student.namDangHoc },
-        //             { yearCondition: null },
-        //         ],
-        //     },
-        // })
-        // console.log('Checking academic warning :',warningCriteriaList)
 
         const severities = warningCriteriaListFilter.map((criteria) => {
             console.log('Checking criteria:', criteria.field, 'with value:', criteria.threshold)
@@ -1216,6 +1213,8 @@ const checkAcademicWarning = async (
             switch (criteria.field) {
                 case CriteriaField.FAILED_CREDITS_PERCENT: // Số tín chỉ không đạt trong kỳ
                     return checkEligible(
+                        student,
+                        CriteriaField.FAILED_CREDITS_PERCENT,
                         student.noTinChiTrongKy / student.soTinChiDangKy,
                         criteria.threshold,
                         criteria.operator,
@@ -1225,6 +1224,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.CUMULATIVE_DEBT_CREDITS: // Số tín chỉ không đạt tích lũy
                     return checkEligible(
+                        student,
+                        CriteriaField.CUMULATIVE_DEBT_CREDITS,
                         student.tongSoTinChiNo,
                         criteria.threshold,
                         criteria.operator,
@@ -1234,6 +1235,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_GPA,
                         student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
                         criteria.threshold,
                         criteria.operator,
@@ -1243,6 +1246,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.CUMULATIVE_GPA: // Điểm trung bình tích lũy
                     return checkEligible(
+                        student,
+                        CriteriaField.CUMULATIVE_GPA,
                         student.heSoDiem === 10 ? student.diemHe10TichLuy : student.diemHe4TichLuy,
                         criteria.threshold,
                         criteria.operator,
@@ -1252,6 +1257,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_REGISTERED_CREDITS,
                         student.soTinChiDangKy,
                         criteria.threshold,
                         criteria.operator,
@@ -1307,6 +1314,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_PASSED_CREDITS,
                         student.soTinChiDangKy,
                         criteria.value,
                         criteria.operator,
@@ -1320,6 +1329,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_REGISTERED_CREDITS,
                         student.soTinChiDangKy,
                         criteria.value,
                         criteria.operator,
@@ -1334,6 +1345,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.CUMULATIVE_PROGRESS_PERCENT,
                         student.soTinChiTichLuy / student.soTinChiYeuCau,
                         criteria.value,
                         criteria.operator,
@@ -1347,6 +1360,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.COURSE_GRADE_LOWEST,
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator,
@@ -1364,6 +1379,8 @@ const checkScholarship = async (
                     }
 
                     return checkEligible(
+                        student,
+                        CriteriaField.GRADUATION_COURSE_GRADE_LOWEST,
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator,
@@ -1377,6 +1394,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_GPA,
                         student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
                         criteria.value,
                         criteria.operator,
@@ -1390,6 +1409,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.ENTRY_SCORE,
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator,
@@ -1566,6 +1587,7 @@ const getStudentResult = async (
                     ?.trainingMajor?.trainingField?.id || '',
             highestScholarship: scholarshipInfo.length > 0 ? scholarshipInfo[0] : null,
             scholarshipRecived: scholarshipRecive,
+            reason: student.lyDoXepLoai || '',
         })
     } catch (error) {
         console.error('Error fetching student result:', error)
