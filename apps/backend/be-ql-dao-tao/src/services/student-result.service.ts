@@ -6,9 +6,11 @@ import {
     type AcademicWarningRule,
     CriteriaField,
     CriteriaOperator,
+    DecisionStatus,
     type Scholarship,
     type ScholarshipCriteria,
     SemesterType,
+    type StudentAcademicDecision,
     type StudentSemesterResult,
     StudentStatus,
     StudentTrainingType,
@@ -1082,8 +1084,8 @@ const checkAcademicActionRule = async (
             console.warn('No action criteria found for training ruleSet:', ruleSetId)
             return false
         }
-        console.log('Student Info:', student)
-        console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
+        // console.log('Student Info:', student)
+        // console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
         // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
         for (const criteria of actionCriteriaListFilter) {
             // Cảnh cáo học tập
@@ -1459,7 +1461,7 @@ const getScholarship = async (
     const scholarshipCriteriaFilter = scholarshipCriteriaList.filter((criteria) =>
         scholarshipIds.includes(criteria.scholarshipId)
     )
-    console.log('semesterScholarship', semesterScholarshipFilter)
+    // console.log('semesterScholarship', semesterScholarshipFilter)
     // Lấy danh sách học bổng của sinh viên
     const scholarships: Scholarship[] = []
     for (const scholarship of semesterScholarshipFilter) {
@@ -1484,7 +1486,8 @@ const getStudentResult = async (
     warningCriteriaList: AcademicWarningRule[] = [],
     academicActionConfig: AcademicActionConfig[] = [],
     academicActionRuleSet: AcademicActionRuleSet[] = [],
-    actionCriteriaList: AcademicActionCondition[] = []
+    actionCriteriaList: AcademicActionCondition[] = [],
+    studentAcademicDecision: StudentAcademicDecision[] = []
 ): Promise<StudentResult> => {
     try {
         console.log('Fetching result for student:', student.id, 'in semester:', semesterId)
@@ -1553,8 +1556,13 @@ const getStudentResult = async (
             type === 'academicWarning'
                 ? await checkAcademicWarning(student, trainingCourseId, warningCriteriaList)
                 : 0
+
+        const checkAcademicActionExists = studentAcademicDecision.find(
+            (decision) => decision.studentId === student.id && decision.semesterId === semesterId
+        )
+        console.log('checkAcademicActionExists', checkAcademicActionExists, student.id, semesterId)
         const academicActionInfo =
-            type === 'academicAction'
+            type === 'academicAction' && checkAcademicActionExists !== undefined
                 ? await getAcademicAction(
                       student,
                       trainingCourseId,
@@ -1691,6 +1699,16 @@ export const resultCourseStudentResult = async (
             },
         },
     })
+
+    // Ds StudentAcademicDecision
+    const studentAcademicDecision = await prisma.studentAcademicDecision.findMany({
+        where: {
+            studentId: { in: students.map((s) => s.id) },
+            semesterId: semesterId,
+            status: { not: DecisionStatus.APPROVED },
+            actionTaken: academicActionType ? academicActionType : undefined,
+        },
+    })
     // Process students in parallel
     await Promise.all(
         students.map(async (student) => {
@@ -1713,7 +1731,8 @@ export const resultCourseStudentResult = async (
                 warningCriteriaList,
                 academicActionConfig,
                 actionRuleSet,
-                actionCriteriaList
+                actionCriteriaList,
+                studentAcademicDecision
             )
             if (!studentResult) {
                 console.warn(`No result found for student ${student.id} in semester ${semesterId}`)
@@ -1735,7 +1754,11 @@ export const resultCourseStudentResult = async (
             courseMap[courseId].students.push(studentResult)
         })
     )
-
+    for (const courseId in courseMap) {
+        if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
+            delete courseMap[courseId]
+        }
+    }
     const result = sortStudentResultInfo(Object.values(courseMap))
     return result.map((course) => CourseStudentResult.parse(course))
 }
