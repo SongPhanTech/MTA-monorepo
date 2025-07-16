@@ -976,6 +976,13 @@ export const listStudentResultInfo = async (semesterId: string) => {
     }
 }
 
+import dictionary from '../../dictionary.json'
+
+const dictionaryConvert = (field: string): string => {
+    const dict = dictionary as Record<string, string>
+    return dict[field] || field // Trả về chính nó nếu không tìm thấy
+}
+
 const checkEligible = <T extends number | string>(
     student: StudentInfoCheck,
     fieldValue: string,
@@ -1007,7 +1014,7 @@ const checkEligible = <T extends number | string>(
         }
     })()
     if ((criteria === true && !invert) || (criteria === false && invert)) {
-        student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${fieldValue}(${criteriaValue}): ${invert ? '!' : ''}${operator} ${studentValue}`
+        student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${dictionaryConvert(fieldValue)}(${studentValue}): ${dictionaryConvert(invert ? '!' : '')}${dictionaryConvert(operator)} ${criteriaValue}`
     }
     return invert ? !criteria : criteria
 }
