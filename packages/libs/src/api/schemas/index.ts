@@ -6,6 +6,7 @@
  */
 
 export * from './_fixedClassBySubjectClassSemesterCount';
+export * from './academicActionType';
 export * from './bucketItemDto';
 export * from './calculateStudentSemesterResultJson200';
 export * from './calculateStudentSemesterResultJson200Item';

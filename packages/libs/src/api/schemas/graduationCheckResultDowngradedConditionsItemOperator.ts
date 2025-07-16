@@ -12,7 +12,7 @@ export type GraduationCheckResultDowngradedConditionsItemOperator = typeof Gradu
 export const GraduationCheckResultDowngradedConditionsItemOperator = {
   GT: 'GT',
   GTE: 'GTE',
-  LE: 'LE',
+  LT: 'LT',
   LTE: 'LTE',
   EQ: 'EQ',
   IN: 'IN',
