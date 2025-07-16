@@ -5,6 +5,8 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutScholarshipAward } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -20,6 +22,7 @@ import {
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
@@ -56,6 +59,12 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         scholarship: undefined,
     })
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const { onOpen, onClose } = useDisclosure<{
+        id: string
+        semesterId: string
+    }>({
+        tag: PutScholarshipAward.name,
+    })
 
     const { data: students = [], refetch } = useExportStudentResultSemesterJson<
         any[] | { data: any[] }
@@ -419,88 +428,125 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                 <Flex vertical gap={16}>
                     <Col span={24}>
                         <div className="bg-white rounded-lg shadow-sm p-4">
-                            <TableCollapse
-                                rowKey="id"
-                                headerTitleKey="name"
-                                childrenFieldName="awards"
-                                filters={filters}
-                                setFilters={setFilters}
-                                defaultExpandAll
-                                columns={[
-                                    {
-                                        title: 'Mã sinh viên',
-                                        dataIndex: 'code',
-                                        width: 120,
-                                        align: 'center',
-                                        type: 'input',
-                                        render: (__, record: any) =>
-                                            record?.student?.userProfile?.code,
-                                    },
-                                    {
-                                        title: 'Tên sinh viên',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                        type: 'input',
-                                        render: (__, record) =>
-                                            record?.student?.userProfile?.fullname,
-                                    },
-                                    {
-                                        title: 'GPA',
-                                        dataIndex: ['gpaAtAward'],
-                                        width: 120,
-                                        align: 'center',
-                                    },
-                                    {
-                                        title: 'Số tiền học bổng',
-                                        dataIndex: ['amount'],
-                                        width: 150,
-                                    },
-                                    {
-                                        title: 'Học bổng',
-                                        dataIndex: 'scholarship',
-                                        width: 200,
-                                        type: 'select',
-                                        options: dataScholarship.map((i: any) => ({
-                                            value: i.id,
-                                            label: [i.name, i.rankOrder, i.trainingCourse.name]
-                                                .filter(Boolean)
-                                                .join(' - '),
-                                        })),
-                                        render: (__, record) => record?.scholarship?.name,
-                                    },
-                                    {
-                                        title: 'Thao tác',
-                                        width: 100,
-                                        align: 'center',
-                                        fixed: 'right',
-                                        render: (_, { id }) => {
-                                            if (id) {
-                                                return (
-                                                    <Row className="justify-center gap-2">
-                                                        <DeleteIcon
-                                                            popConfirm={{
-                                                                onConfirm: () =>
-                                                                    handleDeleteScholarshipAward(
-                                                                        id
-                                                                    ),
-                                                            }}
-                                                        />
-                                                    </Row>
-                                                )
-                                            }
-                                            return ''
-                                        },
-                                    },
-                                ]}
-                                data={transformedTrainingCourses}
-                                pagination={{
-                                    current: currentPage,
-                                    pageSize: numberOfPages,
-                                    total: count,
-                                    onChange: setCurrentPage,
-                                    onShowSizeChange: setNumberOfPages,
-                                }}
-                            />
+                            <Row gutter={[16, 0]}>
+                                <Col span={24}>
+                                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                                        <Col span={24}>
+                                            <Flex justify="end">
+                                                <Button
+                                                    type="primary"
+                                                    onClick={() =>
+                                                        onOpen({
+                                                            id: '',
+                                                            semesterId,
+                                                        })
+                                                    }
+                                                >
+                                                    <BookPlus />
+                                                    Thêm học viên
+                                                </Button>
+                                            </Flex>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col span={24}>
+                                    <TableCollapse
+                                        rowKey="id"
+                                        headerTitleKey="name"
+                                        childrenFieldName="awards"
+                                        filters={filters}
+                                        setFilters={setFilters}
+                                        defaultExpandAll
+                                        columns={[
+                                            {
+                                                title: 'Mã sinh viên',
+                                                dataIndex: 'code',
+                                                width: 120,
+                                                align: 'center',
+                                                type: 'input',
+                                                render: (__, record) =>
+                                                    record?.student?.userProfile?.code,
+                                            },
+                                            {
+                                                title: 'Tên sinh viên',
+                                                dataIndex: 'name',
+                                                width: 150,
+                                                type: 'input',
+                                                render: (__, record) =>
+                                                    record?.student?.userProfile?.fullname,
+                                            },
+                                            {
+                                                title: 'GPA',
+                                                dataIndex: ['gpaAtAward'],
+                                                width: 120,
+                                                align: 'center',
+                                            },
+                                            {
+                                                title: 'Số tiền học bổng',
+                                                dataIndex: ['amount'],
+                                                width: 150,
+                                            },
+                                            {
+                                                title: 'Học bổng',
+                                                dataIndex: 'scholarship',
+                                                width: 200,
+                                                type: 'select',
+                                                options: dataScholarship.map((i: any) => ({
+                                                    value: i.id,
+                                                    label: [
+                                                        i.name,
+                                                        i.rankOrder,
+                                                        i.trainingCourse.name,
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(' - '),
+                                                })),
+                                                render: (__, record) => record?.scholarship?.name,
+                                            },
+                                            {
+                                                title: 'Thao tác',
+                                                width: 100,
+                                                align: 'center',
+                                                fixed: 'right',
+                                                render: (_, record) => {
+                                                    if (record?.id) {
+                                                        return (
+                                                            <Row className="justify-center gap-2">
+                                                                <EditIcon
+                                                                    onClick={() =>
+                                                                        onOpen({
+                                                                            id: record?.id,
+                                                                            semesterId,
+                                                                        })
+                                                                    }
+                                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                                />
+                                                                <DeleteIcon
+                                                                    popConfirm={{
+                                                                        onConfirm: () =>
+                                                                            handleDeleteScholarshipAward(
+                                                                                record?.id
+                                                                            ),
+                                                                    }}
+                                                                />
+                                                            </Row>
+                                                        )
+                                                    }
+                                                    return ''
+                                                },
+                                            },
+                                        ]}
+                                        data={transformedTrainingCourses}
+                                        pagination={{
+                                            current: currentPage,
+                                            pageSize: numberOfPages,
+                                            total: count,
+                                            onChange: setCurrentPage,
+                                            onShowSizeChange: setNumberOfPages,
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
                         </div>
                     </Col>
                     <Col span={24}>

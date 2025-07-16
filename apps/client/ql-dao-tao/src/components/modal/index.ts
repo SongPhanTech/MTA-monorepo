@@ -47,6 +47,7 @@ import PutRoomModal from './put-phong'
 import PutRankDowngradeCondition from './put-quy-tac-ha-bac'
 import PutGraduationDecision from './put-quyet-dinh-tot-nghiep'
 import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
+import PutScholarshipAward from './put-scholarship-award'
 import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
@@ -120,6 +121,7 @@ export {
     ModalLearningResult,
     ModalPrintToDSHV,
     PutGraduationDecision,
+    PutScholarshipAward,
     ModalGraduationCriteria,
     PutRankingCondition,
     PutRankDowngradeCondition,
