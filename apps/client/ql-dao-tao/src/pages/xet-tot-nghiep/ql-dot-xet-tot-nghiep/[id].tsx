@@ -431,11 +431,6 @@ export default function StudentGraduationApplication() {
                                                     width: 140,
                                                     fixed: 'left',
                                                     type: 'input',
-                                                    multiple: [
-                                                        'name',
-                                                        'applicationDate',
-                                                        'statusApplication',
-                                                    ],
                                                     render: (_, record) =>
                                                         record.student?.userProfile?.code || '',
                                                 },
@@ -444,11 +439,6 @@ export default function StudentGraduationApplication() {
                                                     width: 200,
                                                     dataIndex: 'name',
                                                     type: 'input',
-                                                    multiple: [
-                                                        'code',
-                                                        'applicationDate',
-                                                        'statusApplication',
-                                                    ],
                                                     render: (_, record) =>
                                                         record.student?.userProfile?.fullname,
                                                 },
@@ -609,7 +599,6 @@ export default function StudentGraduationApplication() {
                                                     width: 140,
                                                     fixed: 'right',
                                                     type: 'select',
-                                                    multiple: ['name', 'code', 'applicationDate'],
                                                     options: applicationStatusOptions.map((i) => ({
                                                         value: i.value,
                                                         label: i.label,

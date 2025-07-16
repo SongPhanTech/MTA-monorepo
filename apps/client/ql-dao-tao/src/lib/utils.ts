@@ -100,14 +100,21 @@ function generatePassword(length = 12): string {
         .sort(() => 0.5 - Math.random())
         .join('')
 }
+
+export type OrgTreeItem = {
+    value: string
+    label: string
+    children?: OrgTreeItem[]
+}
+
 function buildOrgTree(
     list: Array<{ Id: string; sTen: string | null; sParentId: string | null }>,
     parentId = '0'
-): Array<{ title: string | null; value: string; children: any[] }> {
+): OrgTreeItem[] {
     return list
         .filter((item) => (item.sParentId ?? '0') === parentId)
         .map((item) => ({
-            title: item.sTen,
+            label: item.sTen || '',
             value: item.Id,
             children: buildOrgTree(list, item.Id),
         }))

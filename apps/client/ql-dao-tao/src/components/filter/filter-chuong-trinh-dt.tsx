@@ -177,12 +177,6 @@ const FilterChuongTrinhDT = (props: Props) => {
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }
-                                    // onChange={(val) =>
-                                    //     handleFilterChange(
-                                    //         'managementOrganizationId',
-                                    //         val
-                                    //     )
-                                    // }
                                 />
                             </Form.Item>
                         </Col>
@@ -203,12 +197,6 @@ const FilterChuongTrinhDT = (props: Props) => {
                                             label: i.name,
                                         })
                                     )}
-                                    // onChange={(val) =>
-                                    //     handleFilterChange(
-                                    //         'trainingObjectTypeId',
-                                    //         val
-                                    //     )
-                                    // }
                                     allowClear
                                 />
                             </Form.Item>
@@ -228,12 +216,6 @@ const FilterChuongTrinhDT = (props: Props) => {
                                         value: i.id,
                                         label: i.name,
                                     }))}
-                                    // onChange={(val) =>
-                                    //     handleFilterChange(
-                                    //         'trainingObjectTypeId',
-                                    //         val
-                                    //     )
-                                    // }
                                     allowClear
                                 />
                             </Form.Item>
@@ -253,12 +235,6 @@ const FilterChuongTrinhDT = (props: Props) => {
                                         value: i.id,
                                         label: i.name,
                                     }))}
-                                    // onChange={(val) =>
-                                    //     handleFilterChange(
-                                    //         'trainingFormId',
-                                    //         val
-                                    //     )
-                                    // }
                                     allowClear
                                 />
                             </Form.Item>
@@ -278,12 +254,6 @@ const FilterChuongTrinhDT = (props: Props) => {
                                         value: i.id,
                                         label: i.name,
                                     }))}
-                                    // onChange={(val) =>
-                                    //     handleFilterChange(
-                                    //         'trainingLevelId',
-                                    //         val
-                                    //     )
-                                    // }
                                     allowClear
                                 />
                             </Form.Item>
@@ -298,9 +268,6 @@ const FilterChuongTrinhDT = (props: Props) => {
                                 labelAlign="left"
                             >
                                 <Select
-                                    // onChange={(val) =>
-                                    //     handleFilterChange('status', val)
-                                    // }
                                     placeholder="Chọn trạng thái"
                                     options={Object.entries(CTDT_STATUS).map(
                                         ([value, { label }]) => ({
@@ -343,9 +310,6 @@ const FilterChuongTrinhDT = (props: Props) => {
             <Form.Item name="searchText">
                 <Input
                     id="search"
-                    // onChange={(e) =>
-                    //     handleFilterChange('searchText', e.target.value)
-                    // }
                     placeholder="Tìm kiếm"
                     style={{
                         width: 300,

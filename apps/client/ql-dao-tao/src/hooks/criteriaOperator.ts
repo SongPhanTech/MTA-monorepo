@@ -7,5 +7,8 @@ export const useCriteriaOperatorOptions = () => {
         return criteriaOperatorOptions.find((opt) => opt.value === value)?.label || ''
     }
 
-    return { options: criteriaOperatorOptions, getCriteriaOperatorLabel }
+    return {
+        options: criteriaOperatorOptions,
+        getCriteriaOperatorLabel,
+    }
 }

@@ -433,7 +433,6 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         width: 120,
                                         align: 'center',
                                         type: 'input',
-                                        multiple: ['name', 'scholarship'],
                                         render: (__, record: any) =>
                                             record?.student?.userProfile?.code,
                                     },
@@ -442,7 +441,6 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         dataIndex: 'name',
                                         width: 150,
                                         type: 'input',
-                                        multiple: ['code', 'scholarship'],
                                         render: (__, record) =>
                                             record?.student?.userProfile?.fullname,
                                     },
@@ -462,7 +460,6 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         dataIndex: 'scholarship',
                                         width: 200,
                                         type: 'select',
-                                        multiple: ['code', 'name'],
                                         options: dataScholarship.map((i: any) => ({
                                             value: i.id,
                                             label: [i.name, i.rankOrder, i.trainingCourse.name]
