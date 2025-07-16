@@ -13,8 +13,8 @@ import { RankingContext, type TrainingCourse } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useDeleteAcademicRankingConvert,
-    useDeleteManyAcademicRankingConvert,
     useFindManyTrainingCourse,
+    useUpdateManyAcademicRankingConvert,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
@@ -78,7 +78,7 @@ export default function GraduationRankingPage() {
         }, 500),
         []
     )
-    const { onOpen } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<{ id: string; type: string }>({
         tag: PutAcademicRanking.name,
     })
 
@@ -92,20 +92,20 @@ export default function GraduationRankingPage() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {
-        onOpen()
+    const handleModal = (type: string) => {
+        onOpen({ id: '', type })
     }
 
     const handleOpenModalGraduationCriteria = (record: any) => {
         onOpenGraduationCriteria(record.id)
     }
 
-    const { mutateAsync: UpdateAcademicRanking } = useDeleteAcademicRankingConvert()
-    const { mutateAsync: UpdateManyAcademicRanking } = useDeleteManyAcademicRankingConvert()
+    const { mutateAsync: deleteAcademicRanking } = useDeleteAcademicRankingConvert()
+    const { mutateAsync: updateManyAcademicRanking } = useUpdateManyAcademicRankingConvert()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await UpdateAcademicRanking({
+            await deleteAcademicRanking({
                 where: {
                     id,
                 },
@@ -120,9 +120,13 @@ export default function GraduationRankingPage() {
         try {
             showSpinner()
 
-            await UpdateManyAcademicRanking({
+            await updateManyAcademicRanking({
                 where: {
                     trainingCourseId: record.id,
+                    context: RankingContext.GRADUATION,
+                },
+                data: {
+                    deletedAt: new Date(),
                 },
             })
         } catch (_error) {
@@ -177,7 +181,10 @@ export default function GraduationRankingPage() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
+                                <Button
+                                    onClick={() => handleModal(RankingContext.GRADUATION)}
+                                    type="primary"
+                                >
                                     Thêm mới
                                 </Button>
                             </Flex>
@@ -245,12 +252,21 @@ export default function GraduationRankingPage() {
                                                     />
                                                 </Tooltip>
                                                 <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
+                                                    onClick={(e) => {
+                                                        onOpen({
+                                                            id,
+                                                            type: RankingContext.GRADUATION,
+                                                        })
+                                                        e.stopPropagation()
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
+                                                        onConfirm: (e) => {
+                                                            handleDelete(id)
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                 />
                                             </Row>

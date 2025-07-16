@@ -1,12 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    AddStudentToFixedClassModal,
-    PutStudentModal,
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-} from '@components/modal'
+import { AddStudentToFixedClassModal, ModalPrintToDSHV, PutStudentModal } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -15,10 +10,10 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { DM_DonVi, FixedClass, Student, TrainingCourse } from '@workspace/db'
 import {
     useFindManyCurriculumVersion,
     useFindManyStudent,
-    useFindManyTemplateFile,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
     useFindUniqueFixedClass,
@@ -89,6 +84,7 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 },
+                managementOrganization: true,
             },
         },
         {
@@ -213,78 +209,6 @@ export default function StudentFixedClassPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    // const { data: count } = useCountStudent({
-    //     where: {
-    //         fixedClassId,
-    //         userProfile: {
-    //             OR: [
-    //                 {
-    //                     firstName: {
-    //                         contains: filters.name,
-    //                     },
-    //                 },
-    //                 {
-    //                     lastName: {
-    //                         contains: filters.name,
-    //                     },
-    //                 },
-    //             ],
-    //             ...(filters.gender
-    //                 ? {
-    //                       gender: {
-    //                           in: filters.gender,
-    //                       },
-    //                   }
-    //                 : {}),
-    //             ...(filters.dateOfBirth
-    //                 ? {
-    //                       dateOfBirth: {
-    //                           gte: filters.dateOfBirth?.[0],
-    //                           lte: filters.dateOfBirth?.[1],
-    //                       },
-    //                   }
-    //                 : {}),
-    //         },
-    //         ...(filters.code
-    //             ? {
-    //                   code: {
-    //                       contains: filters.code,
-    //                       mode: 'insensitive',
-    //                   },
-    //               }
-    //             : {}),
-    //         ...(filters.curriculumVersion
-    //             ? {
-    //                   curriculumVersionId: {
-    //                       in: filters.curriculumVersion,
-    //                   },
-    //               }
-    //             : {}),
-    //         fixedClass: {
-    //             curriculumVersion: {
-    //                 curriculum: {
-    //                     trainingMajor: {
-    //                         ...(filters.trainingMajors
-    //                             ? {
-    //                                   id: {
-    //                                       in: filters.trainingMajors,
-    //                                   },
-    //                               }
-    //                             : {}),
-    //                         ...(filters.trainingField
-    //                             ? {
-    //                                   trainingFieldId: {
-    //                                       in: filters.trainingField,
-    //                                   },
-    //                               }
-    //                             : {}),
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -297,12 +221,16 @@ export default function StudentFixedClassPage() {
         tag: AddStudentToFixedClassModal.name,
     })
 
-    const { onOpen: onOpenUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
+    const { onOpen: onOpenPrint } = useDisclosure<{
+        dataTable: Student[]
+        dataFixedClass: FixedClass & {
+            trainingCourse?: TrainingCourse
+            managementOrganization?: DM_DonVi
+        }
+    }>({
+        tag: ModalPrintToDSHV.name,
     })
-    const { onOpen: onOpenUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
-    })
+
     const { onOpen: onOpenUpdate } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
@@ -321,13 +249,10 @@ export default function StudentFixedClassPage() {
         onOpen({ id: fixedClassId })
     }
 
-    const handleModalUpload = (type: string) => {
-        if (type === 'upload') {
-            onOpenUpload('SV')
-        } else {
-            onOpenUpdateFile('SV')
-        }
+    const handleModalPrint = () => {
+        onOpenPrint({ dataFixedClass: fixedClass, dataTable: data })
     }
+
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
     const { mutateAsync: updateManyUserProfile } = useUpdateManyStudent()
     async function handleDelete(id: string) {
@@ -370,8 +295,6 @@ export default function StudentFixedClassPage() {
         }
         hideSpinner()
     }
-
-    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
     const handleCancel = () => {
         setOpen(false)
@@ -421,7 +344,9 @@ export default function StudentFixedClassPage() {
                                         Xoá SV khỏi lớp
                                     </Button>
                                 </Popconfirm>
-                                <Button type="primary">In danh sách</Button>
+                                <Button onClick={handleModalPrint} type="primary">
+                                    In danh sách
+                                </Button>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm SV
                                 </Button>

@@ -1,19 +1,33 @@
 import PutFormModal from '@components/commons/put-modal'
-import type { Student } from '@workspace/db'
+import type { RankingCondition } from '@workspace/db'
 import {
+    useCreateGraduationRankDowngradeRule,
+    useDeleteGraduationRankDowngradeCondition,
+    useDeleteGraduationRankDowngradeRule,
+    useDeleteManyGraduationRankDowngradeCondition,
+    useDeleteRankingCondition,
     useFindManyGraduationRankDowngradeRule,
     useFindManyRankingCondition,
 } from '@workspace/db/hooks'
-import { Col, Form } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Table, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-// import TableCollapse from '@components/commons/tableCollapse'
-export type Student1 = Student
+import TableCollapse from '@components/commons/tableCollapse'
+import CreateIcon from '@components/icons/create'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { useCriteriaFieldOptions } from '@hooks/criteriaField'
+import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
+import useSpinner from '@hooks/spinner'
+import { BookPlus } from 'lucide-react'
+import PutRankingCondition from './put-dieu-kien-xep-loai-tn'
+import PutRankDowngradeCondition from './put-quy-tac-ha-bac'
+export type GraduationCriteria = RankingCondition
 dayjs.locale('vi')
 
 const ModalGraduationCriteria = () => {
-    const [form] = Form.useForm<Student1>()
+    const [form] = Form.useForm<GraduationCriteria>()
     const {
         isOpen,
         onClose,
@@ -22,18 +36,105 @@ const ModalGraduationCriteria = () => {
         tag: ModalGraduationCriteria.name,
         onClose: form.resetFields,
     })
+    const { getCriteriaFieldLabel } = useCriteriaFieldOptions()
+    const { getCriteriaOperatorLabel } = useCriteriaOperatorOptions()
+    const { showSpinner, hideSpinner } = useSpinner()
+    const { mutateAsync: deleteRankingCondition } = useDeleteRankingCondition()
+    const { mutateAsync: createRankDowngradeRule } = useCreateGraduationRankDowngradeRule()
+    const { mutateAsync: deleteGraduationRankDowngradeRule } =
+        useDeleteGraduationRankDowngradeRule()
+    const { mutateAsync: deleteRankDowngradeCondition } =
+        useDeleteGraduationRankDowngradeCondition()
+    const { mutateAsync: deleteManyRankDowngradeCondition } =
+        useDeleteManyGraduationRankDowngradeCondition()
 
     const { data: rankingCondition } = useFindManyRankingCondition({
-        where: { id },
+        where: { rankingId: id },
     })
-    const { data: rankingCondition2 } = useFindManyGraduationRankDowngradeRule({
+
+    const { data: graduationRankDowngrade } = useFindManyGraduationRankDowngradeRule({
         where: { initialRankId: id },
         include: {
             conditions: true,
         },
     })
 
-    console.log(id, rankingCondition2)
+    const graduationRankDowngradeWithIndex = graduationRankDowngrade?.map((item, index) => ({
+        ...item,
+        name: `Bộ ${index + 1}`,
+    }))
+
+    const { onOpen: openRankingCondition } = useDisclosure<{
+        rankingId?: string
+        rankingConditionId: string
+    }>({
+        tag: PutRankingCondition.name,
+    })
+
+    const { onOpen: openRankDowngradeCondition } = useDisclosure<{
+        downgradeRuleId: string
+        downgradeConditionId: string
+    }>({
+        tag: PutRankDowngradeCondition.name,
+    })
+
+    async function handleDeleteRankingCondition(id: string) {
+        try {
+            showSpinner()
+            await deleteRankingCondition({
+                where: { id },
+            })
+            message.success('Xóa bản ghi thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    async function handleDeleteGraduationRankDowngradeRule(id: string) {
+        try {
+            showSpinner()
+            await deleteManyRankDowngradeCondition({
+                where: { downgradeRuleId: id },
+            })
+            await deleteGraduationRankDowngradeRule({
+                where: { id },
+            })
+            message.success('Xóa bản ghi thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    async function handleDeleteRankDowngradeCondition(id: string) {
+        try {
+            showSpinner()
+            await deleteRankDowngradeCondition({
+                where: { id },
+            })
+            message.success('Xóa bản ghi thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const handleOpenRankingCondition = (rankingId: string | undefined) => {
+        openRankingCondition({ rankingId, rankingConditionId: '' })
+    }
+
+    const handleCreateRankDowngradeRule = async () => {
+        try {
+            showSpinner()
+            await createRankDowngradeRule({
+                data: { initialRankId: id || '' },
+            })
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
 
     return (
         <PutFormModal
@@ -43,87 +144,28 @@ const ModalGraduationCriteria = () => {
             onCancel={onClose}
             maskClosable={true}
             title="Tiêu chí xét tốt nghiệp"
-            className="w-[60vw]"
+            className="w-[80vw]"
         >
-            <Col span={24}>
-                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
-                    BỘ QUY TẮC HẠ BẬC
-                </div>
-                {/* <TableCollapse
-                    rowKey="key"
-                    id="learning-result"
-                    headerTitleKey="name"
-                    defaultExpandAll
-                    data={subjectsInCurriculumByBlock}
-                    scroll={{ y: 500 }}
-                    childrenFieldName="subjectsInCurriculum"
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
-                            title: 'Mã môn học',
-                            dataIndex: 'code',
-                            width: 145,
-                            align: 'center',
-                            fixed: 'left',
-                        },
-                        {
-                            title: 'Tên môn học',
-                            dataIndex: 'name',
-                            width: 200,
-                            fixed: 'left',
-                        },
-                        {
-                            title: 'Số TC',
-                            dataIndex: 'credit',
-                            width: 80,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Điểm chuyên cần',
-                            dataIndex: 'attendanceScore',
-                            width: 80,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Điểm thường xuyên',
-                            dataIndex: 'midtermScore',
-                            width: 80,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Điểm thi',
-                            dataIndex: 'examScore',
-                            width: 80,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Điểm học phần',
-                            dataIndex: 'finalScore',
-                            width: 80,
-                            align: 'center',
-                        },
-                    ]}
-                    pagination={{
-                        hideOnSinglePage: true,
-                    }}
-                /> */}
-            </Col>
-
             <Col span={24}>
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
                     ĐIỀU KIỆN ĐẠT XẾP LOẠI
                 </div>
-                {/* <Table
+                <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full mb-2">
+                    <Col span={12}>{/*  */}</Col>
+                    <Col span={4}>
+                        <Flex justify="end" gap={4}>
+                            <Button type="primary" onClick={() => handleOpenRankingCondition(id)}>
+                                <BookPlus />
+                                Thêm mới
+                            </Button>
+                        </Flex>
+                    </Col>
+                </Row>
+                <Table
                     rowKey="key"
-                    id="learning-result"
+                    id="ranking-condition"
                     scroll={{ y: 500 }}
-                    dataSource={electiveSubjects}
+                    dataSource={rankingCondition}
                     columns={[
                         {
                             title: 'STT',
@@ -133,53 +175,214 @@ const ModalGraduationCriteria = () => {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Mã môn học',
-                            dataIndex: 'code',
-                            width: 145,
-                            align: 'center',
-                            fixed: 'left',
-                        },
-                        {
-                            title: 'Tên môn học',
-                            dataIndex: 'name',
+                            title: 'Trường được đánh giá',
+                            dataIndex: 'field',
                             width: 200,
+                            align: 'center',
                             fixed: 'left',
+                            render: (record) => getCriteriaFieldLabel(record),
                         },
                         {
-                            title: 'Số TC',
-                            dataIndex: 'credit',
-                            width: 80,
+                            title: 'Đảo ngược so sánh',
+                            dataIndex: 'invert',
                             align: 'center',
+                            width: 80,
+                            render: (record) => {
+                                return (
+                                    <div className="flex items-center justify-center">
+                                        <Checkbox checked={record} disabled />
+                                    </div>
+                                )
+                            },
                         },
                         {
-                            title: 'Điểm chuyên cần',
-                            dataIndex: 'attendanceScore',
-                            width: 80,
+                            title: 'So sánh',
+                            dataIndex: 'operator',
                             align: 'center',
+                            width: 150,
+                            render: (record) => getCriteriaOperatorLabel(record),
                         },
                         {
-                            title: 'Điểm thường xuyên',
-                            dataIndex: 'midtermScore',
-                            width: 80,
+                            title: 'Mốc điểm',
+                            dataIndex: 'value',
                             align: 'center',
+                            width: 150,
                         },
                         {
-                            title: 'Điểm thi',
-                            dataIndex: 'examScore',
-                            width: 80,
+                            title: 'Mô tả',
+                            width: 150,
                             align: 'center',
+                            dataIndex: 'description',
+                            render: (record: string) => {
+                                return (
+                                    <Tooltip title={record}>
+                                        <div className="line-clamp-2">{record}</div>
+                                    </Tooltip>
+                                )
+                            },
                         },
                         {
-                            title: 'Điểm học phần',
-                            dataIndex: 'finalScore',
-                            width: 80,
+                            title: 'Thao tác',
+                            width: 100,
                             align: 'center',
+                            fixed: 'right',
+                            render: (_, record) => {
+                                if (record?.id) {
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            <EditIcon
+                                                onClick={() =>
+                                                    openRankingCondition({
+                                                        rankingId: id,
+                                                        rankingConditionId: record?.id,
+                                                    })
+                                                }
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteRankingCondition(record?.id),
+                                                }}
+                                            />
+                                        </Row>
+                                    )
+                                }
+                                return ''
+                            },
                         },
                     ]}
                     pagination={{
                         hideOnSinglePage: true,
                     }}
-                /> */}
+                />
+            </Col>
+            <Col span={24}>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
+                    BỘ QUY TẮC HẠ BẬC
+                </div>
+                <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full">
+                    <Col span={12}>{/*  */}</Col>
+                    <Col span={4}>
+                        <Flex justify="end" gap={4}>
+                            <Button type="primary" onClick={() => handleCreateRankDowngradeRule()}>
+                                <BookPlus />
+                                Thêm mới
+                            </Button>
+                        </Flex>
+                    </Col>
+                </Row>
+                <TableCollapse
+                    rowKey="key"
+                    id="graduation-criteria"
+                    headerTitleKey="name"
+                    defaultExpandAll
+                    data={graduationRankDowngradeWithIndex}
+                    scroll={{ y: 500 }}
+                    childrenFieldName="conditions"
+                    columns={[
+                        {
+                            title: 'Trường được đánh giá',
+                            dataIndex: 'field',
+                            width: 200,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (record) => getCriteriaFieldLabel(record),
+                        },
+                        {
+                            title: 'Đảo ngược so sánh',
+                            dataIndex: 'invert',
+                            align: 'center',
+                            width: 80,
+                            render: (record) => {
+                                return (
+                                    <div className="flex items-center justify-center">
+                                        <Checkbox checked={record} disabled />
+                                    </div>
+                                )
+                            },
+                        },
+                        {
+                            title: 'So sánh',
+                            dataIndex: 'operator',
+                            align: 'center',
+                            width: 150,
+                            render: (record) => getCriteriaOperatorLabel(record),
+                        },
+                        {
+                            title: 'Mốc điểm',
+                            dataIndex: 'value',
+                            align: 'center',
+                            width: 150,
+                        },
+                        {
+                            title: 'Mô tả',
+                            width: 150,
+                            align: 'center',
+                            dataIndex: 'description',
+                            render: (record: string) => {
+                                return (
+                                    <Tooltip title={record}>
+                                        <div className="line-clamp-2">{record}</div>
+                                    </Tooltip>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
+                            align: 'center',
+                            fixed: 'right',
+                            render: (_, record) => {
+                                if (record?.id) {
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            <EditIcon
+                                                onClick={() =>
+                                                    openRankDowngradeCondition({
+                                                        downgradeRuleId: id || '',
+                                                        downgradeConditionId: record?.id,
+                                                    })
+                                                }
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteRankDowngradeCondition(
+                                                            record?.id
+                                                        ),
+                                                }}
+                                            />
+                                        </Row>
+                                    )
+                                }
+                                return ''
+                            },
+                        },
+                    ]}
+                    headerRight={({ id }) => (
+                        <div className="flex gap-2.5 w-[85px] items-center">
+                            <CreateIcon
+                                onClick={() => {
+                                    openRankDowngradeCondition({
+                                        downgradeRuleId: id,
+                                        downgradeConditionId: '',
+                                    })
+                                }}
+                                title="Thêm mới tiêu chí"
+                            />
+                            <DeleteIcon
+                                popConfirm={{
+                                    onConfirm: () => handleDeleteGraduationRankDowngradeRule(id),
+                                }}
+                            />
+                        </div>
+                    )}
+                    pagination={{
+                        hideOnSinglePage: true,
+                    }}
+                />
             </Col>
         </PutFormModal>
     )

@@ -3,6 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { StudentGraduationApplication } from '@workspace/db'
+import { ApplicationStatus } from '@workspace/db'
 import {
     useCreateManyStudentGraduationApplication,
     useFindManyStudent,
@@ -92,7 +93,9 @@ const PutGraduationApplication = () => {
                 studentId: graduationApplication.studentId,
             })
         } else {
-            form.resetFields()
+            form.setFieldsValue({
+                applicationDate: dayjs(),
+            })
         }
     }, [graduationApplication, form])
 
@@ -106,7 +109,7 @@ const PutGraduationApplication = () => {
             showSpinner()
             if (input?.id) {
                 const payload = {
-                    status: output.status,
+                    status: input?.id ? output.status : ApplicationStatus.SUBMITTED,
                     sessionId: input?.graduationSessionId || '',
                     studentId: output.studentId,
                     applicationDate: output.applicationDate,
@@ -168,7 +171,7 @@ const PutGraduationApplication = () => {
                         mode={input?.id ? undefined : 'multiple'}
                         placeholder={input?.id ? 'Chọn sinh viên' : 'Chọn nhiều sinh viên'}
                         options={students?.map((item) => ({
-                            label: [item.userProfile.fullname, item.code]
+                            label: [item.userProfile.fullname, item.userProfile.code]
                                 .filter(Boolean)
                                 .join(' - '),
                             value: item.id,
@@ -190,21 +193,24 @@ const PutGraduationApplication = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        defaultValue={dayjs()}
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem form={form} name="status" label="Trạng thái">
-                    <Select
-                        placeholder="Chọn trạng thái"
-                        options={applicationStatusOptions?.map((item) => ({
-                            label: item.label,
-                            value: item.value,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
+            {!!input?.id && (
+                <Col span={12}>
+                    <FormItem form={form} name="status" label="Trạng thái">
+                        <Select
+                            placeholder="Chọn trạng thái"
+                            options={applicationStatusOptions?.map((item) => ({
+                                label: item.label,
+                                value: item.value,
+                            }))}
+                            allowClear
+                        />
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }

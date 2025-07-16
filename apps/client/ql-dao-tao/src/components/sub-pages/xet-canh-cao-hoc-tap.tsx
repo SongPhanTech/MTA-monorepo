@@ -1,12 +1,11 @@
 import DeleteIcon from '@components/icons/delete'
-import { Col, Flex, Form, Input, Row } from 'antd'
+import { Col, Flex, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
-import { Search } from 'lucide-react'
 import { useMemo } from 'react'
 
 dayjs.locale('vi')
@@ -37,30 +36,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Col span={12}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            // onChange={(e) =>
-                                            //     handleFilterChange(
-                                            //         'searchText',
-                                            //         e.target.value
-                                            //     )
-                                            // }
-                                            className="py-0"
-                                            placeholder="Nhập tên học viên, lớp niên chế"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
+                                <Col span={12} />
                             </Flex>
                         </Col>
                     </Row>
@@ -78,11 +54,13 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                 dataIndex: ['userProfile', 'code'],
                                 width: 120,
                                 align: 'center',
+                                fixed: 'left',
                             },
                             {
                                 title: 'Tên sinh viên',
                                 dataIndex: ['userProfile', 'fullname'],
                                 width: 160,
+                                fixed: 'left',
                             },
                             {
                                 title: 'Số TC đăng ký',
@@ -122,7 +100,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                             },
                             {
                                 title: 'Nâng mức CCHT',
-                                dataIndex: '',
+                                dataIndex: 'academicWarningSeverity',
                                 width: 120,
                                 align: 'center',
                             },

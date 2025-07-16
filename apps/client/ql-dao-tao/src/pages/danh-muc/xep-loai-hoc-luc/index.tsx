@@ -103,12 +103,12 @@ export default function AcademicRankingConvertPage() {
         onOpen()
     }
 
-    const { mutateAsync: UpdateAcademicRanking } = useDeleteAcademicRankingConvert()
-    const { mutateAsync: UpdateManyAcademicRanking } = useDeleteManyAcademicRankingConvert()
+    const { mutateAsync: deleteAcademicRanking } = useDeleteAcademicRankingConvert()
+    const { mutateAsync: deleteManyAcademicRanking } = useDeleteManyAcademicRankingConvert()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await UpdateAcademicRanking({
+            await deleteAcademicRanking({
                 where: {
                     id,
                 },
@@ -123,9 +123,10 @@ export default function AcademicRankingConvertPage() {
         try {
             showSpinner()
 
-            await UpdateManyAcademicRanking({
+            await deleteManyAcademicRanking({
                 where: {
                     trainingCourseId: record.id,
+                    context: RankingContext.STUDYING,
                 },
             })
         } catch (_error) {

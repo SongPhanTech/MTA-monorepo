@@ -775,6 +775,7 @@ Table TrainingBlockOnCurriculumVersion {
   curriculumVersion CurriculumVersion [not null]
   curriculumVersionId String [not null]
   priority Int [not null, default: 0, note: 'ưu tiên sắp xếp']
+  electiveCreditsRequired Int [not null, default: 0]
   subjects TrainingBlockSubject [not null]
 
   indexes {
