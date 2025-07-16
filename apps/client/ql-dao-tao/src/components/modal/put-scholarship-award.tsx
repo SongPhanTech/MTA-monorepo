@@ -126,8 +126,6 @@ const PutScholarshipAward = () => {
             form.setFieldsValue({
                 ...initialValue,
             })
-        } else {
-            form.setFieldsValue({})
         }
     }, [initialValue])
 
