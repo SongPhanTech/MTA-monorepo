@@ -410,7 +410,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                         columns={[
                             {
                                 title: 'Mã sinh viên',
-                                dataIndex: 'code',
+                                dataIndex: ['userProfile', 'code'],
                                 width: 120,
                                 align: 'center',
                                 fixed: 'left',
@@ -663,7 +663,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 align: 'center',
                                 width: 80,
                                 fixed: 'right',
-                                render: (value, record) => {
+                                render: (value, record: any) => {
                                     if (!record?.status) {
                                         return <Tag color="error">Không hoạt động</Tag>
                                     }

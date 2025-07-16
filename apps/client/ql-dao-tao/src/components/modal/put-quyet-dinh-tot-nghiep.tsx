@@ -2,7 +2,6 @@ import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import {
-    useCreateGraduationDecision,
     useFindManyAcademicRankingConvert,
     useFindManyDiplomaType,
     useFindManyStudent,
@@ -16,7 +15,7 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import { type GraduationDecision, RankingContext } from '@workspace/db'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 dayjs.locale('vi')
 
@@ -24,7 +23,6 @@ type PutGraduationDecisionFormValues = GraduationDecision
 
 const PutGraduationDecision = () => {
     const [form] = Form.useForm<PutGraduationDecisionFormValues>()
-    const [searchText, setSearchText] = useState('')
     const { isOpen, onClose, input } = useDisclosure<{ id: string; trainingCourseId: string }>({
         tag: PutGraduationDecision.name,
         onClose: form.resetFields,
@@ -32,7 +30,6 @@ const PutGraduationDecision = () => {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createGraduationDecision } = useCreateGraduationDecision()
     const { mutateAsync: updateGraduationDecision } = useUpdateGraduationDecision()
     async function onOk(output?: PutGraduationDecisionFormValues) {
         if (!output) return
@@ -55,11 +52,6 @@ const PutGraduationDecision = () => {
                     },
                 })
                 message.success('Cập nhật thành công')
-            } else {
-                await createGraduationDecision({
-                    data: data,
-                })
-                message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
@@ -99,18 +91,6 @@ const PutGraduationDecision = () => {
 
     const { data: students, refetch } = useFindManyStudent({
         where: {
-            ...(searchText && searchText !== ''
-                ? {
-                      OR: [
-                          { code: { contains: searchText, mode: 'insensitive' } },
-                          {
-                              userProfile: {
-                                  fullname: { contains: searchText, mode: 'insensitive' },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
             fixedClass: {
                 trainingCourseId: input?.trainingCourseId,
             },
@@ -134,7 +114,17 @@ const PutGraduationDecision = () => {
     const { data: diplomaTypeData } = useFindManyDiplomaType(
         {
             where: {
-                trainingCourseId: input?.trainingCourseId,
+                curriculumVersion: {
+                    some: {
+                        fixedClasses: {
+                            some: {
+                                trainingCourse: {
+                                    id: input?.trainingCourseId,
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         { enabled: !!input?.trainingCourseId }
