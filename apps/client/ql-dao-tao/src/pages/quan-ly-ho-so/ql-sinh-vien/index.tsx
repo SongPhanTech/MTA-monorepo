@@ -394,16 +394,6 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                ],
                             },
                             {
                                 title: 'Họ và tên',
@@ -416,32 +406,12 @@ export default function UserProfilePageDs() {
                                         : '',
                                 type: 'input',
                                 dataIndex: 'name',
-                                multiple: [
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                ],
                             },
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'dateOfBirth',
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'code',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                ],
                                 type: 'date',
                                 render: (__, record) =>
                                     record.userProfile?.dateOfBirth
@@ -454,16 +424,6 @@ export default function UserProfilePageDs() {
                                 width: 100,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                ],
                                 options: [
                                     { label: 'Nam', value: 'Male' },
                                     { label: 'Nữ', value: 'Female' },
@@ -493,16 +453,6 @@ export default function UserProfilePageDs() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                    'code',
-                                    'trainingCourse',
-                                ],
                                 render: (__, record) => {
                                     if (!record.fixedClass) return ''
                                     const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
@@ -515,16 +465,6 @@ export default function UserProfilePageDs() {
                                 width: 100,
                                 dataIndex: 'trainingCourse',
                                 type: 'select',
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                    'fixedClass',
-                                    'code',
-                                ],
                                 options: TrainingCourseData.map((item: TrainingCourse) => ({
                                     label: item.name,
                                     value: item.id,
@@ -540,16 +480,6 @@ export default function UserProfilePageDs() {
                                 width: 160,
                                 dataIndex: 'trainingField',
                                 type: 'select',
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'code',
-                                    'trainingMajors',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                ],
                                 options: trainingFieldData.map((item: TrainingField) => ({
                                     label: item.name,
                                     value: item.id,
@@ -569,16 +499,6 @@ export default function UserProfilePageDs() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'code',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                ],
                                 render: (__, record) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum
                                         ?.trainingMajor?.name
@@ -589,16 +509,6 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 dataIndex: 'curriculumVersion',
                                 width: 180,
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'code',
-                                    'trainingField',
-                                    'trainingMajors',
-                                    'fixedClass',
-                                    'trainingCourse',
-                                ],
                                 options: TrainingCurriculumVersionData.map((item) => ({
                                     label: item.name,
                                     value: item.name,

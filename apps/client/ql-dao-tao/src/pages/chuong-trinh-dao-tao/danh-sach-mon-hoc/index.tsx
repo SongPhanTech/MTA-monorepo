@@ -2,6 +2,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
@@ -15,37 +16,19 @@ import {
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Select, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, message, Row, Select, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText?: string
-    managementOrganizationId?: string
-    examType?: ExamType[]
-    active?: boolean
-    code?: string
-    name?: string
-    credit?: 'asc' | 'desc'
-    period?: 'asc' | 'desc'
-    numberOfTheory?: 'asc' | 'desc'
-    numberOfPractical?: 'asc' | 'desc'
-    numberOfSelfStudy?: 'asc' | 'desc'
-    numberOfPractice?: 'asc' | 'desc'
-    numberOfReview?: 'asc' | 'desc'
-    numberOfExam?: 'asc' | 'desc'
-    numberOfOther?: 'asc' | 'desc'
-}
 
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        managementOrganizationId: '',
+        managementOrganizationId: undefined,
         examType: undefined,
         active: undefined,
         code: '',
@@ -66,42 +49,12 @@ export default function SubjectList() {
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              subjectVersion: {
-                                  some: {
-                                      name: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            ...(filters.code
-                ? {
-                      subjectVersion: {
-                          some: { code: { contains: filters.code, mode: 'insensitive' } },
-                      },
-                  }
-                : {}),
-            ...(filters.name
-                ? {
-                      subjectVersion: {
-                          some: { name: { contains: filters.name, mode: 'insensitive' } },
-                      },
-                  }
-                : {}),
+            subjectVersion: {
+                some: {
+                    name: { contains: filters.name, mode: 'insensitive' },
+                    code: { contains: filters.code, mode: 'insensitive' },
+                },
+            },
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
@@ -110,12 +63,10 @@ export default function SubjectList() {
                       subjectVersion: { some: { examType: { in: filters.examType } } },
                   }
                 : {}),
-            ...(typeof filters.active === 'boolean'
+            ...(filters.active?.length === 1
                 ? {
                       subjectVersion: {
-                          some: {
-                              active: filters.active,
-                          },
+                          some: { active: filters.active[0] },
                       },
                   }
                 : {}),
@@ -300,27 +251,6 @@ export default function SubjectList() {
                         <Col span={12}>
                             <Flex>
                                 <Col span={8}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
-                                            }
-                                            placeholder="Tìm kiếm tên môn..."
-                                            className="py-0"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={8}>
                                     <Form.Item
                                         className="mb-0"
                                         name="managementOrganizationId"
@@ -365,28 +295,16 @@ export default function SubjectList() {
                         defaultExpandAll
                         filters={filters}
                         setFilters={setFilters}
-                        onChange={(pagination, filters) => {
-                            if (filters.examType) {
-                                handleFilterChange('examType', filters.examType as ExamType[])
-                            } else {
-                                handleFilterChange('examType', '')
-                            }
-
-                            const activeFilter = Array.isArray(filters.active)
-                                ? filters.active[0]
-                                : undefined
-                            handleFilterChange('active', activeFilter as boolean | '')
-                        }}
                         columns={[
                             {
                                 title: 'Mã môn học',
                                 dataIndex: 'code',
-                                width: 120,
+                                width: 150,
                                 align: 'center',
                                 type: 'input',
                             },
                             {
-                                title: 'Tên phiên bản',
+                                title: 'Tên phiên bản MH',
                                 dataIndex: 'name',
                                 width: 200,
                                 type: 'input',
@@ -403,6 +321,16 @@ export default function SubjectList() {
                                 width: 150,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                    'period',
+                                ],
                             },
                             {
                                 title: 'Số tiết',
@@ -410,6 +338,16 @@ export default function SubjectList() {
                                 width: 150,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'credit',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'LT',
@@ -417,6 +355,16 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'credit',
+                                    'period',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'BT',
@@ -424,6 +372,16 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'credit',
+                                    'numberOfTheory',
+                                    'period',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'ThL',
@@ -431,6 +389,16 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'credit',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'period',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'TN, TH',
@@ -438,6 +406,16 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'credit',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'period',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'Ôn',
@@ -445,6 +423,16 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'credit',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'period',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'KT, Thi',
@@ -452,17 +440,27 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: [
+                                    'credit',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'period',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'Hình thức thi',
                                 dataIndex: 'examType',
                                 width: 150,
+                                type: 'select',
                                 align: 'center',
-                                filters: examTypeFilters.map((opt) => ({
-                                    text: opt.label,
+                                options: examTypeFilters.map((opt) => ({
+                                    label: opt.label,
                                     value: opt.value,
                                 })),
-                                filterSearch: true,
                                 render: (value: ExamType) => getExamTypeLabel(value),
                             },
                             {
@@ -477,12 +475,12 @@ export default function SubjectList() {
                                 align: 'center',
                                 fixed: 'right',
                                 width: 150,
-                                filters: [
-                                    { text: 'Đang hoạt động', value: true },
-                                    { text: 'Không hoạt động', value: false },
+                                options: [
+                                    { label: 'Đang đào tạo', value: true },
+                                    { label: 'Ngừng đào tạo', value: false },
                                 ],
-                                filterMultiple: false,
-                                onFilter: () => true,
+                                type: 'select',
+                                multiple: ['name', 'code'],
                                 render: (record) => {
                                     return !record ? (
                                         <Tag color="error">Không hoạt động</Tag>
@@ -496,9 +494,9 @@ export default function SubjectList() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, record) => {
+                                render: (_, record: { id?: string; subjectId?: string }) => {
                                     const { id: subjectVersionId, subjectId } = record
-                                    return subjectVersionId ? (
+                                    return subjectVersionId && subjectId ? (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
                                                 onClick={() =>

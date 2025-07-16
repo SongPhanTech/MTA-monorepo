@@ -160,7 +160,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 width: 120,
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['name', 'decisionDate'],
                                 render: (_, record: any) =>
                                     record?.student?.userProfile?.code || '',
                             },
@@ -170,7 +169,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 dataIndex: 'name',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['code', 'decisionDate'],
                                 render: (_, record) => record?.student?.userProfile?.fullname,
                             },
                             {

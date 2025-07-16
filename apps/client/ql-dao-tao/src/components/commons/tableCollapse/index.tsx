@@ -16,7 +16,7 @@ type TableProps<T extends Data> = {
     data?: T[]
     columns?: ColumnsType<T> & {
         type?: string
-        multiple?: string[]
+        distinctFilters?: string[]
         options?: { value: string; label: string }[]
     }
     pagination?: TablePaginationConfig & {
