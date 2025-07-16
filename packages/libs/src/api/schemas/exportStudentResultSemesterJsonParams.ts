@@ -6,8 +6,10 @@
  */
 import type { SemesterId } from './semesterId';
 import type { Type } from './type';
+import type { AcademicActionType } from './academicActionType';
 
 export type ExportStudentResultSemesterJsonParams = {
 semesterId: SemesterId & unknown;
 type: Type;
+academicActionType?: AcademicActionType;
 };
