@@ -9,6 +9,7 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
+import type { ScholarshipAward } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useDeleteScholarshipAward,
@@ -55,7 +56,9 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         scholarship: undefined,
     })
 
-    const { data: students = [], refetch } = useExportStudentResultSemesterJson(
+    const { data: students = [], refetch } = useExportStudentResultSemesterJson<
+        any[] | { data: any[] }
+    >(
         {
             semesterId: semesterId || '',
             type: 'scholarship',
@@ -182,14 +185,14 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         if (!studentDataAward || !Array.isArray(studentDataAward)) return []
 
         return studentDataAward.map((course) => {
-            const transformedScholarships = (course.scholarships || []).map((scholarship) => {
+            const transformedScholarships = (course.scholarships || []).map((scholarship: any) => {
                 // Tách phần awards ra ngoài
                 const { awards, ...restScholarship } = scholarship
                 return restScholarship
             })
 
-            const allAwards = (course.scholarships || []).flatMap((scholarship) =>
-                (scholarship.awards || []).map((award) => ({
+            const allAwards = (course.scholarships || []).flatMap((scholarship: any) =>
+                (scholarship.awards || []).map((award: ScholarshipAward) => ({
                     ...award,
                     // Gắn thông tin scholarship vào mỗi award
                     scholarshipId: scholarship.id,
