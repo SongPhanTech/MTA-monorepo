@@ -6,13 +6,16 @@ import {
     type AcademicWarningRule,
     CriteriaField,
     CriteriaOperator,
+    DecisionStatus,
     type Scholarship,
     type ScholarshipCriteria,
     SemesterType,
+    type StudentAcademicDecision,
     type StudentSemesterResult,
     StudentStatus,
     StudentTrainingType,
 } from '@workspace/db'
+import { criteriaFieldLabels, criteriaOperatorLabels } from '@workspace/libs/constants'
 import { prisma } from '..'
 import {
     CourseStudentResult,
@@ -961,6 +964,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     mucCanhCaoHocTap: item.academicWarningLevel || 0,
                     mucCanhCaoHocDuong: item.disciplinaryWarningLevel || 0,
                     xepLoaiRenLuyenKy: '', // or item.xepLoaiRenLuyenKy if available
+                    lyDoXepLoai: '', // tính sau
                 }
             })
         )
@@ -976,6 +980,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
 }
 
 const checkEligible = <T extends number | string>(
+    student: StudentInfoCheck,
+    fieldValue: CriteriaField,
     studentValue: T,
     criteriaValue: T | T[],
     operator: CriteriaOperator,
@@ -1003,7 +1009,9 @@ const checkEligible = <T extends number | string>(
                 return false
         }
     })()
-
+    if ((criteria === true && !invert) || (criteria === false && invert)) {
+        student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${criteriaFieldLabels[fieldValue]}(${studentValue}) ${invert ? '*không* ' : ''}${criteriaOperatorLabels[operator]} ${criteriaValue}`
+    }
     return invert ? !criteria : criteria
 }
 
@@ -1076,14 +1084,16 @@ const checkAcademicActionRule = async (
             console.warn('No action criteria found for training ruleSet:', ruleSetId)
             return false
         }
-        console.log('Student Info:', student)
-        console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
+        // console.log('Student Info:', student)
+        // console.log('Checking action criteria for ruleSet:', actionCriteriaListFilter)
         // Kiểm tra từng điều kiện, tất cả điều kiện thỏa thì mới true
         for (const criteria of actionCriteriaListFilter) {
             // Cảnh cáo học tập
             if (criteria.field === CriteriaField.ACADEMIC_WARNING_LEVEL) {
                 if (
                     !checkEligible(
+                        student,
+                        CriteriaField.ACADEMIC_WARNING_LEVEL,
                         student.mucCanhCaoHocTap,
                         criteria.value,
                         criteria.operator,
@@ -1095,6 +1105,8 @@ const checkAcademicActionRule = async (
             } else if (criteria.field === CriteriaField.DISCIPLINARY_WARNING_LEVEL) {
                 if (
                     !checkEligible(
+                        student,
+                        CriteriaField.DISCIPLINARY_WARNING_LEVEL,
                         student.mucCanhCaoHocDuong,
                         criteria.value,
                         criteria.operator,
@@ -1197,18 +1209,6 @@ const checkAcademicWarning = async (
                 (criteria.yearCondition === student.namDangHoc || criteria.yearCondition === null)
         )
         // Lấy thông tin tiêu chí cảnh cáo
-        // const warningCriteriaList = await prisma.academicWarningRule.findMany({
-        //     where: {
-        //         trainingCourseId: trainingCourseId,
-        //         OR: [
-        //             { semesterCondition: student.kyDangHoc },
-        //             { semesterCondition: null },
-        //             { yearCondition: student.namDangHoc },
-        //             { yearCondition: null },
-        //         ],
-        //     },
-        // })
-        // console.log('Checking academic warning :',warningCriteriaList)
 
         const severities = warningCriteriaListFilter.map((criteria) => {
             console.log('Checking criteria:', criteria.field, 'with value:', criteria.threshold)
@@ -1216,6 +1216,8 @@ const checkAcademicWarning = async (
             switch (criteria.field) {
                 case CriteriaField.FAILED_CREDITS_PERCENT: // Số tín chỉ không đạt trong kỳ
                     return checkEligible(
+                        student,
+                        CriteriaField.FAILED_CREDITS_PERCENT,
                         student.noTinChiTrongKy / student.soTinChiDangKy,
                         criteria.threshold,
                         criteria.operator,
@@ -1225,6 +1227,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.CUMULATIVE_DEBT_CREDITS: // Số tín chỉ không đạt tích lũy
                     return checkEligible(
+                        student,
+                        CriteriaField.CUMULATIVE_DEBT_CREDITS,
                         student.tongSoTinChiNo,
                         criteria.threshold,
                         criteria.operator,
@@ -1234,6 +1238,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_GPA,
                         student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
                         criteria.threshold,
                         criteria.operator,
@@ -1243,6 +1249,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.CUMULATIVE_GPA: // Điểm trung bình tích lũy
                     return checkEligible(
+                        student,
+                        CriteriaField.CUMULATIVE_GPA,
                         student.heSoDiem === 10 ? student.diemHe10TichLuy : student.diemHe4TichLuy,
                         criteria.threshold,
                         criteria.operator,
@@ -1252,6 +1260,8 @@ const checkAcademicWarning = async (
                         : 0
                 case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_REGISTERED_CREDITS,
                         student.soTinChiDangKy,
                         criteria.threshold,
                         criteria.operator,
@@ -1307,6 +1317,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_PASSED_CREDITS,
                         student.soTinChiDangKy,
                         criteria.value,
                         criteria.operator,
@@ -1320,6 +1332,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_REGISTERED_CREDITS,
                         student.soTinChiDangKy,
                         criteria.value,
                         criteria.operator,
@@ -1334,6 +1348,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.CUMULATIVE_PROGRESS_PERCENT,
                         student.soTinChiTichLuy / student.soTinChiYeuCau,
                         criteria.value,
                         criteria.operator,
@@ -1347,6 +1363,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.COURSE_GRADE_LOWEST,
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator,
@@ -1364,6 +1382,8 @@ const checkScholarship = async (
                     }
 
                     return checkEligible(
+                        student,
+                        CriteriaField.GRADUATION_COURSE_GRADE_LOWEST,
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator,
@@ -1377,6 +1397,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.SEMESTER_GPA,
                         student.heSoDiem === 10 ? student.diemTrungBinh10 : student.diemTrungBinh4,
                         criteria.value,
                         criteria.operator,
@@ -1390,6 +1412,8 @@ const checkScholarship = async (
                         criteria.operator
                     )
                     return checkEligible(
+                        student,
+                        CriteriaField.ENTRY_SCORE,
                         student.diemMonThuongNhoNhat,
                         criteria.value,
                         criteria.operator,
@@ -1437,7 +1461,7 @@ const getScholarship = async (
     const scholarshipCriteriaFilter = scholarshipCriteriaList.filter((criteria) =>
         scholarshipIds.includes(criteria.scholarshipId)
     )
-    console.log('semesterScholarship', semesterScholarshipFilter)
+    // console.log('semesterScholarship', semesterScholarshipFilter)
     // Lấy danh sách học bổng của sinh viên
     const scholarships: Scholarship[] = []
     for (const scholarship of semesterScholarshipFilter) {
@@ -1462,7 +1486,8 @@ const getStudentResult = async (
     warningCriteriaList: AcademicWarningRule[] = [],
     academicActionConfig: AcademicActionConfig[] = [],
     academicActionRuleSet: AcademicActionRuleSet[] = [],
-    actionCriteriaList: AcademicActionCondition[] = []
+    actionCriteriaList: AcademicActionCondition[] = [],
+    studentAcademicDecision: StudentAcademicDecision[] = []
 ): Promise<StudentResult> => {
     try {
         console.log('Fetching result for student:', student.id, 'in semester:', semesterId)
@@ -1531,8 +1556,13 @@ const getStudentResult = async (
             type === 'academicWarning'
                 ? await checkAcademicWarning(student, trainingCourseId, warningCriteriaList)
                 : 0
+
+        const checkAcademicActionExists = studentAcademicDecision.find(
+            (decision) => decision.studentId === student.id && decision.semesterId === semesterId
+        )
+        console.log('checkAcademicActionExists', checkAcademicActionExists, student.id, semesterId)
         const academicActionInfo =
-            type === 'academicAction'
+            type === 'academicAction' && checkAcademicActionExists !== undefined
                 ? await getAcademicAction(
                       student,
                       trainingCourseId,
@@ -1566,6 +1596,7 @@ const getStudentResult = async (
                     ?.trainingMajor?.trainingField?.id || '',
             highestScholarship: scholarshipInfo.length > 0 ? scholarshipInfo[0] : null,
             scholarshipRecived: scholarshipRecive,
+            reason: student.lyDoXepLoai || '',
         })
     } catch (error) {
         console.error('Error fetching student result:', error)
@@ -1668,6 +1699,16 @@ export const resultCourseStudentResult = async (
             },
         },
     })
+
+    // Ds StudentAcademicDecision
+    const studentAcademicDecision = await prisma.studentAcademicDecision.findMany({
+        where: {
+            studentId: { in: students.map((s) => s.id) },
+            semesterId: semesterId,
+            status: { not: DecisionStatus.APPROVED },
+            actionTaken: academicActionType ? academicActionType : undefined,
+        },
+    })
     // Process students in parallel
     await Promise.all(
         students.map(async (student) => {
@@ -1690,7 +1731,8 @@ export const resultCourseStudentResult = async (
                 warningCriteriaList,
                 academicActionConfig,
                 actionRuleSet,
-                actionCriteriaList
+                actionCriteriaList,
+                studentAcademicDecision
             )
             if (!studentResult) {
                 console.warn(`No result found for student ${student.id} in semester ${semesterId}`)
@@ -1712,7 +1754,11 @@ export const resultCourseStudentResult = async (
             courseMap[courseId].students.push(studentResult)
         })
     )
-
+    for (const courseId in courseMap) {
+        if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
+            delete courseMap[courseId]
+        }
+    }
     const result = sortStudentResultInfo(Object.values(courseMap))
     return result.map((course) => CourseStudentResult.parse(course))
 }

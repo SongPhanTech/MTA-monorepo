@@ -3,7 +3,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingCourseModal } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import { DEFAULT_PAGINATE_SIZE, KHOA_HL_STATUS } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
@@ -130,11 +130,6 @@ export default function TrainingCoursePage() {
         },
     })
 
-    const _options = Object.entries(KHOA_HL_STATUS).map(([value, { label, color }]) => ({
-        value,
-        label: <Tag color={color}>{label}</Tag>, // hiển thị trong dropdown
-    }))
-
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
@@ -228,7 +223,6 @@ export default function TrainingCoursePage() {
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
-                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Tên khóa',
@@ -237,7 +231,6 @@ export default function TrainingCoursePage() {
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
-                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
@@ -245,7 +238,6 @@ export default function TrainingCoursePage() {
                                 align: 'center',
                                 width: 175,
                                 type: 'select',
-                                multiple: ['name', 'code'],
                                 options: trainingObjectTypeData.map((i) => {
                                     return {
                                         value: i.id,

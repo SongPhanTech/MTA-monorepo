@@ -11,7 +11,7 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { ApplicationStatus, Gender } from '@workspace/db'
+import { ApplicationStatus, Gender, type Prisma } from '@workspace/db'
 import {
     useCountStudentGraduationApplication,
     useFindManyStudentGraduationApplication,
@@ -296,12 +296,12 @@ export default function StudentGraduationApplication() {
                                 record.rank?.id
                         )
                         .map((record) => {
-                            const data = {
+                            const data: Prisma.GraduationDecisionCreateInput = {
                                 application: { connect: { id: record.id } },
                                 student: { connect: { id: record.student.id } },
-                                finalGpa: record.gpa,
-                                finalRanking: { connect: { id: record?.rank?.id } },
+                                finalGpa: record.gpa ?? 0,
                                 decisionDate: new Date(),
+                                finalRanking: { connect: { id: record.rank?.id } },
                             }
 
                             return upsertGraduationDecision({
@@ -323,7 +323,7 @@ export default function StudentGraduationApplication() {
                     setSelectedRowKeys([])
                     message.success('Duyệt thành công')
                 } catch (error) {
-                    message.error('Đã xảy ra lỗi khi từ chối')
+                    message.error('Đã xảy ra lỗi khi duyệt')
                     console.error(error)
                 } finally {
                     hideSpinner()
@@ -431,11 +431,6 @@ export default function StudentGraduationApplication() {
                                                     width: 140,
                                                     fixed: 'left',
                                                     type: 'input',
-                                                    multiple: [
-                                                        'name',
-                                                        'applicationDate',
-                                                        'statusApplication',
-                                                    ],
                                                     render: (_, record) =>
                                                         record.student?.userProfile?.code || '',
                                                 },
@@ -444,11 +439,6 @@ export default function StudentGraduationApplication() {
                                                     width: 200,
                                                     dataIndex: 'name',
                                                     type: 'input',
-                                                    multiple: [
-                                                        'code',
-                                                        'applicationDate',
-                                                        'statusApplication',
-                                                    ],
                                                     render: (_, record) =>
                                                         record.student?.userProfile?.fullname,
                                                 },
@@ -609,7 +599,6 @@ export default function StudentGraduationApplication() {
                                                     width: 140,
                                                     fixed: 'right',
                                                     type: 'select',
-                                                    multiple: ['name', 'code', 'applicationDate'],
                                                     options: applicationStatusOptions.map((i) => ({
                                                         value: i.value,
                                                         label: i.label,

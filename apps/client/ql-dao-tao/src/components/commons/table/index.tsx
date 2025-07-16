@@ -21,16 +21,24 @@ import { useCallback, useState } from 'react'
 
 dayjs.locale('vi')
 
+export type ColumnOption = {
+    value: string | boolean
+    label: string
+    children?: ColumnOption[]
+}
+
 type TableProps<T> = {
     columns?: ColumnsType<T> & {
         type?: string
-        multiple?: string[]
-        options?: any[]
+        distinctFilters?: string[]
+        options?: ColumnOption[]
     }
     data?: T[]
-    pagination?: TablePaginationConfig & {
-        onShowSizeChange?: ((size: number) => void) | undefined
-    }
+    pagination?:
+        | (TablePaginationConfig & {
+              onShowSizeChange?: ((size: number) => void) | undefined
+          })
+        | false
     onRowClick?: (record: T) => void
     filters?: FilterProps
     setFilters?: (record: FilterProps) => void
@@ -41,7 +49,7 @@ type TableProps<T> = {
     scrollable?: boolean
     maxHeight?: number
     rowSelection?: TableRowSelection<T>
-} & TableAntdProps
+} & Omit<TableAntdProps, 'pagination'>
 
 const Table = <T extends Record<string, unknown>>({
     columns = [],
@@ -101,17 +109,19 @@ const Table = <T extends Record<string, unknown>>({
 
         for (const key in obj) {
             if (excludeKeys.includes(key)) {
-                result[key] = obj[key] // giữ nguyên
-            } else {
                 // reset theo kiểu dữ liệu
                 const value = obj[key]
-                if (typeof value === 'string' || typeof value === 'number') {
+                if (value === 'asc' || value === 'desc') {
+                    result[key] = undefined
+                } else if (typeof value === 'string' || typeof value === 'number') {
                     result[key] = ''
                 } else if (Array.isArray(value)) {
                     result[key] = []
                 } else {
                     result[key] = undefined // fallback cho các kiểu khác
                 }
+            } else {
+                result[key] = obj[key] // giữ nguyên
             }
         }
 
@@ -152,18 +162,19 @@ const Table = <T extends Record<string, unknown>>({
                                     })
                                 }}
                                 onPressEnter={() => {
-                                    if (item.multiple) {
+                                    if (item.distinctFilters) {
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, [
-                                                ...item.multiple,
-                                                item.dataIndex as keyof FilterProps,
-                                            ]),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                         }
                                         setFilters?.(result)
                                         props.confirm()
                                         return
                                     }
                                     const result = {
+                                        ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }
@@ -184,18 +195,16 @@ const Table = <T extends Record<string, unknown>>({
                                 props.confirm()
                             }}
                             click={() => {
-                                if (item.multiple) {
+                                if (item.distinctFilters) {
                                     const result = {
-                                        ...updateObjectExcept(filtersTable, [
-                                            ...item.multiple,
-                                            item.dataIndex as keyof FilterProps,
-                                        ]),
+                                        ...updateObjectExcept(filtersTable, item.distinctFilters),
                                     }
                                     setFilters?.(result)
                                     props.confirm()
                                     return
                                 }
                                 const result = {
+                                    ...filtersTable,
                                     [item.dataIndex as keyof FilterProps]:
                                         filtersTable[item.dataIndex as keyof FilterProps],
                                 }
@@ -259,18 +268,16 @@ const Table = <T extends Record<string, unknown>>({
                                 props.confirm()
                             }}
                             click={() => {
-                                if (item.multiple) {
+                                if (item.distinctFilters) {
                                     const result = {
-                                        ...updateObjectExcept(filtersTable, [
-                                            ...item.multiple,
-                                            item.dataIndex as keyof FilterProps,
-                                        ]),
+                                        ...updateObjectExcept(filtersTable, item.distinctFilters),
                                     }
                                     setFilters?.(result)
                                     props.confirm()
                                     return
                                 }
                                 const result = {
+                                    ...filtersTable,
                                     [item.dataIndex as keyof FilterProps]:
                                         filtersTable[item.dataIndex as keyof FilterProps],
                                 }
@@ -341,15 +348,15 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.multiple) {
+                                    if (item.distinctFilters) {
                                         const filter = filtersTable[
                                             item.dataIndex as keyof FilterProps
                                         ] as string[]
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, [
-                                                ...item.multiple,
-                                                item.dataIndex as keyof FilterProps,
-                                            ]),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                             [item.dataIndex as keyof FilterProps]: filter?.length
                                                 ? filter
                                                 : undefined,
@@ -359,6 +366,7 @@ const Table = <T extends Record<string, unknown>>({
                                         return
                                     }
                                     const result = {
+                                        ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }
@@ -404,7 +412,7 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]: checkedKeys,
                                     })
                                 }}
-                                fieldNames={{ title: 'title', key: 'value', children: 'children' }}
+                                fieldNames={{ title: 'label', key: 'value', children: 'children' }}
                                 className="w-full mb-3 max-h-[500px] overflow-y-auto"
                             />
                             <ListButton
@@ -420,15 +428,15 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.multiple) {
+                                    if (item.distinctFilters) {
                                         const filter = filtersTable[
                                             item.dataIndex as keyof FilterProps
                                         ] as string[]
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, [
-                                                ...item.multiple,
-                                                item.dataIndex as keyof FilterProps,
-                                            ]),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                             [item.dataIndex as keyof FilterProps]: filter?.length
                                                 ? filter
                                                 : undefined,
@@ -438,6 +446,7 @@ const Table = <T extends Record<string, unknown>>({
                                         return
                                     }
                                     const result = {
+                                        ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }
@@ -552,18 +561,19 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.multiple) {
+                                    if (item.distinctFilters) {
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, [
-                                                ...item.multiple,
-                                                item.dataIndex as keyof FilterProps,
-                                            ]),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                         }
                                         setFilters?.(result)
                                         props.confirm()
                                         return
                                     }
                                     const result = {
+                                        ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }
@@ -621,12 +631,12 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.multiple) {
+                                    if (item.distinctFilters) {
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, [
-                                                ...item.multiple,
-                                                item.dataIndex as keyof FilterProps,
-                                            ]),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                         }
 
                                         setFilters?.(result)
@@ -634,6 +644,7 @@ const Table = <T extends Record<string, unknown>>({
                                         return
                                     }
                                     const result = {
+                                        ...filtersTable,
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }

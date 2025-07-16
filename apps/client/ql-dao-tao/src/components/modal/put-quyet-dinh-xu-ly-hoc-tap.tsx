@@ -1,11 +1,17 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { AcademicActionType, DocumentFile, StudentAcademicDecision } from '@workspace/db'
+import {
+    AcademicActionType,
+    DecisionStatus,
+    type DocumentFile,
+    type StudentAcademicDecision,
+} from '@workspace/db'
 import {
     useCreateStudentAcademicDecision,
     useFindManyStudent,
     useFindUniqueStudentAcademicDecision,
+    useUpdateStudent,
     useUpdateStudentAcademicDecision,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
@@ -18,7 +24,6 @@ import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import Select from '@components/commons/select'
-import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 export type PutStudentAcademicDecision = StudentAcademicDecision & {
     documentEvidence?: DocumentFile[]
@@ -35,7 +40,6 @@ const PutStudentAcademicDecision = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutStudentAcademicDecision>()
     const { options: decisionStatusOptions } = useDecisionStatusOptions()
-    const { options: academicActionTypeOptions } = useAcademicActionTypeOption()
 
     const { isOpen, onClose, input } = useDisclosure<StudentAcademicDecisionInput>({
         tag: PutStudentAcademicDecision.name,
@@ -46,6 +50,7 @@ const PutStudentAcademicDecision = () => {
 
     const { mutateAsync: createStudentAcademicDecision } = useCreateStudentAcademicDecision()
     const { mutateAsync: updateStudentAcademicDecision } = useUpdateStudentAcademicDecision()
+    const { mutateAsync: updateStudent } = useUpdateStudent()
     async function onOk(output?: PutStudentAcademicDecision) {
         if (!output) return
         try {
@@ -124,7 +129,25 @@ const PutStudentAcademicDecision = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
+            if (output.status === DecisionStatus.APPROVED) {
+                let studentUpdateData = {}
+
+                switch (input.actionTaken) {
+                    case AcademicActionType.EXPULSION:
+                        studentUpdateData = { expelled: true }
+                        break
+                    case AcademicActionType.SUSPENSION:
+                        studentUpdateData = { suspended: true }
+                        break
+                }
+
+                if (Object.keys(studentUpdateData).length > 0) {
+                    await updateStudent({
+                        where: { id: output.studentId },
+                        data: studentUpdateData,
+                    })
+                }
+            }
             queryClient.invalidateQueries({
                 queryKey: ['StudentAcademicDecision'],
             })

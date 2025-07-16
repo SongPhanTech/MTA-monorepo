@@ -16,7 +16,7 @@ interface XetCanhCaoHocTapProps {
 
 const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     // TODO: remove any when have openapi schema
-    const { data: students = [] }: any = useExportStudentResultSemesterJson(
+    const { data: students = [] } = useExportStudentResultSemesterJson<any[] | { data: any[] }>(
         { semesterId: semesterId || '', type: 'academicWarning' },
         { query: { enabled: !!semesterId } },
         queryClient
