@@ -213,272 +213,234 @@ const PutCurriculumVersion = () => {
             style={{ top: 20 }}
         >
             <Tabs
+                className="w-full"
                 items={[
                     {
                         key: '1',
                         label: 'Thông tin chung',
                         children: (
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <FormItem form={form} name="code" label="Mã phiên bản" required>
-                                        <Input placeholder="Nhập mã phiên bản CTĐT" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="name"
-                                        label="Tên phiên bản (tiếng việt)"
-                                        required
-                                    >
-                                        <Input placeholder="Nhập tên phiên bản (tiếng việt)" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="englishName"
-                                        label="Tên phiên bản (tiếng anh)"
-                                    >
-                                        <Input placeholder="Nhập tên phiên bản (tiếng anh)" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem form={form} name="shortName" label="Tên viết tắt">
-                                        <Input placeholder="Nhập tên viết tắt" />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        label="Ngôn ngữ đào tạo"
-                                        name="trainingLanguage"
-                                    >
-                                        <Select
-                                            placeholder="Chọn ngôn ngữ đào tạo"
-                                            options={trainingLanguageOptions}
-                                            allowClear
-                                            defaultValue={TrainingLanguage.Vietnamese}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem form={form} name="yearCreation" label="Năm tạo">
-                                        <InputNumber
-                                            placeholder="Nhập năm tạo"
-                                            className="w-full"
-                                            step={1}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="yearApplication"
-                                        label="Năm áp dụng"
-                                    >
-                                        <InputNumber
-                                            placeholder="Nhập năm áp dụng"
-                                            className="w-full"
-                                            step={1}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="numberOfSemesters"
-                                        label="Số kỳ học"
-                                    >
-                                        <InputNumber
-                                            placeholder="Nhập Số kỳ học"
-                                            className="w-full"
-                                            step={1}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        label="Đối tượng đào tạo"
-                                        name="trainingObjectTypeId"
-                                        required
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            allowClear
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        label="Trình độ đào tạo"
-                                        name="trainingLevelId"
-                                        required
-                                    >
-                                        <Select
-                                            placeholder="Chọn trình độ đào tạo"
-                                            options={trainingLevelData.map((i: TrainingForm) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            allowClear
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        label="Thời gian đào tạo"
-                                        name="trainingTimeId"
-                                        required
-                                    >
-                                        <Select
-                                            placeholder="Chọn thời gian đào tạo"
-                                            options={trainingTimeData.map((i: TrainingTime) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            allowClear
-                                        />
-                                    </FormItem>
-                                </Col>
-                                {/* <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="coef_1"
-                    label="Hệ số điểm chuyên cần"
-                >
-                    <InputNumber
-                        placeholder="Nhập hệ số điểm chuyên cần"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="coef_2"
-                    label="Hệ số điểm thường xuyên"
-                >
-                    <InputNumber
-                        placeholder="Nhập hệ số điểm thường xuyên"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="coef_3" label="Hệ số điểm điểm thi">
-                    <InputNumber
-                        placeholder="Nhập hệ số điểm điểm thi"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col> */}
-                                <Col span={12}>
-                                    <FormItem form={form} name="diplomaTypeId" label="Bậc đào tạo">
-                                        <Select
-                                            placeholder="Chọn bậc đào tạo"
-                                            options={diplomaTypeData.map((i: DiplomaType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            allowClear
-                                        />
-                                    </FormItem>
-                                </Col>
-                                {/* <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="scoreToTakeExam"
-                    label="Điểm tối thiểu được thi"
-                >
-                    <InputNumber
-                        placeholder="Nhập điểm tối thiểu được thi"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="scoreToPass"
-                    label="Điểm tối thiểu để qua"
-                >
-                    <InputNumber
-                        placeholder="Nhập điểm tối thiểu để qua"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col> */}
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="requiredCredits"
-                                        label="Số tín chỉ bắt buộc"
-                                    >
-                                        <InputNumber
-                                            placeholder="Nhập số tín chỉ bắt buộc"
-                                            className="w-full"
-                                            step={1}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem
-                                        form={form}
-                                        name="electiveCredits"
-                                        label="Số tín chỉ tự chọn"
-                                    >
-                                        <InputNumber
-                                            placeholder="Nhập số tín chỉ tự chọn"
-                                            className="w-full"
-                                            step={1}
-                                        />
-                                    </FormItem>
-                                </Col>
-                                <Col span={12}>
-                                    <FormItem form={form} name="description" label="Mô tả">
-                                        <Input.TextArea placeholder="Nhập mô tả" />
-                                    </FormItem>
-                                </Col>
-                                {input?.versionId && (
+                            <div>
+                                <Row gutter={[16, 16]} className="w-full">
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
-                                            name={'active'}
-                                            label="Trạng thái"
+                                            name="code"
+                                            label="Mã phiên bản"
                                             required
                                         >
-                                            <Radio.Group buttonStyle="solid">
-                                                <Radio value={true}>Đang hoạt động</Radio>
-                                                <Radio value={false}>Ngừng hoạt động</Radio>
-                                            </Radio.Group>
+                                            <Input placeholder="Nhập mã phiên bản CTĐT" />
                                         </FormItem>
                                     </Col>
-                                )}
-                                <Col span={24}>
-                                    <FormItem
-                                        form={form}
-                                        name="documentFiles"
-                                        label="Tài liệu đính kèm"
-                                    >
-                                        <DocumentPaths
+                                    <Col span={12}>
+                                        <FormItem
                                             form={form}
-                                            data={document}
-                                            relationId={input?.versionId ?? ''}
-                                            relationType="curriculumVersionId"
-                                        />
-                                    </FormItem>
-                                </Col>
-                            </Row>
+                                            name="name"
+                                            label="Tên phiên bản (tiếng việt)"
+                                            required
+                                        >
+                                            <Input placeholder="Nhập tên phiên bản (tiếng việt)" />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name="englishName"
+                                            label="Tên phiên bản (tiếng anh)"
+                                        >
+                                            <Input placeholder="Nhập tên phiên bản (tiếng anh)" />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem form={form} name="shortName" label="Tên viết tắt">
+                                            <Input placeholder="Nhập tên viết tắt" />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            label="Ngôn ngữ đào tạo"
+                                            name="trainingLanguage"
+                                        >
+                                            <Select
+                                                placeholder="Chọn ngôn ngữ đào tạo"
+                                                options={trainingLanguageOptions}
+                                                allowClear
+                                                defaultValue={TrainingLanguage.Vietnamese}
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem form={form} name="yearCreation" label="Năm tạo">
+                                            <InputNumber
+                                                placeholder="Nhập năm tạo"
+                                                className="w-full"
+                                                step={1}
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name="yearApplication"
+                                            label="Năm áp dụng"
+                                        >
+                                            <InputNumber
+                                                placeholder="Nhập năm áp dụng"
+                                                className="w-full"
+                                                step={1}
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name="numberOfSemesters"
+                                            label="Số kỳ học"
+                                        >
+                                            <InputNumber
+                                                placeholder="Nhập Số kỳ học"
+                                                className="w-full"
+                                                step={1}
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            label="Đối tượng đào tạo"
+                                            name="trainingObjectTypeId"
+                                            required
+                                        >
+                                            <Select
+                                                placeholder="Chọn đối tượng đào tạo"
+                                                options={trainingObjectTypeData.map(
+                                                    (i: TrainingObjectType) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                allowClear
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            label="Trình độ đào tạo"
+                                            name="trainingLevelId"
+                                            required
+                                        >
+                                            <Select
+                                                placeholder="Chọn trình độ đào tạo"
+                                                options={trainingLevelData.map(
+                                                    (i: TrainingForm) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                allowClear
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            label="Thời gian đào tạo"
+                                            name="trainingTimeId"
+                                            required
+                                        >
+                                            <Select
+                                                placeholder="Chọn thời gian đào tạo"
+                                                options={trainingTimeData.map(
+                                                    (i: TrainingTime) => ({
+                                                        value: i.id,
+                                                        label: i.name,
+                                                    })
+                                                )}
+                                                allowClear
+                                            />
+                                        </FormItem>
+                                    </Col>
+
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name="diplomaTypeId"
+                                            label="Bậc đào tạo"
+                                        >
+                                            <Select
+                                                placeholder="Chọn bậc đào tạo"
+                                                options={diplomaTypeData.map((i: DiplomaType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }))}
+                                                allowClear
+                                            />
+                                        </FormItem>
+                                    </Col>
+
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name="requiredCredits"
+                                            label="Số tín chỉ bắt buộc"
+                                        >
+                                            <InputNumber
+                                                placeholder="Nhập số tín chỉ bắt buộc"
+                                                className="w-full"
+                                                step={1}
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem
+                                            form={form}
+                                            name="electiveCredits"
+                                            label="Số tín chỉ tự chọn"
+                                        >
+                                            <InputNumber
+                                                placeholder="Nhập số tín chỉ tự chọn"
+                                                className="w-full"
+                                                step={1}
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem form={form} name="description" label="Mô tả">
+                                            <Input.TextArea placeholder="Nhập mô tả" />
+                                        </FormItem>
+                                    </Col>
+                                    {input?.versionId && (
+                                        <Col span={12}>
+                                            <FormItem
+                                                form={form}
+                                                name={'active'}
+                                                label="Trạng thái"
+                                                required
+                                            >
+                                                <Radio.Group buttonStyle="solid">
+                                                    <Radio value={true}>Đang hoạt động</Radio>
+                                                    <Radio value={false}>Ngừng hoạt động</Radio>
+                                                </Radio.Group>
+                                            </FormItem>
+                                        </Col>
+                                    )}
+                                    <Col span={24}>
+                                        <FormItem
+                                            form={form}
+                                            name="documentFiles"
+                                            label="Tài liệu đính kèm"
+                                        >
+                                            <DocumentPaths
+                                                form={form}
+                                                data={document}
+                                                relationId={input?.versionId ?? ''}
+                                                relationType="curriculumVersionId"
+                                            />
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                            </div>
                         ),
                     },
                     {
