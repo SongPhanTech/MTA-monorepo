@@ -10,7 +10,7 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { DM_DonVi, FixedClass, Student, TrainingCourse } from '@workspace/db'
+import type { Student } from '@workspace/db'
 import {
     useFindManyCurriculumVersion,
     useFindManyStudent,
@@ -223,10 +223,7 @@ export default function StudentFixedClassPage() {
 
     const { onOpen: onOpenPrint } = useDisclosure<{
         dataTable: Student[]
-        dataFixedClass: FixedClass & {
-            trainingCourse?: TrainingCourse
-            managementOrganization?: DM_DonVi
-        }
+        dataFixedClass: any
     }>({
         tag: ModalPrintToDSHV.name,
     })
@@ -389,14 +386,6 @@ export default function StudentFixedClassPage() {
                                 width: 150,
                                 align: 'center',
                                 type: 'input',
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                             },
                             {
                                 title: 'Họ và tên',
@@ -405,14 +394,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'name',
-                                multiple: [
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 render: (__, record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
@@ -423,14 +404,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'dateOfBirth',
-                                multiple: [
-                                    'code',
-                                    'gender',
-                                    'name',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 type: 'date',
                                 render: (__, record) =>
                                     record.userProfile?.dateOfBirth
@@ -443,15 +416,6 @@ export default function StudentFixedClassPage() {
                                 width: 120,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 options: [
                                     { label: 'Nam', value: 'Male' },
                                     { label: 'Nữ', value: 'Female' },
@@ -470,15 +434,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 type: 'select',
                                 dataIndex: 'trainingField',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 options: trainingFieldData.map((item) => ({
                                     label: item.name,
                                     value: item.id,
@@ -500,15 +455,6 @@ export default function StudentFixedClassPage() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 render: (__, record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
@@ -522,15 +468,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 dataIndex: 'curriculumVersion',
                                 type: 'select',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 options: curriculumVersionData.map((item) => ({
                                     label: item.name,
                                     value: item.id,

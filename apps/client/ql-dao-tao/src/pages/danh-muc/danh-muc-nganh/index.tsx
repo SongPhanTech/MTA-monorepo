@@ -239,7 +239,6 @@ export default function TrainingFieldPage() {
                                 fixed: 'left',
                                 width: 150,
                                 type: 'input',
-                                multiple: ['trainingObjectTypes', 'name', 'organization'],
                             },
                             {
                                 title: 'Tên ngành',
@@ -248,7 +247,6 @@ export default function TrainingFieldPage() {
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
-                                multiple: ['trainingObjectTypes', 'code', 'organization'],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
@@ -256,7 +254,6 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 175,
                                 type: 'select',
-                                multiple: ['name', 'code', 'organization'],
                                 options: trainingObjectTypeData.map((i) => {
                                     return {
                                         value: i.id,
@@ -281,7 +278,6 @@ export default function TrainingFieldPage() {
                                 width: 150,
                                 type: 'tree_select',
                                 options: treeData,
-                                multiple: ['name', 'code', 'trainingObjectTypes'],
                                 render: (organization: DM_DonVi) =>
                                     organization?.sTen ? organization?.sTen : '',
                             },

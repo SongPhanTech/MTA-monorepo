@@ -112,7 +112,7 @@ export default function TrainingTimePage() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 50,
+                                width: 60,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
@@ -121,22 +121,19 @@ export default function TrainingTimePage() {
                             {
                                 title: 'Mã thời gian đào tạo',
                                 align: 'center',
-                                width: 150,
+                                width: 250,
                                 dataIndex: 'code',
                                 type: 'input',
-                                multiple: ['name'],
                             },
                             {
                                 title: 'Tên thời gian đào tạo',
                                 align: 'center',
-                                width: 200,
                                 dataIndex: 'name',
                                 type: 'input',
-                                multiple: ['code'],
                             },
                             {
                                 title: 'Thao tác',
-                                width: 50,
+                                width: 150,
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">

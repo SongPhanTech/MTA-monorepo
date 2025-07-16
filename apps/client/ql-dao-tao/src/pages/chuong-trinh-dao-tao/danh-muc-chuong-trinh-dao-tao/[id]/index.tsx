@@ -423,7 +423,6 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['organization', 'name', 'examType'],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.code ? record?.subject?.code : ''
                                 },
@@ -446,7 +445,6 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: ['organization', 'code', 'examType'],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
                                 },
@@ -458,7 +456,6 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
-                                multiple: ['name', 'code', 'examType'],
                                 render: (
                                     __,
                                     record: {
@@ -476,6 +473,17 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 type: 'order',
                                 align: 'center',
+                                single: [
+                                    'semester',
+                                    'period',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.credit
                                 },
@@ -486,6 +494,17 @@ export default function TrainingProgramSubjects() {
                                 width: 140,
                                 type: 'order',
                                 align: 'center',
+                                single: [
+                                    'credit',
+                                    'period',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                             },
                             {
                                 title: 'Số tiết TKB',
@@ -493,6 +512,17 @@ export default function TrainingProgramSubjects() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
+                                single: [
+                                    'credit',
+                                    'semester',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.period
                                 },
@@ -503,6 +533,17 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 type: 'order',
                                 align: 'center',
+                                single: [
+                                    'credit',
+                                    'semester',
+                                    'period',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfTheory
                                 },
@@ -512,6 +553,17 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: 'numberOfPractical',
                                 type: 'order',
                                 align: 'center',
+                                single: [
+                                    'credit',
+                                    'semester',
+                                    'period',
+                                    'numberOfTheory',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfPractical
                                 },
@@ -522,6 +574,17 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
+                                single: [
+                                    'credit',
+                                    'semester',
+                                    'period',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfSelfStudy
                                 },
@@ -532,6 +595,17 @@ export default function TrainingProgramSubjects() {
                                 width: 90,
                                 align: 'center',
                                 type: 'order',
+                                single: [
+                                    'credit',
+                                    'semester',
+                                    'period',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfReview',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfPractice
                                 },
@@ -542,6 +616,17 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
+                                single: [
+                                    'credit',
+                                    'semester',
+                                    'period',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfExam',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfReview
                                 },
@@ -552,6 +637,17 @@ export default function TrainingProgramSubjects() {
                                 width: 100,
                                 align: 'center',
                                 type: 'order',
+                                single: [
+                                    'credit',
+                                    'semester',
+                                    'period',
+                                    'numberOfTheory',
+                                    'numberOfPractical',
+                                    'numberOfSelfStudy',
+                                    'numberOfPractice',
+                                    'numberOfReview',
+                                    'numberOfOther',
+                                ],
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.numberOfExam
                                 },
@@ -565,7 +661,6 @@ export default function TrainingProgramSubjects() {
                                 options: options,
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     getExamTypeLabel(record?.subject?.examType),
-                                multiple: ['organization', 'code', 'name'],
                             },
                             {
                                 title: 'Trạng thái',

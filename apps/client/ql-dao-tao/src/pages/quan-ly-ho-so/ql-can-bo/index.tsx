@@ -293,19 +293,6 @@ export default function StaffManagement() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const handleAdvancedFilter = (values: FilterProps) => {
-        const newFilters = { ...filters, ...values }
-        setFilters(newFilters)
-    }
-
     const handleDownloadTemplate = (type: string) => {
         const fileRecord = templateFile?.find((item) => item.code === type)
         const fileLink = fileRecord ? fileRecord.path : null
@@ -428,17 +415,6 @@ export default function StaffManagement() {
                                 align: 'center',
                                 width: 150,
                                 type: 'input',
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'organization',
-                                    'rankId',
-                                    'staffType',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
                             {
                                 title: 'SHSQ/SHQN',
@@ -447,17 +423,6 @@ export default function StaffManagement() {
                                 align: 'center',
                                 width: 150,
                                 type: 'input',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'organization',
-                                    'rankId',
-                                    'staffType',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
                             {
                                 title: 'Họ và tên',
@@ -469,17 +434,6 @@ export default function StaffManagement() {
                                 width: 150,
                                 dataIndex: 'name',
                                 type: 'input',
-                                multiple: [
-                                    'code',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'organization',
-                                    'rankId',
-                                    'staffType',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
                             {
                                 title: 'Ngày sinh',
@@ -494,17 +448,6 @@ export default function StaffManagement() {
                                         : '',
                                 align: 'center',
                                 width: 150,
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'code',
-                                    'gender',
-                                    'organization',
-                                    'rankId',
-                                    'staffType',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
                             {
                                 title: 'Giới tính',
@@ -522,17 +465,6 @@ export default function StaffManagement() {
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
                                         : '',
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'code',
-                                    'organization',
-                                    'rankId',
-                                    'staffType',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
 
                             {
@@ -543,17 +475,6 @@ export default function StaffManagement() {
                                 render: (value) => value?.sTen,
                                 type: 'tree_select',
                                 options: treeData,
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'code',
-                                    'rankId',
-                                    'staffType',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
                             {
                                 title: 'Học hàm',
@@ -567,17 +488,6 @@ export default function StaffManagement() {
                                 render: (_, record) =>
                                     record.userProfile?.academicRankType?.name || '',
                                 align: 'center',
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'organization',
-                                    'rankId',
-                                    'staffType',
-                                    'code',
-                                    'academicDegreeType',
-                                ],
                             },
                             {
                                 title: 'Năm HH',
@@ -602,17 +512,6 @@ export default function StaffManagement() {
                                     record.userProfile?.academicDegreeType?.name || '',
                                 align: 'center',
                                 width: 120,
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'organization',
-                                    'rankId',
-                                    'staffType',
-                                    'academicRankType',
-                                    'code',
-                                ],
                             },
                             {
                                 title: 'Năm HV',
@@ -636,17 +535,6 @@ export default function StaffManagement() {
                                 type: 'select',
                                 width: 170,
                                 render: (__, record) => record?.staffType?.name || '',
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'organization',
-                                    'rankId',
-                                    'code',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
                             // {
                             //     title: 'Năm CV',
@@ -671,17 +559,6 @@ export default function StaffManagement() {
                                 render: (_, record) => record.userProfile?.rank?.name || '',
                                 align: 'center',
                                 width: 140,
-                                multiple: [
-                                    'name',
-                                    'officerNumber',
-                                    'dateOfBirth',
-                                    'gender',
-                                    'organization',
-                                    'code',
-                                    'staffType',
-                                    'academicRankType',
-                                    'academicDegreeType',
-                                ],
                             },
                             {
                                 title: 'Năm CB',

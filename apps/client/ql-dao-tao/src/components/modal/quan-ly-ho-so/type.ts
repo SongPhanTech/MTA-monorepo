@@ -136,10 +136,15 @@ export type FilterProps = {
     room?: string
     applicationDate?: Date[]
     statusApplication?: ApplicationStatus[]
+    active?: boolean[]
+    numberOfOther?: 'asc' | 'desc'
+    managementOrganizationId?: string
+    floor?: 'asc' | 'desc'
+    roomNumber?: 'asc' | 'desc'
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
-    multiple?: string[]
+    single?: string[]
     options?: any[]
     dataIndex?: string
     slot?: any

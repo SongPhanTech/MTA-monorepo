@@ -343,13 +343,6 @@ export default function TrainingMajorPage() {
                                 width: 200,
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: [
-                                    'trainingObjectTypes',
-                                    'organization',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
                             },
                             {
                                 title: 'Tên chuyên ngành',
@@ -358,13 +351,6 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: [
-                                    'trainingObjectTypes',
-                                    'organization',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
                             },
                             // {
                             //     title: 'Tên tiếng anh',
@@ -382,13 +368,6 @@ export default function TrainingMajorPage() {
                                     value: i.id,
                                     label: i.name,
                                 })),
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
                                 render: (value) =>
                                     value?.length > 0
                                         ? value.map(
@@ -414,13 +393,6 @@ export default function TrainingMajorPage() {
                                 render: (value) => value?.sTen,
                                 type: 'tree_select',
                                 options: treeData,
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
                             },
 
                             {
@@ -429,7 +401,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsMajor',
                                 type: 'order',
-                                multiple: ['name', 'code', 'trainingObjectTypes'],
+                                single: ['numberCreditsRequired', 'numberCreditsElective'],
                             },
                             {
                                 title: 'Số TC bắt buộc',
@@ -437,7 +409,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsRequired',
                                 type: 'order',
-                                multiple: ['name', 'code', 'trainingObjectTypes'],
+                                single: ['numberCreditsMajor', 'numberCreditsElective'],
                             },
                             {
                                 title: 'Số TC lựa chọn',
@@ -445,7 +417,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsElective',
                                 type: 'order',
-                                multiple: ['name', 'code', 'trainingObjectTypes'],
+                                single: ['numberCreditsMajor', 'numberCreditsRequired'],
                             },
                             {
                                 title: 'Mô tả',
