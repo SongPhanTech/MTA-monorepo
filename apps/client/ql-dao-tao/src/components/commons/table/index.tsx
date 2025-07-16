@@ -24,7 +24,7 @@ dayjs.locale('vi')
 type TableProps<T> = {
     columns?: ColumnsType<T> & {
         type?: string
-        single?: string[]
+        distinctFilters?: string[]
         options?: any[]
     }
     data?: T[]
@@ -154,9 +154,12 @@ const Table = <T extends Record<string, unknown>>({
                                     })
                                 }}
                                 onPressEnter={() => {
-                                    if (item.single) {
+                                    if (item.distinctFilters) {
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, item.single),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                         }
                                         setFilters?.(result)
                                         props.confirm()
@@ -184,9 +187,9 @@ const Table = <T extends Record<string, unknown>>({
                                 props.confirm()
                             }}
                             click={() => {
-                                if (item.single) {
+                                if (item.distinctFilters) {
                                     const result = {
-                                        ...updateObjectExcept(filtersTable, item.single),
+                                        ...updateObjectExcept(filtersTable, item.distinctFilters),
                                     }
                                     setFilters?.(result)
                                     props.confirm()
@@ -257,9 +260,9 @@ const Table = <T extends Record<string, unknown>>({
                                 props.confirm()
                             }}
                             click={() => {
-                                if (item.single) {
+                                if (item.distinctFilters) {
                                     const result = {
-                                        ...updateObjectExcept(filtersTable, item.single),
+                                        ...updateObjectExcept(filtersTable, item.distinctFilters),
                                     }
                                     setFilters?.(result)
                                     props.confirm()
@@ -337,12 +340,15 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.single) {
+                                    if (item.distinctFilters) {
                                         const filter = filtersTable[
                                             item.dataIndex as keyof FilterProps
                                         ] as string[]
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, item.single),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                             [item.dataIndex as keyof FilterProps]: filter?.length
                                                 ? filter
                                                 : undefined,
@@ -414,12 +420,15 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.single) {
+                                    if (item.distinctFilters) {
                                         const filter = filtersTable[
                                             item.dataIndex as keyof FilterProps
                                         ] as string[]
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, item.single),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                             [item.dataIndex as keyof FilterProps]: filter?.length
                                                 ? filter
                                                 : undefined,
@@ -544,9 +553,12 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.single) {
+                                    if (item.distinctFilters) {
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, item.single),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                         }
                                         setFilters?.(result)
                                         props.confirm()
@@ -611,9 +623,12 @@ const Table = <T extends Record<string, unknown>>({
                                     props.confirm()
                                 }}
                                 click={() => {
-                                    if (item.single) {
+                                    if (item.distinctFilters) {
                                         const result = {
-                                            ...updateObjectExcept(filtersTable, item.single),
+                                            ...updateObjectExcept(
+                                                filtersTable,
+                                                item.distinctFilters
+                                            ),
                                         }
 
                                         setFilters?.(result)

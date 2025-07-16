@@ -660,7 +660,7 @@ export default function TeachingAssignment() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: ['maxStudent', 'subjectClassStudent'],
+                                distinctFilters: ['maxStudent', 'subjectClassStudent'],
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     record.subject?.credit ? record.subject?.credit : '',
                             },
@@ -670,7 +670,7 @@ export default function TeachingAssignment() {
                                 width: 150,
                                 align: 'center',
                                 type: 'order',
-                                single: ['credit', 'subjectClassStudent'],
+                                distinctFilters: ['credit', 'subjectClassStudent'],
                             },
                             {
                                 title: 'Số SV',
@@ -678,7 +678,7 @@ export default function TeachingAssignment() {
                                 width: 100,
                                 align: 'center',
                                 type: 'order',
-                                single: ['maxStudent', 'credit'],
+                                distinctFilters: ['maxStudent', 'credit'],
                                 render: (value) => (value?.length ? value?.length : ''),
                             },
                             {

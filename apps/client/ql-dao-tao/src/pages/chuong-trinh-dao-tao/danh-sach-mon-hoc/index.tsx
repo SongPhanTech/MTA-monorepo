@@ -321,7 +321,7 @@ export default function SubjectList() {
                                 width: 150,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'numberOfTheory',
                                     'numberOfPractical',
                                     'numberOfSelfStudy',
@@ -338,7 +338,7 @@ export default function SubjectList() {
                                 width: 150,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'numberOfTheory',
                                     'numberOfPractical',
@@ -355,7 +355,7 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'period',
                                     'numberOfPractical',
@@ -372,7 +372,7 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'numberOfTheory',
                                     'period',
@@ -389,7 +389,7 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'numberOfTheory',
                                     'numberOfPractical',
@@ -406,7 +406,7 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'numberOfTheory',
                                     'numberOfPractical',
@@ -423,7 +423,7 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'numberOfTheory',
                                     'numberOfPractical',
@@ -440,7 +440,7 @@ export default function SubjectList() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'numberOfTheory',
                                     'numberOfPractical',

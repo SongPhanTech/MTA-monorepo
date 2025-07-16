@@ -401,7 +401,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsMajor',
                                 type: 'order',
-                                single: ['numberCreditsRequired', 'numberCreditsElective'],
+                                distinctFilters: ['numberCreditsRequired', 'numberCreditsElective'],
                             },
                             {
                                 title: 'Số TC bắt buộc',
@@ -409,7 +409,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsRequired',
                                 type: 'order',
-                                single: ['numberCreditsMajor', 'numberCreditsElective'],
+                                distinctFilters: ['numberCreditsMajor', 'numberCreditsElective'],
                             },
                             {
                                 title: 'Số TC lựa chọn',
@@ -417,7 +417,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsElective',
                                 type: 'order',
-                                single: ['numberCreditsMajor', 'numberCreditsRequired'],
+                                distinctFilters: ['numberCreditsMajor', 'numberCreditsRequired'],
                             },
                             {
                                 title: 'Mô tả',

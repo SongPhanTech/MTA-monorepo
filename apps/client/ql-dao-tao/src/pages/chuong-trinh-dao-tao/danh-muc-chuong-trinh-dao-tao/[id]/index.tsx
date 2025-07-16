@@ -473,7 +473,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 type: 'order',
                                 align: 'center',
-                                single: [
+                                distinctFilters: [
                                     'semester',
                                     'period',
                                     'numberOfTheory',
@@ -494,7 +494,7 @@ export default function TrainingProgramSubjects() {
                                 width: 140,
                                 type: 'order',
                                 align: 'center',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'period',
                                     'numberOfTheory',
@@ -512,7 +512,7 @@ export default function TrainingProgramSubjects() {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'semester',
                                     'numberOfTheory',
@@ -533,7 +533,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 type: 'order',
                                 align: 'center',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'semester',
                                     'period',
@@ -553,7 +553,7 @@ export default function TrainingProgramSubjects() {
                                 dataIndex: 'numberOfPractical',
                                 type: 'order',
                                 align: 'center',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'semester',
                                     'period',
@@ -574,7 +574,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'semester',
                                     'period',
@@ -595,7 +595,7 @@ export default function TrainingProgramSubjects() {
                                 width: 90,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'semester',
                                     'period',
@@ -616,7 +616,7 @@ export default function TrainingProgramSubjects() {
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'semester',
                                     'period',
@@ -637,7 +637,7 @@ export default function TrainingProgramSubjects() {
                                 width: 100,
                                 align: 'center',
                                 type: 'order',
-                                single: [
+                                distinctFilters: [
                                     'credit',
                                     'semester',
                                     'period',

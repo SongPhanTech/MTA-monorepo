@@ -144,7 +144,7 @@ export type FilterProps = {
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
-    single?: string[]
+    distinctFilters?: string[]
     options?: any[]
     dataIndex?: string
     slot?: any

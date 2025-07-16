@@ -529,7 +529,7 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
                                 type: 'order',
-                                single: ['electiveCredits', 'numberOfSemesters'],
+                                distinctFilters: ['electiveCredits', 'numberOfSemesters'],
                                 width: 100,
                             },
                             {
@@ -538,14 +538,14 @@ export default function TrainingProgramCatalog() {
                                 align: 'center',
                                 type: 'order',
                                 width: 100,
-                                single: ['numberOfSemesters', 'requiredCredits'],
+                                distinctFilters: ['numberOfSemesters', 'requiredCredits'],
                             },
                             {
                                 title: 'Số kỳ học',
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
                                 type: 'order',
-                                single: ['electiveCredits', 'requiredCredits'],
+                                distinctFilters: ['electiveCredits', 'requiredCredits'],
                                 width: 120,
                             },
                             {
