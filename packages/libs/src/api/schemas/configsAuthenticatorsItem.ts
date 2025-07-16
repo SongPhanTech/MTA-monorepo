@@ -4,14 +4,14 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ConfigsAuthenticatorsItemType } from './configsAuthenticatorsItemType';
+import type { ConfigsAuthenticatorsItemType } from './configsAuthenticatorsItemType'
 
 export type ConfigsAuthenticatorsItem = {
-  id?: string;
-  name?: string;
-  displayName?: string;
-  isEnabled?: boolean;
-  type?: ConfigsAuthenticatorsItemType;
-  tags?: string[];
-  self?: string;
-};
+    id?: string
+    name?: string
+    displayName?: string
+    isEnabled?: boolean
+    type?: ConfigsAuthenticatorsItemType
+    tags?: string[]
+    self?: string
+}

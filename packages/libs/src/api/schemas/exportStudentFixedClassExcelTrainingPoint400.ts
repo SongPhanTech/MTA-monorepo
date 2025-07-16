@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentFixedClassExcelTrainingPoint400 = {
-  message: string;
-};
+    message: string
+}

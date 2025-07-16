@@ -4,16 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GraduationCheckResultRank } from './graduationCheckResultRank';
-import type { GraduationCheckResultDowngraded } from './graduationCheckResultDowngraded';
+
+import type { GraduationCheckResultDowngraded } from './graduationCheckResultDowngraded'
+import type { GraduationCheckResultRank } from './graduationCheckResultRank'
 
 export interface GraduationCheckResult {
-  applicationId: string;
-  graduation: boolean;
-  reason: string;
-  /** @nullable */
-  gpa?: number | null;
-  /** @nullable */
-  rank?: GraduationCheckResultRank;
-  downgraded?: GraduationCheckResultDowngraded;
+    applicationId: string
+    graduation: boolean
+    reason: string
+    /** @nullable */
+    gpa?: number | null
+    /** @nullable */
+    rank?: GraduationCheckResultRank
+    downgraded?: GraduationCheckResultDowngraded
 }

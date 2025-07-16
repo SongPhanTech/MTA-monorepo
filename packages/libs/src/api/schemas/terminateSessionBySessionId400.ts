@@ -6,5 +6,5 @@
  */
 
 export type TerminateSessionBySessionId400 = {
-  message: string;
-};
+    message: string
+}

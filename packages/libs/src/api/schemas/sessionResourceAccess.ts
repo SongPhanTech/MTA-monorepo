@@ -4,16 +4,17 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionResourceAccessFeTestLocal } from './sessionResourceAccessFeTestLocal';
-import type { SessionResourceAccessRealmManagement } from './sessionResourceAccessRealmManagement';
-import type { SessionResourceAccessFeSystemLocal } from './sessionResourceAccessFeSystemLocal';
-import type { SessionResourceAccessBroker } from './sessionResourceAccessBroker';
-import type { SessionResourceAccessAccount } from './sessionResourceAccessAccount';
+
+import type { SessionResourceAccessAccount } from './sessionResourceAccessAccount'
+import type { SessionResourceAccessBroker } from './sessionResourceAccessBroker'
+import type { SessionResourceAccessFeSystemLocal } from './sessionResourceAccessFeSystemLocal'
+import type { SessionResourceAccessFeTestLocal } from './sessionResourceAccessFeTestLocal'
+import type { SessionResourceAccessRealmManagement } from './sessionResourceAccessRealmManagement'
 
 export type SessionResourceAccess = {
-  'fe-test-local': SessionResourceAccessFeTestLocal;
-  'realm-management': SessionResourceAccessRealmManagement;
-  'fe-system-local': SessionResourceAccessFeSystemLocal;
-  broker: SessionResourceAccessBroker;
-  account: SessionResourceAccessAccount;
-};
+    'fe-test-local': SessionResourceAccessFeTestLocal
+    'realm-management': SessionResourceAccessRealmManagement
+    'fe-system-local': SessionResourceAccessFeSystemLocal
+    broker: SessionResourceAccessBroker
+    account: SessionResourceAccessAccount
+}

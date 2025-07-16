@@ -6,6 +6,6 @@
  */
 
 export interface PresignedUrlDto {
-  path: string;
-  extension: string;
+    path: string
+    extension: string
 }
