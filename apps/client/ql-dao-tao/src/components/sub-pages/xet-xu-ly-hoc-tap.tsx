@@ -14,7 +14,12 @@ import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { AcademicActionType, FixedClass, TrainingCourse } from '@workspace/db'
+import {
+    type AcademicActionType,
+    DecisionStatus,
+    type FixedClass,
+    type TrainingCourse,
+} from '@workspace/db'
 import {
     useDeleteStudentAcademicDecision,
     useFindManyDM_DonVi,
@@ -295,7 +300,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     student: { connect: { id: student.id } },
                     semester: { connect: { id: semesterId } },
                     actionTaken: actionTaken,
-                    status: 'APPROVED',
+                    status: DecisionStatus.PENDING,
                     appliedConfig: student.academicActionId
                         ? { connect: { id: student.academicActionId } }
                         : undefined,
@@ -303,7 +308,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     reason: student.reason || undefined,
                 },
                 update: {
-                    status: 'APPROVED',
+                    status: DecisionStatus.PENDING,
                     decisionDate: new Date(),
                     reason: student.reason || undefined,
                 },
