@@ -120,50 +120,26 @@ export default function SubjectList() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count, refetch: refetchCount } = useCountSubject({
+    const { data: count } = useCountSubject({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              subjectVersion: {
-                                  some: {
-                                      name: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              },
-                          },
-                      ],
-                  }
-                : {}),
+            subjectVersion: {
+                some: {
+                    name: { contains: filters.name, mode: 'insensitive' },
+                    code: { contains: filters.code, mode: 'insensitive' },
+                },
+            },
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
             ...(filters.examType
                 ? {
-                      subjectVersion: {
-                          some: {
-                              examType: {
-                                  in: filters.examType,
-                              },
-                          },
-                      },
+                      subjectVersion: { some: { examType: { in: filters.examType } } },
                   }
                 : {}),
-            ...(typeof filters.active === 'boolean'
+            ...(filters.active?.length === 1
                 ? {
                       subjectVersion: {
-                          some: {
-                              active: filters.active,
-                          },
+                          some: { active: filters.active[0] },
                       },
                   }
                 : {}),
@@ -480,7 +456,6 @@ export default function SubjectList() {
                                     { label: 'Ngừng đào tạo', value: false },
                                 ],
                                 type: 'select',
-                                multiple: ['name', 'code'],
                                 render: (record) => {
                                     return !record ? (
                                         <Tag color="error">Không hoạt động</Tag>

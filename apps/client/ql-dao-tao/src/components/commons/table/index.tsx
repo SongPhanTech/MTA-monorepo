@@ -21,16 +21,24 @@ import { useCallback, useState } from 'react'
 
 dayjs.locale('vi')
 
+export type ColumnOption = {
+    value: string | boolean
+    label: string
+    children?: ColumnOption[]
+}
+
 type TableProps<T> = {
     columns?: ColumnsType<T> & {
         type?: string
         distinctFilters?: string[]
-        options?: any[]
+        options?: ColumnOption[]
     }
     data?: T[]
-    pagination?: TablePaginationConfig & {
-        onShowSizeChange?: ((size: number) => void) | undefined
-    }
+    pagination?:
+        | (TablePaginationConfig & {
+              onShowSizeChange?: ((size: number) => void) | undefined
+          })
+        | false
     onRowClick?: (record: T) => void
     filters?: FilterProps
     setFilters?: (record: FilterProps) => void
@@ -41,7 +49,7 @@ type TableProps<T> = {
     scrollable?: boolean
     maxHeight?: number
     rowSelection?: TableRowSelection<T>
-} & TableAntdProps
+} & Omit<TableAntdProps, 'pagination'>
 
 const Table = <T extends Record<string, unknown>>({
     columns = [],
@@ -404,7 +412,7 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]: checkedKeys,
                                     })
                                 }}
-                                fieldNames={{ title: 'title', key: 'value', children: 'children' }}
+                                fieldNames={{ title: 'label', key: 'value', children: 'children' }}
                                 className="w-full mb-3 max-h-[500px] overflow-y-auto"
                             />
                             <ListButton

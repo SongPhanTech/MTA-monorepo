@@ -374,13 +374,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     align: 'center',
                                     fixed: 'left',
                                     type: 'input',
-                                    multiple: [
-                                        'name',
-                                        'fixedClass',
-                                        'trainingCourse',
-                                        'organization',
-                                        'status',
-                                    ],
                                     render: (__, record) => record?.student?.userProfile?.code,
                                 },
                                 {
@@ -389,13 +382,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     width: 200,
                                     fixed: 'left',
                                     type: 'input',
-                                    multiple: [
-                                        'code',
-                                        'fixedClass',
-                                        'trainingCourse',
-                                        'organization',
-                                        'status',
-                                    ],
                                     render: (__, record) => record?.student?.userProfile?.fullname,
                                 },
                                 {
@@ -404,13 +390,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     width: 150,
                                     align: 'center',
                                     type: 'select',
-                                    multiple: [
-                                        'code',
-                                        'name',
-                                        'trainingCourse',
-                                        'organization',
-                                        'status',
-                                    ],
                                     options: fixedClassData.map((i: FixedClass) => ({
                                         value: i.id,
                                         label: i.name,
@@ -423,13 +402,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     width: 100,
                                     align: 'center',
                                     type: 'select',
-                                    multiple: [
-                                        'code',
-                                        'name',
-                                        'fixedClass',
-                                        'organization',
-                                        'status',
-                                    ],
                                     options: trainingCourseData.map((i: TrainingCourse) => ({
                                         value: i.id,
                                         label: i.name,
@@ -444,13 +416,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     align: 'center',
                                     type: 'tree_select',
                                     options: treeData,
-                                    multiple: [
-                                        'code',
-                                        'name',
-                                        'fixedClass',
-                                        'trainingCourse',
-                                        'status',
-                                    ],
                                     render: (__, record) =>
                                         record?.student?.fixedClass?.managementOrganization?.sTen,
                                 },
@@ -480,13 +445,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     align: 'center',
                                     fixed: 'right',
                                     type: 'select',
-                                    multiple: [
-                                        'code',
-                                        'name',
-                                        'fixedClass',
-                                        'trainingCourse',
-                                        'organization',
-                                    ],
                                     options: decisionStatusOption,
                                     render: (status) => (
                                         <Tag color={getDecisionStatusColor(status)}>

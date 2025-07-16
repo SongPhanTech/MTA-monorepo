@@ -261,13 +261,7 @@ export default function TrainingLocationPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (
-                                    _,
-                                    {
-                                        id,
-                                        trainingLocationId,
-                                    }: { id?: string; trainingLocationId?: string }
-                                ) => {
+                                render: (_, { id, trainingLocationId }) => {
                                     if (id && trainingLocationId) {
                                         return (
                                             <Row className="justify-center gap-2">

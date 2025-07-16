@@ -2,27 +2,39 @@ import { DownOutlined } from '@ant-design/icons'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { TableProps as TableAntdProps } from 'antd'
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnType, TablePaginationConfig } from 'antd/es/table'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
-import Table from '../table'
+import Table, { type ColumnOption } from '../table'
 
-type Data = Record<string, unknown> & {
+interface BaseNode {
     id: string
     key?: string
-    children?: Data[]
+    $type?: 'parent' | 'child'
 }
 
-type TableProps<T extends Data> = {
-    data?: T[]
-    columns?: ColumnsType<T> & {
-        type?: string
+export type ChildData = BaseNode & {
+    [key: string]: any
+}
+
+export type Data<T, ChildKey extends keyof T> = T &
+    BaseNode & {
+        [key in ChildKey]: ChildData[]
+    }
+
+type TableProps<T, ChildKey extends keyof T> = {
+    data?: Data<T, ChildKey>[]
+    columns?: (ColumnType<Data<T, ChildKey>[ChildKey][number]> & {
+        type?: 'input' | 'input_search' | 'select' | 'tree_select' | 'order' | 'date'
         distinctFilters?: string[]
-        options?: { value: string; label: string }[]
-    }
-    pagination?: TablePaginationConfig & {
-        onShowSizeChange?: ((size: number) => void) | undefined
-    }
+        options?: ColumnOption[]
+    })[]
+    pagination?:
+        | (TablePaginationConfig & {
+              onShowSizeChange?: ((size: number) => void) | undefined
+          })
+        | false
     headerTitleKey: keyof T | ((record: T) => ReactNode)
+    onRow?: (data: T, index?: number) => React.HTMLAttributes<any> & React.TdHTMLAttributes<any>
     onRowClick?: (record: T) => void
     expandable?: TableAntdProps<T>['expandable']
     rowKey?: string
@@ -34,12 +46,22 @@ type TableProps<T extends Data> = {
     filters?: FilterProps
     setFilters?: (record: FilterProps) => void
     headerRight?: (record: T) => ReactNode | ReactNode[]
-    childrenFieldName?: keyof T
+    childrenFieldName: ChildKey
     onRowDoubleClick?: (record: T) => void
     defaultExpandAll?: boolean
-} & TableAntdProps
+} & Omit<
+    TableAntdProps,
+    'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName'
+>
 
-const TableCollapse = <T extends Data>({
+const TableCollapse = <
+    T extends {
+        id: string
+        key?: string
+        $type?: 'parent' | 'child'
+    },
+    ChildKey extends keyof T,
+>({
     data = [],
     columns = [],
     headerTitleKey,
@@ -53,13 +75,13 @@ const TableCollapse = <T extends Data>({
     scrollable,
     maxHeight,
     currentPage,
-    childrenFieldName = 'children',
+    childrenFieldName,
     onRowDoubleClick,
     defaultExpandAll,
     filters,
     setFilters,
     ...rest
-}: TableProps<T>) => {
+}: TableProps<T, ChildKey>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
 
     const handleExpand = (expanded: boolean, record: T) => {
@@ -76,11 +98,11 @@ const TableCollapse = <T extends Data>({
         })
     }
 
-    const dataWithKey = useMemo(() => {
+    const dataWithKey: T[] = useMemo(() => {
         if (!data) return []
 
         return data.map((item) => {
-            const children = item[childrenFieldName] as Data[] | undefined
+            const children = item[childrenFieldName]
             const hasChildren = Array.isArray(children)
             // Nếu item không có key thì tạo key mới
             if (!item.key) {
@@ -131,14 +153,14 @@ const TableCollapse = <T extends Data>({
     }, [defaultExpandAll, dataWithKey, childrenFieldName])
 
     const allChildren = useMemo(() => {
-        const children: Data[] = []
+        const children: T[ChildKey][] = []
         if (!dataWithKey) return children
         for (const item of dataWithKey) {
-            const itemChildren = item[childrenFieldName] as Data[] | undefined
+            const itemChildren = item[childrenFieldName] as T[ChildKey][] | undefined
             if (item.$type === 'parent' && Array.isArray(itemChildren)) {
                 children.push(...itemChildren)
             } else if (item.$type === 'child') {
-                children.push(item)
+                children.push(item as T[ChildKey])
             }
         }
         return children
@@ -154,11 +176,15 @@ const TableCollapse = <T extends Data>({
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
+                    // @ts-ignore
                     const order = allChildren.findIndex((item) => item.key === record.key)
                     return order >= 0
                         ? order +
                               1 +
-                              ((pagination?.current || currentPage || 1) - 1) *
+                              (((typeof pagination !== 'boolean' && pagination?.current) ||
+                                  currentPage ||
+                                  1) -
+                                  1) *
                                   DEFAULT_PAGINATE_SIZE
                         : ''
                 },
@@ -177,7 +203,7 @@ const TableCollapse = <T extends Data>({
                     : 1,
             }),
         }))
-    }, [columns, childrenFieldName, allChildren, currentPage, pagination?.current])
+    }, [columns, childrenFieldName, allChildren, currentPage, pagination])
 
     return (
         <>
@@ -225,12 +251,12 @@ const TableCollapse = <T extends Data>({
                     expandedRowKeys: expandedKeys,
                     onExpand: handleExpand,
                     rowExpandable: (record) => {
-                        const children = record[childrenFieldName as string]
+                        const children = record[childrenFieldName]
                         return Array.isArray(children) && children.length > 0
                     },
                     expandRowByClick: true,
                     expandIcon: ({ expanded, onExpand, record }) => {
-                        const children = record[childrenFieldName as string]
+                        const children = record[childrenFieldName]
                         return Array.isArray(children) ? (
                             <div className="flex w-full">
                                 {children.length > 0 && (

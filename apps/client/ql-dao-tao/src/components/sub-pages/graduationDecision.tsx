@@ -149,7 +149,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                 <Col span={24}>
                     <TableCollapse
                         rowKey={'key'}
-                        headerTitleKey={'name'}
+                        headerTitleKey="name"
                         childrenFieldName="graduationDecisions"
                         data={transformedData}
                         columns={[
@@ -160,8 +160,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 width: 120,
                                 fixed: 'left',
                                 type: 'input',
-                                render: (_, record: any) =>
-                                    record?.student?.userProfile?.code || '',
+                                render: (_, record) => record?.student?.userProfile?.code || '',
                             },
                             {
                                 title: 'Họ và tên',

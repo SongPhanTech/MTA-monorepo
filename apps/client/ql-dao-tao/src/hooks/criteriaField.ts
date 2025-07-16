@@ -7,7 +7,7 @@ export const useCriteriaFieldOptions = () => {
     }
 
     return {
-        criteriaFieldOptions,
+        options: criteriaFieldOptions,
         getCriteriaFieldLabel,
     }
 }
