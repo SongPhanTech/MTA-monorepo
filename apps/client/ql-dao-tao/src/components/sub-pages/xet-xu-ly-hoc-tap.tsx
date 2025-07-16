@@ -16,11 +16,12 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import type { AcademicActionType, FixedClass, TrainingCourse } from '@workspace/db'
 import {
+    useDeleteStudentAcademicDecision,
     useFindManyDM_DonVi,
     useFindManyFixedClass,
     useFindManyStudentAcademicDecision,
     useFindManyTrainingCourse,
-    useUpdateStudentAcademicDecision,
+    useUpsertStudentAcademicDecision,
 } from '@workspace/db/hooks'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
@@ -41,12 +42,14 @@ interface SelectedStudent {
     academicActionId: string
     academicActionName: string
     isSelected: boolean
+    reason?: string
 }
 
 const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { getAcademicActionTypeLabel } = useAcademicActionTypeOption()
     const {
         options: decisionStatusOption,
@@ -143,16 +146,13 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         { enabled: !!semesterId }
     )
 
-    const { mutateAsync: updateStudentAcademicDecision } = useUpdateStudentAcademicDecision()
+    const { mutateAsync: deleteStudentAcademicDecision } = useDeleteStudentAcademicDecision()
     async function handleDeleteStudentAcademicDecision(id: string) {
         try {
             showSpinner()
-            await updateStudentAcademicDecision({
+            await deleteStudentAcademicDecision({
                 where: {
                     id,
-                },
-                data: {
-                    deletedAt: new Date(),
                 },
             })
         } catch (_error) {
@@ -206,39 +206,128 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         return []
     }, [students])
 
-    console.log(studentData)
+    const updateSelectedStudents = useMemo(() => {
+        return (keys: React.Key[]) => {
+            const selected = keys
+                .map((id) => {
+                    let studentInfo = null
+                    for (const course of studentData) {
+                        const found = course.students?.find((s: any) => s.id === id)
+                        if (found) {
+                            studentInfo = found
+                            break
+                        }
+                    }
 
+                    if (studentInfo) {
+                        return {
+                            id: studentInfo.id,
+                            code: studentInfo.userProfile?.code,
+                            fullname: studentInfo.userProfile?.fullname,
+                            academicActionId: studentInfo.academicAction?.[0]?.id,
+                            academicActionName: studentInfo.academicAction?.[0]?.name,
+                            isSelected: true,
+                            academicActions: studentInfo.academicAction || [],
+                            reason: studentInfo.reason,
+                        }
+                    }
+                    return null
+                })
+                .filter(Boolean) as SelectedStudent[]
+
+            setSelectedStudents(selected)
+            return selected
+        }
+    }, [studentData])
+
+    const onSelectChange = (id: string, selected: boolean) => {
+        const newSelectedKeys = selected
+            ? [...selectedRowKeys, id]
+            : selectedRowKeys.filter((key) => key !== id)
+
+        setSelectedRowKeys(newSelectedKeys)
+        updateSelectedStudents(newSelectedKeys)
+    }
+
+    const rowSelection = {
+        selectedRowKeys,
+        onSelect: (record: any, selected: boolean) => {
+            if (record.id) {
+                onSelectChange(record.id, selected)
+            }
+        },
+        hideSelectAll: true,
+        columnWidth: 0,
+        renderCell: (_: any, record: any, index: number) => {
+            if (record.id) {
+                return (
+                    <Checkbox
+                        checked={selectedRowKeys.includes(record.id)}
+                        onChange={(e) => onSelectChange(record.id, e.target.checked)}
+                    />
+                )
+            }
+            return null
+        },
+    }
+
+    const { mutateAsync: upsertStudentAcademicDecision } = useUpsertStudentAcademicDecision()
+
+    const handleApprove = async () => {
+        if (!semesterId) {
+            message.error('Vui lòng chọn học kỳ')
+            return
+        }
+
+        if (selectedStudents.length === 0) {
+            message.warning('Vui lòng chọn ít nhất một sinh viên để duyệt')
+            return
+        }
+
+        try {
+            const decisionsToUpsert = selectedStudents.map((student) => ({
+                where: {
+                    studentId: student.id,
+                    semesterId: semesterId,
+                    actionTaken: actionTaken,
+                },
+                create: {
+                    student: { connect: { id: student.id } },
+                    semester: { connect: { id: semesterId } },
+                    actionTaken: actionTaken,
+                    status: 'APPROVED',
+                    appliedConfig: student.academicActionId
+                        ? { connect: { id: student.academicActionId } }
+                        : undefined,
+                    decisionDate: new Date(),
+                    reason: student.reason || undefined,
+                },
+                update: {
+                    status: 'APPROVED',
+                    decisionDate: new Date(),
+                    reason: student.reason || undefined,
+                },
+            }))
+
+            await Promise.all(
+                decisionsToUpsert.map((decision: any) => upsertStudentAcademicDecision(decision))
+            )
+
+            message.success(`Đã duyệt thành công cho ${selectedStudents.length} sinh viên`)
+            setSelectedStudents([])
+            setSelectedRowKeys([])
+            refetch()
+        } catch (error) {
+            console.error('Lỗi khi duyệt quyết định:', error)
+            message.error('Có lỗi xảy ra khi duyệt quyết định')
+        }
+    }
     return (
         <div>
             <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
                 <Row gutter={[16, 0]}>
                     <Col span={24}>
                         <Row gutter={[16, 16]} align="top" justify="space-between">
-                            {/* <Col span={12}>
-                                <Flex>
-                                    <Col span={12}>
-                                        <Form.Item name="searchText">
-                                            <Input
-                                                id="search"
-                                                onChange={(e) =>
-                                                    handleFilterChange('searchText', e.target.value)
-                                                }
-                                                className="py-0"
-                                                placeholder="Tìm kiếm mã, tên học viên"
-                                                prefix={
-                                                    <Search
-                                                        size={15}
-                                                        style={{
-                                                            color: 'rgba(0, 0, 0, 0.25)',
-                                                        }}
-                                                    />
-                                                }
-                                                allowClear
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                </Flex>
-                            </Col> */}
                             <Col span={24}>
                                 <Flex justify="end">
                                     <Button
@@ -459,7 +548,11 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
                                 <Flex justify="end">
-                                    <Button type="primary">
+                                    <Button
+                                        type="primary"
+                                        onClick={handleApprove}
+                                        disabled={selectedStudents.length === 0}
+                                    >
                                         <BookPlus />
                                         Duyệt
                                     </Button>
@@ -473,7 +566,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             headerTitleKey="courseName"
                             childrenFieldName="students"
                             defaultExpandAll
-                            // rowSelection={rowSelection}
+                            rowSelection={rowSelection}
                             columns={[
                                 {
                                     title: 'Mã sinh viên',
@@ -501,30 +594,47 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'academicAction',
                                     width: 200,
                                     fixed: 'right',
-                                    render: (academicAction, record) => (
-                                        <div className="flex flex-col gap-2">
-                                            {Array.isArray(academicAction) &&
-                                                academicAction.map((academicAction) => {
-                                                    return (
-                                                        <div
-                                                            key={academicAction.id}
-                                                            className="flex items-center"
-                                                        >
-                                                            <Checkbox className="mr-2" />
-                                                            <span className="text-gray-800">
-                                                                {academicAction.name}
-                                                            </span>
-                                                        </div>
-                                                    )
-                                                })}
-                                        </div>
-                                    ),
+                                    render: (academicAction, record) => {
+                                        const hasAcademicActions =
+                                            Array.isArray(academicAction) &&
+                                            academicAction.length > 0
+                                        const firstWarningId = hasAcademicActions
+                                            ? academicAction[0].id
+                                            : null
+
+                                        return (
+                                            <div className="flex flex-col gap-2">
+                                                {hasAcademicActions &&
+                                                    academicAction.map((action) => {
+                                                        const isFirstWarning =
+                                                            action.id === firstWarningId
+                                                        return (
+                                                            <div
+                                                                key={action.id}
+                                                                className="flex items-center"
+                                                            >
+                                                                <Checkbox
+                                                                    className="mr-2"
+                                                                    checked={isFirstWarning}
+                                                                />
+                                                                <span className="text-gray-800">
+                                                                    {action.name}
+                                                                </span>
+                                                            </div>
+                                                        )
+                                                    })}
+                                            </div>
+                                        )
+                                    },
                                 },
                             ]}
                             data={studentData}
                             pagination={{
-                                pageSize: studentData.length,
-                                hideOnSinglePage: true,
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: studentData.length,
+                                onChange: setCurrentPage,
+                                onShowSizeChange: setNumberOfPages,
                             }}
                         />
                     </Col>
