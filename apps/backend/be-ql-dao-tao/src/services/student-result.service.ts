@@ -1205,7 +1205,7 @@ const checkAcademicWarning = async (
     student: StudentInfoCheck,
     trainingCourseId: string,
     warningCriteriaList: AcademicWarningRule[] = []
-): Promise<number> => {
+): Promise<AcademicWarningRule[]> => {
     try {
         const warningCriteriaListFilter = warningCriteriaList.filter(
             (criteria) =>
@@ -1216,7 +1216,7 @@ const checkAcademicWarning = async (
         )
         // Lấy thông tin tiêu chí cảnh cáo
 
-        const severities = warningCriteriaListFilter.map((criteria) => {
+        const ruleList = warningCriteriaListFilter.map((criteria) => {
             console.log('Checking criteria:', criteria.field, 'with value:', criteria.threshold)
 
             switch (criteria.field) {
@@ -1229,8 +1229,8 @@ const checkAcademicWarning = async (
                         criteria.operator,
                         criteria.invert
                     )
-                        ? criteria.severity
-                        : 0
+                        ? criteria
+                        : null
                 case CriteriaField.CUMULATIVE_DEBT_CREDITS: // Số tín chỉ không đạt tích lũy
                     return checkEligible(
                         student,
@@ -1240,8 +1240,8 @@ const checkAcademicWarning = async (
                         criteria.operator,
                         criteria.invert
                     )
-                        ? criteria.severity
-                        : 0
+                        ? criteria
+                        : null
                 case CriteriaField.SEMESTER_GPA: // Điểm trung bình học kỳ
                     return checkEligible(
                         student,
@@ -1251,8 +1251,8 @@ const checkAcademicWarning = async (
                         criteria.operator,
                         criteria.invert
                     )
-                        ? criteria.severity
-                        : 0
+                        ? criteria
+                        : null
                 case CriteriaField.CUMULATIVE_GPA: // Điểm trung bình tích lũy
                     return checkEligible(
                         student,
@@ -1262,8 +1262,8 @@ const checkAcademicWarning = async (
                         criteria.operator,
                         criteria.invert
                     )
-                        ? criteria.severity
-                        : 0
+                        ? criteria
+                        : null
                 case CriteriaField.SEMESTER_REGISTERED_CREDITS: // Số tín chỉ đăng ký trong học kỳ
                     return checkEligible(
                         student,
@@ -1273,19 +1273,19 @@ const checkAcademicWarning = async (
                         criteria.operator,
                         criteria.invert
                     )
-                        ? criteria.severity
-                        : 0
+                        ? criteria
+                        : null
                 default:
-                    return 0
+                    return null
             }
         })
 
-        const maxSeverity = Math.max(...severities, 0)
-        console.log('Academic warning severity:', maxSeverity, student.id)
-        return maxSeverity
+        // const check = ruleList.every((item) => item === false)
+
+        return ruleList.filter((item) => item !== null)
     } catch (error) {
         console.error('Error checking student eligibility:', error)
-        return 0 // Trả về false nếu có lỗi xảy ra
+        return [] // Trả về false nếu có lỗi xảy ra
     } finally {
         // Đóng kết nối Prisma nếu cần thiết
         await prisma.$disconnect()
@@ -1561,7 +1561,7 @@ const getStudentResult = async (
         const checkAcademicWarningResult =
             type === 'academicWarning'
                 ? await checkAcademicWarning(student, trainingCourseId, warningCriteriaList)
-                : 0
+                : []
 
         const checkAcademicActionExists = studentAcademicDecision.find(
             (decision) => decision.studentId === student.id && decision.semesterId === semesterId
@@ -1577,15 +1577,18 @@ const getStudentResult = async (
                       actionCriteriaList
                   )
                 : []
+
+        const filteredResult = (({ student, ...rest }) => rest)(studentSemesterResult)
         return StudentResult.parse({
             id: studentSemesterResult.studentId,
-            studentSemesterResult: studentSemesterResult,
+            studentSemesterResult: filteredResult,
             userProfile: await prisma.userProfile.findUnique({
                 where: { id: studentSemesterResult.student.userProfileId },
             }),
             hasScholarship: !!scholarshipInfo.length,
             hasAcademicAction: !!academicActionInfo.length,
-            academicWarningSeverity: checkAcademicWarningResult,
+            hasAcademicWarning: checkAcademicWarningResult.length > 0,
+            academicWarningRule: checkAcademicWarningResult,
             scholarship: scholarshipInfo,
             academicAction: academicActionInfo,
             trainingMajor:
@@ -1747,7 +1750,7 @@ export const resultCourseStudentResult = async (
             // Filter based on type
             const skip =
                 (type === 'scholarship' && !studentResult.hasScholarship) ||
-                (type === 'academicWarning' && !studentResult.academicWarningSeverity) ||
+                (type === 'academicWarning' && !studentResult.hasAcademicWarning) ||
                 (type === 'academicAction' && !studentResult.hasAcademicAction)
             if (skip) {
                 console.log(`Skipping student ${student.id} in course ${courseId} for type ${type}`)
@@ -1760,6 +1763,7 @@ export const resultCourseStudentResult = async (
             courseMap[courseId].students.push(studentResult)
         })
     )
+    // bỏ các khóa học không có sinh viên
     for (const courseId in courseMap) {
         if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
             delete courseMap[courseId]
