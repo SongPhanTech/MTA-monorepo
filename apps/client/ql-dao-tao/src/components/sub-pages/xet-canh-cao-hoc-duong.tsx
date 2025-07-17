@@ -5,12 +5,18 @@ import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import { PutDisciplinaryWarning } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
 import type { DisciplinaryWarning, DisciplinaryWarningReason } from '@workspace/db'
 import {
+    useCountDisciplinaryWarning,
     useFindManyDisciplinaryWarning,
+    useFindManyDM_DonVi,
+    useFindManyFixedClass,
+    useFindManyTrainingCourse,
     useUpdateDisciplinaryWarning,
     useUpdateStudent,
 } from '@workspace/db/hooks'
@@ -20,13 +26,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectId: string | undefined
-    trainingCourseId: string | undefined
-    managementOrganizationId: string | undefined
-}
-
 interface XetCanhCaoHocDuongProps {
     semesterId: string
 }
@@ -35,8 +34,9 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        trainingObjectId: '',
+        code: '',
+        name: '',
+        fixedClassId: '',
         trainingCourseId: '',
         managementOrganizationId: '',
     })
@@ -46,6 +46,55 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
         {
             where: {
                 semesterId,
+                student: {
+                    userProfile: {
+                        ...(filters.code && filters.code !== ''
+                            ? {
+                                  code: {
+                                      contains: filters.code,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                        ...(filters.name && filters.name !== ''
+                            ? {
+                                  fullname: {
+                                      contains: filters.name,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                    },
+                    ...(filters.fixedClassId
+                        ? {
+                              fixedClassId: {
+                                  in: Array.isArray(filters.fixedClassId)
+                                      ? filters.fixedClassId
+                                      : [filters.fixedClassId],
+                              },
+                          }
+                        : {}),
+                    fixedClass: {
+                        ...(filters.trainingCourseId
+                            ? {
+                                  trainingCourseId: {
+                                      in: Array.isArray(filters.trainingCourseId)
+                                          ? filters.trainingCourseId
+                                          : [filters.trainingCourseId],
+                                  },
+                              }
+                            : {}),
+                        ...(filters.managementOrganizationId
+                            ? {
+                                  managementOrganizationId: {
+                                      in: Array.isArray(filters.managementOrganizationId)
+                                          ? filters.managementOrganizationId
+                                          : [filters.managementOrganizationId],
+                                  },
+                              }
+                            : {}),
+                    },
+                },
             },
             include: {
                 student: {
@@ -66,6 +115,64 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
             },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
+        },
+        { enabled: !!semesterId }
+    )
+
+    const { data: count } = useCountDisciplinaryWarning(
+        {
+            where: {
+                semesterId,
+                student: {
+                    userProfile: {
+                        ...(filters.code && filters.code !== ''
+                            ? {
+                                  code: {
+                                      contains: filters.code,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                        ...(filters.name && filters.name !== ''
+                            ? {
+                                  fullname: {
+                                      contains: filters.name,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                    },
+                    ...(filters.fixedClassId
+                        ? {
+                              fixedClassId: {
+                                  in: Array.isArray(filters.fixedClassId)
+                                      ? filters.fixedClassId
+                                      : [filters.fixedClassId],
+                              },
+                          }
+                        : {}),
+                    fixedClass: {
+                        ...(filters.trainingCourseId
+                            ? {
+                                  trainingCourseId: {
+                                      in: Array.isArray(filters.trainingCourseId)
+                                          ? filters.trainingCourseId
+                                          : [filters.trainingCourseId],
+                                  },
+                              }
+                            : {}),
+                        ...(filters.managementOrganizationId
+                            ? {
+                                  managementOrganizationId: {
+                                      in: Array.isArray(filters.managementOrganizationId)
+                                          ? filters.managementOrganizationId
+                                          : [filters.managementOrganizationId],
+                                  },
+                              }
+                            : {}),
+                    },
+                },
+            },
         },
         { enabled: !!semesterId }
     )
@@ -104,6 +211,21 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
         }
         hideSpinner()
     }
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: {
+            name: 'asc',
+        },
+    })
+
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        orderBy: {
+            name: 'asc',
+        },
+    })
+
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
 
     return (
         <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
@@ -160,6 +282,8 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                     <Table
                         rowKey="id"
                         data={data}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -171,39 +295,55 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                             },
                             {
                                 title: 'Mã sinh viên',
-                                dataIndex: ['student', 'code'],
+                                dataIndex: 'code',
                                 width: 120,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'input',
+                                render: (__, record) => record?.student?.userProfile?.code,
                             },
                             {
                                 title: 'Tên sinh viên',
-                                dataIndex: ['student', 'userProfile', 'fullname'],
+                                dataIndex: 'name',
                                 width: 200,
                                 fixed: 'left',
+                                type: 'input',
+                                render: (__, record) => record?.student?.userProfile?.fullname,
                             },
                             {
                                 title: 'Lớp niên chế',
-                                dataIndex: ['student', 'fixedClass', 'name'],
+                                dataIndex: 'fixedClassId',
                                 width: 150,
                                 align: 'center',
+                                type: 'select',
+                                options: fixedClassData.map((i) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                })),
+                                render: (__, record) => record?.student?.fixedClass?.name,
                             },
                             {
                                 title: 'Khóa',
-                                dataIndex: ['student', 'fixedClass', 'trainingCourse', 'name'],
+                                dataIndex: 'trainingCourseId',
                                 width: 150,
                                 align: 'center',
+                                type: 'select',
+                                options: trainingCourseData.map((i) => ({
+                                    value: i.id,
+                                    label: i.name,
+                                })),
+                                render: (__, record) =>
+                                    record?.student?.fixedClass?.trainingCourse?.name,
                             },
                             {
                                 title: 'Đơn vị quản lý',
-                                dataIndex: [
-                                    'student',
-                                    'fixedClass',
-                                    'managementOrganization',
-                                    'sTen',
-                                ],
+                                dataIndex: 'managementOrganizationId',
                                 width: 150,
                                 align: 'center',
+                                type: 'tree_select',
+                                options: treeData,
+                                render: (__, record) =>
+                                    record?.student?.fixedClass?.managementOrganization?.sTen,
                             },
                             {
                                 title: 'Mức CCHĐ',
@@ -217,7 +357,6 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                             },
                             {
                                 title: 'Mức CCHĐ trước đó',
-                                // dataIndex: 'increasedFrom',
                                 width: 120,
                                 align: 'center',
                                 fixed: 'right',
@@ -267,6 +406,13 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                                 },
                             },
                         ]}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
                     />
                 </Col>
             </Row>

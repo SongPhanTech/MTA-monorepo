@@ -1,19 +1,8 @@
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    message,
-    Row,
-    Select,
-    Tag,
-    TreeSelect,
-} from 'antd'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from '@constants/constants'
 import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
@@ -30,17 +19,9 @@ import {
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
 dayjs.locale('vi')
-
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectId: string | undefined
-    trainingCourseId: string | undefined
-    managementOrganizationId: string | undefined
-}
 
 interface DiemTrungBinhKyHocProps {
     semesterId: string
@@ -50,7 +31,8 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        code: '',
+        name: '',
         trainingObjectId: '',
         trainingCourseId: '',
         managementOrganizationId: '',
@@ -70,26 +52,24 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 semesterId: semesterId,
                             },
                         },
-                        ...(filters.searchText && filters.searchText !== ''
-                            ? {
-                                  OR: [
-                                      {
-                                          code: {
-                                              contains: filters.searchText,
-                                              mode: 'insensitive',
-                                          },
+                        userProfile: {
+                            ...(filters.code && filters.code !== ''
+                                ? {
+                                      code: {
+                                          contains: filters.code,
+                                          mode: 'insensitive',
                                       },
-                                      {
-                                          userProfile: {
-                                              fullname: {
-                                                  contains: filters.searchText,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
+                                  }
+                                : {}),
+                            ...(filters.name && filters.name !== ''
+                                ? {
+                                      fullname: {
+                                          contains: filters.name,
+                                          mode: 'insensitive',
                                       },
-                                  ],
-                              }
-                            : {}),
+                                  }
+                                : {}),
+                        },
                     },
                 },
                 ...(filters.trainingObjectId && filters.trainingObjectId !== ''
@@ -130,26 +110,24 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                 },
                 students: {
                     where: {
-                        ...(filters.searchText && filters.searchText !== ''
-                            ? {
-                                  OR: [
-                                      {
-                                          code: {
-                                              contains: filters.searchText,
-                                              mode: 'insensitive',
-                                          },
+                        userProfile: {
+                            ...(filters.code && filters.code !== ''
+                                ? {
+                                      code: {
+                                          contains: filters.code,
+                                          mode: 'insensitive',
                                       },
-                                      {
-                                          userProfile: {
-                                              fullname: {
-                                                  contains: filters.searchText,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
+                                  }
+                                : {}),
+                            ...(filters.name && filters.name !== ''
+                                ? {
+                                      fullname: {
+                                          contains: filters.name,
+                                          mode: 'insensitive',
                                       },
-                                  ],
-                              }
-                            : {}),
+                                  }
+                                : {}),
+                        },
                     },
                     include: {
                         studentSemesterResult: {
@@ -305,7 +283,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Col span={10}>
+                                {/* <Col span={10}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
@@ -325,7 +303,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                             allowClear
                                         />
                                     </Form.Item>
-                                </Col>
+                                </Col> */}
                                 <Col span={10}>
                                     <Form.Item className="mb-0" name="trainingObjectId">
                                         <Select
@@ -404,22 +382,28 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 .filter(Boolean)
                                 .join(' - ')}`
                         }
+                        filters={filters}
+                        setFilters={setFilters}
                         childrenFieldName="students"
                         defaultExpandAll
                         data={dataStudents}
                         columns={[
                             {
                                 title: 'Mã sinh viên',
-                                dataIndex: ['userProfile', 'code'],
+                                dataIndex: 'code',
                                 width: 120,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'input',
+                                render: (__, record) => record?.userProfile?.code,
                             },
                             {
                                 title: 'Tên sinh viên',
-                                dataIndex: ['userProfile', 'fullname'],
+                                dataIndex: 'name',
                                 width: 200,
                                 fixed: 'left',
+                                type: 'input',
+                                render: (__, record) => record?.userProfile?.fullname,
                             },
                             {
                                 title: 'Năm học thứ...',

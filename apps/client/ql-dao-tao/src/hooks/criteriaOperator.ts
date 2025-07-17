@@ -1,5 +1,5 @@
-import type { CriteriaOperator } from '@workspace/db'
-import { criteriaOperatorOptions } from '@workspace/libs/constants'
+import { CriteriaOperator } from '@workspace/db'
+import { type CriteriaOperatorOption, criteriaOperatorOptions } from '@workspace/libs/constants'
 
 export const useCriteriaOperatorOptions = () => {
     const options: CriteriaOperatorOption[] = [

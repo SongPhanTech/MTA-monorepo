@@ -4,70 +4,83 @@ import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutHocBong, PutScholarshipCriteria } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
+import type { TrainingCourse } from '@workspace/db'
 import {
     useCountScholarship,
     useFindManyScholarship,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
     useUpdateScholarship,
     useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
-import { Button, Checkbox, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectTypeId: string | null
-    trainingCourseId: string | null
-}
-
 export default function Scholarship() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        trainingObjectTypeId: null,
+        code: '',
         trainingCourseId: null,
+        field: undefined,
+        operator: undefined,
     })
 
-    const { getCriteriaFieldLabel } = useCriteriaFieldOptions()
-    const { getCriteriaOperatorLabel } = useCriteriaOperatorOptions()
+    const { options: criteriaFieldOptions, getCriteriaFieldLabel } = useCriteriaFieldOptions()
+    const { options: criteriaOperatorOptions, getCriteriaOperatorLabel } =
+        useCriteriaOperatorOptions()
 
     const { data = [], refetch } = useFindManyScholarship({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      name: {
-                          contains: filters.searchText,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
             ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                 ? {
                       trainingCourseId: filters.trainingCourseId,
                   }
                 : {}),
-            ...(filters.trainingCourseId &&
-            filters.trainingCourseId !== '' &&
-            filters.trainingObjectTypeId &&
-            filters.trainingObjectTypeId !== ''
-                ? {
-                      trainingCourse: {
-                          trainingObjectTypeId: filters.trainingObjectTypeId,
-                      },
-                  }
-                : {}),
+            criteria: {
+                some: {
+                    ...(filters.code && filters.code !== ''
+                        ? {
+                              code: { contains: filters.code, mode: 'insensitive' },
+                          }
+                        : {}),
+                    ...(filters.field
+                        ? Array.isArray(filters.field)
+                            ? {
+                                  field: {
+                                      in: filters.field,
+                                  },
+                              }
+                            : {
+                                  field: {
+                                      equals: filters.field,
+                                  },
+                              }
+                        : {}),
+                    ...(filters.operator
+                        ? Array.isArray(filters.operator)
+                            ? {
+                                  operator: {
+                                      in: filters.operator,
+                                  },
+                              }
+                            : {
+                                  operator: {
+                                      equals: filters.operator,
+                                  },
+                              }
+                        : {}),
+                },
+            },
         },
         include: {
             criteria: true,
@@ -86,27 +99,9 @@ export default function Scholarship() {
 
     const { data: count } = useCountScholarship({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      name: {
-                          contains: filters.searchText,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
             ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                 ? {
                       trainingCourseId: filters.trainingCourseId,
-                  }
-                : {}),
-            ...(filters.trainingCourseId &&
-            filters.trainingCourseId !== '' &&
-            filters.trainingObjectTypeId &&
-            filters.trainingObjectTypeId !== ''
-                ? {
-                      trainingCourse: {
-                          trainingObjectTypeId: filters.trainingObjectTypeId,
-                      },
                   }
                 : {}),
         },
@@ -167,10 +162,6 @@ export default function Scholarship() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
-        orderBy: { name: 'asc' },
-    })
-
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
     })
@@ -180,58 +171,20 @@ export default function Scholarship() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Flex>
-                            <Col span={8}>
-                                <Input
-                                    id="search"
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
+                        <Col span={4}>
+                            <Select
+                                placeholder="Chọn khóa"
+                                options={trainingCourseData.map((i: TrainingCourse) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
                                     }
-                                    style={{ width: '100%', height: 32 }}
-                                    prefix={
-                                        <Search
-                                            size={15}
-                                            style={{
-                                                color: 'rgba(0, 0, 0, 0.25)',
-                                            }}
-                                        />
-                                    }
-                                    placeholder="Tìm kiếm tên học bổng"
-                                    allowClear
-                                />
-                            </Col>
-                            <Col span={8}>
-                                <Select
-                                    placeholder="Chọn khóa"
-                                    options={trainingCourseData.map((i: TrainingCourse) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                    style={{ width: '100%' }}
-                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
-                                    allowClear
-                                />
-                            </Col>
-                            <Col span={8}>
-                                <Select
-                                    placeholder="Chọn đối tượng đào tạo"
-                                    options={trainingObjectTypeData.map((i: TrainingObjectType) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                    style={{ width: '100%' }}
-                                    onChange={(val) =>
-                                        handleFilterChange('trainingObjectTypeId', val)
-                                    }
-                                    allowClear
-                                    disabled={!filters?.trainingCourseId}
-                                />
-                            </Col>
-                        </Flex>
+                                })}
+                                style={{ width: '100%' }}
+                                onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                                allowClear
+                            />
+                        </Col>
 
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
@@ -252,6 +205,8 @@ export default function Scholarship() {
                         }
                         defaultExpandAll
                         currentPage={currentPage}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'Mã tiêu chí',
@@ -259,6 +214,7 @@ export default function Scholarship() {
                                 align: 'center',
                                 width: 150,
                                 fixed: 'left',
+                                type: 'input',
                             },
                             {
                                 title: 'Trường được đánh giá',
@@ -266,6 +222,8 @@ export default function Scholarship() {
                                 width: 200,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'select',
+                                options: criteriaFieldOptions,
                                 render: (value) => getCriteriaFieldLabel(value),
                             },
                             {
@@ -286,6 +244,8 @@ export default function Scholarship() {
                                 dataIndex: 'operator',
                                 align: 'center',
                                 width: 150,
+                                type: 'select',
+                                options: criteriaOperatorOptions,
                                 render: (value) => getCriteriaOperatorLabel(value),
                             },
                             {

@@ -5,6 +5,7 @@ import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutAcademicActionConfig } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import useSpinner from '@hooks/spinner'
@@ -16,53 +17,61 @@ import {
     useUpdateAcademicActionConfig,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Col, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | undefined
-    trainingCourseId: string | null
-}
 
 export default function AcademicActionConfig() {
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        code: '',
+        name: '',
         trainingCourseId: null,
+        actionTaken: undefined,
     })
-    const { getAcademicActionTypeLabel } = useAcademicActionTypeOption()
+    const { options: academicActionTypeOption, getAcademicActionTypeLabel } =
+        useAcademicActionTypeOption()
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      academicActionConfig: {
-                          some: {
-                              OR: [
-                                  {
-                                      name: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
+            academicActionConfig: {
+                some: {
+                    ...(filters.code && filters.code !== ''
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.actionTaken
+                        ? Array.isArray(filters.actionTaken)
+                            ? {
+                                  actionType: {
+                                      in: filters.actionTaken,
                                   },
-                                  {
-                                      code: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
+                              }
+                            : {
+                                  actionType: {
+                                      equals: filters.actionTaken,
                                   },
-                              ],
-                          },
-                      },
-                  }
-                : {}),
+                              }
+                        : {}),
+                },
+            },
             ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                 ? {
                       id: filters.trainingCourseId,
@@ -72,23 +81,34 @@ export default function AcademicActionConfig() {
         include: {
             academicActionConfig: {
                 where: {
-                    ...(filters.searchText && filters.searchText !== ''
+                    ...(filters.code && filters.code !== ''
                         ? {
-                              OR: [
-                                  {
-                                      name: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      code: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              ],
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
                           }
+                        : {}),
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.actionTaken
+                        ? Array.isArray(filters.actionTaken)
+                            ? {
+                                  actionType: {
+                                      in: filters.actionTaken,
+                                  },
+                              }
+                            : {
+                                  actionType: {
+                                      equals: filters.actionTaken,
+                                  },
+                              }
                         : {}),
                 },
             },
@@ -107,28 +127,39 @@ export default function AcademicActionConfig() {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      academicActionConfig: {
-                          some: {
-                              OR: [
-                                  {
-                                      name: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
+            academicActionConfig: {
+                some: {
+                    ...(filters.code && filters.code !== ''
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.actionTaken
+                        ? Array.isArray(filters.actionTaken)
+                            ? {
+                                  actionType: {
+                                      in: filters.actionTaken,
                                   },
-                                  {
-                                      code: {
-                                          contains: filters.searchText,
-                                          mode: 'insensitive',
-                                      },
+                              }
+                            : {
+                                  actionType: {
+                                      equals: filters.actionTaken,
                                   },
-                              ],
-                          },
-                      },
-                  }
-                : {}),
+                              }
+                        : {}),
+                },
+            },
             ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                 ? {
                       id: filters.trainingCourseId,
@@ -183,41 +214,20 @@ export default function AcademicActionConfig() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Flex>
-                            <Col span={16}>
-                                <Input
-                                    id="search"
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
+                        <Col span={4}>
+                            <Select
+                                placeholder="Chọn khóa"
+                                options={trainingCourseData.map((i: TrainingCourse) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
                                     }
-                                    style={{ width: '100%', height: 32 }}
-                                    prefix={
-                                        <Search
-                                            size={15}
-                                            style={{
-                                                color: 'rgba(0, 0, 0, 0.25)',
-                                            }}
-                                        />
-                                    }
-                                    placeholder="Tìm kiếm cấu hình"
-                                    allowClear
-                                />
-                            </Col>
-                            <Col span={16}>
-                                <Select
-                                    placeholder="Chọn khóa"
-                                    options={trainingCourseData.map((i: TrainingCourse) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                    style={{ width: '100%' }}
-                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
-                                    allowClear
-                                />
-                            </Col>
-                        </Flex>
+                                })}
+                                style={{ width: '100%' }}
+                                onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                                allowClear
+                            />
+                        </Col>
                     </Row>
                 </Col>
 
@@ -228,6 +238,8 @@ export default function AcademicActionConfig() {
                             `${[code, name, trainingObjectType.name].filter(Boolean).join(' - ')}`
                         }
                         defaultExpandAll
+                        filters={filters}
+                        setFilters={setFilters}
                         currentPage={currentPage}
                         columns={[
                             {
@@ -236,6 +248,7 @@ export default function AcademicActionConfig() {
                                 align: 'center',
                                 width: 150,
                                 fixed: 'left',
+                                type: 'input',
                             },
                             {
                                 title: 'Tên cấu hình',
@@ -243,14 +256,18 @@ export default function AcademicActionConfig() {
                                 align: 'center',
                                 width: 200,
                                 fixed: 'left',
+                                type: 'input',
                             },
                             {
                                 title: 'Loại hành động xử lý',
-                                dataIndex: 'actionType',
+                                dataIndex: 'actionTaken',
                                 width: 200,
                                 align: 'center',
                                 fixed: 'left',
-                                render: (value) => getAcademicActionTypeLabel(value),
+                                type: 'select',
+                                options: academicActionTypeOption,
+                                render: (_, record) =>
+                                    getAcademicActionTypeLabel(record.actionType),
                             },
                             {
                                 title: 'Mô tả',

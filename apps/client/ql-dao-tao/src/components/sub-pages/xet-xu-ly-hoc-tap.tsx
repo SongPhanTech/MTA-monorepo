@@ -13,7 +13,6 @@ import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import { emptyObjectIf } from '@workspace/constant'
 import {
     type AcademicActionType,
     DecisionStatus,
@@ -96,23 +95,32 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                               }
                             : {}),
                     },
-                    ...emptyObjectIf(
-                        {
-                            fixedClassId: {
-                                in: filters.fixedClass,
-                            },
-                        },
-                        !!filters.fixedClass
-                    ),
+                    ...(filters.fixedClass
+                        ? {
+                              fixedClassId: {
+                                  in: Array.isArray(filters.fixedClass)
+                                      ? filters.fixedClass
+                                      : [filters.fixedClass],
+                              },
+                          }
+                        : {}),
                     fixedClass: {
                         ...(filters.trainingCourse
                             ? {
-                                  trainingCourseId: { in: filters.trainingCourse },
+                                  trainingCourseId: {
+                                      in: Array.isArray(filters.trainingCourse)
+                                          ? filters.trainingCourse
+                                          : [filters.trainingCourse],
+                                  },
                               }
                             : {}),
                         ...(filters.organization
                             ? {
-                                  managementOrganizationId: { in: filters.organization },
+                                  managementOrganizationId: {
+                                      in: Array.isArray(filters.organization)
+                                          ? filters.organization
+                                          : [filters.organization],
+                                  },
                               }
                             : {}),
                     },
@@ -125,8 +133,8 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                 ...(filters.decisionDate?.length === 2
                     ? {
                           decisionDate: {
-                              gte: dayjs(filters.decisionDate?.[0]).toDate(),
-                              lte: dayjs(filters.decisionDate?.[1]).toDate(),
+                              gte: dayjs(filters.decisionDate?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.decisionDate?.[1], 'DD/MM/YYYY').toDate(),
                           },
                       }
                     : {}),
@@ -174,14 +182,13 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         tag: PutStudentAcademicDecision.name,
     })
 
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            orderBy: {
-                name: 'asc',
-            },
-        })
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: {
+            name: 'asc',
+        },
+    })
 
-    const { data: fixedClassData = [], refetch: refetchFixedClass } = useFindManyFixedClass({
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: {
             name: 'asc',
         },
@@ -420,6 +427,16 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                         record?.student?.fixedClass?.managementOrganization?.sTen,
                                 },
                                 {
+                                    title: 'Ghi chú lý do',
+                                    dataIndex: 'reason',
+                                    width: 100,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    render: (value) => (
+                                        <span className="line-clamp-2">{value}</span>
+                                    ),
+                                },
+                                {
                                     title: 'Ngày quyết định',
                                     dataIndex: 'decisionDate',
                                     width: 150,
@@ -450,16 +467,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                         <Tag color={getDecisionStatusColor(status)}>
                                             {getDecisionStatusLabel(status)}
                                         </Tag>
-                                    ),
-                                },
-                                {
-                                    title: 'Ghi chú lý do',
-                                    dataIndex: 'reason',
-                                    width: 100,
-                                    align: 'center',
-                                    fixed: 'right',
-                                    render: (value) => (
-                                        <span className="line-clamp-2">{value}</span>
                                     ),
                                 },
                                 {
