@@ -148,13 +148,6 @@ const ModalLearningResult = () => {
                     childrenFieldName="subjectsInCurriculum"
                     columns={[
                         {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
                             title: 'Mã môn học',
                             dataIndex: 'code',
                             width: 145,
