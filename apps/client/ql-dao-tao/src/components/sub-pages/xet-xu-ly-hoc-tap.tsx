@@ -427,6 +427,16 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                         record?.student?.fixedClass?.managementOrganization?.sTen,
                                 },
                                 {
+                                    title: 'Ghi chú lý do',
+                                    dataIndex: 'reason',
+                                    width: 100,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    render: (value) => (
+                                        <span className="line-clamp-2">{value}</span>
+                                    ),
+                                },
+                                {
                                     title: 'Ngày quyết định',
                                     dataIndex: 'decisionDate',
                                     width: 150,
@@ -457,16 +467,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                         <Tag color={getDecisionStatusColor(status)}>
                                             {getDecisionStatusLabel(status)}
                                         </Tag>
-                                    ),
-                                },
-                                {
-                                    title: 'Ghi chú lý do',
-                                    dataIndex: 'reason',
-                                    width: 100,
-                                    align: 'center',
-                                    fixed: 'right',
-                                    render: (value) => (
-                                        <span className="line-clamp-2">{value}</span>
                                     ),
                                 },
                                 {
