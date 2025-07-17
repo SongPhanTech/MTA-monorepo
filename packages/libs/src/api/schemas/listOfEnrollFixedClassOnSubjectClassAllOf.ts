@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { EnrollFixedClassOnSubjectClass } from './enrollFixedClassOnSubjectClass';
+import type { EnrollFixedClassOnSubjectClass } from './enrollFixedClassOnSubjectClass'
 
 export type ListOfEnrollFixedClassOnSubjectClassAllOf = {
-  data: EnrollFixedClassOnSubjectClass[];
-  count: number;
-};
+    data: EnrollFixedClassOnSubjectClass[]
+    count: number
+}

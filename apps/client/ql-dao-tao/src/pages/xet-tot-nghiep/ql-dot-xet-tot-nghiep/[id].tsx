@@ -633,18 +633,20 @@ export default function StudentGraduationApplication() {
                                                                     />
                                                                     <EditIcon
                                                                         onClick={(e) => {
-                                                                            e.stopPropagation()
                                                                             onOpen({
                                                                                 id,
                                                                                 graduationSessionId,
                                                                             })
+                                                                            e.stopPropagation()
                                                                         }}
                                                                         className="text-sm text-blue-700 cursor-pointer"
                                                                     />
                                                                     <DeleteIcon
                                                                         popConfirm={{
-                                                                            onConfirm: () =>
-                                                                                handleDelete(id),
+                                                                            onConfirm: (e) => {
+                                                                                handleDelete(id)
+                                                                                e?.stopPropagation()
+                                                                            },
                                                                         }}
                                                                         onClick={(e) =>
                                                                             e.stopPropagation()

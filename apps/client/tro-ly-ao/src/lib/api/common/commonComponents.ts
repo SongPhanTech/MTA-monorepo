@@ -4,15 +4,10 @@
  * @version 1.0.0
  */
 import * as reactQuery from "@tanstack/react-query";
-import { useCommonContext, CommonContext, queryKeyFn } from "./commonContext";
-import { deepMerge } from "./commonUtils";
+import { useCommonContext, CommonContext } from "./commonContext";
 import type * as Fetcher from "./commonFetcher";
 import { commonFetch } from "./commonFetcher";
 import type * as Schemas from "./commonSchemas";
-
-type QueryFnOptions = {
-  signal?: AbortController["signal"];
-};
 
 export type GetSessionError = Fetcher.ErrorWrapper<{
   status: 401;
@@ -32,65 +27,23 @@ export const fetchGetSession = (
     signal,
   });
 
-export function getSessionQuery(variables: GetSessionVariables): {
-  queryKey: reactQuery.QueryKey;
-  queryFn: (options: QueryFnOptions) => Promise<Schemas.Session>;
-};
-
-export function getSessionQuery(
-  variables: GetSessionVariables | reactQuery.SkipToken,
-): {
-  queryKey: reactQuery.QueryKey;
-  queryFn:
-    | ((options: QueryFnOptions) => Promise<Schemas.Session>)
-    | reactQuery.SkipToken;
-};
-
-export function getSessionQuery(
-  variables: GetSessionVariables | reactQuery.SkipToken,
-) {
-  return {
-    queryKey: queryKeyFn({
-      path: "/api/auth/get-session",
-      operationId: "getSession",
-      variables,
-    }),
-    queryFn:
-      variables === reactQuery.skipToken
-        ? reactQuery.skipToken
-        : ({ signal }: QueryFnOptions) => fetchGetSession(variables, signal),
-  };
-}
-
-export const useSuspenseGetSession = <TData = Schemas.Session,>(
+export const useGetSession = <TData = Schemas.Session,>(
   variables: GetSessionVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<Schemas.Session, GetSessionError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
-  const { queryOptions, fetcherOptions } = useCommonContext(options);
-  return reactQuery.useSuspenseQuery<Schemas.Session, GetSessionError, TData>({
-    ...getSessionQuery(deepMerge(fetcherOptions, variables)),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export const useGetSession = <TData = Schemas.Session,>(
-  variables: GetSessionVariables | reactQuery.SkipToken,
-  options?: Omit<
-    reactQuery.UseQueryOptions<Schemas.Session, GetSessionError, TData>,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useCommonContext(options);
   return reactQuery.useQuery<Schemas.Session, GetSessionError, TData>({
-    ...getSessionQuery(
-      variables === reactQuery.skipToken
-        ? variables
-        : deepMerge(fetcherOptions, variables),
-    ),
+    queryKey: queryKeyFn({
+      path: "/api/auth/get-session",
+      operationId: "getSession",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetSession({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
@@ -137,7 +90,7 @@ export const useGeneratePresignedUrl = (
     GeneratePresignedUrlVariables
   >({
     mutationFn: (variables: GeneratePresignedUrlVariables) =>
-      fetchGeneratePresignedUrl(deepMerge(fetcherOptions, variables)),
+      fetchGeneratePresignedUrl({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
@@ -169,69 +122,23 @@ export const fetchListObjects = (
     {}
   >({ url: "/api/minio", method: "get", ...variables, signal });
 
-export function listObjectsQuery(variables: ListObjectsVariables): {
-  queryKey: reactQuery.QueryKey;
-  queryFn: (options: QueryFnOptions) => Promise<ListObjectsResponse>;
-};
-
-export function listObjectsQuery(
-  variables: ListObjectsVariables | reactQuery.SkipToken,
-): {
-  queryKey: reactQuery.QueryKey;
-  queryFn:
-    | ((options: QueryFnOptions) => Promise<ListObjectsResponse>)
-    | reactQuery.SkipToken;
-};
-
-export function listObjectsQuery(
-  variables: ListObjectsVariables | reactQuery.SkipToken,
-) {
-  return {
-    queryKey: queryKeyFn({
-      path: "/api/minio",
-      operationId: "listObjects",
-      variables,
-    }),
-    queryFn:
-      variables === reactQuery.skipToken
-        ? reactQuery.skipToken
-        : ({ signal }: QueryFnOptions) => fetchListObjects(variables, signal),
-  };
-}
-
-export const useSuspenseListObjects = <TData = ListObjectsResponse,>(
+export const useListObjects = <TData = ListObjectsResponse,>(
   variables: ListObjectsVariables,
   options?: Omit<
     reactQuery.UseQueryOptions<ListObjectsResponse, ListObjectsError, TData>,
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
-  const { queryOptions, fetcherOptions } = useCommonContext(options);
-  return reactQuery.useSuspenseQuery<
-    ListObjectsResponse,
-    ListObjectsError,
-    TData
-  >({
-    ...listObjectsQuery(deepMerge(fetcherOptions, variables)),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export const useListObjects = <TData = ListObjectsResponse,>(
-  variables: ListObjectsVariables | reactQuery.SkipToken,
-  options?: Omit<
-    reactQuery.UseQueryOptions<ListObjectsResponse, ListObjectsError, TData>,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { queryOptions, fetcherOptions } = useCommonContext(options);
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useCommonContext(options);
   return reactQuery.useQuery<ListObjectsResponse, ListObjectsError, TData>({
-    ...listObjectsQuery(
-      variables === reactQuery.skipToken
-        ? variables
-        : deepMerge(fetcherOptions, variables),
-    ),
+    queryKey: queryKeyFn({
+      path: "/api/minio",
+      operationId: "listObjects",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchListObjects({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
@@ -260,72 +167,23 @@ export const fetchPresignedGetObject = (
     {}
   >({ url: "/api/minio/presigned-url", method: "get", ...variables, signal });
 
-export function presignedGetObjectQuery(
+export const usePresignedGetObject = <TData = Schemas.UrlDto,>(
   variables: PresignedGetObjectVariables,
-): {
-  queryKey: reactQuery.QueryKey;
-  queryFn: (options: QueryFnOptions) => Promise<Schemas.UrlDto>;
-};
-
-export function presignedGetObjectQuery(
-  variables: PresignedGetObjectVariables | reactQuery.SkipToken,
-): {
-  queryKey: reactQuery.QueryKey;
-  queryFn:
-    | ((options: QueryFnOptions) => Promise<Schemas.UrlDto>)
-    | reactQuery.SkipToken;
-};
-
-export function presignedGetObjectQuery(
-  variables: PresignedGetObjectVariables | reactQuery.SkipToken,
-) {
-  return {
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.UrlDto, PresignedGetObjectError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useCommonContext(options);
+  return reactQuery.useQuery<Schemas.UrlDto, PresignedGetObjectError, TData>({
     queryKey: queryKeyFn({
       path: "/api/minio/presigned-url",
       operationId: "presignedGetObject",
       variables,
     }),
-    queryFn:
-      variables === reactQuery.skipToken
-        ? reactQuery.skipToken
-        : ({ signal }: QueryFnOptions) =>
-            fetchPresignedGetObject(variables, signal),
-  };
-}
-
-export const useSuspensePresignedGetObject = <TData = Schemas.UrlDto,>(
-  variables: PresignedGetObjectVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<Schemas.UrlDto, PresignedGetObjectError, TData>,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { queryOptions, fetcherOptions } = useCommonContext(options);
-  return reactQuery.useSuspenseQuery<
-    Schemas.UrlDto,
-    PresignedGetObjectError,
-    TData
-  >({
-    ...presignedGetObjectQuery(deepMerge(fetcherOptions, variables)),
-    ...options,
-    ...queryOptions,
-  });
-};
-
-export const usePresignedGetObject = <TData = Schemas.UrlDto,>(
-  variables: PresignedGetObjectVariables | reactQuery.SkipToken,
-  options?: Omit<
-    reactQuery.UseQueryOptions<Schemas.UrlDto, PresignedGetObjectError, TData>,
-    "queryKey" | "queryFn" | "initialData"
-  >,
-) => {
-  const { queryOptions, fetcherOptions } = useCommonContext(options);
-  return reactQuery.useQuery<Schemas.UrlDto, PresignedGetObjectError, TData>({
-    ...presignedGetObjectQuery(
-      variables === reactQuery.skipToken
-        ? variables
-        : deepMerge(fetcherOptions, variables),
-    ),
+    queryFn: ({ signal }) =>
+      fetchPresignedGetObject({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
@@ -335,15 +193,15 @@ export type QueryOperation =
   | {
       path: "/api/auth/get-session";
       operationId: "getSession";
-      variables: GetSessionVariables | reactQuery.SkipToken;
+      variables: GetSessionVariables;
     }
   | {
       path: "/api/minio";
       operationId: "listObjects";
-      variables: ListObjectsVariables | reactQuery.SkipToken;
+      variables: ListObjectsVariables;
     }
   | {
       path: "/api/minio/presigned-url";
       operationId: "presignedGetObject";
-      variables: PresignedGetObjectVariables | reactQuery.SkipToken;
+      variables: PresignedGetObjectVariables;
     };

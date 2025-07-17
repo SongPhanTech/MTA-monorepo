@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { AcademicRankingBaseType, type AcademicRankingConvert } from '@workspace/db'
+import { AcademicRankingBaseType, type AcademicRankingConvert, RankingContext } from '@workspace/db'
 import {
     useCreateAcademicRankingConvert,
     useFindManyTrainingCourse,
@@ -25,11 +25,7 @@ const academicRankingBaseTypeOptions = [
 
 const PutAcademicRanking = () => {
     const [form] = Form.useForm<PutAcademicRankingFormType>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{ id: string; type: string }>({
         tag: PutAcademicRanking.name,
         onClose: form.resetFields,
     })
@@ -46,15 +42,20 @@ const PutAcademicRanking = () => {
         if (!output) return
         try {
             showSpinner()
-            if (id) {
+            if (input?.id) {
                 await updateAcademicRankingConvert({
                     data: output,
-                    where: { id },
+                    where: { id: input.id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createAcademicRankingConvert({
-                    data: output,
+                    data: {
+                        ...output,
+                        context:
+                            input?.type === RankingContext.GRADUATION ? 'GRADUATION' : 'STUDYING',
+                        rankOrder: output.rankOrder || 2,
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
@@ -70,9 +71,9 @@ const PutAcademicRanking = () => {
 
     const { data: level } = useFindUniqueAcademicRankingConvert(
         {
-            where: { id },
+            where: { id: input?.id },
         },
-        { enabled: !!id }
+        { enabled: !!input?.id }
     )
 
     useEffect(() => {
@@ -88,7 +89,7 @@ const PutAcademicRanking = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa loại học lực' : 'Thêm mới loại học lực'}
+            title={input?.id ? 'Chỉnh sửa loại học lực' : 'Thêm mới loại học lực'}
             className="w-[40vw]"
         >
             <Col span={12}>
@@ -160,6 +161,18 @@ const PutAcademicRanking = () => {
                     />
                 </FormItem>
             </Col>
+            {input?.type === RankingContext.GRADUATION && (
+                <Col span={12}>
+                    <FormItem form={form} name="rankOrder" label="Hạng xếp loại" required>
+                        <InputNumber
+                            style={{ width: '100%' }}
+                            placeholder="Nhập hạng xếp loại"
+                            step={1}
+                            min={0}
+                        />
+                    </FormItem>
+                </Col>
+            )}
             <Col span={12}>
                 <FormItem form={form} name="graduated" label="Qua môn" required>
                     <Radio.Group>

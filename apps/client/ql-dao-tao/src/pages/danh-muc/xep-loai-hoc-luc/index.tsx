@@ -6,7 +6,7 @@ import { PutAcademicRanking, PutCloneAcademicRanking } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse } from '@workspace/db'
+import { RankingContext, type TrainingCourse } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useDeleteAcademicRankingConvert,
@@ -70,6 +70,9 @@ export default function AcademicRankingConvertPage() {
         },
         include: {
             academicRankingConvert: {
+                where: {
+                    context: RankingContext.STUDYING,
+                },
                 orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
             },
         },
@@ -100,12 +103,12 @@ export default function AcademicRankingConvertPage() {
         onOpen()
     }
 
-    const { mutateAsync: UpdateAcademicRanking } = useDeleteAcademicRankingConvert()
-    const { mutateAsync: UpdateManyAcademicRanking } = useDeleteManyAcademicRankingConvert()
+    const { mutateAsync: deleteAcademicRanking } = useDeleteAcademicRankingConvert()
+    const { mutateAsync: deleteManyAcademicRanking } = useDeleteManyAcademicRankingConvert()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await UpdateAcademicRanking({
+            await deleteAcademicRanking({
                 where: {
                     id,
                 },
@@ -120,9 +123,10 @@ export default function AcademicRankingConvertPage() {
         try {
             showSpinner()
 
-            await UpdateManyAcademicRanking({
+            await deleteManyAcademicRanking({
                 where: {
                     trainingCourseId: record.id,
+                    context: RankingContext.STUDYING,
                 },
             })
         } catch (_error) {

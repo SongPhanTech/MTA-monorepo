@@ -6,5 +6,5 @@
  */
 
 export type UpdateConfigs200 = {
-  message: string;
-};
+    message: string
+}

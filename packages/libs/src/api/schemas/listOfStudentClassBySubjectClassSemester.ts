@@ -4,7 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginationQuery } from './paginationQuery';
-import type { ListOfStudentClassBySubjectClassSemesterAllOf } from './listOfStudentClassBySubjectClassSemesterAllOf';
 
-export type ListOfStudentClassBySubjectClassSemester = PaginationQuery & ListOfStudentClassBySubjectClassSemesterAllOf;
+import type { ListOfStudentClassBySubjectClassSemesterAllOf } from './listOfStudentClassBySubjectClassSemesterAllOf'
+import type { PaginationQuery } from './paginationQuery'
+
+export type ListOfStudentClassBySubjectClassSemester = PaginationQuery &
+    ListOfStudentClassBySubjectClassSemesterAllOf

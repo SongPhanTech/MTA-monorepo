@@ -8,4 +8,4 @@
 /**
  * @nullable
  */
-export type ListOfundefinedAllOfDataItemFAQUploadedItem = unknown | null;
+export type ListOfundefinedAllOfDataItemFAQUploadedItem = unknown | null

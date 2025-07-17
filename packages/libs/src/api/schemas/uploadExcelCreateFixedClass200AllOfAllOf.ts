@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { UploadExcelCreateFixedClass200AllOfAllOfDataItem } from './uploadExcelCreateFixedClass200AllOfAllOfDataItem';
+import type { UploadExcelCreateFixedClass200AllOfAllOfDataItem } from './uploadExcelCreateFixedClass200AllOfAllOfDataItem'
 
 export type UploadExcelCreateFixedClass200AllOfAllOf = {
-  data: UploadExcelCreateFixedClass200AllOfAllOfDataItem[];
-  count: number;
-};
+    data: UploadExcelCreateFixedClass200AllOfAllOfDataItem[]
+    count: number
+}

@@ -5,11 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UserCreateSystemRole = typeof UserCreateSystemRole[keyof typeof UserCreateSystemRole];
-
+export type UserCreateSystemRole = (typeof UserCreateSystemRole)[keyof typeof UserCreateSystemRole]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UserCreateSystemRole = {
-  ADMIN: 'ADMIN',
-  USER: 'USER',
-} as const;
+    ADMIN: 'ADMIN',
+    USER: 'USER',
+} as const

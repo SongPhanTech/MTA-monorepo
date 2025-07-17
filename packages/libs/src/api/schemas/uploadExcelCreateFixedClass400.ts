@@ -6,5 +6,5 @@
  */
 
 export type UploadExcelCreateFixedClass400 = {
-  message: string;
-};
+    message: string
+}

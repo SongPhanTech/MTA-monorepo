@@ -31,9 +31,7 @@ const nextConfig: NextConfig = {
                 extractComments: false,
             }),
         ]
-        return {
-            ...config,
-        }
+        return config
     },
 }
 

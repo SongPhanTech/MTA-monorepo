@@ -8,4 +8,4 @@
 /**
  * Danh sách ID lớp quản lý
  */
-export type FixedClassIds = string[];
+export type FixedClassIds = string[]
