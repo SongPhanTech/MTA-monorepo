@@ -25,7 +25,7 @@ enum UserType {
 }
 
 model UserProfile extends Base {
-  user                       User?             @relation(fields: [userId], references: [id])
+  user                       DM_NhanVien?      @relation(fields: [userId], references: [Id])
   userId                     String?           @unique
   userType                   UserType          @default(OTHER)
 
