@@ -1,6 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import { FilterSinhVien } from '@components/filter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
@@ -494,59 +493,8 @@ export default function UserProfilePageDs() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <FilterSinhVien
-                                handleFilterChange={handleFilterChange}
-                                filters={filters}
-                                setFilters={setFilters}
-                            />
-                        </Col>
-                        {/* <Col flex="1 1" >
-                            <Select
-                                placeholder="Đối tượng đào tạo"
-                                style={{ width: '100%' }}
-                                options={TrainingOnjectTypeData?.map((item) => {
-                                    return {
-                                        value: item.id,
-                                        label: item.name,
-                                    }
-                                })}
-                                value={selectedTrainingObjectType}
-                                onChange={handleTrainingObjectTypeChange}
-                            />
-                        </Col>
-                        <Col flex="1 1" >
-                            <Select
-                                placeholder="Khóa đào tạo"
-                                style={{ width: '100%' }}
-                                options={TrainingCourseData?.map((item) => {
-                                    return {
-                                        value: item.id,
-                                        label: item.name,
-                                    }
-                                })}
-                                value={selectedTrainingCourse}
-                                onChange={handleTrainingCourseChange}
-                            />
-                        </Col>
-                        <Col flex="1 1" >
-                            <Select
-                                placeholder="Lớp"
-                                style={{ width: '100%' }}
-                                options={filteredFixedClassData?.map((item) => {
-                                    return {
-                                        value: item.id,
-                                        label: `${item.code}-${item.name}`,
-                                    }
-                                })}
-                                value={selectedFixedClass}
-                                onChange={handleFixedClassChange}
-                            />
-                        </Col> */}
-
-                        {/* Hàng chứa các button */}
-                        <Col xs={12}>
+                    <Row gutter={[8, 8]} align="top" justify="end">
+                        <Col xs={24}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 <Button
                                     type="primary"
