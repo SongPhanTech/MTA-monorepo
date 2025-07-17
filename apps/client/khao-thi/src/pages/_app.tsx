@@ -1,24 +1,40 @@
 import { fetchInstance, queryClient } from '@api/index'
 import { Spinner } from '@components/commons/spinner'
 import { colors } from '@constants/colors'
-import { API_BASE_URL } from '@constants/constants'
+import { API_MODEL_BASE_URL } from '@constants/constants'
 import store from '@redux/store'
 import '@styles/globals.css'
 import * as modals from '@components/modal'
 import lightThemeCustom from '@styles/theme/global-theme-custom'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { SessionProvider } from '@workspace/auth/react'
 import { Provider as ZenStackHooksProvider } from '@workspace/db/hooks'
 import { ConfigProvider } from 'antd'
 import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+import isLeapYear from 'dayjs/plugin/isLeapYear'
+import isoWeeksInYear from 'dayjs/plugin/isoWeeksInYear'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import quarterOfYear from 'dayjs/plugin/quarterOfYear'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
 import { StoreProvider } from 'easy-peasy'
 import type { NextComponentType } from 'next'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { SessionProvider } from 'next-auth/react'
 import { type ReactNode, useEffect, useState } from 'react'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
+
+// import '@assets/css/custom.css'
+
+dayjs.locale('vi')
+dayjs.extend(weekOfYear)
+dayjs.extend(isoWeeksInYear)
+dayjs.extend(isLeapYear)
+dayjs.extend(isSameOrBefore)
+dayjs.extend(quarterOfYear)
+dayjs.extend(isBetween)
 
 dayjs.locale('vi')
 function App({ Component, pageProps }: AppProps) {
@@ -79,7 +95,7 @@ function App({ Component, pageProps }: AppProps) {
                     <QueryClientProvider client={queryClient}>
                         <ZenStackHooksProvider
                             value={{
-                                endpoint: `${API_BASE_URL}/api/model`,
+                                endpoint: `${API_MODEL_BASE_URL}/api/model`,
                                 fetch: fetchInstance,
                             }}
                         >

@@ -1,9 +1,9 @@
 import ability from '@lib/casl/ability'
 import { useStoreActions } from '@redux/hook'
+import { useSession } from '@workspace/auth/react'
 import { $Enums } from '@workspace/db'
 import { useFindManyGroup } from '@workspace/db/hooks'
 import NAVIGATION from '@workspace/router'
-import { useSession } from 'next-auth/react'
 import { useEffect, useMemo } from 'react'
 
 const useMenuList = () => {
@@ -13,7 +13,7 @@ const useMenuList = () => {
         where: {
             users: {
                 every: {
-                    ssoId: data?.user.user_id,
+                    ssoId: data?.sub,
                 },
             },
         },
@@ -47,7 +47,7 @@ const useMenuList = () => {
         setIsUpdateAbility(true)
     }, [permissions])
 
-    const menus = NAVIGATION.KHAO_THI.menus.filter((menu) => {
+    const menus = NAVIGATION.QL_DAO_TAO.menus.filter((menu) => {
         // if (menu.children) {
         //     return menu.children.some((child) => permissionNames.includes(child.id))
         // }

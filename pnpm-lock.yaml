@@ -580,6 +580,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.81.5(react@18.3.1)
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
       '@workspace/constant':
         specifier: workspace:*
         version: link:../../../packages/constant
@@ -622,9 +625,6 @@ importers:
       next:
         specifier: 'catalog:'
         version: 15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      next-auth:
-        specifier: 'catalog:'
-        version: 5.0.0-beta.25(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       qs:
         specifier: 'catalog:'
         version: 6.14.0
