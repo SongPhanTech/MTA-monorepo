@@ -74,15 +74,18 @@ const PutDisciplinaryWarning = () => {
                 increasedFrom: currentLevel,
             })
 
-            const sumSeverity = reasonData
-                .filter((reason) => reasonIds.includes(reason.id))
-                .reduce((sum, reason) => sum + reason.severityLevel, 0)
+            const sumSeverity =
+                reasonIds && Array.isArray(reasonIds)
+                    ? reasonData
+                          .filter((reason) => reasonIds.includes(reason.id))
+                          .reduce((sum, reason) => sum + reason.severityLevel, 0)
+                    : 0
 
             form.setFieldsValue({
                 level: currentLevel + sumSeverity,
             })
         }
-    }, [studentId, studentData, reasonIds, form, reasonData.filter])
+    }, [studentId, studentData, reasonIds, form, reasonData])
 
     const { mutateAsync: createDisciplinaryWarning } = useCreateDisciplinaryWarning()
     const { mutateAsync: updateDisciplinaryWarning } = useUpdateDisciplinaryWarning()
@@ -139,10 +142,10 @@ const PutDisciplinaryWarning = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                reasonIds: initialValue.reasonDetails.map(({ id }: any) => id),
+                reasonIds: initialValue.reasonDetails?.map(({ id }) => id) || [],
             })
         } else {
-            form.setFieldsValue({ increasedFrom: 0, level: 0 })
+            form.setFieldsValue({ increasedFrom: 0, level: 0, reasonIds: [] })
         }
     }, [initialValue, form.setFieldsValue])
 

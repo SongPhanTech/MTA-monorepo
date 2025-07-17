@@ -2,89 +2,86 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutDisciplinaryWarningReason } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountDisciplinaryWarningReason,
     useFindManyDisciplinaryWarningReason,
     useUpdateDisciplinaryWarningReason,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
-import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { BookPlus } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | undefined
-}
 
 export default function DisciplinaryWarningReason() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        code: '',
+        name: '',
+        severityLevel: undefined,
     })
 
     const { data = [], refetch } = useFindManyDisciplinaryWarningReason({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
+            ...(filters.code && filters.code !== ''
                 ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
                   }
                 : {}),
         },
-        orderBy: {
-            createdAt: 'asc',
-        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        severityLevel: filters.severityLevel,
+                    },
+                ],
+                !!filters.severityLevel
+            ),
+            { createdAt: 'asc' },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count } = useCountDisciplinaryWarningReason({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
+            ...(filters.code && filters.code !== ''
                 ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
                   }
                 : {}),
         },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
     const { onOpen: onOpenPutDisciplinaryWarningReason } = useDisclosure<string>({
         tag: PutDisciplinaryWarningReason.name,
     })
@@ -109,44 +106,12 @@ export default function DisciplinaryWarningReason() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     return (
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Flex>
-                            <Col span={8}>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        className="py-0 w-[300px]"
-                                        placeholder="Tìm kiếm cảnh cáo học đường"
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Flex>
-
-                        <Col span={4}>
+                        <Col span={24}>
                             <Flex justify="end" gap={4}>
                                 <Button onClick={handleModal} type="primary">
                                     <BookPlus />
@@ -160,10 +125,12 @@ export default function DisciplinaryWarningReason() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
-                                width: 30,
+                                width: 60,
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
@@ -174,6 +141,7 @@ export default function DisciplinaryWarningReason() {
                                 align: 'center',
                                 width: 150,
                                 fixed: 'left',
+                                type: 'input',
                             },
                             {
                                 title: 'Tên',
@@ -181,12 +149,14 @@ export default function DisciplinaryWarningReason() {
                                 width: 200,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'input',
                             },
                             {
                                 title: 'Mức nâng',
                                 dataIndex: 'severityLevel',
                                 width: 200,
                                 align: 'center',
+                                type: 'order',
                             },
                             {
                                 title: 'Mô tả',

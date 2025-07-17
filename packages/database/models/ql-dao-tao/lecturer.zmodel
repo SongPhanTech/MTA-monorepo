@@ -6,6 +6,8 @@ import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
 import '../ql-nguoi-dung/profile'
+import '../ql-dao-tao/research'
+import '../ql-dao-tao/thesis'
 
 model Lecturer extends Base {
   from                DateTime? // từ ngày
@@ -27,6 +29,12 @@ model Lecturer extends Base {
   extraSubjectClasses SubjectClass[] @relation("ExtraLecturer")
   enterGradeClasses   SubjectClass[] @relation("EnterGradeLecturer")
   manageFixedClass    FixedClass[]   @relation("ManageLecturer")
+  classSchedules      ClassSchedule[]
+  researchProjects      ResearchProject[]         // Đề tài đang hướng dẫn
+  reviewedRegistrations StudentResearchRegistration[] // Đăng ký đã phê duyệt
+  thesisProjects        ThesisProject[]             // Đồ án đang hướng dẫn
+  reviewedThesisRegistrations StudentThesisRegistration[] // Đăng ký đã phê duyệt
+
 
   @@schema("ql-dao-tao")
 }

@@ -12,6 +12,10 @@ import 'scholarship'
 import 'warning'
 import 'training-action'
 import 'ranking'
+import '../ql-danh-muc/notification'
+import '../ql-dao-tao/thesis'
+import '../ql-dao-tao/research'
+import '../khao-thi/exam'
 
 /// Điểm môn học SV - lớp môn học
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
@@ -198,6 +202,7 @@ model TrainingCourse extends Base {
   scholarships           Scholarship[]
   academicWarningRule    AcademicWarningRule[]
   academicActionConfig   AcademicActionConfig[]
+  notifications          Notification[]  // Thông báo cho khoá
 
   @@schema("ql-dao-tao")
 }
@@ -233,8 +238,10 @@ model FixedClass extends Base {
   curriculumVersionId      String?
 
   subjectClasses           SubjectClass[]
+  notifications            Notification[]  // Thông báo cho lớp
 
   @@unique([name, trainingCourseId, curriculumVersionId])
+
   @@schema("ql-dao-tao")
 }
 
@@ -367,7 +374,7 @@ model SubjectVersion extends Base {
   numberOfExam             Int? // số tiết KT/thi
   numberOfOther            Int? // số tiết khác
 
-  // description ~ IV. MÔ TẢ
+  // description ~ IV. MÔ TẢ
   objectives               String? // II. Mục tiêu
   learningOutcome          String? // III. Chuẩn đầu ra
   structure                String? // V. Cấu trúc chương trình đào tạo
@@ -397,6 +404,8 @@ model SubjectVersion extends Base {
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
+  exams                    Exam[]
+  questionBanks            QuestionBank[]
 
   @@schema("ql-dao-tao")
 }
@@ -431,6 +440,20 @@ enum SubjectClassSchedule {
   MORNING
   AFTERNOON
   EVENING
+
+  @@schema("ql-dao-tao")
+}
+
+
+// Enum cho loại tiết học
+enum PeriodType {
+  THEORY      // Lý thuyết
+  PRACTICE    // Thực hành
+  LAB         // Thí nghiệm
+  SEMINAR     // Seminar
+  EXAM        // Thi/kiểm tra
+  MAKEUP      // Học bù
+  REVIEW      // Ôn tập
 
   @@schema("ql-dao-tao")
 }
@@ -480,6 +503,40 @@ model SubjectClass extends Base {
 
   subjectClassStudent        StudentSubjectScore[]
   fixedClasses               FixedClass[]
+  classSchedules             ClassSchedule[]        // Thêm relation với thời khóa biểu
+
   @@schema("ql-dao-tao")
 }
 
+// Bảng thời khoá biểu chi tiết
+model ClassSchedule extends Base {
+  // Liên kết với lớp môn học
+  subjectClass        SubjectClass   @relation(fields: [subjectClassId], references: [id])
+  subjectClassId      String
+
+  periodType          PeriodType     @default(THEORY)
+  startPeriod         Int              // Tiết bắt đầu (1, 2, 3, ...)
+  endPeriod           Int              // Tiết kết thúc
+
+  // Thông tin ngày học cụ thể
+  classDate           DateTime       @db.Date
+
+  // Phòng học và giảng viên
+  room                Room?          @relation(fields: [roomId], references: [id])
+  roomId              String?
+  lecturer            Lecturer?      @relation(fields: [lecturerId], references: [id])
+  lecturerId          String?
+
+  notes               String?         
+
+  // Thông tin học bù
+  isReplacement       Boolean        @default(false)  // Có phải tiết học bù
+  originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
+  originalScheduleId  String?        @unique()
+  replacementSchedule ClassSchedule? @relation("ReplacementSchedule")
+
+  cancelReason        String?          // Lý do hủy
+
+  @@unique([subjectClassId, classDate, startPeriod])
+  @@schema("ql-dao-tao")
+}

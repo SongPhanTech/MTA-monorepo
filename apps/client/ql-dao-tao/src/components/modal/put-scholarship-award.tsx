@@ -196,13 +196,13 @@ const PutScholarshipAward = () => {
                         placeholder="Nhập số tiền học bổng"
                         className="w-full"
                         step={1}
-                        disabled
+                        // disabled
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="gpaAtAward" label="GPA">
-                    <InputNumber placeholder="Nhập GPA" className="w-full" step={1} />
+                    <InputNumber placeholder="Nhập GPA" className="w-full" step={0.1} />
                 </FormItem>
             </Col>
             <Col span={12}>

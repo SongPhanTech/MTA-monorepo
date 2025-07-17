@@ -14,7 +14,7 @@ Table Config {
   value String [not null]
 }
 
-Table SurveyObjectType {
+Table QuestionBank {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -23,10 +23,18 @@ Table SurveyObjectType {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  survey Survey [not null]
+  subjectVersion SubjectVersion [not null]
+  subjectVersionId String [not null]
+  questions Question [not null]
+
+  indexes {
+    (subjectVersionId, name) [unique]
+  }
+
+  Note: 'Phiên bản ngân hàng câu hỏi'
 }
 
-Table SurveyTopic {
+Table Difficulty {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -34,11 +42,15 @@ Table SurveyTopic {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  survey Survey [not null]
+  name String [unique, not null]
+  level Int [unique]
+  questions Question [not null]
+  structureRules TestStructureRule [not null]
+
+  Note: 'Mức độ khó'
 }
 
-Table SurveyQuestionType {
+Table KnowledgeBlock {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -46,11 +58,14 @@ Table SurveyQuestionType {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  surveyQuestion SurveyQuestion [not null]
+  name String [unique, not null]
+  questions Question [not null]
+  structureRules TestStructureRule [not null]
+
+  Note: 'Khối kiến thức / Chương mục'
 }
 
-Table Survey {
+Table Question {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -58,17 +73,27 @@ Table Survey {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  startDate DateTime [not null]
-  endDate DateTime
-  surveyObjectType SurveyObjectType [not null]
-  surveyObjectId String [not null]
-  surveyTopic SurveyTopic [not null]
-  surveyTopicId String [not null]
-  surveyQuestion SurveyQuestion [not null]
+  content String [not null]
+  type QuestionType [not null]
+  point Float [not null, default: 1]
+  explanation String
+  isAutoGraded Boolean [not null, default: false]
+  multipleChoiceOptions MultipleChoiceOption [not null]
+  fillInBlankSlots FillInBlankSlot [not null]
+  orderingItems OrderingItem [not null]
+  questionBank QuestionBank [not null]
+  questionBankId String [not null]
+  knowledgeBlock KnowledgeBlock
+  knowledgeBlockId String
+  difficulty Difficulty
+  difficultyId String
+  sessionQuestions ExamSessionQuestion [not null]
+  answers Answer [not null]
+
+  Note: 'Câu hỏi'
 }
 
-Table SurveyQuestion {
+Table MultipleChoiceOption {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -76,15 +101,17 @@ Table SurveyQuestion {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  name String [not null]
-  surveyQuestionType SurveyQuestionType [not null]
-  surveyQuestionTypeId String [not null]
-  survey Survey [not null]
-  surveyId String [not null]
-  surveyAnswer SurveyAnswer [not null]
+  questionId String [not null]
+  question Question [not null]
+  content String [not null]
+  isCorrect Boolean [not null, default: false]
+  order Int [not null]
+  selectedInAnswers SelectedMultipleChoiceOption [not null]
+
+  Note: 'Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)'
 }
 
-Table SurveyAnswer {
+Table FillInBlankSlot {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -92,9 +119,199 @@ Table SurveyAnswer {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  answer String
-  surveyQuestion SurveyQuestion [not null]
-  surveyQuestionId String [not null]
+  questionId String [not null]
+  question Question [not null]
+  order Int [not null]
+  correctAnswer String [not null]
+  fillInBlankAnswers FillInBlankAnswer [not null]
+
+  indexes {
+    (questionId, order) [unique]
+  }
+
+  Note: 'Chỗ trống cần điền cho câu hỏi điền khuyết'
+}
+
+Table OrderingItem {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  questionId String [not null]
+  question Question [not null]
+  content String [not null]
+  correctOrder Int [not null]
+  orderingAnswers OrderingAnswer [not null]
+
+  indexes {
+    (questionId, correctOrder) [unique]
+  }
+
+  Note: 'Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự'
+}
+
+Table Answer {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  sessionId String [not null]
+  session ExamSession [not null]
+  questionId String [not null]
+  question Question [not null]
+  isCorrect Boolean
+  score Float
+  comment String
+  essayAnswer String [not null]
+  multipleChoiceSelections SelectedMultipleChoiceOption [not null]
+  fillInBlankAnswers FillInBlankAnswer [not null]
+  orderingAnswers OrderingAnswer [not null]
+
+  indexes {
+    (sessionId, questionId) [unique]
+  }
+
+  Note: 'Câu trả lời'
+}
+
+Table SelectedMultipleChoiceOption {
+  answer Answer [not null]
+  answerId String [not null]
+  option MultipleChoiceOption [not null]
+  optionId String [not null]
+
+  indexes {
+    (answerId, optionId) [pk]
+  }
+
+  Note: 'Bảng nối, ghi lại lựa chọn của thí sinh cho câu hỏi trắc nghiệm'
+}
+
+Table FillInBlankAnswer {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  answer Answer [not null]
+  answerId String [not null]
+  slot FillInBlankSlot [not null]
+  slotId String [not null]
+  content String [not null]
+
+  indexes {
+    (answerId, slotId) [unique]
+  }
+
+  Note: 'Nội dung trả lời cho một ô trống trong câu hỏi điền khuyết'
+}
+
+Table OrderingAnswer {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  answerId String [not null]
+  answer Answer [not null]
+  itemId String [not null]
+  item OrderingItem [not null]
+  order Int [not null]
+
+  indexes {
+    (answerId, itemId) [unique]
+  }
+
+  Note: 'Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp'
+}
+
+Table Exam {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  status ExamStatus [not null, default: 'DRAFT']
+  subjectVersion SubjectVersion [not null]
+  subjectVersionId String [not null]
+  startTime DateTime [not null]
+  endTime DateTime [not null]
+  duration Int [not null]
+  passScore Float [not null, default: 5]
+  shuffleQuestions Boolean [not null, default: true]
+  shuffleAnswers Boolean [not null, default: true]
+  showResult Boolean [not null, default: false]
+  testStructureRules TestStructureRule [not null]
+  examSessions ExamSession [not null]
+
+  Note: 'Bảng kỳ thi'
+}
+
+Table TestStructureRule {
+  id String [pk]
+  exam Exam [not null]
+  examId String [not null]
+  knowledgeBlock KnowledgeBlock [not null]
+  knowledgeBlockId String [not null]
+  difficulty Difficulty [not null]
+  difficultyId String [not null]
+  questionType QuestionType [not null]
+  count Int [not null]
+
+  Note: 'Cấu hình tạo đề tự động cho kỳ thi'
+}
+
+Table ExamSession {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  startTime DateTime [default: `now()`, not null]
+  endTime DateTime
+  score Float
+  isGraded Boolean [not null, default: false]
+  student Student
+  studentId String
+  exam Exam [not null]
+  examId String [not null]
+  room Room
+  roomId String
+  questions ExamSessionQuestion [not null]
+  answers Answer [not null]
+
+  Note: 'Bài thi / Đề thi'
+}
+
+Table ExamSessionQuestion {
+  id String [pk]
+  sessionId String [not null]
+  session ExamSession [not null]
+  questionId String [not null]
+  question Question [not null]
+  order Int [not null]
+
+  indexes {
+    (sessionId, questionId) [unique]
+    (sessionId, order) [unique]
+  }
+
+  Note: 'Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào'
 }
 
 Table StudentSubjectScore {
@@ -297,6 +514,7 @@ Table TrainingCourse {
   scholarships Scholarship [not null]
   academicWarningRule AcademicWarningRule [not null]
   academicActionConfig AcademicActionConfig [not null]
+  notifications Notification [not null]
 
   Note: 'Khoá học'
 }
@@ -330,6 +548,7 @@ Table FixedClass {
   curriculumVersion CurriculumVersion
   curriculumVersionId String
   subjectClasses SubjectClass [not null]
+  notifications Notification [not null]
 
   indexes {
     (name, trainingCourseId, curriculumVersionId) [unique]
@@ -464,6 +683,8 @@ Table SubjectVersion {
   subjectClass SubjectClass [not null]
   studentSubjectScore StudentSubjectScore [not null]
   documentFiles DocumentFile [not null]
+  exams Exam [not null]
+  questionBanks QuestionBank [not null]
 
   Note: 'Phiên bản môn học'
 }
@@ -526,8 +747,39 @@ Table SubjectClass {
   enterGradeLecturerId String
   subjectClassStudent StudentSubjectScore [not null]
   fixedClasses FixedClass [not null]
+  classSchedules ClassSchedule [not null]
 
   Note: 'Lớp môn học'
+}
+
+Table ClassSchedule {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  subjectClass SubjectClass [not null]
+  subjectClassId String [not null]
+  periodType PeriodType [not null, default: 'THEORY']
+  startPeriod Int [not null]
+  endPeriod Int [not null]
+  classDate DateTime [not null]
+  room Room
+  roomId String
+  lecturer Lecturer
+  lecturerId String
+  notes String
+  isReplacement Boolean [not null, default: false]
+  originalSchedule ClassSchedule
+  originalScheduleId String [unique]
+  replacementSchedule ClassSchedule
+  cancelReason String
+
+  indexes {
+    (subjectClassId, classDate, startPeriod) [unique]
+  }
 }
 
 Table TrainingObjectType {
@@ -658,6 +910,8 @@ Table Room {
   building Building
   buildingId String
   subjectClasses SubjectClass [not null]
+  classSchedules ClassSchedule [not null]
+  examSession ExamSession [not null]
 
   indexes {
     (buildingId, name) [unique]
@@ -897,6 +1151,11 @@ Table Student {
   studentAcademicDecision StudentAcademicDecision [not null]
   graduationApplications StudentGraduationApplication [not null]
   graduationDecision GraduationDecision
+  surveySessions SurveySession [not null]
+  notifications Notification [not null]
+  researchRegistrations StudentResearchRegistration [not null]
+  thesisRegistrations StudentThesisRegistration [not null]
+  examSession ExamSession [not null]
 
   Note: 'HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang'
 }
@@ -984,7 +1243,7 @@ Table StudentYearResult {
   }
 }
 
-Table User {
+Table Notification {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -992,21 +1251,19 @@ Table User {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  email String [unique, not null]
-  userName String [unique, not null]
-  name String [not null]
-  systemRole UserRole [not null, default: 'USER']
-  ssoId String [unique]
-  phone String [unique]
-  role String
-  groups Group [not null]
-  feedback Feedback [not null]
-  userProfile UserProfile [not null]
-  conversation Conversation [not null]
-  documentUploaded Document [not null]
-  documentApproved Document [not null]
-  fAQUploaded FAQ [not null]
-  fAQApproved FAQ [not null]
+  title String [not null]
+  content String [not null]
+  type NotificationType [not null, default: 'GENERAL']
+  priority NotificationPriority [not null, default: 'NORMAL']
+  publishedAt DateTime [default: `now()`, not null]
+  expiresAt DateTime
+  targetAll Boolean [not null, default: false]
+  targetCourses TrainingCourse [not null]
+  targetClasses FixedClass [not null]
+  targetStudents Student [not null]
+  createdBy DM_NhanVien [not null]
+  createdById String [not null]
+  attachments DocumentFile [not null]
 }
 
 Table Group {
@@ -1018,7 +1275,7 @@ Table Group {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  users User [not null]
+  users DM_NhanVien [not null]
   roles Role [not null]
 }
 
@@ -1081,9 +1338,9 @@ Table Document {
   fileSize Int
   type DocumentType [not null]
   reason String
-  uploadedBy User [not null]
+  uploadedBy DM_NhanVien [not null]
   uploadedById String [not null]
-  approvedBy User
+  approvedBy DM_NhanVien
   approvedById String
 }
 
@@ -1100,9 +1357,9 @@ Table FAQ {
   status DocumentStatus [not null, default: 'PENDING']
   type DocumentType [not null]
   reason String
-  uploadedBy User [not null]
+  uploadedBy DM_NhanVien [not null]
   uploadedById String [not null]
-  approvedBy User
+  approvedBy DM_NhanVien
   approvedById String
 }
 
@@ -1128,7 +1385,7 @@ Table Conversation {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  user User
+  user DM_NhanVien
   userId String
   type DocumentType
   message Message [not null]
@@ -1146,112 +1403,6 @@ Table Message {
   content String
   sender MessageSender [not null]
   conversation Conversation
-}
-
-Table Feedback {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  content String [not null]
-  status FeedbackStatus [not null]
-  satisfaction Satisfaction [not null]
-  user User [not null]
-  userId String [not null]
-}
-
-Table UserProfile {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  user User
-  userId String [unique]
-  userType UserType [not null, default: 'OTHER']
-  avatar String
-  firstName String [not null]
-  lastName String [not null]
-  idCardNumber String [unique, not null]
-  fullname String
-  healthInsuranceNumber String
-  bankAccountNumber String
-  bankName String
-  currentAddress String
-  provinceCurrentAddress DM_Tinh
-  provinceCurrentAddressId String
-  districtCurrentAddress DM_QuanHuyen
-  districtCurrentAddressId String
-  communeCurrentAddress DM_XaPhuong
-  communeCurrentAddressId String
-  dateOfBirth DateTime
-  placeOfBirth String
-  provinceOfBirth DM_Tinh
-  provinceOfBirthId String
-  districtOfBirth DM_QuanHuyen
-  districtOfBirthId String
-  communeOfBirth DM_XaPhuong
-  communeOfBirthId String
-  homeTown String
-  idCardDate DateTime
-  gender Gender
-  permanentAddress String
-  provincePermanentAddress DM_Tinh
-  provincePermanentAddressId String
-  districtPermanentAddress DM_QuanHuyen
-  districtPermanentAddressId String
-  communePermanentAddress DM_XaPhuong
-  communePermanentAddressId String
-  temporaryAddress String
-  contactAddress String
-  phoneNumber String
-  email String
-  nationality DM_QuocGia
-  nationalityId String
-  religion DM_TonGiao
-  religionId String
-  ethnicity DM_DanToc
-  ethnicityId String
-  provinceHometown DM_Tinh
-  provinceHometownId String
-  districtHometown DM_QuanHuyen
-  districtHometownId String
-  communeHometown DM_XaPhuong
-  communeHometownId String
-  officerNumber String
-  rank DM_CapBac
-  rankId String
-  rankDate DateTime
-  academicDegreeType DM_HocVi
-  academicDegreeTypeId String
-  academicDegreeDate DateTime
-  academicRankType DM_HocHam
-  academicRankTypeId String
-  academicRankDate DateTime
-  level DM_ChucDanh
-  levelId String
-  unionDate DateTime
-  unionPlace String
-  CPVJoinDate DateTime
-  officialCPVDate DateTime
-  CPVJoinPlace String
-  positionCPV DM_ChucVu
-  positionCPVId String
-  tenureDate DateTime
-  enlistmentDate DateTime
-  dischargeDate DateTime
-  familyPhone String
-  familyName String
-  educationAndTraining Student [not null, note: 'hồ sơ đào tạo']
-  lecturer Lecturer [note: 'hồ sơ giảng viên']
-  lecturerHistory LecturerHistory [not null]
-  staffs Staff [note: 'hồ sơ cán bộ']
-  staffHistory StaffHistory [not null]
 }
 
 Table DM_CapBac {
@@ -1425,6 +1576,8 @@ Table DM_DonVi {
   subjects Subject [not null]
   trainingFields TrainingField [not null]
   trainingMajors TrainingMajor [not null]
+  researchProjects ResearchProject [not null]
+  thesisProjects ThesisProject [not null]
 }
 
 Table DM_DonViHanhChinh {
@@ -1600,10 +1753,20 @@ Table DM_NhanVien {
   sDM_ViTriCongViecId String
   sQuanlyTrucTiepId String
   sAvatarId String
+  group Group
+  groupId String
   taiKhoan TaiKhoan
+  userProfile UserProfile [not null]
   NguoiDungTrongNhom NguoiDungTrongNhom [not null]
   Quyen_VaiTro Quyen_VaiTro [not null]
   nhatKyHoatDong NhatKyHoatDong [not null]
+  notification Notification [not null]
+  feedback Feedback [not null]
+  conversation Conversation [not null]
+  documentUploaded Document [not null]
+  documentApproved Document [not null]
+  fAQUploaded FAQ [not null]
+  fAQApproved FAQ [not null]
 }
 
 Table DM_PhanCap_ChatLuong_TrangThietBi {
@@ -1979,7 +2142,7 @@ Table VaiTroTrongNhom {
   sDM_VaiTroId String
 }
 
-Table Lecturer {
+Table UserProfile {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -1987,40 +2150,87 @@ Table Lecturer {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  from DateTime
-  lectureID String [unique]
-  serviceDate DateTime
-  userProfile UserProfile [not null]
-  userProfileId String [unique, not null]
-  organization DM_DonVi [not null]
-  organizationId String [not null]
-  lecturerType LecturerType [not null]
-  lecturerTypeId String [not null]
-  mainSubjectClasses SubjectClass [not null]
-  extraSubjectClasses SubjectClass [not null]
-  enterGradeClasses SubjectClass [not null]
-  manageFixedClass FixedClass [not null]
-}
-
-Table LecturerHistory {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  from DateTime
-  to DateTime
-  lectureID String
-  lectureCode String
-  serviceDate DateTime
-  userProfile UserProfile [not null]
-  userProfileId String [unique, not null]
-  organization DM_DonVi
-  organizationId String
-  lecturerType LecturerType [not null]
-  lecturerTypeId String [not null]
+  user DM_NhanVien
+  userId String [unique]
+  userType UserType [not null, default: 'OTHER']
+  avatar String
+  firstName String [not null]
+  lastName String [not null]
+  idCardNumber String [unique, not null]
+  fullname String
+  healthInsuranceNumber String
+  bankAccountNumber String
+  bankName String
+  currentAddress String
+  provinceCurrentAddress DM_Tinh
+  provinceCurrentAddressId String
+  districtCurrentAddress DM_QuanHuyen
+  districtCurrentAddressId String
+  communeCurrentAddress DM_XaPhuong
+  communeCurrentAddressId String
+  dateOfBirth DateTime
+  placeOfBirth String
+  provinceOfBirth DM_Tinh
+  provinceOfBirthId String
+  districtOfBirth DM_QuanHuyen
+  districtOfBirthId String
+  communeOfBirth DM_XaPhuong
+  communeOfBirthId String
+  homeTown String
+  idCardDate DateTime
+  gender Gender
+  permanentAddress String
+  provincePermanentAddress DM_Tinh
+  provincePermanentAddressId String
+  districtPermanentAddress DM_QuanHuyen
+  districtPermanentAddressId String
+  communePermanentAddress DM_XaPhuong
+  communePermanentAddressId String
+  temporaryAddress String
+  contactAddress String
+  phoneNumber String
+  email String
+  nationality DM_QuocGia
+  nationalityId String
+  religion DM_TonGiao
+  religionId String
+  ethnicity DM_DanToc
+  ethnicityId String
+  provinceHometown DM_Tinh
+  provinceHometownId String
+  districtHometown DM_QuanHuyen
+  districtHometownId String
+  communeHometown DM_XaPhuong
+  communeHometownId String
+  officerNumber String
+  rank DM_CapBac
+  rankId String
+  rankDate DateTime
+  academicDegreeType DM_HocVi
+  academicDegreeTypeId String
+  academicDegreeDate DateTime
+  academicRankType DM_HocHam
+  academicRankTypeId String
+  academicRankDate DateTime
+  level DM_ChucDanh
+  levelId String
+  unionDate DateTime
+  unionPlace String
+  CPVJoinDate DateTime
+  officialCPVDate DateTime
+  CPVJoinPlace String
+  positionCPV DM_ChucVu
+  positionCPVId String
+  tenureDate DateTime
+  enlistmentDate DateTime
+  dischargeDate DateTime
+  familyPhone String
+  familyName String
+  educationAndTraining Student [not null, note: 'hồ sơ đào tạo']
+  lecturer Lecturer [note: 'hồ sơ giảng viên']
+  lecturerHistory LecturerHistory [not null]
+  staffs Staff [note: 'hồ sơ cán bộ']
+  staffHistory StaffHistory [not null]
 }
 
 Table LecturerType {
@@ -2068,6 +2278,166 @@ Table StaffPosition {
   Note: 'Chức vụ nhân viên'
 }
 
+Table Lecturer {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  from DateTime
+  lectureID String [unique]
+  serviceDate DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization DM_DonVi [not null]
+  organizationId String [not null]
+  lecturerType LecturerType [not null]
+  lecturerTypeId String [not null]
+  mainSubjectClasses SubjectClass [not null]
+  extraSubjectClasses SubjectClass [not null]
+  enterGradeClasses SubjectClass [not null]
+  manageFixedClass FixedClass [not null]
+  classSchedules ClassSchedule [not null]
+  researchProjects ResearchProject [not null]
+  reviewedRegistrations StudentResearchRegistration [not null]
+  thesisProjects ThesisProject [not null]
+  reviewedThesisRegistrations StudentThesisRegistration [not null]
+}
+
+Table LecturerHistory {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  from DateTime
+  to DateTime
+  lectureID String
+  lectureCode String
+  serviceDate DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [unique, not null]
+  organization DM_DonVi
+  organizationId String
+  lecturerType LecturerType [not null]
+  lecturerTypeId String [not null]
+}
+
+Table ResearchProject {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  summary String [not null]
+  objectives String
+  methodology String
+  expectedResults String
+  requirements String
+  supervisor Lecturer [not null]
+  supervisorId String [not null]
+  organization DM_DonVi [not null]
+  organizationId String [not null]
+  maxStudents Int [not null]
+  currentStudents Int [not null, default: 0]
+  registrationStart DateTime [not null]
+  registrationEnd DateTime [not null]
+  projectStart DateTime
+  projectEnd DateTime
+  status ResearchProjectStatus [not null, default: 'OPEN']
+  registrations StudentResearchRegistration [not null]
+}
+
+Table StudentResearchRegistration {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  researchProject ResearchProject [not null]
+  researchProjectId String [not null]
+  registeredAt DateTime [default: `now()`, not null]
+  motivation String
+  experience String
+  status RegistrationStatus [not null, default: 'PENDING']
+  reviewedAt DateTime
+  reviewedBy Lecturer
+  reviewedById String
+  reviewNote String
+
+  indexes {
+    (studentId, researchProjectId) [unique]
+  }
+}
+
+Table ThesisProject {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  title String [not null]
+  summary String [not null]
+  objectives String
+  scope String
+  methodology String
+  expectedResults String
+  requirements String
+  technologies String
+  supervisor Lecturer [not null]
+  supervisorId String [not null]
+  organization DM_DonVi [not null]
+  organizationId String [not null]
+  maxStudents Int [not null]
+  currentStudents Int [not null, default: 0]
+  registrationStart DateTime [not null]
+  registrationEnd DateTime [not null]
+  projectStart DateTime
+  projectEnd DateTime
+  status ThesisProjectStatus [not null, default: 'OPEN']
+  registrations StudentThesisRegistration [not null]
+}
+
+Table StudentThesisRegistration {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  thesisProject ThesisProject [not null]
+  thesisProjectId String [not null]
+  registeredAt DateTime [default: `now()`, not null]
+  motivation String
+  experience String
+  proposedIdeas String
+  status ThesisRegistrationStatus [not null, default: 'PENDING']
+  reviewedAt DateTime
+  reviewedBy Lecturer
+  reviewedById String
+  reviewNote String
+
+  indexes {
+    (studentId, thesisProjectId) [unique]
+  }
+}
+
 Table Staff {
   id String [pk]
   code String [unique]
@@ -2106,6 +2476,275 @@ Table StaffHistory {
   staffTypeId String [not null]
   staffPosition StaffPosition [not null]
   staffPositionId String [not null]
+}
+
+Table SurveyObjectType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  survey Survey [not null]
+}
+
+Table SurveyTopic {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  survey Survey [not null]
+}
+
+Table SurveyQuestionType {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  surveyQuestion SurveyQuestion [not null]
+}
+
+Table Survey {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  surveyObjectType SurveyObjectType [not null]
+  surveyObjectId String [not null]
+  surveyTopic SurveyTopic [not null]
+  surveyTopicId String [not null]
+  surveyQuestion SurveyQuestion [not null]
+  surveySessions SurveySession [not null]
+}
+
+Table SurveyQuestion {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  surveyQuestionType SurveyQuestionType [not null]
+  surveyQuestionTypeId String [not null]
+  survey Survey [not null]
+  surveyId String [not null]
+  surveyAnswer SurveyChoice [not null]
+  surveyResponses SurveyResponse [not null]
+}
+
+Table SurveyChoice {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  answer String
+  surveyQuestion SurveyQuestion [not null]
+  surveyQuestionId String [not null]
+  surveyResponses SurveyResponse [not null]
+
+  Note: 'Lựa chọn của câu hỏi khảo sát'
+}
+
+Table SurveySession {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  survey Survey [not null]
+  surveyId String [not null]
+  student Student
+  studentId String
+  startedAt DateTime [default: `now()`, not null]
+  completedAt DateTime
+  isCompleted Boolean [not null, default: false]
+  responses SurveyResponse [not null]
+
+  indexes {
+    (surveyId, studentId) [unique]
+  }
+
+  Note: 'Bảng lưu phiên khảo sát của từng học viên'
+}
+
+Table SurveyResponse {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  surveySession SurveySession [not null]
+  surveySessionId String [not null]
+  surveyQuestion SurveyQuestion [not null]
+  surveyQuestionId String [not null]
+  answerText String
+  surveyChoice SurveyChoice
+  surveyChoiceId String
+  answeredAt DateTime [default: `now()`, not null]
+
+  indexes {
+    (surveySessionId, surveyQuestionId) [unique]
+  }
+
+  Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
+}
+
+Table Feedback {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  content String [not null]
+  status FeedbackStatus [not null]
+  satisfaction Satisfaction [not null]
+  user DM_NhanVien [not null]
+  userId String [not null]
+}
+
+Table DocumentFile {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  path String [not null]
+  size BigInt [not null]
+  mimeType String
+  archivedCertificate ArchivedCertificate
+  archivedCertificateId String
+  archivedAward ArchivedAward
+  archivedAwardId String
+  curriculum Curriculum
+  curriculumId String
+  curriculumVersion CurriculumVersion
+  curriculumVersionId String
+  subjectVersion SubjectVersion
+  subjectVersionId String
+  studentAcademicDecision StudentAcademicDecision
+  studentAcademicDecisionId String
+  notification Notification
+  notificationId String
+}
+
+Table AcademicActionConfig {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  actionType AcademicActionType [not null]
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
+  ruleSets AcademicActionRuleSet [not null]
+  decisions StudentAcademicDecision [not null]
+
+  indexes {
+    (trainingCourseId, name) [unique]
+  }
+
+  Note: 'Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)'
+}
+
+Table AcademicActionRuleSet {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  config AcademicActionConfig [not null]
+  configId String [not null]
+  conditions AcademicActionCondition [not null]
+
+  Note: 'Bộ quy tắc, chứa nhiều điều kiện (AND logic)
+Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
+Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)'
+}
+
+Table AcademicActionCondition {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  ruleSet AcademicActionRuleSet [not null]
+  ruleSetId String [not null]
+  field CriteriaField [not null]
+  operator CriteriaOperator [not null]
+  invert Boolean [not null, default: false]
+  value Float [not null]
+  tuple String[] [not null]
+  yearCondition Int
+  isPriorityStudent Boolean
+
+  Note: 'Điều kiện cụ thể để kích hoạt xử lý'
+}
+
+Table StudentAcademicDecision {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  semester Semester
+  semesterId String
+  schoolYear SchoolYear
+  schoolYearId String
+  appliedConfig AcademicActionConfig
+  appliedConfigId String
+  actionTaken AcademicActionType [not null]
+  decisionDate DateTime [default: `now()`, not null]
+  validUntil DateTime
+  reason String
+  documentEvidence DocumentFile [not null]
+  status DecisionStatus [not null, default: 'PENDING']
+
+  indexes {
+    (studentId, semesterId, schoolYearId, appliedConfigId) [unique]
+  }
+
+  Note: 'Quyết định xử lý học tập cho sinh viên'
 }
 
 Table TrainingScoreSession {
@@ -2282,122 +2921,6 @@ Table DisciplinaryWarningReason {
   name String [unique, not null]
   warning DisciplinaryWarning [not null]
   severityLevel Int [not null]
-}
-
-Table AcademicActionConfig {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  actionType AcademicActionType [not null]
-  trainingCourse TrainingCourse [not null]
-  trainingCourseId String [not null]
-  ruleSets AcademicActionRuleSet [not null]
-  decisions StudentAcademicDecision [not null]
-
-  indexes {
-    (trainingCourseId, name) [unique]
-  }
-
-  Note: 'Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)'
-}
-
-Table AcademicActionRuleSet {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  config AcademicActionConfig [not null]
-  configId String [not null]
-  conditions AcademicActionCondition [not null]
-
-  Note: 'Bộ quy tắc, chứa nhiều điều kiện (AND logic)
-Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
-Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)'
-}
-
-Table AcademicActionCondition {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  ruleSet AcademicActionRuleSet [not null]
-  ruleSetId String [not null]
-  field CriteriaField [not null]
-  operator CriteriaOperator [not null]
-  invert Boolean [not null, default: false]
-  value Float [not null]
-  tuple String[] [not null]
-  yearCondition Int
-  isPriorityStudent Boolean
-
-  Note: 'Điều kiện cụ thể để kích hoạt xử lý'
-}
-
-Table StudentAcademicDecision {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  student Student [not null]
-  studentId String [not null]
-  semester Semester
-  semesterId String
-  schoolYear SchoolYear
-  schoolYearId String
-  appliedConfig AcademicActionConfig
-  appliedConfigId String
-  actionTaken AcademicActionType [not null]
-  decisionDate DateTime [default: `now()`, not null]
-  validUntil DateTime
-  reason String
-  documentEvidence DocumentFile [not null]
-  status DecisionStatus [not null, default: 'PENDING']
-
-  indexes {
-    (studentId, semesterId, schoolYearId, appliedConfigId) [unique]
-  }
-
-  Note: 'Quyết định xử lý học tập cho sinh viên'
-}
-
-Table DocumentFile {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  path String [not null]
-  size BigInt [not null]
-  mimeType String
-  archivedCertificate ArchivedCertificate
-  archivedCertificateId String
-  archivedAward ArchivedAward
-  archivedAwardId String
-  curriculum Curriculum
-  curriculumId String
-  curriculumVersion CurriculumVersion
-  curriculumVersionId String
-  subjectVersion SubjectVersion
-  subjectVersionId String
-  studentAcademicDecision StudentAcademicDecision
-  studentAcademicDecisionId String
 }
 
 Table GraduationSession {
@@ -2601,9 +3124,19 @@ Table BlockedIp {
   expiresAt DateTime
 }
 
+Table NotificationToTrainingCourse {
+  notificationsId String [ref: > Notification.id]
+  targetcoursesId String [ref: > TrainingCourse.id]
+}
+
 Table FixedClassToSubjectClass {
   subjectclassesId String [ref: > SubjectClass.id]
   fixedclassesId String [ref: > FixedClass.id]
+}
+
+Table FixedClassToNotification {
+  notificationsId String [ref: > Notification.id]
+  targetclassesId String [ref: > FixedClass.id]
 }
 
 Table PrerequisiteSubject {
@@ -2621,9 +3154,9 @@ Table PriorityObjectToStudent {
   priorityobjectId String [ref: > PriorityObject.id]
 }
 
-Table GroupToUser {
-  groupsId String [ref: > Group.id]
-  usersId String [ref: > User.id]
+Table NotificationToStudent {
+  notificationsId String [ref: > Notification.id]
+  targetstudentsId String [ref: > Student.id]
 }
 
 Table GroupToRole {
@@ -2644,6 +3177,22 @@ Table AcademicWarningToAcademicWarningRule {
 Table DisciplinaryWarningToDisciplinaryWarningReason {
   reasondetailsId String [ref: > DisciplinaryWarningReason.id]
   warningId String [ref: > DisciplinaryWarning.id]
+}
+
+Enum QuestionType {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  ESSAY
+  FILL_IN_BLANK
+  ORDERING
+}
+
+Enum ExamStatus {
+  DRAFT
+  PUBLISHED
+  ONGOING
+  FINISHED
+  ARCHIVED
 }
 
 Enum SemesterType {
@@ -2689,6 +3238,16 @@ Enum SubjectClassSchedule {
   EVENING
 }
 
+Enum PeriodType {
+  THEORY
+  PRACTICE
+  LAB
+  SEMINAR
+  EXAM
+  MAKEUP
+  REVIEW
+}
+
 Enum TrainingObjectTypes {
   MILITARY
   CIVILIAN
@@ -2709,6 +3268,24 @@ Enum StudentStatus {
   TRANSFERRED
   PENDING_GRADUATION_REVIEW
   ACADEMIC_SUSPENSION
+}
+
+Enum NotificationType {
+  GENERAL
+  ACADEMIC
+  EXAM
+  EVENT
+  SCHOLARSHIP
+  TUITION
+  URGENT
+  MAINTENANCE
+}
+
+Enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
 }
 
 Enum UserRole {
@@ -2755,21 +3332,6 @@ Enum DocumentType {
   ABSTRACTIVE_TEXT_SUMMARIZATION
 }
 
-Enum FeedbackStatus {
-  Pending
-  InProgress
-  Resolved
-  Closed
-}
-
-Enum Satisfaction {
-  VeryDissatisfied
-  Dissatisfied
-  Neutral
-  Satisfied
-  VerySatisfied
-}
-
 Enum UserType {
   MILITARY_STUDENT
   CIVILIAN_STUDENT
@@ -2785,6 +3347,63 @@ Enum UserType {
 Enum Gender {
   Male
   Female
+}
+
+Enum ResearchProjectStatus {
+  OPEN
+  FULL
+  CLOSED
+  COMPLETED
+}
+
+Enum RegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+Enum ThesisProjectStatus {
+  OPEN
+  FULL
+  CLOSED
+  IN_PROGRESS
+  COMPLETED
+}
+
+Enum ThesisRegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+Enum FeedbackStatus {
+  Pending
+  InProgress
+  Resolved
+  Closed
+}
+
+Enum Satisfaction {
+  VeryDissatisfied
+  Dissatisfied
+  Neutral
+  Satisfied
+  VerySatisfied
+}
+
+Enum AcademicActionType {
+  REPEAT_YEAR
+  SUSPENSION
+  EXPULSION
+}
+
+Enum DecisionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  APPEALED
 }
 
 Enum StudentTrainingType {
@@ -2835,19 +3454,6 @@ Enum CriteriaOperator {
   IN
 }
 
-Enum AcademicActionType {
-  REPEAT_YEAR
-  SUSPENSION
-  EXPULSION
-}
-
-Enum DecisionStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  APPEALED
-}
-
 Enum GraduationSessionStatus {
   PLANNING
   OPEN_FOR_APPLICATION
@@ -2874,15 +3480,53 @@ Enum TemplateFileType {
   LOGS
 }
 
-Ref: Survey.surveyObjectId > SurveyObjectType.id
+Ref: QuestionBank.subjectVersionId > SubjectVersion.id
 
-Ref: Survey.surveyTopicId > SurveyTopic.id
+Ref: Question.questionBankId > QuestionBank.id
 
-Ref: SurveyQuestion.surveyQuestionTypeId > SurveyQuestionType.id
+Ref: Question.knowledgeBlockId > KnowledgeBlock.id
 
-Ref: SurveyQuestion.surveyId > Survey.id
+Ref: Question.difficultyId > Difficulty.id
 
-Ref: SurveyAnswer.surveyQuestionId > SurveyQuestion.id
+Ref: MultipleChoiceOption.questionId > Question.id [delete: Cascade]
+
+Ref: FillInBlankSlot.questionId > Question.id [delete: Cascade]
+
+Ref: OrderingItem.questionId > Question.id [delete: Cascade]
+
+Ref: Answer.sessionId > ExamSession.id [delete: Cascade]
+
+Ref: Answer.questionId > Question.id
+
+Ref: SelectedMultipleChoiceOption.answerId > Answer.id [delete: Cascade]
+
+Ref: SelectedMultipleChoiceOption.optionId > MultipleChoiceOption.id
+
+Ref: FillInBlankAnswer.answerId > Answer.id [delete: Cascade]
+
+Ref: FillInBlankAnswer.slotId > FillInBlankSlot.id
+
+Ref: OrderingAnswer.answerId > Answer.id [delete: Cascade]
+
+Ref: OrderingAnswer.itemId > OrderingItem.id
+
+Ref: Exam.subjectVersionId > SubjectVersion.id
+
+Ref: TestStructureRule.examId > Exam.id
+
+Ref: TestStructureRule.knowledgeBlockId > KnowledgeBlock.id
+
+Ref: TestStructureRule.difficultyId > Difficulty.id
+
+Ref: ExamSession.studentId > Student.id
+
+Ref: ExamSession.examId > Exam.id
+
+Ref: ExamSession.roomId > Room.id
+
+Ref: ExamSessionQuestion.sessionId > ExamSession.id [delete: Cascade]
+
+Ref: ExamSessionQuestion.questionId > Question.id
 
 Ref: StudentSubjectScore.subjectClassId > SubjectClass.id
 
@@ -2956,6 +3600,14 @@ Ref: SubjectClass.extraLecturerId > Lecturer.id
 
 Ref: SubjectClass.enterGradeLecturerId > Lecturer.id
 
+Ref: ClassSchedule.subjectClassId > SubjectClass.id
+
+Ref: ClassSchedule.roomId > Room.id
+
+Ref: ClassSchedule.lecturerId > Lecturer.id
+
+Ref: ClassSchedule.originalScheduleId - ClassSchedule.id
+
 Ref: Building.trainingLocationId > TrainingLocation.id
 
 Ref: Room.buildingId > Building.id
@@ -3006,21 +3658,63 @@ Ref: StudentYearResult.studentId > Student.id
 
 Ref: StudentYearResult.schoolYearId > SchoolYear.id
 
-Ref: Document.uploadedById > User.id
+Ref: Notification.createdById > DM_NhanVien.Id
 
-Ref: Document.approvedById > User.id
+Ref: Document.uploadedById > DM_NhanVien.Id
 
-Ref: FAQ.uploadedById > User.id
+Ref: Document.approvedById > DM_NhanVien.Id
 
-Ref: FAQ.approvedById > User.id
+Ref: FAQ.uploadedById > DM_NhanVien.Id
 
-Ref: Conversation.userId > User.id
+Ref: FAQ.approvedById > DM_NhanVien.Id
+
+Ref: Conversation.userId > DM_NhanVien.Id
 
 Ref: Message.conversationId > Conversation.id
 
-Ref: Feedback.userId > User.id
+Ref: DM_DonVi.sParentId - DM_DonVi.Id
 
-Ref: UserProfile.userId > User.id
+Ref: DM_NhanVien.sDM_DonViId > DM_DonVi.Id [delete: No Action]
+
+Ref: DM_NhanVien.sDM_ViTriCongViecId > DM_ViTriCongViec.Id [delete: No Action]
+
+Ref: DM_NhanVien.groupId > Group.id
+
+Ref: DM_Tinh.sDM_QuocGiaId > DM_QuocGia.Id
+
+Ref: DM_Tinh.iDM_KhuVucDiaLy_Id > DM_KhuVuc_DiaLy.Id
+
+Ref: DM_Tinh.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
+
+Ref: DM_QuanHuyen.sDM_TinhId > DM_Tinh.Id
+
+Ref: DM_QuanHuyen.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
+
+Ref: DM_XaPhuong.sDM_QuanHuyenId > DM_QuanHuyen.Id
+
+Ref: DM_XaPhuong.dM_TinhId > DM_Tinh.Id
+
+Ref: DM_XaPhuong.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
+
+Ref: DM_ViTriCongViec.sDM_ChucDanhId > DM_ChucDanh.Id [delete: No Action]
+
+Ref: NguoiDungTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id [delete: No Action]
+
+Ref: NguoiDungTrongNhom.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
+
+Ref: NhatKyHoatDong.sNhanVienId > DM_NhanVien.Id [delete: No Action]
+
+Ref: Quyen_VaiTro.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
+
+Ref: Quyen_VaiTro.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
+
+Ref: TaiKhoan.sDM_NhanVienId - DM_NhanVien.Id [delete: No Action]
+
+Ref: VaiTroTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id
+
+Ref: VaiTroTrongNhom.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
+
+Ref: UserProfile.userId > DM_NhanVien.Id
 
 Ref: UserProfile.provinceCurrentAddressId > DM_Tinh.Id
 
@@ -3062,46 +3756,6 @@ Ref: UserProfile.levelId > DM_ChucDanh.Id
 
 Ref: UserProfile.positionCPVId > DM_ChucVu.Id
 
-Ref: DM_DonVi.sParentId - DM_DonVi.Id
-
-Ref: DM_NhanVien.sDM_DonViId > DM_DonVi.Id [delete: No Action]
-
-Ref: DM_NhanVien.sDM_ViTriCongViecId > DM_ViTriCongViec.Id [delete: No Action]
-
-Ref: DM_Tinh.sDM_QuocGiaId > DM_QuocGia.Id
-
-Ref: DM_Tinh.iDM_KhuVucDiaLy_Id > DM_KhuVuc_DiaLy.Id
-
-Ref: DM_Tinh.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
-
-Ref: DM_QuanHuyen.sDM_TinhId > DM_Tinh.Id
-
-Ref: DM_QuanHuyen.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
-
-Ref: DM_XaPhuong.sDM_QuanHuyenId > DM_QuanHuyen.Id
-
-Ref: DM_XaPhuong.dM_TinhId > DM_Tinh.Id
-
-Ref: DM_XaPhuong.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
-
-Ref: DM_ViTriCongViec.sDM_ChucDanhId > DM_ChucDanh.Id [delete: No Action]
-
-Ref: NguoiDungTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id [delete: No Action]
-
-Ref: NguoiDungTrongNhom.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
-
-Ref: NhatKyHoatDong.sNhanVienId > DM_NhanVien.Id [delete: No Action]
-
-Ref: Quyen_VaiTro.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
-
-Ref: Quyen_VaiTro.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
-
-Ref: TaiKhoan.sDM_NhanVienId - DM_NhanVien.Id [delete: No Action]
-
-Ref: VaiTroTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id
-
-Ref: VaiTroTrongNhom.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
-
 Ref: Lecturer.userProfileId - UserProfile.id
 
 Ref: Lecturer.organizationId > DM_DonVi.Id
@@ -3113,6 +3767,26 @@ Ref: LecturerHistory.userProfileId > UserProfile.id
 Ref: LecturerHistory.organizationId > DM_DonVi.Id
 
 Ref: LecturerHistory.lecturerTypeId > LecturerType.id
+
+Ref: ResearchProject.supervisorId > Lecturer.id
+
+Ref: ResearchProject.organizationId > DM_DonVi.Id
+
+Ref: StudentResearchRegistration.studentId > Student.id
+
+Ref: StudentResearchRegistration.researchProjectId > ResearchProject.id
+
+Ref: StudentResearchRegistration.reviewedById > Lecturer.id
+
+Ref: ThesisProject.supervisorId > Lecturer.id
+
+Ref: ThesisProject.organizationId > DM_DonVi.Id
+
+Ref: StudentThesisRegistration.studentId > Student.id
+
+Ref: StudentThesisRegistration.thesisProjectId > ThesisProject.id
+
+Ref: StudentThesisRegistration.reviewedById > Lecturer.id
 
 Ref: Staff.userProfileId - UserProfile.id
 
@@ -3129,6 +3803,56 @@ Ref: StaffHistory.organizationId > DM_DonVi.Id
 Ref: StaffHistory.staffTypeId > StaffType.id
 
 Ref: StaffHistory.staffPositionId > StaffPosition.id
+
+Ref: Survey.surveyObjectId > SurveyObjectType.id
+
+Ref: Survey.surveyTopicId > SurveyTopic.id
+
+Ref: SurveyQuestion.surveyQuestionTypeId > SurveyQuestionType.id
+
+Ref: SurveyQuestion.surveyId > Survey.id
+
+Ref: SurveyChoice.surveyQuestionId > SurveyQuestion.id
+
+Ref: SurveySession.surveyId > Survey.id
+
+Ref: SurveySession.studentId > Student.id
+
+Ref: SurveyResponse.surveySessionId > SurveySession.id
+
+Ref: SurveyResponse.surveyQuestionId > SurveyQuestion.id
+
+Ref: SurveyResponse.surveyChoiceId > SurveyChoice.id
+
+Ref: Feedback.userId > DM_NhanVien.Id
+
+Ref: DocumentFile.archivedCertificateId > ArchivedCertificate.id
+
+Ref: DocumentFile.archivedAwardId > ArchivedAward.id
+
+Ref: DocumentFile.curriculumId > Curriculum.id
+
+Ref: DocumentFile.curriculumVersionId > CurriculumVersion.id
+
+Ref: DocumentFile.subjectVersionId > SubjectVersion.id
+
+Ref: DocumentFile.studentAcademicDecisionId > StudentAcademicDecision.id
+
+Ref: DocumentFile.notificationId > Notification.id
+
+Ref: AcademicActionConfig.trainingCourseId > TrainingCourse.id
+
+Ref: AcademicActionRuleSet.configId > AcademicActionConfig.id
+
+Ref: AcademicActionCondition.ruleSetId > AcademicActionRuleSet.id
+
+Ref: StudentAcademicDecision.studentId > Student.id
+
+Ref: StudentAcademicDecision.semesterId > Semester.id
+
+Ref: StudentAcademicDecision.schoolYearId > SchoolYear.id
+
+Ref: StudentAcademicDecision.appliedConfigId > AcademicActionConfig.id
 
 Ref: TrainingScoreSession.semesterId > Semester.id
 
@@ -3157,32 +3881,6 @@ Ref: AcademicWarning.semesterId > Semester.id
 Ref: DisciplinaryWarning.studentId > Student.id
 
 Ref: DisciplinaryWarning.semesterId > Semester.id
-
-Ref: AcademicActionConfig.trainingCourseId > TrainingCourse.id
-
-Ref: AcademicActionRuleSet.configId > AcademicActionConfig.id
-
-Ref: AcademicActionCondition.ruleSetId > AcademicActionRuleSet.id
-
-Ref: StudentAcademicDecision.studentId > Student.id
-
-Ref: StudentAcademicDecision.semesterId > Semester.id
-
-Ref: StudentAcademicDecision.schoolYearId > SchoolYear.id
-
-Ref: StudentAcademicDecision.appliedConfigId > AcademicActionConfig.id
-
-Ref: DocumentFile.archivedCertificateId > ArchivedCertificate.id
-
-Ref: DocumentFile.archivedAwardId > ArchivedAward.id
-
-Ref: DocumentFile.curriculumId > Curriculum.id
-
-Ref: DocumentFile.curriculumVersionId > CurriculumVersion.id
-
-Ref: DocumentFile.subjectVersionId > SubjectVersion.id
-
-Ref: DocumentFile.studentAcademicDecisionId > StudentAcademicDecision.id
 
 Ref: StudentGraduationApplication.studentId > Student.id
 

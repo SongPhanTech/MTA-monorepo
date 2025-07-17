@@ -80,8 +80,8 @@ export default function StudentGraduationApplication() {
                 ...(filters.applicationDate?.length === 2
                     ? {
                           applicationDate: {
-                              gte: dayjs(filters.applicationDate?.[0]).toDate(),
-                              lte: dayjs(filters.applicationDate?.[1]).toDate(),
+                              gte: dayjs(filters.applicationDate?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.applicationDate?.[1], 'DD/MM/YYYY').toDate(),
                           },
                       }
                     : {}),

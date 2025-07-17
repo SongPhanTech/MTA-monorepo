@@ -235,7 +235,7 @@ const PutHocvienModal = () => {
 
                 await Promise.all(promises)
 
-                message.success('Cập nhật sinh viên thành công')
+                message.success('Cập nhật học viên thành công')
             } else {
                 // CREATE MODE
                 if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
@@ -254,7 +254,7 @@ const PutHocvienModal = () => {
                         },
                     })
 
-                    message.success('Cập nhật sinh viên thành công')
+                    message.success('Cập nhật học viên thành công')
                 } else {
                     const userProfile = await createUserProfile({
                         data: userProfileData,
@@ -267,7 +267,7 @@ const PutHocvienModal = () => {
                     const studentCreateData = buildStudentCreateData(output, userProfile.id)
                     await createStudent({ data: studentCreateData })
 
-                    message.success('Thêm sinh viên thành công')
+                    message.success('Thêm học viên thành công')
                 }
             }
 
@@ -287,7 +287,7 @@ const PutHocvienModal = () => {
         return [
             {
                 key: '1',
-                label: 'Thông tin sinh viên',
+                label: 'Thông tin học viên',
                 children: (
                     <Row gutter={[16, 16]}>
                         <Col span={24}>

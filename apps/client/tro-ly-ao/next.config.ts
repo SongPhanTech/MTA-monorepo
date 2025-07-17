@@ -29,10 +29,11 @@ const nextConfig: NextConfig = {
             new TerserPlugin({
                 parallel: true,
                 terserOptions: {
-                    keep_classnames: true,
+                    // keep_classnames: true,
                     keep_fnames: true,
                 },
                 extractComments: false,
+                include: 'src/components/modal/*',
             }),
         ]
         return config

@@ -2,6 +2,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutGraduationSession } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useGraduationSessionStatusOptions } from '@hooks/graduationSessionStatus'
 import useSpinner from '@hooks/spinner'
@@ -12,52 +13,76 @@ import {
     useUpdateGraduationSession,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
-import { BookPlus, Eye, Search } from 'lucide-react'
+import { BookPlus, Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
-import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | null
-    trainingCourseId: string | null
-    trainingObjectTypeId: string | null
-}
 
 export default function GraduationSession() {
     const router = useRouter()
-    const { getGraduationSessionStatusLabel, getGraduationSessionStatusColor } =
-        useGraduationSessionStatusOptions()
+    const {
+        graduationSessionStatusOptions,
+        getGraduationSessionStatusLabel,
+        getGraduationSessionStatusColor,
+    } = useGraduationSessionStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        trainingCourseId: null,
-        trainingObjectTypeId: null,
+        name: '',
+        sessionDate: undefined,
+        applicationStart: undefined,
+        applicationEnd: undefined,
+        statusGraduationSession: undefined,
     })
 
     const { data: graduationSessionData, refetch } = useFindManyGraduationSession({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
+            ...(filters.name && filters.name !== ''
                 ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
                   }
+                : {}),
+            ...(filters.sessionDate?.length === 2
+                ? {
+                      sessionDate: {
+                          gte: dayjs(filters.sessionDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.sessionDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.applicationStart?.length === 2
+                ? {
+                      applicationStart: {
+                          gte: dayjs(filters.applicationStart?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.applicationStart?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.applicationEnd?.length === 2
+                ? {
+                      applicationEnd: {
+                          gte: dayjs(filters.applicationEnd?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.applicationEnd?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.statusGraduationSession
+                ? Array.isArray(filters.statusGraduationSession)
+                    ? {
+                          status: {
+                              in: filters.statusGraduationSession,
+                          },
+                      }
+                    : {
+                          status: {
+                              equals: filters.statusGraduationSession,
+                          },
+                      }
                 : {}),
         },
         take: numberOfPages,
@@ -66,33 +91,54 @@ export default function GraduationSession() {
 
     const { data: count } = useCountGraduationSession({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
+            ...(filters.name && filters.name !== ''
                 ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
                   }
+                : {}),
+            ...(filters.sessionDate?.length === 2
+                ? {
+                      sessionDate: {
+                          gte: dayjs(filters.sessionDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.sessionDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.applicationStart?.length === 2
+                ? {
+                      applicationStart: {
+                          gte: dayjs(filters.applicationStart?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.applicationStart?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.applicationEnd?.length === 2
+                ? {
+                      applicationEnd: {
+                          gte: dayjs(filters.applicationEnd?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.applicationEnd?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.statusGraduationSession
+                ? Array.isArray(filters.statusGraduationSession)
+                    ? {
+                          status: {
+                              in: filters.statusGraduationSession,
+                          },
+                      }
+                    : {
+                          status: {
+                              equals: filters.statusGraduationSession,
+                          },
+                      }
                 : {}),
         },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
     const { onOpen } = useDisclosure<string>({
         tag: PutGraduationSession.name,
     })
@@ -121,14 +167,6 @@ export default function GraduationSession() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
             router.push(
@@ -142,32 +180,7 @@ export default function GraduationSession() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={12}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
-                                            }
-                                            placeholder="Tìm kiếm đợt..."
-                                            className="py-0"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
-                        </Col>
-                        <Col span={6}>
+                        <Col span={24}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     <BookPlus />
@@ -183,6 +196,8 @@ export default function GraduationSession() {
                         rowKey="key"
                         id="graduation-session"
                         onRowClick={(record) => handleRowClick(record)}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -196,11 +211,13 @@ export default function GraduationSession() {
                                 title: 'Tên đợt',
                                 dataIndex: 'name',
                                 width: 180,
+                                type: 'input',
                             },
                             {
                                 title: 'Ngày họp hội đồng',
                                 dataIndex: 'sessionDate',
                                 width: 120,
+                                type: 'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -208,6 +225,7 @@ export default function GraduationSession() {
                                 title: 'Ngày bắt đầu nhận đơn',
                                 dataIndex: 'applicationStart',
                                 width: 150,
+                                type: 'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -215,18 +233,21 @@ export default function GraduationSession() {
                                 title: 'Ngày kết thúc nhận đơn',
                                 dataIndex: 'applicationEnd',
                                 width: 150,
+                                type: 'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Trạng thái',
-                                dataIndex: 'status',
+                                dataIndex: 'statusGraduationSession',
                                 align: 'center',
                                 width: 160,
                                 fixed: 'right',
-                                render: (record) => {
-                                    const label = getGraduationSessionStatusLabel(record)
-                                    const color = getGraduationSessionStatusColor(record)
+                                type: 'select',
+                                options: graduationSessionStatusOptions,
+                                render: (_, record) => {
+                                    const label = getGraduationSessionStatusLabel(record?.status)
+                                    const color = getGraduationSessionStatusColor(record?.status)
                                     return <Tag color={color}>{label}</Tag>
                                 },
                             },

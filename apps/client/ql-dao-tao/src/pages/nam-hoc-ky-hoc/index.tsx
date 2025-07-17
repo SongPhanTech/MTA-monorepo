@@ -1,15 +1,16 @@
-import { EyeOutlined, FilterFilled } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSchoolYearModal, PutSemesterModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useSemesterTypeOptions } from '@hooks/semesterType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { SchoolYear, SemesterType } from '@workspace/db'
+import type { SchoolYear } from '@workspace/db'
 import {
     useCountSchoolYear,
     useFindManySchoolYear,
@@ -17,30 +18,26 @@ import {
     useUpdateSemester,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Radio, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    schoolYearId: string | undefined
-    semesterType: SemesterType | undefined
-}
 
 function YearAndSemester() {
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
     const [filters, setFilters] = useState<FilterProps>({
-        schoolYearId: undefined,
+        code: '',
+        name: '',
+        schoolYearId: '',
         semesterType: undefined,
     })
 
-    const { options, getSemesterTypeLabel } = useSemesterTypeOptions()
+    const { options: semesterOption, getSemesterTypeLabel } = useSemesterTypeOptions()
 
     const { data = [], refetch } = useFindManySchoolYear({
         where: {
@@ -52,33 +49,39 @@ function YearAndSemester() {
                       },
                   }
                 : {}),
-            ...(searchText && {
-                semesters: {
-                    some: {
-                        OR: [
-                            {
-                                name: {
-                                    contains: searchText,
-                                    mode: 'insensitive',
-                                },
-                            },
-                            {
-                                code: {
-                                    contains: searchText,
-                                    mode: 'insensitive',
-                                },
-                            },
-                        ],
-                    },
+            semesters: {
+                some: {
+                    ...(filters.code && filters.code !== ''
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.semesterType
+                        ? Array.isArray(filters.semesterType)
+                            ? {
+                                  semesterType: {
+                                      in: filters.semesterType,
+                                  },
+                              }
+                            : {
+                                  semesterType: {
+                                      equals: filters.semesterType,
+                                  },
+                              }
+                        : {}),
                 },
-            }),
-            ...(filters.semesterType !== undefined && {
-                semesters: {
-                    some: {
-                        semesterType: filters.semesterType,
-                    },
-                },
-            }),
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -86,27 +89,35 @@ function YearAndSemester() {
         include: {
             semesters: {
                 where: {
-                    ...(searchText !== ''
+                    ...(filters.code && filters.code !== ''
                         ? {
-                              OR: [
-                                  {
-                                      name: {
-                                          contains: searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      code: {
-                                          contains: searchText,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              ],
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
                           }
                         : {}),
-                    ...(filters.semesterType !== undefined && {
-                        semesterType: filters.semesterType,
-                    }),
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.semesterType
+                        ? Array.isArray(filters.semesterType)
+                            ? {
+                                  semesterType: {
+                                      in: filters.semesterType,
+                                  },
+                              }
+                            : {
+                                  semesterType: {
+                                      equals: filters.semesterType,
+                                  },
+                              }
+                        : {}),
                 },
             },
         },
@@ -121,31 +132,49 @@ function YearAndSemester() {
 
     const { data: count } = useCountSchoolYear({
         where: {
-            id: filters.schoolYearId,
-            ...(searchText && {
-                OR: [
-                    {
-                        semesters: {
-                            some: {
-                                name: {
-                                    contains: searchText,
-                                    mode: 'insensitive',
-                                },
-                            },
-                        },
-                    },
-                    {
-                        name: {
-                            contains: searchText,
-                            mode: 'insensitive',
-                        },
-                    },
-                ],
-            }),
+            ...(filters.schoolYearId && filters.schoolYearId !== ''
+                ? {
+                      id: {
+                          contains: filters.schoolYearId,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            semesters: {
+                some: {
+                    ...(filters.code && filters.code !== ''
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.semesterType
+                        ? Array.isArray(filters.semesterType)
+                            ? {
+                                  semesterType: {
+                                      in: filters.semesterType,
+                                  },
+                              }
+                            : {
+                                  semesterType: {
+                                      equals: filters.semesterType,
+                                  },
+                              }
+                        : {}),
+                },
+            },
         },
     })
-
-    const debouncedSearchText = _.debounce(setSearchText, 500)
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -225,25 +254,6 @@ function YearAndSemester() {
                     <Col span={12}>
                         <Flex>
                             <Col span={12}>
-                                <Form.Item name="search">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) => debouncedSearchText(e.target.value)}
-                                        placeholder="Tìm kiếm kỳ học..."
-                                        className="py-0"
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
                                 <Form.Item name="schoolYearId">
                                     <Select
                                         placeholder="Chọn năm học"
@@ -282,6 +292,8 @@ function YearAndSemester() {
                     headerTitleKey={'name'}
                     childrenFieldName="semesters"
                     currentPage={currentPage}
+                    filters={filters}
+                    setFilters={setFilters}
                     onRowClick={({ id }) => {
                         router.push(`${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`)
                     }}
@@ -292,6 +304,7 @@ function YearAndSemester() {
                             align: 'center',
                             width: 140,
                             fixed: 'left',
+                            type: 'input',
                         },
                         {
                             title: 'Tên học kỳ',
@@ -299,41 +312,15 @@ function YearAndSemester() {
                             align: 'center',
                             width: 250,
                             fixed: 'left',
+                            type: 'input',
                         },
                         {
                             title: 'Loại học kỳ',
                             dataIndex: 'semesterType',
                             align: 'center',
                             width: 120,
-                            filterDropdown: ({ confirm }) => (
-                                <div style={{ padding: 8 }}>
-                                    <Radio.Group
-                                        options={options}
-                                        value={filters.semesterType}
-                                        onChange={(e) => {
-                                            handleFilterChange('semesterType', e.target.value)
-                                            confirm()
-                                        }}
-                                        className="flex flex-col"
-                                    />
-                                    <div className="flex mt-2 justify-end w-full">
-                                        <Button
-                                            size="small"
-                                            onClick={() => {
-                                                handleFilterChange('semesterType', undefined)
-                                                confirm()
-                                            }}
-                                        >
-                                            Bỏ lọc
-                                        </Button>
-                                    </div>
-                                </div>
-                            ),
-                            filterIcon: () => (
-                                <FilterFilled
-                                    style={{ color: filters.semesterType ? '#005f37' : undefined }}
-                                />
-                            ),
+                            type: 'select',
+                            options: semesterOption,
                             render: (value) => getSemesterTypeLabel(value),
                         },
                         {

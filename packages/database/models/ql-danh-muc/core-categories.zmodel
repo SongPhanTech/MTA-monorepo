@@ -4,6 +4,12 @@ import '../ql-dao-tao/categories'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/staff'
 import '../ql-dao-tao/student'
+import '../ql-dao-tao/research'
+import '../ql-dao-tao/thesis'
+import '../ql-nguoi-dung/user'
+import '../ql-nguoi-dung/feedback'
+import '../tro-ly-ao/chat-bot'
+import 'notification'
 
 abstract model CoreBase {
   Id             String    @id() @default(cuid())
@@ -103,6 +109,9 @@ model DM_DonVi extends CoreBase {
   subjects         Subject[]
   trainingFields   TrainingField[]
   trainingMajors   TrainingMajor[]
+  researchProjects ResearchProject[]         // Đề tài của đơn vị
+  thesisProjects   ThesisProject[]             // Đồ án của đơn vị
+
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
   @@schema("mta")
@@ -179,10 +188,21 @@ model DM_NhanVien extends CoreBase {
   sQuanlyTrucTiepId   String?
   sAvatarId           String?
 
+  group               Group?               @relation(fields: [groupId], references: [id])
+  groupId             String?
+
   taiKhoan            TaiKhoan?
+  userProfile         UserProfile[]
   NguoiDungTrongNhom  NguoiDungTrongNhom[]
   Quyen_VaiTro        Quyen_VaiTro[]
   nhatKyHoatDong      NhatKyHoatDong[]
+  notification        Notification[]
+  feedback            Feedback[]
+  conversation        Conversation[]
+  documentUploaded    Document[]           @relation("DocumentUploaded")
+  documentApproved    Document[]           @relation("DocumentApproved")
+  fAQUploaded         FAQ[]                @relation("FAQUploaded")
+  fAQApproved         FAQ[]                @relation("FAQApproved")
 
   @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
