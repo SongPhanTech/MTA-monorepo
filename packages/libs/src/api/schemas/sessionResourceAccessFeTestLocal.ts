@@ -6,5 +6,5 @@
  */
 
 export type SessionResourceAccessFeTestLocal = {
-    roles: string[]
-}
+  roles: string[];
+};

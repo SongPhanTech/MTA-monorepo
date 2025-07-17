@@ -8,11 +8,12 @@
 /**
  * Loại hành động học vụ
  */
-export type AcademicActionType = (typeof AcademicActionType)[keyof typeof AcademicActionType]
+export type AcademicActionType = typeof AcademicActionType[keyof typeof AcademicActionType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AcademicActionType = {
-    REPEAT_YEAR: 'REPEAT_YEAR',
-    SUSPENSION: 'SUSPENSION',
-    EXPULSION: 'EXPULSION',
-} as const
+  REPEAT_YEAR: 'REPEAT_YEAR',
+  SUSPENSION: 'SUSPENSION',
+  EXPULSION: 'EXPULSION',
+} as const;

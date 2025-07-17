@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentFixedClassExcelTrainingPoint404 = {
-    message: string
-}
+  message: string;
+};

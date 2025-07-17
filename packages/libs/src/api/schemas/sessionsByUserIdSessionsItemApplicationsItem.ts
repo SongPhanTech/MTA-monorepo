@@ -6,12 +6,12 @@
  */
 
 export type SessionsByUserIdSessionsItemApplicationsItem = {
-    /** Unique ID of the application. */
-    id: string
-    /** Username of the logged in user for the application. */
-    subject: string
-    /** Name of the application. */
-    appName: string
-    /** ID of the application. */
-    appId: string
-}
+  /** Unique ID of the application. */
+  id: string;
+  /** Username of the logged in user for the application. */
+  subject: string;
+  /** Name of the application. */
+  appName: string;
+  /** ID of the application. */
+  appId: string;
+};

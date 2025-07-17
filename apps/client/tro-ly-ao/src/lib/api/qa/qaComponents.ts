@@ -4,10 +4,15 @@
  * @version 1.0.0
  */
 import * as reactQuery from "@tanstack/react-query";
-import { useQaContext, QaContext } from "./qaContext";
+import { useQaContext, QaContext, queryKeyFn } from "./qaContext";
+import { deepMerge } from "./qaUtils";
 import type * as Fetcher from "./qaFetcher";
 import { qaFetch } from "./qaFetcher";
 import type * as Schemas from "./qaSchemas";
+
+type QueryFnOptions = {
+  signal?: AbortController["signal"];
+};
 
 export type ReadDocumentContentDocumentDocumentReaderGetQueryParams = {
   uri_file: string;
@@ -43,7 +48,54 @@ export const fetchReadDocumentContentDocumentDocumentReaderGet = (
 /**
  * Reads and returns the content of a document file specified by its URI.
  */
-export const useReadDocumentContentDocumentDocumentReaderGet = <
+export function readDocumentContentDocumentDocumentReaderGetQuery(
+  variables: ReadDocumentContentDocumentDocumentReaderGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (
+    options: QueryFnOptions,
+  ) => Promise<Schemas.SrcRoutersDocumentDocumentReaderResponse>;
+};
+
+export function readDocumentContentDocumentDocumentReaderGetQuery(
+  variables:
+    | ReadDocumentContentDocumentDocumentReaderGetVariables
+    | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((
+        options: QueryFnOptions,
+      ) => Promise<Schemas.SrcRoutersDocumentDocumentReaderResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function readDocumentContentDocumentDocumentReaderGetQuery(
+  variables:
+    | ReadDocumentContentDocumentDocumentReaderGetVariables
+    | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/document/document-reader",
+      operationId: "readDocumentContentDocumentDocumentReaderGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchReadDocumentContentDocumentDocumentReaderGet(
+              variables,
+              signal,
+            ),
+  };
+}
+
+/**
+ * Reads and returns the content of a document file specified by its URI.
+ */
+export const useSuspenseReadDocumentContentDocumentDocumentReaderGet = <
   TData = Schemas.SrcRoutersDocumentDocumentReaderResponse,
 >(
   variables: ReadDocumentContentDocumentDocumentReaderGetVariables,
@@ -56,22 +108,49 @@ export const useReadDocumentContentDocumentDocumentReaderGet = <
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  const { queryOptions, fetcherOptions } = useQaContext(options);
+  return reactQuery.useSuspenseQuery<
+    Schemas.SrcRoutersDocumentDocumentReaderResponse,
+    ReadDocumentContentDocumentDocumentReaderGetError,
+    TData
+  >({
+    ...readDocumentContentDocumentDocumentReaderGetQuery(
+      deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Reads and returns the content of a document file specified by its URI.
+ */
+export const useReadDocumentContentDocumentDocumentReaderGet = <
+  TData = Schemas.SrcRoutersDocumentDocumentReaderResponse,
+>(
+  variables:
+    | ReadDocumentContentDocumentDocumentReaderGetVariables
+    | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.SrcRoutersDocumentDocumentReaderResponse,
+      ReadDocumentContentDocumentDocumentReaderGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useQaContext(options);
   return reactQuery.useQuery<
     Schemas.SrcRoutersDocumentDocumentReaderResponse,
     ReadDocumentContentDocumentDocumentReaderGetError,
     TData
   >({
-    queryKey: queryKeyFn({
-      path: "/document/document-reader",
-      operationId: "readDocumentContentDocumentDocumentReaderGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchReadDocumentContentDocumentDocumentReaderGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+    ...readDocumentContentDocumentDocumentReaderGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
     ...options,
     ...queryOptions,
   });
@@ -119,7 +198,54 @@ export const fetchGetSimilarDocumentsDocumentSimilarDocumentsGet = (
 /**
  * Fetches documents of the same type with similar content based on a provided document ID and type.
  */
-export const useGetSimilarDocumentsDocumentSimilarDocumentsGet = <
+export function getSimilarDocumentsDocumentSimilarDocumentsGetQuery(
+  variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (
+    options: QueryFnOptions,
+  ) => Promise<GetSimilarDocumentsDocumentSimilarDocumentsGetResponse>;
+};
+
+export function getSimilarDocumentsDocumentSimilarDocumentsGetQuery(
+  variables:
+    | GetSimilarDocumentsDocumentSimilarDocumentsGetVariables
+    | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((
+        options: QueryFnOptions,
+      ) => Promise<GetSimilarDocumentsDocumentSimilarDocumentsGetResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function getSimilarDocumentsDocumentSimilarDocumentsGetQuery(
+  variables:
+    | GetSimilarDocumentsDocumentSimilarDocumentsGetVariables
+    | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/document/similar-documents",
+      operationId: "getSimilarDocumentsDocumentSimilarDocumentsGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetSimilarDocumentsDocumentSimilarDocumentsGet(
+              variables,
+              signal,
+            ),
+  };
+}
+
+/**
+ * Fetches documents of the same type with similar content based on a provided document ID and type.
+ */
+export const useSuspenseGetSimilarDocumentsDocumentSimilarDocumentsGet = <
   TData = GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
 >(
   variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables,
@@ -132,22 +258,49 @@ export const useGetSimilarDocumentsDocumentSimilarDocumentsGet = <
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  const { queryOptions, fetcherOptions } = useQaContext(options);
+  return reactQuery.useSuspenseQuery<
+    GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
+    GetSimilarDocumentsDocumentSimilarDocumentsGetError,
+    TData
+  >({
+    ...getSimilarDocumentsDocumentSimilarDocumentsGetQuery(
+      deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Fetches documents of the same type with similar content based on a provided document ID and type.
+ */
+export const useGetSimilarDocumentsDocumentSimilarDocumentsGet = <
+  TData = GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
+>(
+  variables:
+    | GetSimilarDocumentsDocumentSimilarDocumentsGetVariables
+    | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
+      GetSimilarDocumentsDocumentSimilarDocumentsGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useQaContext(options);
   return reactQuery.useQuery<
     GetSimilarDocumentsDocumentSimilarDocumentsGetResponse,
     GetSimilarDocumentsDocumentSimilarDocumentsGetError,
     TData
   >({
-    queryKey: queryKeyFn({
-      path: "/document/similar-documents",
-      operationId: "getSimilarDocumentsDocumentSimilarDocumentsGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetSimilarDocumentsDocumentSimilarDocumentsGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+    ...getSimilarDocumentsDocumentSimilarDocumentsGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
     ...options,
     ...queryOptions,
   });
@@ -190,7 +343,51 @@ export const fetchGetSimilarDocumentsFqaSimilarQuestionGet = (
 /**
  * Fetches questions of the same type with similar content based on a provided question ID and type.
  */
-export const useGetSimilarDocumentsFqaSimilarQuestionGet = <
+export function getSimilarDocumentsFqaSimilarQuestionGetQuery(
+  variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (
+    options: QueryFnOptions,
+  ) => Promise<GetSimilarDocumentsFqaSimilarQuestionGetResponse>;
+};
+
+export function getSimilarDocumentsFqaSimilarQuestionGetQuery(
+  variables:
+    | GetSimilarDocumentsFqaSimilarQuestionGetVariables
+    | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((
+        options: QueryFnOptions,
+      ) => Promise<GetSimilarDocumentsFqaSimilarQuestionGetResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function getSimilarDocumentsFqaSimilarQuestionGetQuery(
+  variables:
+    | GetSimilarDocumentsFqaSimilarQuestionGetVariables
+    | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/fqa/similar-question",
+      operationId: "getSimilarDocumentsFqaSimilarQuestionGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetSimilarDocumentsFqaSimilarQuestionGet(variables, signal),
+  };
+}
+
+/**
+ * Fetches questions of the same type with similar content based on a provided question ID and type.
+ */
+export const useSuspenseGetSimilarDocumentsFqaSimilarQuestionGet = <
   TData = GetSimilarDocumentsFqaSimilarQuestionGetResponse,
 >(
   variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables,
@@ -203,22 +400,49 @@ export const useGetSimilarDocumentsFqaSimilarQuestionGet = <
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  const { queryOptions, fetcherOptions } = useQaContext(options);
+  return reactQuery.useSuspenseQuery<
+    GetSimilarDocumentsFqaSimilarQuestionGetResponse,
+    GetSimilarDocumentsFqaSimilarQuestionGetError,
+    TData
+  >({
+    ...getSimilarDocumentsFqaSimilarQuestionGetQuery(
+      deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Fetches questions of the same type with similar content based on a provided question ID and type.
+ */
+export const useGetSimilarDocumentsFqaSimilarQuestionGet = <
+  TData = GetSimilarDocumentsFqaSimilarQuestionGetResponse,
+>(
+  variables:
+    | GetSimilarDocumentsFqaSimilarQuestionGetVariables
+    | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetSimilarDocumentsFqaSimilarQuestionGetResponse,
+      GetSimilarDocumentsFqaSimilarQuestionGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useQaContext(options);
   return reactQuery.useQuery<
     GetSimilarDocumentsFqaSimilarQuestionGetResponse,
     GetSimilarDocumentsFqaSimilarQuestionGetError,
     TData
   >({
-    queryKey: queryKeyFn({
-      path: "/fqa/similar-question",
-      operationId: "getSimilarDocumentsFqaSimilarQuestionGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetSimilarDocumentsFqaSimilarQuestionGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+    ...getSimilarDocumentsFqaSimilarQuestionGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
     ...options,
     ...queryOptions,
   });
@@ -260,7 +484,51 @@ export const fetchGetSimilarDocumentsFqaSimilarAnswerGet = (
 /**
  * Fetches answeres of the same type with similar content based on a provided question ID and type.
  */
-export const useGetSimilarDocumentsFqaSimilarAnswerGet = <
+export function getSimilarDocumentsFqaSimilarAnswerGetQuery(
+  variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (
+    options: QueryFnOptions,
+  ) => Promise<GetSimilarDocumentsFqaSimilarAnswerGetResponse>;
+};
+
+export function getSimilarDocumentsFqaSimilarAnswerGetQuery(
+  variables:
+    | GetSimilarDocumentsFqaSimilarAnswerGetVariables
+    | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((
+        options: QueryFnOptions,
+      ) => Promise<GetSimilarDocumentsFqaSimilarAnswerGetResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function getSimilarDocumentsFqaSimilarAnswerGetQuery(
+  variables:
+    | GetSimilarDocumentsFqaSimilarAnswerGetVariables
+    | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/fqa/similar-answer",
+      operationId: "getSimilarDocumentsFqaSimilarAnswerGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchGetSimilarDocumentsFqaSimilarAnswerGet(variables, signal),
+  };
+}
+
+/**
+ * Fetches answeres of the same type with similar content based on a provided question ID and type.
+ */
+export const useSuspenseGetSimilarDocumentsFqaSimilarAnswerGet = <
   TData = GetSimilarDocumentsFqaSimilarAnswerGetResponse,
 >(
   variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables,
@@ -273,22 +541,49 @@ export const useGetSimilarDocumentsFqaSimilarAnswerGet = <
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  const { queryOptions, fetcherOptions } = useQaContext(options);
+  return reactQuery.useSuspenseQuery<
+    GetSimilarDocumentsFqaSimilarAnswerGetResponse,
+    GetSimilarDocumentsFqaSimilarAnswerGetError,
+    TData
+  >({
+    ...getSimilarDocumentsFqaSimilarAnswerGetQuery(
+      deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Fetches answeres of the same type with similar content based on a provided question ID and type.
+ */
+export const useGetSimilarDocumentsFqaSimilarAnswerGet = <
+  TData = GetSimilarDocumentsFqaSimilarAnswerGetResponse,
+>(
+  variables:
+    | GetSimilarDocumentsFqaSimilarAnswerGetVariables
+    | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      GetSimilarDocumentsFqaSimilarAnswerGetResponse,
+      GetSimilarDocumentsFqaSimilarAnswerGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useQaContext(options);
   return reactQuery.useQuery<
     GetSimilarDocumentsFqaSimilarAnswerGetResponse,
     GetSimilarDocumentsFqaSimilarAnswerGetError,
     TData
   >({
-    queryKey: queryKeyFn({
-      path: "/fqa/similar-answer",
-      operationId: "getSimilarDocumentsFqaSimilarAnswerGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchGetSimilarDocumentsFqaSimilarAnswerGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+    ...getSimilarDocumentsFqaSimilarAnswerGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
     ...options,
     ...queryOptions,
   });
@@ -322,7 +617,44 @@ export const fetchReadDocumentContentUtilNlpTaskGet = (
     {}
   >({ url: "/util/nlp_task", method: "get", ...variables, signal });
 
-export const useReadDocumentContentUtilNlpTaskGet = <
+export function readDocumentContentUtilNlpTaskGetQuery(
+  variables: ReadDocumentContentUtilNlpTaskGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (
+    options: QueryFnOptions,
+  ) => Promise<Schemas.SrcRoutersUtilDocumentReaderResponse>;
+};
+
+export function readDocumentContentUtilNlpTaskGetQuery(
+  variables: ReadDocumentContentUtilNlpTaskGetVariables | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn:
+    | ((
+        options: QueryFnOptions,
+      ) => Promise<Schemas.SrcRoutersUtilDocumentReaderResponse>)
+    | reactQuery.SkipToken;
+};
+
+export function readDocumentContentUtilNlpTaskGetQuery(
+  variables: ReadDocumentContentUtilNlpTaskGetVariables | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/util/nlp_task",
+      operationId: "readDocumentContentUtilNlpTaskGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchReadDocumentContentUtilNlpTaskGet(variables, signal),
+  };
+}
+
+export const useSuspenseReadDocumentContentUtilNlpTaskGet = <
   TData = Schemas.SrcRoutersUtilDocumentReaderResponse,
 >(
   variables: ReadDocumentContentUtilNlpTaskGetVariables,
@@ -335,22 +667,44 @@ export const useReadDocumentContentUtilNlpTaskGet = <
     "queryKey" | "queryFn" | "initialData"
   >,
 ) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useQaContext(options);
+  const { queryOptions, fetcherOptions } = useQaContext(options);
+  return reactQuery.useSuspenseQuery<
+    Schemas.SrcRoutersUtilDocumentReaderResponse,
+    ReadDocumentContentUtilNlpTaskGetError,
+    TData
+  >({
+    ...readDocumentContentUtilNlpTaskGetQuery(
+      deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export const useReadDocumentContentUtilNlpTaskGet = <
+  TData = Schemas.SrcRoutersUtilDocumentReaderResponse,
+>(
+  variables: ReadDocumentContentUtilNlpTaskGetVariables | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.SrcRoutersUtilDocumentReaderResponse,
+      ReadDocumentContentUtilNlpTaskGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useQaContext(options);
   return reactQuery.useQuery<
     Schemas.SrcRoutersUtilDocumentReaderResponse,
     ReadDocumentContentUtilNlpTaskGetError,
     TData
   >({
-    queryKey: queryKeyFn({
-      path: "/util/nlp_task",
-      operationId: "readDocumentContentUtilNlpTaskGet",
-      variables,
-    }),
-    queryFn: ({ signal }) =>
-      fetchReadDocumentContentUtilNlpTaskGet(
-        { ...fetcherOptions, ...variables },
-        signal,
-      ),
+    ...readDocumentContentUtilNlpTaskGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
     ...options,
     ...queryOptions,
   });
@@ -360,25 +714,35 @@ export type QueryOperation =
   | {
       path: "/document/document-reader";
       operationId: "readDocumentContentDocumentDocumentReaderGet";
-      variables: ReadDocumentContentDocumentDocumentReaderGetVariables;
+      variables:
+        | ReadDocumentContentDocumentDocumentReaderGetVariables
+        | reactQuery.SkipToken;
     }
   | {
       path: "/document/similar-documents";
       operationId: "getSimilarDocumentsDocumentSimilarDocumentsGet";
-      variables: GetSimilarDocumentsDocumentSimilarDocumentsGetVariables;
+      variables:
+        | GetSimilarDocumentsDocumentSimilarDocumentsGetVariables
+        | reactQuery.SkipToken;
     }
   | {
       path: "/fqa/similar-question";
       operationId: "getSimilarDocumentsFqaSimilarQuestionGet";
-      variables: GetSimilarDocumentsFqaSimilarQuestionGetVariables;
+      variables:
+        | GetSimilarDocumentsFqaSimilarQuestionGetVariables
+        | reactQuery.SkipToken;
     }
   | {
       path: "/fqa/similar-answer";
       operationId: "getSimilarDocumentsFqaSimilarAnswerGet";
-      variables: GetSimilarDocumentsFqaSimilarAnswerGetVariables;
+      variables:
+        | GetSimilarDocumentsFqaSimilarAnswerGetVariables
+        | reactQuery.SkipToken;
     }
   | {
       path: "/util/nlp_task";
       operationId: "readDocumentContentUtilNlpTaskGet";
-      variables: ReadDocumentContentUtilNlpTaskGetVariables;
+      variables:
+        | ReadDocumentContentUtilNlpTaskGetVariables
+        | reactQuery.SkipToken;
     };

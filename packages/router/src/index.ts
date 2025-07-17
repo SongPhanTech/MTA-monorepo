@@ -768,6 +768,13 @@ const NAVIGATION: NavigationType = {
         label: 'Khảo thí',
         menus: [
             {
+                id: 'home',
+                label: 'Trang chủ',
+                icon: House,
+                path: ROUTER_PATH.KHAO_THI.HOME,
+                description: 'Thông tin trang chủ',
+            },
+            {
                 id: 'thiet-lap-khao-sat',
                 label: 'Thiết lập khảo sát',
                 icon: SettingOutlined,

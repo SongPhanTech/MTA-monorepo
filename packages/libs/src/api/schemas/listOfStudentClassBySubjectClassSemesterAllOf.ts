@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { StudentClassBySubjectClassSemester } from './studentClassBySubjectClassSemester'
+import type { StudentClassBySubjectClassSemester } from './studentClassBySubjectClassSemester';
 
 export type ListOfStudentClassBySubjectClassSemesterAllOf = {
-    data: StudentClassBySubjectClassSemester[]
-    count: number
-}
+  data: StudentClassBySubjectClassSemester[];
+  count: number;
+};

@@ -6,7 +6,7 @@
  */
 
 export type ListObjectsParams = {
-    path?: string
-    startAfter?: string
-    limit: number
-}
+path?: string;
+startAfter?: string;
+limit: number;
+};

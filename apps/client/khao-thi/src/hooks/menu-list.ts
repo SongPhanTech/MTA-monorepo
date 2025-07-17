@@ -1,9 +1,9 @@
 import ability from '@lib/casl/ability'
 import { useStoreActions } from '@redux/hook'
+import { useSession } from '@workspace/auth/react'
 import { $Enums } from '@workspace/db'
 import { useFindManyGroup } from '@workspace/db/hooks'
 import NAVIGATION from '@workspace/router'
-import { useSession } from 'next-auth/react'
 import { useEffect, useMemo } from 'react'
 
 const useMenuList = () => {
@@ -13,7 +13,7 @@ const useMenuList = () => {
         where: {
             users: {
                 every: {
-                    ssoId: data?.user.user_id,
+                    ssoId: data?.sub,
                 },
             },
         },
@@ -28,7 +28,7 @@ const useMenuList = () => {
     const permissions = useMemo(
         () =>
             groups
-                .flatMap((group) => group.roles.flatMap((role) => role.permissions))
+                .flatMap((group) => group.roles.flatMap((role: any) => role?.permissions))
                 .filter((permission) => permission.permissionType === $Enums.PermissionType.READ),
         [groups]
     )

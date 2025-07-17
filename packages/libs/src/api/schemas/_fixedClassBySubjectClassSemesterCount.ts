@@ -6,5 +6,5 @@
  */
 
 export type _FixedClassBySubjectClassSemesterCount = {
-    students: number
-}
+  students: number;
+};

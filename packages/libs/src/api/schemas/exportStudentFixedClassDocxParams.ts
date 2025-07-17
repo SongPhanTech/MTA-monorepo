@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { FixedClassId } from './fixedClassId'
+import type { FixedClassId } from './fixedClassId';
 
 export type ExportStudentFixedClassDocxParams = {
-    fixedClassId: FixedClassId
-}
+fixedClassId: FixedClassId;
+};

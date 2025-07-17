@@ -8,4 +8,4 @@
 /**
  * Số trang
  */
-export type Page = string
+export type Page = string;

@@ -6,6 +6,6 @@
  */
 
 export type OpenSubjectClassCurriculumVersionItem = {
-    curriculumVersionId: string
-    curriculumVersionName: string
-}
+  curriculumVersionId: string;
+  curriculumVersionName: string;
+};
