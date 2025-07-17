@@ -4,15 +4,10 @@
  * @version 0.1.0
  */
 import * as reactQuery from "@tanstack/react-query";
-import { useChatContext, ChatContext, queryKeyFn } from "./chatContext";
-import { deepMerge } from "./chatUtils";
+import { useChatContext, ChatContext } from "./chatContext";
 import type * as Fetcher from "./chatFetcher";
 import { chatFetch } from "./chatFetcher";
 import type * as Schemas from "./chatSchemas";
-
-type QueryFnOptions = {
-  signal?: AbortController["signal"];
-};
 
 export type HoiDapHoiDapPostError = Fetcher.ErrorWrapper<{
   status: 422;
@@ -49,7 +44,7 @@ export const useHoiDapHoiDapPost = (
     HoiDapHoiDapPostVariables
   >({
     mutationFn: (variables: HoiDapHoiDapPostVariables) =>
-      fetchHoiDapHoiDapPost(deepMerge(fetcherOptions, variables)),
+      fetchHoiDapHoiDapPost({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
@@ -89,7 +84,7 @@ export const useHoiDapFaqHoiDapFaqPost = (
     HoiDapFaqHoiDapFaqPostVariables
   >({
     mutationFn: (variables: HoiDapFaqHoiDapFaqPostVariables) =>
-      fetchHoiDapFaqHoiDapFaqPost(deepMerge(fetcherOptions, variables)),
+      fetchHoiDapFaqHoiDapFaqPost({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
@@ -142,9 +137,10 @@ export const useChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
       mutationFn: (
         variables: ChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPostVariables,
       ) =>
-        fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost(
-          deepMerge(fetcherOptions, variables),
-        ),
+        fetchChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost({
+          ...fetcherOptions,
+          ...variables,
+        }),
       ...options,
     });
   };
@@ -185,7 +181,7 @@ export const useFaqVectorizeFaqVectorizePost = (
     FaqVectorizeFaqVectorizePostVariables
   >({
     mutationFn: (variables: FaqVectorizeFaqVectorizePostVariables) =>
-      fetchFaqVectorizeFaqVectorizePost(deepMerge(fetcherOptions, variables)),
+      fetchFaqVectorizeFaqVectorizePost({ ...fetcherOptions, ...variables }),
     ...options,
   });
 };
@@ -228,9 +224,10 @@ export const useTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = (
     TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables
   >({
     mutationFn: (variables: TimKiemTheoTuKhoaTimKiemTheoTuKhoaPostVariables) =>
-      fetchTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost(
-        deepMerge(fetcherOptions, variables),
-      ),
+      fetchTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
     ...options,
   });
 };
@@ -276,9 +273,10 @@ export const useTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = (
     mutationFn: (
       variables: TimKiemTheoNguNghiaTimKiemTheoNguNghiaPostVariables,
     ) =>
-      fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost(
-        deepMerge(fetcherOptions, variables),
-      ),
+      fetchTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
     ...options,
   });
 };
@@ -330,9 +328,10 @@ export const useXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost = (
     mutationFn: (
       variables: XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariables,
     ) =>
-      fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost(
-        deepMerge(fetcherOptions, variables),
-      ),
+      fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
     ...options,
   });
 };
@@ -378,9 +377,10 @@ export const useXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
     mutationFn: (
       variables: XoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPostVariables,
     ) =>
-      fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost(
-        deepMerge(fetcherOptions, variables),
-      ),
+      fetchXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost({
+        ...fetcherOptions,
+        ...variables,
+      }),
     ...options,
   });
 };
@@ -388,5 +388,5 @@ export const useXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = (
 export type QueryOperation = {
   path: string;
   operationId: never;
-  variables: unknown | reactQuery.SkipToken;
+  variables: unknown;
 };

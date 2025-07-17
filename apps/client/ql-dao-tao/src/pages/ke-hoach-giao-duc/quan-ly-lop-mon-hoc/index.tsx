@@ -3,20 +3,24 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutOneSubjectClassModal, PutOpenSubjectClassModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { formatDate } from '@lib/utils'
+import { buildOrgTree, formatDate } from '@lib/utils'
+import { emptyObjectIf } from '@workspace/constant'
 import type {
     SubjectClass,
     SubjectClassSchedule,
+    SubjectVersion,
     TrainingCourse,
     TrainingMajor,
 } from '@workspace/db'
 import {
     useCountSubjectClass,
     useDeleteSubjectClass,
+    useFindManyDM_DonVi,
     useFindManyLecturer,
     useFindManySemester,
     useFindManySubjectClass,
@@ -24,39 +28,53 @@ import {
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
 import { putManySubjectClass } from '@workspace/libs/api/training'
-import { Button, Checkbox, Col, Flex, Input, message, Row } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | undefined
-    trainingCourseId: string | null
-    semesterStartId: string | null
-    trainingMajorId: string | null
-}
 
 export default function TeachingAssignment() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        code: '',
+        name: '',
         trainingCourseId: null,
         semesterStartId: null,
         trainingMajorId: null,
+        lecturerId: undefined,
+        credit: undefined,
+        maxStudent: undefined,
+        subjectClassStudent: undefined,
+        mainLecturer: undefined,
+        extraLecturer: undefined,
+        enterGradeLecturer: undefined,
+        examType: undefined,
+        organization: undefined,
     })
 
     const [isEdit, setIsEdit] = useState(false)
     const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
-    const { getExamTypeLabel } = useExamTypeOptions()
+    const { options, getExamTypeLabel } = useExamTypeOptions()
     const { data = [], refetch } = useFindManySubjectClass({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
+            code: { contains: filters.code, mode: 'insensitive' },
+            ...(filters.examType
+                ? {
+                      examType: {
+                          in: filters.examType,
+                      },
+                  }
+                : {}),
+            ...(filters.schedule
+                ? {
+                      schedule: {
+                          in: filters.schedule,
+                      },
+                  }
+                : {}),
             semester: {
                 ...(filters.semesterStartId ? { id: filters.semesterStartId } : {}),
                 ...(filters.trainingCourseId
@@ -76,6 +94,64 @@ export default function TeachingAssignment() {
                                       id: filters.trainingMajorId,
                                   },
                               },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      managementOrganizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.lecturerId?.length === 1
+                ? {
+                      ...(filters.lecturerId[0]
+                          ? { lecturerId: { not: null } }
+                          : { lecturerId: null }),
+                  }
+                : {}),
+            ...(filters.mainLecturer
+                ? {
+                      mainLecturer: {
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              ],
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.extraLecturer
+                ? {
+                      extraLecturer: {
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.extraLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.extraLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              ],
                           },
                       },
                   }
@@ -114,36 +190,142 @@ export default function TeachingAssignment() {
             },
             subjectClassStudent: true,
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        subject: {
+                            credit: filters.credit,
+                        },
+                    },
+                ],
+                !!filters.credit
+            ),
+            ...emptyObjectIf(
+                [
+                    {
+                        maxStudent: filters.maxStudent,
+                    },
+                ],
+                !!filters.maxStudent
+            ),
+            ...emptyObjectIf(
+                [
+                    {
+                        subjectClassStudent: {
+                            _count: filters.maxStudent,
+                        },
+                    },
+                ],
+                !!filters.maxStudent
+            ),
+            {
+                createdAt: 'desc',
+            },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count } = useCountSubjectClass({
         where: {
-            OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
-                { code: { contains: filters.searchText, mode: 'insensitive' } },
-            ],
+            name: { contains: filters.name, mode: 'insensitive' },
+            code: { contains: filters.code, mode: 'insensitive' },
+            ...(filters.examType
+                ? {
+                      examType: {
+                          in: filters.examType,
+                      },
+                  }
+                : {}),
+            ...(filters.schedule
+                ? {
+                      schedule: {
+                          in: filters.schedule,
+                      },
+                  }
+                : {}),
             semester: {
-                id: filters.semesterStartId || undefined,
-                trainingCoursesStart: {
-                    some: {
-                        id: filters.trainingCourseId || undefined,
-                    },
-                },
+                ...(filters.semesterStartId ? { id: filters.semesterStartId } : {}),
+                ...(filters.trainingCourseId
+                    ? {
+                          trainingCoursesStart: {
+                              some: { id: filters.trainingCourseId },
+                          },
+                      }
+                    : {}),
             },
-            subject: {
-                managementOrganization: {
-                    trainingMajors: {
-                        some: {
-                            id: filters.trainingMajorId || undefined,
-                        },
-                    },
-                },
-            },
+            ...(filters.trainingMajorId
+                ? {
+                      subject: {
+                          managementOrganization: {
+                              trainingMajors: {
+                                  some: {
+                                      id: filters.trainingMajorId,
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      managementOrganizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.lecturerId?.length === 1
+                ? {
+                      ...(filters.lecturerId[0]
+                          ? { lecturerId: { not: null } }
+                          : { lecturerId: null }),
+                  }
+                : {}),
+            ...(filters.mainLecturer
+                ? {
+                      mainLecturer: {
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              ],
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.extraLecturer
+                ? {
+                      extraLecturer: {
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.extraLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.extraLecturer,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                              ],
+                          },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -164,12 +346,15 @@ export default function TeachingAssignment() {
         })
     }
 
-    const { data: semesterData = [], refetch: refetchSemesters } = useFindManySemester({
+    const { data: semesterData = [] } = useFindManySemester({
         where: {},
         include: {
             schoolYear: true,
         },
     })
+
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(manageOrgData)
 
     const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
         useFindManyTrainingMajor({
@@ -324,62 +509,55 @@ export default function TeachingAssignment() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={4}>
-                            <Input
-                                id="search"
-                                onChange={(e) => handleFilterChange('searchText', e.target.value)}
-                                style={{ width: '100%', height: 32 }}
-                                prefix={
-                                    <Search
-                                        size={15}
-                                        style={{
-                                            color: 'rgba(0, 0, 0, 0.25)',
-                                        }}
+                        <Col span={12}>
+                            <Row gutter={[16, 16]} align="top">
+                                <Col span={8}>
+                                    <Select
+                                        placeholder="Chọn kỳ học bắt đầu"
+                                        options={semesterData.map((i) => {
+                                            return {
+                                                value: i.id,
+                                                label: `${i.name} năm ${i.schoolYear.name}`,
+                                            }
+                                        })}
+                                        style={{ width: '100%' }}
+                                        onChange={(val) =>
+                                            handleFilterChange('semesterStartId', val)
+                                        }
                                     />
-                                }
-                                placeholder="Tìm kiếm"
-                                allowClear
-                            />
-                        </Col>
-                        <Col span={4}>
-                            <Select
-                                placeholder="Chọn kỳ học bắt đầu"
-                                options={semesterData.map((i) => {
-                                    return {
-                                        value: i.id,
-                                        label: `${i.name} năm ${i.schoolYear.name}`,
-                                    }
-                                })}
-                                style={{ width: '100%' }}
-                                onChange={(val) => handleFilterChange('semesterStartId', val)}
-                            />
-                        </Col>
-                        <Col span={4}>
-                            <Select
-                                placeholder="Chọn khóa"
-                                options={trainingCourseData.map((i: TrainingCourse) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
-                                    }
-                                })}
-                                style={{ width: '100%' }}
-                                onChange={(val) => handleFilterChange('trainingCourseId', val)}
-                                allowClear
-                            />
-                        </Col>
-                        <Col span={4}>
-                            <Select
-                                placeholder="Chọn chuyên ngành"
-                                options={trainingMajorData.map((i: TrainingMajor) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
-                                    }
-                                })}
-                                style={{ width: '100%' }}
-                                onChange={(val) => handleFilterChange('trainingMajorId', val)}
-                            />
+                                </Col>
+                                <Col span={8}>
+                                    <Select
+                                        placeholder="Chọn khóa"
+                                        options={trainingCourseData.map((i: TrainingCourse) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
+                                        })}
+                                        style={{ width: '100%' }}
+                                        onChange={(val) =>
+                                            handleFilterChange('trainingCourseId', val)
+                                        }
+                                        allowClear
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <Select
+                                        placeholder="Chọn chuyên ngành"
+                                        options={trainingMajorData.map((i: TrainingMajor) => {
+                                            return {
+                                                value: i.id,
+                                                label: i.name,
+                                            }
+                                        })}
+                                        style={{ width: '100%' }}
+                                        onChange={(val) =>
+                                            handleFilterChange('trainingMajorId', val)
+                                        }
+                                    />
+                                </Col>
+                            </Row>
                         </Col>
 
                         <Col span={8}>
@@ -436,6 +614,8 @@ export default function TeachingAssignment() {
                     <Table
                         rowKey="id"
                         id="training-category"
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -450,46 +630,64 @@ export default function TeachingAssignment() {
                                 align: 'center',
                                 width: 100,
                                 dataIndex: 'lecturerId',
+                                fixed: 'left',
+                                type: 'select',
+                                options: [
+                                    { value: true, label: 'Đã phân công giảng dạy' },
+                                    { value: false, label: 'Chưa phân công giảng dạy' },
+                                ],
                                 render: (value) => <Checkbox checked={!!value} />,
                             },
                             {
                                 title: 'Mã lớp môn học',
                                 dataIndex: 'code',
                                 width: 150,
+                                fixed: 'left',
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
                                 width: 200,
+                                fixed: 'left',
                                 align: 'center',
+                                type: 'input',
                             },
-
                             {
                                 title: 'Số tín chỉ',
-                                dataIndex: 'subject',
-                                width: 100,
+                                dataIndex: 'credit',
+                                width: 120,
                                 align: 'center',
-                                render: (value) => (value?.credit ? value?.credit : ''),
+                                type: 'order',
+                                distinctFilters: ['maxStudent', 'subjectClassStudent'],
+                                render: (__, record: { subject?: SubjectVersion }) =>
+                                    record.subject?.credit ? record.subject?.credit : '',
                             },
                             {
                                 title: 'Số SV tối đa',
                                 dataIndex: 'maxStudent',
                                 width: 150,
                                 align: 'center',
+                                type: 'order',
+                                distinctFilters: ['credit', 'subjectClassStudent'],
                             },
                             {
                                 title: 'Số SV',
                                 dataIndex: 'subjectClassStudent',
                                 width: 100,
                                 align: 'center',
+                                type: 'order',
+                                distinctFilters: ['maxStudent', 'credit'],
                                 render: (value) => (value?.length ? value?.length : ''),
                             },
                             {
                                 title: 'Giảng viên 1',
                                 width: 300,
                                 align: 'center',
-                                render: (record) => (
+                                type: 'input',
+                                dataIndex: 'mainLecturer',
+                                render: (__, record) => (
                                     <Select
                                         style={{ width: '100%' }}
                                         options={lecturerData
@@ -507,7 +705,7 @@ export default function TeachingAssignment() {
                                         placeholder="Chọn giảng viên"
                                         onChange={(selectedValue) =>
                                             handleChangeLecturer(
-                                                record,
+                                                record as SubjectClass,
                                                 selectedValue,
                                                 'lecturerId',
                                                 'mainLecturer'
@@ -521,7 +719,9 @@ export default function TeachingAssignment() {
                                 title: 'Giảng viên 2',
                                 width: 300,
                                 align: 'center',
-                                render: (record) => (
+                                type: 'input',
+                                dataIndex: 'extraLecturer',
+                                render: (__, record) => (
                                     <Select
                                         style={{ width: '100%' }}
                                         options={lecturerData
@@ -538,7 +738,7 @@ export default function TeachingAssignment() {
                                         placeholder="Chọn giảng viên"
                                         onChange={(selectedValue) =>
                                             handleChangeLecturer(
-                                                record,
+                                                record as SubjectClass,
                                                 selectedValue,
                                                 'extraLecturerId',
                                                 'extraLecturer'
@@ -550,16 +750,29 @@ export default function TeachingAssignment() {
                             },
                             {
                                 title: 'Hình thức thi',
-                                dataIndex: 'subject',
+                                dataIndex: 'examType',
                                 align: 'center',
                                 width: 150,
-                                render: (value) => getExamTypeLabel(value?.examType) || '',
+                                type: 'select',
+                                options: options,
+                                render: (__, record: { subject?: SubjectVersion }) =>
+                                    getExamTypeLabel(record?.subject?.examType) || '',
                             },
                             {
                                 title: 'Kíp học',
                                 dataIndex: 'schedule',
                                 align: 'center',
                                 width: 100,
+                                type: 'select',
+
+                                options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                                    ([key, value_]) => {
+                                        return {
+                                            label: value_,
+                                            value: key,
+                                        }
+                                    }
+                                ),
                                 render: (value: SubjectClassSchedule) =>
                                     SUBJECT_CLASS_SCHEDULE_TYPE[
                                         value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
@@ -570,6 +783,7 @@ export default function TeachingAssignment() {
                                 dataIndex: 'room',
                                 align: 'center',
                                 width: 150,
+                                type: 'input',
                                 render: (value) =>
                                     value?.building?.trainingLocation?.name
                                         ? value?.building?.trainingLocation?.name
@@ -613,7 +827,10 @@ export default function TeachingAssignment() {
                                         value={record?.enterGradeLecturerId || undefined}
                                         placeholder="Chọn giảng viên"
                                         onChange={(selectedValue) =>
-                                            handleChangeEnterGradeLecturer(record, selectedValue)
+                                            handleChangeEnterGradeLecturer(
+                                                record as SubjectClass,
+                                                selectedValue
+                                            )
                                         }
                                         disabled={!isEdit && record?.lecturerId}
                                     />
@@ -623,7 +840,7 @@ export default function TeachingAssignment() {
                                 title: 'Phòng học',
                                 dataIndex: 'room',
                                 align: 'center',
-                                width: 100,
+                                width: 120,
                                 render: (value) => value?.name || '',
                             },
                             {
@@ -637,21 +854,22 @@ export default function TeachingAssignment() {
                             {
                                 title: 'Hạn PCGD',
                                 dataIndex: 'lecturerAssignmentDeadline',
-                                width: 100,
+                                width: 120,
                                 align: 'center',
                                 render: (value) => (value ? formatDate(value) : ''),
                             },
                             {
                                 title: 'Hạn nhập điểm CC/TX',
                                 dataIndex: 'scoreDeadline',
-                                width: 150,
+                                width: 200,
                                 align: 'center',
                                 render: (value) => (value ? formatDate(value) : ''),
                             },
                             {
                                 title: 'Hạn nhập điểm thi',
                                 dataIndex: 'examScoreDeadline',
-                                width: 150,
+                                width: 170,
+                                align: 'center',
                                 render: (value) => (value ? formatDate(value) : ''),
                             },
                             {
@@ -659,6 +877,8 @@ export default function TeachingAssignment() {
                                 dataIndex: 'subject',
                                 width: 200,
                                 align: 'center',
+                                type: 'tree_select',
+                                options: treeData,
                                 render: (value) =>
                                     value?.managementOrganization?.name
                                         ? value?.managementOrganization?.name

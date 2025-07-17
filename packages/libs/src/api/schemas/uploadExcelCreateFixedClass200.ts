@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefined } from './listOfundefined';
-import type { UploadExcelCreateFixedClass200AllOf } from './uploadExcelCreateFixedClass200AllOf';
+import type { ListOfundefined } from './listOfundefined'
+import type { UploadExcelCreateFixedClass200AllOf } from './uploadExcelCreateFixedClass200AllOf'
 
-export type UploadExcelCreateFixedClass200 = ListOfundefined & UploadExcelCreateFixedClass200AllOf;
+export type UploadExcelCreateFixedClass200 = ListOfundefined & UploadExcelCreateFixedClass200AllOf

@@ -193,12 +193,6 @@ export default function GraduationSession() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã đợt xét tốt nghiệp',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 150,
-                            },
-                            {
                                 title: 'Tên đợt',
                                 dataIndex: 'name',
                                 width: 180,

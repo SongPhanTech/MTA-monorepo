@@ -236,13 +236,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         }
         hideSpinner()
     }
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
 
     return (
         <div>
@@ -288,18 +281,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 fixed: 'left',
                                 dataIndex: 'code',
                                 type: 'input',
-                                multiple: [
-                                    'managementOrganization',
-                                    'trainingCourse',
-                                    'curriculumVersion',
-                                    'trainingObjectTypes',
-                                    'trainingLevel',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'trainingMajors',
-                                ],
                             },
                             {
                                 title: 'Tên lớp niên chế',
@@ -308,18 +289,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 fixed: 'left',
                                 dataIndex: 'name',
                                 type: 'input',
-                                multiple: [
-                                    'managementOrganization',
-                                    'trainingCourse',
-                                    'curriculumVersion',
-                                    'trainingObjectTypes',
-                                    'trainingLevel',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'trainingMajors',
-                                ],
                             },
                             {
                                 title: 'Đơn vị quản lý',
@@ -329,19 +298,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 type: 'tree_select',
                                 options: treeData,
                                 render: (value) => (value?.sTen ? value?.sTen : ''),
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingCourse',
-                                    'curriculumVersion',
-                                    'trainingObjectTypes',
-                                    'trainingLevel',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'trainingMajors',
-                                ],
                             },
                             {
                                 title: 'Chuyên ngành',
@@ -356,19 +312,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 render: (_, record) =>
                                     record?.curriculumVersion?.curriculum?.trainingMajor?.name ||
                                     '',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingCourse',
-                                    'curriculumVersion',
-                                    'trainingObjectTypes',
-                                    'trainingLevel',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
                             {
                                 title: 'Khóa',
@@ -381,19 +324,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     value: item.id,
                                 })),
                                 render: (value) => (value?.name ? value?.name : ''),
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'curriculumVersion',
-                                    'trainingObjectTypes',
-                                    'trainingLevel',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
@@ -407,19 +337,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 })),
                                 render: (__, record) =>
                                     record?.trainingCourse?.trainingObjectType?.name || '',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'curriculumVersion',
-                                    'trainingCourse',
-                                    'trainingLevel',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
 
                             {
@@ -434,19 +351,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 dataIndex: 'trainingLevel',
                                 render: (__, record) =>
                                     record?.curriculumVersion?.trainingLevel?.name || '',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'curriculumVersion',
-                                    'trainingCourse',
-                                    'trainingObjectTypes',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
                             {
                                 title: 'Chương trình đào tạo',
@@ -459,19 +363,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     value: item.id,
                                 })),
                                 render: (value) => (value?.name ? value?.name : ''),
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'trainingLevel',
-                                    'trainingCourse',
-                                    'trainingObjectTypes',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
 
                             {
@@ -486,19 +377,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 ],
                                 render: (value) =>
                                     value ? <CheckOutlined className="text-[#028850]" /> : '',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'trainingLevel',
-                                    'trainingCourse',
-                                    'trainingObjectTypes',
-                                    'curriculumVersion',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
                             {
                                 title: 'Giáo viên chủ nhiệm',
@@ -510,19 +388,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'trainingLevel',
-                                    'trainingCourse',
-                                    'trainingObjectTypes',
-                                    'curriculumVersion',
-                                    'graduated',
-                                    'staffManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
                             {
                                 title: 'Cán bộ quản lý',
@@ -534,19 +399,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'trainingLevel',
-                                    'trainingCourse',
-                                    'trainingObjectTypes',
-                                    'curriculumVersion',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'startYear',
-                                    'managementOrganization',
-                                ],
                             },
                             {
                                 title: 'Năm bắt đầu',
@@ -554,19 +406,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 width: 150,
                                 type: 'order',
                                 align: 'center',
-                                multiple: [
-                                    'code',
-                                    'name',
-                                    'trainingMajors',
-                                    'trainingLevel',
-                                    'trainingCourse',
-                                    'trainingObjectTypes',
-                                    'curriculumVersion',
-                                    'graduated',
-                                    'lecturerManagement',
-                                    'staffManagement',
-                                    'managementOrganization',
-                                ],
                             },
                             // {
                             //     title: 'Trạng thái',

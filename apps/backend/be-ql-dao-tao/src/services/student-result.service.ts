@@ -15,6 +15,7 @@ import {
     StudentStatus,
     StudentTrainingType,
 } from '@workspace/db'
+import { criteriaFieldLabels, criteriaOperatorLabels } from '@workspace/libs/constants'
 import { prisma } from '..'
 import {
     CourseStudentResult,
@@ -978,16 +979,9 @@ export const listStudentResultInfo = async (semesterId: string) => {
     }
 }
 
-import dictionary from '../../dictionary.json'
-
-const dictionaryConvert = (field: string): string => {
-    const dict = dictionary as Record<string, string>
-    return dict[field] || field // Trả về chính nó nếu không tìm thấy
-}
-
 const checkEligible = <T extends number | string>(
     student: StudentInfoCheck,
-    fieldValue: string,
+    fieldValue: CriteriaField,
     studentValue: T,
     criteriaValue: T | T[],
     operator: CriteriaOperator,
@@ -999,7 +993,7 @@ const checkEligible = <T extends number | string>(
                 return studentValue > criteriaValue
             case CriteriaOperator.GTE:
                 return studentValue >= criteriaValue
-            case CriteriaOperator.LE:
+            case CriteriaOperator.LT:
                 return studentValue < criteriaValue
             case CriteriaOperator.LTE:
                 return studentValue <= criteriaValue
@@ -1016,7 +1010,7 @@ const checkEligible = <T extends number | string>(
         }
     })()
     if ((criteria === true && !invert) || (criteria === false && invert)) {
-        student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${dictionaryConvert(fieldValue)}(${studentValue}): ${dictionaryConvert(invert ? '!' : '')}${dictionaryConvert(operator)} ${criteriaValue}`
+        student.lyDoXepLoai = `${student.lyDoXepLoai}\n ${criteriaFieldLabels[fieldValue]}(${studentValue}) ${invert ? '*không* ' : ''}${criteriaOperatorLabels[operator]} ${criteriaValue}`
     }
     return invert ? !criteria : criteria
 }
@@ -1044,7 +1038,7 @@ export function evaluateCondition(
         case 'LTE': // Nhỏ hơn hoặc bằng (<=)
             return value <= condition.value
 
-        case 'LE': // Nhỏ hơn (<)
+        case 'LT': // Nhỏ hơn (<)
             return value < condition.value
 
         case 'EQ': // Bằng (==)

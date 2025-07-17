@@ -1,6 +1,7 @@
 import type {
     $Enums,
     AcademicActionType,
+    ApplicationStatus,
     CurriculumVersion,
     DecisionStatus,
     DM_CapBac,
@@ -24,6 +25,7 @@ import type {
     StaffPosition,
     StaffType,
     Student,
+    SubjectClassSchedule,
     TrainingCourse,
     UserProfile,
 } from '@workspace/db'
@@ -119,10 +121,30 @@ export type FilterProps = {
     finalScore?: 'asc' | 'desc'
     count?: 'asc' | 'desc'
     publishDate?: Date[]
+    scholarship?: string[]
+    decisionDate?: Date[]
+    trainingCourseId?: string | null
+    semesterStartId?: string | null
+    trainingMajorId?: string | null
+    lecturerId?: string[]
+    maxStudent?: 'asc' | 'desc'
+    subjectClassStudent?: 'asc' | 'desc'
+    mainLecturer?: string
+    extraLecturer?: string
+    enterGradeLecturer?: string
+    schedule?: SubjectClassSchedule[]
+    room?: string
+    applicationDate?: Date[]
+    statusApplication?: ApplicationStatus[]
+    active?: boolean[]
+    numberOfOther?: 'asc' | 'desc'
+    managementOrganizationId?: string
+    floor?: 'asc' | 'desc'
+    roomNumber?: 'asc' | 'desc'
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
-    multiple?: string[]
+    distinctFilters?: string[]
     options?: any[]
     dataIndex?: string
     slot?: any

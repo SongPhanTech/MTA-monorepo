@@ -3,6 +3,8 @@ import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
+import ModalLearningResult from './modal-ket-qua-hoc-tap-ctdt'
+import ModalPrintToDSHV from './modal-print-ds-sinh-vien-lop'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
@@ -40,7 +42,9 @@ import PutOneSubjectClassModal from './put-one-subject-class'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
+import PutGraduationDecision from './put-quyet-dinh-tot-nghiep'
 import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
+import PutScholarshipAward from './put-scholarship-award'
 import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
@@ -111,4 +115,8 @@ export {
     PutGraduationApplication,
     PutAcademicActionCondition,
     PutStudentAcademicDecision,
+    ModalLearningResult,
+    ModalPrintToDSHV,
+    PutGraduationDecision,
+    PutScholarshipAward,
 }

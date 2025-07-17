@@ -1,11 +1,17 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { DocumentFile, StudentAcademicDecision } from '@workspace/db'
+import {
+    AcademicActionType,
+    DecisionStatus,
+    type DocumentFile,
+    type StudentAcademicDecision,
+} from '@workspace/db'
 import {
     useCreateStudentAcademicDecision,
     useFindManyStudent,
     useFindUniqueStudentAcademicDecision,
+    useUpdateStudent,
     useUpdateStudentAcademicDecision,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
@@ -18,7 +24,6 @@ import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import Select from '@components/commons/select'
-import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 export type PutStudentAcademicDecision = StudentAcademicDecision & {
     documentEvidence?: DocumentFile[]
@@ -28,13 +33,13 @@ dayjs.locale('vi')
 type StudentAcademicDecisionInput = {
     id: string
     semesterId: string
+    actionTaken: AcademicActionType
 }
 
 const PutStudentAcademicDecision = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutStudentAcademicDecision>()
     const { options: decisionStatusOptions } = useDecisionStatusOptions()
-    const { options: academicActionTypeOptions } = useAcademicActionTypeOption()
 
     const { isOpen, onClose, input } = useDisclosure<StudentAcademicDecisionInput>({
         tag: PutStudentAcademicDecision.name,
@@ -45,6 +50,7 @@ const PutStudentAcademicDecision = () => {
 
     const { mutateAsync: createStudentAcademicDecision } = useCreateStudentAcademicDecision()
     const { mutateAsync: updateStudentAcademicDecision } = useUpdateStudentAcademicDecision()
+    const { mutateAsync: updateStudent } = useUpdateStudent()
     async function onOk(output?: PutStudentAcademicDecision) {
         if (!output) return
         try {
@@ -57,7 +63,7 @@ const PutStudentAcademicDecision = () => {
             const baseData = {
                 studentId: output?.studentId,
                 semesterId: input.semesterId,
-                actionTaken: output?.actionTaken,
+                actionTaken: input.actionTaken,
                 decisionDate: output?.decisionDate,
                 reason: output?.reason,
                 status: output?.status,
@@ -123,7 +129,25 @@ const PutStudentAcademicDecision = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
+            if (output.status === DecisionStatus.APPROVED) {
+                let studentUpdateData = {}
+
+                switch (input.actionTaken) {
+                    case AcademicActionType.EXPULSION:
+                        studentUpdateData = { expelled: true }
+                        break
+                    case AcademicActionType.SUSPENSION:
+                        studentUpdateData = { suspended: true }
+                        break
+                }
+
+                if (Object.keys(studentUpdateData).length > 0) {
+                    await updateStudent({
+                        where: { id: output.studentId },
+                        data: studentUpdateData,
+                    })
+                }
+            }
             queryClient.invalidateQueries({
                 queryKey: ['StudentAcademicDecision'],
             })
@@ -196,7 +220,7 @@ const PutStudentAcademicDecision = () => {
                         options={studentData.map((i) => {
                             return {
                                 value: i.id,
-                                label: [i.code, i.userProfile?.fullname]
+                                label: [i.userProfile?.code, i.userProfile?.fullname]
                                     .filter(Boolean)
                                     .join(' - '),
                             }
@@ -206,17 +230,15 @@ const PutStudentAcademicDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} label="Hành động đã thực hiện" name="actionTaken" required>
-                    <Select
-                        placeholder="Chọn hành động đã thực hiện"
-                        options={academicActionTypeOptions}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="decisionDate" label="Ngày quyết định" required>
-                    <DatePicker format="DD/MM/YYYY" className="w-full" defaultValue={dayjs()} />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                        defaultValue={dayjs()}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -229,6 +251,11 @@ const PutStudentAcademicDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="reason" label="Ghi chú lý do">
+                    <Input.TextArea placeholder="Nhập ghi chú" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     name="documentEvidence"
@@ -241,11 +268,6 @@ const PutStudentAcademicDecision = () => {
                         relationType="studentAcademicDecisionId"
                         titleForm="documentEvidence"
                     />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="reason" label="Ghi chú lý do">
-                    <Input.TextArea placeholder="Nhập ghi chú" />
                 </FormItem>
             </Col>
         </PutFormModal>

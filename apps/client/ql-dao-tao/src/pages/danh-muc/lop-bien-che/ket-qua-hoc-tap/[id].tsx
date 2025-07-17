@@ -302,8 +302,9 @@ export default function StudentScoreClassPage() {
                                 render: (_, record) => {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
-                                        subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore
+                                        subjectClassStudent?.manualFinalScore ||
+                                        subjectClassStudent?.finalScore ||
+                                        0
                                     return score !== undefined ? convertScore(score).base4 : ''
                                 },
                             },
@@ -314,8 +315,9 @@ export default function StudentScoreClassPage() {
                                 render: (_, record) => {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
-                                        subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore
+                                        subjectClassStudent?.manualFinalScore ||
+                                        subjectClassStudent?.finalScore ||
+                                        0
                                     return score !== undefined ? convertScore(score).letter : ''
                                 },
                             },

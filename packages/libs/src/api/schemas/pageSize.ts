@@ -8,4 +8,4 @@
 /**
  * Số lượng bản ghi trên mỗi trang
  */
-export type PageSize = string;
+export type PageSize = string

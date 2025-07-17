@@ -15,3 +15,23 @@ await Promise.all(
         })
     )
 )
+
+const ranks = await prisma.academicRankingConvert.findMany({
+    where: { rankOrder: { in: [1, 2] } },
+    select: { id: true },
+})
+
+for (const rank of ranks) {
+    await prisma.graduationRankDowngradeRule.create({
+        data: {
+            initialRankId: rank.id,
+            conditions: {
+                create: {
+                    field: 'CONDUCT_SCORE',
+                    operator: 'LT',
+                    value: 80,
+                },
+            },
+        },
+    })
+}

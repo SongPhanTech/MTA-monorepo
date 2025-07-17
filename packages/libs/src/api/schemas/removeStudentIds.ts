@@ -8,4 +8,4 @@
 /**
  * Danh sách ID học viên cần xóa
  */
-export type RemoveStudentIds = string[];
+export type RemoveStudentIds = string[]

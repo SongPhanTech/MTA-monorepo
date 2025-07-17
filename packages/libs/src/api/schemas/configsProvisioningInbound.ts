@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ConfigsProvisioningInboundScim } from './configsProvisioningInboundScim';
+import type { ConfigsProvisioningInboundScim } from './configsProvisioningInboundScim'
 
 export type ConfigsProvisioningInbound = {
-  scim?: ConfigsProvisioningInboundScim;
-};
+    scim?: ConfigsProvisioningInboundScim
+}

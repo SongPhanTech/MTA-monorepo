@@ -2,6 +2,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutRoomModal } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -12,17 +13,12 @@ import {
     useUpdateRoom,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface FilterProps {
-    searchText: string | undefined
-}
 
 export default function BuildingPage() {
     const router = useRouter()
@@ -36,20 +32,21 @@ export default function BuildingPage() {
     const { data = [], refetch } = useFindManyRoom({
         where: {
             buildingId,
-            OR: [
-                {
-                    name: {
-                        contains: filters.searchText,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    code: {
-                        contains: filters.searchText,
-                        mode: 'insensitive',
-                    },
-                },
-            ],
+            name: {
+                contains: filters.name,
+                mode: 'insensitive',
+            },
+            code: {
+                contains: filters.code,
+                mode: 'insensitive',
+            },
+            ...(filters.active?.length === 1
+                ? {
+                      subjectVersion: {
+                          some: { active: filters.active[0] },
+                      },
+                  }
+                : {}),
         },
         orderBy: {
             createdAt: 'desc',
@@ -75,20 +72,21 @@ export default function BuildingPage() {
     const { data: count } = useCountRoom({
         where: {
             buildingId,
-            OR: [
-                {
-                    name: {
-                        contains: filters.searchText,
-                        mode: 'insensitive',
-                    },
-                },
-                {
-                    code: {
-                        contains: filters.searchText,
-                        mode: 'insensitive',
-                    },
-                },
-            ],
+            name: {
+                contains: filters.name,
+                mode: 'insensitive',
+            },
+            code: {
+                contains: filters.code,
+                mode: 'insensitive',
+            },
+            ...(filters.active?.length === 1
+                ? {
+                      subjectVersion: {
+                          some: { active: filters.active[0] },
+                      },
+                  }
+                : {}),
         },
     })
 
@@ -141,34 +139,7 @@ export default function BuildingPage() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm"
-                                        style={{
-                                            width: 300,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Flex>
-                        </Col>
+                    <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={6}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
@@ -198,11 +169,13 @@ export default function BuildingPage() {
                                 dataIndex: 'code',
                                 width: 200,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Tên phòng',
                                 dataIndex: 'name',
                                 align: 'left',
+                                type: 'input',
                             },
                             {
                                 title: 'Mô tả',
@@ -214,7 +187,19 @@ export default function BuildingPage() {
                                 align: 'center',
                                 width: 130,
                                 fixed: 'right',
-                                render: (value, record) => {
+                                dataIndex: 'active',
+                                type: 'select',
+                                options: [
+                                    {
+                                        value: true,
+                                        label: 'Đang hoạt động',
+                                    },
+                                    {
+                                        value: false,
+                                        label: 'Không hoạt động',
+                                    },
+                                ],
+                                render: (__, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
                                     ) : (

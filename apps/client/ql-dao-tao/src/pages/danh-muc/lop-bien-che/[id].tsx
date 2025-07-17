@@ -1,12 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    AddStudentToFixedClassModal,
-    PutStudentModal,
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-} from '@components/modal'
+import { AddStudentToFixedClassModal, ModalPrintToDSHV, PutStudentModal } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -15,10 +10,10 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Student } from '@workspace/db'
 import {
     useFindManyCurriculumVersion,
     useFindManyStudent,
-    useFindManyTemplateFile,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
     useFindUniqueFixedClass,
@@ -89,6 +84,7 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 },
+                managementOrganization: true,
             },
         },
         {
@@ -213,78 +209,6 @@ export default function StudentFixedClassPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    // const { data: count } = useCountStudent({
-    //     where: {
-    //         fixedClassId,
-    //         userProfile: {
-    //             OR: [
-    //                 {
-    //                     firstName: {
-    //                         contains: filters.name,
-    //                     },
-    //                 },
-    //                 {
-    //                     lastName: {
-    //                         contains: filters.name,
-    //                     },
-    //                 },
-    //             ],
-    //             ...(filters.gender
-    //                 ? {
-    //                       gender: {
-    //                           in: filters.gender,
-    //                       },
-    //                   }
-    //                 : {}),
-    //             ...(filters.dateOfBirth
-    //                 ? {
-    //                       dateOfBirth: {
-    //                           gte: filters.dateOfBirth?.[0],
-    //                           lte: filters.dateOfBirth?.[1],
-    //                       },
-    //                   }
-    //                 : {}),
-    //         },
-    //         ...(filters.code
-    //             ? {
-    //                   code: {
-    //                       contains: filters.code,
-    //                       mode: 'insensitive',
-    //                   },
-    //               }
-    //             : {}),
-    //         ...(filters.curriculumVersion
-    //             ? {
-    //                   curriculumVersionId: {
-    //                       in: filters.curriculumVersion,
-    //                   },
-    //               }
-    //             : {}),
-    //         fixedClass: {
-    //             curriculumVersion: {
-    //                 curriculum: {
-    //                     trainingMajor: {
-    //                         ...(filters.trainingMajors
-    //                             ? {
-    //                                   id: {
-    //                                       in: filters.trainingMajors,
-    //                                   },
-    //                               }
-    //                             : {}),
-    //                         ...(filters.trainingField
-    //                             ? {
-    //                                   trainingFieldId: {
-    //                                       in: filters.trainingField,
-    //                                   },
-    //                               }
-    //                             : {}),
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -297,12 +221,13 @@ export default function StudentFixedClassPage() {
         tag: AddStudentToFixedClassModal.name,
     })
 
-    const { onOpen: onOpenUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
+    const { onOpen: onOpenPrint } = useDisclosure<{
+        dataTable: Student[]
+        dataFixedClass: any
+    }>({
+        tag: ModalPrintToDSHV.name,
     })
-    const { onOpen: onOpenUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
-    })
+
     const { onOpen: onOpenUpdate } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
@@ -321,13 +246,10 @@ export default function StudentFixedClassPage() {
         onOpen({ id: fixedClassId })
     }
 
-    const handleModalUpload = (type: string) => {
-        if (type === 'upload') {
-            onOpenUpload('SV')
-        } else {
-            onOpenUpdateFile('SV')
-        }
+    const handleModalPrint = () => {
+        onOpenPrint({ dataFixedClass: fixedClass, dataTable: data })
     }
+
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
     const { mutateAsync: updateManyUserProfile } = useUpdateManyStudent()
     async function handleDelete(id: string) {
@@ -370,8 +292,6 @@ export default function StudentFixedClassPage() {
         }
         hideSpinner()
     }
-
-    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
     const handleCancel = () => {
         setOpen(false)
@@ -421,7 +341,9 @@ export default function StudentFixedClassPage() {
                                         Xoá SV khỏi lớp
                                     </Button>
                                 </Popconfirm>
-                                <Button type="primary">In danh sách</Button>
+                                <Button onClick={handleModalPrint} type="primary">
+                                    In danh sách
+                                </Button>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm SV
                                 </Button>
@@ -464,14 +386,6 @@ export default function StudentFixedClassPage() {
                                 width: 150,
                                 align: 'center',
                                 type: 'input',
-                                multiple: [
-                                    'name',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                             },
                             {
                                 title: 'Họ và tên',
@@ -480,14 +394,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'name',
-                                multiple: [
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 render: (__, record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
@@ -498,14 +404,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'dateOfBirth',
-                                multiple: [
-                                    'code',
-                                    'gender',
-                                    'name',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 type: 'date',
                                 render: (__, record) =>
                                     record.userProfile?.dateOfBirth
@@ -518,15 +416,6 @@ export default function StudentFixedClassPage() {
                                 width: 120,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 options: [
                                     { label: 'Nam', value: 'Male' },
                                     { label: 'Nữ', value: 'Female' },
@@ -545,15 +434,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 type: 'select',
                                 dataIndex: 'trainingField',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 options: trainingFieldData.map((item) => ({
                                     label: item.name,
                                     value: item.id,
@@ -575,15 +455,6 @@ export default function StudentFixedClassPage() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 render: (__, record) => {
                                     return (
                                         record?.fixedClass?.curriculumVersion?.curriculum
@@ -597,15 +468,6 @@ export default function StudentFixedClassPage() {
                                 align: 'center',
                                 dataIndex: 'curriculumVersion',
                                 type: 'select',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'gender',
-                                    'dateOfBirth',
-                                    'curriculumVersion',
-                                    'trainingField',
-                                    'trainingMajors',
-                                ],
                                 options: curriculumVersionData.map((item) => ({
                                     label: item.name,
                                     value: item.id,

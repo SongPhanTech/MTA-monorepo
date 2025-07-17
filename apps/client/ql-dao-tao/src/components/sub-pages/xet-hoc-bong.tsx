@@ -1,15 +1,28 @@
-import { Button, Checkbox, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, Modal, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutScholarshipAward } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
-import { useUpsertScholarshipAward } from '@workspace/db/hooks'
+import type { ScholarshipAward } from '@workspace/db'
+import {
+    useCountTrainingCourse,
+    useDeleteScholarshipAward,
+    useFindManyScholarship,
+    useFindManyTrainingCourse,
+    useUpsertScholarshipAward,
+} from '@workspace/db/hooks'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
@@ -26,6 +39,7 @@ interface SelectedStudent {
     amount: number
     gpaAtAward: number
     priorityRank: number
+    isSelected: boolean
 }
 
 const XetHocBong = ({ semesterId }: XetHocBongProps) => {
@@ -33,12 +47,28 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
         useStudentTrainingTypeOptions()
+    const { showSpinner, hideSpinner } = useSpinner()
 
     const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
     const [transferDataDisabled, setTransferDataDisabled] = useState(true)
     const [rightPanelData, setRightPanelData] = useState<any[]>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        scholarship: undefined,
+    })
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const { onOpen, onClose } = useDisclosure<{
+        id: string
+        semesterId: string
+    }>({
+        tag: PutScholarshipAward.name,
+    })
 
-    const { data: students = [], refetch } = useExportStudentResultSemesterJson(
+    const { data: students = [], refetch } = useExportStudentResultSemesterJson<
+        any[] | { data: any[] }
+    >(
         {
             semesterId: semesterId || '',
             type: 'scholarship',
@@ -51,6 +81,109 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         queryClient
     )
 
+    const { data: studentDataAward, refetch: refetchAward } = useFindManyTrainingCourse({
+        where: {
+            scholarships: {
+                some: {
+                    awards: {
+                        some: {
+                            semesterId,
+                            student: {
+                                userProfile: {
+                                    ...(filters.code && filters.code !== ''
+                                        ? {
+                                              code: {
+                                                  contains: filters.code,
+                                                  mode: 'insensitive',
+                                              },
+                                          }
+                                        : {}),
+                                    ...(filters.name && filters.name !== ''
+                                        ? {
+                                              fullname: {
+                                                  contains: filters.name,
+                                                  mode: 'insensitive',
+                                              },
+                                          }
+                                        : {}),
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        include: {
+            scholarships: {
+                include: {
+                    awards: {
+                        include: {
+                            student: {
+                                include: {
+                                    userProfile: true,
+                                },
+                            },
+                            scholarship: true,
+                        },
+                        orderBy: {
+                            gpaAtAward: 'desc',
+                        },
+                        where: {
+                            student: {
+                                userProfile: {
+                                    ...(filters.code && filters.code !== ''
+                                        ? {
+                                              code: { contains: filters.code, mode: 'insensitive' },
+                                          }
+                                        : {}),
+                                    ...(filters.name && filters.name !== ''
+                                        ? {
+                                              fullname: {
+                                                  contains: filters.name,
+                                                  mode: 'insensitive',
+                                              },
+                                          }
+                                        : {}),
+                                },
+                            },
+                            ...(filters.scholarship
+                                ? {
+                                      scholarshipId: { in: filters.scholarship },
+                                  }
+                                : {}),
+                        },
+                    },
+                },
+                orderBy: {
+                    rankOrder: 'asc',
+                },
+            },
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: dataScholarship = [] } = useFindManyScholarship({
+        where: {
+            awards: {
+                some: {
+                    semesterId,
+                },
+            },
+        },
+        include: {
+            trainingCourse: {
+                select: {
+                    name: true,
+                },
+            },
+            awards: true,
+        },
+        orderBy: {
+            rankOrder: 'asc',
+        },
+    })
+
     const studentData = useMemo(() => {
         if (!students) return []
         if (Array.isArray(students)) return students
@@ -58,7 +191,107 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         return []
     }, [students])
 
-    // Handle scholarship checkbox change
+    const transformedTrainingCourses = useMemo(() => {
+        if (!studentDataAward || !Array.isArray(studentDataAward)) return []
+
+        return studentDataAward.map((course) => {
+            const transformedScholarships = (course.scholarships || []).map((scholarship: any) => {
+                // Tách phần awards ra ngoài
+                const { awards, ...restScholarship } = scholarship
+                return restScholarship
+            })
+
+            const allAwards = (course.scholarships || []).flatMap((scholarship: any) =>
+                (scholarship.awards || []).map((award: ScholarshipAward) => ({
+                    ...award,
+                    // Gắn thông tin scholarship vào mỗi award
+                    scholarshipId: scholarship.id,
+                    scholarshipName: scholarship.name,
+                    scholarshipRankOrder: scholarship.rankOrder,
+                    amount: award.amount.toString(),
+                }))
+            )
+
+            return {
+                ...course,
+                scholarships: transformedScholarships,
+                awards: allAwards,
+            }
+        })
+    }, [studentDataAward])
+
+    const { data: count } = useCountTrainingCourse({
+        where: {
+            scholarships: {
+                some: {
+                    awards: {
+                        some: {
+                            semesterId,
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    useEffect(() => {
+        if (studentData.length > 0) {
+            const newSelectedStudents: SelectedStudent[] = []
+
+            studentData.forEach((course: any) => {
+                if (course.students && Array.isArray(course.students)) {
+                    course.students.forEach((student: any) => {
+                        if (student.scholarship && Array.isArray(student.scholarship)) {
+                            const highestOrderScholarship = student.scholarship.reduce(
+                                (prev: any, current: any) =>
+                                    prev.order < current.order ? current : prev
+                            )
+
+                            if (highestOrderScholarship) {
+                                newSelectedStudents.push({
+                                    id: student.id,
+                                    code: student.userProfile.code,
+                                    fullname: student.userProfile.fullname,
+                                    scholarshipId: highestOrderScholarship.id,
+                                    scholarshipName: highestOrderScholarship.name,
+                                    amount:
+                                        Number(highestOrderScholarship.baseAmount) *
+                                            highestOrderScholarship.multiplier || 0,
+                                    gpaAtAward: student.studentSemesterResult.gpaBase4 || 0,
+                                    priorityRank: highestOrderScholarship.order || 0,
+                                    isSelected: false,
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+
+            setSelectedStudents(newSelectedStudents)
+        }
+    }, [studentData])
+
+    const onSelectChange = (studentId: string, checked: boolean) => {
+        const newSelectedRowKeys = [...selectedRowKeys]
+        if (checked) {
+            if (!newSelectedRowKeys.includes(studentId)) {
+                newSelectedRowKeys.push(studentId)
+            }
+        } else {
+            const index = newSelectedRowKeys.indexOf(studentId)
+            if (index > -1) {
+                newSelectedRowKeys.splice(index, 1)
+            }
+        }
+        setSelectedRowKeys(newSelectedRowKeys)
+
+        setSelectedStudents((prev) =>
+            prev.map((student) =>
+                student.id === studentId ? { ...student, isSelected: checked } : student
+            )
+        )
+    }
+
     const handleScholarshipCheckboxChange = (
         studentId: string,
         scholarship: any,
@@ -66,19 +299,23 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         studentInfo: any
     ) => {
         if (checked) {
-            setSelectedStudents((prev) => [
-                ...prev,
-                {
-                    id: studentId,
-                    code: studentInfo.userProfile.code,
-                    fullname: studentInfo.userProfile.fullname,
-                    scholarshipId: scholarship.id,
-                    scholarshipName: scholarship.name,
-                    amount: scholarship.baseAmount * scholarship.multiplier || 0,
-                    gpaAtAward: studentInfo.studentSemesterResult.gpaBase4 || 0,
-                    priorityRank: scholarship.order || 0,
-                },
-            ])
+            setSelectedStudents((prev) => {
+                const filtered = prev.filter((s) => s.id !== studentId)
+                return [
+                    ...filtered,
+                    {
+                        id: studentId,
+                        code: studentInfo.userProfile.code,
+                        fullname: studentInfo.userProfile.fullname,
+                        scholarshipId: scholarship.id,
+                        scholarshipName: scholarship.name,
+                        amount: Number(scholarship.baseAmount) * scholarship.multiplier || 0,
+                        gpaAtAward: studentInfo.studentSemesterResult.gpaBase4 || 0,
+                        priorityRank: scholarship.order || 0,
+                        isSelected: prev.find((s) => s.id === studentId)?.isSelected || false,
+                    },
+                ]
+            })
         } else {
             setSelectedStudents((prev) =>
                 prev.filter((s) => !(s.id === studentId && s.scholarshipId === scholarship.id))
@@ -86,20 +323,19 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         }
     }
 
-    // Update transfer button disabled state
     useEffect(() => {
-        setTransferDataDisabled(selectedStudents.length === 0)
+        const hasSelected = selectedStudents.some((s) => s.isSelected)
+        setTransferDataDisabled(!hasSelected)
     }, [selectedStudents])
 
-    // Handle transfer data button click
     const handleTransferData = () => {
-        setRightPanelData(selectedStudents)
-        message.success(`Đã chuyển ${selectedStudents.length} sinh viên`)
+        const dataToTransfer = selectedStudents.filter((s) => s.isSelected)
+        setRightPanelData(dataToTransfer)
+        message.success(`Đã chuyển ${dataToTransfer.length} sinh viên`)
     }
 
     const { mutateAsync: upsertScholarshipAward } = useUpsertScholarshipAward()
 
-    // Handle save button click
     const handleSaveScholarshipAward = async () => {
         if (!semesterId) {
             message.error('Vui lòng chọn học kỳ')
@@ -140,18 +376,180 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
             message.success('Lưu học bổng thành công')
             setSelectedStudents([])
             setRightPanelData([])
+            setSelectedRowKeys([])
             refetch()
+            refetchAward()
         } catch (error) {
             console.error('Lỗi khi lưu học bổng:', error)
             message.error('Có lỗi xảy ra khi lưu học bổng')
         }
     }
 
+    const rowSelection = {
+        selectedRowKeys,
+        onSelect: (record: any, selected: boolean) => {
+            if (record.id) {
+                onSelectChange(record.id, selected)
+            }
+        },
+        hideSelectAll: true,
+        columnWidth: 0,
+        renderCell: (_: any, record: any, index: number) => {
+            if (record.id) {
+                return (
+                    <Checkbox
+                        checked={selectedRowKeys.includes(record.id)}
+                        onChange={(e) => onSelectChange(record.id, e.target.checked)}
+                    />
+                )
+            }
+            return null
+        },
+    }
+
+    const { mutateAsync: deleteScholarshipAward } = useDeleteScholarshipAward()
+    async function handleDeleteScholarshipAward(id: string) {
+        try {
+            showSpinner()
+            await deleteScholarshipAward({
+                where: {
+                    id,
+                },
+            })
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
     return (
         <Row gutter={[16, 0]} className="mt-4">
             <Col span={24} className="!p-0">
-                <Flex>
-                    <Col span={14}>
+                <Flex vertical gap={16}>
+                    <Col span={24}>
+                        <div className="bg-white rounded-lg shadow-sm p-4">
+                            <Row gutter={[16, 0]}>
+                                <Col span={24}>
+                                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                                        <Col span={24}>
+                                            <Flex justify="end">
+                                                <Button
+                                                    type="primary"
+                                                    onClick={() =>
+                                                        onOpen({
+                                                            id: '',
+                                                            semesterId,
+                                                        })
+                                                    }
+                                                >
+                                                    <BookPlus />
+                                                    Thêm học viên
+                                                </Button>
+                                            </Flex>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col span={24}>
+                                    <TableCollapse
+                                        rowKey="id"
+                                        headerTitleKey="name"
+                                        childrenFieldName="awards"
+                                        filters={filters}
+                                        setFilters={setFilters}
+                                        defaultExpandAll
+                                        columns={[
+                                            {
+                                                title: 'Mã sinh viên',
+                                                dataIndex: 'code',
+                                                width: 120,
+                                                align: 'center',
+                                                type: 'input',
+                                                render: (__, record) =>
+                                                    record?.student?.userProfile?.code,
+                                            },
+                                            {
+                                                title: 'Tên sinh viên',
+                                                dataIndex: 'name',
+                                                width: 150,
+                                                type: 'input',
+                                                render: (__, record) =>
+                                                    record?.student?.userProfile?.fullname,
+                                            },
+                                            {
+                                                title: 'GPA',
+                                                dataIndex: ['gpaAtAward'],
+                                                width: 120,
+                                                align: 'center',
+                                            },
+                                            {
+                                                title: 'Số tiền học bổng',
+                                                dataIndex: ['amount'],
+                                                width: 150,
+                                            },
+                                            {
+                                                title: 'Học bổng',
+                                                dataIndex: 'scholarship',
+                                                width: 200,
+                                                type: 'select',
+                                                options: dataScholarship.map((i: any) => ({
+                                                    value: i.id,
+                                                    label: [
+                                                        i.name,
+                                                        i.rankOrder,
+                                                        i.trainingCourse.name,
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(' - '),
+                                                })),
+                                                render: (__, record) => record?.scholarship?.name,
+                                            },
+                                            {
+                                                title: 'Thao tác',
+                                                width: 100,
+                                                align: 'center',
+                                                fixed: 'right',
+                                                render: (_, record) => {
+                                                    if (record?.id) {
+                                                        return (
+                                                            <Row className="justify-center gap-2">
+                                                                <EditIcon
+                                                                    onClick={() =>
+                                                                        onOpen({
+                                                                            id: record?.id,
+                                                                            semesterId,
+                                                                        })
+                                                                    }
+                                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                                />
+                                                                <DeleteIcon
+                                                                    popConfirm={{
+                                                                        onConfirm: () =>
+                                                                            handleDeleteScholarshipAward(
+                                                                                record?.id
+                                                                            ),
+                                                                    }}
+                                                                />
+                                                            </Row>
+                                                        )
+                                                    }
+                                                    return ''
+                                                },
+                                            },
+                                        ]}
+                                        data={transformedTrainingCourses}
+                                        pagination={{
+                                            current: currentPage,
+                                            pageSize: numberOfPages,
+                                            total: count,
+                                            onChange: setCurrentPage,
+                                            onShowSizeChange: setNumberOfPages,
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+                    <Col span={24}>
                         <div className="bg-white rounded-lg shadow-sm p-4">
                             <Row gutter={[16, 0]}>
                                 <Col span={24}>
@@ -177,6 +575,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         headerTitleKey="courseName"
                                         childrenFieldName="students"
                                         defaultExpandAll
+                                        rowSelection={rowSelection}
                                         columns={[
                                             {
                                                 title: 'Mã sinh viên',
@@ -211,120 +610,136 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                 render: (scholarships, record) => (
                                                     <div className="flex flex-col gap-2">
                                                         {Array.isArray(scholarships) &&
-                                                            scholarships.map((scholarship) => (
-                                                                <div
-                                                                    key={scholarship.id}
-                                                                    className="flex items-center"
-                                                                >
-                                                                    <Checkbox
-                                                                        className="mr-2"
-                                                                        onChange={(e) =>
-                                                                            handleScholarshipCheckboxChange(
-                                                                                record.id,
-                                                                                scholarship,
-                                                                                e.target.checked,
-                                                                                record
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                    <span className="text-gray-800">
-                                                                        {scholarship.name}{' '}
-                                                                        <span className="text-gray-500">
-                                                                            (Order:{' '}
-                                                                            {scholarship.order})
+                                                            scholarships.map((scholarship) => {
+                                                                const isChecked =
+                                                                    selectedStudents.some(
+                                                                        (s) =>
+                                                                            s.id === record.id &&
+                                                                            s.scholarshipId ===
+                                                                                scholarship.id
+                                                                    )
+                                                                return (
+                                                                    <div
+                                                                        key={scholarship.id}
+                                                                        className="flex items-center"
+                                                                    >
+                                                                        <Checkbox
+                                                                            className="mr-2"
+                                                                            checked={isChecked}
+                                                                            onChange={(e) =>
+                                                                                handleScholarshipCheckboxChange(
+                                                                                    record.id,
+                                                                                    scholarship,
+                                                                                    e.target
+                                                                                        .checked,
+                                                                                    record
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                        <span className="text-gray-800">
+                                                                            {scholarship.name}{' '}
+                                                                            <span className="text-gray-500">
+                                                                                (Order:{' '}
+                                                                                {
+                                                                                    scholarship.rankOrder
+                                                                                }
+                                                                                )
+                                                                            </span>
                                                                         </span>
-                                                                    </span>
-                                                                </div>
-                                                            ))}
+                                                                    </div>
+                                                                )
+                                                            })}
                                                     </div>
                                                 ),
                                             },
                                         ]}
                                         data={studentData}
                                         pagination={{
-                                            pageSize: studentData.length,
-                                            hideOnSinglePage: true,
+                                            current: currentPage,
+                                            pageSize: numberOfPages,
+                                            total: studentData.length,
+                                            onChange: setCurrentPage,
+                                            onShowSizeChange: setNumberOfPages,
                                         }}
                                     />
                                 </Col>
                             </Row>
                         </div>
                     </Col>
-
-                    <Col span={10}>
-                        <div className="bg-white rounded-lg shadow-sm p-4">
-                            <Flex vertical gap={16}>
-                                <Flex justify="space-between" align="center">
-                                    <h3 className="font-medium">Danh sách sinh viên được chọn</h3>
-                                    <Button
-                                        type="primary"
-                                        onClick={handleSaveScholarshipAward}
-                                        disabled={rightPanelData.length === 0}
-                                    >
-                                        Lưu
-                                    </Button>
-                                </Flex>
-
-                                {rightPanelData.length > 0 ? (
-                                    <Table
-                                        rowKey="id"
-                                        data={rightPanelData}
-                                        columns={[
-                                            {
-                                                title: 'STT',
-                                                width: 50,
-                                                align: 'center',
-                                                fixed: 'left',
-                                                render: (_, __, index) =>
-                                                    index +
-                                                    1 +
-                                                    (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                            },
-                                            {
-                                                title: 'Mã sinh viên',
-                                                dataIndex: ['code'],
-                                                width: 120,
-                                                align: 'center',
-                                                fixed: 'left',
-                                            },
-                                            {
-                                                title: 'Tên sinh viên',
-                                                dataIndex: ['fullname'],
-                                                width: 200,
-                                                fixed: 'left',
-                                            },
-                                            {
-                                                title: 'Trung bình hệ 4',
-                                                dataIndex: ['gpaAtAward'],
-                                                width: 150,
-                                                align: 'center',
-                                            },
-                                            {
-                                                title: 'Xếp hạng',
-                                                dataIndex: ['priorityRank'],
-                                                width: 150,
-                                                align: 'center',
-                                            },
-                                            {
-                                                title: 'Học bổng',
-                                                dataIndex: ['scholarshipName'],
-                                                width: 150,
-                                                align: 'center',
-                                                fixed: 'right',
-                                            },
-                                        ]}
-                                        pagination={false}
-                                    />
-                                ) : (
-                                    <div className="text-gray-400 text-center py-8">
-                                        Chưa có dữ liệu được chọn
-                                    </div>
-                                )}
-                            </Flex>
-                        </div>
-                    </Col>
                 </Flex>
             </Col>
+            <Modal
+                title="Danh sách sinh viên được chọn"
+                visible={isModalVisible}
+                onOk={handleSaveScholarshipAward}
+                onCancel={() => setIsModalVisible(false)}
+                width={800}
+                footer={[
+                    <Button key="back" onClick={() => setIsModalVisible(false)}>
+                        Đóng
+                    </Button>,
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={handleSaveScholarshipAward}
+                        disabled={rightPanelData.length === 0}
+                    >
+                        Lưu
+                    </Button>,
+                ]}
+            >
+                {rightPanelData.length > 0 ? (
+                    <Table
+                        rowKey="id"
+                        data={rightPanelData}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã sinh viên',
+                                dataIndex: 'code',
+                                width: 120,
+                                align: 'center',
+                                fixed: 'left',
+                            },
+                            {
+                                title: 'Tên sinh viên',
+                                dataIndex: 'fullname',
+                                width: 200,
+                                fixed: 'left',
+                            },
+                            {
+                                title: 'Trung bình hệ 4',
+                                dataIndex: 'gpaAtAward',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Xếp hạng',
+                                dataIndex: 'priorityRank',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Học bổng',
+                                dataIndex: 'scholarshipName',
+                                width: 150,
+                                align: 'center',
+                                fixed: 'right',
+                            },
+                        ]}
+                        pagination={false}
+                    />
+                ) : (
+                    <div className="text-gray-400 text-center py-8">Chưa có dữ liệu được chọn</div>
+                )}
+            </Modal>
         </Row>
     )
 }

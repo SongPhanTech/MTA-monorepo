@@ -6,8 +6,8 @@
  */
 
 export type OpenSubjectClassFixedClassItem = {
-  fixedClassId: string;
-  fixedClassName: string;
-  fixedClassCount: number;
-  fixedClassSemester: number;
-};
+    fixedClassId: string
+    fixedClassName: string
+    fixedClassCount: number
+    fixedClassSemester: number
+}

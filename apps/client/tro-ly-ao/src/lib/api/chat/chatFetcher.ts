@@ -1,5 +1,6 @@
-import { fetchInstance } from '..'
-import type { ChatContext } from './chatContext'
+// @ts-nocheck
+import { fetchInstance } from '..';
+import type { ChatContext } from './chatContext';
 
 const baseUrl = 'https://api.chat.chatbot.swantech.vn' // TODO add your baseUrl
 

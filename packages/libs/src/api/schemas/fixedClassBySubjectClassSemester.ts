@@ -4,36 +4,37 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { FixedClassBySubjectClassSemesterTrainingCourse } from './fixedClassBySubjectClassSemesterTrainingCourse';
-import type { FixedClassBySubjectClassSemesterCurriculumVersion } from './fixedClassBySubjectClassSemesterCurriculumVersion';
-import type { _FixedClassBySubjectClassSemesterCount } from './_fixedClassBySubjectClassSemesterCount';
+
+import type { _FixedClassBySubjectClassSemesterCount } from './_fixedClassBySubjectClassSemesterCount'
+import type { FixedClassBySubjectClassSemesterCurriculumVersion } from './fixedClassBySubjectClassSemesterCurriculumVersion'
+import type { FixedClassBySubjectClassSemesterTrainingCourse } from './fixedClassBySubjectClassSemesterTrainingCourse'
 
 export interface FixedClassBySubjectClassSemester {
-  id: string;
-  code: string;
-  active: boolean;
-  /** @nullable */
-  description: string | null;
-  /** @nullable */
-  deletedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-  name: string;
-  /** @nullable */
-  summary: string | null;
-  startYear: number;
-  graduated: boolean;
-  trainingCourseId: string;
-  /** @nullable */
-  managementOrganizationId: string | null;
-  /** @nullable */
-  lecturerManagementId: string | null;
-  /** @nullable */
-  staffManagementId: string | null;
-  initSize: number;
-  curriculumVersionId: string;
-  trainingCourse: FixedClassBySubjectClassSemesterTrainingCourse;
-  curriculumVersion: FixedClassBySubjectClassSemesterCurriculumVersion;
-  checked: boolean;
-  _count: _FixedClassBySubjectClassSemesterCount;
+    id: string
+    code: string
+    active: boolean
+    /** @nullable */
+    description: string | null
+    /** @nullable */
+    deletedAt: string | null
+    createdAt: string
+    updatedAt: string
+    name: string
+    /** @nullable */
+    summary: string | null
+    startYear: number
+    graduated: boolean
+    trainingCourseId: string
+    /** @nullable */
+    managementOrganizationId: string | null
+    /** @nullable */
+    lecturerManagementId: string | null
+    /** @nullable */
+    staffManagementId: string | null
+    initSize: number
+    curriculumVersionId: string
+    trainingCourse: FixedClassBySubjectClassSemesterTrainingCourse
+    curriculumVersion: FixedClassBySubjectClassSemesterCurriculumVersion
+    checked: boolean
+    _count: _FixedClassBySubjectClassSemesterCount
 }

@@ -6,27 +6,14 @@ type TabsProps = {
     items: TabsAntdProps['items']
 } & TabsAntdProps
 
-const Tabs: React.FC<TabsProps> = ({ items }) => {
+const Tabs: React.FC<TabsProps> = ({ items, ...props }) => {
     const [active, setActive] = useState('1')
 
     const handleOnChange = (key: string) => {
         setActive(key)
+        props.onChange?.(key)
     }
-    return (
-        <TabAntd
-            items={items}
-            onChange={handleOnChange}
-            activeKey={active}
-            className="custom-tab-bar"
-            tabBarStyle={{
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                padding: '16px',
-                marginBottom: '0',
-            }}
-        />
-    )
+    return <TabAntd items={items} onChange={handleOnChange} activeKey={active} {...props} />
 }
 
 export default Tabs
