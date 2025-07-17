@@ -176,14 +176,15 @@ model TrainingBlock extends Base {
 }
 
 model TrainingBlockOnCurriculumVersion extends Base {
-  trainingBlock       TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
-  trainingBlockId     String
-  curriculumVersion   CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId String
+  trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
+  trainingBlockId         String
+  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId     String
 
   /// ưu tiên sắp xếp
-  priority            Int                    @default(0)
-  subjects            TrainingBlockSubject[]
+  priority                Int                    @default(0)
+  electiveCreditsRequired Int                    @default(0)
+  subjects                TrainingBlockSubject[]
 
   @@unique([trainingBlockId, curriculumVersionId])
   @@schema("ql-dao-tao")

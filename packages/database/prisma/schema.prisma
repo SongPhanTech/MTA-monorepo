@@ -333,8 +333,8 @@ enum CriteriaField {
   SEMESTER_REGISTERED_CREDITS
   SEMESTER_PASSED_CREDITS
   SEMESTER_FAILED_CREDITS
-  SEMESTER_FAILED_CREDITS_PERCENT
   YEAR_FAILED_CREDITS
+  FAILED_CREDITS_PERCENT
   CUMULATIVE_PASSED_CREDITS
   CUMULATIVE_DEBT_CREDITS
   CUMULATIVE_PROGRESS_PERCENT
@@ -357,7 +357,7 @@ enum CriteriaField {
 enum CriteriaOperator {
   GT
   GTE
-  LE
+  LT
   LTE
   EQ
   IN
@@ -1421,20 +1421,21 @@ model TrainingBlock {
 }
 
 model TrainingBlockOnCurriculumVersion {
-  id                  String                 @id() @default(cuid())
-  code                String?                @unique()
-  active              Boolean                @default(true)
-  description         String?                @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime               @default(now())
-  updatedAt           DateTime               @updatedAt()
-  trainingBlock       TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
-  trainingBlockId     String
-  curriculumVersion   CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId String
+  id                      String                 @id() @default(cuid())
+  code                    String?                @unique()
+  active                  Boolean                @default(true)
+  description             String?                @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt()
+  trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
+  trainingBlockId         String
+  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId     String
   /// ưu tiên sắp xếp
-  priority            Int                    @default(0)
-  subjects            TrainingBlockSubject[]
+  priority                Int                    @default(0)
+  electiveCreditsRequired Int                    @default(0)
+  subjects                TrainingBlockSubject[]
 
   @@unique([trainingBlockId, curriculumVersionId])
   @@schema("ql-dao-tao")

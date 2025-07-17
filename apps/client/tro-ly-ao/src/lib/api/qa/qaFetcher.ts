@@ -1,5 +1,6 @@
-import { fetchInstance } from '..'
-import type { QaContext } from './qaContext'
+// @ts-nocheck
+import { fetchInstance } from '..';
+import type { QaContext } from './qaContext';
 
 const baseUrl = 'https://api.doc.chatbot.swantech.vn' // TODO add your baseUrl
 

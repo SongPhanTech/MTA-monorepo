@@ -3,7 +3,10 @@ import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
+import ModalLearningResult from './modal-ket-qua-hoc-tap-ctdt'
+import ModalPrintToDSHV from './modal-print-ds-sinh-vien-lop'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
+import ModalGraduationCriteria from './modal-tieu-chi-xet-tn'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
 import PutCertificateScoreModal from './put-chung-chi-score'
@@ -14,6 +17,7 @@ import PutCloneConvertScore from './put-clone-convert-score'
 import PutCurriculum from './put-danh-muc-chuong-trinh-dao-dao'
 import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutOlympicScoreModal from './put-diem-cong'
+import PutRankingCondition from './put-dieu-kien-xep-loai-tn'
 import PutAcademicActionCondition from './put-dieu-kien-xu-ly-hoc-tap'
 import PutGraduationApplication from './put-don-xet-tot-nghiep'
 import PutGraduationSession from './put-dot-xet-tot-nghiep'
@@ -40,7 +44,10 @@ import PutOneSubjectClassModal from './put-one-subject-class'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
 import PutVersionSubjectModal from './put-phien-ban-mon-hoc'
 import PutRoomModal from './put-phong'
+import PutRankDowngradeCondition from './put-quy-tac-ha-bac'
+import PutGraduationDecision from './put-quyet-dinh-tot-nghiep'
 import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
+import PutScholarshipAward from './put-scholarship-award'
 import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
@@ -111,4 +118,11 @@ export {
     PutGraduationApplication,
     PutAcademicActionCondition,
     PutStudentAcademicDecision,
+    ModalLearningResult,
+    ModalPrintToDSHV,
+    PutGraduationDecision,
+    PutScholarshipAward,
+    ModalGraduationCriteria,
+    PutRankingCondition,
+    PutRankDowngradeCondition,
 }

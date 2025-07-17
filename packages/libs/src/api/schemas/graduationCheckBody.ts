@@ -6,6 +6,7 @@
  */
 
 export type GraduationCheckBody = {
-  sessionId: string;
-  applicationIds: string[];
-};
+    sessionId: string
+    /** Không truyền hoặc truyền mảng rỗng sẽ xét hết */
+    applicationIds?: string[]
+}

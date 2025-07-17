@@ -341,7 +341,6 @@ function YearAndSemester() {
                             align: 'center',
                             // dataIndex: 'startDate',
                             width: 140,
-                            sorter: (a, b) => dayjs(a.startDate).unix() - dayjs(b.startDate).unix(),
                             render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
                         },
                         {
@@ -349,7 +348,6 @@ function YearAndSemester() {
                             align: 'center',
                             // dataIndex: 'endDate',
                             width: 140,
-                            sorter: (a, b) => dayjs(a.endDate).unix() - dayjs(b.endDate).unix(),
                             render: ({ endDate }) =>
                                 endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
                         },

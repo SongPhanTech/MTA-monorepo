@@ -1,7 +1,4 @@
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import { FilterLecture } from '@components/filter'
-import type { FilterProps } from '@components/filter/filter-hoc-vien'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import {
@@ -9,75 +6,127 @@ import {
     PutUploadProfileModal,
     PutUserProfileStaffModal,
 } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import {
     useCountStaff,
+    useFindManyDM_CapBac,
+    useFindManyDM_DonVi,
+    useFindManyDM_HocHam,
+    useFindManyDM_HocVi,
     useFindManyStaff,
+    useFindManyStaffType,
     useFindManyTemplateFile,
     useUpdateStaff,
 } from '@workspace/db/hooks'
-import { Button, Col, Dropdown, Flex, Input, Menu, message, Row } from 'antd'
+import { Button, Col, Flex, Menu, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type Filter = FilterProps & {
-    searchText: string
-    organizationText: string
-}
-
 export default function StaffManagement() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-    const [filters, setFilters] = useState<Filter>({
-        searchText: '',
-        organizationText: '',
-        priorityObjectId: null,
-        nationalityId: null,
-        religionId: null,
-        ethnicityId: null,
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        dateOfBirth: undefined,
+        academicRankType: undefined,
+        academicDegreeType: undefined,
+        organization: undefined,
+        gender: undefined,
+        rankId: undefined,
+        officerNumber: undefined,
+        staffType: undefined,
     })
 
     const { data, refetch } = useFindManyStaff({
         where: {
-            AND: [
-                ...(filters.searchText
-                    ? [
-                          {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                  ],
-                              },
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.name,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.name,
+                        },
+                    },
+                ],
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
                           },
-                      ]
-                    : []),
-                ...(filters.organizationText
-                    ? [
-                          {
-                              organization: {
-                                  sTen: {
-                                      contains: filters.organizationText,
-                                  },
-                              },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth?.length === 2
+                    ? {
+                          dateOfBirth: {
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
                           },
-                      ]
-                    : []),
-            ],
+                      }
+                    : {}),
+                ...(filters.officerNumber
+                    ? {
+                          officerNumber: {
+                              contains: filters.officerNumber,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+                ...(filters.academicRankType
+                    ? {
+                          academicRankTypeId: {
+                              in: filters.academicRankType,
+                          },
+                      }
+                    : {}),
+                ...(filters.academicDegreeType
+                    ? {
+                          academicDegreeTypeId: {
+                              in: filters.academicDegreeType,
+                          },
+                      }
+                    : {}),
+                ...(filters.rankId
+                    ? {
+                          rankId: {
+                              in: filters.rankId,
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.staffType
+                ? {
+                      staffTypeId: {
+                          in: filters.staffType,
+                      },
+                  }
+                : {}),
         },
         include: {
             organization: true,
@@ -101,41 +150,95 @@ export default function StaffManagement() {
 
     const { data: count } = useCountStaff({
         where: {
-            AND: [
-                ...(filters.searchText
-                    ? [
-                          {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                      {
-                                          lastName: {
-                                              contains: filters.searchText,
-                                          },
-                                      },
-                                  ],
-                              },
+            userProfile: {
+                OR: [
+                    {
+                        firstName: {
+                            contains: filters.name,
+                        },
+                    },
+                    {
+                        lastName: {
+                            contains: filters.name,
+                        },
+                    },
+                ],
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
                           },
-                      ]
-                    : []),
-                ...(filters.organizationText
-                    ? [
-                          {
-                              organization: {
-                                  sTen: {
-                                      contains: filters.organizationText,
-                                  },
-                              },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth?.length === 2
+                    ? {
+                          dateOfBirth: {
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
                           },
-                      ]
-                    : []),
-            ],
+                      }
+                    : {}),
+                ...(filters.officerNumber
+                    ? {
+                          officerNumber: {
+                              contains: filters.officerNumber,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+                ...(filters.academicRankType
+                    ? {
+                          academicRankTypeId: {
+                              in: filters.academicRankType,
+                          },
+                      }
+                    : {}),
+                ...(filters.academicDegreeType
+                    ? {
+                          academicDegreeTypeId: {
+                              in: filters.academicDegreeType,
+                          },
+                      }
+                    : {}),
+                ...(filters.rankId
+                    ? {
+                          rankId: {
+                              in: filters.rankId,
+                          },
+                      }
+                    : {}),
+            },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.staffType
+                ? {
+                      staffTypeId: {
+                          in: filters.staffType,
+                      },
+                  }
+                : {}),
         },
     })
+
+    const { data: staffTypeData = [] } = useFindManyStaffType()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
+    const { data: academicRankTypeData = [] } = useFindManyDM_HocHam()
+    const { data: academicDegreeTypeData = [] } = useFindManyDM_HocVi()
+    const { data: rankTypeData = [] } = useFindManyDM_CapBac()
 
     const { mutateAsync: updateStaff } = useUpdateStaff()
 
@@ -189,19 +292,6 @@ export default function StaffManagement() {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const handleAdvancedFilter = (values: FilterProps) => {
-        const newFilters = { ...filters, ...values }
-        setFilters(newFilters)
-    }
 
     const handleDownloadTemplate = (type: string) => {
         const fileRecord = templateFile?.find((item) => item.code === type)
@@ -275,49 +365,12 @@ export default function StaffManagement() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={7}>
-                            <Input
-                                id="search"
-                                onChange={(e) =>
-                                    handleFilterChange('organizationText', e.target.value)
-                                }
-                                placeholder="Tìm kiếm theo tên đơn vị"
-                            />
-                        </Col>
-                        <Col span={10}>
-                            <FilterLecture
-                                onSearchChange={handleFilterChange}
-                                onFilterChange={handleAdvancedFilter}
-                            />
-                        </Col>
-
+                    <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={7}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
-
-                                {/* Gói Dropdown vào Space để đảm bảo chỉ có một child */}
-                                <Dropdown overlay={menuDownload} trigger={['hover']}>
-                                    <Button
-                                        className="ml-4"
-                                        type="primary"
-                                        icon={<DownloadOutlined />}
-                                    >
-                                        Tải file mẫu
-                                    </Button>
-                                </Dropdown>
-
-                                <Dropdown overlay={menuUpload} trigger={['hover']}>
-                                    <Button
-                                        className="ml-4"
-                                        type="primary"
-                                        icon={<UploadOutlined />}
-                                    >
-                                        Nhập file
-                                    </Button>
-                                </Dropdown>
                             </Flex>
                         </Col>
                     </Row>
@@ -357,22 +410,41 @@ export default function StaffManagement() {
                             //     },
                             // },
                             {
-                                title: 'Mã cán bộ',
+                                title: 'Mã giảng viên',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 120,
+                                width: 150,
+                                type: 'input',
                             },
                             {
                                 title: 'SHSQ/SHQN',
-                                render: (_, record) => record.userProfile?.officerNumber,
+                                dataIndex: 'officerNumber',
+                                render: (__, record) => record.userProfile?.officerNumber,
                                 align: 'center',
-                                width: 120,
+                                width: 150,
+                                type: 'input',
                             },
                             {
                                 title: 'Họ và tên',
-                                render: (record) =>
+                                render: (__, record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
+                                        : '',
+                                align: 'center',
+                                width: 150,
+                                dataIndex: 'name',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Ngày sinh',
+                                dataIndex: 'dateOfBirth',
+                                type: 'date',
+
+                                render: (__, record) =>
+                                    record.userProfile?.dateOfBirth
+                                        ? dayjs(record.userProfile?.dateOfBirth).format(
+                                              'DD/MM/YYYY'
+                                          )
                                         : '',
                                 align: 'center',
                                 width: 150,
@@ -381,6 +453,12 @@ export default function StaffManagement() {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 100,
+                                type: 'select',
+                                dataIndex: 'gender',
+                                options: [
+                                    { label: 'Nam', value: 'Male' },
+                                    { label: 'Nữ', value: 'Female' },
+                                ],
                                 render: (record) =>
                                     record.userProfile?.gender
                                         ? GENDER_MEAN[
@@ -388,26 +466,25 @@ export default function StaffManagement() {
                                           ]
                                         : '',
                             },
-                            {
-                                title: 'Ngày sinh',
-                                render: (_, record) =>
-                                    record.userProfile?.dateOfBirth
-                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
-                                        : '',
-                                align: 'center',
-                                width: 100,
-                            },
+
                             {
                                 title: 'Đơn vị',
-                                width: 200,
-                                render: (_, record) => {
-                                    return record.organization?.sTen || 'Chưa có'
-                                },
+                                dataIndex: 'organization',
                                 align: 'center',
+                                width: 150,
+                                render: (value) => value?.sTen,
+                                type: 'tree_select',
+                                options: treeData,
                             },
                             {
                                 title: 'Học hàm',
                                 width: 120,
+                                dataIndex: 'academicRankType',
+                                options: academicRankTypeData.map((aca) => ({
+                                    label: aca.sTen,
+                                    value: aca.Id,
+                                })),
+                                type: 'select',
                                 render: (_, record) =>
                                     record.userProfile?.academicRankType?.name || '',
                                 align: 'center',
@@ -425,7 +502,13 @@ export default function StaffManagement() {
                             },
                             {
                                 title: 'Học vị',
-                                render: (_, record) =>
+                                dataIndex: 'academicDegreeType',
+                                options: academicDegreeTypeData.map((hv) => ({
+                                    label: hv.sTen,
+                                    value: hv.Id,
+                                })),
+                                type: 'select',
+                                render: (__, record) =>
                                     record.userProfile?.academicDegreeType?.name || '',
                                 align: 'center',
                                 width: 120,
@@ -442,22 +525,45 @@ export default function StaffManagement() {
                                 width: 120,
                             },
                             {
-                                title: 'Loại cán bộ',
+                                title: 'Loại giảng viên',
                                 align: 'center',
-                                width: 120,
-                                render: (_, record) => record.staffType?.name || '',
+                                options: staffTypeData.map((type) => ({
+                                    label: type.name,
+                                    value: type.id,
+                                })),
+                                dataIndex: 'staffType',
+                                type: 'select',
+                                width: 170,
+                                render: (__, record) => record?.staffType?.name || '',
                             },
+                            // {
+                            //     title: 'Năm CV',
+                            //     render: (_, record) =>
+                            //         record.userProfile?.academicDegreeDate
+                            //             ? dayjs(
+                            //                   record.userProfile
+                            //                       .academicDegreeDate
+                            //               ).format('DD/MM/YYYY')
+                            //             : '',
+                            //     align: 'center',
+                            //     width: 100,
+                            // },
                             {
-                                title: 'Cập bậc hàm',
+                                title: 'Cấp bậc hàm',
                                 dataIndex: 'rankId',
+                                options: rankTypeData.map((rank) => ({
+                                    label: rank.sTen,
+                                    value: rank.Id,
+                                })),
+                                type: 'select',
                                 render: (_, record) => record.userProfile?.rank?.name || '',
                                 align: 'center',
-                                width: 120,
+                                width: 140,
                             },
                             {
                                 title: 'Năm CB',
                                 dataIndex: 'rankDate',
-                                render: (_, record) =>
+                                render: (__, record) =>
                                     record.userProfile?.rankDate
                                         ? dayjs(record.userProfile.rankDate).format('DD/MM/YYYY')
                                         : '',
@@ -488,14 +594,18 @@ export default function StaffManagement() {
                         ]}
                         data={data}
                         rowKey="id"
-                        rowSelection={{
-                            selectedRowKeys,
-                            onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                        }}
+                        // rowSelection={{
+                        //     selectedRowKeys,
+                        //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
+                        // }}
                         pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
                             total: count,
                             onChange: setCurrentPage,
                             onShowSizeChange: setNumberOfPages,
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

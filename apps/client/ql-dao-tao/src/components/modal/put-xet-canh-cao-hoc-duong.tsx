@@ -139,7 +139,7 @@ const PutDisciplinaryWarning = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                reasonIds: initialValue.reasonDetails.map(({ id }) => id),
+                reasonIds: initialValue.reasonDetails.map(({ id }: any) => id),
             })
         } else {
             form.setFieldsValue({ increasedFrom: 0, level: 0 })
@@ -165,7 +165,9 @@ const PutDisciplinaryWarning = () => {
                         options={studentData.map((i) => {
                             return {
                                 value: i.id,
-                                label: [i.code, i.userProfile.fullname].filter(Boolean).join(' - '),
+                                label: [i.userProfile.code, i.userProfile.fullname]
+                                    .filter(Boolean)
+                                    .join(' - '),
                             }
                         })}
                         disabled={!!input?.id}

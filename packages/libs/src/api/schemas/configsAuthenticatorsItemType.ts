@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ConfigsAuthenticatorsItemType = typeof ConfigsAuthenticatorsItemType[keyof typeof ConfigsAuthenticatorsItemType];
-
+export type ConfigsAuthenticatorsItemType =
+    (typeof ConfigsAuthenticatorsItemType)[keyof typeof ConfigsAuthenticatorsItemType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ConfigsAuthenticatorsItemType = {
-  LOCAL: 'LOCAL',
-  REQUEST_PATH: 'REQUEST_PATH',
-} as const;
+    LOCAL: 'LOCAL',
+    REQUEST_PATH: 'REQUEST_PATH',
+} as const

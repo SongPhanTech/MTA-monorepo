@@ -1029,6 +1029,7 @@ Table TrainingBlockOnCurriculumVersion {
   curriculumVersion CurriculumVersion [not null]
   curriculumVersionId String [not null]
   priority Int [not null, default: 0, note: 'ưu tiên sắp xếp']
+  electiveCreditsRequired Int [not null, default: 0]
   subjects TrainingBlockSubject [not null]
 
   indexes {
@@ -3425,8 +3426,8 @@ Enum CriteriaField {
   SEMESTER_REGISTERED_CREDITS
   SEMESTER_PASSED_CREDITS
   SEMESTER_FAILED_CREDITS
-  SEMESTER_FAILED_CREDITS_PERCENT
   YEAR_FAILED_CREDITS
+  FAILED_CREDITS_PERCENT
   CUMULATIVE_PASSED_CREDITS
   CUMULATIVE_DEBT_CREDITS
   CUMULATIVE_PROGRESS_PERCENT
@@ -3447,7 +3448,7 @@ Enum CriteriaField {
 Enum CriteriaOperator {
   GT
   GTE
-  LE
+  LT
   LTE
   EQ
   IN

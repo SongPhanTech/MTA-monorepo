@@ -6,8 +6,9 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
+import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,
@@ -213,7 +214,8 @@ export default function TrainingMajorPage() {
         },
     })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -341,13 +343,6 @@ export default function TrainingMajorPage() {
                                 width: 200,
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: [
-                                    'trainingObjectTypes',
-                                    'organization',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
                             },
                             {
                                 title: 'Tên chuyên ngành',
@@ -356,13 +351,6 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                multiple: [
-                                    'trainingObjectTypes',
-                                    'organization',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
                             },
                             // {
                             //     title: 'Tên tiếng anh',
@@ -380,13 +368,6 @@ export default function TrainingMajorPage() {
                                     value: i.id,
                                     label: i.name,
                                 })),
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
                                 render: (value) =>
                                     value?.length > 0
                                         ? value.map(
@@ -410,18 +391,8 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 width: 150,
                                 render: (value) => value?.sTen,
-                                type: 'select',
-                                options: manageOrgData.map((i: DM_DonVi) => ({
-                                    value: i.Id,
-                                    label: i.sTen,
-                                })),
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'numberCreditsMajor',
-                                    'numberCreditsRequired',
-                                    'numberCreditsElective',
-                                ],
+                                type: 'tree_select',
+                                options: treeData,
                             },
 
                             {
@@ -430,7 +401,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsMajor',
                                 type: 'order',
-                                multiple: ['name', 'code', 'trainingObjectTypes'],
+                                distinctFilters: ['numberCreditsRequired', 'numberCreditsElective'],
                             },
                             {
                                 title: 'Số TC bắt buộc',
@@ -438,7 +409,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsRequired',
                                 type: 'order',
-                                multiple: ['name', 'code', 'trainingObjectTypes'],
+                                distinctFilters: ['numberCreditsMajor', 'numberCreditsElective'],
                             },
                             {
                                 title: 'Số TC lựa chọn',
@@ -446,7 +417,7 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 dataIndex: 'numberCreditsElective',
                                 type: 'order',
-                                multiple: ['name', 'code', 'trainingObjectTypes'],
+                                distinctFilters: ['numberCreditsMajor', 'numberCreditsRequired'],
                             },
                             {
                                 title: 'Mô tả',

@@ -33,7 +33,6 @@ export default function SubjectOpeningPlan() {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    // const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [selectedSemester, setSelectedSemester] = useState({})
 
     const { data: schoolYears = [] } = useFindManySchoolYear({
@@ -41,8 +40,6 @@ export default function SubjectOpeningPlan() {
         orderBy: { startDate: 'asc' },
     })
     const semesterId = Form.useWatch('semesterId', form)
-    //  const trainingCourseId = Form.useWatch('semesterId', form)
-    //   const searchText = Form.useWatch('semesterId', form)
     const { data: res, refetch } = useOpenSubjectClass(
         {
             page: '1',
@@ -63,7 +60,7 @@ export default function SubjectOpeningPlan() {
             code: i?.code,
             children: i?.semesters?.length
                 ? i?.semesters.map((j: Semester) => ({
-                      title: j?.name,
+                      title: `${j?.name} năm ${i?.name}`,
                       key: j?.id,
                       value: j?.id,
                       code: j?.code,
@@ -184,7 +181,7 @@ export default function SubjectOpeningPlan() {
                                             labelAlign="left"
                                         >
                                             <TreeSelect
-                                                placeholder="Chọn đơn vị quản lý"
+                                                placeholder="Chọn học kỳ"
                                                 showSearch
                                                 treeDefaultExpandAll
                                                 treeData={treeData}

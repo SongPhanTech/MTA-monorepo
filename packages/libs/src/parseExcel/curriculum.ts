@@ -12,6 +12,7 @@ dayjs.extend(customParseFormat)
 type TrainingBlockResult = {
     name: string
     priority: number
+    electiveCreditsRequired: number
     subjects: {
         name: string
         organizationCode: string | undefined
@@ -132,6 +133,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
             trainingBlocks.push({
                 name: maybeTrainingBlock.trim(),
                 priority: trainingBlocks.length + 1,
+                electiveCreditsRequired: 0,
                 subjects: [],
             })
             isMandatory = true
@@ -150,6 +152,13 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
             const requirement = row[cols.subjectName]
             if (requirement?.toLocaleLowerCase().includes('tự chọn')) {
                 isMandatory = false
+
+                // set số TC tự chọn yêu cầu
+                const trainingBlock = trainingBlocks[trainingBlocks.length - 1]
+                if (trainingBlock) {
+                    trainingBlock.electiveCreditsRequired =
+                        Number.parseInt(row[cols.credit] || '') || 0
+                }
             } else {
                 isMandatory = true
             }

@@ -378,9 +378,9 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: 'ql-diem-lop-mon-hoc',
-                        label: 'Nhập điểm lớp môn học',
+                        label: 'Nhập điểm',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                        description: 'Nhập điểm lớp môn học',
+                        description: 'Nhập điểm',
                     },
                     {
                         id: 'ql-diem-ren-luyen',
@@ -449,6 +449,13 @@ const NAVIGATION: NavigationType = {
                         icon: BookOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_HOC_LUC,
                         description: 'Xếp loại học lực',
+                    },
+                    {
+                        id: 'xep-loai-tot-nghiep',
+                        label: 'Xếp loại tốt nghiệp',
+                        icon: BookOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_XEP_LOAI_TOT_NGHIEP,
+                        description: 'Xếp loại tốt nghiệp',
                     },
                     {
                         id: 'danh-muc-danh-muc-phong-hoc',

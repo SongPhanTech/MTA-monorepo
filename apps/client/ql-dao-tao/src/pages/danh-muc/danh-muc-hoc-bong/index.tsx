@@ -382,7 +382,7 @@ export default function Scholarship() {
                                             scholarshipCriteriaId: '',
                                         })
                                     }}
-                                    title="Thêm mới phiên bản"
+                                    title="Thêm mới tiêu chí"
                                 />
                                 <EditIcon
                                     onClick={(e) => {

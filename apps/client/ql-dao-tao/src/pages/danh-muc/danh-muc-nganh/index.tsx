@@ -6,9 +6,11 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
+    useFindManyDM_DonVi,
     useFindManyTrainingField,
     useFindManyTrainingObjectType,
     useUpdateTrainingField,
@@ -27,6 +29,8 @@ export default function TrainingFieldPage() {
         trainingObjectTypes: undefined,
         name: '',
         code: '',
+        organization: undefined,
+        publishDate: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingField({
@@ -39,6 +43,21 @@ export default function TrainingFieldPage() {
                 ? {
                       trainingObjectTypeId: {
                           in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.publishDate?.length === 2
+                ? {
+                      publishDate: {
+                          gte: dayjs(filters.publishDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.publishDate?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),
@@ -68,6 +87,21 @@ export default function TrainingFieldPage() {
                 ? {
                       trainingObjectTypeId: {
                           in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
+            ...(filters.organization
+                ? {
+                      organizationId: {
+                          in: filters.organization,
+                      },
+                  }
+                : {}),
+            ...(filters.publishDate?.length === 2
+                ? {
+                      publishDate: {
+                          gte: dayjs(filters.publishDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.publishDate?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),
@@ -107,13 +141,8 @@ export default function TrainingFieldPage() {
         hideSpinner()
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
@@ -210,7 +239,6 @@ export default function TrainingFieldPage() {
                                 fixed: 'left',
                                 width: 150,
                                 type: 'input',
-                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Tên ngành',
@@ -219,7 +247,6 @@ export default function TrainingFieldPage() {
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
-                                multiple: ['trainingObjectTypes'],
                             },
                             {
                                 title: 'Đối tượng đào tạo',
@@ -227,7 +254,6 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 175,
                                 type: 'select',
-                                multiple: ['name', 'code'],
                                 options: trainingObjectTypeData.map((i) => {
                                     return {
                                         value: i.id,
@@ -250,6 +276,8 @@ export default function TrainingFieldPage() {
                                 dataIndex: 'organization',
                                 align: 'center',
                                 width: 150,
+                                type: 'tree_select',
+                                options: treeData,
                                 render: (organization: DM_DonVi) =>
                                     organization?.sTen ? organization?.sTen : '',
                             },
@@ -257,7 +285,9 @@ export default function TrainingFieldPage() {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
-                                render: ({ publishDate }) =>
+                                dataIndex: 'publishDate',
+                                type: 'date',
+                                render: (__, { publishDate }) =>
                                     publishDate ? dayjs(publishDate).format('DD/MM/YYYY') : '',
                             },
                             {

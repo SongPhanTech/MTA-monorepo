@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { FixedClassBySubjectClassSemester } from './fixedClassBySubjectClassSemester';
+import type { FixedClassBySubjectClassSemester } from './fixedClassBySubjectClassSemester'
 
 export type ListOfFixedClassBySubjectClassSemesterAllOf = {
-  data: FixedClassBySubjectClassSemester[];
-  count: number;
-};
+    data: FixedClassBySubjectClassSemester[]
+    count: number
+}

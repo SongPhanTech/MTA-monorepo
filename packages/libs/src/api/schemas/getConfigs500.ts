@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetConfigs500 = { [key: string]: unknown };
+export type GetConfigs500 = { [key: string]: unknown }

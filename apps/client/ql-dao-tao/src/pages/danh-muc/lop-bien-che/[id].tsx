@@ -1,12 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    AddStudentToFixedClassModal,
-    PutStudentModal,
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-} from '@components/modal'
+import { AddStudentToFixedClassModal, ModalPrintToDSHV, PutStudentModal } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -15,11 +10,10 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Student } from '@workspace/db'
 import {
-    useCountStudent,
     useFindManyCurriculumVersion,
     useFindManyStudent,
-    useFindManyTemplateFile,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
     useFindUniqueFixedClass,
@@ -27,7 +21,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Flex, Menu, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Flex, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon } from 'lucide-react'
@@ -46,8 +40,13 @@ export default function StudentFixedClassPage() {
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [open, setOpen] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
         gender: undefined,
+        name: '',
+        code: '',
+        curriculumVersion: undefined,
+        trainingMajors: undefined,
+        trainingField: undefined,
+        dateOfBirth: undefined,
     })
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -85,6 +84,7 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 },
+                managementOrganization: true,
             },
         },
         {
@@ -108,27 +108,30 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
-
-                //                ...(filters.curriculumVersion
-                // ? {
-                //       curriculumVersionId: {
-                //           in: filters.curriculumVersion,
-                //       },
-                //   }
-                // : {}),
-                //    ...(filters.gender
-                // ? {
-                //       gender: {
-                //           in: filters.gender,
-                //       },
-                //   }
-                // : {}),
-                // dateOfBirth: {
-                //     gte: filters.dateOfBirth?.[0],
-                //     lte: filters.dateOfBirth?.[1],
-                // },
-                // ...(filters.gender ? { gender: filters.gender } : {}),
+                ...(filters.gender
+                    ? {
+                          gender: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
+                ...(filters.dateOfBirth?.length === 2
+                    ? {
+                          dateOfBirth: {
+                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
             },
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
             ...(filters.curriculumVersion
                 ? {
                       curriculumVersionId: {
@@ -136,6 +139,28 @@ export default function StudentFixedClassPage() {
                       },
                   }
                 : {}),
+            fixedClass: {
+                curriculumVersion: {
+                    curriculum: {
+                        trainingMajor: {
+                            ...(filters.trainingMajors
+                                ? {
+                                      id: {
+                                          in: filters.trainingMajors,
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.trainingField
+                                ? {
+                                      trainingFieldId: {
+                                          in: filters.trainingField,
+                                      },
+                                  }
+                                : {}),
+                        },
+                    },
+                },
+            },
         },
         include: {
             userProfile: true,
@@ -184,32 +209,6 @@ export default function StudentFixedClassPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountStudent({
-        where: {
-            fixedClassId,
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.searchText,
-                        },
-                    },
-                ],
-                // dateOfBirth: {
-                //     gte: filters.dateOfBirth?.[0],
-                //     lte: filters.dateOfBirth?.[1],
-                // },
-
-                // ...(filters.gender ? { gender: filters.gender } : {}),
-            },
-        },
-    })
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -222,12 +221,13 @@ export default function StudentFixedClassPage() {
         tag: AddStudentToFixedClassModal.name,
     })
 
-    const { onOpen: onOpenUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
+    const { onOpen: onOpenPrint } = useDisclosure<{
+        dataTable: Student[]
+        dataFixedClass: any
+    }>({
+        tag: ModalPrintToDSHV.name,
     })
-    const { onOpen: onOpenUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
-    })
+
     const { onOpen: onOpenUpdate } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
@@ -246,13 +246,10 @@ export default function StudentFixedClassPage() {
         onOpen({ id: fixedClassId })
     }
 
-    const handleModalUpload = (type: string) => {
-        if (type === 'upload') {
-            onOpenUpload('SV')
-        } else {
-            onOpenUpdateFile('SV')
-        }
+    const handleModalPrint = () => {
+        onOpenPrint({ dataFixedClass: fixedClass, dataTable: data })
     }
+
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
     const { mutateAsync: updateManyUserProfile } = useUpdateManyStudent()
     async function handleDelete(id: string) {
@@ -295,77 +292,6 @@ export default function StudentFixedClassPage() {
         }
         hideSpinner()
     }
-
-    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
-
-    const handleFilterChange = (
-        key: string,
-        value: string | { startDate?: string; endDate?: string } | string[]
-    ) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const handleDownloadTemplate = (type: string) => {
-        const fileRecord = templateFile?.find((item) => item.code === type)
-        const fileLink = fileRecord ? fileRecord.path : null
-        if (fileLink) {
-            const link = document.createElement('a')
-            link.href = fileLink
-            link.setAttribute('download', '')
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-        }
-    }
-
-    const itemsDownload = [
-        {
-            key: 'import',
-            label: 'Tải file nhập thông tin sinh viên',
-            onClick: () => handleDownloadTemplate('IMPORT_USERPROFILE'),
-        },
-        {
-            key: 'update',
-            label: 'Tải file cập nhật thông tin sinh viên',
-            onClick: () => handleDownloadTemplate('UPDATE_USERPROFILE'),
-        },
-    ]
-
-    const itemsUpload = [
-        {
-            key: 'upload',
-            label: 'Nhập file nhập thông tin sinh viên',
-            onClick: () => handleModalUpload('upload'),
-        },
-        {
-            key: 'update',
-            label: 'Nhập file cập nhật thông tin sinh viên',
-            onClick: () => handleModalUpload('update'),
-        },
-    ]
-    const menuDownload = (
-        <Menu>
-            {itemsDownload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
-    const menuUpload = (
-        <Menu>
-            {itemsUpload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
 
     const handleCancel = () => {
         setOpen(false)
@@ -415,7 +341,9 @@ export default function StudentFixedClassPage() {
                                         Xoá SV khỏi lớp
                                     </Button>
                                 </Popconfirm>
-                                <Button type="primary">In danh sách</Button>
+                                <Button onClick={handleModalPrint} type="primary">
+                                    In danh sách
+                                </Button>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm SV
                                 </Button>
@@ -455,7 +383,7 @@ export default function StudentFixedClassPage() {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
                                 fixed: 'left',
-                                width: 120,
+                                width: 150,
                                 align: 'center',
                                 type: 'input',
                             },
@@ -465,7 +393,8 @@ export default function StudentFixedClassPage() {
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
-                                render: (record) =>
+                                dataIndex: 'name',
+                                render: (__, record) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
@@ -474,7 +403,9 @@ export default function StudentFixedClassPage() {
                                 title: 'Ngày sinh',
                                 align: 'center',
                                 width: 150,
-                                render: (record) =>
+                                dataIndex: 'dateOfBirth',
+                                type: 'date',
+                                render: (__, record) =>
                                     record.userProfile?.dateOfBirth
                                         ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
@@ -486,8 +417,8 @@ export default function StudentFixedClassPage() {
                                 type: 'select',
                                 dataIndex: 'gender',
                                 options: [
-                                    { label: 'Nam', value: 'male' },
-                                    { label: 'Nữ', value: 'female' },
+                                    { label: 'Nam', value: 'Male' },
+                                    { label: 'Nữ', value: 'Female' },
                                 ],
 
                                 render: (__, record) =>
@@ -502,7 +433,7 @@ export default function StudentFixedClassPage() {
                                 width: 150,
                                 align: 'center',
                                 type: 'select',
-                                dataIndex: 'trainingFields',
+                                dataIndex: 'trainingField',
                                 options: trainingFieldData.map((item) => ({
                                     label: item.name,
                                     value: item.id,
@@ -600,15 +531,7 @@ export default function StudentFixedClassPage() {
                         ]}
                         data={data}
                         scroll={{ x: 'max-content' }}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

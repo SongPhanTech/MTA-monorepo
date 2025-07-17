@@ -433,22 +433,12 @@ export default function TrainingProgramCatalog() {
                                 fixed: 'left',
                                 width: 120,
                                 type: 'input',
-                                multiple: [
-                                    'trainingObjectTypes',
-                                    'trainingCourses',
-                                    'trainingTime',
-                                ],
                             },
                             {
                                 title: 'Tên chương trình',
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
-                                multiple: [
-                                    'trainingObjectTypes',
-                                    'trainingCourses',
-                                    'trainingTime',
-                                ],
                                 width: 250,
                                 type: 'input',
                             },
@@ -462,7 +452,6 @@ export default function TrainingProgramCatalog() {
                                     value: i.id,
                                     label: i.name,
                                 })),
-                                multiple: ['name', 'code', 'trainingCourses', 'trainingTime'],
                                 render: (
                                     __,
                                     record: { trainingObjectType?: TrainingObjectType }
@@ -482,7 +471,6 @@ export default function TrainingProgramCatalog() {
                                     value: i.id,
                                     label: i.name,
                                 })),
-                                multiple: ['name', 'code', 'trainingObjectTypes', 'trainingTime'],
                                 render: (
                                     __,
                                     record: {
@@ -541,6 +529,7 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'requiredCredits',
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: ['electiveCredits', 'numberOfSemesters'],
                                 width: 100,
                             },
                             {
@@ -549,12 +538,14 @@ export default function TrainingProgramCatalog() {
                                 align: 'center',
                                 type: 'order',
                                 width: 100,
+                                distinctFilters: ['numberOfSemesters', 'requiredCredits'],
                             },
                             {
                                 title: 'Số kỳ học',
                                 dataIndex: 'numberOfSemesters',
                                 align: 'center',
                                 type: 'order',
+                                distinctFilters: ['electiveCredits', 'requiredCredits'],
                                 width: 120,
                             },
                             {
@@ -563,12 +554,6 @@ export default function TrainingProgramCatalog() {
                                 align: 'center',
                                 width: 170,
                                 type: 'select',
-                                multiple: [
-                                    'name',
-                                    'code',
-                                    'trainingObjectTypes',
-                                    'trainingCourses',
-                                ],
                                 options: trainingTimeData.map((i: TrainingTime) => ({
                                     value: i.id,
                                     label: i.name,

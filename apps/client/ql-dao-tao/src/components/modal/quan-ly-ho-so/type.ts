@@ -1,6 +1,7 @@
 import type {
     $Enums,
     AcademicActionType,
+    ApplicationStatus,
     CurriculumVersion,
     DecisionStatus,
     DM_CapBac,
@@ -14,7 +15,9 @@ import type {
     DM_Tinh,
     DM_TonGiao,
     DM_XaPhuong,
+    ExamType,
     FixedClass,
+    Gender,
     Lecturer,
     LecturerType,
     PriorityObject,
@@ -22,6 +25,7 @@ import type {
     StaffPosition,
     StaffType,
     Student,
+    SubjectClassSchedule,
     TrainingCourse,
     UserProfile,
 } from '@workspace/db'
@@ -92,7 +96,7 @@ export type FilterProps = {
     numberOfPractice?: 'asc' | 'desc'
     numberOfReview?: 'asc' | 'desc'
     numberOfExam?: 'asc' | 'desc'
-    examType?: string[]
+    examType?: ExamType[]
     fixedClass?: string[]
     trainingCourse?: string[]
     actionTaken?: AcademicActionType[]
@@ -104,11 +108,43 @@ export type FilterProps = {
     graduated?: boolean
     trainingLevel?: string[]
     startYear?: 'asc' | 'desc'
-    gender?: string[]
+    gender?: Gender[]
+    trainingField?: string[]
+    dateOfBirth?: Date[]
+    academicRankType?: string[]
+    academicDegreeType?: string[]
+    rankId?: string[]
+    officerNumber?: string
+    lecturerType?: string[]
+    staffType?: string[]
+    bonusScore?: 'asc' | 'desc'
+    finalScore?: 'asc' | 'desc'
+    count?: 'asc' | 'desc'
+    publishDate?: Date[]
+    scholarship?: string[]
+    decisionDate?: Date[]
+    trainingCourseId?: string | null
+    semesterStartId?: string | null
+    trainingMajorId?: string | null
+    lecturerId?: string[]
+    maxStudent?: 'asc' | 'desc'
+    subjectClassStudent?: 'asc' | 'desc'
+    mainLecturer?: string
+    extraLecturer?: string
+    enterGradeLecturer?: string
+    schedule?: SubjectClassSchedule[]
+    room?: string
+    applicationDate?: Date[]
+    statusApplication?: ApplicationStatus[]
+    active?: boolean[]
+    numberOfOther?: 'asc' | 'desc'
+    managementOrganizationId?: string
+    floor?: 'asc' | 'desc'
+    roomNumber?: 'asc' | 'desc'
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
-    multiple?: string[]
+    distinctFilters?: string[]
     options?: any[]
     dataIndex?: string
     slot?: any

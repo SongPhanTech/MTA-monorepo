@@ -122,6 +122,7 @@ export const StudentAcademicAction = z.object({
     mucCanhCaoHocTap: z.number().describe('Mức cảnh cáo học tập'),
     mucCanhCaoHocDuong: z.number().describe('Mức cảnh cáo học đường'),
     xepLoaiRenLuyenKy: z.string().describe('Xếp loại rèn luyện'),
+
     userProfile: z.any().describe('Thông tin người dùng'),
 })
 export const StudentInfoCheck = z.object({
@@ -168,6 +169,7 @@ export const StudentInfoCheck = z.object({
     mucCanhCaoHocTap: z.number().describe('Mức cảnh cáo học tập'),
     mucCanhCaoHocDuong: z.number().describe('Mức cảnh cáo học đường'),
     xepLoaiRenLuyenKy: z.string().describe('Xếp loại rèn luyện'),
+    lyDoXepLoai: z.string().describe('Lý do xếp loại'),
     userProfile: z.any().describe('Thông tin người dùng'),
 })
 export const StudentResult = z.object({
@@ -184,7 +186,12 @@ export const StudentResult = z.object({
     academicAction: z
         .array(ListAcademicAction)
         .describe('Danh sách hành động học vụ của sinh viên'),
-    hasAcademicWarning: z.boolean().describe('Có cảnh báo học vụ hay không'),
+    hasAcademicWarning: z.boolean().describe('Có cảnh cáo học tập'),
+    academicWarningRule: z.array(z.any()).describe('Danh sách cảnh cáo học tập của sinh viên'),
+    decreaseAcademicWarning: z.boolean().describe('Giảm cảnh cáo học tập'),
+    highestScholarship: z.any().describe('Học bổng cao nhất của sinh viên'),
+    scholarshipRecived: z.array(z.any()).describe('Thông tin học bổng đã nhận'),
+    reason: z.string().describe('Lý do'),
 })
 export const CourseStudentResult = z.object({
     courseId: z.string().describe('ID khóa học'),
