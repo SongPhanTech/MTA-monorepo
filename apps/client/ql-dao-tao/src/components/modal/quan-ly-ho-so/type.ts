@@ -2,6 +2,8 @@ import type {
     $Enums,
     AcademicActionType,
     ApplicationStatus,
+    CriteriaField,
+    CriteriaOperator,
     CurriculumVersion,
     DecisionStatus,
     DM_CapBac,
@@ -18,9 +20,11 @@ import type {
     ExamType,
     FixedClass,
     Gender,
+    GraduationSessionStatus,
     Lecturer,
     LecturerType,
     PriorityObject,
+    SemesterType,
     Staff,
     StaffPosition,
     StaffType,
@@ -97,7 +101,7 @@ export type FilterProps = {
     numberOfReview?: 'asc' | 'desc'
     numberOfExam?: 'asc' | 'desc'
     examType?: ExamType[]
-    fixedClass?: string[]
+    fixedClass?: string[] | string
     trainingCourse?: string[]
     actionTaken?: AcademicActionType[]
     status?: DecisionStatus[]
@@ -141,6 +145,24 @@ export type FilterProps = {
     managementOrganizationId?: string
     floor?: 'asc' | 'desc'
     roomNumber?: 'asc' | 'desc'
+    trainingObjectId?: string | null
+    fixedClassId?: string | null
+    schoolYearId?: string | null | undefined
+    semesterType?: SemesterType[]
+    severityLevel?: 'asc' | 'desc'
+    sessionDate?: Date[]
+    applicationStart?: Date[]
+    applicationEnd?: Date[]
+    statusGraduationSession?: GraduationSessionStatus[]
+    field?: CriteriaField[]
+    operator?: CriteriaOperator[]
+    semesterId?: string | null
+    subjectName?: string
+    scoreDeadline?: Date[]
+    examScoreDeadline?: Date[]
+    startDate?: Date[]
+    examDate?: Date[]
+    endDate?: Date[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

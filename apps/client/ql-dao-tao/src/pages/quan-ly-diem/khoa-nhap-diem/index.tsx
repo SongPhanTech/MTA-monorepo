@@ -3,6 +3,7 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { HanNhapDiem } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType } from '@workspace/db'
@@ -12,20 +13,12 @@ import {
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-// const { Option } = Select;
-interface FilterProps {
-    searchText: string | null
-    semesterId: string | null //Học kỳ
-    trainingObjectTypeId: string | null
-}
 
 export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -42,9 +35,16 @@ export default function SubjectClassScore() {
     const latestSemester = useMemo(() => semesters?.[0]?.id || null, [semesters])
 
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        code: '',
+        name: '',
         semesterId: latestSemester,
-        trainingObjectTypeId: null,
+        trainingObjectId: null,
+        subjectName: '',
+        scoreDeadline: undefined,
+        examScoreDeadline: undefined,
+        startDate: undefined,
+        examDate: undefined,
+        endDate: undefined,
     })
 
     const { onOpen, onClose } = useDisclosure<string>({
@@ -63,33 +63,81 @@ export default function SubjectClassScore() {
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
+            ...(filters.code && filters.code !== ''
                 ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
                   }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
-            ...(filters.trainingObjectTypeId
+            ...(filters.trainingObjectId
                 ? {
                       subjectClassStudent: {
                           some: {
                               student: {
-                                  trainingObjectTypeId: filters.trainingObjectTypeId,
+                                  trainingObjectTypeId: filters.trainingObjectId,
                               },
                           },
+                      },
+                  }
+                : {}),
+            ...(filters.subjectName && filters.subjectName !== ''
+                ? {
+                      subject: {
+                          name: {
+                              contains: filters.subjectName,
+                              mode: 'insensitive',
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.scoreDeadline?.length === 2
+                ? {
+                      scoreDeadline: {
+                          gte: dayjs(filters.scoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.scoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examScoreDeadline?.length === 2
+                ? {
+                      examScoreDeadline: {
+                          gte: dayjs(filters.examScoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.examScoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.startDate?.length === 2
+                ? {
+                      startDate: {
+                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examDate?.length === 2
+                ? {
+                      examDate: {
+                          gte: dayjs(filters.examDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.examDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endDate?.length === 2
+                ? {
+                      endDate: {
+                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),
@@ -132,33 +180,81 @@ export default function SubjectClassScore() {
 
     const { data: count } = useCountSubjectClass({
         where: {
-            ...(filters.searchText && filters.searchText !== ''
+            ...(filters.code && filters.code !== ''
                 ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
                   }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
-            ...(filters.trainingObjectTypeId
+            ...(filters.trainingObjectId
                 ? {
                       subjectClassStudent: {
                           some: {
                               student: {
-                                  trainingObjectTypeId: filters.trainingObjectTypeId,
+                                  trainingObjectTypeId: filters.trainingObjectId,
                               },
                           },
+                      },
+                  }
+                : {}),
+            ...(filters.subjectName && filters.subjectName !== ''
+                ? {
+                      subject: {
+                          name: {
+                              contains: filters.subjectName,
+                              mode: 'insensitive',
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.scoreDeadline?.length === 2
+                ? {
+                      scoreDeadline: {
+                          gte: dayjs(filters.scoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.scoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examScoreDeadline?.length === 2
+                ? {
+                      examScoreDeadline: {
+                          gte: dayjs(filters.examScoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.examScoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.startDate?.length === 2
+                ? {
+                      startDate: {
+                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examDate?.length === 2
+                ? {
+                      examDate: {
+                          gte: dayjs(filters.examDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.examDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endDate?.length === 2
+                ? {
+                      endDate: {
+                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),
@@ -189,30 +285,10 @@ export default function SubjectClassScore() {
         <div>
             <Form form={form}>
                 <Row gutter={[16, 0]}>
-                    <Col span={24}>
+                    <Col span={24} className="pb-2">
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={12}>
                                 <Flex>
-                                    <Col span={8}>
-                                        <Form.Item name="searchText">
-                                            <Input
-                                                id="search"
-                                                onChange={(e) =>
-                                                    handleFilterChange('searchText', e.target.value)
-                                                }
-                                                placeholder="Nhập tên lớp..."
-                                                prefix={
-                                                    <Search
-                                                        size={15}
-                                                        style={{
-                                                            color: 'rgba(0, 0, 0, 0.25)',
-                                                        }}
-                                                    />
-                                                }
-                                                allowClear
-                                            />
-                                        </Form.Item>
-                                    </Col>
                                     <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
@@ -221,7 +297,6 @@ export default function SubjectClassScore() {
                                             labelAlign="left"
                                         >
                                             <TreeSelectSemester
-                                                style={{ height: 40 }}
                                                 defaultValue={latestSemester || ''}
                                                 value={filters.semesterId || ''}
                                                 onChange={(val) =>
@@ -246,9 +321,6 @@ export default function SubjectClassScore() {
                                                         label: i.name,
                                                     })
                                                 )}
-                                                style={{
-                                                    height: 40,
-                                                }}
                                                 onChange={(val) =>
                                                     handleFilterChange('trainingObjectTypeId', val)
                                                 }
@@ -288,6 +360,8 @@ export default function SubjectClassScore() {
                             rowKey="id"
                             id="training-category"
                             rowSelection={rowSelection}
+                            filters={filters}
+                            setFilters={setFilters}
                             columns={[
                                 {
                                     title: 'STT',
@@ -301,19 +375,23 @@ export default function SubjectClassScore() {
                                     title: 'Mã lớp',
                                     dataIndex: 'code',
                                     align: 'center',
-                                    width: 150,
+                                    width: 200,
                                     fixed: 'left',
+                                    type: 'input',
                                 },
                                 {
                                     title: 'Tên lớp',
                                     dataIndex: 'name',
                                     align: 'center',
                                     width: 200,
+                                    type: 'input',
                                 },
                                 {
                                     title: 'Môn học',
                                     width: 250,
+                                    dataIndex: 'subjectName',
                                     render: (text, record) => record?.subject?.name || text,
+                                    type: 'input',
                                 },
                                 {
                                     title: 'Số tín chỉ',
@@ -324,58 +402,18 @@ export default function SubjectClassScore() {
                                 {
                                     title: 'Hạn ĐQT',
                                     width: 120,
+                                    dataIndex: 'scoreDeadline',
                                     align: 'center',
-                                    sorter: (a: any, b: any) => {
-                                        const dateA = a.scoreDeadline
-                                            ? new Date(a.scoreDeadline).getTime()
-                                            : 0
-                                        const dateB = b.scoreDeadline
-                                            ? new Date(b.scoreDeadline).getTime()
-                                            : 0
-                                        return dateA - dateB
-                                    },
-                                    render: ({ scoreDeadline }) =>
-                                        scoreDeadline
-                                            ? dayjs(scoreDeadline).format('DD/MM/YYYY')
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record.scoreDeadline
+                                            ? dayjs(record.scoreDeadline).format('DD/MM/YYYY')
                                             : '',
                                 },
                                 {
                                     title: 'Số ngày',
                                     width: 100,
                                     align: 'center',
-                                    sorter: (a: any, b: any) => {
-                                        const today = dayjs()
-
-                                        // Hàm tính số ngày còn lại
-                                        const calculateDaysRemaining = (record: any) => {
-                                            const scoreDeadline = record?.scoreDeadline
-                                                ? dayjs(record?.scoreDeadline)
-                                                : null
-                                            const examDeadline = record?.examScoreDeadline
-                                                ? dayjs(record?.examScoreDeadline)
-                                                : null
-
-                                            // Nếu không có cả 2 hạn
-                                            if (!scoreDeadline && !examDeadline)
-                                                return Number.POSITIVE_INFINITY
-
-                                            // Nếu chưa qua hạn ĐQT
-                                            if (scoreDeadline && today.isBefore(scoreDeadline)) {
-                                                return scoreDeadline.diff(today, 'day')
-                                            }
-                                            // Nếu đã qua hạn ĐQT nhưng chưa qua hạn ĐT
-                                            if (examDeadline && today.isBefore(examDeadline)) {
-                                                return examDeadline.diff(today, 'day')
-                                            }
-                                            // Đã qua cả 2 hạn
-                                            return Number.NEGATIVE_INFINITY
-                                        }
-
-                                        const daysA = calculateDaysRemaining(a)
-                                        const daysB = calculateDaysRemaining(b)
-
-                                        return daysA - daysB
-                                    },
                                     render: (record) => {
                                         const today = dayjs()
                                         const scoreDeadline = dayjs(record?.scoreDeadline)
@@ -426,18 +464,10 @@ export default function SubjectClassScore() {
                                     title: 'Hạn ĐT',
                                     width: 120,
                                     align: 'center',
-                                    sorter: (a: any, b: any) => {
-                                        const dateA = a.examScoreDeadline
-                                            ? new Date(a.examScoreDeadline).getTime()
-                                            : 0
-                                        const dateB = b.examScoreDeadline
-                                            ? new Date(b.examScoreDeadline).getTime()
-                                            : 0
-                                        return dateA - dateB
-                                    },
-                                    render: ({ examScoreDeadline }) =>
-                                        examScoreDeadline
-                                            ? dayjs(examScoreDeadline).format('DD/MM/YYYY')
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record.examScoreDeadline
+                                            ? dayjs(record.examScoreDeadline).format('DD/MM/YYYY')
                                             : '',
                                 },
                                 {
@@ -488,49 +518,34 @@ export default function SubjectClassScore() {
                                     title: 'Ngày bắt đầu',
                                     width: 150,
                                     align: 'center',
-                                    sorter: (a: any, b: any) => {
-                                        const dateA = a.startDate
-                                            ? new Date(a.startDate).getTime()
-                                            : 0
-                                        const dateB = b.startDate
-                                            ? new Date(b.startDate).getTime()
-                                            : 0
-                                        return dateA - dateB
-                                    },
-                                    render: ({ startDate }) =>
-                                        startDate ? dayjs(startDate).format('DD/MM/YYYY') : '',
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record.startDate
+                                            ? dayjs(record.startDate).format('DD/MM/YYYY')
+                                            : '',
                                 },
                                 {
                                     title: 'Ngày thi',
                                     width: 150,
                                     align: 'center',
-                                    sorter: (a: any, b: any) => {
-                                        const dateA = a.examDate
-                                            ? new Date(a.examDate).getTime()
-                                            : 0
-                                        const dateB = b.examDate
-                                            ? new Date(b.examDate).getTime()
-                                            : 0
-                                        return dateA - dateB
-                                    },
-                                    render: ({ examDate }) =>
-                                        examDate ? dayjs(examDate).format('DD/MM/YYYY') : '',
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record.examDate
+                                            ? dayjs(record.examDate).format('DD/MM/YYYY')
+                                            : '',
                                 },
                                 {
                                     title: 'Ngày kết thúc',
                                     width: 150,
                                     align: 'center',
-                                    sorter: (a: any, b: any) => {
-                                        const dateA = a.endDate ? new Date(a.endDate).getTime() : 0
-                                        const dateB = b.endDate ? new Date(b.endDate).getTime() : 0
-                                        return dateA - dateB
-                                    },
-                                    render: ({ endDate }) =>
-                                        endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record.endDate
+                                            ? dayjs(record.endDate).format('DD/MM/YYYY')
+                                            : '',
                                 },
                                 {
                                     title: 'Bộ môn',
-                                    dataIndex: 'danhSachLop',
                                     width: 200,
                                     align: 'center',
                                     render: (text, record) => {
@@ -544,7 +559,6 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Khoa',
-                                    dataIndex: 'danhSachLop',
                                     width: 200,
                                     align: 'center',
                                     render: (text, record) => {
@@ -611,8 +625,6 @@ export default function SubjectClassScore() {
                                 total: count,
                                 onChange: setCurrentPage,
                                 onShowSizeChange: setNumberOfPages,
-                                showTotal: (total, range) =>
-                                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                             }}
                         />
                     </Col>

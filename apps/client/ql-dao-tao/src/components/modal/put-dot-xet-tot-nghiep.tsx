@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { GraduationSession } from '@workspace/db'
+import { type GraduationSession, GraduationSessionStatus } from '@workspace/db'
 import {
     useCreateGraduationSession,
     useFindUniqueGraduationSession,
@@ -50,6 +50,10 @@ const PutGraduationSession = () => {
                 applicationEnd: graduationSession.applicationEnd
                     ? dayjs(graduationSession.applicationEnd)
                     : undefined,
+            })
+        } else {
+            form.setFieldsValue({
+                status: GraduationSessionStatus.PLANNING,
             })
         }
     }, [graduationSession, form])
@@ -147,7 +151,7 @@ const PutGraduationSession = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="status" label="Trạng thái">
+                <FormItem form={form} name="status" label="Trạng thái" required>
                     <Select
                         placeholder="Chọn trạng thái"
                         options={graduationSessionStatusOptions?.map((item) => ({
@@ -155,6 +159,7 @@ const PutGraduationSession = () => {
                             value: item.value,
                         }))}
                         allowClear
+                        defaultValue={GraduationSessionStatus.PLANNING}
                     />
                 </FormItem>
             </Col>
