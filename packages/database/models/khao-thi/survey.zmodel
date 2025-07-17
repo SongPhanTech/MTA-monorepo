@@ -2,6 +2,7 @@ import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-nguoi-dung/profile'
 import '../ql-nguoi-dung/user'
+import '../ql-dao-tao/student'
 
 // đối tượng khảo sát (Sinh viên, giảng viên, cán bộ quản lý,...)
 model SurveyObjectType extends Base {
@@ -52,17 +53,17 @@ model SurveyQuestion extends Base {
   survey               Survey             @relation(fields: [surveyId], references: [id])
   surveyId             String
 
-  surveyAnswer         SurveyAnswer[]
+  surveyAnswer         SurveyChoice[]
   surveyResponses      SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")
 }
 
-// trả lời khảo sát
-model SurveyAnswer extends Base {
+/// Lựa chọn của câu hỏi khảo sát
+model SurveyChoice extends Base {
   answer           String?
 
-  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
+  surveyQuestion   SurveyQuestion   @relation(fields: [surveyQuestionId], references: [id])
   surveyQuestionId String
 
   surveyResponses  SurveyResponse[]  // Thêm relation mới
@@ -70,17 +71,17 @@ model SurveyAnswer extends Base {
   @@schema("khao-thi")
 }
 
-// Bảng lưu phiên khảo sát của từng học viên
+/// Bảng lưu phiên khảo sát của từng học viên
 model SurveySession extends Base {
-  survey      Survey    @relation(fields: [surveyId], references: [id])
+  survey      Survey           @relation(fields: [surveyId], references: [id])
   surveyId    String
-  
-  student     Student   @relation(fields: [studentId], references: [id])
-  studentId   String
 
-  startedAt   DateTime  @default(now())
+  student     Student?         @relation(fields: [studentId], references: [id])
+  studentId   String?
+
+  startedAt   DateTime         @default(now())
   completedAt DateTime?
-  isCompleted Boolean   @default(false)
+  isCompleted Boolean          @default(false)
 
   responses   SurveyResponse[]
 
@@ -88,18 +89,18 @@ model SurveySession extends Base {
   @@schema("khao-thi")
 }
 
-// Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi
+/// Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi
 model SurveyResponse extends Base {
   surveySession    SurveySession  @relation(fields: [surveySessionId], references: [id])
   surveySessionId  String
-  
+
   surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
   surveyQuestionId String
 
   // Câu trả lời của học viên
   answerText       String?        // Câu trả lời dạng text
-  selectedAnswer   SurveyAnswer?  @relation(fields: [selectedAnswerId], references: [id])
-  selectedAnswerId String?        // ID của đáp án được chọn (cho câu hỏi trắc nghiệm)
+  surveyChoice     SurveyChoice?  @relation(fields: [surveyChoiceId], references: [id])
+  surveyChoiceId   String?
 
   answeredAt       DateTime       @default(now())
 

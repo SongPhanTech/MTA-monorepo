@@ -1,9 +1,12 @@
 import '../base'
+import '../ql-danh-muc/notification'
 import '../ql-nguoi-dung/user'
 import '../ql-danh-muc/categories'
 import '../ql-danh-muc/core-categories'
-import '../ql-danh-muc/common'
 import '../ql-nguoi-dung/profile'
+import '../ql-danh-muc/common'
+import '../khao-thi/survey'
+import '../khao-thi/exam'
 import 'training-score'
 import 'categories'
 import 'plan-training'
@@ -11,6 +14,9 @@ import 'scholarship'
 import 'warning'
 import 'training-action'
 import 'ranking'
+import '../khao-thi/exam'
+import 'thesis'
+import 'research'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
@@ -81,12 +87,11 @@ model Student extends Base {
   graduationApplications   StudentGraduationApplication[]
   graduationDecision       GraduationDecision?
   surveySessions           SurveySession[]   // Thêm relation với khảo sát
-  notifications     Notification[]     // Thông báo cá nhân
-  notificationReads NotificationRead[] // Lịch sử đọc thông báo
-  studentExams    StudentExam[]
-  researchRegistrations StudentResearchRegistration[] // Đăng ký đề tài nghiên cứu
-  thesisRegistrations   StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
-  
+  notifications            Notification[]     // Thông báo cá nhân
+  researchRegistrations    StudentResearchRegistration[] // Đăng ký đề tài nghiên cứu
+  thesisRegistrations      StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
+  examSession              ExamSession[]
+
   @@schema("ql-dao-tao")
 }
 

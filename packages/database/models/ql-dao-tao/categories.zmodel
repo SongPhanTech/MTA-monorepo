@@ -6,6 +6,7 @@ import '../ql-nguoi-dung/profile'
 import '../ql-danh-muc/core-categories'
 import 'training-score'
 import 'ranking'
+import '../khao-thi/exam'
 
 enum TrainingObjectTypes {
   MILITARY // Học viên quân sự
@@ -89,19 +90,20 @@ model Building extends Base {
 model Room extends Base {
   name           String
 
-  trainingRoom   Boolean        @default(true)
-  computerRoom   Boolean        @default(false)
-  laboratoryRoom Boolean        @default(false)
-  examRoom       Boolean        @default(false)
+  trainingRoom   Boolean         @default(true)
+  computerRoom   Boolean         @default(false)
+  laboratoryRoom Boolean         @default(false)
+  examRoom       Boolean         @default(false)
 
   capacity       Int
   examCapacity   Int?
 
-  building       Building?      @relation(fields: [buildingId], references: [id])
+  building       Building?       @relation(fields: [buildingId], references: [id])
   buildingId     String?
 
   subjectClasses SubjectClass[]
   classSchedules ClassSchedule[]
+  examSession    ExamSession[]
 
   @@unique([buildingId, name])
   @@schema("ql-dao-tao")

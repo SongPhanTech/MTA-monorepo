@@ -3,32 +3,32 @@ import '../tro-ly-ao/chat-bot'
 import 'feedback'
 import 'profile'
 import '../khao-thi/survey'
-import '../ql-dao-tao/notification'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/research'
-import '../ql-dao-tao/exam'
+import '../khao-thi/exam'
+import '../ql-danh-muc/core-categories'
 
-model User extends Base {
-  email            String         @unique @email
-  userName         String         @unique
-  name             String
-  systemRole       UserRole       @default(USER)
-  ssoId            String?        @unique
-  phone            String?        @unique
-  role             String?
-  groups           Group[]
+/// !DEPRECATED: user DM_NhanVien instead
+// model User extends Base {
+//   email            String         @unique @email
+//   userName         String         @unique
+//   name             String
+//   systemRole       UserRole       @default(USER)
+//   ssoId            String?        @unique
+//   phone            String?        @unique
+//   role             String?
+//   groups           Group[]
 
-  feedback         Feedback[]
-  userProfile      UserProfile[]
-  conversation     Conversation[]
-  documentUploaded Document[]     @relation("DocumentUploaded")
-  documentApproved Document[]     @relation("DocumentApproved")
-  fAQUploaded      FAQ[]          @relation("FAQUploaded")
-  fAQApproved      FAQ[]          @relation("FAQApproved")
-  createdNotifications Notification[] // Thông báo đã tạo
+//   feedback         Feedback[]
+//   userProfile      UserProfile[]
+//   conversation     Conversation[]
+//   documentUploaded Document[]     @relation("DocumentUploaded")
+//   documentApproved Document[]     @relation("DocumentApproved")
+//   fAQUploaded      FAQ[]          @relation("FAQUploaded")
+//   fAQApproved      FAQ[]          @relation("FAQApproved")
 
-  @@schema("ql-nguoi-dung")
-}
+//   @@schema("ql-nguoi-dung")
+// }
 
 enum UserRole {
   ADMIN
@@ -38,7 +38,7 @@ enum UserRole {
 
 model Group extends Base {
   name  String
-  users User[]
+  users DM_NhanVien[]
   roles Role[]
   @@schema("ql-nguoi-dung")
 }

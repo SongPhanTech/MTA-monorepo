@@ -12,10 +12,10 @@ import 'scholarship'
 import 'warning'
 import 'training-action'
 import 'ranking'
-import '../ql-dao-tao/notification'
+import '../ql-danh-muc/notification'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/research'
-import '../ql-dao-tao/exam'
+import '../khao-thi/exam'
 
 /// Điểm môn học SV - lớp môn học
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
@@ -202,7 +202,7 @@ model TrainingCourse extends Base {
   scholarships           Scholarship[]
   academicWarningRule    AcademicWarningRule[]
   academicActionConfig   AcademicActionConfig[]
-  notifications  Notification[]  // Thông báo cho khoá
+  notifications          Notification[]  // Thông báo cho khoá
 
   @@schema("ql-dao-tao")
 }
@@ -238,7 +238,7 @@ model FixedClass extends Base {
   curriculumVersionId      String?
 
   subjectClasses           SubjectClass[]
-  notifications  Notification[]  // Thông báo cho lớp
+  notifications            Notification[]  // Thông báo cho lớp
 
   @@unique([name, trainingCourseId, curriculumVersionId])
 
@@ -404,9 +404,8 @@ model SubjectVersion extends Base {
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
-  questionBanks   QuestionBank[]
-  examSessions    ExamSession[]
-
+  exams                    Exam[]
+  questionBanks            QuestionBank[]
 
   @@schema("ql-dao-tao")
 }
@@ -509,43 +508,34 @@ model SubjectClass extends Base {
   @@schema("ql-dao-tao")
 }
 
-// Bảng thời khóa biểu chi tiết
+// Bảng thời khoá biểu chi tiết
 model ClassSchedule extends Base {
   // Liên kết với lớp môn học
-  subjectClass     SubjectClass     @relation(fields: [subjectClassId], references: [id])
-  subjectClassId   String
+  subjectClass        SubjectClass   @relation(fields: [subjectClassId], references: [id])
+  subjectClassId      String
 
-  // Thông tin thời gian
-  
-  startPeriod      Int              // Tiết bắt đầu (1, 2, 3, ...)
-  endPeriod        Int              // Tiết kết thúc
-  startTime        String           // Giờ bắt đầu (HH:mm)
-  endTime          String           // Giờ kết thúc (HH:mm)
+  periodType          PeriodType     @default(THEORY)
+  startPeriod         Int              // Tiết bắt đầu (1, 2, 3, ...)
+  endPeriod           Int              // Tiết kết thúc
 
   // Thông tin ngày học cụ thể
-  classDate        DateTime         // Ngày học cụ thể (YYYY-MM-DD)
+  classDate           DateTime       @db.Date
 
   // Phòng học và giảng viên
-  room             Room?            @relation(fields: [roomId], references: [id])
-  roomId           String?
-  lecturer         Lecturer?        @relation(fields: [lecturerId], references: [id])
-  lecturerId       String?
+  room                Room?          @relation(fields: [roomId], references: [id])
+  roomId              String?
+  lecturer            Lecturer?      @relation(fields: [lecturerId], references: [id])
+  lecturerId          String?
 
-  // Loại tiết học
-  periodType       PeriodType       @default(THEORY)
-
-  // Ghi chú
-  notes            String?          // Ghi chú đặc biệt
+  notes               String?         
 
   // Thông tin học bù
-  isReplacement    Boolean          @default(false)  // Có phải tiết học bù
-  originalSchedule ClassSchedule?   @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
-  originalScheduleId String?        @unique()
+  isReplacement       Boolean        @default(false)  // Có phải tiết học bù
+  originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
+  originalScheduleId  String?        @unique()
   replacementSchedule ClassSchedule? @relation("ReplacementSchedule")
 
-  // Trạng thái
-  isCancelled      Boolean          @default(false)  // Bị hủy
-  cancelReason     String?          // Lý do hủy
+  cancelReason        String?          // Lý do hủy
 
   @@unique([subjectClassId, classDate, startPeriod])
   @@schema("ql-dao-tao")
