@@ -825,7 +825,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                // studentId: { endsWith: 'K6_5' },
+                // studentId: { endsWith: 'K6_2' },
                 student: {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
                     fixedClassId: {
@@ -961,8 +961,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     xepLoaiRenLuyenTichLuy: '',
                     // Add missing required properties for StudentInfoCheck
                     namDangHoc: item.studyYear || 0,
-                    mucCanhCaoHocTap: item.academicWarningLevel || 0,
-                    mucCanhCaoHocDuong: item.disciplinaryWarningLevel || 0,
+                    mucCanhCaoHocTap: item.student.academicWarningLevel || 0,
+                    mucCanhCaoHocDuong: item.student.disciplinaryWarningLevel || 0,
                     xepLoaiRenLuyenKy: '', // or item.xepLoaiRenLuyenKy if available
                     lyDoXepLoai: '', // tính sau
                 }
@@ -993,7 +993,7 @@ const checkEligible = <T extends number | string>(
                 return studentValue > criteriaValue
             case CriteriaOperator.GTE:
                 return studentValue >= criteriaValue
-            case CriteriaOperator.LT:
+            case CriteriaOperator.LE:
                 return studentValue < criteriaValue
             case CriteriaOperator.LTE:
                 return studentValue <= criteriaValue
@@ -1038,7 +1038,7 @@ export function evaluateCondition(
         case 'LTE': // Nhỏ hơn hoặc bằng (<=)
             return value <= condition.value
 
-        case 'LT': // Nhỏ hơn (<)
+        case 'LE': // Nhỏ hơn (<)
             return value < condition.value
 
         case 'EQ': // Bằng (==)
@@ -1477,10 +1477,31 @@ const getScholarship = async (
     return scholarships
 }
 
+const CheckDecreaseAcademicWarning = (
+    student: StudentInfoCheck,
+    hasAcademicWarning: boolean
+): boolean => {
+    console.log('Checking if academic warning can be decreased for student:', student.id)
+    console.log(
+        'Academic warning level:',
+        student.mucCanhCaoHocTap,
+        'Has academic warning:',
+        hasAcademicWarning
+    )
+    const academicWarningLevel = student.mucCanhCaoHocTap || 0
+    if (academicWarningLevel <= 0) {
+        return false // Không có cảnh cáo học tập
+    }
+    if (academicWarningLevel >= 1 && !hasAcademicWarning) {
+        return true // Giảm cảnh cáo học tập nếu không có cảnh cáo học tập
+    }
+    return false
+}
+
 const getStudentResult = async (
     student: StudentInfoCheck,
     semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction',
+    type: 'scholarship' | 'academicWarning' | 'academicAction' | 'decreaseAcademicWarning',
     semesterScholarship: Scholarship[] = [],
     scholarshipCriteriaList: ScholarshipCriteria[] = [],
     warningCriteriaList: AcademicWarningRule[] = [],
@@ -1572,6 +1593,10 @@ const getStudentResult = async (
                   )
                 : []
 
+        const checkDecreaseAcademicWarning =
+            type === 'decreaseAcademicWarning'
+                ? CheckDecreaseAcademicWarning(student, checkAcademicWarningResult.length > 0)
+                : false
         const filteredResult = (({ student, ...rest }) => rest)(studentSemesterResult)
         return StudentResult.parse({
             id: studentSemesterResult.studentId,
@@ -1599,6 +1624,7 @@ const getStudentResult = async (
                     ?.trainingMajor?.trainingField?.id || '',
             highestScholarship: scholarshipInfo.length > 0 ? scholarshipInfo[0] : null,
             scholarshipRecived: scholarshipRecive,
+            decreaseAcademicWarning: checkDecreaseAcademicWarning,
             reason: student.lyDoXepLoai || '',
         })
     } catch (error) {
@@ -1638,7 +1664,7 @@ export const sortStudentResultInfo = (
 export const resultCourseStudentResult = async (
     students: StudentInfoCheck[],
     semesterId: string,
-    type: 'scholarship' | 'academicWarning' | 'academicAction',
+    type: 'scholarship' | 'academicWarning' | 'academicAction' | 'decreaseAcademicWarning',
     academicActionType?: 'REPEAT_YEAR' | 'SUSPENSION' | 'EXPULSION'
 ): Promise<CourseStudentResult[]> => {
     const courseMap: Record<string, CourseStudentResult> = {}
@@ -1745,7 +1771,8 @@ export const resultCourseStudentResult = async (
             const skip =
                 (type === 'scholarship' && !studentResult.hasScholarship) ||
                 (type === 'academicWarning' && !studentResult.hasAcademicWarning) ||
-                (type === 'academicAction' && !studentResult.hasAcademicAction)
+                (type === 'academicAction' && !studentResult.hasAcademicAction) ||
+                (type === 'decreaseAcademicWarning' && !studentResult.decreaseAcademicWarning)
             if (skip) {
                 console.log(`Skipping student ${student.id} in course ${courseId} for type ${type}`)
                 return
