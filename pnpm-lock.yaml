@@ -568,6 +568,9 @@ importers:
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
         version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/plots':
+        specifier: 'catalog:'
+        version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@casl/ability':
         specifier: 'catalog:'
         version: 6.7.3
@@ -616,12 +619,21 @@ importers:
       easy-peasy:
         specifier: 'catalog:'
         version: 6.0.5(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
+      file-saver:
+        specifier: 'catalog:'
+        version: 2.0.5
       lodash:
         specifier: 'catalog:'
         version: 4.17.21
       lucide-react:
         specifier: 'catalog:'
         version: 0.468.0(react@18.3.1)
+      minio:
+        specifier: 'catalog:'
+        version: 8.0.5
       next:
         specifier: 'catalog:'
         version: 15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -637,6 +649,12 @@ importers:
       react-day-picker:
         specifier: 'catalog:'
         version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
+      react-dnd:
+        specifier: 'catalog:'
+        version: 16.0.1(@types/node@20.19.6)(@types/react@18.3.23)(react@18.3.1)
+      react-dnd-html5-backend:
+        specifier: 'catalog:'
+        version: 16.0.1
       react-dom:
         specifier: 'catalog:'
         version: 18.3.1(react@18.3.1)
@@ -652,12 +670,21 @@ importers:
       react-images-viewer:
         specifier: 'catalog:'
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-to-print:
+        specifier: 'catalog:'
+        version: 3.1.1(react@18.3.1)
       react-top-loading-bar:
         specifier: 'catalog:'
         version: 2.3.1(react@18.3.1)
+      read-excel-file:
+        specifier: 'catalog:'
+        version: 5.8.8
       tailwind-merge:
         specifier: 'catalog:'
         version: 2.6.0
+      xlsx:
+        specifier: 'catalog:'
+        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
       zod:
         specifier: 'catalog:'
         version: 3.25.76
@@ -665,12 +692,15 @@ importers:
       '@biomejs/biome':
         specifier: 'catalog:'
         version: 2.1.1
-      '@types/axios':
+      '@types/file-saver':
         specifier: 'catalog:'
-        version: 0.14.4
+        version: 2.0.7
       '@types/lodash':
         specifier: 'catalog:'
         version: 4.17.20
+      '@types/minio':
+        specifier: 'catalog:'
+        version: 7.1.1
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.6
@@ -686,12 +716,18 @@ importers:
       '@types/react-image-fallback':
         specifier: 'catalog:'
         version: 8.0.6
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
       autoprefixer:
         specifier: 'catalog:'
         version: 10.4.21(postcss@8.5.6)
       cross-env:
         specifier: 'catalog:'
         version: 7.0.3
+      crypto-browserify:
+        specifier: 'catalog:'
+        version: 3.12.1
       dotenv:
         specifier: 'catalog:'
         version: 16.6.1
@@ -704,12 +740,18 @@ importers:
       patch-package:
         specifier: 'catalog:'
         version: 8.0.0
+      path-browserify:
+        specifier: 'catalog:'
+        version: 1.0.1
       postcss:
         specifier: 'catalog:'
         version: 8.5.6
       prettier-plugin-tailwindcss:
         specifier: 'catalog:'
         version: 0.6.13(prettier@3.6.2)
+      stream-browserify:
+        specifier: 'catalog:'
+        version: 3.0.0
       tailwindcss:
         specifier: 'catalog:'
         version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
@@ -11044,7 +11086,7 @@ snapshots:
     dependencies:
       cipher-base: 1.0.6
       inherits: 2.0.4
-      ripemd160: 2.0.1
+      ripemd160: 2.0.2
       sha.js: 2.4.12
 
   create-hash@1.2.0:

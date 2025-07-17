@@ -4,17 +4,16 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { Page } from './page'
-import type { PageSize } from './pageSize'
-import type { Search } from './search'
-import type { SemesterId } from './semesterId'
-import type { SubjectClassId } from './subjectClassId'
+import type { SemesterId } from './semesterId';
+import type { SubjectClassId } from './subjectClassId';
+import type { Search } from './search';
+import type { Page } from './page';
+import type { PageSize } from './pageSize';
 
 export type FixedClassBySubjectClassSemesterParams = {
-    semesterId: SemesterId
-    subjectClassId: SubjectClassId
-    search?: Search
-    page: Page
-    pageSize: PageSize
-}
+semesterId: SemesterId;
+subjectClassId: SubjectClassId;
+search?: Search;
+page: Page;
+pageSize: PageSize;
+};

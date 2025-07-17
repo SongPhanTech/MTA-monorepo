@@ -28,7 +28,7 @@ const useMenuList = () => {
     const permissions = useMemo(
         () =>
             groups
-                .flatMap((group) => group.roles.flatMap((role) => role.permissions))
+                .flatMap((group) => group.roles.flatMap((role: any) => role?.permissions))
                 .filter((permission) => permission.permissionType === $Enums.PermissionType.READ),
         [groups]
     )
@@ -47,7 +47,7 @@ const useMenuList = () => {
         setIsUpdateAbility(true)
     }, [permissions])
 
-    const menus = NAVIGATION.QL_DAO_TAO.menus.filter((menu) => {
+    const menus = NAVIGATION.KHAO_THI.menus.filter((menu) => {
         // if (menu.children) {
         //     return menu.children.some((child) => permissionNames.includes(child.id))
         // }

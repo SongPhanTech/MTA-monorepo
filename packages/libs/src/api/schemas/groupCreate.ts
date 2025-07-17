@@ -6,18 +6,18 @@
  */
 
 export interface GroupCreate {
-    id?: string
-    /** @nullable */
-    code?: string | null
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt?: string | null
-    name: string
-    userIds: string[]
-    roleIds: string[]
+  id?: string;
+  /** @nullable */
+  code?: string | null;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt?: string | null;
+  name: string;
+  userIds: string[];
+  roleIds: string[];
 }

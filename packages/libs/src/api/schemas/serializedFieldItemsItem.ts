@@ -6,7 +6,7 @@
  */
 
 export type SerializedFieldItemsItem = {
-    path: string
-    type: string
-    description?: string
-}
+  path: string;
+  type: string;
+  description?: string;
+};

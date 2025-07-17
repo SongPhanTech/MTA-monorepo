@@ -6,5 +6,5 @@
  */
 
 export type UploadExcelCreateUserProfile400 = {
-    message: string
-}
+  message: string;
+};

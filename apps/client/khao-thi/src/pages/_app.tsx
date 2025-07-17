@@ -25,8 +25,7 @@ import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
-
-// import '@assets/css/custom.css'
+import '@assets/css/custom.css'
 
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)

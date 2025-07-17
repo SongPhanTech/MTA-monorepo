@@ -4,13 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
-import type { RemoveStudentIds } from './removeStudentIds'
-import type { StudentIds } from './studentIds'
-import type { SubjectClassId } from './subjectClassId'
+import type { StudentIds } from './studentIds';
+import type { RemoveStudentIds } from './removeStudentIds';
+import type { SubjectClassId } from './subjectClassId';
 
 export type EnrollStudentOnSubjectClassBody = {
-    addStudentIds: StudentIds
-    removeStudentIds: RemoveStudentIds
-    subjectClassId: SubjectClassId
-}
+  addStudentIds: StudentIds;
+  removeStudentIds: RemoveStudentIds;
+  subjectClassId: SubjectClassId;
+};
