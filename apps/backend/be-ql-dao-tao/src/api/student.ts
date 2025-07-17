@@ -116,9 +116,16 @@ const dsKetQuaHocKySinhVienJson = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của kì học',
             }),
-            type: z.enum(['scholarship', 'academicWarning', 'academicAction']).openapi('type', {
-                description: 'Loại danh sách',
-            }),
+            type: z
+                .enum([
+                    'scholarship',
+                    'academicWarning',
+                    'academicAction',
+                    'decreaseAcademicWarning',
+                ])
+                .openapi('type', {
+                    description: 'Loại danh sách',
+                }),
             academicActionType: z
                 .enum(['REPEAT_YEAR', 'SUSPENSION', 'EXPULSION'])
                 .optional()
