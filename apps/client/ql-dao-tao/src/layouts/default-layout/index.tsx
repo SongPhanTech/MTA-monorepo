@@ -144,13 +144,12 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <HeaderApp />
-                    
-                    <Header className="flex items-center bg-white shadow-sm rounded-lg m-2">
+                    <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
                         <div>{<Breadcrumb items={listBreadcrumb} />}</div>
+                        <HeaderApp />
 
                         {/* <div className="flex gap-2 items-center">
                             <SearchSystem />

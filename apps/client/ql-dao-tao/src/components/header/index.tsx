@@ -9,37 +9,19 @@ declare global {
 }
 
 const HeaderApp: React.FC = () => {
-
     useEffect(() => {
-            try {
-                setTimeout(() => {
-                                  const menuButton =
-                    window.MTAMenuComponents.default.createMenuButton('menuContainer')
-                menuButton.init()
-
-                const userButton = window.MTAMenuComponents.default.createUserButton(
-                    'userContainer'
-                )
-                userButton.init()
-                const notificationButton =
-                    window.MTAMenuComponents.default.createNotificationButton(
-                        'notificationContainer'
-                    )
-                notificationButton.init()
-                },1000)
-  
-            } catch (error) {
-                console.log(error)
-            }
+        try {
+            window.MTAMenuComponents.default.createPlugin('pluginContainer', {
+                menuAppId: 'menuContainer',
+                notificationAppId: 'notificationContainer',
+                userAppId: 'userContainer',
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }, [])
 
-    return (
-        <div>
-            <div id="menuContainer" />
-            <div id="notificationContainer" />
-            <div id="userContainer" />
-        </div>
-    )
+    return <div id="pluginContainer" />
 }
 
 export default HeaderApp
