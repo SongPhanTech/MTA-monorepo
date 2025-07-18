@@ -14,9 +14,10 @@
             "!**/open-api/**/*",
             "!**/*.json",
             "!**/lib/api/**/*",
-            "!**/packages/libs/src/api/schemas/**/*",
+            "!**/packages/libs/src/api/**/*",
             "!**/.env",
-            "!**/.env.*"
+            "!**/.env.*",
+            "!**/public"
         ],
         "experimentalScannerIgnores": ["lodash", "dist", ".next", "out"]
     },

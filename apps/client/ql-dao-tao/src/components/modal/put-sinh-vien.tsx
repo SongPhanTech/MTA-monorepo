@@ -397,7 +397,7 @@ const PutStudentModal = () => {
                 academicRankTypeId: studentData.userProfile?.academicRankTypeId ?? undefined,
                 positionCPVId: studentData.userProfile?.positionCPVId,
             })
-            setUserSelected(studentData.userProfile)
+            // setUserSelected(studentData.userProfile)
 
             if (studentData.userProfile?.avatar) {
                 setAvatar([

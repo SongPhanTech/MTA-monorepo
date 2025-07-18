@@ -16,4 +16,5 @@ export const Type = {
   scholarship: 'scholarship',
   academicWarning: 'academicWarning',
   academicAction: 'academicAction',
+  decreaseAcademicWarning: 'decreaseAcademicWarning',
 } as const;
