@@ -94,10 +94,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                     : {}),
                 ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
                     ? {
-                          managementOrganizationId: {
-                              contains: filters.managementOrganizationId,
-                              mode: 'insensitive',
-                          },
+                          managementOrganizationId: filters.managementOrganizationId,
                       }
                     : {}),
             },
@@ -194,18 +191,12 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                     : {}),
                 ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                     ? {
-                          trainingCourseId: {
-                              contains: filters.trainingCourseId,
-                              mode: 'insensitive',
-                          },
+                          trainingCourseId: filters.trainingCourseId,
                       }
                     : {}),
                 ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
                     ? {
-                          managementOrganizationId: {
-                              contains: filters.managementOrganizationId,
-                              mode: 'insensitive',
-                          },
+                          managementOrganizationId: filters.managementOrganizationId,
                       }
                     : {}),
             },
