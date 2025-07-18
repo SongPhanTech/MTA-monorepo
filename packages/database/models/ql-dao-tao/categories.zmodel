@@ -115,7 +115,7 @@ model TrainingField extends Base {
   englishName         String
   publishDate         DateTime
   organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
-  organizationId      String
+  organizationId      String                              @db.Uuid
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
 
@@ -145,7 +145,7 @@ model TrainingMajor extends Base {
   /// Số tín chỉ tự chọn
   numberCreditsElective Int                                 @default(0)
   organization          DM_DonVi                            @relation(fields: [organizationId], references: [Id])
-  organizationId        String
+  organizationId        String                              @db.Uuid
   trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId       String
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]

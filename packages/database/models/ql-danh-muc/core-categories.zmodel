@@ -12,8 +12,8 @@ import '../tro-ly-ao/chat-bot'
 import 'notification'
 
 abstract model CoreBase {
-  Id             String    @id() @default(cuid())
-  sMa            String?   @unique
+  Id             String    @id() @default(uuid()) @db.Uuid
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -89,13 +89,13 @@ model DM_DonVi extends CoreBase {
   sTen             String            @unique
   sCode            String?           @unique
   sTenVietTat      String?
-  sParentId        String?
   sTruongDonVi     String?
   sChucNangNhiemVu String?
   sDiaChi          String?
   DM_NhanVien      DM_NhanVien[]
 
   parent           DM_DonVi?         @relation("DM_DonVi_Parent", fields: [sParentId], references: [Id], map: "FK_DM_DonVi_iParentId_DM_DonVi_Id")
+  sParentId        String?           @db.Uuid
   children         DM_DonVi[]        @relation("DM_DonVi_Parent")
 
   lecturers        Lecturer[]
@@ -158,19 +158,6 @@ model DM_TrinhDoTinHoc extends CoreBase {
   @@schema("mta")
 }
 
-model DM_UngDung extends CoreBase {
-  sTen             String   @unique
-  sMoTa            String?
-  sLogoUrl         String?
-  sUrl             String?
-  bTatCaNguoiDung  Boolean? @default(false)
-  bTatCaNhanVien   Boolean? @default(false)
-  sClientId        String?
-  sClientSecret    String?
-  sRedirectDefault String?
-  @@schema("mta")
-}
-
 model DM_NhanVien extends CoreBase {
   sTen                String?
   sHoVaDem            String?
@@ -182,10 +169,10 @@ model DM_NhanVien extends CoreBase {
   sEmail              String?
   bLaNguoiDung        Boolean?
   DM_DonVi            DM_DonVi?            @relation(fields: [sDM_DonViId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_DonVi")
-  sDM_DonViId         String?
+  sDM_DonViId         String?              @db.Uuid
   DM_ViTriCongViec    DM_ViTriCongViec?    @relation(fields: [sDM_ViTriCongViecId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_ViTriCongViec")
-  sDM_ViTriCongViecId String?
-  sQuanlyTrucTiepId   String?
+  sDM_ViTriCongViecId String?              @db.Uuid
+  sQuanlyTrucTiepId   String?              @db.Uuid
   sAvatarId           String?
 
   group               Group?               @relation(fields: [groupId], references: [id])
@@ -249,11 +236,11 @@ model DM_QuocGia extends CoreBase {
 model DM_Tinh extends CoreBase {
   sTen                        String             @unique
   quocGia                     DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
-  sDM_QuocGiaId               String?
+  sDM_QuocGiaId               String?            @db.Uuid
   dM_KhuVuc_DiaLy             DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
-  iDM_KhuVucDiaLy_Id          String?
+  iDM_KhuVucDiaLy_Id          String?            @db.Uuid
   dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?
+  iDM_DonViHanhChinhId        String?            @db.Uuid
 
   huyen                       DM_QuanHuyen[]
   xaPhuong                    DM_XaPhuong[]
@@ -269,10 +256,10 @@ model DM_Tinh extends CoreBase {
 model DM_QuanHuyen extends CoreBase {
   sTen                        String
   dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
-  sDM_TinhId                  String?
+  sDM_TinhId                  String?            @db.Uuid
   sDM_Tinh_Ma                 String?
   dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?
+  iDM_DonViHanhChinhId        String?            @db.Uuid
 
   xaPhuong                    DM_XaPhuong[]
   userProfileHometown         UserProfile[]      @relation("DistrictHometown")
@@ -287,14 +274,13 @@ model DM_QuanHuyen extends CoreBase {
 
 model DM_XaPhuong extends CoreBase {
   sTen                        String
-  sDM_TinhId                  String?
-  quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
-  sDM_QuanHuyenId             String?
   sDM_QuanHuyen_Ma            String?
-  dM_Tinh                     DM_Tinh?           @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId                   String?
+  dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
+  sDM_TinhId                  String?            @db.Uuid
+  quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
+  sDM_QuanHuyenId             String?            @db.Uuid
   dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?
+  iDM_DonViHanhChinhId        String?            @db.Uuid
 
   userProfileHometown         UserProfile[]      @relation("CommuneHometown")
   userProfilePlaceOfBirth     UserProfile[]      @relation("CommunePlaceOfBirth")
@@ -315,8 +301,8 @@ model DM_VaiTro extends CoreBase {
 
 model DM_ViTriCongViec extends CoreBase {
   sTen            String        @unique
-  sDM_ChucDanhId  String?
-  sDM_NhomViTriId String
+  sDM_ChucDanhId  String?       @db.Uuid
+  sDM_NhomViTriId String        @db.Uuid
   DM_NhanVien     DM_NhanVien[]
   DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
   @@schema("mta")
@@ -324,9 +310,9 @@ model DM_ViTriCongViec extends CoreBase {
 
 model NguoiDungTrongNhom extends CoreBase {
   DM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhomNguoiDung")
-  sDM_NhomNguoiDungId String?
+  sDM_NhomNguoiDungId String?           @db.Uuid
   DM_NhanVien         DM_NhanVien?      @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhanVien")
-  sDM_NhanVienId      String?
+  sDM_NhanVienId      String?           @db.Uuid
 
   @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
   @@schema("mta")
@@ -334,7 +320,7 @@ model NguoiDungTrongNhom extends CoreBase {
 
 model NhatKyHoatDong extends CoreBase {
   DM_NhanVien    DM_NhanVien? @relation(fields: [sNhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
-  sNhanVienId    String?
+  sNhanVienId    String?      @db.Uuid
   dLogTime       DateTime?
   iState         Int?
   sObjectName    String?
@@ -356,8 +342,8 @@ model Policy extends CoreBase {
 model Quyen_VaiTro extends CoreBase {
   sTen           String       @unique
   sTenChucNang   String?      @default("N'Tên quyền'")
-  sDM_NhanVienId String?
-  sDM_VaiTroId   String?
+  sDM_NhanVienId String?      @db.Uuid
+  sDM_VaiTroId   String?      @db.Uuid
   fValue         Int?
   DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
   DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
@@ -368,7 +354,7 @@ model TaiKhoan extends CoreBase {
   sTen           String
   sUserName      String?      @unique
   sAvatar        String?
-  sDM_NhanVienId String?      @unique // TODO: maybe remove unique constraint
+  sDM_NhanVienId String?      @unique @db.Uuid // TODO: maybe remove unique constraint
 
   nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
   @@schema("mta")
@@ -376,8 +362,8 @@ model TaiKhoan extends CoreBase {
 
 model VaiTroTrongNhom extends CoreBase {
   dM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id])
-  sDM_NhomNguoiDungId String?
+  sDM_NhomNguoiDungId String?           @db.Uuid
   DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
-  sDM_VaiTroId        String?
+  sDM_VaiTroId        String?           @db.Uuid
   @@schema("mta")
 }

@@ -57,7 +57,7 @@ model Student extends Base {
   trainingFormId           String?
 
   registrationArea         DM_KhuVuc_DiaLy?               @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
-  registrationAreaId       String?
+  registrationAreaId       String?                        @db.Uuid
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý
   // phiên bản -> CTĐT -> chuyên ngành

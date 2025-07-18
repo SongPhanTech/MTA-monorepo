@@ -14,7 +14,7 @@ model Staff extends Base {
   userProfileId   String        @unique
 
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String
+  organizationId  String        @db.Uuid
 
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
   staffTypeId     String
@@ -35,7 +35,7 @@ model StaffHistory extends Base {
   userProfileId   String        @unique
 
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String
+  organizationId  String        @db.Uuid
 
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
   staffTypeId     String

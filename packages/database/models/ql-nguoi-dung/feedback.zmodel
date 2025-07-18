@@ -7,7 +7,7 @@ model Feedback extends Base {
   status       FeedbackStatus
   satisfaction Satisfaction
   user         DM_NhanVien    @relation(fields: [userId], references: [Id])
-  userId       String
+  userId       String         @db.Uuid
 
   @@allow('create', auth() != null)
   // @@allow('update', auth().role == 'ADMIN' || auth() == user && status == Pending)

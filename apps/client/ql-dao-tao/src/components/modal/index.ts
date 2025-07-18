@@ -50,6 +50,7 @@ import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
 import PutScholarshipAward from './put-scholarship-award'
 import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
+import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutBuildingModal from './put-toa-nha'
 import PutTrainingFormModal from './put-training-form'
@@ -125,4 +126,5 @@ export {
     ModalGraduationCriteria,
     PutRankingCondition,
     PutRankDowngradeCondition,
+    PutAcademicWarning,
 }
