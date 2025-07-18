@@ -1,13 +1,32 @@
-import { Button, Col, Flex, Row } from 'antd'
+import { Button, Col, Flex, Modal, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
+import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutAcademicWarning } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useFindManyTrainingCourse } from '@workspace/db/hooks'
+import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
+import useSpinner from '@hooks/spinner'
+import { buildOrgTree } from '@lib/utils'
+import { emptyObjectIf } from '@workspace/constant'
+import type { AcademicWarning, FixedClass, Prisma, Student, TrainingCourse } from '@workspace/db'
+import {
+    useDeleteAcademicWarning,
+    useFindManyAcademicWarning,
+    useFindManyDM_DonVi,
+    useFindManyFixedClass,
+    useFindManyTrainingCourse,
+    useUpdateManyAcademicWarning,
+    useUpsertAcademicWarning,
+} from '@workspace/db/hooks'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
@@ -17,7 +36,19 @@ interface XetCanhCaoHocTapProps {
 
 const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     const [currentPage, setCurrentPage] = useState(1)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        fixedClass: undefined,
+        trainingCourse: undefined,
+        organization: undefined,
+    })
+    const { showSpinner, hideSpinner } = useSpinner()
+    const { mutateAsync: upsertAcademicWarning } = useUpsertAcademicWarning()
+    const { mutateAsync: updateManyAcademicWarning } = useUpdateManyAcademicWarning()
+    const { mutateAsync: deleteAcademicWarning } = useDeleteAcademicWarning()
     const { data: students = [] } = useExportStudentResultSemesterJson<any[] | { data: any[] }>(
         { semesterId: semesterId || '', type: 'academicWarning' },
         { query: { enabled: !!semesterId } },
@@ -31,65 +62,217 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         return []
     }, [students])
 
-    const { data: academicWarningData } = useFindManyTrainingCourse(
-        {
-            where: {
-                fixedClass: {
-                    some: {
-                        students: {
-                            some: {
-                                academicWarning: {
-                                    some: {
-                                        semesterId,
-                                    },
-                                },
-                            },
+    const { data: academicWarningData, refetch } = useFindManyAcademicWarning({
+        where: {
+            semesterId: semesterId,
+            student: {
+                userProfile: {
+                    ...(filters.code && filters.code !== ''
+                        ? {
+                              code: { contains: filters.code, mode: 'insensitive' },
+                          }
+                        : {}),
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              fullname: { contains: filters.name, mode: 'insensitive' },
+                          }
+                        : {}),
+                },
+                ...emptyObjectIf(
+                    {
+                        fixedClassId: {
+                            in: Array.isArray(filters.fixedClass)
+                                ? filters.fixedClass
+                                : filters.fixedClass
+                                  ? [filters.fixedClass]
+                                  : undefined,
                         },
                     },
+                    !!filters.fixedClass
+                ),
+                fixedClass: {
+                    ...(filters.trainingCourse
+                        ? {
+                              trainingCourseId: { in: filters.trainingCourse },
+                          }
+                        : {}),
+                    ...(filters.organization
+                        ? {
+                              managementOrganizationId: { in: filters.organization },
+                          }
+                        : {}),
                 },
             },
-            select: {
-                fixedClass: {
-                    include: {
-                        students: {
-                            include: {
-                                userProfile: true,
-                                academicWarning: {
-                                    include: {
-                                        rules: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    where: {
-                        students: {
-                            some: {
-                                academicWarning: {
-                                    some: {
-                                        semesterId,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
         },
-        { enabled: !!semesterId }
-    )
+        include: {
+            student: {
+                include: {
+                    fixedClass: {
+                        include: {
+                            trainingCourse: true,
+                            managementOrganization: true,
+                        },
+                    },
+                    userProfile: true,
+                },
+            },
+        },
+    })
+
+    const filteredStudentData = useMemo(() => {
+        if (!academicWarningData) return studentData
+
+        const studentIdsWithWarnings = new Set(
+            academicWarningData.map((warning: AcademicWarning) => warning.studentId)
+        )
+
+        return studentData.map((record) => ({
+            ...record,
+            students: (record.students || []).filter(
+                (student: Student) => !studentIdsWithWarnings.has(student.id)
+            ),
+        }))
+    }, [studentData, academicWarningData])
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: {
+            name: 'asc',
+        },
+    })
+
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        orderBy: {
+            name: 'asc',
+        },
+    })
+
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+
+    const treeData = buildOrgTree(manageOrgData)
+
+    const { onOpen } = useDisclosure<{
+        id: string
+        semesterId: string
+    }>({
+        tag: PutAcademicWarning.name,
+    })
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (newSelectedRowKeys: React.Key[]) => {
+            setSelectedRowKeys(newSelectedRowKeys as string[])
+        },
+        getCheckboxProps: (record: any) => {
+            const isHeaderRow = Array.isArray(record.students)
+            return {
+                style: isHeaderRow ? { display: 'none' } : {},
+            }
+        },
+    }
+
+    const handleApproved = async () => {
+        if (selectedRowKeys.length === 0) {
+            message.warning('Vui lòng chọn ít nhất một sinh viên để duyệt')
+            return
+        }
+
+        const selectedRecords =
+            studentData?.flatMap((record) =>
+                (record.students || []).filter((student: Student) =>
+                    selectedRowKeys.includes(student.id)
+                )
+            ) || []
+
+        Modal.confirm({
+            title: 'Xác nhận duyệt',
+            content: `Bạn có chắc chắn muốn chấp nhận ${selectedRowKeys.length} sinh viên đã chọn?`,
+            okText: 'Xác nhận',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                try {
+                    showSpinner()
+                    const createAcademicWarningPromises = selectedRecords
+                        .filter(
+                            (record) =>
+                                record.studentSemesterResult.id &&
+                                record.studentSemesterResult.semesterId
+                        )
+                        .map((record) => {
+                            const data: Prisma.AcademicWarningCreateInput = {
+                                student: {
+                                    connect: { id: record.studentSemesterResult.student.id },
+                                },
+                                semester: {
+                                    connect: { id: record.studentSemesterResult.semesterId },
+                                },
+                                level:
+                                    Number.parseInt(
+                                        record.studentSemesterResult.academicWarningLevel
+                                    ) + Number.parseInt(record.academicWarningSeverity),
+                                increasedFrom: record.studentSemesterResult.academicWarningLevel,
+                            }
+
+                            return upsertAcademicWarning({
+                                where: {
+                                    studentId: record.studentSemesterResult.student.id,
+                                    semesterId: record.studentSemesterResult.semesterId,
+                                    level:
+                                        Number.parseInt(
+                                            record.studentSemesterResult.academicWarningLevel
+                                        ) + Number.parseInt(record.academicWarningSeverity),
+                                    code: '',
+                                    increasedFrom:
+                                        record.studentSemesterResult.academicWarningLevel,
+                                },
+                                create: data,
+                                update: data,
+                            })
+                        })
+
+                    await Promise.all(createAcademicWarningPromises)
+                    await updateManyAcademicWarning({
+                        where: { id: { in: selectedRowKeys } },
+                        data: {},
+                    })
+                    await refetch()
+                    setSelectedRowKeys([])
+                    message.success('Duyệt thành công')
+                } catch (error) {
+                    message.error('Đã xảy ra lỗi khi duyệt')
+                    console.error(error)
+                } finally {
+                    hideSpinner()
+                }
+            },
+        })
+    }
+
+    async function handleDeleteAcademicWarning(id: string) {
+        try {
+            showSpinner()
+            await deleteAcademicWarning({
+                where: {
+                    id,
+                },
+            })
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
 
     return (
         <div>
             <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
-                <Row gutter={[16, 0]}>
+                <Row gutter={[16, 0]} className="flex gap-4">
                     <Col span={24}>
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
                                 <Flex justify="end">
-                                    <Button type="primary">
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpen({ id: '', semesterId })}
+                                    >
                                         <BookPlus />
                                         Thêm học viên
                                     </Button>
@@ -98,13 +281,101 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                         </Row>
                     </Col>
                     <Col span={24}>
-                        {/* <TableCollapse
-                            rowKey="id"
+                        <Table
+                            rowKey="key"
                             data={academicWarningData}
-                            headerTitleKey="name"
-                            childrenFieldName="fixedClass"
-                            defaultExpandAll
+                            filters={filters}
+                            setFilters={setFilters}
                             columns={[
+                                {
+                                    title: 'STT',
+                                    width: 50,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                },
+                                {
+                                    title: 'Mã sinh viên',
+                                    dataIndex: 'code',
+                                    width: 120,
+                                    fixed: 'left',
+                                    type: 'input',
+                                    render: (__, record) => record?.student?.code,
+                                },
+                                {
+                                    title: 'Tên sinh viên',
+                                    dataIndex: 'name',
+                                    width: 200,
+                                    fixed: 'left',
+                                    type: 'input',
+                                    render: (__, record) => record?.student?.userProfile?.fullname,
+                                },
+                                {
+                                    title: 'Lớp niên chế',
+                                    dataIndex: 'fixedClass',
+                                    width: 160,
+                                    align: 'center',
+                                    type: 'select',
+                                    options: fixedClassData.map((i: FixedClass) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    })),
+                                    render: (__, record) => record?.student?.fixedClass?.name,
+                                },
+                                {
+                                    title: 'Khóa',
+                                    dataIndex: 'trainingCourse',
+                                    width: 100,
+                                    align: 'center',
+                                    type: 'select',
+                                    options: trainingCourseData.map((i: TrainingCourse) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    })),
+                                    render: (__, record) =>
+                                        record?.student?.fixedClass?.trainingCourse?.name,
+                                },
+                                {
+                                    title: 'Đơn vị quản lý',
+                                    dataIndex: 'organization',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'tree_select',
+                                    options: treeData,
+                                    render: (__, record) =>
+                                        record?.student?.fixedClass?.managementOrganization?.sTen,
+                                },
+                                {
+                                    title: 'Mức CCHĐ',
+                                    dataIndex: 'level',
+                                    width: 100,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    render: (value: number) => (
+                                        <Tag color={getWarningLevelColor(value)}>{value}</Tag>
+                                    ),
+                                },
+                                {
+                                    title: 'Nâng Mức CCHĐ từ',
+                                    dataIndex: 'increasedFrom',
+                                    width: 150,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    render: (value: number) => (
+                                        <Tag color={getWarningLevelColor(value)}>{value}</Tag>
+                                    ),
+                                },
+                                {
+                                    title: 'Ghi chú lý do',
+                                    dataIndex: 'reason',
+                                    width: 150,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    render: (value) => (
+                                        <span className="line-clamp-2">{value}</span>
+                                    ),
+                                },
                                 {
                                     title: 'Thao tác',
                                     width: 100,
@@ -113,14 +384,20 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                     render: (_, record) => {
                                         return record?.id ? (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon className="text-sm text-blue-700 cursor-pointer" />
+                                                <EditIcon
+                                                    onClick={() =>
+                                                        onOpen({
+                                                            id: record?.id,
+                                                            semesterId,
+                                                        })
+                                                    }
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
                                                 <DeleteIcon
-                                                // popConfirm={{
-                                                //     onConfirm: () =>
-                                                //         handleDeleteStudentAcademicDecision(
-                                                //             record?.id
-                                                //         ),
-                                                // }}
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDeleteAcademicWarning(record?.id),
+                                                    }}
                                                 />
                                             </Row>
                                         ) : null
@@ -130,11 +407,12 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                total: studentData.length,
                                 onChange: setCurrentPage,
                                 onShowSizeChange: setNumberOfPages,
+                                showTotal: (total, range) =>
+                                    `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                             }}
-                        /> */}
+                        />
                     </Col>
                 </Row>
             </div>
@@ -144,7 +422,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
                                 <Flex justify="end">
-                                    <Button type="primary">
+                                    <Button type="primary" onClick={handleApproved}>
                                         <BookPlus />
                                         Duyệt
                                     </Button>
@@ -154,11 +432,12 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                     </Col>
                     <Col span={24}>
                         <TableCollapse
-                            rowKey="key"
+                            rowKey="id"
                             headerTitleKey="courseName"
                             childrenFieldName="students"
                             defaultExpandAll
-                            data={studentData}
+                            data={filteredStudentData}
+                            rowSelection={rowSelection}
                             columns={[
                                 {
                                     title: 'Mã sinh viên',
