@@ -13,7 +13,7 @@ import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { FixedClass, Prisma, TrainingCourse } from '@workspace/db'
+import type { AcademicWarning, FixedClass, Prisma, Student, TrainingCourse } from '@workspace/db'
 import {
     useDeleteAcademicWarning,
     useFindManyAcademicWarning,
@@ -69,25 +69,23 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                 userProfile: {
                     ...(filters.code && filters.code !== ''
                         ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive',
-                              },
+                              code: { contains: filters.code, mode: 'insensitive' },
                           }
                         : {}),
                     ...(filters.name && filters.name !== ''
                         ? {
-                              fullname: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
+                              fullname: { contains: filters.name, mode: 'insensitive' },
                           }
                         : {}),
                 },
                 ...emptyObjectIf(
                     {
                         fixedClassId: {
-                            in: filters.fixedClass,
+                            in: Array.isArray(filters.fixedClass)
+                                ? filters.fixedClass
+                                : filters.fixedClass
+                                  ? [filters.fixedClass]
+                                  : undefined,
                         },
                     },
                     !!filters.fixedClass
@@ -125,13 +123,13 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         if (!academicWarningData) return studentData
 
         const studentIdsWithWarnings = new Set(
-            academicWarningData.map((warning: any) => warning.studentId)
+            academicWarningData.map((warning: AcademicWarning) => warning.studentId)
         )
 
-        return studentData.map((record: any) => ({
+        return studentData.map((record) => ({
             ...record,
             students: (record.students || []).filter(
-                (student: any) => !studentIdsWithWarnings.has(student.id)
+                (student: Student) => !studentIdsWithWarnings.has(student.id)
             ),
         }))
     }, [studentData, academicWarningData])
@@ -164,6 +162,12 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         onChange: (newSelectedRowKeys: React.Key[]) => {
             setSelectedRowKeys(newSelectedRowKeys as string[])
         },
+        getCheckboxProps: (record: any) => {
+            const isHeaderRow = Array.isArray(record.students)
+            return {
+                style: isHeaderRow ? { display: 'none' } : {},
+            }
+        },
     }
 
     const handleApproved = async () => {
@@ -174,7 +178,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
 
         const selectedRecords =
             studentData?.flatMap((record) =>
-                (record.students || []).filter((student: any) =>
+                (record.students || []).filter((student: Student) =>
                     selectedRowKeys.includes(student.id)
                 )
             ) || []
