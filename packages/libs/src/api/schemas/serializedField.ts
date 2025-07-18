@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SerializedFieldItemsItem } from './serializedFieldItemsItem'
+import type { SerializedFieldItemsItem } from './serializedFieldItemsItem';
 
 export interface SerializedField {
-    path: string
-    type: string
-    description?: string
-    items?: SerializedFieldItemsItem[]
+  path: string;
+  type: string;
+  description?: string;
+  items?: SerializedFieldItemsItem[];
 }

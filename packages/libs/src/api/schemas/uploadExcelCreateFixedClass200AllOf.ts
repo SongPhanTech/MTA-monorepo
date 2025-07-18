@@ -4,8 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PaginationQuery } from './paginationQuery'
-import type { UploadExcelCreateFixedClass200AllOfAllOf } from './uploadExcelCreateFixedClass200AllOfAllOf'
+import type { PaginationQuery } from './paginationQuery';
+import type { UploadExcelCreateFixedClass200AllOfAllOf } from './uploadExcelCreateFixedClass200AllOfAllOf';
 
-export type UploadExcelCreateFixedClass200AllOf = PaginationQuery &
-    UploadExcelCreateFixedClass200AllOfAllOf
+export type UploadExcelCreateFixedClass200AllOf = PaginationQuery & UploadExcelCreateFixedClass200AllOfAllOf;

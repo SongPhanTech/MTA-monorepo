@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SerializedField } from './serializedField'
+import type { SerializedField } from './serializedField';
 
-export type SerializedFields = SerializedField[]
+export type SerializedFields = SerializedField[];

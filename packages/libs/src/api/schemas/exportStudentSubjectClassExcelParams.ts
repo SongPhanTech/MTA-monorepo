@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SubjectClassId } from './subjectClassId'
+import type { SubjectClassId } from './subjectClassId';
 
 export type ExportStudentSubjectClassExcelParams = {
-    subjectClassId: SubjectClassId
-}
+subjectClassId: SubjectClassId;
+};

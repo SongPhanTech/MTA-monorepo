@@ -349,11 +349,8 @@ export default function UserProfilePageDs() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col span={12} />
-
-                        {/* Hàng chứa các button */}
-                        <Col xs={12}>
+                    <Row gutter={[8, 8]} align="top" justify="end">
+                        <Col xs={24}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 <Button
                                     type="primary"

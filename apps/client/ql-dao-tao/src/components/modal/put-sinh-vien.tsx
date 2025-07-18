@@ -50,7 +50,7 @@ type PreFillFormFields = {
 
 const PutStudentModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
-    const [userSelected, setUserSelected] = useState<UserProfileType | undefined>(undefined)
+    const [userSelected, setUserSelected] = useState<UserProfileType>()
     const [avatar, setAvatar] = useState<UploadFile[]>([])
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: PutStudentModal.name,
@@ -59,7 +59,7 @@ const PutStudentModal = () => {
     const { id, preSelectedValues } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: fixedClassData = [], refetch: refetchFix } = useFindManyFixedClass({
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
         include: {
             trainingCourse: true,
             curriculumVersion: true,
@@ -301,7 +301,7 @@ const PutStudentModal = () => {
             {
                 key: '3',
                 label: 'Trình độ, chứng chỉ',
-                children: <TrinhDoChungChiTab />,
+                children: <TrinhDoChungChiTab userSelected={userSelected} />,
                 forceRender: true,
             },
             {
@@ -329,7 +329,7 @@ const PutStudentModal = () => {
                 forceRender: true,
             },
         ]
-    }, [id, avatar])
+    }, [id, avatar, userSelected])
 
     useEffect(() => {
         if (studentData) {
@@ -397,6 +397,7 @@ const PutStudentModal = () => {
                 academicRankTypeId: studentData.userProfile?.academicRankTypeId ?? undefined,
                 positionCPVId: studentData.userProfile?.positionCPVId,
             })
+            // setUserSelected(studentData.userProfile)
 
             if (studentData.userProfile?.avatar) {
                 setAvatar([
@@ -452,7 +453,7 @@ const PutStudentModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa học viên' : 'Thêm học viên'}
+            title={id ? 'Chỉnh sửa sinh viên' : 'Thêm sinh viên'}
             className="w-[90vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)

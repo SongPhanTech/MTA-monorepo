@@ -64,9 +64,7 @@ const PutAcademicWarningRule = () => {
             if (input?.academicWarningRuleId) {
                 await updateAcademicWarningRule({
                     data: data,
-                    where: {
-                        id: input?.academicWarningRuleId,
-                    },
+                    where: { id: input?.academicWarningRuleId },
                 })
                 message.success('Cập nhật thành công')
             } else {

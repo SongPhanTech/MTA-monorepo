@@ -5,6 +5,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { Button, Collapse, Flex, Row } from 'antd'
 import { useState } from 'react'
+import type { UserProfileType } from '../type'
 
 const { Panel } = Collapse
 
@@ -77,7 +78,7 @@ const dataQuocPhongAnNinh = [
     },
 ]
 
-export default function TrinhDoChungChiTab() {
+export default function TrinhDoChungChiTab({ userSelected }: { userSelected?: UserProfileType }) {
     const [openCollapse, setOpenCollapse] = useState<string | null>(null)
     const [currentPage, _setCurrentPage] = useState(1)
     const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -121,6 +122,7 @@ export default function TrinhDoChungChiTab() {
                         </Button>
                     </Flex>
                     <Table
+                        rowKey={'id'}
                         columns={[
                             {
                                 title: 'STT',
@@ -203,6 +205,7 @@ export default function TrinhDoChungChiTab() {
                         </Button>
                     </Flex>
                     <Table
+                        rowKey={'id'}
                         columns={[
                             {
                                 title: 'STT',

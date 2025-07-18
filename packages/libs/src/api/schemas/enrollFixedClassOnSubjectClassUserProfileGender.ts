@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type EnrollFixedClassOnSubjectClassUserProfileGender =
-    (typeof EnrollFixedClassOnSubjectClassUserProfileGender)[keyof typeof EnrollFixedClassOnSubjectClassUserProfileGender]
+export type EnrollFixedClassOnSubjectClassUserProfileGender = typeof EnrollFixedClassOnSubjectClassUserProfileGender[keyof typeof EnrollFixedClassOnSubjectClassUserProfileGender];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EnrollFixedClassOnSubjectClassUserProfileGender = {
-    Male: 'Male',
-    Female: 'Female',
-} as const
+  Male: 'Male',
+  Female: 'Female',
+} as const;

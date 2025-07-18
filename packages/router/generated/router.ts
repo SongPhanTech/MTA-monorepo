@@ -1,5 +1,6 @@
 export default {
   "KHAO_THI": {
+    "HOME": "/home",
     "INDEX": "/",
     "THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/cau-hoi-khao-sat",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",

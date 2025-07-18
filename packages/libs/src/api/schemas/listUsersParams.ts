@@ -6,9 +6,9 @@
  */
 
 export type ListUsersParams = {
-    page?: number
-    limit?: number | null
-    email?: string
-    userName?: string
-    name?: string
-}
+page?: number;
+limit?: number | null;
+email?: string;
+userName?: string;
+name?: string;
+};

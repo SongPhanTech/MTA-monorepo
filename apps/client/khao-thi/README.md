@@ -29,7 +29,7 @@ Sao chép tệp `.env.example` sang `.env.local` và sửa đổi cấu hình tr
 pnpm dev --filter=client
 ```
 
-- local app: <http://localhost:3001>
+- local app: <http://localhost:3000>
 
 ### Sử dụng Docker (Nếu có)
 

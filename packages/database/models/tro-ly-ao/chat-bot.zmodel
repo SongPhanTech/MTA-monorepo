@@ -1,5 +1,5 @@
 import '../base'
-import '../ql-nguoi-dung/user'
+import '../ql-danh-muc/core-categories'
 
 model ChatBotConfig extends Base {
   name  String @unique
@@ -16,9 +16,9 @@ model Document extends Base {
   fileSize     Int?
   type         DocumentType
   reason       String?
-  uploadedBy   User           @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedBy   DM_NhanVien    @relation("DocumentUploaded", fields: [uploadedById], references: [Id])
   uploadedById String         @default(auth().Id)
-  approvedBy   User?          @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedBy   DM_NhanVien?   @relation("DocumentApproved", fields: [approvedById], references: [Id])
   approvedById String?
   @@schema("tro-ly-ao")
 }
@@ -29,9 +29,9 @@ model FAQ  extends Base {
   status       DocumentStatus @default(PENDING)
   type         DocumentType
   reason       String?
-  uploadedBy   User           @relation("FAQUploaded", fields: [uploadedById], references: [id])
+  uploadedBy   DM_NhanVien    @relation("FAQUploaded", fields: [uploadedById], references: [Id])
   uploadedById String         @default(auth().Id)
-  approvedBy   User?          @relation("FAQApproved", fields: [approvedById], references: [id])
+  approvedBy   DM_NhanVien?   @relation("FAQApproved", fields: [approvedById], references: [Id])
   approvedById String?
   @@schema("tro-ly-ao")
 }
@@ -45,7 +45,7 @@ model Prompt extends Base {
 }
 
 model Conversation extends Base {
-  user    User?         @relation(fields: [userId], references: [id])
+  user    DM_NhanVien?  @relation(fields: [userId], references: [Id])
   userId  String?
   type    DocumentType?
   message Message[]

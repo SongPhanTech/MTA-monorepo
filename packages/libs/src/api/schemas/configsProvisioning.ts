@@ -4,8 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ConfigsProvisioningInbound } from './configsProvisioningInbound'
+import type { ConfigsProvisioningInbound } from './configsProvisioningInbound';
 
 export type ConfigsProvisioning = {
-    inbound?: ConfigsProvisioningInbound
-}
+  inbound?: ConfigsProvisioningInbound;
+};

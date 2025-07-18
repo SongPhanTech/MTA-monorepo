@@ -13,7 +13,7 @@ const useMenuList = () => {
         where: {
             users: {
                 every: {
-                    ssoId: data?.sub,
+                    Id: data?.sub,
                 },
             },
         },

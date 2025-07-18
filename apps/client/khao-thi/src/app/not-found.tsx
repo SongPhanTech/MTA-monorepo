@@ -18,7 +18,7 @@ export default function NotFoundPage() {
                 </span>
             </section>
             <div className="link-container">
-                <a href={ROUTER_PATH.KHAO_THI.INDEX} className="more-link">
+                <a href={ROUTER_PATH.KHAO_THI.HOME} className="more-link">
                     Quay về trang chủ
                 </a>
             </div>

@@ -6,24 +6,24 @@
  */
 
 export type UploadExcelCreateFixedClass200AllOfAllOfDataItem = {
-    id: string
-    /** @nullable */
-    code?: string | null
-    active?: boolean
-    /** @nullable */
-    description?: string | null
-    /** @nullable */
-    deletedAt?: string | null
-    /** @nullable */
-    createdAt?: string | null
-    /** @nullable */
-    updatedAt: string | null
-    name: string
-    /** @nullable */
-    summary?: string | null
-    /** @nullable */
-    startYear?: number | null
-    /** @nullable */
-    graduated?: boolean | null
-    initSize?: number
-}
+  id: string;
+  /** @nullable */
+  code?: string | null;
+  active?: boolean;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  deletedAt?: string | null;
+  /** @nullable */
+  createdAt?: string | null;
+  /** @nullable */
+  updatedAt: string | null;
+  name: string;
+  /** @nullable */
+  summary?: string | null;
+  /** @nullable */
+  startYear?: number | null;
+  /** @nullable */
+  graduated?: boolean | null;
+  initSize?: number;
+};

@@ -39,6 +39,14 @@ help:
 	@echo "  all-$(PKG_AI)"
 	@echo "  all-clients"
 
+ql-dao-tao:
+	cd apps/client/ql-dao-tao && \
+	pnpm build && \
+	zip -r out.zip out && \
+	scp out.zip swan1:app && \
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf lms-cdn && unzip out.zip && mv out lms-cdn && docker compose -f app-docker-compose.yml up -d"
+
+
 # Pattern rule: build-<name>
 build-%:
 	@echo "Target: $*"

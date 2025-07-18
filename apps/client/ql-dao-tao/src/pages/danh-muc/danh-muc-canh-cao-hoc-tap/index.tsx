@@ -4,6 +4,7 @@ import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutAcademicWarningRule } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
@@ -23,23 +24,20 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
-interface FilterProps {
-    searchText: string | undefined
-    trainingObjectTypeId: string | null
-    trainingCourseId: string | null
-}
-
 export default function AcademicWarningRule() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
-        trainingObjectTypeId: null,
+        code: '',
+        trainingObjectId: null,
         trainingCourseId: null,
+        field: undefined,
+        operator: undefined,
     })
 
-    const { getCriteriaFieldLabel } = useCriteriaFieldOptions()
-    const { getCriteriaOperatorLabel } = useCriteriaOperatorOptions()
+    const { options: criteriaFieldOptions, getCriteriaFieldLabel } = useCriteriaFieldOptions()
+    const { options: criteriaOperatorOptions, getCriteriaOperatorLabel } =
+        useCriteriaOperatorOptions()
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
@@ -48,11 +46,46 @@ export default function AcademicWarningRule() {
                       id: filters.trainingCourseId,
                   }
                 : {}),
-            ...(filters.trainingObjectTypeId && filters.trainingObjectTypeId !== ''
+            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
                 ? {
-                      trainingObjectTypeId: filters.trainingObjectTypeId,
+                      trainingObjectTypeId: filters.trainingObjectId,
                   }
                 : {}),
+            academicWarningRule: {
+                some: {
+                    ...(filters.code && filters.code !== ''
+                        ? {
+                              code: { contains: filters.code, mode: 'insensitive' },
+                          }
+                        : {}),
+                    ...(filters.field
+                        ? Array.isArray(filters.field)
+                            ? {
+                                  field: {
+                                      in: filters.field,
+                                  },
+                              }
+                            : {
+                                  field: {
+                                      equals: filters.field,
+                                  },
+                              }
+                        : {}),
+                    ...(filters.operator
+                        ? Array.isArray(filters.operator)
+                            ? {
+                                  operator: {
+                                      in: filters.operator,
+                                  },
+                              }
+                            : {
+                                  operator: {
+                                      equals: filters.operator,
+                                  },
+                              }
+                        : {}),
+                },
+            },
         },
         include: {
             academicWarningRule: true,
@@ -72,9 +105,9 @@ export default function AcademicWarningRule() {
                       id: filters.trainingCourseId,
                   }
                 : {}),
-            ...(filters.trainingObjectTypeId && filters.trainingObjectTypeId !== ''
+            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
                 ? {
-                      trainingObjectTypeId: filters.trainingObjectTypeId,
+                      trainingObjectId: filters.trainingObjectId,
                   }
                 : {}),
         },
@@ -170,9 +203,7 @@ export default function AcademicWarningRule() {
                                         }
                                     })}
                                     className="w-[300px]"
-                                    onChange={(val) =>
-                                        handleFilterChange('trainingObjectTypeId', val)
-                                    }
+                                    onChange={(val) => handleFilterChange('trainingObjectId', val)}
                                     allowClear
                                 />
                             </Col>
@@ -202,6 +233,8 @@ export default function AcademicWarningRule() {
                                 width: 200,
                                 align: 'center',
                                 fixed: 'left',
+                                type: 'select',
+                                options: criteriaFieldOptions,
                                 render: (value) => getCriteriaFieldLabel(value),
                             },
                             {
@@ -209,6 +242,8 @@ export default function AcademicWarningRule() {
                                 dataIndex: 'operator',
                                 align: 'center',
                                 width: 180,
+                                type: 'select',
+                                options: criteriaOperatorOptions,
                                 render: (value) => getCriteriaOperatorLabel(value),
                             },
                             {

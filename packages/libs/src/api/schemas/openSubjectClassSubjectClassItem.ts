@@ -6,7 +6,7 @@
  */
 
 export type OpenSubjectClassSubjectClassItem = {
-    subjectClassId: string
-    subjectClassName: string
-    subjectClassCode: string
-}
+  subjectClassId: string;
+  subjectClassName: string;
+  subjectClassCode: string;
+};

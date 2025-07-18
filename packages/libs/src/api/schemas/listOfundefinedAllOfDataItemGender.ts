@@ -8,12 +8,11 @@
 /**
  * @nullable
  */
-export type ListOfundefinedAllOfDataItemGender =
-    | (typeof ListOfundefinedAllOfDataItemGender)[keyof typeof ListOfundefinedAllOfDataItemGender]
-    | null
+export type ListOfundefinedAllOfDataItemGender = typeof ListOfundefinedAllOfDataItemGender[keyof typeof ListOfundefinedAllOfDataItemGender] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ListOfundefinedAllOfDataItemGender = {
-    Male: 'Male',
-    Female: 'Female',
-} as const
+  Male: 'Male',
+  Female: 'Female',
+} as const;
