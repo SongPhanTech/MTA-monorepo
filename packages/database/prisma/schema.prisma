@@ -466,6 +466,7 @@ model QuestionBank {
   subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
   questions        Question[]
+  exam             Exam[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
@@ -676,8 +677,8 @@ model Exam {
   updatedAt          DateTime            @updatedAt()
   title              String
   status             ExamStatus          @default(DRAFT)
-  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId   String
+  questionBank       QuestionBank        @relation(fields: [questionBankId], references: [id])
+  questionBankId     String
   startTime          DateTime
   endTime            DateTime
   duration           Int
@@ -706,8 +707,8 @@ model TestStructureRule {
   @@schema("khao-thi")
 }
 
-/// Bài thi / Đề thi
-model ExamSession {
+/// Ngân hàng đề thi
+model ExamBank {
   id          String                @id() @default(cuid())
   code        String?               @unique()
   active      Boolean               @default(true)
@@ -715,17 +716,34 @@ model ExamSession {
   deletedAt   DateTime?
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt()
-  startTime   DateTime              @default(now())
+  name        String
+  examSession ExamSession[]
+  questions   ExamSessionQuestion[]
+
+  @@schema("khao-thi")
+}
+
+/// Bài thi / Đề thi
+model ExamSession {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  startTime   DateTime  @default(now())
   endTime     DateTime?
   score       Float?
-  isGraded    Boolean               @default(false)
-  student     Student?              @relation(fields: [studentId], references: [id])
+  isGraded    Boolean   @default(false)
+  student     Student?  @relation(fields: [studentId], references: [id])
   studentId   String?
-  exam        Exam                  @relation(fields: [examId], references: [id])
+  exam        Exam      @relation(fields: [examId], references: [id])
   examId      String
-  room        Room?                 @relation(fields: [roomId], references: [id])
+  room        Room?     @relation(fields: [roomId], references: [id])
   roomId      String?
-  questions   ExamSessionQuestion[]
+  examBank    ExamBank? @relation(fields: [examBankId], references: [id])
+  examBankId  String?
   answers     Answer[]
 
   @@schema("khao-thi")
@@ -733,15 +751,15 @@ model ExamSession {
 
 /// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
 model ExamSessionQuestion {
-  id         String      @id() @default(cuid())
-  sessionId  String
-  session    ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  id         String   @id() @default(cuid())
+  examBankId String
+  examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
   questionId String
-  question   Question    @relation(fields: [questionId], references: [id])
-  order      Int
+  question   Question @relation(fields: [questionId], references: [id])
+  order      Int?
 
-  @@unique([sessionId, questionId])
-  @@unique([sessionId, order])
+  @@unique([examBankId, questionId])
+  @@unique([examBankId, order])
   @@schema("khao-thi")
 }
 
@@ -1119,7 +1137,6 @@ model SubjectVersion {
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
-  exams                    Exam[]
   questionBanks            QuestionBank[]
 
   @@schema("ql-dao-tao")
@@ -1873,7 +1890,7 @@ model Message {
 
 model DM_CapBac {
   Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?       @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1894,7 +1911,7 @@ model DM_CapBac {
 
 model DM_ChucDanh {
   Id               String             @id() @default(uuid()) @db.Uuid()
-  sMa              String?            @unique()
+  sMa              String?
   sGhiChu          String?
   iSTT             Int?               @default(0)
   bActive          Boolean?           @default(true)
@@ -1917,7 +1934,7 @@ model DM_ChucDanh {
 
 model DM_ChucVu {
   Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?       @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1938,7 +1955,7 @@ model DM_ChucVu {
 
 model DM_HocHam {
   Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?       @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1959,7 +1976,7 @@ model DM_HocHam {
 
 model DM_HocVi {
   Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?       @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1980,7 +1997,7 @@ model DM_HocVi {
 
 model DM_ChungChiTinHoc {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2000,7 +2017,7 @@ model DM_ChungChiTinHoc {
 
 model DM_DanToc {
   Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?       @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2023,7 +2040,7 @@ model DM_DanToc {
 
 model DM_DonVi {
   Id               String            @id() @default(uuid()) @db.Uuid()
-  sMa              String?           @unique()
+  sMa              String?
   sGhiChu          String?
   iSTT             Int?              @default(0)
   bActive          Boolean?          @default(true)
@@ -2066,7 +2083,7 @@ model DM_DonVi {
 
 model DM_DonViHanhChinh {
   Id             String         @id() @default(uuid()) @db.Uuid()
-  sMa            String?        @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?           @default(0)
   bActive        Boolean?       @default(true)
@@ -2090,7 +2107,7 @@ model DM_DonViHanhChinh {
 
 model DM_KhuVuc_DiaLy {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2113,7 +2130,7 @@ model DM_KhuVuc_DiaLy {
 
 model DM_NgoaiNgu {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2133,7 +2150,7 @@ model DM_NgoaiNgu {
 
 model DM_TonGiao {
   Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?       @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2154,7 +2171,7 @@ model DM_TonGiao {
 
 model DM_TrinhDoNgoaiNgu {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2175,7 +2192,7 @@ model DM_TrinhDoNgoaiNgu {
 
 model DM_TrinhDoTinHoc {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2195,7 +2212,7 @@ model DM_TrinhDoTinHoc {
 
 model DM_NhanVien {
   Id                  String               @id() @default(uuid()) @db.Uuid()
-  sMa                 String?              @unique()
+  sMa                 String?
   sGhiChu             String?
   iSTT                Int?                 @default(0)
   bActive             Boolean?             @default(true)
@@ -2247,7 +2264,7 @@ model DM_NhanVien {
 
 model DM_PhanCap_ChatLuong_TrangThietBi {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2267,7 +2284,7 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
 
 model DM_PhanLoai_CSKT {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2287,7 +2304,7 @@ model DM_PhanLoai_CSKT {
 
 model DM_NhomNguoiDung {
   Id                 String               @id() @default(uuid()) @db.Uuid()
-  sMa                String?              @unique()
+  sMa                String?
   sGhiChu            String?
   iSTT               Int?                 @default(0)
   bActive            Boolean?             @default(true)
@@ -2309,7 +2326,7 @@ model DM_NhomNguoiDung {
 
 model DM_NhomUngDung {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2330,7 +2347,7 @@ model DM_NhomUngDung {
 
 model DM_QuocGia {
   Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?       @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2353,7 +2370,7 @@ model DM_QuocGia {
 
 model DM_Tinh {
   Id                          String             @id() @default(uuid()) @db.Uuid()
-  sMa                         String?            @unique()
+  sMa                         String?
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
   bActive                     Boolean?           @default(true)
@@ -2386,7 +2403,7 @@ model DM_Tinh {
 
 model DM_QuanHuyen {
   Id                          String             @id() @default(uuid()) @db.Uuid()
-  sMa                         String?            @unique()
+  sMa                         String?
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
   bActive                     Boolean?           @default(true)
@@ -2418,7 +2435,7 @@ model DM_QuanHuyen {
 
 model DM_XaPhuong {
   Id                          String             @id() @default(uuid()) @db.Uuid()
-  sMa                         String?            @unique()
+  sMa                         String?
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
   bActive                     Boolean?           @default(true)
@@ -2451,7 +2468,7 @@ model DM_XaPhuong {
 
 model DM_VaiTro {
   Id              String            @id() @default(uuid()) @db.Uuid()
-  sMa             String?           @unique()
+  sMa             String?
   sGhiChu         String?
   iSTT            Int?              @default(0)
   bActive         Boolean?          @default(true)
@@ -2473,7 +2490,7 @@ model DM_VaiTro {
 
 model DM_ViTriCongViec {
   Id              String        @id() @default(uuid()) @db.Uuid()
-  sMa             String?       @unique()
+  sMa             String?
   sGhiChu         String?
   iSTT            Int?          @default(0)
   bActive         Boolean?      @default(true)
@@ -2497,7 +2514,7 @@ model DM_ViTriCongViec {
 
 model NguoiDungTrongNhom {
   Id                  String            @id() @default(uuid()) @db.Uuid()
-  sMa                 String?           @unique()
+  sMa                 String?
   sGhiChu             String?
   iSTT                Int?              @default(0)
   bActive             Boolean?          @default(true)
@@ -2521,7 +2538,7 @@ model NguoiDungTrongNhom {
 
 model NhatKyHoatDong {
   Id             String       @id() @default(uuid()) @db.Uuid()
-  sMa            String?      @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?         @default(0)
   bActive        Boolean?     @default(true)
@@ -2548,7 +2565,7 @@ model NhatKyHoatDong {
 
 model Policy {
   Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?   @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2572,7 +2589,7 @@ model Policy {
 
 model Quyen_VaiTro {
   Id             String       @id() @default(uuid()) @db.Uuid()
-  sMa            String?      @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?         @default(0)
   bActive        Boolean?     @default(true)
@@ -2598,7 +2615,7 @@ model Quyen_VaiTro {
 
 model TaiKhoan {
   Id             String       @id() @default(uuid()) @db.Uuid()
-  sMa            String?      @unique()
+  sMa            String?
   sGhiChu        String?
   iSTT           Int?         @default(0)
   bActive        Boolean?     @default(true)
@@ -2622,7 +2639,7 @@ model TaiKhoan {
 
 model VaiTroTrongNhom {
   Id                  String            @id() @default(uuid()) @db.Uuid()
-  sMa                 String?           @unique()
+  sMa                 String?
   sGhiChu             String?
   iSTT                Int?              @default(0)
   bActive             Boolean?          @default(true)
