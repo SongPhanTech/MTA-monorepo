@@ -18,6 +18,7 @@ generator client {
 enum ConfigKey {
   DIRECTOR
   ACADEMY_NAME
+  USER_SESSION_TIMEOUT
 
   @@schema("he-thong")
 }
