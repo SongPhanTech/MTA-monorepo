@@ -404,7 +404,6 @@ model SubjectVersion extends Base {
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
-  exams                    Exam[]
   questionBanks            QuestionBank[]
 
   @@schema("ql-dao-tao")

@@ -33,9 +33,11 @@ model QuestionBank extends Base {
   subjectVersionId String
 
   questions        Question[]
+	exam Exam[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
+
 }
 
 /// Mức độ khó
@@ -184,8 +186,8 @@ model OrderingAnswer  extends Base {
 model Exam  extends Base {
   title              String
   status             ExamStatus          @default(DRAFT)
-  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId   String
+  questionBank     QuestionBank      @relation(fields: [questionBankId], references: [id])
+  questionBankId   String
 
   startTime          DateTime
   endTime            DateTime
@@ -198,6 +200,7 @@ model Exam  extends Base {
 
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]
+
   @@schema("khao-thi")
 }
 
@@ -215,6 +218,17 @@ model TestStructureRule {
   @@schema("khao-thi")
 }
 
+
+/// Ngân hàng đề thi
+model ExamBank extends Base {
+  name                String
+
+	examSession ExamSession[]
+  questions ExamSessionQuestion[] // Danh sách câu hỏi trong đề thi
+  @@schema("khao-thi")
+}
+
+
 /// Bài thi / Đề thi
 model ExamSession extends Base {
   startTime DateTime              @default(now())
@@ -229,7 +243,9 @@ model ExamSession extends Base {
   room      Room?                 @relation(fields: [roomId], references: [id])
   roomId    String?
 
-  questions ExamSessionQuestion[] // Đề thi cụ thể của phiên này
+  examBank  ExamBank?        @relation(fields: [examBankId], references: [id])
+  examBankId String?
+
   answers   Answer[]              // Tất cả câu trả lời trong phiên này
   @@schema("khao-thi")
 }
@@ -237,13 +253,13 @@ model ExamSession extends Base {
 /// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
 model ExamSessionQuestion {
   id         String      @id @default(cuid())
-  sessionId  String
-  session    ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  examBankId  String
+  examBank    ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
   questionId String
   question   Question    @relation(fields: [questionId], references: [id])
-  order      Int // Thứ tự câu hỏi trong đề thi của phiên này
+  order      Int? // Thứ tự câu hỏi trong đề thi của phiên này
 
-  @@unique([sessionId, questionId])
-  @@unique([sessionId, order])
+  @@unique([examBankId, questionId])
+  @@unique([examBankId, order])
   @@schema("khao-thi")
 }
