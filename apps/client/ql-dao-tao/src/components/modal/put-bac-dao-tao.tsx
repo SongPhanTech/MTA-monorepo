@@ -1,0 +1,115 @@
+import { queryClient } from '@api/index'
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import useSpinner from '@hooks/spinner'
+import type { DiplomaType } from '@workspace/db'
+import {
+    useCreateDiplomaType,
+    useFindUniqueDiplomaType,
+    useUpdateDiplomaType,
+} from '@workspace/db/hooks'
+import { Col, Form, Input, message } from 'antd'
+import dayjs from 'dayjs'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import 'dayjs/locale/vi'
+export type PutDiplomaTypeFormType = DiplomaType
+dayjs.locale('vi')
+const PutDiplomaType = () => {
+    const [form] = Form.useForm<PutDiplomaTypeFormType>()
+    const {
+        isOpen,
+        onClose,
+        input: id,
+    } = useDisclosure<string>({
+        tag: PutDiplomaType.name,
+        onClose: form.resetFields,
+    })
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { mutateAsync: createDiplomaType } = useCreateDiplomaType()
+    const { mutateAsync: updateDiplomaType } = useUpdateDiplomaType()
+    async function onOk(output?: PutDiplomaTypeFormType) {
+        if (!output) return
+        try {
+            showSpinner()
+            const data = {
+                code: output.code,
+                name: output.name,
+                englishName: output.englishName,
+                description: output.description,
+            }
+            if (id) {
+                await updateDiplomaType({
+                    data: data,
+                    where: {
+                        id,
+                    },
+                })
+                message.success('Cập nhật thành công')
+            } else {
+                await createDiplomaType({
+                    data: data,
+                })
+                message.success('Thêm mới thành công')
+            }
+            queryClient.invalidateQueries({
+                queryKey: ['DiplomaType'],
+            })
+            onClose()
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const { data: initialValue } = useFindUniqueDiplomaType(
+        {
+            where: { id },
+        },
+        { enabled: !!id }
+    )
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    useEffect(() => {
+        if (initialValue) {
+            form.setFieldsValue({
+                ...initialValue,
+            })
+        }
+    }, [initialValue])
+
+    return (
+        <PutFormModal
+            open={isOpen}
+            form={form}
+            onFinish={onOk}
+            onCancel={onClose}
+            maskClosable={true}
+            title={id ? 'Chỉnh sửa bậc đào tạo' : 'Thêm mới bậc đào tạo'}
+            className="w-[30vw]"
+        >
+            <Col span={24}>
+                <FormItem form={form} name="code" label="Mã bậc đào tạo">
+                    <Input placeholder="Nhập mã bậc đào tạo" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="name" label="Tên bậc đào tạo" required>
+                    <Input placeholder="Nhập tên bậc đào tạo" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="englishName" label="Tên tiếng anh">
+                    <Input placeholder="Nhập tên tiếng anh" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
+                </FormItem>
+            </Col>
+        </PutFormModal>
+    )
+}
+
+export default PutDiplomaType

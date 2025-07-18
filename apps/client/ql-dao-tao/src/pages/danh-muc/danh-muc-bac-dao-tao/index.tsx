@@ -1,0 +1,233 @@
+import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutDiplomaType } from '@components/modal'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
+import DefaultLayout from '@layouts/default-layout'
+import {
+    useCountDiplomaType,
+    useFindManyDiplomaType,
+    useUpdateDiplomaType,
+} from '@workspace/db/hooks'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { BookPlus } from 'lucide-react'
+import type React from 'react'
+import { useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
+export default function DiplomaType() {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        englistName: '',
+    })
+
+    const { data = [], refetch } = useFindManyDiplomaType({
+        where: {
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.englistName && filters.englistName !== ''
+                ? {
+                      englistName: {
+                          contains: filters.englistName,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: count } = useCountDiplomaType({
+        where: {
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.englistName && filters.englistName !== ''
+                ? {
+                      englistName: {
+                          contains: filters.englistName,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+        },
+    })
+
+    const { onOpen: onOpenPutDiplomaType } = useDisclosure<string>({
+        tag: PutDiplomaType.name,
+    })
+
+    const handleModal = () => {
+        onOpenPutDiplomaType()
+    }
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { mutateAsync: updateDiplomaType } = useUpdateDiplomaType()
+    async function handleDeleteDiplomaType(id: string) {
+        try {
+            showSpinner()
+            await updateDiplomaType({
+                where: { id },
+                data: { deletedAt: new Date() },
+            })
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    return (
+        <div>
+            <Row gutter={[16, 0]}>
+                <Col span={24}>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={24}>
+                            <Flex justify="end" gap={4}>
+                                <Button onClick={handleModal} type="primary">
+                                    <BookPlus />
+                                    Thêm mới
+                                </Button>
+                            </Flex>
+                        </Col>
+                    </Row>
+                </Col>
+
+                <Col span={24}>
+                    <Table
+                        rowKey="id"
+                        filters={filters}
+                        setFilters={setFilters}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã bậc',
+                                dataIndex: 'code',
+                                align: 'center',
+                                width: 150,
+                                fixed: 'left',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Tên',
+                                dataIndex: 'name',
+                                width: 200,
+                                align: 'center',
+                                fixed: 'left',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Tên tiếng anh',
+                                dataIndex: 'englishName',
+                                width: 200,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Mô tả',
+                                width: 200,
+                                align: 'center',
+                                dataIndex: 'description',
+                                render: (value: string) => {
+                                    return (
+                                        <Tooltip title={value}>
+                                            <div className="line-clamp-2">{value}</div>
+                                        </Tooltip>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, record) => {
+                                    if (record?.id) {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                {/* <Tooltip
+                                                    title="Xem chi tiết"
+                                                    placement="leftTop"
+                                                >
+                                                    <EyeOutlined
+                                                        onClick={onOpen.bind(
+                                                            null,
+                                                            id
+                                                        )}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                </Tooltip> */}
+                                                <EditIcon
+                                                    onClick={() => onOpenPutDiplomaType(record?.id)}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDeleteDiplomaType(record?.id),
+                                                    }}
+                                                />
+                                            </Row>
+                                        )
+                                    }
+                                    return ''
+                                },
+                            },
+                        ]}
+                        data={data}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: setCurrentPage,
+                            onShowSizeChange: setNumberOfPages,
+                        }}
+                    />
+                </Col>
+            </Row>
+        </div>
+    )
+}
+
+DiplomaType.getLayout = function getLayout(page: React.ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>
+}

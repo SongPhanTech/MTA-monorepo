@@ -509,6 +509,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HINH_THUC_HUAN_LUYEN,
                         description: 'Danh mục hình thức huấn luyện',
                     },
+                    {
+                        id: 'bac-dao-tao',
+                        label: 'Danh mục bậc đào tạo',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_BAC_DAO_TAO,
+                        description: 'Danh mục bậc đào tạo',
+                    },
                 ],
             },
             {

@@ -163,6 +163,7 @@ export type FilterProps = {
     startDate?: Date[]
     examDate?: Date[]
     endDate?: Date[]
+    englistName?: string | ''
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

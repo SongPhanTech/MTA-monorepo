@@ -1,5 +1,5 @@
 import DeleteIcon from '@components/icons/delete'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
@@ -20,7 +20,7 @@ import {
     useUpdateDisciplinaryWarning,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -232,35 +232,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={12}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            // onChange={(e) =>
-                                            //     handleFilterChange(
-                                            //         'searchText',
-                                            //         e.target.value
-                                            //     )
-                                            // }
-                                            className="py-0"
-                                            placeholder="Nhập tên học viên, lớp niên chế"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex>
-                        </Col>
-                        <Col span={6}>
+                        <Col span={24}>
                             <Flex justify="end">
                                 <Button
                                     type="primary"
