@@ -1,7 +1,14 @@
 import '../base.zmodel'
 
+enum ConfigKey {
+    DIRECTOR
+    ACADEMY_NAME
+
+    @@schema("he-thong")
+}
+
 model Config extends Base {
-    key   String @unique
+    key   ConfigKey @unique
     value String
     @@schema("he-thong")
 }

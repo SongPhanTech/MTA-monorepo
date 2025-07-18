@@ -46,7 +46,6 @@ ql-dao-tao:
 	scp out.zip swan1:app && \
 	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf lms-cdn && unzip out.zip && mv out lms-cdn && docker compose -f app-docker-compose.yml up -d"
 
-
 # Pattern rule: build-<name>
 build-%:
 	@echo "Target: $*"

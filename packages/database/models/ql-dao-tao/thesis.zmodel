@@ -2,88 +2,254 @@ import '../base'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/student'
 import '../ql-danh-muc/core-categories.zmodel'
+import '../ql-danh-muc/document'
 
-// Enum trạng thái đồ án
+// Trạng thái đồ án
 enum ThesisProjectStatus {
-  OPEN            // Đang mở đăng ký
-  FULL            // Đã đủ thành viên
-  CLOSED          // Đã đóng đăng ký
-  IN_PROGRESS     // Đang thực hiện
-  COMPLETED       // Đã hoàn thành
-
-  @@schema("ql-dao-tao")
-}
-
-// Enum trạng thái đăng ký đồ án của học viên
-enum ThesisRegistrationStatus {
-  PENDING         // Chờ phê duyệt
-  APPROVED        // Đã phê duyệt
-  REJECTED        // Bị từ chối
-  CANCELLED       // Đã hủy
+  PROPOSED // Mới đề xuất (GV đề xuất)
+  APPROVED_BY_DEPT // Khoa/Bộ môn đã duyệt
+  ASSIGNED // Đã giao cho SV
+  IN_PROGRESS // Đang thực hiện
+  DEFENSE_ELIGIBLE // Đủ điều kiện bảo vệ
+  DEFENDED_PASSED // Đã bảo vệ - Đạt
+  DEFENDED_FAILED // Đã bảo vệ - Không đạt
+  COMPLETED // Đã hoàn thành (nộp lưu chiểu)
+  CANCELED // Đã hủy
 
   @@schema("ql-dao-tao")
 }
 
 // Bảng đồ án
 model ThesisProject extends Base {
-  title                 String                        // Tên đồ án
-  summary               String                        @db.Text() // Tóm tắt đồ án
-  objectives            String?                       @db.Text() // Mục tiêu
-  scope                 String?                       @db.Text() // Phạm vi thực hiện
-  methodology           String?                       @db.Text() // Phương pháp thực hiện
-  expectedResults       String?                       @db.Text() // Kết quả mong đợi
-  requirements          String?                       @db.Text() // Yêu cầu với học viên
-  technologies          String?                       @db.Text() // Công nghệ sử dụng
+  title             String                        // Tên đồ án
+  titleEN           String?                       // Tên đồ án (Tiếng Anh)
+  summary           String                      @db.Text() // Tóm tắt đồ án
+  objectives        String?                     @db.Text() // Mục tiêu
+  scope             String?                     @db.Text() // Phạm vi thực hiện
+  methodology       String?                     @db.Text() // Phương pháp thực hiện
+  expectedResults   String?                     @db.Text() // Kết quả mong đợi
+  requirements      String?                     @db.Text() // Yêu cầu với học viên
+  technologies      String?                     @db.Text() // Công nghệ sử dụng
+
+  status            ThesisProjectStatus         @default(PROPOSED)
   
-  // Giáo viên hướng dẫn
-  supervisor            Lecturer                      @relation(fields: [supervisorId], references: [id])
-  supervisorId          String
-  
+  // Chuyên gia hướng dẫn
+  supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
+  supervisorId      String
+
   // Đơn vị quản lý
-  organization          DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId        String
+  organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])
+  organizationId    String
   
   // Thông tin đăng ký
-  maxStudents           Int                           // Số lượng học viên tối đa
-  currentStudents       Int                           @default(0) // Số học viên hiện tại
+  maxStudents       Int                           // Số lượng học viên tối đa
+  currentStudents   Int                         @default(0) // Số học viên hiện tại
   
   // Thời gian
-  registrationStart     DateTime                      // Thời gian mở đăng ký
-  registrationEnd       DateTime                      // Thời gian đóng đăng ký
-  projectStart          DateTime?                     // Thời gian bắt đầu thực hiện
-  projectEnd            DateTime?                     // Thời gian kết thúc dự kiến
-  
-  status                ThesisProjectStatus           @default(OPEN)
-  
-  // Đăng ký của học viên
-  registrations         StudentThesisRegistration[]
-  
+  registrationStart DateTime                      // Thời gian mở đăng ký
+  registrationEnd   DateTime                      // Thời gian đóng đăng ký
+  projectStart      DateTime?                     // Thời gian bắt đầu thực hiện
+  projectEnd        DateTime?                     // Thời gian kết thúc dự kiến
+
+  defenseRecord     DefenseRecord?
+  librarySubmission LibrarySubmission?
+
+  council           Council[]
+  decisions         Decision[]
+  registrations     StudentThesisRegistration[]
+
+  @@schema("ql-dao-tao")
+}
+
+// Enum trạng thái đăng ký đồ án của học viên
+enum StudentThesisRegistrationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
   @@schema("ql-dao-tao")
 }
 
 // Bảng đăng ký đồ án của học viên
 model StudentThesisRegistration extends Base {
-  student               Student                     @relation(fields: [studentId], references: [id])
-  studentId             String
-  
-  thesisProject         ThesisProject               @relation(fields: [thesisProjectId], references: [id])
-  thesisProjectId       String
+  student         Student                         @relation(fields: [studentId], references: [id])
+  studentId       String
+
+  thesisProject   ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
+  thesisProjectId String
   
   // Thông tin đăng ký
-  registeredAt          DateTime                    @default(now()) // Thời gian đăng ký
-  motivation            String?                     @db.Text() // Lý do muốn tham gia
-  experience            String?                     @db.Text() // Kinh nghiệm liên quan
-  proposedIdeas         String?                     @db.Text() // Ý tưởng đóng góp
-  
-  // Trạng thái
-  status                ThesisRegistrationStatus    @default(PENDING)
-  
-  // Phê duyệt
-  reviewedAt            DateTime?                   // Thời gian phê duyệt
-  reviewedBy            Lecturer?                   @relation(fields: [reviewedById], references: [id])
-  reviewedById          String?
-  reviewNote            String?                     @db.Text() // Ghi chú của giáo viên
-  
+  registeredAt    DateTime                        @default(now()) // Thời gian đăng ký
+  motivation      String?                         @db.Text() // Lý do muốn tham gia
+  experience      String?                         @db.Text() // Kinh nghiệm liên quan
+  proposedIdeas   String?                         @db.Text() // Ý tưởng đóng góp
+
+  status          StudentThesisRegistrationStatus @default(PENDING)
+  reviewedAt      DateTime?                   // Thời gian phê duyệt
+  reviewedBy      Lecturer?                       @relation(fields: [reviewedById], references: [id])
+  reviewedById    String?
+  reviewNote      String?                         @db.Text() // Ghi chú của giáo viên
+
   @@unique([studentId, thesisProjectId])
+  @@schema("ql-dao-tao")
+}
+
+/// Model cho Chuyên gia (Giảng viên trong và ngoài trường)
+model ExpertProfile extends Base {
+  lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
+  lecturerId         String?         @unique // Null nếu là chuyên gia ngoài trường
+  title              String?  // Học hàm, học vị (GS, PGS, TS, ThS)
+  specialization     String?   // Chuyên ngành
+  workplace          String?   // Đơn vị công tác
+  phone              String?
+  email              String?         @unique // Dùng email này để liên lạc nếu là chuyên gia ngoài
+
+  supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
+  councilMemberships CouncilMember[]
+  payments           PaymentRecord[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Loại quyết định
+enum DecisionType {
+  SUPERVISION_GUIDE // Quyết định Hướng dẫn
+  EVALUATION_COUNCIL // Quyết định Thành lập Hội đồng
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quản lý các Quyết định liên quan
+model Decision extends Base {
+  issueDate       DateTime // Ngày ban hành
+  type            DecisionType
+  documentFile    DocumentFile[]
+
+  thesisProject   ThesisProject  @relation(fields: [thesisProjectId], references: [id])
+  thesisProjectId String
+
+  invitations     Invitation[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quản lý Giấy mời
+model Invitation extends Base {
+  sentDate       DateTime @default(now())
+  isConfirmed    Boolean  @default(false)
+
+  // Quan hệ
+  decisionId     String
+  decision       Decision @relation(fields: [decisionId], references: [id])
+  
+  // Thông tin người nhận mời
+  recipientEmail String
+  recipientName  String
+
+  @@schema("ql-dao-tao")
+}
+
+/// Trạng thái đề xuất thành lập hội đồng
+enum CouncilProposalStatus {
+  PENDING // Chờ phê duyệt
+  APPROVED // Đã phê duyệt
+  REJECTED // Từ chối
+
+  @@schema("ql-dao-tao")
+}
+
+
+/// Hội đồng đánh giá
+model Council extends Base {
+  proposedDate        DateTime              @default(now())
+  proposedDefenseDate DateTime? // Ngày bảo vệ dự kiến
+  status              CouncilProposalStatus @default(PENDING)
+
+  defenseDate         DateTime? // Ngày bảo vệ
+  location            String? // Phòng bảo vệ
+
+  thesisId            String                @unique
+  thesis              ThesisProject         @relation(fields: [thesisId], references: [id])
+
+  members             CouncilMember[]
+
+  @@schema("ql-dao-tao")
+}
+
+enum CouncilRole {
+  CHAIRMAN // Chủ tịch
+  SECRETARY // Thư ký
+  REVIEWER_1 // Phản biện 1
+  REVIEWER_2 // Phản biện 2
+  MEMBER // Ủy viên
+
+  @@schema("ql-dao-tao")
+}
+
+/// Thành viên trong một Hội đồng
+model CouncilMember extends Base {
+  role      CouncilRole
+
+  councilId String
+  council   Council        @relation(fields: [councilId], references: [id])
+  expertId  String
+  expert    ExpertProfile  @relation(fields: [expertId], references: [id])
+  payment   PaymentRecord?
+
+  @@unique([councilId, expertId])
+
+  @@schema("ql-dao-tao")
+}
+
+/// Hồ sơ và Kết quả bảo vệ
+model DefenseRecord extends Base {
+  finalScore        Float? // Điểm cuối cùng
+  comments          String?        @db.Text // Nhận xét chung của hội đồng
+  isProfileComplete Boolean        @default(false)
+
+  thesis            ThesisProject  @relation(fields: [thesisId], references: [id])
+  thesisId          String         @unique
+
+  documents         DocumentFile[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quản lý việc nộp Luận văn cho Thư viện
+model LibrarySubmission extends Base {
+  submissionDate DateTime      @default(now())
+  isHardcopy     Boolean       @default(false) // Đã nộp bản cứng
+  isSoftcopy     Boolean       @default(false) // Đã nộp bản mềm
+  librarianNote  String?
+
+  thesis         ThesisProject @relation(fields: [thesisId], references: [id])
+  thesisId       String        @unique
+  confirmedById  String? // ID của thủ thư đã xác nhận
+
+  @@schema("ql-dao-tao")
+}
+
+enum PaymentStatus {
+  PENDING // Chờ thanh toán
+  PROCESSING // Đang xử lý
+  PAID // Đã thanh toán
+  FAILED // Thanh toán lỗi
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quản lý việc thanh toán
+model PaymentRecord  extends Base {
+  amount          Float
+  status          PaymentStatus  @default(PENDING)
+  paymentDate     DateTime?
+  transactionCode String?
+
+  expert          ExpertProfile  @relation(fields: [expertId], references: [id])
+  expertId        String
+  
+  // Có thể liên kết với thành viên hội đồng hoặc GVHD
+  councilMemberId String?        @unique
+  councilMember   CouncilMember? @relation(fields: [councilMemberId], references: [id])
+
   @@schema("ql-dao-tao")
 }

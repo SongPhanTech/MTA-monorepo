@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/training-action'
+import '../ql-dao-tao/thesis'
 import 'notification'
 
 model DocumentFile extends Base {
@@ -30,5 +31,12 @@ model DocumentFile extends Base {
 
   notification              Notification?            @relation(fields: [notificationId], references: [id])
   notificationId            String?
+
+  decision                  Decision?                @relation(fields: [decisionId], references: [id])
+  decisionId                String?
+
+  defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
+  defenseRecordId           String?
+
   @@schema("ql-danh-muc")
 }

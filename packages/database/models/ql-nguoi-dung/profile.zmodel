@@ -12,13 +12,11 @@ import '../khao-thi/survey'
 
 enum UserType {
   MILITARY_STUDENT // Học viên quân sự
-  CIVILIAN_STUDENT // Học viên dân sự
+  CIVILIAN_STUDENT // Sinh viên dân sự
   LECTURER // Giảng viên
   STAFF // Nhân viên
   PROFESSIONAL // Chuyên nghiệp
   CONTRACT // Hợp đồng: Người làm việc theo hợp đồng tại các trường học, có thể là giảng viên hoặc nhân viên.
-  CIVIL_STUDENT
-  TEACHER
   OTHER
 
   @@schema("ql-nguoi-dung")

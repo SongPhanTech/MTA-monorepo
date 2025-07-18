@@ -10,31 +10,30 @@ import '../ql-dao-tao/research'
 import '../ql-dao-tao/thesis'
 
 model Lecturer extends Base {
-  from                DateTime? // từ ngày
+  from                        DateTime? // từ ngày
   
   // lecture/staff information
-  lectureID           String?        @unique // giảng viên ID
-  serviceDate         DateTime? // ngày vào ngành
+  lectureID                   String?                       @unique // giảng viên ID
+  serviceDate                 DateTime? // ngày vào ngành
 
-  userProfile         UserProfile    @relation(fields: [userProfileId], references: [id])
-  userProfileId       String         @unique
+  userProfile                 UserProfile                   @relation(fields: [userProfileId], references: [id])
+  userProfileId               String                        @unique
 
-  organization        DM_DonVi       @relation(fields: [organizationId], references: [Id])
-  organizationId      String
+  organization                DM_DonVi                      @relation(fields: [organizationId], references: [Id])
+  organizationId              String
 
-  lecturerType        LecturerType   @relation(fields: [lecturerTypeId], references: [id])
-  lecturerTypeId      String
+  lecturerType                LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId              String
 
-  mainSubjectClasses  SubjectClass[] @relation("MainLecturer")
-  extraSubjectClasses SubjectClass[] @relation("ExtraLecturer")
-  enterGradeClasses   SubjectClass[] @relation("EnterGradeLecturer")
-  manageFixedClass    FixedClass[]   @relation("ManageLecturer")
-  classSchedules      ClassSchedule[]
-  researchProjects      ResearchProject[]         // Đề tài đang hướng dẫn
-  reviewedRegistrations StudentResearchRegistration[] // Đăng ký đã phê duyệt
-  thesisProjects        ThesisProject[]             // Đồ án đang hướng dẫn
+  mainSubjectClasses          SubjectClass[]                @relation("MainLecturer")
+  extraSubjectClasses         SubjectClass[]                @relation("ExtraLecturer")
+  enterGradeClasses           SubjectClass[]                @relation("EnterGradeLecturer")
+  manageFixedClass            FixedClass[]                  @relation("ManageLecturer")
+  classSchedules              ClassSchedule[]
+  researchProjects            ResearchProject[]         // Đề tài đang hướng dẫn
+  reviewedRegistrations       StudentResearchRegistration[] // Đăng ký đã phê duyệt
   reviewedThesisRegistrations StudentThesisRegistration[] // Đăng ký đã phê duyệt
-
+  expertProfile               ExpertProfile[]
 
   @@schema("ql-dao-tao")
 }

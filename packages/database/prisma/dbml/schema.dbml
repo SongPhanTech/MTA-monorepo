@@ -10,7 +10,7 @@ Table Config {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  key String [unique, not null]
+  key ConfigKey [unique, not null]
   value String [not null]
 }
 
@@ -2302,8 +2302,8 @@ Table Lecturer {
   classSchedules ClassSchedule [not null]
   researchProjects ResearchProject [not null]
   reviewedRegistrations StudentResearchRegistration [not null]
-  thesisProjects ThesisProject [not null]
   reviewedThesisRegistrations StudentThesisRegistration [not null]
+  expertProfile ExpertProfile [not null]
 }
 
 Table LecturerHistory {
@@ -2390,6 +2390,7 @@ Table ThesisProject {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   title String [not null]
+  titleEN String
   summary String [not null]
   objectives String
   scope String
@@ -2397,7 +2398,8 @@ Table ThesisProject {
   expectedResults String
   requirements String
   technologies String
-  supervisor Lecturer [not null]
+  status ThesisProjectStatus [not null, default: 'PROPOSED']
+  supervisor ExpertProfile [not null]
   supervisorId String [not null]
   organization DM_DonVi [not null]
   organizationId String [not null]
@@ -2407,7 +2409,10 @@ Table ThesisProject {
   registrationEnd DateTime [not null]
   projectStart DateTime
   projectEnd DateTime
-  status ThesisProjectStatus [not null, default: 'OPEN']
+  defenseRecord DefenseRecord
+  librarySubmission LibrarySubmission
+  council Council [not null]
+  decisions Decision [not null]
   registrations StudentThesisRegistration [not null]
 }
 
@@ -2427,7 +2432,7 @@ Table StudentThesisRegistration {
   motivation String
   experience String
   proposedIdeas String
-  status ThesisRegistrationStatus [not null, default: 'PENDING']
+  status StudentThesisRegistrationStatus [not null, default: 'PENDING']
   reviewedAt DateTime
   reviewedBy Lecturer
   reviewedById String
@@ -2435,6 +2440,386 @@ Table StudentThesisRegistration {
 
   indexes {
     (studentId, thesisProjectId) [unique]
+  }
+}
+
+Table ExpertProfile {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lecturer Lecturer
+  lecturerId String [unique]
+  title String
+  specialization String
+  workplace String
+  phone String
+  email String [unique]
+  supervisedTheses ThesisProject [not null]
+  councilMemberships CouncilMember [not null]
+  payments PaymentRecord [not null]
+
+  Note: 'Model cho Chuyên gia (Giảng viên trong và ngoài trường)'
+}
+
+Table Decision {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  issueDate DateTime [not null]
+  type DecisionType [not null]
+  documentFile DocumentFile [not null]
+  thesisProject ThesisProject [not null]
+  thesisProjectId String [not null]
+  invitations Invitation [not null]
+
+  Note: 'Quản lý các Quyết định liên quan'
+}
+
+Table Invitation {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  sentDate DateTime [default: `now()`, not null]
+  isConfirmed Boolean [not null, default: false]
+  decisionId String [not null]
+  decision Decision [not null]
+  recipientEmail String [not null]
+  recipientName String [not null]
+
+  Note: 'Quản lý Giấy mời'
+}
+
+Table Council {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  proposedDate DateTime [default: `now()`, not null]
+  proposedDefenseDate DateTime
+  status CouncilProposalStatus [not null, default: 'PENDING']
+  defenseDate DateTime
+  location String
+  thesisId String [unique, not null]
+  thesis ThesisProject [not null]
+  members CouncilMember [not null]
+
+  Note: 'Hội đồng đánh giá'
+}
+
+Table CouncilMember {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  role CouncilRole [not null]
+  councilId String [not null]
+  council Council [not null]
+  expertId String [not null]
+  expert ExpertProfile [not null]
+  payment PaymentRecord
+
+  indexes {
+    (councilId, expertId) [unique]
+  }
+
+  Note: 'Thành viên trong một Hội đồng'
+}
+
+Table DefenseRecord {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  finalScore Float
+  comments String
+  isProfileComplete Boolean [not null, default: false]
+  thesis ThesisProject [not null]
+  thesisId String [unique, not null]
+  documents DocumentFile [not null]
+
+  Note: 'Hồ sơ và Kết quả bảo vệ'
+}
+
+Table LibrarySubmission {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  submissionDate DateTime [default: `now()`, not null]
+  isHardcopy Boolean [not null, default: false]
+  isSoftcopy Boolean [not null, default: false]
+  librarianNote String
+  thesis ThesisProject [not null]
+  thesisId String [unique, not null]
+  confirmedById String
+
+  Note: 'Quản lý việc nộp Luận văn cho Thư viện'
+}
+
+Table PaymentRecord {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  amount Float [not null]
+  status PaymentStatus [not null, default: 'PENDING']
+  paymentDate DateTime
+  transactionCode String
+  expert ExpertProfile [not null]
+  expertId String [not null]
+  councilMemberId String [unique]
+  councilMember CouncilMember
+
+  Note: 'Quản lý việc thanh toán'
+}
+
+Table DocumentFile {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  path String [not null]
+  size BigInt [not null]
+  mimeType String
+  archivedCertificate ArchivedCertificate
+  archivedCertificateId String
+  archivedAward ArchivedAward
+  archivedAwardId String
+  curriculum Curriculum
+  curriculumId String
+  curriculumVersion CurriculumVersion
+  curriculumVersionId String
+  subjectVersion SubjectVersion
+  subjectVersionId String
+  studentAcademicDecision StudentAcademicDecision
+  studentAcademicDecisionId String
+  notification Notification
+  notificationId String
+  decision Decision
+  decisionId String
+  defenseRecord DefenseRecord
+  defenseRecordId String
+}
+
+Table AcademicActionConfig {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  actionType AcademicActionType [not null]
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
+  ruleSets AcademicActionRuleSet [not null]
+  decisions StudentAcademicDecision [not null]
+
+  indexes {
+    (trainingCourseId, name) [unique]
+  }
+
+  Note: 'Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)'
+}
+
+Table AcademicActionRuleSet {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  config AcademicActionConfig [not null]
+  configId String [not null]
+  conditions AcademicActionCondition [not null]
+
+  Note: 'Bộ quy tắc, chứa nhiều điều kiện (AND logic)
+Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
+Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)'
+}
+
+Table AcademicActionCondition {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  ruleSet AcademicActionRuleSet [not null]
+  ruleSetId String [not null]
+  field CriteriaField [not null]
+  operator CriteriaOperator [not null]
+  invert Boolean [not null, default: false]
+  value Float [not null]
+  tuple String[] [not null]
+  yearCondition Int
+  isPriorityStudent Boolean
+
+  Note: 'Điều kiện cụ thể để kích hoạt xử lý'
+}
+
+Table StudentAcademicDecision {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  semester Semester
+  semesterId String
+  schoolYear SchoolYear
+  schoolYearId String
+  appliedConfig AcademicActionConfig
+  appliedConfigId String
+  actionTaken AcademicActionType [not null]
+  decisionDate DateTime [default: `now()`, not null]
+  validUntil DateTime
+  reason String
+  documentEvidence DocumentFile [not null]
+  status DecisionStatus [not null, default: 'PENDING']
+
+  indexes {
+    (studentId, semesterId, schoolYearId, appliedConfigId) [unique]
+  }
+
+  Note: 'Quyết định xử lý học tập cho sinh viên'
+}
+
+Table TrainingScoreSession {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  time DateTime [default: `now()`, not null]
+  semester Semester [not null]
+  semesterId String [not null]
+  trainingObjectType TrainingObjectType
+  trainingObjectTypeId String
+  studentTrainingScore StudentTrainingScore [not null]
+}
+
+Table StudentTrainingScore {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  trainingScoreSession TrainingScoreSession [not null]
+  trainingScoreSessionId String [not null]
+  student Student [not null]
+  studentId String [not null]
+  score Float [not null, default: 0]
+
+  indexes {
+    (trainingScoreSessionId, studentId) [unique]
+  }
+}
+
+Table Scholarship {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  rankOrder Int [not null]
+  baseAmount Decimal [not null]
+  multiplier Float [not null, default: 1]
+  effectiveFrom DateTime
+  effectiveTo DateTime
+  trainingCourse TrainingCourse [not null]
+  trainingCourseId String [not null]
+  criteria ScholarshipCriteria [not null]
+  awards ScholarshipAward [not null]
+
+  indexes {
+    (trainingCourseId, name) [unique]
+  }
+}
+
+Table ScholarshipCriteria {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  scholarshipId String [not null]
+  scholarship Scholarship [not null]
+  field CriteriaField [not null]
+  invert Boolean [not null, default: false]
+  operator CriteriaOperator [not null]
+  value Float [not null]
+  tuple String[] [not null]
+  bonusValue Float [not null, default: 0]
+}
+
+Table ScholarshipAward {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  student Student [not null]
+  studentId String [not null]
+  semester Semester [not null]
+  semesterId String [not null]
+  scholarship Scholarship [not null]
+  scholarshipId String [not null]
+  amount Decimal [not null]
+  gpaAtAward Float [not null]
+  priorityRank Int [not null]
+
+  indexes {
+    (studentId, scholarshipId, semesterId) [unique]
   }
 }
 
@@ -2627,225 +3012,6 @@ Table Feedback {
   satisfaction Satisfaction [not null]
   user DM_NhanVien [not null]
   userId String [not null]
-}
-
-Table DocumentFile {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  path String [not null]
-  size BigInt [not null]
-  mimeType String
-  archivedCertificate ArchivedCertificate
-  archivedCertificateId String
-  archivedAward ArchivedAward
-  archivedAwardId String
-  curriculum Curriculum
-  curriculumId String
-  curriculumVersion CurriculumVersion
-  curriculumVersionId String
-  subjectVersion SubjectVersion
-  subjectVersionId String
-  studentAcademicDecision StudentAcademicDecision
-  studentAcademicDecisionId String
-  notification Notification
-  notificationId String
-}
-
-Table AcademicActionConfig {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  actionType AcademicActionType [not null]
-  trainingCourse TrainingCourse [not null]
-  trainingCourseId String [not null]
-  ruleSets AcademicActionRuleSet [not null]
-  decisions StudentAcademicDecision [not null]
-
-  indexes {
-    (trainingCourseId, name) [unique]
-  }
-
-  Note: 'Cấu hình các hành động xử lý học tập (Lưu ban, Đình chỉ, Thôi học)'
-}
-
-Table AcademicActionRuleSet {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  config AcademicActionConfig [not null]
-  configId String [not null]
-  conditions AcademicActionCondition [not null]
-
-  Note: 'Bộ quy tắc, chứa nhiều điều kiện (AND logic)
-Một cấu hình có thể có nhiều bộ quy tắc (OR logic)
-Ví dụ: (CBHT mức 3 AND CCHĐ >= 1) OR (CBHT mức 4)'
-}
-
-Table AcademicActionCondition {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  ruleSet AcademicActionRuleSet [not null]
-  ruleSetId String [not null]
-  field CriteriaField [not null]
-  operator CriteriaOperator [not null]
-  invert Boolean [not null, default: false]
-  value Float [not null]
-  tuple String[] [not null]
-  yearCondition Int
-  isPriorityStudent Boolean
-
-  Note: 'Điều kiện cụ thể để kích hoạt xử lý'
-}
-
-Table StudentAcademicDecision {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  student Student [not null]
-  studentId String [not null]
-  semester Semester
-  semesterId String
-  schoolYear SchoolYear
-  schoolYearId String
-  appliedConfig AcademicActionConfig
-  appliedConfigId String
-  actionTaken AcademicActionType [not null]
-  decisionDate DateTime [default: `now()`, not null]
-  validUntil DateTime
-  reason String
-  documentEvidence DocumentFile [not null]
-  status DecisionStatus [not null, default: 'PENDING']
-
-  indexes {
-    (studentId, semesterId, schoolYearId, appliedConfigId) [unique]
-  }
-
-  Note: 'Quyết định xử lý học tập cho sinh viên'
-}
-
-Table TrainingScoreSession {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  time DateTime [default: `now()`, not null]
-  semester Semester [not null]
-  semesterId String [not null]
-  trainingObjectType TrainingObjectType
-  trainingObjectTypeId String
-  studentTrainingScore StudentTrainingScore [not null]
-}
-
-Table StudentTrainingScore {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  trainingScoreSession TrainingScoreSession [not null]
-  trainingScoreSessionId String [not null]
-  student Student [not null]
-  studentId String [not null]
-  score Float [not null, default: 0]
-
-  indexes {
-    (trainingScoreSessionId, studentId) [unique]
-  }
-}
-
-Table Scholarship {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  name String [not null]
-  rankOrder Int [not null]
-  baseAmount Decimal [not null]
-  multiplier Float [not null, default: 1]
-  effectiveFrom DateTime
-  effectiveTo DateTime
-  trainingCourse TrainingCourse [not null]
-  trainingCourseId String [not null]
-  criteria ScholarshipCriteria [not null]
-  awards ScholarshipAward [not null]
-
-  indexes {
-    (trainingCourseId, name) [unique]
-  }
-}
-
-Table ScholarshipCriteria {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  scholarshipId String [not null]
-  scholarship Scholarship [not null]
-  field CriteriaField [not null]
-  invert Boolean [not null, default: false]
-  operator CriteriaOperator [not null]
-  value Float [not null]
-  tuple String[] [not null]
-  bonusValue Float [not null, default: 0]
-}
-
-Table ScholarshipAward {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  student Student [not null]
-  studentId String [not null]
-  semester Semester [not null]
-  semesterId String [not null]
-  scholarship Scholarship [not null]
-  scholarshipId String [not null]
-  amount Decimal [not null]
-  gpaAtAward Float [not null]
-  priorityRank Int [not null]
-
-  indexes {
-    (studentId, scholarshipId, semesterId) [unique]
-  }
 }
 
 Table AcademicWarningRule {
@@ -3179,6 +3345,11 @@ Table DisciplinaryWarningToDisciplinaryWarningReason {
   warningId String [ref: > DisciplinaryWarning.id]
 }
 
+Enum ConfigKey {
+  DIRECTOR
+  ACADEMY_NAME
+}
+
 Enum QuestionType {
   SINGLE_CHOICE
   MULTIPLE_CHOICE
@@ -3339,8 +3510,6 @@ Enum UserType {
   STAFF
   PROFESSIONAL
   CONTRACT
-  CIVIL_STUDENT
-  TEACHER
   OTHER
 }
 
@@ -3364,33 +3533,47 @@ Enum RegistrationStatus {
 }
 
 Enum ThesisProjectStatus {
-  OPEN
-  FULL
-  CLOSED
+  PROPOSED
+  APPROVED_BY_DEPT
+  ASSIGNED
   IN_PROGRESS
+  DEFENSE_ELIGIBLE
+  DEFENDED_PASSED
+  DEFENDED_FAILED
   COMPLETED
+  CANCELED
 }
 
-Enum ThesisRegistrationStatus {
+Enum StudentThesisRegistrationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+Enum DecisionType {
+  SUPERVISION_GUIDE
+  EVALUATION_COUNCIL
+}
+
+Enum CouncilProposalStatus {
   PENDING
   APPROVED
   REJECTED
-  CANCELLED
 }
 
-Enum FeedbackStatus {
-  Pending
-  InProgress
-  Resolved
-  Closed
+Enum CouncilRole {
+  CHAIRMAN
+  SECRETARY
+  REVIEWER_1
+  REVIEWER_2
+  MEMBER
 }
 
-Enum Satisfaction {
-  VeryDissatisfied
-  Dissatisfied
-  Neutral
-  Satisfied
-  VerySatisfied
+Enum PaymentStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
 }
 
 Enum AcademicActionType {
@@ -3452,6 +3635,21 @@ Enum CriteriaOperator {
   LTE
   EQ
   IN
+}
+
+Enum FeedbackStatus {
+  Pending
+  InProgress
+  Resolved
+  Closed
+}
+
+Enum Satisfaction {
+  VeryDissatisfied
+  Dissatisfied
+  Neutral
+  Satisfied
+  VerySatisfied
 }
 
 Enum GraduationSessionStatus {
@@ -3778,7 +3976,7 @@ Ref: StudentResearchRegistration.researchProjectId > ResearchProject.id
 
 Ref: StudentResearchRegistration.reviewedById > Lecturer.id
 
-Ref: ThesisProject.supervisorId > Lecturer.id
+Ref: ThesisProject.supervisorId > ExpertProfile.id
 
 Ref: ThesisProject.organizationId > DM_DonVi.Id
 
@@ -3787,6 +3985,76 @@ Ref: StudentThesisRegistration.studentId > Student.id
 Ref: StudentThesisRegistration.thesisProjectId > ThesisProject.id
 
 Ref: StudentThesisRegistration.reviewedById > Lecturer.id
+
+Ref: ExpertProfile.lecturerId > Lecturer.id
+
+Ref: Decision.thesisProjectId > ThesisProject.id
+
+Ref: Invitation.decisionId > Decision.id
+
+Ref: Council.thesisId > ThesisProject.id
+
+Ref: CouncilMember.councilId > Council.id
+
+Ref: CouncilMember.expertId > ExpertProfile.id
+
+Ref: DefenseRecord.thesisId - ThesisProject.id
+
+Ref: LibrarySubmission.thesisId - ThesisProject.id
+
+Ref: PaymentRecord.expertId > ExpertProfile.id
+
+Ref: PaymentRecord.councilMemberId - CouncilMember.id
+
+Ref: DocumentFile.archivedCertificateId > ArchivedCertificate.id
+
+Ref: DocumentFile.archivedAwardId > ArchivedAward.id
+
+Ref: DocumentFile.curriculumId > Curriculum.id
+
+Ref: DocumentFile.curriculumVersionId > CurriculumVersion.id
+
+Ref: DocumentFile.subjectVersionId > SubjectVersion.id
+
+Ref: DocumentFile.studentAcademicDecisionId > StudentAcademicDecision.id
+
+Ref: DocumentFile.notificationId > Notification.id
+
+Ref: DocumentFile.decisionId > Decision.id
+
+Ref: DocumentFile.defenseRecordId > DefenseRecord.id
+
+Ref: AcademicActionConfig.trainingCourseId > TrainingCourse.id
+
+Ref: AcademicActionRuleSet.configId > AcademicActionConfig.id
+
+Ref: AcademicActionCondition.ruleSetId > AcademicActionRuleSet.id
+
+Ref: StudentAcademicDecision.studentId > Student.id
+
+Ref: StudentAcademicDecision.semesterId > Semester.id
+
+Ref: StudentAcademicDecision.schoolYearId > SchoolYear.id
+
+Ref: StudentAcademicDecision.appliedConfigId > AcademicActionConfig.id
+
+Ref: TrainingScoreSession.semesterId > Semester.id
+
+Ref: TrainingScoreSession.trainingObjectTypeId > TrainingObjectType.id
+
+Ref: StudentTrainingScore.trainingScoreSessionId > TrainingScoreSession.id
+
+Ref: StudentTrainingScore.studentId > Student.id
+
+Ref: Scholarship.trainingCourseId > TrainingCourse.id
+
+Ref: ScholarshipCriteria.scholarshipId > Scholarship.id
+
+Ref: ScholarshipAward.studentId > Student.id
+
+Ref: ScholarshipAward.semesterId > Semester.id
+
+Ref: ScholarshipAward.scholarshipId > Scholarship.id
 
 Ref: Staff.userProfileId - UserProfile.id
 
@@ -3825,52 +4093,6 @@ Ref: SurveyResponse.surveyQuestionId > SurveyQuestion.id
 Ref: SurveyResponse.surveyChoiceId > SurveyChoice.id
 
 Ref: Feedback.userId > DM_NhanVien.Id
-
-Ref: DocumentFile.archivedCertificateId > ArchivedCertificate.id
-
-Ref: DocumentFile.archivedAwardId > ArchivedAward.id
-
-Ref: DocumentFile.curriculumId > Curriculum.id
-
-Ref: DocumentFile.curriculumVersionId > CurriculumVersion.id
-
-Ref: DocumentFile.subjectVersionId > SubjectVersion.id
-
-Ref: DocumentFile.studentAcademicDecisionId > StudentAcademicDecision.id
-
-Ref: DocumentFile.notificationId > Notification.id
-
-Ref: AcademicActionConfig.trainingCourseId > TrainingCourse.id
-
-Ref: AcademicActionRuleSet.configId > AcademicActionConfig.id
-
-Ref: AcademicActionCondition.ruleSetId > AcademicActionRuleSet.id
-
-Ref: StudentAcademicDecision.studentId > Student.id
-
-Ref: StudentAcademicDecision.semesterId > Semester.id
-
-Ref: StudentAcademicDecision.schoolYearId > SchoolYear.id
-
-Ref: StudentAcademicDecision.appliedConfigId > AcademicActionConfig.id
-
-Ref: TrainingScoreSession.semesterId > Semester.id
-
-Ref: TrainingScoreSession.trainingObjectTypeId > TrainingObjectType.id
-
-Ref: StudentTrainingScore.trainingScoreSessionId > TrainingScoreSession.id
-
-Ref: StudentTrainingScore.studentId > Student.id
-
-Ref: Scholarship.trainingCourseId > TrainingCourse.id
-
-Ref: ScholarshipCriteria.scholarshipId > Scholarship.id
-
-Ref: ScholarshipAward.studentId > Student.id
-
-Ref: ScholarshipAward.semesterId > Semester.id
-
-Ref: ScholarshipAward.scholarshipId > Scholarship.id
 
 Ref: AcademicWarningRule.trainingCourseId > TrainingCourse.id
 
