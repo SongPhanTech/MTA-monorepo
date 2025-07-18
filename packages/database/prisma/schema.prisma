@@ -15,10 +15,6 @@ generator client {
   binaryTargets   = ["native"]
 }
 
-generator dbml {
-  provider = "prisma-dbml-generator"
-}
-
 enum ConfigKey {
   DIRECTOR
   ACADEMY_NAME
@@ -975,7 +971,7 @@ model FixedClass {
   trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String
   managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?
+  managementOrganizationId String?            @db.Uuid()
   lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
   lecturerManagementId     String?
   staffManagement          Staff?             @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
@@ -1003,7 +999,7 @@ model Curriculum {
   name                     String
   englishName              String?
   managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String
+  managementOrganizationId String              @db.Uuid()
   trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id])
   trainingMajorId          String
   information              String?
@@ -1073,7 +1069,7 @@ model Subject {
   name                     String           @unique()
   englishName              String?          @unique()
   managementOrganization   DM_DonVi         @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String
+  managementOrganizationId String           @db.Uuid()
   information              String?
   subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
 
@@ -1110,7 +1106,7 @@ model SubjectVersion {
   materials                String?
   rules                    String?
   managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String
+  managementOrganizationId String                 @db.Uuid()
   subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
   /// môn học khối kiến thức - CTĐT
@@ -1377,7 +1373,7 @@ model TrainingField {
   englishName         String
   publishDate         DateTime
   organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
-  organizationId      String
+  organizationId      String                              @db.Uuid()
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
 
@@ -1420,7 +1416,7 @@ model TrainingMajor {
   /// Số tín chỉ tự chọn
   numberCreditsElective Int                                 @default(0)
   organization          DM_DonVi                            @relation(fields: [organizationId], references: [Id])
-  organizationId        String
+  organizationId        String                              @db.Uuid()
   trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId       String
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
@@ -1586,7 +1582,7 @@ model Student {
   trainingForm             TrainingForm?                  @relation(fields: [trainingFormId], references: [id])
   trainingFormId           String?
   registrationArea         DM_KhuVuc_DiaLy?               @relation(fields: [registrationAreaId], references: [Id])
-  registrationAreaId       String?
+  registrationAreaId       String?                        @db.Uuid()
   curriculumVersion        CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
   academicWarningLevel     Int                            @default(0)
@@ -1715,7 +1711,7 @@ model Notification {
   targetClasses  FixedClass[]
   targetStudents Student[]
   createdBy      DM_NhanVien          @relation(fields: [createdById], references: [Id])
-  createdById    String
+  createdById    String               @db.Uuid()
   attachments    DocumentFile[]
 
   @@schema("ql-danh-muc")
@@ -1799,9 +1795,9 @@ model Document {
   type         DocumentType
   reason       String?
   uploadedBy   DM_NhanVien    @relation("DocumentUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String
+  uploadedById String         @db.Uuid()
   approvedBy   DM_NhanVien?   @relation("DocumentApproved", fields: [approvedById], references: [Id])
-  approvedById String?
+  approvedById String?        @db.Uuid()
 
   @@schema("tro-ly-ao")
 }
@@ -1820,9 +1816,9 @@ model FAQ {
   type         DocumentType
   reason       String?
   uploadedBy   DM_NhanVien    @relation("FAQUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String
+  uploadedById String         @db.Uuid()
   approvedBy   DM_NhanVien?   @relation("FAQApproved", fields: [approvedById], references: [Id])
-  approvedById String?
+  approvedById String?        @db.Uuid()
 
   @@schema("tro-ly-ao")
 }
@@ -1852,7 +1848,7 @@ model Conversation {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt()
   user        DM_NhanVien?  @relation(fields: [userId], references: [Id])
-  userId      String?
+  userId      String?       @db.Uuid()
   type        DocumentType?
   message     Message[]
 
@@ -1876,7 +1872,7 @@ model Message {
 }
 
 model DM_CapBac {
-  Id             String        @id() @default(cuid())
+  Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
@@ -1897,7 +1893,7 @@ model DM_CapBac {
 }
 
 model DM_ChucDanh {
-  Id               String             @id() @default(cuid())
+  Id               String             @id() @default(uuid()) @db.Uuid()
   sMa              String?            @unique()
   sGhiChu          String?
   iSTT             Int?               @default(0)
@@ -1920,7 +1916,7 @@ model DM_ChucDanh {
 }
 
 model DM_ChucVu {
-  Id             String        @id() @default(cuid())
+  Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
@@ -1941,7 +1937,7 @@ model DM_ChucVu {
 }
 
 model DM_HocHam {
-  Id             String        @id() @default(cuid())
+  Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
@@ -1962,7 +1958,7 @@ model DM_HocHam {
 }
 
 model DM_HocVi {
-  Id             String        @id() @default(cuid())
+  Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
@@ -1983,7 +1979,7 @@ model DM_HocVi {
 }
 
 model DM_ChungChiTinHoc {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2003,7 +1999,7 @@ model DM_ChungChiTinHoc {
 }
 
 model DM_DanToc {
-  Id             String        @id() @default(cuid())
+  Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
@@ -2026,7 +2022,7 @@ model DM_DanToc {
 }
 
 model DM_DonVi {
-  Id               String            @id() @default(cuid())
+  Id               String            @id() @default(uuid()) @db.Uuid()
   sMa              String?           @unique()
   sGhiChu          String?
   iSTT             Int?              @default(0)
@@ -2043,12 +2039,12 @@ model DM_DonVi {
   sTen             String            @unique()
   sCode            String?           @unique()
   sTenVietTat      String?
-  sParentId        String?
   sTruongDonVi     String?
   sChucNangNhiemVu String?
   sDiaChi          String?
   DM_NhanVien      DM_NhanVien[]
   parent           DM_DonVi?         @relation("DM_DonVi_Parent", fields: [sParentId], references: [Id], map: "FK_DM_DonVi_iParentId_DM_DonVi_Id")
+  sParentId        String?           @db.Uuid()
   children         DM_DonVi[]        @relation("DM_DonVi_Parent")
   lecturers        Lecturer[]
   lecturerHistory  LecturerHistory[]
@@ -2069,7 +2065,7 @@ model DM_DonVi {
 }
 
 model DM_DonViHanhChinh {
-  Id             String         @id() @default(cuid())
+  Id             String         @id() @default(uuid()) @db.Uuid()
   sMa            String?        @unique()
   sGhiChu        String?
   iSTT           Int?           @default(0)
@@ -2093,7 +2089,7 @@ model DM_DonViHanhChinh {
 }
 
 model DM_KhuVuc_DiaLy {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2116,7 +2112,7 @@ model DM_KhuVuc_DiaLy {
 }
 
 model DM_NgoaiNgu {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2136,7 +2132,7 @@ model DM_NgoaiNgu {
 }
 
 model DM_TonGiao {
-  Id             String        @id() @default(cuid())
+  Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
@@ -2157,7 +2153,7 @@ model DM_TonGiao {
 }
 
 model DM_TrinhDoNgoaiNgu {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2178,7 +2174,7 @@ model DM_TrinhDoNgoaiNgu {
 }
 
 model DM_TrinhDoTinHoc {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2197,36 +2193,8 @@ model DM_TrinhDoTinHoc {
   @@schema("mta")
 }
 
-model DM_UngDung {
-  Id               String    @id() @default(cuid())
-  sMa              String?   @unique()
-  sGhiChu          String?
-  iSTT             Int?      @default(0)
-  bActive          Boolean?  @default(true)
-  bDeleted         Boolean?  @default(false)
-  bSystem          Boolean?  @default(false)
-  iDictionaryKey   Int?      @default(0)
-  dNgayTao         DateTime?
-  dNgaySua         DateTime?
-  sNguoiTao        String?
-  sNguoiSua        String?
-  sThietBiTao      String?
-  sThietBiSua      String?
-  sTen             String    @unique()
-  sMoTa            String?
-  sLogoUrl         String?
-  sUrl             String?
-  bTatCaNguoiDung  Boolean?  @default(false)
-  bTatCaNhanVien   Boolean?  @default(false)
-  sClientId        String?
-  sClientSecret    String?
-  sRedirectDefault String?
-
-  @@schema("mta")
-}
-
 model DM_NhanVien {
-  Id                  String               @id() @default(cuid())
+  Id                  String               @id() @default(uuid()) @db.Uuid()
   sMa                 String?              @unique()
   sGhiChu             String?
   iSTT                Int?                 @default(0)
@@ -2250,10 +2218,10 @@ model DM_NhanVien {
   sEmail              String?
   bLaNguoiDung        Boolean?
   DM_DonVi            DM_DonVi?            @relation(fields: [sDM_DonViId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_DonVi")
-  sDM_DonViId         String?
+  sDM_DonViId         String?              @db.Uuid()
   DM_ViTriCongViec    DM_ViTriCongViec?    @relation(fields: [sDM_ViTriCongViecId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_ViTriCongViec")
-  sDM_ViTriCongViecId String?
-  sQuanlyTrucTiepId   String?
+  sDM_ViTriCongViecId String?              @db.Uuid()
+  sQuanlyTrucTiepId   String?              @db.Uuid()
   sAvatarId           String?
   group               Group?               @relation(fields: [groupId], references: [id])
   groupId             String?
@@ -2278,7 +2246,7 @@ model DM_NhanVien {
 }
 
 model DM_PhanCap_ChatLuong_TrangThietBi {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2298,7 +2266,7 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
 }
 
 model DM_PhanLoai_CSKT {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2318,7 +2286,7 @@ model DM_PhanLoai_CSKT {
 }
 
 model DM_NhomNguoiDung {
-  Id                 String               @id() @default(cuid())
+  Id                 String               @id() @default(uuid()) @db.Uuid()
   sMa                String?              @unique()
   sGhiChu            String?
   iSTT               Int?                 @default(0)
@@ -2340,7 +2308,7 @@ model DM_NhomNguoiDung {
 }
 
 model DM_NhomUngDung {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2361,7 +2329,7 @@ model DM_NhomUngDung {
 }
 
 model DM_QuocGia {
-  Id             String        @id() @default(cuid())
+  Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?       @unique()
   sGhiChu        String?
   iSTT           Int?          @default(0)
@@ -2384,7 +2352,7 @@ model DM_QuocGia {
 }
 
 model DM_Tinh {
-  Id                          String             @id() @default(cuid())
+  Id                          String             @id() @default(uuid()) @db.Uuid()
   sMa                         String?            @unique()
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
@@ -2400,11 +2368,11 @@ model DM_Tinh {
   sThietBiSua                 String?
   sTen                        String             @unique()
   quocGia                     DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
-  sDM_QuocGiaId               String?
+  sDM_QuocGiaId               String?            @db.Uuid()
   dM_KhuVuc_DiaLy             DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
-  iDM_KhuVucDiaLy_Id          String?
+  iDM_KhuVucDiaLy_Id          String?            @db.Uuid()
   dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?
+  iDM_DonViHanhChinhId        String?            @db.Uuid()
   huyen                       DM_QuanHuyen[]
   xaPhuong                    DM_XaPhuong[]
   userProfileHometown         UserProfile[]      @relation("ProvinceHometown")
@@ -2417,7 +2385,7 @@ model DM_Tinh {
 }
 
 model DM_QuanHuyen {
-  Id                          String             @id() @default(cuid())
+  Id                          String             @id() @default(uuid()) @db.Uuid()
   sMa                         String?            @unique()
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
@@ -2433,10 +2401,10 @@ model DM_QuanHuyen {
   sThietBiSua                 String?
   sTen                        String
   dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
-  sDM_TinhId                  String?
+  sDM_TinhId                  String?            @db.Uuid()
   sDM_Tinh_Ma                 String?
   dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?
+  iDM_DonViHanhChinhId        String?            @db.Uuid()
   xaPhuong                    DM_XaPhuong[]
   userProfileHometown         UserProfile[]      @relation("DistrictHometown")
   userProfilePlaceOfBirth     UserProfile[]      @relation("DistrictPlaceOfBirth")
@@ -2449,7 +2417,7 @@ model DM_QuanHuyen {
 }
 
 model DM_XaPhuong {
-  Id                          String             @id() @default(cuid())
+  Id                          String             @id() @default(uuid()) @db.Uuid()
   sMa                         String?            @unique()
   sGhiChu                     String?
   iSTT                        Int?               @default(0)
@@ -2464,14 +2432,13 @@ model DM_XaPhuong {
   sThietBiTao                 String?
   sThietBiSua                 String?
   sTen                        String
-  sDM_TinhId                  String?
-  quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
-  sDM_QuanHuyenId             String?
   sDM_QuanHuyen_Ma            String?
-  dM_Tinh                     DM_Tinh?           @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId                   String?
+  dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
+  sDM_TinhId                  String?            @db.Uuid()
+  quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
+  sDM_QuanHuyenId             String?            @db.Uuid()
   dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?
+  iDM_DonViHanhChinhId        String?            @db.Uuid()
   userProfileHometown         UserProfile[]      @relation("CommuneHometown")
   userProfilePlaceOfBirth     UserProfile[]      @relation("CommunePlaceOfBirth")
   userProfilePermanentAddress UserProfile[]      @relation("CommunePermanentAddress")
@@ -2483,7 +2450,7 @@ model DM_XaPhuong {
 }
 
 model DM_VaiTro {
-  Id              String            @id() @default(cuid())
+  Id              String            @id() @default(uuid()) @db.Uuid()
   sMa             String?           @unique()
   sGhiChu         String?
   iSTT            Int?              @default(0)
@@ -2505,7 +2472,7 @@ model DM_VaiTro {
 }
 
 model DM_ViTriCongViec {
-  Id              String        @id() @default(cuid())
+  Id              String        @id() @default(uuid()) @db.Uuid()
   sMa             String?       @unique()
   sGhiChu         String?
   iSTT            Int?          @default(0)
@@ -2520,8 +2487,8 @@ model DM_ViTriCongViec {
   sThietBiTao     String?
   sThietBiSua     String?
   sTen            String        @unique()
-  sDM_ChucDanhId  String?
-  sDM_NhomViTriId String
+  sDM_ChucDanhId  String?       @db.Uuid()
+  sDM_NhomViTriId String        @db.Uuid()
   DM_NhanVien     DM_NhanVien[]
   DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
 
@@ -2529,7 +2496,7 @@ model DM_ViTriCongViec {
 }
 
 model NguoiDungTrongNhom {
-  Id                  String            @id() @default(cuid())
+  Id                  String            @id() @default(uuid()) @db.Uuid()
   sMa                 String?           @unique()
   sGhiChu             String?
   iSTT                Int?              @default(0)
@@ -2544,16 +2511,16 @@ model NguoiDungTrongNhom {
   sThietBiTao         String?
   sThietBiSua         String?
   DM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhomNguoiDung")
-  sDM_NhomNguoiDungId String?
+  sDM_NhomNguoiDungId String?           @db.Uuid()
   DM_NhanVien         DM_NhanVien?      @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhanVien")
-  sDM_NhanVienId      String?
+  sDM_NhanVienId      String?           @db.Uuid()
 
   @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
   @@schema("mta")
 }
 
 model NhatKyHoatDong {
-  Id             String       @id() @default(cuid())
+  Id             String       @id() @default(uuid()) @db.Uuid()
   sMa            String?      @unique()
   sGhiChu        String?
   iSTT           Int?         @default(0)
@@ -2568,7 +2535,7 @@ model NhatKyHoatDong {
   sThietBiTao    String?
   sThietBiSua    String?
   DM_NhanVien    DM_NhanVien? @relation(fields: [sNhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
-  sNhanVienId    String?
+  sNhanVienId    String?      @db.Uuid()
   dLogTime       DateTime?
   iState         Int?
   sObjectName    String?
@@ -2580,7 +2547,7 @@ model NhatKyHoatDong {
 }
 
 model Policy {
-  Id             String    @id() @default(cuid())
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?   @unique()
   sGhiChu        String?
   iSTT           Int?      @default(0)
@@ -2604,7 +2571,7 @@ model Policy {
 }
 
 model Quyen_VaiTro {
-  Id             String       @id() @default(cuid())
+  Id             String       @id() @default(uuid()) @db.Uuid()
   sMa            String?      @unique()
   sGhiChu        String?
   iSTT           Int?         @default(0)
@@ -2620,8 +2587,8 @@ model Quyen_VaiTro {
   sThietBiSua    String?
   sTen           String       @unique()
   sTenChucNang   String?      @default("N'Tên quyền'")
-  sDM_NhanVienId String?
-  sDM_VaiTroId   String?
+  sDM_NhanVienId String?      @db.Uuid()
+  sDM_VaiTroId   String?      @db.Uuid()
   fValue         Int?
   DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
   DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
@@ -2630,7 +2597,7 @@ model Quyen_VaiTro {
 }
 
 model TaiKhoan {
-  Id             String       @id() @default(cuid())
+  Id             String       @id() @default(uuid()) @db.Uuid()
   sMa            String?      @unique()
   sGhiChu        String?
   iSTT           Int?         @default(0)
@@ -2647,14 +2614,14 @@ model TaiKhoan {
   sTen           String
   sUserName      String?      @unique()
   sAvatar        String?
-  sDM_NhanVienId String?      @unique()
+  sDM_NhanVienId String?      @unique() @db.Uuid()
   nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
 
   @@schema("mta")
 }
 
 model VaiTroTrongNhom {
-  Id                  String            @id() @default(cuid())
+  Id                  String            @id() @default(uuid()) @db.Uuid()
   sMa                 String?           @unique()
   sGhiChu             String?
   iSTT                Int?              @default(0)
@@ -2669,9 +2636,9 @@ model VaiTroTrongNhom {
   sThietBiTao         String?
   sThietBiSua         String?
   dM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id])
-  sDM_NhomNguoiDungId String?
+  sDM_NhomNguoiDungId String?           @db.Uuid()
   DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
-  sDM_VaiTroId        String?
+  sDM_VaiTroId        String?           @db.Uuid()
 
   @@schema("mta")
 }
@@ -2685,7 +2652,7 @@ model UserProfile {
   createdAt                  DateTime          @default(now())
   updatedAt                  DateTime          @updatedAt()
   user                       DM_NhanVien?      @relation(fields: [userId], references: [Id])
-  userId                     String?           @unique()
+  userId                     String?           @unique() @db.Uuid()
   userType                   UserType          @default(OTHER)
   avatar                     String?
   firstName                  String
@@ -2697,64 +2664,64 @@ model UserProfile {
   bankName                   String?
   currentAddress             String?
   provinceCurrentAddress     DM_Tinh?          @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
-  provinceCurrentAddressId   String?
+  provinceCurrentAddressId   String?           @db.Uuid()
   districtCurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
-  districtCurrentAddressId   String?
+  districtCurrentAddressId   String?           @db.Uuid()
   communeCurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
-  communeCurrentAddressId    String?
+  communeCurrentAddressId    String?           @db.Uuid()
   dateOfBirth                DateTime?
   placeOfBirth               String?
   provinceOfBirth            DM_Tinh?          @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
-  provinceOfBirthId          String?
+  provinceOfBirthId          String?           @db.Uuid()
   districtOfBirth            DM_QuanHuyen?     @relation(name: "DistrictPlaceOfBirth", fields: [districtOfBirthId], references: [Id])
-  districtOfBirthId          String?
+  districtOfBirthId          String?           @db.Uuid()
   communeOfBirth             DM_XaPhuong?      @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
-  communeOfBirthId           String?
+  communeOfBirthId           String?           @db.Uuid()
   homeTown                   String?
   idCardDate                 DateTime?
   gender                     Gender?
   permanentAddress           String?
   provincePermanentAddress   DM_Tinh?          @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
-  provincePermanentAddressId String?
+  provincePermanentAddressId String?           @db.Uuid()
   districtPermanentAddress   DM_QuanHuyen?     @relation(name: "DistrictPermanentAddress", fields: [districtPermanentAddressId], references: [Id])
-  districtPermanentAddressId String?
+  districtPermanentAddressId String?           @db.Uuid()
   communePermanentAddress    DM_XaPhuong?      @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
-  communePermanentAddressId  String?
+  communePermanentAddressId  String?           @db.Uuid()
   temporaryAddress           String?
   contactAddress             String?
   phoneNumber                String?
   email                      String?
   nationality                DM_QuocGia?       @relation(fields: [nationalityId], references: [Id])
-  nationalityId              String?
+  nationalityId              String?           @db.Uuid()
   religion                   DM_TonGiao?       @relation(fields: [religionId], references: [Id])
-  religionId                 String?
+  religionId                 String?           @db.Uuid()
   ethnicity                  DM_DanToc?        @relation(fields: [ethnicityId], references: [Id])
-  ethnicityId                String?
+  ethnicityId                String?           @db.Uuid()
   provinceHometown           DM_Tinh?          @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
-  provinceHometownId         String?
+  provinceHometownId         String?           @db.Uuid()
   districtHometown           DM_QuanHuyen?     @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
-  districtHometownId         String?
+  districtHometownId         String?           @db.Uuid()
   communeHometown            DM_XaPhuong?      @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
-  communeHometownId          String?
+  communeHometownId          String?           @db.Uuid()
   officerNumber              String?
   rank                       DM_CapBac?        @relation(fields: [rankId], references: [Id])
-  rankId                     String?
+  rankId                     String?           @db.Uuid()
   rankDate                   DateTime?
   academicDegreeType         DM_HocVi?         @relation(fields: [academicDegreeTypeId], references: [Id])
-  academicDegreeTypeId       String?
+  academicDegreeTypeId       String?           @db.Uuid()
   academicDegreeDate         DateTime?
   academicRankType           DM_HocHam?        @relation(fields: [academicRankTypeId], references: [Id])
-  academicRankTypeId         String?
+  academicRankTypeId         String?           @db.Uuid()
   academicRankDate           DateTime?
   level                      DM_ChucDanh?      @relation(fields: [levelId], references: [Id])
-  levelId                    String?
+  levelId                    String?           @db.Uuid()
   unionDate                  DateTime?
   unionPlace                 String?
   CPVJoinDate                DateTime?
   officialCPVDate            DateTime?
   CPVJoinPlace               String?
   positionCPV                DM_ChucVu?        @relation(fields: [positionCPVId], references: [Id])
-  positionCPVId              String?
+  positionCPVId              String?           @db.Uuid()
   tenureDate                 DateTime?
   enlistmentDate             DateTime?
   dischargeDate              DateTime?
@@ -2834,7 +2801,7 @@ model Lecturer {
   userProfile                 UserProfile                   @relation(fields: [userProfileId], references: [id])
   userProfileId               String                        @unique()
   organization                DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId              String
+  organizationId              String                        @db.Uuid()
   lecturerType                LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId              String
   mainSubjectClasses          SubjectClass[]                @relation("MainLecturer")
@@ -2866,7 +2833,7 @@ model LecturerHistory {
   userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
   userProfileId  String       @unique()
   organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
-  organizationId String?
+  organizationId String?      @db.Uuid()
   lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId String
 
@@ -2890,7 +2857,7 @@ model ResearchProject {
   supervisor        Lecturer                      @relation(fields: [supervisorId], references: [id])
   supervisorId      String
   organization      DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId    String
+  organizationId    String                        @db.Uuid()
   maxStudents       Int
   currentStudents   Int                           @default(0)
   registrationStart DateTime
@@ -2949,7 +2916,7 @@ model ThesisProject {
   supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId      String
   organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])
-  organizationId    String
+  organizationId    String                      @db.Uuid()
   maxStudents       Int
   currentStudents   Int                         @default(0)
   registrationStart DateTime
@@ -3389,7 +3356,7 @@ model Staff {
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique()
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String
+  organizationId  String        @db.Uuid()
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
   staffTypeId     String
   staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
@@ -3412,7 +3379,7 @@ model StaffHistory {
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique()
   organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String
+  organizationId  String        @db.Uuid()
   staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
   staffTypeId     String
   staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
@@ -3576,7 +3543,7 @@ model Feedback {
   status       FeedbackStatus
   satisfaction Satisfaction
   user         DM_NhanVien    @relation(fields: [userId], references: [Id])
-  userId       String
+  userId       String         @db.Uuid()
 
   @@schema("ql-nguoi-dung")
 }

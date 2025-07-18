@@ -211,7 +211,7 @@ Table FillInBlankAnswer {
     (answerId, slotId) [unique]
   }
 
-  Note: 'Nội dung trả lời cho một ô trống trong câu hỏi điền khuyết'
+  Note: 'Nội dung trả lời cho một ô trống trong câu hỏi đi���n khuyết'
 }
 
 Table OrderingAnswer {
@@ -1559,12 +1559,12 @@ Table DM_DonVi {
   sTen String [unique, not null]
   sCode String [unique]
   sTenVietTat String
-  sParentId String
   sTruongDonVi String
   sChucNangNhiemVu String
   sDiaChi String
   DM_NhanVien DM_NhanVien [not null]
   parent DM_DonVi
+  sParentId String
   children DM_DonVi [not null]
   lecturers Lecturer [not null]
   lecturerHistory LecturerHistory [not null]

@@ -49,7 +49,7 @@ model Notification extends Base {
 
   // Thông tin tác giả
   createdBy      DM_NhanVien          @relation(fields: [createdById], references: [Id])
-  createdById    String
+  createdById    String               @db.Uuid
 
   // Tệp đính kèm
   attachments    DocumentFile[]

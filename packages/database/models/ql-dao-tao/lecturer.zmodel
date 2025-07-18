@@ -20,7 +20,7 @@ model Lecturer extends Base {
   userProfileId               String                        @unique
 
   organization                DM_DonVi                      @relation(fields: [organizationId], references: [Id])
-  organizationId              String
+  organizationId              String                        @db.Uuid
 
   lecturerType                LecturerType                  @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId              String
@@ -51,7 +51,7 @@ model LecturerHistory extends Base {
   userProfileId  String       @unique
 
   organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
-  organizationId String?
+  organizationId String?      @db.Uuid
 
   lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
   lecturerTypeId String

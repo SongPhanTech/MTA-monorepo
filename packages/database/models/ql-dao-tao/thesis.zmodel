@@ -39,7 +39,7 @@ model ThesisProject extends Base {
 
   // Đơn vị quản lý
   organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])
-  organizationId    String
+  organizationId    String                      @db.Uuid
   
   // Thông tin đăng ký
   maxStudents       Int                           // Số lượng học viên tối đa

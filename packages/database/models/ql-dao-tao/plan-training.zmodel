@@ -223,7 +223,7 @@ model FixedClass extends Base {
   trainingCourseId         String
 
   managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?
+  managementOrganizationId String?            @db.Uuid
 
   lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
   lecturerManagementId     String?
@@ -252,7 +252,7 @@ model Curriculum extends Base {
   englishName              String?
 
   managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String
+  managementOrganizationId String              @db.Uuid
 
   trainingMajor            TrainingMajor       @relation(fields: [trainingMajorId], references: [id]) // Chuyên ngành đào tạo
   trainingMajorId          String
@@ -324,7 +324,7 @@ model Subject extends Base {
   englishName              String?          @unique
 
   managementOrganization   DM_DonVi         @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String
+  managementOrganizationId String           @db.Uuid
   information              String?   //Thông tin
 
   subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
@@ -385,7 +385,7 @@ model SubjectVersion extends Base {
 
 
   managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String
+  managementOrganizationId String                 @db.Uuid
 
   subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
