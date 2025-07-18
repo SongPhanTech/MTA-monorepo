@@ -31,6 +31,7 @@ export default {
     "DANH_MUC_HO_SO_TRINH_DO_QUAN_LY_NHA_NUOC": "/danh-muc-ho-so/trinh-do-quan-ly-nha-nuoc",
     "DANH_MUC_HO_SO_XEP_LOAI_DANH_GIA_CAN_BO": "/danh-muc-ho-so/xep-loai-danh-gia-can-bo",
     "DANH_MUC_HO_SO_XEP_LOAI_DANH_GIA_CHAT_LUONG_DANG_VIEN": "/danh-muc-ho-so/xep-loai-danh-gia-chat-luong-dang-vien",
+    "DANH_MUC_DANH_MUC_BAC_DAO_TAO": "/danh-muc/danh-muc-bac-dao-tao",
     "DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG": "/danh-muc/danh-muc-canh-cao-hoc-duong",
     "DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP": "/danh-muc/danh-muc-canh-cao-hoc-tap",
     "DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM": "/danh-muc/danh-muc-chuyen-doi-diem",

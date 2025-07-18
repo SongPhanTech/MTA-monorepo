@@ -555,11 +555,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     width: 150,
                                 },
                                 {
-                                    title: 'Mức độ cảnh cáo học tập',
-                                    dataIndex: 'academicWarningSeverity',
-                                    width: 150,
-                                },
-                                {
                                     title: 'Cảnh cáo',
                                     dataIndex: 'academicAction',
                                     width: 200,
