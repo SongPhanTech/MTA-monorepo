@@ -28,7 +28,7 @@ const TreeSelectDepartment: React.FC<CustomTreeSelectProps> = ({
     // Lấy thông tin SchoolYear
     const { data: organizationDataKhoa = [] } = useFindManyDM_DonVi({
         include: {
-            children: true,
+            // children: true,
         },
         // TODO: fetch Khoa only
         where: {

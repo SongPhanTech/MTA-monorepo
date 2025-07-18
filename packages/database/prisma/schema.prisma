@@ -2058,7 +2058,9 @@ model DM_DonVi {
   sTruongDonVi     String?
   sChucNangNhiemVu String?
   sDiaChi          String?
+  parent           DM_DonVi?         @relation("DM_DonVi_Parent", fields: [sParentId], references: [Id], map: "FK_DM_DonVi_iParentId_DM_DonVi_Id")
   sParentId        String?           @db.Uuid()
+  children         DM_DonVi[]        @relation("DM_DonVi_Parent")
   lecturers        Lecturer[]
   lecturerHistory  LecturerHistory[]
   staffs           Staff[]
