@@ -138,7 +138,7 @@ export default function ClassSubject() {
         include: {
             subject: {
                 include: {
-                    managementOrganization: { include: { parent: true } },
+                    managementOrganization: true,
                 },
             },
             mainLecturer: {

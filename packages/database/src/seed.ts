@@ -1,5 +1,5 @@
 import { $Enums, PrismaClient } from '@prisma/client'
-import { academicRankingConversions } from './seed/academic-ranking-convert'
+import { academicRankingGraduation, academicRankingStudying } from './seed/academic-ranking-convert'
 import { scoreConversions } from './seed/score-convert'
 import { trainingData } from './seed/trainingData'
 
@@ -415,10 +415,12 @@ async function main() {
     await Promise.all(
         trainingCourses.map((trainingCourse) =>
             prisma.academicRankingConvert.createMany({
-                data: academicRankingConversions.map((conversion) => ({
-                    trainingCourseId: trainingCourse.id,
-                    ...conversion,
-                })),
+                data: [...academicRankingGraduation, ...academicRankingStudying].map(
+                    (conversion) => ({
+                        trainingCourseId: trainingCourse.id,
+                        ...conversion,
+                    })
+                ),
             })
         )
     )

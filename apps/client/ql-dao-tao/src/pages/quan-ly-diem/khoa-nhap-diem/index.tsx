@@ -146,7 +146,7 @@ export default function SubjectClassScore() {
         include: {
             subject: {
                 include: {
-                    managementOrganization: { include: { parent: true } },
+                    managementOrganization: true,
                 },
             },
             mainLecturer: {

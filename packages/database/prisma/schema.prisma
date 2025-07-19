@@ -1892,6 +1892,7 @@ model Message {
 model DM_CapBac {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1904,7 +1905,6 @@ model DM_CapBac {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("mta")
@@ -1913,6 +1913,7 @@ model DM_CapBac {
 model DM_ChucDanh {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1925,7 +1926,6 @@ model DM_ChucDanh {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   iLoaiChucDanh  Int?          @default(0)
   userProfile    UserProfile[]
 
@@ -1935,6 +1935,7 @@ model DM_ChucDanh {
 model DM_ChucVu {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1947,7 +1948,6 @@ model DM_ChucVu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   userProfile    UserProfile[]
 
   @@schema("mta")
@@ -1956,6 +1956,7 @@ model DM_ChucVu {
 model DM_HocHam {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1968,7 +1969,6 @@ model DM_HocHam {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("mta")
@@ -1977,6 +1977,7 @@ model DM_HocHam {
 model DM_HocVi {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1989,7 +1990,6 @@ model DM_HocVi {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("mta")
@@ -1998,6 +1998,7 @@ model DM_HocVi {
 model DM_ChungChiTinHoc {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2010,7 +2011,6 @@ model DM_ChungChiTinHoc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2018,6 +2018,7 @@ model DM_ChungChiTinHoc {
 model DM_DanToc {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2030,7 +2031,6 @@ model DM_DanToc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   sTenKhac       String?
   sDiaChiCuTru   String?
   userProfile    UserProfile[]
@@ -2041,6 +2041,7 @@ model DM_DanToc {
 model DM_DonVi {
   Id               String            @id() @default(uuid()) @db.Uuid()
   sMa              String?
+  sTen             String?
   sGhiChu          String?
   iSTT             Int?              @default(0)
   bActive          Boolean?          @default(true)
@@ -2053,15 +2054,12 @@ model DM_DonVi {
   sNguoiSua        String?
   sThietBiTao      String?
   sThietBiSua      String?
-  sTen             String            @unique()
-  sCode            String?           @unique()
+  sCode            String?
   sTenVietTat      String?
   sTruongDonVi     String?
   sChucNangNhiemVu String?
   sDiaChi          String?
-  parent           DM_DonVi?         @relation("DM_DonVi_Parent", fields: [sParentId], references: [Id], map: "FK_DM_DonVi_iParentId_DM_DonVi_Id")
   sParentId        String?           @db.Uuid()
-  children         DM_DonVi[]        @relation("DM_DonVi_Parent")
   lecturers        Lecturer[]
   lecturerHistory  LecturerHistory[]
   staffs           Staff[]
@@ -2083,6 +2081,7 @@ model DM_DonVi {
 model DM_DonViHanhChinh {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2095,7 +2094,6 @@ model DM_DonViHanhChinh {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
   sTen_En        String?
 
   @@schema("mta")
@@ -2104,6 +2102,7 @@ model DM_DonViHanhChinh {
 model DM_KhuVuc_DiaLy {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2116,7 +2115,6 @@ model DM_KhuVuc_DiaLy {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
   sTen_En        String?
   student        Student[]
 
@@ -2126,6 +2124,7 @@ model DM_KhuVuc_DiaLy {
 model DM_NgoaiNgu {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2138,7 +2137,6 @@ model DM_NgoaiNgu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2146,6 +2144,7 @@ model DM_NgoaiNgu {
 model DM_TonGiao {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2158,7 +2157,6 @@ model DM_TonGiao {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   userProfile    UserProfile[]
 
   @@schema("mta")
@@ -2167,6 +2165,7 @@ model DM_TonGiao {
 model DM_TrinhDoNgoaiNgu {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2179,7 +2178,6 @@ model DM_TrinhDoNgoaiNgu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
   sKhung         String?
 
   @@schema("mta")
@@ -2188,6 +2186,7 @@ model DM_TrinhDoNgoaiNgu {
 model DM_TrinhDoTinHoc {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2200,7 +2199,6 @@ model DM_TrinhDoTinHoc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2208,6 +2206,7 @@ model DM_TrinhDoTinHoc {
 model DM_NhanVien {
   Id                  String         @id() @default(uuid()) @db.Uuid()
   sMa                 String?
+  sTen                String?
   sGhiChu             String?
   iSTT                Int?           @default(0)
   bActive             Boolean?       @default(true)
@@ -2220,7 +2219,7 @@ model DM_NhanVien {
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
-  sTen                String?
+  sCCCD               String?
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -2254,6 +2253,7 @@ model DM_NhanVien {
 model DM_PhanCap_ChatLuong_TrangThietBi {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2266,7 +2266,6 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2274,6 +2273,7 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
 model DM_PhanLoai_CSKT {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2286,7 +2286,6 @@ model DM_PhanLoai_CSKT {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2294,6 +2293,7 @@ model DM_PhanLoai_CSKT {
 model DM_NhomNguoiDung {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2306,7 +2306,6 @@ model DM_NhomNguoiDung {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2314,6 +2313,7 @@ model DM_NhomNguoiDung {
 model DM_NhomUngDung {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2326,7 +2326,6 @@ model DM_NhomUngDung {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
   sMoTa          String?
 
   @@schema("mta")
@@ -2335,6 +2334,7 @@ model DM_NhomUngDung {
 model DM_QuocGia {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2347,7 +2347,6 @@ model DM_QuocGia {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   sLanguage      String?
   userProfile    UserProfile[]
 
@@ -2357,6 +2356,7 @@ model DM_QuocGia {
 model DM_Tinh {
   Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
+  sTen                        String?
   sGhiChu                     String?
   iSTT                        Int?          @default(0)
   bActive                     Boolean?      @default(true)
@@ -2369,7 +2369,6 @@ model DM_Tinh {
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sTen                        String        @unique()
   sDM_QuocGiaId               String?       @db.Uuid()
   iDM_KhuVucDiaLy_Id          String?       @db.Uuid()
   iDM_DonViHanhChinhId        String?       @db.Uuid()
@@ -2385,6 +2384,7 @@ model DM_Tinh {
 model DM_QuanHuyen {
   Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
+  sTen                        String?
   sGhiChu                     String?
   iSTT                        Int?          @default(0)
   bActive                     Boolean?      @default(true)
@@ -2397,7 +2397,6 @@ model DM_QuanHuyen {
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sTen                        String
   sDM_TinhId                  String?       @db.Uuid()
   sDM_Tinh_Ma                 String?
   iDM_DonViHanhChinhId        String?       @db.Uuid()
@@ -2406,7 +2405,6 @@ model DM_QuanHuyen {
   userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
   userProfileCurrentAddress   UserProfile[] @relation("DistrictCurrentAddress")
 
-  @@unique([sDM_TinhId, sTen])
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("mta")
 }
@@ -2414,6 +2412,7 @@ model DM_QuanHuyen {
 model DM_XaPhuong {
   Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
+  sTen                        String?
   sGhiChu                     String?
   iSTT                        Int?          @default(0)
   bActive                     Boolean?      @default(true)
@@ -2426,7 +2425,6 @@ model DM_XaPhuong {
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sTen                        String
   sDM_QuanHuyen_Ma            String?
   sDM_TinhId                  String?       @db.Uuid()
   sDM_QuanHuyenId             String?       @db.Uuid()
@@ -2436,34 +2434,14 @@ model DM_XaPhuong {
   userProfilePermanentAddress UserProfile[] @relation("CommunePermanentAddress")
   userProfileCurrentAddress   UserProfile[] @relation("CommuneCurrentAddress")
 
-  @@unique([sDM_QuanHuyenId, sTen])
   @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
-  @@schema("mta")
-}
-
-model DM_VaiTro {
-  Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String    @unique()
-
   @@schema("mta")
 }
 
 model DM_ViTriCongViec {
   Id              String    @id() @default(uuid()) @db.Uuid()
   sMa             String?
+  sTen            String?
   sGhiChu         String?
   iSTT            Int?      @default(0)
   bActive         Boolean?  @default(true)
@@ -2476,149 +2454,8 @@ model DM_ViTriCongViec {
   sNguoiSua       String?
   sThietBiTao     String?
   sThietBiSua     String?
-  sTen            String    @unique()
   sDM_ChucDanhId  String?   @db.Uuid()
   sDM_NhomViTriId String    @db.Uuid()
-
-  @@schema("mta")
-}
-
-model NguoiDungTrongNhom {
-  Id                  String    @id() @default(uuid()) @db.Uuid()
-  sMa                 String?
-  sGhiChu             String?
-  iSTT                Int?      @default(0)
-  bActive             Boolean?  @default(true)
-  bDeleted            Boolean?  @default(false)
-  bSystem             Boolean?  @default(false)
-  iDictionaryKey      Int?      @default(0)
-  dNgayTao            DateTime?
-  dNgaySua            DateTime?
-  sNguoiTao           String?
-  sNguoiSua           String?
-  sThietBiTao         String?
-  sThietBiSua         String?
-  sDM_NhomNguoiDungId String?   @db.Uuid()
-  sDM_NhanVienId      String?   @db.Uuid()
-
-  @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
-  @@schema("mta")
-}
-
-model NhatKyHoatDong {
-  Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sNhanVienId    String?   @db.Uuid()
-  dLogTime       DateTime?
-  iState         Int?
-  sObjectName    String?
-  sReferenceName String?
-  sDescription   String?
-  sIPAddress     String?
-
-  @@schema("mta")
-}
-
-model Policy {
-  Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String    @unique()
-  bXacThuc2YeuTo Boolean?  @default(false)
-  bGioiHanTCIP   Boolean?  @default(false)
-  bGioiHanTG     Boolean?  @default(false)
-  iApDungChoUD   Int?      @default(0)
-
-  @@schema("mta")
-}
-
-model Quyen_VaiTro {
-  Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String    @unique()
-  sTenChucNang   String?   @default("N'Tên quyền'")
-  sDM_NhanVienId String?   @db.Uuid()
-  sDM_VaiTroId   String?   @db.Uuid()
-  fValue         Int?
-
-  @@schema("mta")
-}
-
-model TaiKhoan {
-  Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String
-  sUserName      String?   @unique()
-  sAvatar        String?
-  sDM_NhanVienId String?   @unique() @db.Uuid()
-
-  @@schema("mta")
-}
-
-model VaiTroTrongNhom {
-  Id                  String    @id() @default(uuid()) @db.Uuid()
-  sMa                 String?
-  sGhiChu             String?
-  iSTT                Int?      @default(0)
-  bActive             Boolean?  @default(true)
-  bDeleted            Boolean?  @default(false)
-  bSystem             Boolean?  @default(false)
-  iDictionaryKey      Int?      @default(0)
-  dNgayTao            DateTime?
-  dNgaySua            DateTime?
-  sNguoiTao           String?
-  sNguoiSua           String?
-  sThietBiTao         String?
-  sThietBiSua         String?
-  sDM_NhomNguoiDungId String?   @db.Uuid()
-  sDM_VaiTroId        String?   @db.Uuid()
 
   @@schema("mta")
 }
