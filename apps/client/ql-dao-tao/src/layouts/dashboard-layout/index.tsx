@@ -1,12 +1,10 @@
 import logo_mta from '@assets/images/logo_mta.png'
-import AvatarDropdown from '@components/layouts/avatar-dropdown'
+import HeaderApp from '@components/header'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-import { SearchSystem } from '@workspace/ui'
-import { Layout, theme } from 'antd'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
@@ -72,10 +70,7 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
                         <span className="text-lg font-bold text-primary">
                             PHÂN HỆ QUẢN LÝ ĐÀO TẠO
                         </span>
-                        <div className="flex gap-2 items-center">
-                            <SearchSystem />
-                            <AvatarDropdown />
-                        </div>
+                        <HeaderApp />
                     </Header>
                     <Content className="mx-2">
                         {/* <div
