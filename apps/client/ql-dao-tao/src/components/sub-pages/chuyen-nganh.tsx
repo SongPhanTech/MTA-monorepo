@@ -159,7 +159,7 @@ export default function MajorInforList({ infor }: any) {
                                     }
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
-                                        (node.title as string)
+                                        (node.label as string)
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }

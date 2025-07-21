@@ -187,7 +187,7 @@ export default function SubjectOpeningPlan() {
                                                 treeData={treeData}
                                                 style={{ width: '100%' }}
                                                 filterTreeNode={(input, node) =>
-                                                    (node.title as string)
+                                                    (node.label as string)
                                                         .toLowerCase()
                                                         .includes(input.toLowerCase())
                                                 }

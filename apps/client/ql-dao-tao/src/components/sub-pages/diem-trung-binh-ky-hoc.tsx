@@ -332,7 +332,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                             }
                                             treeData={treeData}
                                             filterTreeNode={(input, node) =>
-                                                (node.title as string)
+                                                (node.label as string)
                                                     .toLowerCase()
                                                     .includes(input.toLowerCase())
                                             }

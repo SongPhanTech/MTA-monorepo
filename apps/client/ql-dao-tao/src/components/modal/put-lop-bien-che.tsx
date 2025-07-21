@@ -365,7 +365,7 @@ const PutFixedClassModal = () => {
                         treeDefaultExpandAll
                         treeData={curriculumTreeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                            (node.label as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </FormItem>
@@ -411,7 +411,7 @@ const PutFixedClassModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                            (node.label as string).toLowerCase().includes(input.toLowerCase())
                         }
                         onChange={(val) =>
                             handleChangeFieldOrganization(

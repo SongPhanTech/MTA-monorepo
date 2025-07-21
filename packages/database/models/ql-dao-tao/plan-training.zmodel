@@ -383,7 +383,6 @@ model SubjectVersion extends Base {
   materials                String? // VIII. Cơ sở vật chất, học liệu
   rules                    String? // ​IX. Quy định của học phần
 
-
   managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
   managementOrganizationId String                 @db.Uuid
 

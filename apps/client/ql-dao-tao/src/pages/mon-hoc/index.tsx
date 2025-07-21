@@ -151,7 +151,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                     treeDefaultExpandAll
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
-                                        (node.title as string)
+                                        (node.label as string)
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }

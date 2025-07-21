@@ -223,7 +223,7 @@ const PutOpenSubjectClassModal = () => {
                         treeData={treeData}
                         className="w-full"
                         filterTreeNode={(input, node) =>
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                            (node.label as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </FormItem>

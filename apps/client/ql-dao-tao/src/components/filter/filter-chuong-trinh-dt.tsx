@@ -173,7 +173,7 @@ const FilterChuongTrinhDT = (props: Props) => {
                                     treeDefaultExpandAll
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
-                                        (node.title as string)
+                                        (node.label as string)
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }
