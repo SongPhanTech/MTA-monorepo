@@ -1,4 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { importHeQuanSu } from '@workspace/libs/api/training'
 import { parseSheetHeQuanSu } from '@workspace/libs/parseExcel'
@@ -12,8 +13,8 @@ interface ImportStudentModalProps {
 }
 
 const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
-    const [currentPage, _setCurrentPage] = useState(1)
-    const [_numberOfPages, _setNumberOfPages] = useState(10)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(10)
     const [previewData, setPreviewData] = useState<any[]>([])
     const [errorData, setErrorData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
@@ -357,14 +358,21 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 rowKey="studentCode"
                 pagination={{
                     position: ['bottomRight'],
-                    defaultPageSize: 10,
+                    defaultPageSize: DEFAULT_PAGINATE_SIZE,
                     showSizeChanger: {
                         labelRender: ({ value }) => `${value} / trang`,
                         optionRender: (oriOption) => `${oriOption.value} / trang`,
                     },
                     showTotal: (total, range) =>
                         `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-
+                    onChange: (page, pageSize) => {
+                        if (numberOfPages === pageSize) {
+                            setCurrentPage(page)
+                        } else {
+                            setCurrentPage(1)
+                            setNumberOfPages(pageSize)
+                        }
+                    },
                     // onShowSizeChange(current, size) {
                     //     pagination?.onShowSizeChange?.(size)
                     // },
