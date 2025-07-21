@@ -38,7 +38,7 @@ async function main() {
                 scoreSpace = [6, 8]
             }
             // điểm trung bình
-            if (student.id.endsWith('2')) {
+            if (student.id.endsWith('3')) {
                 scoreSpace = [4, 7]
             }
             // điểm yếu

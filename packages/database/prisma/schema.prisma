@@ -25,11 +25,7 @@ enum ConfigKey {
 
 /// Loại câu hỏi
 enum QuestionType {
-  SINGLE_CHOICE
-  MULTIPLE_CHOICE
   ESSAY
-  FILL_IN_BLANK
-  ORDERING
 
   @@schema("khao-thi")
 }
@@ -492,16 +488,18 @@ model Difficulty {
 
 /// Khối kiến thức / Chương mục
 model KnowledgeBlock {
-  id             String              @id() @default(cuid())
-  code           String?             @unique()
-  active         Boolean             @default(true)
-  description    String?             @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt()
-  name           String
-  questions      Question[]
-  structureRules TestStructureRule[]
+  id               String              @id() @default(cuid())
+  code             String?             @unique()
+  active           Boolean             @default(true)
+  description      String?             @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt()
+  subjectVersion   SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  name             String
+  questions        Question[]
+  structureRules   TestStructureRule[]
 
   @@unique([name])
   @@schema("khao-thi")
@@ -509,161 +507,50 @@ model KnowledgeBlock {
 
 /// Câu hỏi
 model Question {
-  id                    String                 @id() @default(cuid())
-  code                  String?                @unique()
-  active                Boolean                @default(true)
-  description           String?                @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt()
-  content               String
-  type                  QuestionType
-  point                 Float                  @default(1)
-  explanation           String?
-  isAutoGraded          Boolean                @default(false)
-  multipleChoiceOptions MultipleChoiceOption[]
-  fillInBlankSlots      FillInBlankSlot[]
-  orderingItems         OrderingItem[]
-  questionBank          QuestionBank           @relation(fields: [questionBankId], references: [id])
-  questionBankId        String
-  knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId      String?
-  difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
-  difficultyId          String?
-  sessionQuestions      ExamSessionQuestion[]
-  answers               Answer[]
+  id               String                @id() @default(cuid())
+  code             String?               @unique()
+  active           Boolean               @default(true)
+  description      String?               @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt()
+  content          String
+  type             QuestionType          @default(ESSAY)
+  point            Float                 @default(1)
+  explanation      String?
+  isAutoGraded     Boolean               @default(false)
+  questionBank     QuestionBank          @relation(fields: [questionBankId], references: [id])
+  questionBankId   String
+  knowledgeBlock   KnowledgeBlock?       @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId String?
+  difficulty       Difficulty?           @relation(fields: [difficultyId], references: [id])
+  difficultyId     String?
+  sessionQuestions ExamSessionQuestion[]
+  /// Câu trả lời của thí sinh trong các phiên thi
+  answers          Answer[]
 
   @@schema("khao-thi")
 }
 
-/// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
-model MultipleChoiceOption {
-  id                String                         @id() @default(cuid())
-  code              String?                        @unique()
-  active            Boolean                        @default(true)
-  description       String?                        @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime                       @default(now())
-  updatedAt         DateTime                       @updatedAt()
-  questionId        String
-  question          Question                       @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content           String
-  isCorrect         Boolean                        @default(false)
-  order             Int
-  selectedInAnswers SelectedMultipleChoiceOption[]
-
-  @@schema("khao-thi")
-}
-
-/// Chỗ trống cần điền cho câu hỏi điền khuyết
-model FillInBlankSlot {
-  id                 String              @id() @default(cuid())
-  code               String?             @unique()
-  active             Boolean             @default(true)
-  description        String?             @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt()
-  questionId         String
-  question           Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  order              Int
-  correctAnswer      String
-  fillInBlankAnswers FillInBlankAnswer[]
-
-  @@unique([questionId, order])
-  @@schema("khao-thi")
-}
-
-/// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
-model OrderingItem {
-  id              String           @id() @default(cuid())
-  code            String?          @unique()
-  active          Boolean          @default(true)
-  description     String?          @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt()
-  questionId      String
-  question        Question         @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content         String
-  correctOrder    Int
-  orderingAnswers OrderingAnswer[]
-
-  @@unique([questionId, correctOrder])
-  @@schema("khao-thi")
-}
-
-/// Câu trả lời
+/// Câu trả lời của thí sinh
 model Answer {
-  id                       String                         @id() @default(cuid())
-  code                     String?                        @unique()
-  active                   Boolean                        @default(true)
-  description              String?                        @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                       @default(now())
-  updatedAt                DateTime                       @updatedAt()
-  sessionId                String
-  session                  ExamSession                    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  questionId               String
-  question                 Question                       @relation(fields: [questionId], references: [id])
-  isCorrect                Boolean?
-  score                    Float?
-  comment                  String?
-  essayAnswer              String
-  multipleChoiceSelections SelectedMultipleChoiceOption[]
-  fillInBlankAnswers       FillInBlankAnswer[]
-  orderingAnswers          OrderingAnswer[]
+  id          String      @id() @default(cuid())
+  code        String?     @unique()
+  active      Boolean     @default(true)
+  description String?     @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt()
+  sessionId   String
+  session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question    @relation(fields: [questionId], references: [id])
+  isCorrect   Boolean?
+  score       Float?
+  comment     String?
+  essayAnswer String
 
   @@unique([sessionId, questionId])
-  @@schema("khao-thi")
-}
-
-/// Bảng nối, ghi lại lựa chọn của thí sinh cho câu hỏi trắc nghiệm
-model SelectedMultipleChoiceOption {
-  answer   Answer               @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId String
-  option   MultipleChoiceOption @relation(fields: [optionId], references: [id])
-  optionId String
-
-  @@id([answerId, optionId])
-  @@schema("khao-thi")
-}
-
-/// Nội dung trả lời cho một ô trống trong câu hỏi điền khuyết
-model FillInBlankAnswer {
-  id          String          @id() @default(cuid())
-  code        String?         @unique()
-  active      Boolean         @default(true)
-  description String?         @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt()
-  answer      Answer          @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId    String
-  slot        FillInBlankSlot @relation(fields: [slotId], references: [id])
-  slotId      String
-  content     String
-
-  @@unique([answerId, slotId])
-  @@schema("khao-thi")
-}
-
-/// Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp
-model OrderingAnswer {
-  id          String       @id() @default(cuid())
-  code        String?      @unique()
-  active      Boolean      @default(true)
-  description String?      @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
-  answerId    String
-  answer      Answer       @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  itemId      String
-  item        OrderingItem @relation(fields: [itemId], references: [id])
-  order       Int
-
-  @@unique([answerId, itemId])
   @@schema("khao-thi")
 }
 
@@ -687,6 +574,7 @@ model Exam {
   shuffleQuestions   Boolean             @default(true)
   shuffleAnswers     Boolean             @default(true)
   showResult         Boolean             @default(false)
+  examBank           ExamBank[]
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]
 
@@ -708,7 +596,7 @@ model TestStructureRule {
   @@schema("khao-thi")
 }
 
-/// Ngân hàng đề thi
+/// Đề thi
 model ExamBank {
   id          String                @id() @default(cuid())
   code        String?               @unique()
@@ -717,7 +605,8 @@ model ExamBank {
   deletedAt   DateTime?
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt()
-  name        String
+  exam        Exam                  @relation(fields: [examId], references: [id])
+  examId      String
   examSession ExamSession[]
   questions   ExamSessionQuestion[]
 
@@ -747,6 +636,7 @@ model ExamSession {
   examBankId  String?
   answers     Answer[]
 
+  @@unique([studentId, examId])
   @@schema("khao-thi")
 }
 
@@ -1135,6 +1025,7 @@ model SubjectVersion {
   dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
   coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
@@ -2786,6 +2677,7 @@ model ExpertProfile {
   updatedAt          DateTime        @updatedAt()
   lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
   lecturerId         String?         @unique()
+  name               String?
   title              String?
   specialization     String?
   workplace          String?

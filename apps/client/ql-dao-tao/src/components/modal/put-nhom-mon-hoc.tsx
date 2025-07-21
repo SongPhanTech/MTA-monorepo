@@ -109,7 +109,7 @@ const PutSubjectModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.title as string).toLowerCase().includes(input.toLowerCase())
+                            (node.label as string).toLowerCase().includes(input.toLowerCase())
                         }
                     />
                 </FormItem>

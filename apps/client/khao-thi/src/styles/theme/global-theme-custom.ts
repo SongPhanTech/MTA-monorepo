@@ -1,18 +1,18 @@
 const lightThemeCustom = {
     token: {
-        colorPrimary: '#005f37',
+        colorPrimary: '#028850',
     },
     components: {
         Table: {
-            headerBg: '#005f37',
+            headerBg: '#E8E8E8',
             padding: 10,
-            headerColor: '#fff',
-            headerBorderRadius: 5,
+            headerColor: '#26273D',
+            headerBorderRadius: 8,
         },
         Menu: {
             itemSelectedColor: '#fff',
-            itemSelectedBg: '#005f37',
-            subMenuItemSelectedColor: '#005f37',
+            itemSelectedBg: '#028850',
+            subMenuItemSelectedColor: '#028850',
         },
         Layout: {
             bodyBg: '#F3F6FB',
