@@ -598,8 +598,14 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                 current: currentPage,
                                 pageSize: numberOfPages,
                                 total: studentData.length,
-                                onChange: setCurrentPage,
-                                onShowSizeChange: setNumberOfPages,
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
                             }}
                         />
                     </Col>
