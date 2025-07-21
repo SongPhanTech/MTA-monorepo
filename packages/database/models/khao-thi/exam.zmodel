@@ -5,11 +5,11 @@ import '../ql-dao-tao/categories'
 
 /// Loại câu hỏi
 enum QuestionType {
-  SINGLE_CHOICE // Trắc nghiệm một lựa chọn
-  MULTIPLE_CHOICE // Trắc nghiệm nhiều lựa chọn
   ESSAY           // Tự luận
-  FILL_IN_BLANK   // Điền vào chỗ trống
-  ORDERING        // Sắp xếp thứ tự
+  // SINGLE_CHOICE // Trắc nghiệm một lựa chọn
+  // MULTIPLE_CHOICE // Trắc nghiệm nhiều lựa chọn
+  // FILL_IN_BLANK   // Điền vào chỗ trống
+  // ORDERING        // Sắp xếp thứ tự
 
   @@schema("khao-thi")
 }
@@ -33,11 +33,10 @@ model QuestionBank extends Base {
   subjectVersionId String
 
   questions        Question[]
-	exam Exam[]
+  exam             Exam[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
-
 }
 
 /// Mức độ khó
@@ -64,130 +63,130 @@ model KnowledgeBlock extends Base {
 
 /// Câu hỏi
 model Question extends Base {
-  content               String // Nội dung câu hỏi. Với FILL_IN_BLANK, có thể chứa placeholder như {$1}
-  type                  QuestionType
-  point                 Float                  @default(1) // Điểm số
-  explanation           String? // Giải thích đáp án
-  isAutoGraded          Boolean                @default(false)
+  content          String // Nội dung câu hỏi. Với FILL_IN_BLANK, có thể chứa placeholder như {$1}
+  type             QuestionType          @default(ESSAY)
+  point            Float                 @default(1) // Điểm số
+  explanation      String? // Giải thích đáp án
+  isAutoGraded     Boolean               @default(false)
 
-  // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
-  multipleChoiceOptions MultipleChoiceOption[]
-  fillInBlankSlots      FillInBlankSlot[]
-  orderingItems         OrderingItem[]
+  // // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
+  // multipleChoiceOptions MultipleChoiceOption[]
+  // fillInBlankSlots      FillInBlankSlot[]
+  // orderingItems         OrderingItem[]
 
-  questionBank          QuestionBank           @relation(fields: [questionBankId], references: [id])
-  questionBankId        String
-  knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId      String?
-  difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
-  difficultyId          String?
+  questionBank     QuestionBank          @relation(fields: [questionBankId], references: [id])
+  questionBankId   String
+  knowledgeBlock   KnowledgeBlock?       @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId String?
+  difficulty       Difficulty?           @relation(fields: [difficultyId], references: [id])
+  difficultyId     String?
 
-  sessionQuestions      ExamSessionQuestion[]
-  answers               Answer[]
-
-  @@schema("khao-thi")
-}
-
-/// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
-model MultipleChoiceOption extends Base {
-  questionId        String
-  question          Question                       @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content           String // Nội dung của lựa chọn (VD: "A. Paris")
-  isCorrect         Boolean                        @default(false) // Đánh dấu đây có phải là đáp án đúng không
-  order             Int // Thứ tự hiển thị của lựa chọn
-
-  selectedInAnswers SelectedMultipleChoiceOption[]
+  sessionQuestions ExamSessionQuestion[]
+  answers          Answer[]
 
   @@schema("khao-thi")
 }
 
-/// Chỗ trống cần điền cho câu hỏi điền khuyết
-model FillInBlankSlot extends Base {
-  questionId         String
-  question           Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  order              Int // Thứ tự của chỗ trống trong câu (VD: 1 cho {$1})
-  correctAnswer      String // Đáp án đúng cho chỗ trống này
+// /// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
+// model MultipleChoiceOption extends Base {
+//   questionId        String
+//   question          Question                       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+//   content           String // Nội dung của lựa chọn (VD: "A. Paris")
+//   isCorrect         Boolean                        @default(false) // Đánh dấu đây có phải là đáp án đúng không
+//   order             Int // Thứ tự hiển thị của lựa chọn
 
-  fillInBlankAnswers FillInBlankAnswer[]
-  @@unique([questionId, order])
-  @@schema("khao-thi")
-}
+//   selectedInAnswers SelectedMultipleChoiceOption[]
 
-/// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
-model OrderingItem extends Base {
-  questionId      String
-  question        Question         @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content         String // Nội dung của mục cần sắp xếp
-  correctOrder    Int // Thứ tự đúng của mục này (VD: 1, 2, 3, ...)
+//   @@schema("khao-thi")
+// }
 
-  orderingAnswers OrderingAnswer[]
-  @@unique([questionId, correctOrder])
-  @@schema("khao-thi")
-}
+// /// Chỗ trống cần điền cho câu hỏi điền khuyết
+// model FillInBlankSlot extends Base {
+//   questionId         String
+//   question           Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
+//   order              Int // Thứ tự của chỗ trống trong câu (VD: 1 cho {$1})
+//   correctAnswer      String // Đáp án đúng cho chỗ trống này
+
+//   fillInBlankAnswers FillInBlankAnswer[]
+//   @@unique([questionId, order])
+//   @@schema("khao-thi")
+// }
+
+// /// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
+// model OrderingItem extends Base {
+//   questionId      String
+//   question        Question         @relation(fields: [questionId], references: [id], onDelete: Cascade)
+//   content         String // Nội dung của mục cần sắp xếp
+//   correctOrder    Int // Thứ tự đúng của mục này (VD: 1, 2, 3, ...)
+
+//   orderingAnswers OrderingAnswer[]
+//   @@unique([questionId, correctOrder])
+//   @@schema("khao-thi")
+// }
 
 /// Câu trả lời
 model Answer extends Base {
-  sessionId                String
-  session                  ExamSession                    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  questionId               String
-  question                 Question                       @relation(fields: [questionId], references: [id])
+  sessionId   String
+  session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question    @relation(fields: [questionId], references: [id])
 
   // Điểm và nhận xét chung cho câu trả lời này
-  isCorrect                Boolean?
-  score                    Float?
-  comment                  String?
+  isCorrect   Boolean?
+  score       Float?
+  comment     String?
 
   // Liên kết đến dữ liệu trả lời chi tiết, tùy thuộc vào loại câu hỏi
-  essayAnswer              String
-  multipleChoiceSelections SelectedMultipleChoiceOption[]
-  fillInBlankAnswers       FillInBlankAnswer[]
-  orderingAnswers          OrderingAnswer[]
+  essayAnswer String
+  // multipleChoiceSelections SelectedMultipleChoiceOption[]
+  // fillInBlankAnswers       FillInBlankAnswer[]
+  // orderingAnswers          OrderingAnswer[]
 
   @@unique([sessionId, questionId])
   @@schema("khao-thi")
 }
 
-/// Bảng nối, ghi lại lựa chọn của thí sinh cho câu hỏi trắc nghiệm
-model SelectedMultipleChoiceOption {
-  answer   Answer               @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId String
-  option   MultipleChoiceOption @relation(fields: [optionId], references: [id])
-  optionId String
+// /// Bảng nối, ghi lại lựa chọn của thí sinh cho câu hỏi trắc nghiệm
+// model SelectedMultipleChoiceOption {
+//   answer   Answer               @relation(fields: [answerId], references: [id], onDelete: Cascade)
+//   answerId String
+//   option   MultipleChoiceOption @relation(fields: [optionId], references: [id])
+//   optionId String
 
-  @@id([answerId, optionId])
-  @@schema("khao-thi")
-}
+//   @@id([answerId, optionId])
+//   @@schema("khao-thi")
+// }
 
-/// Nội dung trả lời cho một ô trống trong câu hỏi điền khuyết
-model FillInBlankAnswer  extends Base {
-  answer   Answer          @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId String
-  slot     FillInBlankSlot @relation(fields: [slotId], references: [id])
-  slotId   String
-  content  String // Nội dung thí sinh điền vào
+// /// Nội dung trả lời cho một ô trống trong câu hỏi điền khuyết
+// model FillInBlankAnswer  extends Base {
+//   answer   Answer          @relation(fields: [answerId], references: [id], onDelete: Cascade)
+//   answerId String
+//   slot     FillInBlankSlot @relation(fields: [slotId], references: [id])
+//   slotId   String
+//   content  String // Nội dung thí sinh điền vào
 
-  @@unique([answerId, slotId])
-  @@schema("khao-thi")
-}
+//   @@unique([answerId, slotId])
+//   @@schema("khao-thi")
+// }
 
-/// Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp
-model OrderingAnswer  extends Base {
-  answerId String
-  answer   Answer       @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  itemId   String
-  item     OrderingItem @relation(fields: [itemId], references: [id])
-  order    Int // Thứ tự do thí sinh chọn
+// /// Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp
+// model OrderingAnswer  extends Base {
+//   answerId String
+//   answer   Answer       @relation(fields: [answerId], references: [id], onDelete: Cascade)
+//   itemId   String
+//   item     OrderingItem @relation(fields: [itemId], references: [id])
+//   order    Int // Thứ tự do thí sinh chọn
 
-  @@unique([answerId, itemId])
-  @@schema("khao-thi")
-}
+//   @@unique([answerId, itemId])
+//   @@schema("khao-thi")
+// }
 
 /// Bảng kỳ thi
 model Exam  extends Base {
   title              String
   status             ExamStatus          @default(DRAFT)
-  questionBank     QuestionBank      @relation(fields: [questionBankId], references: [id])
-  questionBankId   String
+  questionBank       QuestionBank        @relation(fields: [questionBankId], references: [id])
+  questionBankId     String
 
   startTime          DateTime
   endTime            DateTime
@@ -198,6 +197,7 @@ model Exam  extends Base {
   shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
   showResult         Boolean             @default(false) // Hiển thị kết quả ngay
 
+  examBank           ExamBank[]
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]
 
@@ -218,45 +218,47 @@ model TestStructureRule {
   @@schema("khao-thi")
 }
 
-
-/// Ngân hàng đề thi
+/// Đề thi
 model ExamBank extends Base {
-  name                String
+  exam        Exam                  @relation(fields: [examId], references: [id])
+  examId      String
 
-	examSession ExamSession[]
-  questions ExamSessionQuestion[] // Danh sách câu hỏi trong đề thi
+  examSession ExamSession[]
+  questions   ExamSessionQuestion[] // Danh sách câu hỏi trong đề thi
   @@schema("khao-thi")
 }
 
 
 /// Bài thi / Đề thi
 model ExamSession extends Base {
-  startTime DateTime              @default(now())
-  endTime   DateTime?
-  score     Float?
-  isGraded  Boolean               @default(false)
+  startTime  DateTime  @default(now())
+  endTime    DateTime?
+  score      Float?
+  isGraded   Boolean   @default(false)
 
-  student   Student?              @relation(fields: [studentId], references: [id])
-  studentId String?
-  exam      Exam                  @relation(fields: [examId], references: [id])
-  examId    String
-  room      Room?                 @relation(fields: [roomId], references: [id])
-  roomId    String?
+  student    Student?  @relation(fields: [studentId], references: [id])
+  studentId  String?
+  exam       Exam      @relation(fields: [examId], references: [id])
+  examId     String
+  room       Room?     @relation(fields: [roomId], references: [id])
+  roomId     String?
 
-  examBank  ExamBank?        @relation(fields: [examBankId], references: [id])
+  examBank   ExamBank? @relation(fields: [examBankId], references: [id])
   examBankId String?
 
-  answers   Answer[]              // Tất cả câu trả lời trong phiên này
+  answers    Answer[]              // Tất cả câu trả lời trong phiên này
+
+  @@unique([studentId, examId])
   @@schema("khao-thi")
 }
 
 /// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
 model ExamSessionQuestion {
-  id         String      @id @default(cuid())
-  examBankId  String
-  examBank    ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  examBankId String
+  examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
   questionId String
-  question   Question    @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id])
   order      Int? // Thứ tự câu hỏi trong đề thi của phiên này
 
   @@unique([examBankId, questionId])
