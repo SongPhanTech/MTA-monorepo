@@ -1,14 +1,15 @@
-import { DeleteOutlined } from '@ant-design/icons'
-import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
+import type { LucideProps } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 
 type DeleteIconProps = {
     popConfirm?: Partial<PopconfirmProps>
-} & Omit<AntdIconProps, 'ref'> &
-    React.RefAttributes<HTMLSpanElement>
-const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
+    title?: string
+    disabled?: boolean
+} & LucideProps
+const DeleteIcon = ({ title, popConfirm, disabled, ...props }: DeleteIconProps) => {
     return (
-        <Tooltip title="Xóa" placement="leftTop">
+        <Tooltip title={title ? title : 'Xóa'} placement="top">
             <Popconfirm
                 placement="topLeft"
                 title="Xác nhận xóa dữ liệu?"
@@ -17,7 +18,17 @@ const DeleteIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
                 cancelText="Hủy"
                 {...popConfirm}
             >
-                <DeleteOutlined className="text-red-600 cursor-pointer" {...props} />
+                <Trash2
+                    size={16}
+                    strokeWidth={1.5}
+                    className={
+                        disabled
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-sm text-red-600 cursor-pointer'
+                    }
+                    onClick={(e) => e.stopPropagation()}
+                    {...props}
+                />
             </Popconfirm>
         </Tooltip>
     )
