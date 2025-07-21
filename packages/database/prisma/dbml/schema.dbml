@@ -1749,8 +1749,8 @@ Table DM_Tinh {
   sThietBiTao String
   sThietBiSua String
   sDM_QuocGiaId String
-  iDM_KhuVucDiaLy_Id String
-  iDM_DonViHanhChinhId String
+  iDM_KhuVucDiaLy_Id Int
+  iDM_DonViHanhChinhId Int
   userProfileHometown UserProfile [not null]
   userProfilePlaceOfBirth UserProfile [not null]
   userProfilePermanentAddress UserProfile [not null]
@@ -1775,7 +1775,7 @@ Table DM_QuanHuyen {
   sThietBiSua String
   sDM_TinhId String
   sDM_Tinh_Ma String
-  iDM_DonViHanhChinhId String
+  iDM_DonViHanhChinhId Int
   userProfileHometown UserProfile [not null]
   userProfilePlaceOfBirth UserProfile [not null]
   userProfilePermanentAddress UserProfile [not null]
@@ -1801,7 +1801,7 @@ Table DM_XaPhuong {
   sDM_QuanHuyen_Ma String
   sDM_TinhId String
   sDM_QuanHuyenId String
-  iDM_DonViHanhChinhId String
+  iDM_DonViHanhChinhId Int
   userProfileHometown UserProfile [not null]
   userProfilePlaceOfBirth UserProfile [not null]
   userProfilePermanentAddress UserProfile [not null]

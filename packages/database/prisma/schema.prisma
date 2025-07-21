@@ -2270,8 +2270,8 @@ model DM_Tinh {
   sThietBiTao                 String?
   sThietBiSua                 String?
   sDM_QuocGiaId               String?       @db.Uuid()
-  iDM_KhuVucDiaLy_Id          String?       @db.Uuid()
-  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  iDM_KhuVucDiaLy_Id          Int?
+  iDM_DonViHanhChinhId        Int?
   userProfileHometown         UserProfile[] @relation("ProvinceHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
@@ -2299,7 +2299,7 @@ model DM_QuanHuyen {
   sThietBiSua                 String?
   sDM_TinhId                  String?       @db.Uuid()
   sDM_Tinh_Ma                 String?
-  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  iDM_DonViHanhChinhId        Int?
   userProfileHometown         UserProfile[] @relation("DistrictHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("DistrictPlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
@@ -2328,7 +2328,7 @@ model DM_XaPhuong {
   sDM_QuanHuyen_Ma            String?
   sDM_TinhId                  String?       @db.Uuid()
   sDM_QuanHuyenId             String?       @db.Uuid()
-  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  iDM_DonViHanhChinhId        Int?
   userProfileHometown         UserProfile[] @relation("CommuneHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("CommunePlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("CommunePermanentAddress")
