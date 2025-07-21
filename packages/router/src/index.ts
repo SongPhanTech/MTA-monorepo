@@ -798,6 +798,18 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
+                id: 'category',
+                label: 'Danh mục',
+                icon: LayoutDashboard,
+                children: [
+                    {
+                        id: 'danh-muc-chuong-muc',
+                        label: 'Danh mục chương mục',
+                        path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
+                    },
+                ],
+            },
+            {
                 id: 'thiet-lap-khao-sat',
                 label: 'Thiết lập khảo sát',
                 icon: SettingOutlined,
