@@ -531,6 +531,25 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
+                id: 'ql-do-an',
+                label: 'Quản lý đồ án',
+                icon: CalendarFold,
+                children: [
+                    {
+                        id: 'danh-muc-do-an',
+                        label: 'Danh mục đồ án',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                        description: 'Danh mục đồ án',
+                    },
+                    {
+                        id: 'danh-sach-chuyen-gia',
+                        label: 'Danh sách chuyên gia',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
+                        description: 'Danh sách chuyên gia',
+                    },
+                ],
+            },
+            {
                 id: 'ql-ho-so',
                 label: 'Quản lý hồ sơ',
                 icon: FileUser,

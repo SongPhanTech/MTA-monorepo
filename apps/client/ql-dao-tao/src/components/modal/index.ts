@@ -12,6 +12,7 @@ import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
 import PutCertificateScoreModal from './put-chung-chi-score'
 import PutConvertScore from './put-chuyen-doi-diem'
+import PutExpertProfile from './put-chuyen-gia'
 import PutTrainingMajorModal from './put-chuyen-nganh'
 import PutCloneAcademicRanking from './put-clone-acdemic-ranking'
 import PutCloneConvertScore from './put-clone-convert-score'
@@ -20,6 +21,7 @@ import PutSubjectListModal from './put-danh-sach-mon-hoc'
 import PutOlympicScoreModal from './put-diem-cong'
 import PutRankingCondition from './put-dieu-kien-xep-loai-tn'
 import PutAcademicActionCondition from './put-dieu-kien-xu-ly-hoc-tap'
+import PutThesisProject from './put-do-an'
 import PutGraduationApplication from './put-don-xet-tot-nghiep'
 import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
@@ -129,4 +131,6 @@ export {
     PutRankDowngradeCondition,
     PutAcademicWarning,
     PutDiplomaType,
+    PutThesisProject,
+    PutExpertProfile,
 }
