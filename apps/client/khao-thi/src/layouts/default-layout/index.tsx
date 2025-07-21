@@ -1,6 +1,5 @@
 import { HomeOutlined } from '@ant-design/icons'
 import logo_mta from '@assets/images/logo_mta.png'
-import HeaderApp from '@components/header'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
@@ -14,6 +13,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
+import HeaderApp from '@/components/header'
 
 const { Header, Content } = Layout
 interface breadcrumListProps {
@@ -34,7 +34,7 @@ const DefaultLayout = ({
 }) => {
     const router = useRouter()
     const currentPath = router.pathname
-    const breadcrumb = getDynamicBreadcrum('QL_DAO_TAO', currentPath)
+    const breadcrumb = getDynamicBreadcrum('KHAO_THI', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
@@ -53,7 +53,7 @@ const DefaultLayout = ({
                   ...breadcrumb.map((i: { title: string; href?: string }) => {
                       if (i?.href) {
                           return {
-                              title: <a href={`${i.href}`}>{i.title}</a>,
+                              title: <a href={`/lms${i.href}`}>{i.title}</a>,
                           }
                       }
                       return {
@@ -74,7 +74,7 @@ const DefaultLayout = ({
                     ...breadcrumbList.map((i: { title: string; href?: string }) => {
                         if (i?.href) {
                             return {
-                                title: <a href={`${i.href}`}>{i.title}</a>,
+                                title: <a href={`/lms${i.href}`}>{i.title}</a>,
                             }
                         }
                         return {
@@ -144,12 +144,13 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex items-center jusstify-between bg-white shadow-sm rounded-lg m-2">
+                    <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
                         <div>{<Breadcrumb items={listBreadcrumb} />}</div>
                         <HeaderApp />
+
                         {/* <div className="flex gap-2 items-center">
                             <SearchSystem />
                             <AvatarDropdown />
