@@ -13,7 +13,6 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import type {
     CurriculumVersion,
-    DM_DonVi,
     DocumentFile,
     SubjectVersion,
     TrainingBlockOnCurriculumVersion,
@@ -456,14 +455,7 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
-                                render: (
-                                    __,
-                                    record: {
-                                        subject?: SubjectVersion & {
-                                            managementOrganization?: DM_DonVi
-                                        }
-                                    }
-                                ) => {
+                                render: (_, record) => {
                                     return record?.subject?.managementOrganization?.sTen
                                 },
                             },

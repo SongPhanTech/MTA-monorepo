@@ -977,8 +977,8 @@ model Subject {
   updatedAt                DateTime         @updatedAt()
   name                     String           @unique()
   englishName              String?          @unique()
-  managementOrganization   DM_DonVi         @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String           @db.Uuid()
+  managementOrganization   DM_DonVi?        @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?          @db.Uuid()
   information              String?
   subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
 
@@ -1014,8 +1014,8 @@ model SubjectVersion {
   academicResults          String?
   materials                String?
   rules                    String?
-  managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String                 @db.Uuid()
+  managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                @db.Uuid()
   subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
   /// môn học khối kiến thức - CTĐT

@@ -1,7 +1,7 @@
 import { $Enums } from '@workspace/db'
 export const CONFIG_KEY = {
     USER_SESSION_TIMEOUT: 'USER_SESSION_TIMEOUT',
-}
+} as const
 
 export const PERMISSION_TYPE = [
     {

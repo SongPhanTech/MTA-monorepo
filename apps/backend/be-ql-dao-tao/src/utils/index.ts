@@ -222,6 +222,11 @@ export const buildCurriculumMapOrThrow = async (
 export const buildTrainingBlockMapOrThrow = async (prisma: PrismaClient, names: string[]) => {
     const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
 
+    // await prisma.trainingBlock.createMany({
+    //     data: uniqNames.map((name) => ({ name })),
+    //     skipDuplicates: true,
+    // })
+
     const existing = await prisma.trainingBlock.findMany({
         where: { name: { in: uniqNames, mode: 'insensitive' } },
         select: { name: true, id: true },
@@ -279,7 +284,40 @@ export const buildSubjectMapOrThrow = async (
         ([name]) => !existing.some((version) => version.name === name)
     )
 
+    // const orgMap = await buildOrganizationMapOrThrow(
+    //     prisma,
+    //     subjects.map((s) => s.organizationCode || null)
+    // )
+
     if (missing.length) {
+        // for (const subject of missing) {
+        //     console.log(subject[0], subject[1], subject[2], orgMap.get(subject[1]))
+
+        //     const managementOrganizationId = orgMap.get(subject[1]) || null
+
+        //     const a = await prisma.subjectVersion.create({
+        //         data: {
+        //             name: subject[0],
+        //             examType: ExamType.OfflineWritten,
+        //             credit: subject[2] as number,
+        //             ...(managementOrganizationId
+        //                 ? {
+        //                       managementOrganization: {
+        //                           connect: { Id: managementOrganizationId },
+        //                       },
+        //                   }
+        //                 : {}),
+        //             subject: {
+        //                 connectOrCreate: {
+        //                     where: { name: subject[0] },
+        //                     create: { name: subject[0], managementOrganizationId },
+        //                 },
+        //             },
+        //         },
+        //         select: { id: true, name: true },
+        //     })
+        // }
+
         throw new HTTPException(400, {
             message: `Phiên bản môn học không tồn tại: ${missing
                 .map(
