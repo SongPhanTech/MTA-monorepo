@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutTrainingBlock } from '@components/modal'
+import { PutExpertProfile } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -23,22 +23,14 @@ export default function ExpertProfile() {
     const [filters, setFilters] = useState<FilterProps>({
         code: undefined,
         name: undefined,
-        active: undefined,
     })
 
     const { data: expertProfileData } = useFindManyExpertProfile({
         where: {
             ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
             ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
-            ...(filters.active?.length === 1 ? { active: filters.active[0] } : {}),
         },
-        include: {
-            lecturer: {
-                include: {
-                    userProfile: true,
-                },
-            },
-        },
+        include: { lecturer: { include: { userProfile: true } } },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -47,16 +39,11 @@ export default function ExpertProfile() {
         where: {
             ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
             ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
-            ...(filters.active?.length === 1
-                ? {
-                      ...(filters.active.length === 1 ? { active: filters.active[0] } : {}),
-                  }
-                : {}),
         },
     })
 
     const { onOpen } = useDisclosure<string>({
-        tag: PutTrainingBlock.name,
+        tag: PutExpertProfile.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -102,7 +89,7 @@ export default function ExpertProfile() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        id="training-block"
+                        id="expert-profile"
                         filters={filters}
                         setFilters={setFilters}
                         columns={[
@@ -116,9 +103,9 @@ export default function ExpertProfile() {
                             },
                             {
                                 title: 'Tên chuyên gia',
-                                dataIndex: ['lecturer', 'userProfile', 'fullname'],
                                 width: 150,
                                 type: 'input',
+                                render: (record) => record?.lecturer?.userProfile.fullname,
                             },
                             {
                                 title: 'Hàm vị, học vị',
