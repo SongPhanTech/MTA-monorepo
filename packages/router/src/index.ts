@@ -781,6 +781,23 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin trang chủ',
             },
             {
+                id: 'ngan-hang',
+                label: 'Ngân hàng',
+                icon: SettingOutlined,
+                children: [
+                    {
+                        id: 'ngan-hang-cau-hoi',
+                        label: 'Ngân hàng câu hỏi',
+                        path: ROUTER_PATH.KHAO_THI.NGAN_HANG_CAU_HOI,
+                    },
+                    {
+                        id: 'ngan-hang-de-thi',
+                        label: 'Ngân hàng đề thi',
+                        path: ROUTER_PATH.KHAO_THI.NGAN_HANG_DE_THI,
+                    },
+                ],
+            },
+            {
                 id: 'thiet-lap-khao-sat',
                 label: 'Thiết lập khảo sát',
                 icon: SettingOutlined,

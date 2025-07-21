@@ -2,6 +2,10 @@ export default {
   "KHAO_THI": {
     "HOME": "/home",
     "INDEX": "/",
+    "NGAN_HANG_CAU_HOI_ID": "/ngan-hang/cau-hoi/[id]",
+    "NGAN_HANG_CAU_HOI": "/ngan-hang/cau-hoi",
+    "NGAN_HANG_DE_THI": "/ngan-hang/de-thi",
+    "THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI": "/thiet-lap-de-thi/ngan-hang-cau-hoi",
     "THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/cau-hoi-khao-sat",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "TRA_LOI_KHAO_SAT": "/tra-loi-khao-sat"
