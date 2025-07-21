@@ -706,9 +706,6 @@ const Table = <T extends Record<string, unknown>>({
                           },
                           showTotal: (total, range) =>
                               `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                          onShowSizeChange(current, size) {
-                              pagination?.onShowSizeChange?.(size)
-                          },
                           ...pagination,
                       }
                     : false

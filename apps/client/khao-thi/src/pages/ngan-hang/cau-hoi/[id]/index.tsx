@@ -4,11 +4,13 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutQuestion } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
 import {
+    useCountQuestion,
     useFindManyQuestion,
     useFindUniqueQuestionBank,
     useUpdateQuestion,
@@ -25,6 +27,8 @@ export default function Question() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const questionBankId = router.query.id as string
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
@@ -49,6 +53,55 @@ export default function Question() {
     )
 
     const { data } = useFindManyQuestion(
+        {
+            where: {
+                questionBankId,
+                ...(filters.code && filters.code !== ''
+                    ? {
+                          code: {
+                              contains: filters.code,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+                ...(filters.questionType && filters.questionType.length > 0
+                    ? {
+                          type: { in: filters.questionType },
+                      }
+                    : {}),
+                ...(filters.content && filters.content !== ''
+                    ? {
+                          content: {
+                              contains: filters.content,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+                ...(filters.explanation && filters.explanation !== ''
+                    ? {
+                          explanation: {
+                              contains: filters.explanation,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+            },
+            orderBy: [
+                ...emptyObjectIf(
+                    [
+                        {
+                            point: filters.point,
+                        },
+                    ],
+                    !!filters.point
+                ),
+                { point: 'asc' },
+            ],
+        },
+        { enabled: !!questionBankId }
+    )
+
+    const { data: count } = useCountQuestion(
         {
             where: {
                 questionBankId,
@@ -265,7 +318,19 @@ export default function Question() {
                             },
                         ]}
                         data={data}
-                        pagination={false}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
+                        }}
                     />
                 </Col>
             </Row>
