@@ -9,7 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import {
     useCountExpertProfile,
     useFindManyExpertProfile,
-    useUpdateTrainingBlock,
+    useUpdateExpertProfile,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
@@ -51,11 +51,11 @@ export default function ExpertProfile() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateTrainingBlock } = useUpdateTrainingBlock()
+    const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateTrainingBlock({
+            await updateExpertProfile({
                 where: {
                     id,
                 },

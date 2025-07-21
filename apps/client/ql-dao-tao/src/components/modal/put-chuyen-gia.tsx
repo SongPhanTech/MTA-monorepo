@@ -18,7 +18,6 @@ export type PutExpertProfile = ExpertProfile
 dayjs.locale('vi')
 
 const PutExpertProfile = () => {
-    const [isInternal, setIsInternal] = useState(true)
     const [form] = Form.useForm<PutExpertProfile>()
     const {
         isOpen,
@@ -28,6 +27,9 @@ const PutExpertProfile = () => {
         tag: PutExpertProfile.name,
         onClose: form.resetFields,
     })
+    const { data: expert } = useFindUniqueExpertProfile({ where: { id: id } }, { enabled: !!id })
+
+    const [isInternal, setIsInternal] = useState(!!expert?.lecturerId)
 
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: lecturer = [] } = useFindManyLecturer({
@@ -35,18 +37,14 @@ const PutExpertProfile = () => {
             userProfile: true,
         },
     })
-    const { data: thesisProject } = useFindUniqueExpertProfile(
-        { where: { id: id } },
-        { enabled: !!id }
-    )
 
     useEffect(() => {
-        if (thesisProject) {
+        if (expert) {
             form.setFieldsValue({
-                ...thesisProject,
+                ...expert,
             })
         }
-    }, [thesisProject, form])
+    }, [expert, form])
 
     const { mutateAsync: createExpertProfile } = useCreateExpertProfile()
     const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()
@@ -59,7 +57,7 @@ const PutExpertProfile = () => {
             workplace: output.workplace,
             phone: output.phone,
             email: output.email,
-            // name: output.name,
+            name: output.name,
         }
 
         try {
@@ -103,7 +101,7 @@ const PutExpertProfile = () => {
                             form.resetFields()
                         }
                     }}
-                    defaultValue="internal"
+                    defaultValue={expert?.lecturerId ? 'internal' : 'external'}
                 >
                     <Radio value="internal">Chuyên gia trong trường</Radio>
                     <Radio value="external">Chuyên gia ngoài trường</Radio>
@@ -120,6 +118,13 @@ const PutExpertProfile = () => {
                             }))}
                             allowClear
                         />
+                    </FormItem>
+                </Col>
+            )}
+            {!isInternal && (
+                <Col span={12}>
+                    <FormItem form={form} name="name" label="Họ và tên">
+                        <Input placeholder="Nhập họ và tên" />
                     </FormItem>
                 </Col>
             )}

@@ -16,13 +16,16 @@ import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import Tabs from '@components/commons/tabar'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
-import { useEffect } from 'react'
+import { debounce } from 'lodash'
+import { useCallback, useEffect, useState } from 'react'
 
 export type PutThesisProject = ThesisProject
 dayjs.locale('vi')
 
 const PutThesisProject = () => {
     const { thesisProjectStatusOptions } = useThesisProjectStatusOptions()
+    const [searchExpert, setSearchExpert] = useState('')
+    const [searchOrganization, setSearchOrganization] = useState('')
     const [form] = Form.useForm<PutThesisProject>()
     const {
         isOpen,
@@ -34,8 +37,27 @@ const PutThesisProject = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const { data: organization = [] } = useFindManyDM_DonVi()
-    const { data: expert = [] } = useFindManyExpertProfile({
+    const { data: organization = [], refetch: refetchOrganization } = useFindManyDM_DonVi({
+        where: {
+            ...(searchOrganization
+                ? {
+                      sTen: { contains: searchOrganization, mode: 'insensitive' },
+                  }
+                : {}),
+        },
+    })
+    const { data: expert = [], refetch } = useFindManyExpertProfile({
+        where: {
+            ...(searchExpert
+                ? {
+                      lecturer: {
+                          userProfile: {
+                              fullname: { contains: searchExpert, mode: 'insensitive' },
+                          },
+                      },
+                  }
+                : {}),
+        },
         include: {
             lecturer: {
                 include: {
@@ -48,6 +70,24 @@ const PutThesisProject = () => {
         { where: { id: id } },
         { enabled: !!id }
     )
+
+    const debouncedRefetch = useCallback(
+        debounce(() => {
+            refetch()
+            refetchOrganization()
+        }, 500),
+        []
+    )
+
+    const handleSearchExpert = (value: string) => {
+        setSearchExpert(value)
+        debouncedRefetch()
+    }
+
+    const handleSearchOrganization = (value: string) => {
+        setSearchOrganization(value)
+        debouncedRefetch()
+    }
 
     useEffect(() => {
         if (thesisProject) {
@@ -145,9 +185,12 @@ const PutThesisProject = () => {
                     <Select
                         placeholder="Chọn chuyên gia hướng dẫn"
                         options={expert.map((item) => ({
-                            label: `${item.lecturer.userProfile.fullname} - ${item.code}`,
+                            label: `${item.lecturer?.userProfile.fullname} - ${item.code}`,
                             value: item.id,
                         }))}
+                        showSearch
+                        onSearch={handleSearchExpert}
+                        filterOption={false}
                         allowClear
                     />
                 </FormItem>
@@ -160,6 +203,9 @@ const PutThesisProject = () => {
                             label: item.sTen,
                             value: item.Id,
                         }))}
+                        showSearch
+                        onSearch={handleSearchOrganization}
+                        filterOption={false}
                         allowClear
                     />
                 </FormItem>
