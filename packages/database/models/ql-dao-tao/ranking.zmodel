@@ -125,6 +125,7 @@ model AcademicRankingConvert extends Base {
 
   rankingCondition   RankingCondition[]
   downgradeRules     GraduationRankDowngradeRule[]
+  graduationDecision GraduationDecision[]
 
   @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
   @@validate(!(baseScore == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")
@@ -132,7 +133,6 @@ model AcademicRankingConvert extends Base {
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")
 
-  graduationDecision GraduationDecision[]
 }
 
 /// Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp

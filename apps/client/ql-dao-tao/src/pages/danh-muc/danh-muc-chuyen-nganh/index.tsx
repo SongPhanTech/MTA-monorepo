@@ -8,7 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { TrainingObjectType } from '@workspace/db'
+import type { Prisma, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,
@@ -16,27 +16,12 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
+import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-interface DataType {
-    key: React.Key
-    majorName: string
-    department?: string
-    majorCode?: string
-    abbreviation?: string
-    specializationName?: string
-    englishName?: string
-    description?: string
-    creditsMajor?: string
-    creditsRequired?: string
-    creditsElective?: string
-    status?: string
-    children?: DataType[]
-}
 
 export default function TrainingMajorPage() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -52,61 +37,102 @@ export default function TrainingMajorPage() {
         organization: undefined,
     })
 
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.TrainingFieldWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      ...(filters.searchText
+                          ? {
+                                OR: [
+                                    {
+                                        code: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                    {
+                                        name: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                ],
+                            }
+                          : {}),
+
+                      trainingMajors: {
+                          some: {
+                              ...(filters.name
+                                  ? {
+                                        name: {
+                                            contains: filters.name,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.code
+                                  ? {
+                                        code: {
+                                            contains: filters.code,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+
+                              ...emptyObjectIf(
+                                  {
+                                      trainingObjectTypes: {
+                                          some: {
+                                              trainingObjectTypeId: {
+                                                  in: filters.trainingObjectTypes,
+                                              },
+                                          },
+                                      },
+                                  },
+                                  !!filters.trainingObjectTypes?.length
+                              ),
+                              ...emptyObjectIf(
+                                  {
+                                      organizationId: {
+                                          in: filters.organization,
+                                      },
+                                  },
+                                  !!filters.organization
+                              ),
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
+
     const { data = [], refetch } = useFindManyTrainingField({
-        where: {
-            trainingMajors: {
-                some: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
-                    ...emptyObjectIf(
-                        {
-                            trainingObjectTypeId: {
-                                in: filters.trainingObjectTypes,
-                            },
-                        },
-                        !!filters.trainingObjectTypes
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            organizationId: {
-                                in: filters.organization,
-                            },
-                        },
-                        !!filters.organization
-                    ),
-                },
-            },
-        },
+        where,
         include: {
             _count: true,
             trainingMajors: {
                 where: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
+                    ...(filters.name
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.code
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+
                     ...emptyObjectIf(
                         {
                             trainingObjectTypes: {
@@ -117,7 +143,7 @@ export default function TrainingMajorPage() {
                                 },
                             },
                         },
-                        !!filters.trainingObjectTypes
+                        !!filters.trainingObjectTypes?.length
                     ),
                     ...emptyObjectIf(
                         {
@@ -175,43 +201,7 @@ export default function TrainingMajorPage() {
     })
 
     const { data: count } = useCountTrainingField({
-        where: {
-            trainingMajors: {
-                some: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
-                    ...emptyObjectIf(
-                        {
-                            trainingObjectTypeId: {
-                                in: filters.trainingObjectTypes,
-                            },
-                        },
-                        !!filters.trainingObjectTypes
-                    ),
-
-                    ...emptyObjectIf(
-                        {
-                            organizationId: {
-                                in: filters.organization,
-                            },
-                        },
-                        !!filters.organization
-                    ),
-                },
-            },
-        },
+        where: { ...where, deletedAt: null },
     })
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
@@ -262,13 +252,16 @@ export default function TrainingMajorPage() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            {/* <Flex>
+                            <Flex>
                                 <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
                                             onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
+                                                setFilters({
+                                                    ...filters,
+                                                    searchText: e.target.value,
+                                                })
                                             }
                                             placeholder="Tìm kiếm"
                                             style={{
@@ -288,32 +281,7 @@ export default function TrainingMajorPage() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        name="trainingObjectTypeId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                marginRight: 8,
-                                            }}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingObjectTypeId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex> */}
+                            </Flex>
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
@@ -488,8 +456,14 @@ export default function TrainingMajorPage() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>

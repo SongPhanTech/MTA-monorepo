@@ -164,6 +164,9 @@ export type FilterProps = {
     examDate?: Date[]
     endDate?: Date[]
     englistName?: string | ''
+    finalGpa?: 'asc' | 'desc'
+    diplomaNumber?: string
+    diplomaIssueDate?: Date[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
