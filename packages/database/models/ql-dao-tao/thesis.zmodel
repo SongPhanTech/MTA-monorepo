@@ -97,7 +97,8 @@ model StudentThesisRegistration extends Base {
 model ExpertProfile extends Base {
   lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
   lecturerId         String?         @unique // Null nếu là chuyên gia ngoài trường
-  title              String?  // Học hàm, học vị (GS, PGS, TS, ThS)
+  name               String?   // Họ tên
+  title              String?   // Học hàm, học vị (GS, PGS, TS, ThS)
   specialization     String?   // Chuyên ngành
   workplace          String?   // Đơn vị công tác
   phone              String?
