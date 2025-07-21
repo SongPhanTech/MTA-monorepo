@@ -1,5 +1,6 @@
 import { HomeOutlined } from '@ant-design/icons'
 import logo_mta from '@assets/images/logo_mta.png'
+import HeaderApp from '@components/header'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
@@ -143,12 +144,12 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex items-center bg-white shadow-sm rounded-lg m-2">
+                    <Header className="flex items-center jusstify-between bg-white shadow-sm rounded-lg m-2">
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
                         <div>{<Breadcrumb items={listBreadcrumb} />}</div>
-
+                        <HeaderApp />
                         {/* <div className="flex gap-2 items-center">
                             <SearchSystem />
                             <AvatarDropdown />
