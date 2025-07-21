@@ -45,6 +45,57 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         trainingCourse: undefined,
         organization: undefined,
     })
+
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.AcademicWarningWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      student: {
+                          userProfile: {
+                              ...(filters.code && filters.code !== ''
+                                  ? {
+                                        code: { contains: filters.code, mode: 'insensitive' },
+                                    }
+                                  : {}),
+                              ...(filters.name && filters.name !== ''
+                                  ? {
+                                        fullname: { contains: filters.name, mode: 'insensitive' },
+                                    }
+                                  : {}),
+                          },
+                          ...emptyObjectIf(
+                              {
+                                  fixedClassId: {
+                                      in: Array.isArray(filters.fixedClass)
+                                          ? filters.fixedClass
+                                          : filters.fixedClass
+                                            ? [filters.fixedClass]
+                                            : undefined,
+                                  },
+                              },
+                              !!filters.fixedClass
+                          ),
+                          fixedClass: {
+                              ...(filters.trainingCourse
+                                  ? {
+                                        trainingCourseId: { in: filters.trainingCourse },
+                                    }
+                                  : {}),
+                              ...(filters.organization
+                                  ? {
+                                        managementOrganizationId: { in: filters.organization },
+                                    }
+                                  : {}),
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: upsertAcademicWarning } = useUpsertAcademicWarning()
     const { mutateAsync: updateManyAcademicWarning } = useUpdateManyAcademicWarning()
@@ -65,44 +116,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     const { data: academicWarningData, refetch } = useFindManyAcademicWarning({
         where: {
             semesterId: semesterId,
-            student: {
-                userProfile: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: { contains: filters.code, mode: 'insensitive' },
-                          }
-                        : {}),
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              fullname: { contains: filters.name, mode: 'insensitive' },
-                          }
-                        : {}),
-                },
-                ...emptyObjectIf(
-                    {
-                        fixedClassId: {
-                            in: Array.isArray(filters.fixedClass)
-                                ? filters.fixedClass
-                                : filters.fixedClass
-                                  ? [filters.fixedClass]
-                                  : undefined,
-                        },
-                    },
-                    !!filters.fixedClass
-                ),
-                fixedClass: {
-                    ...(filters.trainingCourse
-                        ? {
-                              trainingCourseId: { in: filters.trainingCourse },
-                          }
-                        : {}),
-                    ...(filters.organization
-                        ? {
-                              managementOrganizationId: { in: filters.organization },
-                          }
-                        : {}),
-                },
-            },
+            ...where,
         },
         include: {
             student: {
@@ -461,8 +475,14 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                 current: currentPage,
                                 pageSize: numberOfPages,
                                 total: studentData.length,
-                                onChange: setCurrentPage,
-                                onShowSizeChange: setNumberOfPages,
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
                             }}
                         />
                     </Col>

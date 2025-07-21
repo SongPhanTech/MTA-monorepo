@@ -9,7 +9,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse } from '@workspace/db'
+import type { Prisma, TrainingCourse } from '@workspace/db'
 import {
     useCountScholarship,
     useFindManyScholarship,
@@ -21,7 +21,7 @@ import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
@@ -38,50 +38,61 @@ export default function Scholarship() {
     const { options: criteriaFieldOptions, getCriteriaFieldLabel } = useCriteriaFieldOptions()
     const { options: criteriaOperatorOptions, getCriteriaOperatorLabel } =
         useCriteriaOperatorOptions()
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.ScholarshipWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                          ? {
+                                trainingCourseId: filters.trainingCourseId,
+                            }
+                          : {}),
+                      criteria: {
+                          some: {
+                              ...(filters.code && filters.code !== ''
+                                  ? {
+                                        code: { contains: filters.code, mode: 'insensitive' },
+                                    }
+                                  : {}),
+                              ...(filters.field
+                                  ? Array.isArray(filters.field)
+                                      ? {
+                                            field: {
+                                                in: filters.field,
+                                            },
+                                        }
+                                      : {
+                                            field: {
+                                                equals: filters.field,
+                                            },
+                                        }
+                                  : {}),
+                              ...(filters.operator
+                                  ? Array.isArray(filters.operator)
+                                      ? {
+                                            operator: {
+                                                in: filters.operator,
+                                            },
+                                        }
+                                      : {
+                                            operator: {
+                                                equals: filters.operator,
+                                            },
+                                        }
+                                  : {}),
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
 
     const { data = [], refetch } = useFindManyScholarship({
-        where: {
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      trainingCourseId: filters.trainingCourseId,
-                  }
-                : {}),
-            criteria: {
-                some: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: { contains: filters.code, mode: 'insensitive' },
-                          }
-                        : {}),
-                    ...(filters.field
-                        ? Array.isArray(filters.field)
-                            ? {
-                                  field: {
-                                      in: filters.field,
-                                  },
-                              }
-                            : {
-                                  field: {
-                                      equals: filters.field,
-                                  },
-                              }
-                        : {}),
-                    ...(filters.operator
-                        ? Array.isArray(filters.operator)
-                            ? {
-                                  operator: {
-                                      in: filters.operator,
-                                  },
-                              }
-                            : {
-                                  operator: {
-                                      equals: filters.operator,
-                                  },
-                              }
-                        : {}),
-                },
-            },
-        },
+        where,
         include: {
             criteria: true,
             trainingCourse: {
@@ -98,13 +109,7 @@ export default function Scholarship() {
     })
 
     const { data: count } = useCountScholarship({
-        where: {
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      trainingCourseId: filters.trainingCourseId,
-                  }
-                : {}),
-        },
+        where,
     })
 
     const debouncedRefetch = useCallback(
@@ -364,8 +369,14 @@ export default function Scholarship() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>

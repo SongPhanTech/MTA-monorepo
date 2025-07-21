@@ -9,7 +9,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
+import type { Prisma, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
@@ -20,7 +20,7 @@ import {
 import { Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
@@ -39,54 +39,66 @@ export default function AcademicWarningRule() {
     const { options: criteriaOperatorOptions, getCriteriaOperatorLabel } =
         useCriteriaOperatorOptions()
 
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.TrainingCourseWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                          ? {
+                                id: filters.trainingCourseId,
+                            }
+                          : {}),
+                      ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                          ? {
+                                trainingObjectTypeId: filters.trainingObjectId,
+                            }
+                          : {}),
+                      academicWarningRule: {
+                          some: {
+                              ...(filters.code && filters.code !== ''
+                                  ? {
+                                        code: { contains: filters.code, mode: 'insensitive' },
+                                    }
+                                  : {}),
+                              ...(filters.field
+                                  ? Array.isArray(filters.field)
+                                      ? {
+                                            field: {
+                                                in: filters.field,
+                                            },
+                                        }
+                                      : {
+                                            field: {
+                                                equals: filters.field,
+                                            },
+                                        }
+                                  : {}),
+                              ...(filters.operator
+                                  ? Array.isArray(filters.operator)
+                                      ? {
+                                            operator: {
+                                                in: filters.operator,
+                                            },
+                                        }
+                                      : {
+                                            operator: {
+                                                equals: filters.operator,
+                                            },
+                                        }
+                                  : {}),
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
+
     const { data = [], refetch } = useFindManyTrainingCourse({
-        where: {
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      id: filters.trainingCourseId,
-                  }
-                : {}),
-            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                ? {
-                      trainingObjectTypeId: filters.trainingObjectId,
-                  }
-                : {}),
-            academicWarningRule: {
-                some: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: { contains: filters.code, mode: 'insensitive' },
-                          }
-                        : {}),
-                    ...(filters.field
-                        ? Array.isArray(filters.field)
-                            ? {
-                                  field: {
-                                      in: filters.field,
-                                  },
-                              }
-                            : {
-                                  field: {
-                                      equals: filters.field,
-                                  },
-                              }
-                        : {}),
-                    ...(filters.operator
-                        ? Array.isArray(filters.operator)
-                            ? {
-                                  operator: {
-                                      in: filters.operator,
-                                  },
-                              }
-                            : {
-                                  operator: {
-                                      equals: filters.operator,
-                                  },
-                              }
-                        : {}),
-                },
-            },
-        },
+        where,
         include: {
             academicWarningRule: true,
             trainingObjectType: true,
@@ -99,18 +111,7 @@ export default function AcademicWarningRule() {
     })
 
     const { data: count } = useCountTrainingCourse({
-        where: {
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      id: filters.trainingCourseId,
-                  }
-                : {}),
-            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                ? {
-                      trainingObjectId: filters.trainingObjectId,
-                  }
-                : {}),
-        },
+        where,
     })
 
     const debouncedRefetch = useCallback(
@@ -362,8 +363,14 @@ export default function AcademicWarningRule() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>

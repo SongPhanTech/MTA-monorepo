@@ -10,7 +10,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useSemesterTypeOptions } from '@hooks/semesterType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { SchoolYear } from '@workspace/db'
+import type { Prisma, SchoolYear } from '@workspace/db'
 import {
     useCountSchoolYear,
     useFindManySchoolYear,
@@ -23,7 +23,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function YearAndSemester() {
@@ -38,9 +38,12 @@ function YearAndSemester() {
     })
 
     const { options: semesterOption, getSemesterTypeLabel } = useSemesterTypeOptions()
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
 
-    const { data = [], refetch } = useFindManySchoolYear({
-        where: {
+    const where: Prisma.SchoolYearWhereInput = useMemo(() => {
+        return {
             ...(filters.schoolYearId && filters.schoolYearId !== ''
                 ? {
                       id: {
@@ -49,40 +52,47 @@ function YearAndSemester() {
                       },
                   }
                 : {}),
-            semesters: {
-                some: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.semesterType
-                        ? Array.isArray(filters.semesterType)
-                            ? {
-                                  semesterType: {
-                                      in: filters.semesterType,
-                                  },
-                              }
-                            : {
-                                  semesterType: {
-                                      equals: filters.semesterType,
-                                  },
-                              }
-                        : {}),
-                },
-            },
-        },
+            ...(isFiltering
+                ? {
+                      semesters: {
+                          some: {
+                              ...(filters.code && filters.code !== ''
+                                  ? {
+                                        code: {
+                                            contains: filters.code,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.name && filters.name !== ''
+                                  ? {
+                                        name: {
+                                            contains: filters.name,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.semesterType
+                                  ? Array.isArray(filters.semesterType)
+                                      ? {
+                                            semesterType: {
+                                                in: filters.semesterType,
+                                            },
+                                        }
+                                      : {
+                                            semesterType: {
+                                                equals: filters.semesterType,
+                                            },
+                                        }
+                                  : {}),
+                          },
+                      },
+                  }
+                : {}),
+        }
+    }, [filters, isFiltering])
+    const { data = [], refetch } = useFindManySchoolYear({
+        where,
         orderBy: {
             createdAt: 'desc',
         },
@@ -132,47 +142,8 @@ function YearAndSemester() {
 
     const { data: count } = useCountSchoolYear({
         where: {
-            ...(filters.schoolYearId && filters.schoolYearId !== ''
-                ? {
-                      id: {
-                          contains: filters.schoolYearId,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            semesters: {
-                some: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.semesterType
-                        ? Array.isArray(filters.semesterType)
-                            ? {
-                                  semesterType: {
-                                      in: filters.semesterType,
-                                  },
-                              }
-                            : {
-                                  semesterType: {
-                                      equals: filters.semesterType,
-                                  },
-                              }
-                        : {}),
-                },
-            },
+            ...where,
+            deletedAt: null,
         },
     })
 
@@ -395,8 +366,14 @@ function YearAndSemester() {
                         current: currentPage,
                         pageSize: numberOfPages,
                         total: count,
-                        onChange: setCurrentPage,
-                        onShowSizeChange: setNumberOfPages,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
                     }}
                     defaultExpandAll
                     headerRight={({ id }) => (

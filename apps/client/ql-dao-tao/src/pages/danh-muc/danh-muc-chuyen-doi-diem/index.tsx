@@ -6,7 +6,7 @@ import { PutCloneConvertScore, PutConvertScore } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse } from '@workspace/db'
+import type { Prisma, TrainingCourse } from '@workspace/db'
 import {
     useCountScoreConvert,
     useCreateManyScoreConvert,
@@ -18,7 +18,7 @@ import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd
 import _ from 'lodash'
 import { Copy, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -39,36 +39,46 @@ export default function TrainingFieldPage() {
         searchText: '',
         active: 'true',
     })
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
 
+    const where: Prisma.TrainingCourseWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      scoreConverts: {
+                          some: {
+                              active:
+                                  filters.active === 'true'
+                                      ? true
+                                      : filters.active === 'false'
+                                        ? false
+                                        : undefined,
+                              ...(filters.searchText && filters.searchText.trim() !== ''
+                                  ? {
+                                        AND: [
+                                            {
+                                                base10Min: {
+                                                    lte: Number(filters.searchText),
+                                                },
+                                            },
+                                            {
+                                                base10Max: {
+                                                    gte: Number(filters.searchText),
+                                                },
+                                            },
+                                        ],
+                                    }
+                                  : {}),
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
     const { data = [], refetch } = useFindManyTrainingCourse({
-        where: {
-            scoreConverts: {
-                some: {
-                    active:
-                        filters.active === 'true'
-                            ? true
-                            : filters.active === 'false'
-                              ? false
-                              : undefined,
-                    ...(filters.searchText && filters.searchText.trim() !== ''
-                        ? {
-                              AND: [
-                                  {
-                                      base10Min: {
-                                          lte: Number(filters.searchText),
-                                      },
-                                  },
-                                  {
-                                      base10Max: {
-                                          gte: Number(filters.searchText),
-                                      },
-                                  },
-                              ],
-                          }
-                        : {}),
-                },
-            },
-        },
+        where,
         include: {
             scoreConverts: {
                 orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
@@ -315,8 +325,14 @@ export default function TrainingFieldPage() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
