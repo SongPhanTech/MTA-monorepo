@@ -488,16 +488,18 @@ model Difficulty {
 
 /// Khối kiến thức / Chương mục
 model KnowledgeBlock {
-  id             String              @id() @default(cuid())
-  code           String?             @unique()
-  active         Boolean             @default(true)
-  description    String?             @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt()
-  name           String
-  questions      Question[]
-  structureRules TestStructureRule[]
+  id               String              @id() @default(cuid())
+  code             String?             @unique()
+  active           Boolean             @default(true)
+  description      String?             @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt()
+  subjectVersion   SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  name             String
+  questions        Question[]
+  structureRules   TestStructureRule[]
 
   @@unique([name])
   @@schema("khao-thi")
@@ -524,12 +526,13 @@ model Question {
   difficulty       Difficulty?           @relation(fields: [difficultyId], references: [id])
   difficultyId     String?
   sessionQuestions ExamSessionQuestion[]
+  /// Câu trả lời của thí sinh trong các phiên thi
   answers          Answer[]
 
   @@schema("khao-thi")
 }
 
-/// Câu trả lời
+/// Câu trả lời của thí sinh
 model Answer {
   id          String      @id() @default(cuid())
   code        String?     @unique()
@@ -1022,6 +1025,7 @@ model SubjectVersion {
   dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
   coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
@@ -2673,6 +2677,7 @@ model ExpertProfile {
   updatedAt          DateTime        @updatedAt()
   lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
   lecturerId         String?         @unique()
+  name               String?
   title              String?
   specialization     String?
   workplace          String?

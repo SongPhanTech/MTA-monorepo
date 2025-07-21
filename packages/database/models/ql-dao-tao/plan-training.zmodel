@@ -400,6 +400,7 @@ model SubjectVersion extends Base {
   coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
 
+  knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]

@@ -52,10 +52,13 @@ model Difficulty extends Base {
 
 /// Khối kiến thức / Chương mục
 model KnowledgeBlock extends Base {
-  name           String // Tên chương / khối kiến thức
+  subjectVersion   SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
 
-  questions      Question[]
-  structureRules TestStructureRule[]
+  name             String // Tên chương / khối kiến thức
+
+  questions        Question[]
+  structureRules   TestStructureRule[]
 
   @@unique([name])
   @@schema("khao-thi")
@@ -82,6 +85,7 @@ model Question extends Base {
   difficultyId     String?
 
   sessionQuestions ExamSessionQuestion[]
+  /// Câu trả lời của thí sinh trong các phiên thi
   answers          Answer[]
 
   @@schema("khao-thi")
@@ -124,7 +128,7 @@ model Question extends Base {
 //   @@schema("khao-thi")
 // }
 
-/// Câu trả lời
+/// Câu trả lời của thí sinh
 model Answer extends Base {
   sessionId   String
   session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)

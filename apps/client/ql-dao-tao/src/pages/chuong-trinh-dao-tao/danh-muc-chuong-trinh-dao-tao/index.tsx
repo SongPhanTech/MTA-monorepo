@@ -14,6 +14,7 @@ import type {
     CurriculumVersion,
     DocumentFile,
     FixedClass,
+    Prisma,
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
     TrainingObjectType,
@@ -35,7 +36,7 @@ import _ from 'lodash'
 import { BookPlus, Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingProgramCatalog() {
@@ -55,57 +56,85 @@ export default function TrainingProgramCatalog() {
         // trainingMajorId: '',
     })
 
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.CurriculumWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      curriculumVersion: {
+                          some: {
+                              ...(filters.name
+                                  ? {
+                                        name: {
+                                            contains: filters.name,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.code
+                                  ? {
+                                        code: {
+                                            contains: filters.code,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.trainingObjectTypes
+                                  ? {
+                                        trainingObjectTypeId: {
+                                            in: filters.trainingObjectTypes,
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.trainingCourses
+                                  ? {
+                                        fixedClasses: {
+                                            some: {
+                                                trainingCourseId: {
+                                                    in: filters.trainingCourses,
+                                                },
+                                            },
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.trainingTime
+                                  ? {
+                                        trainingTimeId: {
+                                            in: filters.trainingTime,
+                                        },
+                                    }
+                                  : {}),
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
+
     const { data = [], refetch } = useFindManyCurriculum({
-        where: {
-            curriculumVersion: {
-                some: {
-                    name: {
-                        contains: filters.name,
-                        mode: 'insensitive',
-                    },
-                    code: {
-                        contains: filters.code,
-                        mode: 'insensitive',
-                    },
-                    ...(filters.trainingObjectTypes
-                        ? {
-                              trainingObjectTypeId: {
-                                  in: filters.trainingObjectTypes,
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingCourses
-                        ? {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          in: filters.trainingCourses,
-                                      },
-                                  },
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingTime
-                        ? {
-                              trainingTimeId: {
-                                  in: filters.trainingTime,
-                              },
-                          }
-                        : {}),
-                },
-            },
-        },
+        where,
         include: {
             curriculumVersion: {
                 where: {
-                    name: {
-                        contains: filters.name,
-                        mode: 'insensitive',
-                    },
-                    code: {
-                        contains: filters.code,
-                        mode: 'insensitive',
-                    },
+                    ...(filters.name
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.code
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
                     ...(filters.trainingObjectTypes
                         ? {
                               trainingObjectTypeId: {
@@ -191,53 +220,7 @@ export default function TrainingProgramCatalog() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountCurriculum({
-        where: {
-            curriculumVersion: {
-                some: {
-                    OR: [
-                        {
-                            name: {
-                                contains: filters.name,
-                                mode: 'insensitive',
-                            },
-                        },
-                        {
-                            code: {
-                                contains: filters.code,
-                                mode: 'insensitive',
-                            },
-                        },
-                    ],
-                    ...(filters.trainingObjectTypes
-                        ? {
-                              trainingObjectTypeId: {
-                                  in: filters.trainingObjectTypes,
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingCourses
-                        ? {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          in: filters.trainingCourses,
-                                      },
-                                  },
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingTime
-                        ? {
-                              trainingTimeId: {
-                                  in: filters.trainingTime,
-                              },
-                          }
-                        : {}),
-                },
-            },
-        },
-    })
+    const { data: count } = useCountCurriculum({ where: { ...where, deletedAt: null } })
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
