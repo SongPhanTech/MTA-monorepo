@@ -18,6 +18,7 @@ generator client {
 enum ConfigKey {
   DIRECTOR
   ACADEMY_NAME
+  USER_SESSION_TIMEOUT
 
   @@schema("he-thong")
 }
@@ -1891,6 +1892,7 @@ model Message {
 model DM_CapBac {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1903,31 +1905,29 @@ model DM_CapBac {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("mta")
 }
 
 model DM_ChucDanh {
-  Id               String             @id() @default(uuid()) @db.Uuid()
-  sMa              String?
-  sGhiChu          String?
-  iSTT             Int?               @default(0)
-  bActive          Boolean?           @default(true)
-  bDeleted         Boolean?           @default(false)
-  bSystem          Boolean?           @default(false)
-  iDictionaryKey   Int?               @default(0)
-  dNgayTao         DateTime?
-  dNgaySua         DateTime?
-  sNguoiTao        String?
-  sNguoiSua        String?
-  sThietBiTao      String?
-  sThietBiSua      String?
-  sTen             String             @unique()
-  iLoaiChucDanh    Int?               @default(0)
-  DM_ViTriCongViec DM_ViTriCongViec[]
-  userProfile      UserProfile[]
+  Id             String        @id() @default(uuid()) @db.Uuid()
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  iLoaiChucDanh  Int?          @default(0)
+  userProfile    UserProfile[]
 
   @@schema("mta")
 }
@@ -1935,6 +1935,7 @@ model DM_ChucDanh {
 model DM_ChucVu {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1947,7 +1948,6 @@ model DM_ChucVu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   userProfile    UserProfile[]
 
   @@schema("mta")
@@ -1956,6 +1956,7 @@ model DM_ChucVu {
 model DM_HocHam {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1968,7 +1969,6 @@ model DM_HocHam {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("mta")
@@ -1977,6 +1977,7 @@ model DM_HocHam {
 model DM_HocVi {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -1989,7 +1990,6 @@ model DM_HocVi {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   profiles       UserProfile[]
 
   @@schema("mta")
@@ -1998,6 +1998,7 @@ model DM_HocVi {
 model DM_ChungChiTinHoc {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2010,7 +2011,6 @@ model DM_ChungChiTinHoc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2018,6 +2018,7 @@ model DM_ChungChiTinHoc {
 model DM_DanToc {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2030,7 +2031,6 @@ model DM_DanToc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   sTenKhac       String?
   sDiaChiCuTru   String?
   userProfile    UserProfile[]
@@ -2041,6 +2041,7 @@ model DM_DanToc {
 model DM_DonVi {
   Id               String            @id() @default(uuid()) @db.Uuid()
   sMa              String?
+  sTen             String?
   sGhiChu          String?
   iSTT             Int?              @default(0)
   bActive          Boolean?          @default(true)
@@ -2053,16 +2054,12 @@ model DM_DonVi {
   sNguoiSua        String?
   sThietBiTao      String?
   sThietBiSua      String?
-  sTen             String            @unique()
-  sCode            String?           @unique()
+  sCode            String?
   sTenVietTat      String?
   sTruongDonVi     String?
   sChucNangNhiemVu String?
   sDiaChi          String?
-  DM_NhanVien      DM_NhanVien[]
-  parent           DM_DonVi?         @relation("DM_DonVi_Parent", fields: [sParentId], references: [Id], map: "FK_DM_DonVi_iParentId_DM_DonVi_Id")
   sParentId        String?           @db.Uuid()
-  children         DM_DonVi[]        @relation("DM_DonVi_Parent")
   lecturers        Lecturer[]
   lecturerHistory  LecturerHistory[]
   staffs           Staff[]
@@ -2082,32 +2079,9 @@ model DM_DonVi {
 }
 
 model DM_DonViHanhChinh {
-  Id             String         @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?           @default(0)
-  bActive        Boolean?       @default(true)
-  bDeleted       Boolean?       @default(false)
-  bSystem        Boolean?       @default(false)
-  iDictionaryKey Int?           @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String         @unique()
-  sTen_En        String?
-  tinh           DM_Tinh[]
-  huyen          DM_QuanHuyen[]
-  xaPhuong       DM_XaPhuong[]
-
-  @@schema("mta")
-}
-
-model DM_KhuVuc_DiaLy {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2120,9 +2094,28 @@ model DM_KhuVuc_DiaLy {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
   sTen_En        String?
-  tinh           DM_Tinh[]
+
+  @@schema("mta")
+}
+
+model DM_KhuVuc_DiaLy {
+  Id             String    @id() @default(uuid()) @db.Uuid()
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  sTen_En        String?
   student        Student[]
 
   @@schema("mta")
@@ -2131,6 +2124,7 @@ model DM_KhuVuc_DiaLy {
 model DM_NgoaiNgu {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2143,7 +2137,6 @@ model DM_NgoaiNgu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2151,6 +2144,7 @@ model DM_NgoaiNgu {
 model DM_TonGiao {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2163,7 +2157,6 @@ model DM_TonGiao {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   userProfile    UserProfile[]
 
   @@schema("mta")
@@ -2172,6 +2165,7 @@ model DM_TonGiao {
 model DM_TrinhDoNgoaiNgu {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2184,7 +2178,6 @@ model DM_TrinhDoNgoaiNgu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
   sKhung         String?
 
   @@schema("mta")
@@ -2193,6 +2186,7 @@ model DM_TrinhDoNgoaiNgu {
 model DM_TrinhDoTinHoc {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2205,27 +2199,27 @@ model DM_TrinhDoTinHoc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
 
 model DM_NhanVien {
-  Id                  String               @id() @default(uuid()) @db.Uuid()
+  Id                  String         @id() @default(uuid()) @db.Uuid()
   sMa                 String?
+  sTen                String?
   sGhiChu             String?
-  iSTT                Int?                 @default(0)
-  bActive             Boolean?             @default(true)
-  bDeleted            Boolean?             @default(false)
-  bSystem             Boolean?             @default(false)
-  iDictionaryKey      Int?                 @default(0)
+  iSTT                Int?           @default(0)
+  bActive             Boolean?       @default(true)
+  bDeleted            Boolean?       @default(false)
+  bSystem             Boolean?       @default(false)
+  iDictionaryKey      Int?           @default(0)
   dNgayTao            DateTime?
   dNgaySua            DateTime?
   sNguoiTao           String?
   sNguoiSua           String?
   sThietBiTao         String?
   sThietBiSua         String?
-  sTen                String?
+  sCCCD               String?
   sHoVaDem            String?
   sTenDayDu           String?
   dNgaySinh           DateTime?
@@ -2234,26 +2228,20 @@ model DM_NhanVien {
   sSDTDiDong          String?
   sEmail              String?
   bLaNguoiDung        Boolean?
-  DM_DonVi            DM_DonVi?            @relation(fields: [sDM_DonViId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_DonVi")
-  sDM_DonViId         String?              @db.Uuid()
-  DM_ViTriCongViec    DM_ViTriCongViec?    @relation(fields: [sDM_ViTriCongViecId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_NhanVien_DM_ViTriCongViec")
-  sDM_ViTriCongViecId String?              @db.Uuid()
-  sQuanlyTrucTiepId   String?              @db.Uuid()
+  sDM_DonViId         String?        @db.Uuid()
+  sDM_ViTriCongViecId String?        @db.Uuid()
+  sQuanlyTrucTiepId   String?        @db.Uuid()
   sAvatarId           String?
-  group               Group?               @relation(fields: [groupId], references: [id])
+  group               Group?         @relation(fields: [groupId], references: [id])
   groupId             String?
-  taiKhoan            TaiKhoan?
   userProfile         UserProfile[]
-  NguoiDungTrongNhom  NguoiDungTrongNhom[]
-  Quyen_VaiTro        Quyen_VaiTro[]
-  nhatKyHoatDong      NhatKyHoatDong[]
   notification        Notification[]
   feedback            Feedback[]
   conversation        Conversation[]
-  documentUploaded    Document[]           @relation("DocumentUploaded")
-  documentApproved    Document[]           @relation("DocumentApproved")
-  fAQUploaded         FAQ[]                @relation("FAQUploaded")
-  fAQApproved         FAQ[]                @relation("FAQApproved")
+  documentUploaded    Document[]     @relation("DocumentUploaded")
+  documentApproved    Document[]     @relation("DocumentApproved")
+  fAQUploaded         FAQ[]          @relation("FAQUploaded")
+  fAQApproved         FAQ[]          @relation("FAQApproved")
 
   @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
@@ -2265,6 +2253,7 @@ model DM_NhanVien {
 model DM_PhanCap_ChatLuong_TrangThietBi {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2277,7 +2266,6 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
@@ -2285,6 +2273,7 @@ model DM_PhanCap_ChatLuong_TrangThietBi {
 model DM_PhanLoai_CSKT {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2297,29 +2286,26 @@ model DM_PhanLoai_CSKT {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
 
   @@schema("mta")
 }
 
 model DM_NhomNguoiDung {
-  Id                 String               @id() @default(uuid()) @db.Uuid()
-  sMa                String?
-  sGhiChu            String?
-  iSTT               Int?                 @default(0)
-  bActive            Boolean?             @default(true)
-  bDeleted           Boolean?             @default(false)
-  bSystem            Boolean?             @default(false)
-  iDictionaryKey     Int?                 @default(0)
-  dNgayTao           DateTime?
-  dNgaySua           DateTime?
-  sNguoiTao          String?
-  sNguoiSua          String?
-  sThietBiTao        String?
-  sThietBiSua        String?
-  sTen               String               @unique()
-  vaiTroTrongNhom    VaiTroTrongNhom[]
-  nguoiDungTrongNhom NguoiDungTrongNhom[]
+  Id             String    @id() @default(uuid()) @db.Uuid()
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
 
   @@schema("mta")
 }
@@ -2327,6 +2313,7 @@ model DM_NhomNguoiDung {
 model DM_NhomUngDung {
   Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?      @default(0)
   bActive        Boolean?  @default(true)
@@ -2339,7 +2326,6 @@ model DM_NhomUngDung {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String    @unique()
   sMoTa          String?
 
   @@schema("mta")
@@ -2348,6 +2334,7 @@ model DM_NhomUngDung {
 model DM_QuocGia {
   Id             String        @id() @default(uuid()) @db.Uuid()
   sMa            String?
+  sTen           String?
   sGhiChu        String?
   iSTT           Int?          @default(0)
   bActive        Boolean?      @default(true)
@@ -2360,302 +2347,115 @@ model DM_QuocGia {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  sTen           String        @unique()
   sLanguage      String?
   userProfile    UserProfile[]
-  tinh           DM_Tinh[]
 
   @@schema("mta")
 }
 
 model DM_Tinh {
-  Id                          String             @id() @default(uuid()) @db.Uuid()
+  Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
+  sTen                        String?
   sGhiChu                     String?
-  iSTT                        Int?               @default(0)
-  bActive                     Boolean?           @default(true)
-  bDeleted                    Boolean?           @default(false)
-  bSystem                     Boolean?           @default(false)
-  iDictionaryKey              Int?               @default(0)
+  iSTT                        Int?          @default(0)
+  bActive                     Boolean?      @default(true)
+  bDeleted                    Boolean?      @default(false)
+  bSystem                     Boolean?      @default(false)
+  iDictionaryKey              Int?          @default(0)
   dNgayTao                    DateTime?
   dNgaySua                    DateTime?
   sNguoiTao                   String?
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sTen                        String             @unique()
-  quocGia                     DM_QuocGia?        @relation(fields: [sDM_QuocGiaId], references: [Id])
-  sDM_QuocGiaId               String?            @db.Uuid()
-  dM_KhuVuc_DiaLy             DM_KhuVuc_DiaLy?   @relation(fields: [iDM_KhuVucDiaLy_Id], references: [Id])
-  iDM_KhuVucDiaLy_Id          String?            @db.Uuid()
-  dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?            @db.Uuid()
-  huyen                       DM_QuanHuyen[]
-  xaPhuong                    DM_XaPhuong[]
-  userProfileHometown         UserProfile[]      @relation("ProvinceHometown")
-  userProfilePlaceOfBirth     UserProfile[]      @relation("ProvincePlaceOfBirth")
-  userProfilePermanentAddress UserProfile[]      @relation("ProvincePermanentAddress")
-  userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")
+  sDM_QuocGiaId               String?       @db.Uuid()
+  iDM_KhuVucDiaLy_Id          String?       @db.Uuid()
+  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  userProfileHometown         UserProfile[] @relation("ProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("ProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
   @@schema("mta")
 }
 
 model DM_QuanHuyen {
-  Id                          String             @id() @default(uuid()) @db.Uuid()
+  Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
+  sTen                        String?
   sGhiChu                     String?
-  iSTT                        Int?               @default(0)
-  bActive                     Boolean?           @default(true)
-  bDeleted                    Boolean?           @default(false)
-  bSystem                     Boolean?           @default(false)
-  iDictionaryKey              Int?               @default(0)
+  iSTT                        Int?          @default(0)
+  bActive                     Boolean?      @default(true)
+  bDeleted                    Boolean?      @default(false)
+  bSystem                     Boolean?      @default(false)
+  iDictionaryKey              Int?          @default(0)
   dNgayTao                    DateTime?
   dNgaySua                    DateTime?
   sNguoiTao                   String?
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sTen                        String
-  dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
-  sDM_TinhId                  String?            @db.Uuid()
+  sDM_TinhId                  String?       @db.Uuid()
   sDM_Tinh_Ma                 String?
-  dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?            @db.Uuid()
-  xaPhuong                    DM_XaPhuong[]
-  userProfileHometown         UserProfile[]      @relation("DistrictHometown")
-  userProfilePlaceOfBirth     UserProfile[]      @relation("DistrictPlaceOfBirth")
-  userProfilePermanentAddress UserProfile[]      @relation("DistrictPermanentAddress")
-  userProfileCurrentAddress   UserProfile[]      @relation("DistrictCurrentAddress")
+  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  userProfileHometown         UserProfile[] @relation("DistrictHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("DistrictPlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("DistrictCurrentAddress")
 
-  @@unique([sDM_TinhId, sTen])
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("mta")
 }
 
 model DM_XaPhuong {
-  Id                          String             @id() @default(uuid()) @db.Uuid()
+  Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
+  sTen                        String?
   sGhiChu                     String?
-  iSTT                        Int?               @default(0)
-  bActive                     Boolean?           @default(true)
-  bDeleted                    Boolean?           @default(false)
-  bSystem                     Boolean?           @default(false)
-  iDictionaryKey              Int?               @default(0)
+  iSTT                        Int?          @default(0)
+  bActive                     Boolean?      @default(true)
+  bDeleted                    Boolean?      @default(false)
+  bSystem                     Boolean?      @default(false)
+  iDictionaryKey              Int?          @default(0)
   dNgayTao                    DateTime?
   dNgaySua                    DateTime?
   sNguoiTao                   String?
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sTen                        String
   sDM_QuanHuyen_Ma            String?
-  dM_Tinh                     DM_Tinh?           @relation(fields: [sDM_TinhId], references: [Id])
-  sDM_TinhId                  String?            @db.Uuid()
-  quanHuyen                   DM_QuanHuyen?      @relation(fields: [sDM_QuanHuyenId], references: [Id])
-  sDM_QuanHuyenId             String?            @db.Uuid()
-  dM_DonViHanhChinh           DM_DonViHanhChinh? @relation(fields: [iDM_DonViHanhChinhId], references: [Id])
-  iDM_DonViHanhChinhId        String?            @db.Uuid()
-  userProfileHometown         UserProfile[]      @relation("CommuneHometown")
-  userProfilePlaceOfBirth     UserProfile[]      @relation("CommunePlaceOfBirth")
-  userProfilePermanentAddress UserProfile[]      @relation("CommunePermanentAddress")
-  userProfileCurrentAddress   UserProfile[]      @relation("CommuneCurrentAddress")
+  sDM_TinhId                  String?       @db.Uuid()
+  sDM_QuanHuyenId             String?       @db.Uuid()
+  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  userProfileHometown         UserProfile[] @relation("CommuneHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("CommunePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("CommunePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("CommuneCurrentAddress")
 
-  @@unique([sDM_QuanHuyenId, sTen])
   @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
   @@schema("mta")
 }
 
-model DM_VaiTro {
-  Id              String            @id() @default(uuid()) @db.Uuid()
-  sMa             String?
-  sGhiChu         String?
-  iSTT            Int?              @default(0)
-  bActive         Boolean?          @default(true)
-  bDeleted        Boolean?          @default(false)
-  bSystem         Boolean?          @default(false)
-  iDictionaryKey  Int?              @default(0)
-  dNgayTao        DateTime?
-  dNgaySua        DateTime?
-  sNguoiTao       String?
-  sNguoiSua       String?
-  sThietBiTao     String?
-  sThietBiSua     String?
-  sTen            String            @unique()
-  Quyen_VaiTro    Quyen_VaiTro[]
-  VaiTroTrongNhom VaiTroTrongNhom[]
-
-  @@schema("mta")
-}
-
 model DM_ViTriCongViec {
-  Id              String        @id() @default(uuid()) @db.Uuid()
+  Id              String    @id() @default(uuid()) @db.Uuid()
   sMa             String?
+  sTen            String?
   sGhiChu         String?
-  iSTT            Int?          @default(0)
-  bActive         Boolean?      @default(true)
-  bDeleted        Boolean?      @default(false)
-  bSystem         Boolean?      @default(false)
-  iDictionaryKey  Int?          @default(0)
+  iSTT            Int?      @default(0)
+  bActive         Boolean?  @default(true)
+  bDeleted        Boolean?  @default(false)
+  bSystem         Boolean?  @default(false)
+  iDictionaryKey  Int?      @default(0)
   dNgayTao        DateTime?
   dNgaySua        DateTime?
   sNguoiTao       String?
   sNguoiSua       String?
   sThietBiTao     String?
   sThietBiSua     String?
-  sTen            String        @unique()
-  sDM_ChucDanhId  String?       @db.Uuid()
-  sDM_NhomViTriId String        @db.Uuid()
-  DM_NhanVien     DM_NhanVien[]
-  DM_ChucDanh     DM_ChucDanh?  @relation(fields: [sDM_ChucDanhId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DM_ViTriCongViec_DM_ChucDanh")
-
-  @@schema("mta")
-}
-
-model NguoiDungTrongNhom {
-  Id                  String            @id() @default(uuid()) @db.Uuid()
-  sMa                 String?
-  sGhiChu             String?
-  iSTT                Int?              @default(0)
-  bActive             Boolean?          @default(true)
-  bDeleted            Boolean?          @default(false)
-  bSystem             Boolean?          @default(false)
-  iDictionaryKey      Int?              @default(0)
-  dNgayTao            DateTime?
-  dNgaySua            DateTime?
-  sNguoiTao           String?
-  sNguoiSua           String?
-  sThietBiTao         String?
-  sThietBiSua         String?
-  DM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhomNguoiDung")
-  sDM_NhomNguoiDungId String?           @db.Uuid()
-  DM_NhanVien         DM_NhanVien?      @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_NguoiDungTrongNhom_DM_NhanVien")
-  sDM_NhanVienId      String?           @db.Uuid()
-
-  @@unique([sDM_NhomNguoiDungId, sDM_NhanVienId])
-  @@schema("mta")
-}
-
-model NhatKyHoatDong {
-  Id             String       @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?         @default(0)
-  bActive        Boolean?     @default(true)
-  bDeleted       Boolean?     @default(false)
-  bSystem        Boolean?     @default(false)
-  iDictionaryKey Int?         @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  DM_NhanVien    DM_NhanVien? @relation(fields: [sNhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
-  sNhanVienId    String?      @db.Uuid()
-  dLogTime       DateTime?
-  iState         Int?
-  sObjectName    String?
-  sReferenceName String?
-  sDescription   String?
-  sIPAddress     String?
-
-  @@schema("mta")
-}
-
-model Policy {
-  Id             String    @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String    @unique()
-  bXacThuc2YeuTo Boolean?  @default(false)
-  bGioiHanTCIP   Boolean?  @default(false)
-  bGioiHanTG     Boolean?  @default(false)
-  iApDungChoUD   Int?      @default(0)
-
-  @@schema("mta")
-}
-
-model Quyen_VaiTro {
-  Id             String       @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?         @default(0)
-  bActive        Boolean?     @default(true)
-  bDeleted       Boolean?     @default(false)
-  bSystem        Boolean?     @default(false)
-  iDictionaryKey Int?         @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String       @unique()
-  sTenChucNang   String?      @default("N'Tên quyền'")
-  sDM_NhanVienId String?      @db.Uuid()
-  sDM_VaiTroId   String?      @db.Uuid()
-  fValue         Int?
-  DM_NhanVien    DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_NhanVien")
-  DM_VaiTro      DM_VaiTro?   @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Quyen_VaiTro_DM_VaiTro")
-
-  @@schema("mta")
-}
-
-model TaiKhoan {
-  Id             String       @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sGhiChu        String?
-  iSTT           Int?         @default(0)
-  bActive        Boolean?     @default(true)
-  bDeleted       Boolean?     @default(false)
-  bSystem        Boolean?     @default(false)
-  iDictionaryKey Int?         @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  sTen           String
-  sUserName      String?      @unique()
-  sAvatar        String?
-  sDM_NhanVienId String?      @unique() @db.Uuid()
-  nhanVien       DM_NhanVien? @relation(fields: [sDM_NhanVienId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TaiKhoan_DM_NhanVien")
-
-  @@schema("mta")
-}
-
-model VaiTroTrongNhom {
-  Id                  String            @id() @default(uuid()) @db.Uuid()
-  sMa                 String?
-  sGhiChu             String?
-  iSTT                Int?              @default(0)
-  bActive             Boolean?          @default(true)
-  bDeleted            Boolean?          @default(false)
-  bSystem             Boolean?          @default(false)
-  iDictionaryKey      Int?              @default(0)
-  dNgayTao            DateTime?
-  dNgaySua            DateTime?
-  sNguoiTao           String?
-  sNguoiSua           String?
-  sThietBiTao         String?
-  sThietBiSua         String?
-  dM_NhomNguoiDung    DM_NhomNguoiDung? @relation(fields: [sDM_NhomNguoiDungId], references: [Id])
-  sDM_NhomNguoiDungId String?           @db.Uuid()
-  DM_VaiTro           DM_VaiTro?        @relation(fields: [sDM_VaiTroId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_VaiTroTrongNhom_DM_VaiTro")
-  sDM_VaiTroId        String?           @db.Uuid()
+  sDM_ChucDanhId  String?   @db.Uuid()
+  sDM_NhomViTriId String    @db.Uuid()
 
   @@schema("mta")
 }

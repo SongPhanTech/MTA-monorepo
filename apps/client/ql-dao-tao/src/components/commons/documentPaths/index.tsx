@@ -1,5 +1,5 @@
 import { CloseOutlined, CloudUploadOutlined, PaperClipOutlined } from '@ant-design/icons'
-import type { DocumentFile } from '@workspace/db'
+import type { DocumentFile, Prisma } from '@workspace/db'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'
@@ -13,13 +13,7 @@ interface DocumentPathsComponentProps {
     form: FormInstance
     data: DocumentFile[]
     relationId: string
-    relationType:
-        | 'archivedCertificateId'
-        | 'archivedAwardId'
-        | 'curriculumId'
-        | 'curriculumVersionId'
-        | 'subjectVersionId'
-        | 'studentAcademicDecisionId'
+    relationType: Extract<Prisma.DocumentFileScalarFieldEnum, `${string}Id`>
     titleForm?: string
 }
 

@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE "mta"."DM_DonVi" ADD CONSTRAINT "FK_DM_DonVi_iParentId_DM_DonVi_Id" FOREIGN KEY ("sParentId") REFERENCES "mta"."DM_DonVi"("Id") ON DELETE SET NULL ON UPDATE CASCADE;
