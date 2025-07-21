@@ -5,7 +5,12 @@ import Select from '@components/commons/select'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import { type Question, QuestionType } from '@workspace/db'
-import { useCreateQuestion, useFindUniqueQuestion, useUpdateQuestion } from '@workspace/db/hooks'
+import {
+    useCreateQuestion,
+    useFindManyKnowledgeBlock,
+    useFindUniqueQuestion,
+    useUpdateQuestion,
+} from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,6 +43,7 @@ const PutQuestion = () => {
                 explanation: output.explanation,
                 isAutoGraded: output.isAutoGraded,
                 questionBankId: input?.questionBankId,
+                knowledgeBlockId: output.knowledgeBlockId,
             }
             if (input?.id) {
                 await updateQuestion({
@@ -66,11 +72,16 @@ const PutQuestion = () => {
     const { data: initialValue } = useFindUniqueQuestion(
         {
             where: { id: input?.id },
+            include: { questionBank: true },
         },
         {
             enabled: !!input?.id,
         }
     )
+
+    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
+        where: { subjectVersionId: initialValue?.questionBank?.subjectVersionId },
+    })
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -108,6 +119,18 @@ const PutQuestion = () => {
                         placeholder="Chọn loại câu hỏi"
                         options={questionTypeOptions}
                         defaultValue={QuestionType.ESSAY}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="knowledgeBlockId" label="Chương mục">
+                    <Select
+                        maxTagCount={'responsive'}
+                        placeholder="Chọn chương mục"
+                        options={knowledgeBlockData?.map(({ id, name }) => ({
+                            value: id,
+                            label: name,
+                        }))}
                     />
                 </FormItem>
             </Col>

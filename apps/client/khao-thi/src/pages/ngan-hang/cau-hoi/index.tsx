@@ -17,7 +17,7 @@ import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function QuestionBank() {
@@ -30,8 +30,8 @@ export default function QuestionBank() {
         subjectVersionId: undefined,
     })
 
-    const { data = [], refetch } = useFindManyQuestionBank({
-        where: {
+    const commonWhere = useMemo(
+        () => ({
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -55,7 +55,12 @@ export default function QuestionBank() {
                       },
                   }
                 : {}),
-        },
+        }),
+        [filters.code, filters.name, filters.subjectVersionId]
+    )
+
+    const { data = [], refetch } = useFindManyQuestionBank({
+        where: commonWhere,
         include: { subjectVersion: true },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -63,29 +68,8 @@ export default function QuestionBank() {
 
     const { data: count } = useCountQuestionBank({
         where: {
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.subjectVersionId
-                ? {
-                      subjectVersionId: {
-                          in: filters.subjectVersionId,
-                      },
-                  }
-                : {}),
+            ...commonWhere,
+            deletedAt: null,
         },
     })
 

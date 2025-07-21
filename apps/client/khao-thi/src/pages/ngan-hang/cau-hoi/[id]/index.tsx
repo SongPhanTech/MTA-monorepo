@@ -16,11 +16,11 @@ import {
     useUpdateQuestion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Checkbox, Col, Divider, Dropdown, Flex, Menu, message, Row } from 'antd'
+import { Button, Col, Divider, Dropdown, Flex, Menu, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function Question() {
@@ -52,102 +52,81 @@ export default function Question() {
         { enabled: !!questionBankId }
     )
 
+    const commonWhere = useMemo(
+        () => ({
+            questionBankId,
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.questionType && filters.questionType.length > 0
+                ? {
+                      type: { in: filters.questionType },
+                  }
+                : {}),
+            ...(filters.content && filters.content !== ''
+                ? {
+                      content: {
+                          contains: filters.content,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.explanation && filters.explanation !== ''
+                ? {
+                      explanation: {
+                          contains: filters.explanation,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+        }),
+        [questionBankId, filters.code, filters.questionType, filters.content, filters.explanation]
+    )
+
+    const commonOrderBy = useMemo(
+        () => [
+            ...emptyObjectIf(
+                [
+                    {
+                        point: filters.point,
+                    },
+                ],
+                !!filters.point
+            ),
+            { point: 'asc' },
+        ],
+        [filters.point]
+    )
+
+    const queryOptions = useMemo(
+        () => ({
+            enabled: !!questionBankId,
+        }),
+        [questionBankId]
+    )
+
     const { data } = useFindManyQuestion(
         {
-            where: {
-                questionBankId,
-                ...(filters.code && filters.code !== ''
-                    ? {
-                          code: {
-                              contains: filters.code,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.questionType && filters.questionType.length > 0
-                    ? {
-                          type: { in: filters.questionType },
-                      }
-                    : {}),
-                ...(filters.content && filters.content !== ''
-                    ? {
-                          content: {
-                              contains: filters.content,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.explanation && filters.explanation !== ''
-                    ? {
-                          explanation: {
-                              contains: filters.explanation,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-            },
-            orderBy: [
-                ...emptyObjectIf(
-                    [
-                        {
-                            point: filters.point,
-                        },
-                    ],
-                    !!filters.point
-                ),
-                { point: 'asc' },
-            ],
+            where: commonWhere,
+            orderBy: commonOrderBy,
         },
-        { enabled: !!questionBankId }
+        queryOptions
     )
 
     const { data: count } = useCountQuestion(
         {
             where: {
-                questionBankId,
-                ...(filters.code && filters.code !== ''
-                    ? {
-                          code: {
-                              contains: filters.code,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.questionType && filters.questionType.length > 0
-                    ? {
-                          type: { in: filters.questionType },
-                      }
-                    : {}),
-                ...(filters.content && filters.content !== ''
-                    ? {
-                          content: {
-                              contains: filters.content,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.explanation && filters.explanation !== ''
-                    ? {
-                          explanation: {
-                              contains: filters.explanation,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
+                ...commonWhere,
+                deletedAt: null,
             },
-            orderBy: [
-                ...emptyObjectIf(
-                    [
-                        {
-                            point: filters.point,
-                        },
-                    ],
-                    !!filters.point
-                ),
-                { point: 'asc' },
-            ],
+            orderBy: commonOrderBy,
         },
-        { enabled: !!questionBankId }
+        queryOptions
     )
 
     const { mutateAsync: updateQuestion } = useUpdateQuestion()
@@ -273,19 +252,19 @@ export default function Question() {
                                 width: 200,
                                 type: 'input',
                             },
-                            {
-                                title: 'Tự động chấm điểm',
-                                dataIndex: 'isAutoGraded',
-                                align: 'center',
-                                width: 120,
-                                render: (value) => {
-                                    return (
-                                        <div className="flex items-center justify-center">
-                                            <Checkbox checked={value} disabled />
-                                        </div>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Tự động chấm điểm',
+                            //     dataIndex: 'isAutoGraded',
+                            //     align: 'center',
+                            //     width: 120,
+                            //     render: (value) => {
+                            //         return (
+                            //             <div className="flex items-center justify-center">
+                            //                 <Checkbox checked={value} disabled />
+                            //             </div>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,

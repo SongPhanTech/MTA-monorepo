@@ -1,6 +1,7 @@
 import AddTaiLieu from './add-tai-lieu'
 import ConfirmModal from './confirm-dialog'
 import PutQuestion from './put-cau-hoi'
+import PutKnowledgeBlock from './put-chuong-muc'
 import PutSurveyModal from './put-modal-survey'
 import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
 import PutSurveyQuestionModal from './put-modal-survey-question'
@@ -17,4 +18,5 @@ export {
     PutSurveyQuestionModal,
     PutQuestionBank,
     PutQuestion,
+    PutKnowledgeBlock,
 }
