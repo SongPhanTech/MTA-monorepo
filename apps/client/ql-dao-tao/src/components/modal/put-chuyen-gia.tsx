@@ -29,7 +29,7 @@ const PutExpertProfile = () => {
     })
     const { data: expert } = useFindUniqueExpertProfile({ where: { id: id } }, { enabled: !!id })
 
-    const [isInternal, setIsInternal] = useState(!!expert?.lecturerId)
+    const [isInternal, setIsInternal] = useState(true)
 
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: lecturer = [] } = useFindManyLecturer({
@@ -43,6 +43,7 @@ const PutExpertProfile = () => {
             form.setFieldsValue({
                 ...expert,
             })
+            setIsInternal(!!expert.lecturerId)
         }
     }, [expert, form])
 
@@ -101,7 +102,7 @@ const PutExpertProfile = () => {
                             form.resetFields()
                         }
                     }}
-                    defaultValue={expert?.lecturerId ? 'internal' : 'external'}
+                    value={isInternal ? 'internal' : 'external'}
                 >
                     <Radio value="internal">Chuyên gia trong trường</Radio>
                     <Radio value="external">Chuyên gia ngoài trường</Radio>

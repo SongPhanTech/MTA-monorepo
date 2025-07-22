@@ -12,8 +12,10 @@ import {
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import { BookPlus } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -25,6 +27,7 @@ type FilterPropsThesis = FilterProps & {
 }
 
 export default function ThesisProject() {
+    const router = useRouter()
     const { getThesisProjectStatusColor, getThesisProjectStatusLabel, thesisProjectStatusOptions } =
         useThesisProjectStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
@@ -88,6 +91,12 @@ export default function ThesisProject() {
         hideSpinner()
     }
 
+    const handleNavigate = (record: { id?: string }) => {
+        if (record?.id) {
+            router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN}/${record.id}`)
+        }
+    }
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -110,6 +119,7 @@ export default function ThesisProject() {
                         id="training-block"
                         filters={filters}
                         setFilters={setFilters}
+                        onRowClick={(record) => handleNavigate(record)}
                         columns={[
                             {
                                 title: 'STT',
@@ -207,12 +217,19 @@ export default function ThesisProject() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
+                                                    onClick={(e) => {
+                                                        onOpen(id)
+                                                        e.stopPropagation()
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
+                                                        onConfirm: (e) => {
+                                                            handleDelete(id)
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => e?.stopPropagation(),
                                                     }}
                                                 />
                                             </Row>
