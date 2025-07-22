@@ -20,7 +20,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CSDL_CNTT_1',
             },
             {
@@ -34,7 +34,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'THDC_CNTT_1',
             },
             {
@@ -48,7 +48,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TACN1IT_CNTT_1',
             },
             {
@@ -62,7 +62,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'NMNKNMIT_CNTT_1',
             },
             {
@@ -104,7 +104,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTHDTJAVACB_CNTT_1',
             },
             {
@@ -118,7 +118,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DS_CNTT_1',
             },
             {
@@ -132,7 +132,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'NLHDH_CNTT_1',
             },
             {
@@ -146,7 +146,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CNWEB_CNTT_1',
             },
             {
@@ -160,7 +160,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACS1IT_CNTT_1',
             },
             {
@@ -174,7 +174,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'VL_CNTT_1',
             },
             {
@@ -188,7 +188,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CTDLGT_CNTT_1',
             },
             {
@@ -202,7 +202,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TACN2_CNTT_1',
             },
             {
@@ -216,7 +216,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'KTMT_CNTT_1',
             },
             {
@@ -230,7 +230,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTJAVANC_CNTT_1',
             },
             {
@@ -244,7 +244,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACS2IT_CNTT_1',
             },
             {
@@ -258,7 +258,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CD1IT_CNTT_1',
             },
             {
@@ -272,7 +272,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PTTKHT_CNTT_1',
             },
             {
@@ -286,7 +286,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TACNTH1_CNTT_1',
             },
             {
@@ -300,7 +300,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TR_CNTT_1',
             },
             {
@@ -314,7 +314,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'HTS_CNTT_1',
             },
             {
@@ -328,7 +328,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'MMT_CNTT_1',
             },
             {
@@ -342,7 +342,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CNWEBNC_CNTT_1',
             },
             {
@@ -356,7 +356,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CNPM_CNTT_1',
             },
             {
@@ -370,7 +370,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CD2_CNTT_1',
             },
             {
@@ -384,7 +384,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'VDK_CNTT_1',
             },
             {
@@ -398,7 +398,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'GT_CNTT_1',
             },
             {
@@ -412,7 +412,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TACNTH2_CNTT_1',
             },
             {
@@ -426,7 +426,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'XSTK_CNTT_1',
             },
             {
@@ -440,7 +440,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACS3IT_CNTT_1',
             },
             {
@@ -454,7 +454,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTDNIT_CNTT_1',
             },
             {
@@ -468,7 +468,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTDT_CNTT_1',
             },
             {
@@ -482,7 +482,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CD3_CNTT_1',
             },
             {
@@ -496,7 +496,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACS4IT_CNTT_1',
             },
             {
@@ -510,7 +510,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DHMT_CNTT_1',
             },
             {
@@ -524,7 +524,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'QTM_CNTT_1',
             },
             {
@@ -538,7 +538,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'ANHT_CNTT_1',
             },
             {
@@ -552,7 +552,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTM_CNTT_1',
             },
             {
@@ -566,7 +566,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'QLDA_CNTT_1',
             },
             {
@@ -580,7 +580,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTNT_CNTT_1',
             },
             {
@@ -594,7 +594,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TBD_CNTT_1',
             },
             {
@@ -608,7 +608,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CD4_CNTT_1',
             },
             {
@@ -622,7 +622,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACS5IT_CNTT_1',
             },
             {
@@ -636,7 +636,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'KTPM_CNTT_1',
             },
             {
@@ -650,7 +650,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'XLA_CNTT_1',
             },
             {
@@ -664,7 +664,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTHT_CNTT_1',
             },
             {
@@ -678,7 +678,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PTTKGT_CNTT_1',
             },
             {
@@ -692,7 +692,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'XTHS_CNTT_1',
             },
             {
@@ -706,7 +706,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'HH_CNTT_1',
             },
             {
@@ -720,7 +720,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'THML_CNTT_1',
             },
             {
@@ -734,7 +734,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTHCM_CNTT_1',
             },
             {
@@ -748,7 +748,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PLDC_CNTT_1',
             },
             {
@@ -762,7 +762,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CD5IT_CNTT_1',
             },
             {
@@ -776,7 +776,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACN1IT_CNTT_1',
             },
             {
@@ -790,7 +790,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTWIN_CNTT_1',
             },
             {
@@ -804,7 +804,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTNM_CNTT_1',
             },
             {
@@ -818,7 +818,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTTCMT_CNTT_1',
             },
             {
@@ -832,7 +832,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TMDT_CNTT_1',
             },
             {
@@ -846,7 +846,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LPMM_CNTT_1',
             },
             {
@@ -860,7 +860,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'XLNTN_CNTT_1',
             },
             {
@@ -874,7 +874,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'BMATHTT_CNTT_1',
             },
             {
@@ -888,7 +888,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'KTTSDL_CNTT_1',
             },
             {
@@ -902,7 +902,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TKDHVHH_CNTT_1',
             },
             {
@@ -916,7 +916,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'KTCTML_CNTT_1',
             },
             {
@@ -930,7 +930,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LSDCSVN_CNTT_1',
             },
             {
@@ -944,7 +944,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CD6IT_CNTT_1',
             },
             {
@@ -958,7 +958,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACN2IT_CNTT_1',
             },
             {
@@ -972,7 +972,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'HCSDLP_CNTT_1',
             },
             {
@@ -986,7 +986,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PTTKM_CNTT_1',
             },
             {
@@ -1000,7 +1000,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'MKKDD_CNTT_1',
             },
             {
@@ -1014,7 +1014,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DTDC_CNTT_1',
             },
             {
@@ -1028,7 +1028,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'MMH_CNTT_1',
             },
             {
@@ -1042,7 +1042,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TKLTTT_CNTT_1',
             },
             {
@@ -1056,7 +1056,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TKDH3D_CNTT_1',
             },
             {
@@ -1070,7 +1070,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TGMT_CNTT_1',
             },
             {
@@ -1084,7 +1084,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'XBTT_CNTT_1',
             },
             {
@@ -1098,7 +1098,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'KXPATH_CNTT_1',
             },
             {
@@ -1112,7 +1112,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CNXHKH_CNTT_1',
             },
             {
@@ -1126,7 +1126,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTTNIT_CNTT_1',
             },
             {
@@ -1140,7 +1140,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K11',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DATNIT_CNTT_1',
             },
         ],
