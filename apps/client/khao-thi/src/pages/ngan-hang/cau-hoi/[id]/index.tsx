@@ -8,7 +8,6 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountQuestion,
     useFindManyQuestion,
@@ -59,7 +58,7 @@ export default function Question() {
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -72,7 +71,7 @@ export default function Question() {
                 ? {
                       content: {
                           contains: filters.content,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -80,7 +79,7 @@ export default function Question() {
                 ? {
                       explanation: {
                           contains: filters.explanation,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -88,20 +87,14 @@ export default function Question() {
         [questionBankId, filters.code, filters.questionType, filters.content, filters.explanation]
     )
 
-    const commonOrderBy = useMemo(
-        () => [
-            ...emptyObjectIf(
-                [
-                    {
-                        point: filters.point,
-                    },
-                ],
-                !!filters.point
-            ),
-            { point: 'asc' },
-        ],
-        [filters.point]
-    )
+    const commonOrderBy = useMemo(() => {
+        const order: { point?: 'asc' | 'desc' }[] = []
+        if (filters.point === 'asc' || filters.point === 'desc') {
+            order.push({ point: filters.point })
+        }
+        order.push({ point: 'asc' })
+        return order
+    }, [filters.point])
 
     const queryOptions = useMemo(
         () => ({

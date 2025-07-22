@@ -7,6 +7,7 @@ import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
 import PutSurveyQuestionModal from './put-modal-survey-question'
 import PutSurveyQuestionTypeModal from './put-modal-survey-question-type'
 import PutSurveyTopicModal from './put-modal-survey-topic'
+import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
 export {
     ConfirmModal,
@@ -19,4 +20,5 @@ export {
     PutQuestionBank,
     PutQuestion,
     PutKnowledgeBlock,
+    PutDifficulty,
 }

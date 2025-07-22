@@ -7,15 +7,15 @@ import { PutKnowledgeBlock } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Prisma } from '@workspace/db'
 import {
     useCountSubjectVersion,
     useFindManySubjectVersion,
     useUpdateKnowledgeBlock,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
-import { BookPlus } from 'lucide-react'
-import type React from 'react'
-import { useState } from 'react'
+import { Col, Flex, Form, Input, message, Row, Tooltip } from 'antd'
+import { Search } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function KnowledgeBlock() {
@@ -24,16 +24,73 @@ export default function KnowledgeBlock() {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        subjectVersionId: undefined,
+        searchText: '',
     })
 
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.SubjectVersionWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      ...(filters.searchText
+                          ? {
+                                OR: [
+                                    {
+                                        code: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                    {
+                                        name: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                ],
+                            }
+                          : {}),
+                      ...(filters.code || filters.name
+                          ? {
+                                knowledgeBlocks: {
+                                    some: {
+                                        ...(filters.name
+                                            ? {
+                                                  name: {
+                                                      contains: filters.name,
+                                                      mode: 'insensitive',
+                                                  },
+                                              }
+                                            : {}),
+                                        ...(filters.code
+                                            ? {
+                                                  code: {
+                                                      contains: filters.code,
+                                                      mode: 'insensitive',
+                                                  },
+                                              }
+                                            : {}),
+                                    },
+                                },
+                            }
+                          : {}),
+                  }
+                : {},
+        [filters, isFiltering]
+    )
+
     const { data, refetch } = useFindManySubjectVersion({
+        where,
         include: { knowledgeBlocks: { include: { questions: true } } },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
+        orderBy: { createdAt: 'desc' },
     })
 
-    const { data: count } = useCountSubjectVersion()
+    const { data: count } = useCountSubjectVersion({ where: { ...where, deletedAt: null } })
 
     const { onOpen: onOpenPutKnowledgeBlock } = useDisclosure<{
         id: string
@@ -62,15 +119,50 @@ export default function KnowledgeBlock() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
-                            <Flex justify="end" gap={4}>
-                                <Button type="primary">
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                    <Row gutter={[16, 16]} align="top">
+                        {/* Tìm kiếm */}
+                        <Col span={12}>
+                            <Flex>
+                                <Col span={10}>
+                                    <Form.Item name="searchText">
+                                        <Input
+                                            id="search"
+                                            onChange={(e) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    searchText: e.target.value,
+                                                })
+                                            }
+                                            className="py-0 h-8"
+                                            placeholder="Tìm kiếm phiên bản môn học"
+                                            prefix={
+                                                <Search
+                                                    size={15}
+                                                    style={{
+                                                        color: 'rgba(0, 0, 0, 0.25)',
+                                                    }}
+                                                />
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
                             </Flex>
                         </Col>
+
+                        {/* Thêm mới */}
+                        {/* <Col span={12}>
+                        <Flex justify="end" gap={10}>
+                            <Button onClick={handleModal} className="border-primary text-primary">
+                                <BookPlus />
+                                Thêm mới năm học
+                            </Button>
+                            <Button onClick={handleModalSemester} type="primary">
+                                <BookPlus />
+                                Thêm mới kỳ học
+                            </Button>
+                        </Flex>
+                    </Col> */}
                     </Row>
                 </Col>
 

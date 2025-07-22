@@ -1,6 +1,7 @@
 export default {
   "KHAO_THI": {
     "DANH_MUC_DANH_MUC_CHUONG_MUC": "/danh-muc/danh-muc-chuong-muc",
+    "DANH_MUC_MUC_DO_KHO": "/danh-muc/muc-do-kho",
     "HOME": "/home",
     "INDEX": "/",
     "NGAN_HANG_CAU_HOI_ID": "/ngan-hang/cau-hoi/[id]",

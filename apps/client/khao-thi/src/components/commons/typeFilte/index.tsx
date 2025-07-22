@@ -106,6 +106,7 @@ export type FilterProps = {
     questionType?: QuestionType[]
     explanation?: string | ''
     point?: 'asc' | 'desc'
+    level?: 'asc' | 'desc'
 }
 
 export type ColumnTypeProps = ColumnsType & {

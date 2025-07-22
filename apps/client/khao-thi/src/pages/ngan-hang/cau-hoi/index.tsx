@@ -36,7 +36,7 @@ export default function QuestionBank() {
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -44,7 +44,7 @@ export default function QuestionBank() {
                 ? {
                       name: {
                           contains: filters.name,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
