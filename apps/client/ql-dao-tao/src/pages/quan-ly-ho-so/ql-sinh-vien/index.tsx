@@ -427,7 +427,7 @@ export default function UserProfilePageDs() {
                                 ],
 
                                 render: (__, record) =>
-                                    record.userProfile?.gender
+                                    record?.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]

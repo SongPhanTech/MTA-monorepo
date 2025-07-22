@@ -505,7 +505,7 @@ export default function UserProfilePageLecture() {
                                     { label: 'Nữ', value: 'Female' },
                                 ],
                                 render: (record) =>
-                                    record.userProfile?.gender
+                                    record?.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]

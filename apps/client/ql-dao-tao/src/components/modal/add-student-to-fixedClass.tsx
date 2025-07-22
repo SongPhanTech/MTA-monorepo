@@ -417,8 +417,8 @@ const AddStudentToFixedClassModal = () => {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 80,
-                                render: (record) =>
-                                    record.userProfile?.gender
+                                render: (__, record) =>
+                                    record?.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
@@ -558,8 +558,8 @@ const AddStudentToFixedClassModal = () => {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 80,
-                                render: (record) =>
-                                    record.userProfile?.gender
+                                render: (__, record) =>
+                                    record?.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
