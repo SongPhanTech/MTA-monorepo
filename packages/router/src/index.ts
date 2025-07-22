@@ -808,19 +808,19 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin trang chủ',
             },
             {
-                id: 'ngan-hang',
-                label: 'Ngân hàng',
+                id: 'thiet-lap-de-thi',
+                label: 'Thiết lập đề thi',
                 icon: Landmark,
                 children: [
                     {
-                        id: 'ngan-hang-cau-hoi',
-                        label: 'Ngân hàng câu hỏi',
-                        path: ROUTER_PATH.KHAO_THI.NGAN_HANG_CAU_HOI,
+                        id: 'danh-sach-ky-thi',
+                        label: 'Danh sách kỳ thi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
                     },
                     {
-                        id: 'ngan-hang-de-thi',
-                        label: 'Ngân hàng đề thi',
-                        path: ROUTER_PATH.KHAO_THI.NGAN_HANG_DE_THI,
+                        id: 'ngan-hang-cau-hoi',
+                        label: 'Ngân hàng câu hỏi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                     },
                 ],
             },

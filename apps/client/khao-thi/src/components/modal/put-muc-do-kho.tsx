@@ -87,7 +87,7 @@ const PutDifficulty = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name="code" label="Mã độ khó" required>
+                <FormItem form={form} name="code" label="Mã độ khó">
                     <Input placeholder="Nhập mã độ khó" />
                 </FormItem>
             </Col>

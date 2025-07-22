@@ -314,7 +314,10 @@ Question.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
-                { title: 'Ngân hàng câu hỏi', href: ROUTER_PATH.KHAO_THI.NGAN_HANG_CAU_HOI },
+                {
+                    title: 'Ngân hàng câu hỏi',
+                    href: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+                },
                 {
                     title: 'Câu hỏi',
                 },
