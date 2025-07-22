@@ -572,34 +572,7 @@ const NAVIGATION: NavigationType = {
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG,
                     },
-                    {
-                        id: 'user-profile-ds',
-                        label: 'Quản lý hồ sơ sinh viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
-                        description: 'Quản lý hồ sơ sinh viên',
-                    },
-                    {
-                        id: 'ql-hoc-vien',
-                        label: 'Quản lý hồ sơ học viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_HOC_VIEN,
-                        description: 'Quản lý hồ sơ học viên',
-                    },
-                    {
-                        id: 'user-profile-lecture',
-                        label: 'Quản lý hồ sơ giảng viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_GIANG_VIEN,
-                        description: 'Quản lý hồ sơ giảng viên',
-                    },
-                    {
-                        id: 'user-profile-staff',
-                        label: 'Quản lý hồ sơ cán bộ',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_CAN_BO,
-                        description: 'Quản lý hồ sơ cán bộ',
-                    },
+                  
                 ],
             },
             {
@@ -853,6 +826,54 @@ const NAVIGATION: NavigationType = {
             },
         ],
     },
+    QL_HO_SO:{
+        label: 'Quản lý hồ sơ',
+        menus: [
+            {
+                id: 'home',
+                label: 'Trang chủ',
+                icon: House,
+                path: ROUTER_PATH.KHAO_THI.HOME,
+                description: 'Thông tin trang chủ',
+            },
+            {
+                id: 'quan-tri',
+                label: 'Quản trị hồ sơ',
+                icon: SettingOutlined,
+                children: [
+                  {
+                        id: 'user-profile-ds',
+                        label: 'Quản lý hồ sơ sinh viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_SINH_VIEN,
+                        description: 'Quản lý hồ sơ sinh viên',
+                    },
+                    {
+                        id: 'ql-hoc-vien',
+                        label: 'Quản lý hồ sơ học viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_HOC_VIEN,
+                        description: 'Quản lý hồ sơ học viên',
+                    },
+                    {
+                        id: 'user-profile-lecture',
+                        label: 'Quản lý hồ sơ giảng viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_GIANG_VIEN,
+                        description: 'Quản lý hồ sơ giảng viên',
+                    },
+                    {
+                        id: 'user-profile-staff',
+                        label: 'Quản lý hồ sơ cán bộ',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_CAN_BO,
+                        description: 'Quản lý hồ sơ cán bộ',
+                    },
+                ],
+            },
+        ],
+    }
+    
 }
 export { ROUTER_PATH }
 export type { MenuItem, NavigationType }

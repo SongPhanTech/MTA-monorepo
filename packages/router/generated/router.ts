@@ -80,18 +80,14 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_REN_LUYEN_LOP_BIEN_CHE": "/quan-ly-diem/ql-diem-ren-luyen/lop-bien-che",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN": "/quan-ly-do-an/danh-muc-do-an",
     "QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA": "/quan-ly-do-an/danh-sach-chuyen-gia",
-    "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
-    "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
-    "QUAN_LY_HO_SO_QL_HOC_VIEN_ID": "/quan-ly-ho-so/ql-hoc-vien/[id]",
-    "QUAN_LY_HO_SO_QL_HOC_VIEN": "/quan-ly-ho-so/ql-hoc-vien",
+
+
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG": "/quan-ly-ho-so/ql-ren-luyen/danh-gia-tong",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG_LOP_BIEN_CHE": "/quan-ly-ho-so/ql-ren-luyen/danh-gia-tong/lop-bien-che",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA": "/quan-ly-ho-so/ql-ren-luyen/danh-gia",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_LOP_BIEN_CHE": "/quan-ly-ho-so/ql-ren-luyen/danh-gia/lop-bien-che",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA": "/quan-ly-ho-so/ql-ren-luyen/dot-danh-gia",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA_MODAL_DOT_DANH_GIA": "/quan-ly-ho-so/ql-ren-luyen/dot-danh-gia/modal-dot-danh-gia",
-    "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
-    "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
   },
@@ -116,5 +112,13 @@ export default {
     "TIM_KIEM_VAN_BAN": "/tim-kiem-van-ban",
     "TRO_LY_AO": "/tro-ly-ao",
     "XU_LY_VAN_BAN": "/xu-ly-van-ban"
+  },
+  "QL_HO_SO":{
+    "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
+    "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
+    "QUAN_LY_HO_SO_QL_HOC_VIEN_ID": "/quan-ly-ho-so/ql-hoc-vien/[id]",
+    "QUAN_LY_HO_SO_QL_HOC_VIEN": "/quan-ly-ho-so/ql-hoc-vien",
+    "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
+    "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
   }
 }

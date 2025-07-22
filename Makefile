@@ -15,12 +15,13 @@ PKG_BE_DAO_TAO := be-ql-dao-tao
 PKG_CATEGORIES := ql-danh-muc
 PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
+PKG_HO_SO := ql-ho-so
 PKG_USER := ql-nguoi-dung
 PKG_AI := tro-ly-ao
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_USER) $(PKG_BE_CATEGORIES) $(PKG_BE_DAO_TAO)
-FE_PKGS := $(PKG_CATEGORIES) $(PKG_DAO_TAO) $(PKG_USER) $(PKG_AI) $(PKG_KHAO_THI)
+FE_PKGS := $(PKG_CATEGORIES) $(PKG_DAO_TAO) $(PKG_USER) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO)
 
 # Targets
 .PHONY: all clean push deploy release \
@@ -34,6 +35,7 @@ help:
 	@echo "  all-$(PKG_BE_DAO_TAO)"
 	@echo "  all-$(PKG_CATEGORIES)"
 	@echo "  all-$(PKG_DAO_TAO)"
+	@echo "  all-$(PKG_HO_SO)"
 	@echo "  all-$(PKG_KHAO_THI)"
 	@echo "  all-$(PKG_USER)"
 	@echo "  all-$(PKG_AI)"
