@@ -104,6 +104,9 @@ model UserProfile extends Base {
   familyPhone                String?
   familyName                 String?
 
+  //thân nhân
+  relatives                  Relative[]
+
   dM_TrinhDoHocVan           DM_TrinhDoHocVan? @relation(fields: [dM_TrinhDoHocVanId], references: [Id])
   dM_TrinhDoHocVanId         String?           @db.Uuid
 
@@ -132,15 +135,110 @@ model HocHam extends Base {
 }
 
 model HocVi extends Base {
-  academicDegreeType   DM_HocVi?   @relation(fields: [academicDegreeTypeId], references: [Id])
-  academicDegreeTypeId String?     @db.Uuid
+  academicDegreeType   DM_HocVi?             @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId String?               @db.Uuid
 
-  nationality          DM_QuocGia? @relation(fields: [nationalityId], references: [Id])
-  nationalityId        String?     @db.Uuid
+  nationality          DM_QuocGia?           @relation(fields: [nationalityId], references: [Id])
+  nationalityId        String?               @db.Uuid
 
   linhVuc              String?
-  truong               String?
+  truong               DM_TruongDaoTaoBacDH? @relation(fields: [truongId], references: [Id])
+  truongId             String?               @db.Uuid
   year                 Int?
 
   @@schema("ql-ho-so")
+}
+
+//Thân nhân
+model Relative extends Base {
+  name           String        @unique
+  birthYear      Int?
+  job            String?
+  information    String?
+
+  profiles       UserProfile[]
+
+  relationship   Relationship  @relation(fields: [relationshipId], references: [Id])
+  relationshipId String
+}
+
+// Mối quan hệ
+model Relationship extends CoreBase {
+  name      String     @unique
+
+  relatives Relative[]
+}
+
+model DM_TrinhDoLyLuanChinhTri extends CoreBase {
+  name String @unique
+}
+
+model DM_TrinhDoQuanLyNhaNuoc extends CoreBase {
+  name String @unique
+}
+
+model DM_TinhTrangHonNhan extends CoreBase {
+  name String @unique
+}
+
+model DM_TrangThaiLamViec extends CoreBase {
+  name String @unique
+}
+
+model DM_HinhThucKhenThuongChinhQuyen extends CoreBase {
+  name String @unique
+}
+
+model DM_HinhThucKhenThuongDang extends CoreBase {
+  name String @unique
+}
+
+model DM_XepLoaiDanhGiaCanBo extends CoreBase {
+  name String @unique
+}
+
+model DM_XepLoaiDanhGiaChatLuongDangVien extends CoreBase {
+  name String @unique
+}
+
+model DM_LoaiHinhCongTac extends CoreBase {
+  name String @unique
+}
+
+model DM_TinhTrangCongTac extends CoreBase {
+  name String @unique
+}
+
+model DM_LoaiHinhDiHocTap extends CoreBase {
+  name String @unique
+}
+
+model DM_TinhTrangDiHocTap extends CoreBase {
+  name String @unique
+}
+
+model DM_NuocCuDiHocTap extends CoreBase {
+  name String @unique
+}
+
+model DM_ChucDanhCMNVGiangVien extends CoreBase {
+  name String @unique
+}
+
+model DM_ChucDanhCMNVNghienCuuVien extends CoreBase {
+  name String @unique
+}
+
+model DM_ChucDanhCMNVKySu extends CoreBase {
+  name String @unique
+}
+
+model DM_TruongDaoTaoBacDH extends CoreBase {
+  name  String  @unique
+
+  hocVi HocVi[]
+}
+
+model DM_ChuyenNganhDaoTaoBacDH extends CoreBase {
+  name String @unique
 }
