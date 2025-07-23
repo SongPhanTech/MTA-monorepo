@@ -2608,7 +2608,7 @@ Table SurveyTopic {
   survey Survey [not null]
 }
 
-Table SurveyQuestionType {
+Table SurveyQuestionGroup {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -2635,6 +2635,8 @@ Table Survey {
   surveyObjectId String [not null]
   surveyTopic SurveyTopic [not null]
   surveyTopicId String [not null]
+  additionalSuggestion Boolean [not null]
+  surveyChoice SurveyChoice [not null]
   surveyQuestion SurveyQuestion [not null]
   surveySessions SurveySession [not null]
 }
@@ -2648,11 +2650,11 @@ Table SurveyQuestion {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  surveyQuestionType SurveyQuestionType [not null]
-  surveyQuestionTypeId String [not null]
+  type SurveyQuestionType [not null]
+  surveyQuestionGroup SurveyQuestionGroup [not null]
+  surveyQuestionGroupId String [not null]
   survey Survey [not null]
   surveyId String [not null]
-  surveyAnswer SurveyChoice [not null]
   surveyResponses SurveyResponse [not null]
 }
 
@@ -2665,8 +2667,8 @@ Table SurveyChoice {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   answer String
-  surveyQuestion SurveyQuestion [not null]
-  surveyQuestionId String [not null]
+  survey Survey [not null]
+  surveyId String [not null]
   surveyResponses SurveyResponse [not null]
 
   Note: 'Lựa chọn của câu hỏi khảo sát'
@@ -2682,6 +2684,7 @@ Table SurveySession {
   updatedAt DateTime [not null]
   survey Survey [not null]
   surveyId String [not null]
+  additionalSuggestion String
   student Student
   studentId String
   startedAt DateTime [default: `now()`, not null]
@@ -3582,6 +3585,11 @@ Enum CriteriaOperator {
   IN
 }
 
+Enum SurveyQuestionType {
+  ESSAY
+  SINGLE_CHOICE
+}
+
 Enum FeedbackStatus {
   Pending
   InProgress
@@ -3971,11 +3979,11 @@ Ref: Survey.surveyObjectId > SurveyObjectType.id
 
 Ref: Survey.surveyTopicId > SurveyTopic.id
 
-Ref: SurveyQuestion.surveyQuestionTypeId > SurveyQuestionType.id
+Ref: SurveyQuestion.surveyQuestionGroupId > SurveyQuestionGroup.id
 
 Ref: SurveyQuestion.surveyId > Survey.id
 
-Ref: SurveyChoice.surveyQuestionId > SurveyQuestion.id
+Ref: SurveyChoice.surveyId > Survey.id
 
 Ref: SurveySession.surveyId > Survey.id
 

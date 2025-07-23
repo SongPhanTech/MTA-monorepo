@@ -387,6 +387,13 @@ enum CriteriaOperator {
   @@schema("ql-dao-tao")
 }
 
+enum SurveyQuestionType {
+  ESSAY
+  SINGLE_CHOICE
+
+  @@schema("khao-thi")
+}
+
 enum FeedbackStatus {
   Pending
   InProgress
@@ -3171,7 +3178,7 @@ model SurveyTopic {
   @@schema("khao-thi")
 }
 
-model SurveyQuestionType {
+model SurveyQuestionGroup {
   id             String           @id() @default(cuid())
   code           String?          @unique()
   active         Boolean          @default(true)
@@ -3186,79 +3193,82 @@ model SurveyQuestionType {
 }
 
 model Survey {
-  id               String           @id() @default(cuid())
-  code             String?          @unique()
-  active           Boolean          @default(true)
-  description      String?          @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt()
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
-  surveyObjectType SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
-  surveyObjectId   String
-  surveyTopic      SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId    String
-  surveyQuestion   SurveyQuestion[]
-  surveySessions   SurveySession[]
+  id                   String           @id() @default(cuid())
+  code                 String?          @unique()
+  active               Boolean          @default(true)
+  description          String?          @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt()
+  name                 String
+  startDate            DateTime
+  endDate              DateTime?
+  surveyObjectType     SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
+  surveyObjectId       String
+  surveyTopic          SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
+  additionalSuggestion Boolean
+  surveyChoice         SurveyChoice[]
+  surveyQuestion       SurveyQuestion[]
+  surveySessions       SurveySession[]
 
   @@schema("khao-thi")
 }
 
 model SurveyQuestion {
-  id                   String             @id() @default(cuid())
-  code                 String?            @unique()
-  active               Boolean            @default(true)
-  description          String?            @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt()
-  name                 String
-  surveyQuestionType   SurveyQuestionType @relation(fields: [surveyQuestionTypeId], references: [id])
-  surveyQuestionTypeId String
-  survey               Survey             @relation(fields: [surveyId], references: [id])
-  surveyId             String
-  surveyAnswer         SurveyChoice[]
-  surveyResponses      SurveyResponse[]
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt()
+  name                  String
+  type                  SurveyQuestionType
+  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String
+  survey                Survey              @relation(fields: [surveyId], references: [id])
+  surveyId              String
+  surveyResponses       SurveyResponse[]
 
   @@schema("khao-thi")
 }
 
 /// Lựa chọn của câu hỏi khảo sát
 model SurveyChoice {
-  id               String           @id() @default(cuid())
-  code             String?          @unique()
-  active           Boolean          @default(true)
-  description      String?          @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt()
-  answer           String?
-  surveyQuestion   SurveyQuestion   @relation(fields: [surveyQuestionId], references: [id])
-  surveyQuestionId String
-  surveyResponses  SurveyResponse[]
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt()
+  answer          String?
+  survey          Survey           @relation(fields: [surveyId], references: [id])
+  surveyId        String
+  surveyResponses SurveyResponse[]
 
   @@schema("khao-thi")
 }
 
 /// Bảng lưu phiên khảo sát của từng học viên
 model SurveySession {
-  id          String           @id() @default(cuid())
-  code        String?          @unique()
-  active      Boolean          @default(true)
-  description String?          @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt()
-  survey      Survey           @relation(fields: [surveyId], references: [id])
-  surveyId    String
-  student     Student?         @relation(fields: [studentId], references: [id])
-  studentId   String?
-  startedAt   DateTime         @default(now())
-  completedAt DateTime?
-  isCompleted Boolean          @default(false)
-  responses   SurveyResponse[]
+  id                   String           @id() @default(cuid())
+  code                 String?          @unique()
+  active               Boolean          @default(true)
+  description          String?          @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt()
+  survey               Survey           @relation(fields: [surveyId], references: [id])
+  surveyId             String
+  additionalSuggestion String?
+  student              Student?         @relation(fields: [studentId], references: [id])
+  studentId            String?
+  startedAt            DateTime         @default(now())
+  completedAt          DateTime?
+  isCompleted          Boolean          @default(false)
+  responses            SurveyResponse[]
 
   @@unique([surveyId, studentId])
   @@schema("khao-thi")

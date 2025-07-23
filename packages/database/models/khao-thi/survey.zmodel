@@ -4,6 +4,13 @@ import '../ql-ho-so/profile'
 import '../ql-nguoi-dung/user'
 import '../ql-dao-tao/student'
 
+enum SurveyQuestionType {
+  ESSAY
+  SINGLE_CHOICE
+
+  @@schema("khao-thi")
+}
+
 // đối tượng khảo sát (Sinh viên, giảng viên, cán bộ quản lý,...)
 model SurveyObjectType extends Base {
   name   String
@@ -18,8 +25,8 @@ model SurveyTopic extends Base {
   @@schema("khao-thi")
 }
 
-// Loại câu hỏi khảo sát (Trắc nghiệm, ý kiến,...)
-model SurveyQuestionType extends Base {
+// Nhóm câu hỏi khảo sát
+model SurveyQuestionGroup extends Base {
   name           String
   surveyQuestion SurveyQuestion[]
   @@schema("khao-thi")
@@ -27,63 +34,76 @@ model SurveyQuestionType extends Base {
 
 // đợt khảo sát
 model Survey extends Base {
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
+  name                 String
+  startDate            DateTime
+  endDate              DateTime?
 
-  surveyObjectType SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
-  surveyObjectId   String
+  surveyObjectType     SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
+  surveyObjectId       String
 
-  surveyTopic      SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId    String
+  surveyTopic          SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
 
-  surveyQuestion   SurveyQuestion[]
-  surveySessions   SurveySession[]   // Thêm relation mới
+  // Có góp ý bổ sung không?
+  additionalSuggestion Boolean
+
+  // 1. Rất hài lòng
+  // 2. Hài lòng
+  // 3. Không hài lòng
+  // 4. Rất không hài lòng
+  // 0. Phân vân
+  surveyChoice         SurveyChoice[]
+  surveyQuestion       SurveyQuestion[]
+  surveySessions       SurveySession[]   // Thêm relation mới
 
   @@schema("khao-thi")
 }
 
 // câu hỏi khảo sát
 model SurveyQuestion extends Base {
-  name                 String
+  name                  String
 
-  surveyQuestionType   SurveyQuestionType @relation(fields: [surveyQuestionTypeId], references: [id])
-  surveyQuestionTypeId String
+  // Hiển thị surveyChoice khi type = SINGLE_CHOICE
+  type                  SurveyQuestionType
 
-  survey               Survey             @relation(fields: [surveyId], references: [id])
-  surveyId             String
+  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String
 
-  surveyAnswer         SurveyChoice[]
-  surveyResponses      SurveyResponse[]  // Thêm relation mới
+  survey                Survey              @relation(fields: [surveyId], references: [id])
+  surveyId              String
+
+  surveyResponses       SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")
 }
 
 /// Lựa chọn của câu hỏi khảo sát
 model SurveyChoice extends Base {
-  answer           String?
+  answer          String?
 
-  surveyQuestion   SurveyQuestion   @relation(fields: [surveyQuestionId], references: [id])
-  surveyQuestionId String
+  survey          Survey           @relation(fields: [surveyId], references: [id])
+  surveyId        String
 
-  surveyResponses  SurveyResponse[]  // Thêm relation mới
+  surveyResponses SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")
 }
 
 /// Bảng lưu phiên khảo sát của từng học viên
 model SurveySession extends Base {
-  survey      Survey           @relation(fields: [surveyId], references: [id])
-  surveyId    String
+  survey               Survey           @relation(fields: [surveyId], references: [id])
+  surveyId             String
 
-  student     Student?         @relation(fields: [studentId], references: [id])
-  studentId   String?
+  additionalSuggestion String?
 
-  startedAt   DateTime         @default(now())
-  completedAt DateTime?
-  isCompleted Boolean          @default(false)
+  student              Student?         @relation(fields: [studentId], references: [id])
+  studentId            String?
 
-  responses   SurveyResponse[]
+  startedAt            DateTime         @default(now())
+  completedAt          DateTime?
+  isCompleted          Boolean          @default(false)
+
+  responses            SurveyResponse[]
 
   @@unique([surveyId, studentId])
   @@schema("khao-thi")
