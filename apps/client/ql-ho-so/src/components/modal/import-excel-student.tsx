@@ -281,13 +281,6 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                         width: 100,
                     },
                     {
-                        title: 'Nguyên quán huyện',
-                        dataIndex: 'districtHometown',
-                        key: 'districtHometown',
-                        align: 'center',
-                        width: 200,
-                    },
-                    {
                         title: 'Nguyên quán tỉnh',
                         dataIndex: 'provinceHometown',
                         key: 'provinceHometown',

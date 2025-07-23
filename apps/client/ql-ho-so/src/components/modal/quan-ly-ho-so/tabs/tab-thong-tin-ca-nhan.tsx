@@ -152,13 +152,10 @@ export default function ThongTinCaNhanTab({
             },
             include: {
                 provinceCurrentAddress: true,
-                districtCurrentAddress: true,
                 communeCurrentAddress: true,
                 provinceOfBirth: true,
-                districtOfBirth: true,
                 communeOfBirth: true,
                 provinceHometown: true,
-                districtHometown: true,
                 communeHometown: true,
                 nationality: true,
                 religion: true,
@@ -292,16 +289,12 @@ export default function ThongTinCaNhanTab({
 
                 // Địa chỉ
                 provinceCurrentAddressId: userData.provinceCurrentAddressId,
-                districtCurrentAddressId: userData.districtCurrentAddressId,
                 communeCurrentAddressId: userData.communeCurrentAddressId,
                 provinceOfBirthId: userData.provinceOfBirthId,
-                districtOfBirthId: userData.districtOfBirthId,
                 communeOfBirthId: userData.communeOfBirthId,
                 provincePermanentAddressId: userData.provincePermanentAddressId,
-                districtPermanentAddressId: userData.districtPermanentAddressId,
                 communePermanentAddressId: userData.communePermanentAddressId,
                 provinceHometownId: userData.provinceHometownId,
-                districtHometownId: userData.districtHometownId,
                 communeHometownId: userData.communeHometownId,
 
                 // Thông tin cá nhân khác
@@ -1102,7 +1095,7 @@ export default function ThongTinCaNhanTab({
                         className="border-none mb-2"
                     >
                         <Row gutter={[16, 16]}>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem
                                     form={form}
                                     name="provinceOfBirthId"
@@ -1112,17 +1105,7 @@ export default function ThongTinCaNhanTab({
                                     <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
-                                <FormItem
-                                    form={form}
-                                    name="districtOfBirthId"
-                                    className="mb-0"
-                                    label="Quận/Huyện"
-                                >
-                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem
                                     form={form}
                                     name="communeOfBirthId"
@@ -1145,17 +1128,12 @@ export default function ThongTinCaNhanTab({
                         className="border-none mb-2"
                     >
                         <Row gutter={[16, 16]}>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem form={form} name="provinceHometownId" className="mb-0">
                                     <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
-                                <FormItem form={form} name="districtHometownId" className="mb-0">
-                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem form={form} name="communeHometownId" className="mb-0">
                                     <Select placeholder="Chọn phường/xã" className="w-full" />
                                 </FormItem>
@@ -1175,7 +1153,7 @@ export default function ThongTinCaNhanTab({
                         className="border-none mb-2"
                     >
                         <Row gutter={[16, 16]}>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem
                                     form={form}
                                     name="provincePermanentAddressId"
@@ -1184,16 +1162,7 @@ export default function ThongTinCaNhanTab({
                                     <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
-                                <FormItem
-                                    form={form}
-                                    name="districtPermanentAddressId"
-                                    className="mb-0"
-                                >
-                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem
                                     form={form}
                                     name="communePermanentAddressId"
@@ -1217,7 +1186,7 @@ export default function ThongTinCaNhanTab({
                         className="border-none mb-2"
                     >
                         <Row gutter={[16, 16]}>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <FormItem
                                     form={form}
                                     name="provinceCurrentAddressId"
@@ -1226,16 +1195,7 @@ export default function ThongTinCaNhanTab({
                                     <Select placeholder="Chọn tỉnh/thành phố" className="w-full" />
                                 </FormItem>
                             </Col>
-                            <Col span={6}>
-                                <FormItem
-                                    form={form}
-                                    name="districtCurrentAddressId"
-                                    className="mb-0"
-                                >
-                                    <Select placeholder="Chọn quận/huyện" className="w-full" />
-                                </FormItem>
-                            </Col>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <FormItem
                                     form={form}
                                     name="communeCurrentAddressId"
@@ -1244,7 +1204,7 @@ export default function ThongTinCaNhanTab({
                                     <Select placeholder="Chọn phường/xã" className="w-full" />
                                 </FormItem>
                             </Col>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <FormItem form={form} name="currentAddress" className="mb-0">
                                     <Input placeholder="Nhập địa chỉ cụ thể" className="w-full" />
                                 </FormItem>

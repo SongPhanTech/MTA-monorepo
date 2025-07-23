@@ -2,12 +2,12 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { AddStudentToFixedClassModal, ModalPrintToDSHV, PutStudentModal } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
     GENDER_MEAN,
 } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Student } from '@workspace/db'
