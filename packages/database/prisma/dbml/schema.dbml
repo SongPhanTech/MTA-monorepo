@@ -179,6 +179,12 @@ Table ExamBank {
 
 Table ExamBankQuestion {
   id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   examBankId String [not null]
   examBank ExamBank [not null]
   questionId String [not null]
@@ -1409,6 +1415,7 @@ Table DM_HocVi {
   sThietBiTao String
   sThietBiSua String
   profiles UserProfile [not null]
+  hocVi HocVi [not null]
 }
 
 Table DM_ChungChiTinHoc {
@@ -1734,6 +1741,7 @@ Table DM_QuocGia {
   sThietBiTao String
   sThietBiSua String
   sLanguage String
+  hocVi HocVi [not null]
   userProfile UserProfile [not null]
 }
 
@@ -1755,31 +1763,6 @@ Table DM_Tinh {
   sThietBiSua String
   sDM_QuocGiaId String
   iDM_KhuVucDiaLy_Id Int
-  iDM_DonViHanhChinhId Int
-  userProfileHometown UserProfile [not null]
-  userProfilePlaceOfBirth UserProfile [not null]
-  userProfilePermanentAddress UserProfile [not null]
-  userProfileCurrentAddress UserProfile [not null]
-}
-
-Table DM_QuanHuyen {
-  Id String [pk]
-  sMa String
-  sTen String
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  sDM_TinhId String
-  sDM_Tinh_Ma String
   iDM_DonViHanhChinhId Int
   userProfileHometown UserProfile [not null]
   userProfilePlaceOfBirth UserProfile [not null]
@@ -1855,16 +1838,12 @@ Table UserProfile {
   currentAddress String
   provinceCurrentAddress DM_Tinh
   provinceCurrentAddressId String
-  districtCurrentAddress DM_QuanHuyen
-  districtCurrentAddressId String
   communeCurrentAddress DM_XaPhuong
   communeCurrentAddressId String
   dateOfBirth DateTime
   placeOfBirth String
   provinceOfBirth DM_Tinh
   provinceOfBirthId String
-  districtOfBirth DM_QuanHuyen
-  districtOfBirthId String
   communeOfBirth DM_XaPhuong
   communeOfBirthId String
   homeTown String
@@ -1873,8 +1852,6 @@ Table UserProfile {
   permanentAddress String
   provincePermanentAddress DM_Tinh
   provincePermanentAddressId String
-  districtPermanentAddress DM_QuanHuyen
-  districtPermanentAddressId String
   communePermanentAddress DM_XaPhuong
   communePermanentAddressId String
   temporaryAddress String
@@ -1889,8 +1866,6 @@ Table UserProfile {
   ethnicityId String
   provinceHometown DM_Tinh
   provinceHometownId String
-  districtHometown DM_QuanHuyen
-  districtHometownId String
   communeHometown DM_XaPhuong
   communeHometownId String
   officerNumber String
@@ -1936,10 +1911,26 @@ Table HocHam {
   updatedAt DateTime [not null]
   academicRankType DM_HocHam
   academicRankTypeId String
-  linhVuc DM_LinhVuc
-  linhVucId String
-  truong DM_Truong
-  truongId String
+  noiCap String
+  soQuyetDinh String
+  from DateTime
+  to DateTime
+}
+
+Table HocVi {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  academicDegreeType DM_HocVi
+  academicDegreeTypeId String
+  nationality DM_QuocGia
+  nationalityId String
+  linhVuc String
+  truong String
   year Int
 }
 
@@ -2708,44 +2699,6 @@ Table SurveyResponse {
   }
 
   Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
-}
-
-Table DM_LinhVuc {
-  Id String [pk]
-  sMa String
-  sTen String
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  hocHam HocHam [not null]
-}
-
-Table DM_Truong {
-  Id String [pk]
-  sMa String
-  sTen String
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  hocHam HocHam [not null]
 }
 
 Table DM_TrinhDoHocVan {
@@ -3627,19 +3580,13 @@ Ref: UserProfile.userId > DM_NhanVien.Id
 
 Ref: UserProfile.provinceCurrentAddressId > DM_Tinh.Id
 
-Ref: UserProfile.districtCurrentAddressId > DM_QuanHuyen.Id
-
 Ref: UserProfile.communeCurrentAddressId > DM_XaPhuong.Id
 
 Ref: UserProfile.provinceOfBirthId > DM_Tinh.Id
 
-Ref: UserProfile.districtOfBirthId > DM_QuanHuyen.Id
-
 Ref: UserProfile.communeOfBirthId > DM_XaPhuong.Id
 
 Ref: UserProfile.provincePermanentAddressId > DM_Tinh.Id
-
-Ref: UserProfile.districtPermanentAddressId > DM_QuanHuyen.Id
 
 Ref: UserProfile.communePermanentAddressId > DM_XaPhuong.Id
 
@@ -3650,8 +3597,6 @@ Ref: UserProfile.religionId > DM_TonGiao.Id
 Ref: UserProfile.ethnicityId > DM_DanToc.Id
 
 Ref: UserProfile.provinceHometownId > DM_Tinh.Id
-
-Ref: UserProfile.districtHometownId > DM_QuanHuyen.Id
 
 Ref: UserProfile.communeHometownId > DM_XaPhuong.Id
 
@@ -3669,9 +3614,9 @@ Ref: UserProfile.dM_TrinhDoHocVanId > DM_TrinhDoHocVan.Id
 
 Ref: HocHam.academicRankTypeId > DM_HocHam.Id
 
-Ref: HocHam.linhVucId > DM_LinhVuc.Id
+Ref: HocVi.academicDegreeTypeId > DM_HocVi.Id
 
-Ref: HocHam.truongId > DM_Truong.Id
+Ref: HocVi.nationalityId > DM_QuocGia.Id
 
 Ref: Lecturer.userProfileId - UserProfile.id
 
