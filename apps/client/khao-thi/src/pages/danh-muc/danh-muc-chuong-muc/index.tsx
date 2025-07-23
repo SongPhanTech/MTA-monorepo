@@ -84,7 +84,29 @@ export default function KnowledgeBlock() {
 
     const { data, refetch } = useFindManySubjectVersion({
         where,
-        include: { knowledgeBlocks: { include: { questions: true } } },
+        include: {
+            knowledgeBlocks: {
+                include: { questions: true },
+                where: {
+                    ...(filters.name
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.code
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                },
+            },
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
         orderBy: { createdAt: 'desc' },

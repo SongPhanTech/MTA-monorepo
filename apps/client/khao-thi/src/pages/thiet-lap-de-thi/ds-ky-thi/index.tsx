@@ -81,31 +81,37 @@ function Exam() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 60,
                                 align: 'center',
+                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Tên kỳ thi',
                                 dataIndex: 'title',
+                                fixed: 'left',
+                                width: 220,
                             },
                             {
                                 title: 'Thời gian bắt dầu',
                                 dataIndex: 'startTime',
                                 align: 'center',
+                                width: 150,
                                 render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Thời gian kết thúc',
                                 dataIndex: 'endTime',
                                 align: 'center',
+                                width: 150,
                                 render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Thời gian thi',
                                 dataIndex: 'duration',
                                 align: 'center',
+                                width: 150,
                                 render: (value) => {
                                     return <span>{value} phút</span>
                                 },
@@ -114,6 +120,7 @@ function Exam() {
                                 title: 'Điểm đạt',
                                 dataIndex: 'passScore',
                                 align: 'center',
+                                width: 100,
                             },
                             {
                                 title: 'Xáo trộn câu hỏi',
@@ -145,7 +152,7 @@ function Exam() {
                                 title: 'Hiển thị kết quả ngay',
                                 dataIndex: 'showResult',
                                 align: 'center',
-                                width: 80,
+                                width: 100,
                                 render: (value) => {
                                     return (
                                         <div className="flex items-center justify-center">
@@ -158,6 +165,8 @@ function Exam() {
                                 title: 'Trạng thái',
                                 dataIndex: 'status',
                                 align: 'center',
+                                fixed: 'right',
+                                width: 100,
                                 render: (value) => {
                                     return (
                                         <Tag color={getExamStatusColor(value)}>
@@ -170,6 +179,7 @@ function Exam() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
