@@ -64,6 +64,7 @@ model DM_HocHam extends CoreBase {
 
 model DM_HocVi extends CoreBase {
   profiles UserProfile[]
+  hocVi    HocVi[]
   @@schema("mta")
 }
 
@@ -198,7 +199,7 @@ model DM_NhomUngDung extends CoreBase {
 
 model DM_QuocGia extends CoreBase {
   sLanguage   String?
-
+  hocVi       HocVi[]
   userProfile UserProfile[]
   @@schema("mta")
 }
