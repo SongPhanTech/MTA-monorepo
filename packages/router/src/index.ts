@@ -557,12 +557,12 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
-                id: 'ql-ho-so',
-                label: 'Quản lý hồ sơ',
+                id: 'ql-ren-luyen',
+                label: 'Quản lý rèn luyện',
                 icon: FolderOpen,
                 children: [
                     {
-                        id: 'ql-ren-luyen',
+                        id: 'ql-dot-ren-luyen',
                         label: 'QL đợt rèn luyện',
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA,
