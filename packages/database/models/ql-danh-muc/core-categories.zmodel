@@ -217,20 +217,6 @@ model DM_Tinh extends CoreBase {
   @@schema("mta")
 }
 
-model DM_QuanHuyen extends CoreBase {
-  sDM_TinhId                  String?       @db.Uuid
-  sDM_Tinh_Ma                 String?
-  iDM_DonViHanhChinhId        Int?
-
-  userProfileHometown         UserProfile[] @relation("DistrictHometown")
-  userProfilePlaceOfBirth     UserProfile[] @relation("DistrictPlaceOfBirth")
-  userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
-  userProfileCurrentAddress   UserProfile[] @relation("DistrictCurrentAddress")
-
-  @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
-  @@schema("mta")
-}
-
 model DM_XaPhuong extends CoreBase {
   sDM_QuanHuyen_Ma            String?
   sDM_TinhId                  String?       @db.Uuid

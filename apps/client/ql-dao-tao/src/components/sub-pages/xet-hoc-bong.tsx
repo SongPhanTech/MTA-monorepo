@@ -7,8 +7,8 @@ import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutScholarshipAward } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import type { Prisma, ScholarshipAward } from '@workspace/db'
@@ -63,7 +63,6 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const where: Prisma.TrainingCourseWhereInput = useMemo(
         () =>
             isFiltering
@@ -99,7 +98,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                       },
                   }
                 : {},
-        [filters, isFiltering]
+        [filters, isFiltering, semesterId]
     )
     const [isModalVisible, setIsModalVisible] = useState(false)
     const { onOpen, onClose } = useDisclosure<{

@@ -40,16 +40,12 @@ model UserProfile extends Base {
   currentAddress             String? // địa chỉ hiện tại
   provinceCurrentAddress     DM_Tinh?          @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?           @db.Uuid
-  districtCurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
-  districtCurrentAddressId   String?           @db.Uuid
   communeCurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
   communeCurrentAddressId    String?           @db.Uuid
   dateOfBirth                DateTime? // ngày sinh
   placeOfBirth               String?   // nơi sinh
   provinceOfBirth            DM_Tinh?          @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
   provinceOfBirthId          String?           @db.Uuid
-  districtOfBirth            DM_QuanHuyen?     @relation(name: "DistrictPlaceOfBirth", fields: [districtOfBirthId], references: [Id])
-  districtOfBirthId          String?           @db.Uuid
   communeOfBirth             DM_XaPhuong?      @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
   communeOfBirthId           String?           @db.Uuid
   homeTown                   String? // quê quán
@@ -58,8 +54,6 @@ model UserProfile extends Base {
   permanentAddress           String? // địa chỉ thường trú
   provincePermanentAddress   DM_Tinh?          @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
   provincePermanentAddressId String?           @db.Uuid
-  districtPermanentAddress   DM_QuanHuyen?     @relation(name: "DistrictPermanentAddress", fields: [districtPermanentAddressId], references: [Id])
-  districtPermanentAddressId String?           @db.Uuid
   communePermanentAddress    DM_XaPhuong?      @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
   communePermanentAddressId  String?           @db.Uuid
   temporaryAddress           String? // địa chỉ tạm trú
@@ -74,8 +68,6 @@ model UserProfile extends Base {
   ethnicityId                String?           @db.Uuid
   provinceHometown           DM_Tinh?          @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
   provinceHometownId         String?           @db.Uuid
-  districtHometown           DM_QuanHuyen?     @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
-  districtHometownId         String?           @db.Uuid
   communeHometown            DM_XaPhuong?      @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
   communeHometownId          String?           @db.Uuid
 

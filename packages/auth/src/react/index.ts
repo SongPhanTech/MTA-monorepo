@@ -29,9 +29,9 @@ const fetchSession = async (): Promise<{
         }
     } catch (error) {
         // TODO!: toggle comment
-        if (process.env.ENVIRONMENT !== 'develop') {
-            signIn()
-        }
+        // if (process.env.ENVIRONMENT !== 'develop') {
+        //     signIn()
+        // }
         return {
             status: 'unauthenticated',
             data: null,
