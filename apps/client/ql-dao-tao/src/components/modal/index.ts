@@ -26,9 +26,7 @@ import PutGraduationApplication from './put-don-xet-tot-nghiep'
 import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
-import PutUserProfileLectureModal from './put-giang-vien'
 import PutHocBong from './put-hoc-bong'
-import PutHocvienModal from './put-hoc-vien'
 import PutTrainingCourseModal from './put-khoa-huan-luyen'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
 import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
@@ -41,7 +39,7 @@ import PutSubjectModal from './put-mon-hoc'
 import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
 import PutSchoolYearModal from './put-nam-hoc'
 import PutTrainingFieldModal from './put-nganh'
-import PutUserProfileStaffModal from './put-nhan-vien'
+
 import PutSubjectGroupModal from './put-nhom-mon-hoc'
 import PutOneSubjectClassModal from './put-one-subject-class'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
@@ -52,19 +50,17 @@ import PutGraduationDecision from './put-quyet-dinh-tot-nghiep'
 import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
 import PutScholarshipAward from './put-scholarship-award'
 import PutScholarshipCriteria from './put-scholarship-criteria'
-import PutStudentModal from './put-sinh-vien'
 import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutBuildingModal from './put-toa-nha'
 import PutTrainingFormModal from './put-training-form'
 import PutTrainingTimeModal from './put-training-time'
-import PutUpdateProfileModal from './put-update-profile'
-import PutUploadProfileModal from './put-upload-profile'
 import PutAcademicRanking from './put-xep-loai-hoc-luc'
 import PutDisciplinaryWarning from './put-xet-canh-cao-hoc-duong'
 import PutAcademicActionConfig from './put-xu-ly-hoc-tap'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+
 export {
     ConfirmModal,
     PutSchoolYearModal,
@@ -72,13 +68,10 @@ export {
     PutMilestoneModal,
     PutTrainingCourseModal,
     PutFixedClassModal,
-    PutUploadProfileModal,
-    PutUpdateProfileModal,
     PutUploadFixedClassModal,
     PutUploadDivisionModal,
     PutSubjectGroupModal,
     PutSubjectModal,
-    PutUserProfileLectureModal,
     ThongTinBaoCaoModal,
     PutTrainingFieldModal,
     PutTrainingMajorModal,
@@ -88,10 +81,8 @@ export {
     PutVersionSubjectModal,
     PutOpenClassModal,
     PutOpenSubjectClassModal,
-    PutStudentModal,
     PutCurriculum,
     PutTrainingBlockOnCurriculumVersion,
-    PutUserProfileStaffModal,
     PutTrainingBlockSubject,
     PutConvertScore,
     PutTrainingLocationModal,
@@ -110,7 +101,6 @@ export {
     PutTrainingTimeModal,
     PutTrainingFormModal,
     PutHocBong,
-    PutHocvienModal,
     PutScholarshipCriteria,
     PutAcademicRanking,
     PutCloneAcademicRanking,
