@@ -2157,6 +2157,7 @@ Table StudentThesisRegistration {
   reviewedBy Lecturer
   reviewedById String
   reviewNote String
+  council Council
 
   indexes {
     (studentId, thesisProjectId) [unique]
@@ -2235,8 +2236,10 @@ Table Council {
   status CouncilProposalStatus [not null, default: 'PENDING']
   defenseDate DateTime
   location String
-  thesisId String [unique, not null]
+  thesisId String [not null]
   thesis ThesisProject [not null]
+  studentThesisRegistration StudentThesisRegistration
+  studentThesisRegistrationId String [unique]
   members CouncilMember [not null]
 
   Note: 'Hội đồng đánh giá'
@@ -3896,6 +3899,8 @@ Ref: Decision.thesisProjectId > ThesisProject.id
 Ref: Invitation.decisionId > Decision.id
 
 Ref: Council.thesisId > ThesisProject.id
+
+Ref: Council.studentThesisRegistrationId - StudentThesisRegistration.id
 
 Ref: CouncilMember.councilId > Council.id
 

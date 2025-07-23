@@ -89,6 +89,8 @@ model StudentThesisRegistration extends Base {
   reviewedById    String?
   reviewNote      String?                         @db.Text() // Ghi chú của giáo viên
 
+  council         Council?
+
   @@unique([studentId, thesisProjectId])
   @@schema("ql-dao-tao")
 }
@@ -161,17 +163,20 @@ enum CouncilProposalStatus {
 
 /// Hội đồng đánh giá
 model Council extends Base {
-  proposedDate        DateTime              @default(now())
-  proposedDefenseDate DateTime? // Ngày bảo vệ dự kiến
-  status              CouncilProposalStatus @default(PENDING)
+  proposedDate                DateTime                   @default(now())
+  proposedDefenseDate         DateTime? // Ngày bảo vệ dự kiến
+  status                      CouncilProposalStatus      @default(PENDING)
 
-  defenseDate         DateTime? // Ngày bảo vệ
-  location            String? // Phòng bảo vệ
+  defenseDate                 DateTime? // Ngày bảo vệ
+  location                    String? // Phòng bảo vệ
 
-  thesisId            String                @unique
-  thesis              ThesisProject         @relation(fields: [thesisId], references: [id])
+  thesisId                    String
+  thesis                      ThesisProject              @relation(fields: [thesisId], references: [id])
 
-  members             CouncilMember[]
+  studentThesisRegistration   StudentThesisRegistration? @relation(fields: [studentThesisRegistrationId], references: [id])
+  studentThesisRegistrationId String?                    @unique
+
+  members                     CouncilMember[]
 
   @@schema("ql-dao-tao")
 }
