@@ -128,16 +128,27 @@ model UserProfile extends Base {
 }
 
 model HocHam extends Base {
-  academicRankType   DM_HocHam?  @relation(fields: [academicRankTypeId], references: [Id])
-  academicRankTypeId String?     @db.Uuid
+  academicRankType   DM_HocHam? @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId String?    @db.Uuid
 
-  linhVuc            DM_LinhVuc? @relation(fields: [linhVucId], references: [Id])
-  linhVucId          String?     @db.Uuid
+  noiCap             String?
+  soQuyetDinh        String?
+  from               DateTime?
+  to                 DateTime?
 
-  truong             DM_Truong?  @relation(fields: [truongId], references: [Id])
-  truongId           String?     @db.Uuid
+  @@schema("ql-ho-so")
+}
 
-  year               Int?
+model HocVi extends Base {
+  academicDegreeType   DM_HocVi?   @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId String?     @db.Uuid
+
+  nationality          DM_QuocGia? @relation(fields: [nationalityId], references: [Id])
+  nationalityId        String?     @db.Uuid
+
+  linhVuc              String?
+  truong               String?
+  year                 Int?
 
   @@schema("ql-ho-so")
 }
