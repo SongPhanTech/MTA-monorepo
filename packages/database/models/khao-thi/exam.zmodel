@@ -233,8 +233,7 @@ model ExamBank extends Base {
 }
 
 /// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
-model ExamBankQuestion {
-  id         String   @id @default(cuid())
+model ExamBankQuestion  extends Base {
   examBankId String
   examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
   questionId String
