@@ -1,6 +1,6 @@
 import { FilterOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
-import { useFindManySurvey, useFindManySurveyQuestionType } from '@workspace/db/hooks'
+import { useFindManySurvey } from '@workspace/db/hooks'
 import {
     Button,
     Col,
@@ -53,8 +53,6 @@ const FilterSurveyQuestion = (props: Props) => {
     }
 
     const { data: surveyData = [], refetch: refetchSurvey } = useFindManySurvey()
-    const { data: surveyQuestionTypeData = [], refetch: refetchSurveyType } =
-        useFindManySurveyQuestionType()
 
     const filterContent = (
         <div style={{ width: '100%', borderRadius: '10px' }}>
@@ -81,26 +79,6 @@ const FilterSurveyQuestion = (props: Props) => {
             <div style={{ padding: '0 16px' }}>
                 <Form form={form} layout="horizontal" className="mt-4">
                     <Row gutter={[10, 0]}>
-                        <Col span={24}>
-                            <Form.Item
-                                label="Loại câu hỏi"
-                                name="surveyQuestionTypeId"
-                                labelCol={{ span: 7 }}
-                                wrapperCol={{ span: 17 }}
-                                labelAlign="left"
-                            >
-                                <Select
-                                    allowClear
-                                    placeholder="Chọn loại khảo sát"
-                                    options={surveyQuestionTypeData.map((item) => {
-                                        return {
-                                            value: item.id,
-                                            label: item.name,
-                                        }
-                                    })}
-                                />
-                            </Form.Item>
-                        </Col>
                         <Col span={24}>
                             <Form.Item
                                 label="Khảo sát"

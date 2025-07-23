@@ -2413,7 +2413,7 @@ Table AcademicActionCondition {
   yearCondition Int
   isPriorityStudent Boolean
 
-  Note: 'Điều kiện cụ thể để kích hoạt xử lý'
+  Note: 'Điều kiện cụ thể để kích ho��t xử lý'
 }
 
 Table StudentAcademicDecision {
@@ -2654,8 +2654,8 @@ Table SurveyQuestion {
   updatedAt DateTime [not null]
   name String [not null]
   type SurveyQuestionType [not null]
-  surveyQuestionGroup SurveyQuestionGroup [not null]
-  surveyQuestionGroupId String [not null]
+  surveyQuestionGroup SurveyQuestionGroup
+  surveyQuestionGroupId String
   survey Survey [not null]
   surveyId String [not null]
   surveyResponses SurveyResponse [not null]

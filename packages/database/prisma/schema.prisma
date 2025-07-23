@@ -3219,18 +3219,18 @@ model Survey {
 }
 
 model SurveyQuestion {
-  id                    String              @id() @default(cuid())
-  code                  String?             @unique()
-  active                Boolean             @default(true)
-  description           String?             @db.Text()
+  id                    String               @id() @default(cuid())
+  code                  String?              @unique()
+  active                Boolean              @default(true)
+  description           String?              @db.Text()
   deletedAt             DateTime?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt()
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt()
   name                  String
   type                  SurveyQuestionType
-  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
-  surveyQuestionGroupId String
-  survey                Survey              @relation(fields: [surveyId], references: [id])
+  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String?
+  survey                Survey               @relation(fields: [surveyId], references: [id])
   surveyId              String
   surveyResponses       SurveyResponse[]
 
