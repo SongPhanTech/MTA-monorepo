@@ -156,31 +156,6 @@ export default function ThesisProject() {
                                 width: 150,
                                 render: (record) => record.organization.sTen,
                             },
-                            // {
-                            //     title: 'Phạm vi thực hiện',
-                            //     dataIndex: 'scope',
-                            //     width: 150,
-                            // },
-                            // {
-                            //     title: 'Phương pháp thực hiện',
-                            //     dataIndex: 'methodology',
-                            //     width: 150,
-                            // },
-                            // {
-                            //     title: 'Kết quả mong đợi',
-                            //     dataIndex: 'expectedResults',
-                            //     width: 150,
-                            // },
-                            // {
-                            //     title: 'Yêu cầu với học viên',
-                            //     dataIndex: 'requirements',
-                            //     width: 150,
-                            // },
-                            // {
-                            //     title: 'Công nghệ sử dụng',
-                            //     dataIndex: 'technologies',
-                            //     width: 150,
-                            // },
                             {
                                 title: 'Số lượng học viên',
                                 dataIndex: 'currentStudents',

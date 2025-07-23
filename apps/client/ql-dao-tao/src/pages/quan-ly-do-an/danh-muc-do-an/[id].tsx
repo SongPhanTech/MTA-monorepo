@@ -3,17 +3,28 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutThesisProject } from '@components/modal'
+import {
+    PutCouncil,
+    PutCouncilMember,
+    PutDecision,
+    PutStudentThesisRegistration,
+} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useCouncilRoleOptions } from '@hooks/councilRole'
+import { useDecisionTypeOptions } from '@hooks/decisionType'
 import useSpinner from '@hooks/spinner'
+import { useStudentThesisRegistrationStatusOptions } from '@hooks/studentThesisRegistrationStatus'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useFindManyCouncil,
     useFindManyDecision,
     useFindManyStudentThesisRegistration,
-    useUpdateThesisProject,
+    useUpdateCouncil,
+    useUpdateCouncilMember,
+    useUpdateDecision,
+    useUpdateStudentThesisRegistration,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -22,6 +33,10 @@ import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function ThesisProjectDetail() {
+    const { getStudentThesisRegistrationStatusColor, getStudentThesisRegistrationStatusLabel } =
+        useStudentThesisRegistrationStatusOptions()
+    const { getDecisionTypeColor, getDecisionTypeLabel } = useDecisionTypeOptions()
+    const { getCouncilRoleLabel } = useCouncilRoleOptions()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -60,17 +75,99 @@ export default function ThesisProjectDetail() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { onOpen: openDecision } = useDisclosure<string>({
-        tag: PutThesisProject.name,
+    const councilWithName = council?.map((council, index) => ({
+        ...council,
+        name: `Hội đồng ${index + 1}`,
+    }))
+
+    const { onOpen: openDecision } = useDisclosure<{ thesisProjectId: string; decisionId: string }>(
+        {
+            tag: PutDecision.name,
+        }
+    )
+
+    const { onOpen: openStudentThesisRegistration } = useDisclosure<{
+        studentThesisId: string
+        thesisProjectId: string
+    }>({
+        tag: PutStudentThesisRegistration.name,
+    })
+
+    const { onOpen: openCouncil } = useDisclosure<{ councilId: string; thesisProjectId: string }>({
+        tag: PutCouncil.name,
+    })
+
+    const { onOpen: openCouncilMember } = useDisclosure<{
+        councilId: string
+        councilMemberId: string
+    }>({
+        tag: PutCouncilMember.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
-    async function handleDelete(id: string) {
+    const { mutateAsync: updateDecision } = useUpdateDecision()
+    async function handleDeleteDecision(id: string) {
         try {
             showSpinner()
-            await updateThesisProject({
+            await updateDecision({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xóa thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const { mutateAsync: updateStudentThesisRegistration } = useUpdateStudentThesisRegistration()
+    async function handleDeleteStudentThesisRegistration(id: string) {
+        try {
+            showSpinner()
+            await updateStudentThesisRegistration({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xóa thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const { mutateAsync: updateCouncil } = useUpdateCouncil()
+    async function handleDeleteCouncil(id: string) {
+        try {
+            showSpinner()
+            await updateCouncil({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xóa thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const { mutateAsync: updateCouncilMember } = useUpdateCouncilMember()
+    async function handleDeleteCouncilMember(id: string) {
+        try {
+            showSpinner()
+            await updateCouncilMember({
                 where: {
                     id,
                 },
@@ -95,7 +192,15 @@ export default function ThesisProjectDetail() {
                     <Col span={12}>{/*  */}</Col>
                     <Col span={4}>
                         <Flex justify="end" gap={4}>
-                            <Button type="primary">
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    openStudentThesisRegistration({
+                                        studentThesisId: '',
+                                        thesisProjectId: thesisProjectId,
+                                    })
+                                }
+                            >
                                 <BookPlus />
                                 Thêm mới
                             </Button>
@@ -115,6 +220,12 @@ export default function ThesisProjectDetail() {
                             render: (_, __, index) => index + 1,
                         },
                         {
+                            title: 'Mã sinh viên',
+                            width: 100,
+                            fixed: 'left',
+                            render: (record) => record.student.code,
+                        },
+                        {
                             title: 'Họ và tên',
                             width: 200,
                             fixed: 'left',
@@ -125,8 +236,7 @@ export default function ThesisProjectDetail() {
                             dataIndex: 'registeredAt',
                             align: 'center',
                             width: 100,
-                            render: (record) =>
-                                record ? dayjs(record.issueDate).format('DD/MM/YYYY') : '',
+                            render: (record) => (record ? dayjs(record).format('DD/MM/YYYY') : ''),
                         },
                         {
                             title: 'Người phê duyệt',
@@ -139,8 +249,7 @@ export default function ThesisProjectDetail() {
                             dataIndex: 'reviewedAt',
                             align: 'center',
                             width: 150,
-                            render: (record) =>
-                                record ? dayjs(record.issueDate).format('DD/MM/YYYY') : '',
+                            render: (record) => (record ? dayjs(record).format('DD/MM/YYYY') : ''),
                         },
                         {
                             title: 'Ghi chú',
@@ -153,6 +262,15 @@ export default function ThesisProjectDetail() {
                             align: 'center',
                             width: 150,
                             fixed: 'right',
+                            render: (_, record) => {
+                                const label = getStudentThesisRegistrationStatusLabel(
+                                    record?.status
+                                )
+                                const color = getStudentThesisRegistrationStatusColor(
+                                    record?.status
+                                )
+                                return <Tag color={color}>{label}</Tag>
+                            },
                         },
                         {
                             title: 'Thao tác',
@@ -164,19 +282,21 @@ export default function ThesisProjectDetail() {
                                     return (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
-                                                // onClick={() =>
-                                                //     openRankingCondition({
-                                                //         rankingId: id,
-                                                //         rankingConditionId: record?.id,
-                                                //     })
-                                                // }
+                                                onClick={() =>
+                                                    openStudentThesisRegistration({
+                                                        thesisProjectId: thesisProjectId,
+                                                        studentThesisId: record?.id,
+                                                    })
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon
-                                            // popConfirm={{
-                                            //     onConfirm: () =>
-                                            //         handleDeleteRankingCondition(record?.id),
-                                            // }}
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteStudentThesisRegistration(
+                                                            record?.id
+                                                        ),
+                                                }}
                                             />
                                         </Row>
                                     )
@@ -189,13 +309,122 @@ export default function ThesisProjectDetail() {
             </Col>
             <Col span={24}>
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
+                    HỘI ĐỒNG ĐÁNH GIÁ
+                </div>
+                <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full">
+                    <Col span={12}>{/*  */}</Col>
+                    <Col span={4}>
+                        <Flex justify="end" gap={4}>
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    openCouncil({ councilId: '', thesisProjectId: thesisProjectId })
+                                }
+                            >
+                                <BookPlus />
+                                Thêm mới hội đồng
+                            </Button>
+                        </Flex>
+                    </Col>
+                </Row>
+                <TableCollapse
+                    rowKey="key"
+                    id="graduation-criteria"
+                    headerTitleKey="name"
+                    defaultExpandAll
+                    data={councilWithName}
+                    childrenFieldName="members"
+                    columns={[
+                        {
+                            title: 'Tên chuyên gia',
+                            width: 200,
+                            fixed: 'left',
+                            render: (record) => record.expert?.lecturer?.userProfile.fullname,
+                        },
+                        {
+                            title: 'Vai trò',
+                            dataIndex: 'role',
+                            align: 'center',
+                            width: 150,
+                            render: (record) => <div>{getCouncilRoleLabel(record)}</div>,
+                        },
+                        {
+                            title: 'Thao tác',
+                            width: 100,
+                            align: 'center',
+                            fixed: 'right',
+                            render: (_, record) => {
+                                if (record?.id) {
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            <EditIcon
+                                                onClick={() =>
+                                                    openCouncilMember({
+                                                        councilId: record.councilId || '',
+                                                        councilMemberId: record?.id,
+                                                    })
+                                                }
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteCouncilMember(record?.id),
+                                                }}
+                                            />
+                                        </Row>
+                                    )
+                                }
+                                return ''
+                            },
+                        },
+                    ]}
+                    headerRight={({ id }) => (
+                        <div className="flex gap-2.5 w-[85px] items-center">
+                            <CreateIcon
+                                onClick={() => {
+                                    openCouncilMember({
+                                        councilId: id,
+                                        councilMemberId: '',
+                                    })
+                                }}
+                                title="Thêm mới thành viên hội đồng"
+                            />
+                            <EditIcon
+                                onClick={() =>
+                                    openCouncil({
+                                        councilId: id,
+                                        thesisProjectId: thesisProjectId || '',
+                                    })
+                                }
+                                className="text-sm text-blue-700 cursor-pointer"
+                            />
+                            <DeleteIcon
+                                popConfirm={{
+                                    onConfirm: () => handleDeleteCouncil(id),
+                                }}
+                            />
+                        </div>
+                    )}
+                />
+            </Col>
+            <Col span={24}>
+                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
                     QUYẾT ĐỊNH LIÊN QUAN
                 </div>
                 <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full mb-2">
                     <Col span={12}>{/*  */}</Col>
                     <Col span={4}>
                         <Flex justify="end" gap={4}>
-                            <Button type="primary" onClick={() => openDecision()}>
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    openDecision({
+                                        thesisProjectId: thesisProjectId,
+                                        decisionId: '',
+                                    })
+                                }
+                            >
                                 <BookPlus />
                                 Thêm mới
                             </Button>
@@ -224,9 +453,13 @@ export default function ThesisProjectDetail() {
                         },
                         {
                             title: 'Loại quyết định',
-                            dataIndex: 'type',
                             align: 'center',
                             width: 150,
+                            render: (_, record) => {
+                                const label = getDecisionTypeLabel(record?.type)
+                                const color = getDecisionTypeColor(record?.type)
+                                return <Tag color={color}>{label}</Tag>
+                            },
                         },
                         {
                             title: 'Thao tác',
@@ -238,19 +471,19 @@ export default function ThesisProjectDetail() {
                                     return (
                                         <Row className="justify-center gap-2">
                                             <EditIcon
-                                                // onClick={() =>
-                                                //     openRankingCondition({
-                                                //         rankingId: id,
-                                                //         rankingConditionId: record?.id,
-                                                //     })
-                                                // }
+                                                onClick={() =>
+                                                    openDecision({
+                                                        thesisProjectId: thesisProjectId,
+                                                        decisionId: record?.id,
+                                                    })
+                                                }
                                                 className="text-sm text-blue-700 cursor-pointer"
                                             />
                                             <DeleteIcon
-                                            // popConfirm={{
-                                            //     onConfirm: () =>
-                                            //         handleDeleteRankingCondition(record?.id),
-                                            // }}
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteDecision(record?.id),
+                                                }}
                                             />
                                         </Row>
                                     )
@@ -259,94 +492,6 @@ export default function ThesisProjectDetail() {
                             },
                         },
                     ]}
-                />
-            </Col>
-            <Col span={24}>
-                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
-                    HỘI ĐỒNG ĐÁNH GIÁ
-                </div>
-                <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full">
-                    <Col span={12}>{/*  */}</Col>
-                    <Col span={4}>
-                        <Flex justify="end" gap={4}>
-                            <Button type="primary">
-                                <BookPlus />
-                                Thêm mới
-                            </Button>
-                        </Flex>
-                    </Col>
-                </Row>
-                <TableCollapse
-                    rowKey="key"
-                    id="graduation-criteria"
-                    headerTitleKey="thesisId"
-                    defaultExpandAll
-                    data={council}
-                    childrenFieldName="members"
-                    columns={[
-                        {
-                            title: 'Tên chuyên gia',
-                            width: 200,
-                            fixed: 'left',
-                            render: (record) => record.expert?.lecturer?.userProfile.fullname,
-                        },
-                        {
-                            title: 'Vai trò',
-                            dataIndex: 'role',
-                            align: 'center',
-                            width: 150,
-                        },
-                        {
-                            title: 'Thao tác',
-                            width: 100,
-                            align: 'center',
-                            fixed: 'right',
-                            render: (_, record) => {
-                                if (record?.id) {
-                                    return (
-                                        <Row className="justify-center gap-2">
-                                            <EditIcon
-                                                // onClick={() =>
-                                                //     openRankDowngradeCondition({
-                                                //         downgradeRuleId: id || '',
-                                                //         downgradeConditionId: record?.id,
-                                                //     })
-                                                // }
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                            <DeleteIcon
-                                            // popConfirm={{
-                                            //     onConfirm: () =>
-                                            //         handleDeleteRankDowngradeCondition(
-                                            //             record?.id
-                                            //         ),
-                                            // }}
-                                            />
-                                        </Row>
-                                    )
-                                }
-                                return ''
-                            },
-                        },
-                    ]}
-                    headerRight={({ id }) => (
-                        <div className="flex gap-2.5 w-[85px] items-center">
-                            <CreateIcon
-                                // onClick={() => {
-                                //     openRankDowngradeCondition({
-                                //         downgradeRuleId: id,
-                                //         downgradeConditionId: '',
-                                //     })
-                                // }}
-                                title="Thêm mới thành viên"
-                            />
-                            <DeleteIcon
-                            // popConfirm={{
-                            //     onConfirm: () => handleDeleteGraduationRankDowngradeRule(id),
-                            // }}
-                            />
-                        </div>
-                    )}
                 />
             </Col>
         </div>

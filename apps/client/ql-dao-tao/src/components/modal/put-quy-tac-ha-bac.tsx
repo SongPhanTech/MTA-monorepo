@@ -34,8 +34,6 @@ const PutRankDowngradeCondition = () => {
         onClose: form.resetFields,
     })
 
-    console.log(input?.downgradeRuleId)
-
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: createRankDowngradeCondition } =
