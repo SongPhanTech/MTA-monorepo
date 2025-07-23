@@ -9,6 +9,7 @@ import '../ql-dao-tao/student'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/staff'
 import '../khao-thi/survey'
+import '../ql-ho-so/categories'
 
 enum UserType {
   MILITARY_STUDENT // Học viên quân sự
@@ -110,6 +111,9 @@ model UserProfile extends Base {
   // người thân
   familyPhone                String?
   familyName                 String?
+
+  dM_TrinhDoHocVan           DM_TrinhDoHocVan? @relation(fields: [dM_TrinhDoHocVanId], references: [Id])
+  dM_TrinhDoHocVanId         String?           @db.Uuid
 
   /// hồ sơ đào tạo
   educationAndTraining       Student[]

@@ -2442,8 +2442,8 @@ model UserProfile {
   dischargeDate              DateTime?
   familyPhone                String?
   familyName                 String?
-  dM_TrinhDoHocVan           DM_TrinhDoHocVan  @relation(fields: [dM_TrinhDoHocVanId], references: [Id])
-  dM_TrinhDoHocVanId         String
+  dM_TrinhDoHocVan           DM_TrinhDoHocVan? @relation(fields: [dM_TrinhDoHocVanId], references: [Id])
+  dM_TrinhDoHocVanId         String?           @db.Uuid()
   /// hồ sơ đào tạo
   educationAndTraining       Student[]
   /// hồ sơ giảng viên

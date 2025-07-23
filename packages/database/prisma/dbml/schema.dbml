@@ -46,7 +46,6 @@ Table Difficulty {
   name String [unique, not null]
   level Int [unique]
   questions Question [not null]
-  structureRules TestStructureRule [not null]
 
   Note: 'Mức độ khó'
 }
@@ -87,7 +86,7 @@ Table Question {
   knowledgeBlockId String
   difficulty Difficulty
   difficultyId String
-  sessionQuestions ExamSessionQuestion [not null]
+  sessionQuestions ExamBankQuestion [not null]
   answers Answer [not null, note: 'Câu trả lời của thí sinh trong các phiên thi']
 
   Note: 'Câu hỏi'
@@ -149,8 +148,7 @@ Table TestStructureRule {
   examId String [not null]
   knowledgeBlock KnowledgeBlock [not null]
   knowledgeBlockId String [not null]
-  difficulty Difficulty [not null]
-  difficultyId String [not null]
+  questionPoint Float [not null]
   questionType QuestionType [not null]
   count Int [not null]
 
@@ -168,9 +166,25 @@ Table ExamBank {
   exam Exam [not null]
   examId String [not null]
   examSession ExamSession [not null]
-  questions ExamSessionQuestion [not null]
+  questions ExamBankQuestion [not null]
 
   Note: 'Đề thi'
+}
+
+Table ExamBankQuestion {
+  id String [pk]
+  examBankId String [not null]
+  examBank ExamBank [not null]
+  questionId String [not null]
+  question Question [not null]
+  order Int
+
+  indexes {
+    (examBankId, questionId) [unique]
+    (examBankId, order) [unique]
+  }
+
+  Note: 'Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào'
 }
 
 Table ExamSession {
@@ -199,23 +213,7 @@ Table ExamSession {
     (studentId, examId) [unique]
   }
 
-  Note: 'Bài thi / Đề thi'
-}
-
-Table ExamSessionQuestion {
-  id String [pk]
-  examBankId String [not null]
-  examBank ExamBank [not null]
-  questionId String [not null]
-  question Question [not null]
-  order Int
-
-  indexes {
-    (examBankId, questionId) [unique]
-    (examBankId, order) [unique]
-  }
-
-  Note: 'Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào'
+  Note: 'Bài thi'
 }
 
 Table StudentSubjectScore {
@@ -1912,6 +1910,8 @@ Table UserProfile {
   dischargeDate DateTime
   familyPhone String
   familyName String
+  dM_TrinhDoHocVan DM_TrinhDoHocVan
+  dM_TrinhDoHocVanId String
   educationAndTraining Student [not null, note: 'hồ sơ đào tạo']
   lecturer Lecturer [note: 'hồ sơ giảng viên']
   lecturerHistory LecturerHistory [not null]
@@ -2686,6 +2686,25 @@ Table SurveyResponse {
   Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
 }
 
+Table DM_TrinhDoHocVan {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  userProfile UserProfile [not null]
+}
+
 Table Feedback {
   id String [pk]
   code String [unique]
@@ -3382,9 +3401,11 @@ Ref: TestStructureRule.examId > Exam.id
 
 Ref: TestStructureRule.knowledgeBlockId > KnowledgeBlock.id
 
-Ref: TestStructureRule.difficultyId > Difficulty.id
-
 Ref: ExamBank.examId > Exam.id
+
+Ref: ExamBankQuestion.examBankId > ExamBank.id [delete: Cascade]
+
+Ref: ExamBankQuestion.questionId > Question.id
 
 Ref: ExamSession.studentId > Student.id
 
@@ -3393,10 +3414,6 @@ Ref: ExamSession.examId > Exam.id
 Ref: ExamSession.roomId > Room.id
 
 Ref: ExamSession.examBankId > ExamBank.id
-
-Ref: ExamSessionQuestion.examBankId > ExamBank.id [delete: Cascade]
-
-Ref: ExamSessionQuestion.questionId > Question.id
 
 Ref: StudentSubjectScore.subjectClassId > SubjectClass.id
 
@@ -3585,6 +3602,8 @@ Ref: UserProfile.academicRankTypeId > DM_HocHam.Id
 Ref: UserProfile.levelId > DM_ChucDanh.Id
 
 Ref: UserProfile.positionCPVId > DM_ChucVu.Id
+
+Ref: UserProfile.dM_TrinhDoHocVanId > DM_TrinhDoHocVan.Id
 
 Ref: Lecturer.userProfileId - UserProfile.id
 

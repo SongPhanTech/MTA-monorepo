@@ -2,7 +2,7 @@ import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-danh-muc/common'
-import '../ql-nguoi-dung/profile'
+import '../ql-ho-so/profile'
 import 'categories'
 import 'training-score'
 import 'criteria'
@@ -132,7 +132,6 @@ model AcademicRankingConvert extends Base {
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")
-
 }
 
 /// Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp
