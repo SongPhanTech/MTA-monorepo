@@ -1,8 +1,17 @@
 import '../ql-danh-muc/core-categories'
 import '../ql-ho-so/profile'
 
+model DM_LinhVuc extends CoreBase {
+  hocHam HocHam[]
+  @@schema("mta")
+}
+
+model DM_Truong extends CoreBase {
+  hocHam HocHam[]
+  @@schema("mta")
+}
+
 model DM_TrinhDoHocVan extends CoreBase {
   userProfile UserProfile[]
   @@schema("mta")
 }
-

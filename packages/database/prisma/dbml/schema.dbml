@@ -144,6 +144,12 @@ Table Exam {
 
 Table TestStructureRule {
   id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   exam Exam [not null]
   examId String [not null]
   knowledgeBlock KnowledgeBlock [not null]
@@ -1383,6 +1389,7 @@ Table DM_HocHam {
   sThietBiTao String
   sThietBiSua String
   profiles UserProfile [not null]
+  hocHam HocHam [not null]
 }
 
 Table DM_HocVi {
@@ -1917,6 +1924,23 @@ Table UserProfile {
   lecturerHistory LecturerHistory [not null]
   staffs Staff [note: 'hồ sơ cán bộ']
   staffHistory StaffHistory [not null]
+}
+
+Table HocHam {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  academicRankType DM_HocHam
+  academicRankTypeId String
+  linhVuc DM_LinhVuc
+  linhVucId String
+  truong DM_Truong
+  truongId String
+  year Int
 }
 
 Table LecturerType {
@@ -2684,6 +2708,44 @@ Table SurveyResponse {
   }
 
   Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
+}
+
+Table DM_LinhVuc {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  hocHam HocHam [not null]
+}
+
+Table DM_Truong {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  hocHam HocHam [not null]
 }
 
 Table DM_TrinhDoHocVan {
@@ -3604,6 +3666,12 @@ Ref: UserProfile.levelId > DM_ChucDanh.Id
 Ref: UserProfile.positionCPVId > DM_ChucVu.Id
 
 Ref: UserProfile.dM_TrinhDoHocVanId > DM_TrinhDoHocVan.Id
+
+Ref: HocHam.academicRankTypeId > DM_HocHam.Id
+
+Ref: HocHam.linhVucId > DM_LinhVuc.Id
+
+Ref: HocHam.truongId > DM_Truong.Id
 
 Ref: Lecturer.userProfileId - UserProfile.id
 

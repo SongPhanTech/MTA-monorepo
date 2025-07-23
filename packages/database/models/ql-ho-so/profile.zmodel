@@ -127,3 +127,17 @@ model UserProfile extends Base {
   @@schema("ql-nguoi-dung")
 }
 
+model HocHam extends Base {
+  academicRankType   DM_HocHam?  @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId String?     @db.Uuid
+
+  linhVuc            DM_LinhVuc? @relation(fields: [linhVucId], references: [Id])
+  linhVucId          String?     @db.Uuid
+
+  truong             DM_Truong?  @relation(fields: [truongId], references: [Id])
+  truongId           String?     @db.Uuid
+
+  year               Int?
+
+  @@schema("ql-ho-so")
+}
