@@ -174,7 +174,7 @@ model Answer extends Base {
 // }
 
 // /// Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp
-// model OrderingAnswer  extends Base {
+// model OrderingAnswer extends Base {
 //   answerId String
 //   answer   Answer       @relation(fields: [answerId], references: [id], onDelete: Cascade)
 //   itemId   String
@@ -209,8 +209,7 @@ model Exam  extends Base {
 }
 
 /// Cấu hình tạo đề tự động cho kỳ thi
-model TestStructureRule {
-  id               String         @id @default(cuid())
+model TestStructureRule extends Base {
   exam             Exam           @relation(fields: [examId], references: [id])
   examId           String
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])

@@ -6,7 +6,7 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["mta", "he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao"]
+  schemas  = ["mta", "he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao", "ql-ho-so"]
 }
 
 generator client {
@@ -587,6 +587,12 @@ model Exam {
 /// Cấu hình tạo đề tự động cho kỳ thi
 model TestStructureRule {
   id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt()
   exam             Exam           @relation(fields: [examId], references: [id])
   examId           String
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
@@ -1864,6 +1870,7 @@ model DM_HocHam {
   sThietBiTao    String?
   sThietBiSua    String?
   profiles       UserProfile[]
+  hocHam         HocHam[]
 
   @@schema("mta")
 }
@@ -2454,6 +2461,25 @@ model UserProfile {
   staffHistory               StaffHistory[]
 
   @@schema("ql-nguoi-dung")
+}
+
+model HocHam {
+  id                 String      @id() @default(cuid())
+  code               String?     @unique()
+  active             Boolean     @default(true)
+  description        String?     @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt()
+  academicRankType   DM_HocHam?  @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId String?     @db.Uuid()
+  linhVuc            DM_LinhVuc? @relation(fields: [linhVucId], references: [Id])
+  linhVucId          String?     @db.Uuid()
+  truong             DM_Truong?  @relation(fields: [truongId], references: [Id])
+  truongId           String?     @db.Uuid()
+  year               Int?
+
+  @@schema("ql-ho-so")
 }
 
 /// Loại giáo viên
@@ -3247,6 +3273,48 @@ model SurveyResponse {
 
   @@unique([surveySessionId, surveyQuestionId])
   @@schema("khao-thi")
+}
+
+model DM_LinhVuc {
+  Id             String    @id() @default(uuid()) @db.Uuid()
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  hocHam         HocHam[]
+
+  @@schema("mta")
+}
+
+model DM_Truong {
+  Id             String    @id() @default(uuid()) @db.Uuid()
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  hocHam         HocHam[]
+
+  @@schema("mta")
 }
 
 model DM_TrinhDoHocVan {
