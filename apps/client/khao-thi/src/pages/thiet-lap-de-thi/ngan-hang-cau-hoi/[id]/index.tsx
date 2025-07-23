@@ -41,7 +41,11 @@ export default function Question() {
         knowledgeBlockId: undefined,
     })
 
-    const { onOpen: onOpenPutQuestion } = useDisclosure<{ id: string; questionBankId: string }>({
+    const { onOpen: onOpenPutQuestion } = useDisclosure<{
+        id: string
+        questionBankId: string
+        subjectVersionId: string
+    }>({
         tag: PutQuestion.name,
     })
 
@@ -218,6 +222,7 @@ export default function Question() {
                                         onOpenPutQuestion({
                                             id: '',
                                             questionBankId,
+                                            subjectVersionId: initialValue?.subjectVersionId || '',
                                         })
                                     }
                                 >
@@ -335,6 +340,9 @@ export default function Question() {
                                                         onOpenPutQuestion({
                                                             id: record.id,
                                                             questionBankId,
+                                                            subjectVersionId:
+                                                                initialValue?.subjectVersionId ||
+                                                                '',
                                                         })
                                                     }
                                                 />
@@ -376,6 +384,9 @@ Question.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
+                {
+                    title: 'Thiết lập đề thi',
+                },
                 {
                     title: 'Ngân hàng câu hỏi',
                     href: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,

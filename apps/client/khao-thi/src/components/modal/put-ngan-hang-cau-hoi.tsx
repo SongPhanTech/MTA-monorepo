@@ -75,8 +75,6 @@ const PutQuestionBank = () => {
         orderBy: { name: 'asc' },
     })
 
-    console.log(subjectVersionData)
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {

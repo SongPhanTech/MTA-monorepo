@@ -19,7 +19,11 @@ export type PutQuestionType = Question
 const PutQuestion = () => {
     const [form] = Form.useForm<PutQuestionType>()
     const { options: questionTypeOptions } = useQuestionTypeOptions()
-    const { isOpen, onClose, input } = useDisclosure<{ id: string; questionBankId: string }>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        questionBankId: string
+        subjectVersionId: string
+    }>({
         tag: PutQuestion.name,
         onClose: form.resetFields,
     })
@@ -82,7 +86,7 @@ const PutQuestion = () => {
     )
 
     const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
-        where: { subjectVersionId: initialValue?.questionBank?.subjectVersionId },
+        where: { subjectVersionId: input?.subjectVersionId },
     })
 
     const { data: difficultyData } = useFindManyDifficulty({
@@ -155,7 +159,7 @@ const PutQuestion = () => {
             <Col span={12}>
                 <FormItem form={form} name="point" label="Điểm" required>
                     <InputNumber
-                        placeholder="Nhập Điểm"
+                        placeholder="Nhập điểm"
                         defaultValue={1}
                         step={0.1}
                         className="w-full"
