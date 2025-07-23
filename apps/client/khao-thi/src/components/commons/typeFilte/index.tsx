@@ -106,6 +106,9 @@ export type FilterProps = {
     questionType?: QuestionType[]
     explanation?: string | ''
     point?: 'asc' | 'desc'
+    level?: 'asc' | 'desc'
+    difficultyId?: string | null
+    knowledgeBlockId?: string | null
 }
 
 export type ColumnTypeProps = ColumnsType & {

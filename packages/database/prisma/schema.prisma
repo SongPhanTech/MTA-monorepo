@@ -475,17 +475,16 @@ model QuestionBank {
 
 /// Mức độ khó
 model Difficulty {
-  id             String              @id() @default(cuid())
-  code           String?             @unique()
-  active         Boolean             @default(true)
-  description    String?             @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt()
-  name           String              @unique()
-  level          Int?                @unique()
-  questions      Question[]
-  structureRules TestStructureRule[]
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+  name        String     @unique()
+  level       Int?       @unique()
+  questions   Question[]
 
   @@schema("khao-thi")
 }
@@ -511,25 +510,25 @@ model KnowledgeBlock {
 
 /// Câu hỏi
 model Question {
-  id               String                @id() @default(cuid())
-  code             String?               @unique()
-  active           Boolean               @default(true)
-  description      String?               @db.Text()
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt()
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt()
   content          String
-  type             QuestionType          @default(ESSAY)
-  point            Float                 @default(1)
+  type             QuestionType       @default(ESSAY)
+  point            Float              @default(1)
   explanation      String?
-  isAutoGraded     Boolean               @default(false)
-  questionBank     QuestionBank          @relation(fields: [questionBankId], references: [id])
+  isAutoGraded     Boolean            @default(false)
+  questionBank     QuestionBank       @relation(fields: [questionBankId], references: [id])
   questionBankId   String
-  knowledgeBlock   KnowledgeBlock?       @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlock   KnowledgeBlock?    @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String?
-  difficulty       Difficulty?           @relation(fields: [difficultyId], references: [id])
+  difficulty       Difficulty?        @relation(fields: [difficultyId], references: [id])
   difficultyId     String?
-  sessionQuestions ExamSessionQuestion[]
+  sessionQuestions ExamBankQuestion[]
   /// Câu trả lời của thí sinh trong các phiên thi
   answers          Answer[]
 
@@ -592,8 +591,7 @@ model TestStructureRule {
   examId           String
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String
-  difficulty       Difficulty     @relation(fields: [difficultyId], references: [id])
-  difficultyId     String
+  questionPoint    Float
   questionType     QuestionType
   count            Int
 
@@ -602,22 +600,36 @@ model TestStructureRule {
 
 /// Đề thi
 model ExamBank {
-  id          String                @id() @default(cuid())
-  code        String?               @unique()
-  active      Boolean               @default(true)
-  description String?               @db.Text()
+  id          String             @id() @default(cuid())
+  code        String?            @unique()
+  active      Boolean            @default(true)
+  description String?            @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @updatedAt()
-  exam        Exam                  @relation(fields: [examId], references: [id])
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt()
+  exam        Exam               @relation(fields: [examId], references: [id])
   examId      String
   examSession ExamSession[]
-  questions   ExamSessionQuestion[]
+  questions   ExamBankQuestion[]
 
   @@schema("khao-thi")
 }
 
-/// Bài thi / Đề thi
+/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
+model ExamBankQuestion {
+  id         String   @id() @default(cuid())
+  examBankId String
+  examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  order      Int?
+
+  @@unique([examBankId, questionId])
+  @@unique([examBankId, order])
+  @@schema("khao-thi")
+}
+
+/// Bài thi
 model ExamSession {
   id          String    @id() @default(cuid())
   code        String?   @unique()
@@ -641,20 +653,6 @@ model ExamSession {
   answers     Answer[]
 
   @@unique([studentId, examId])
-  @@schema("khao-thi")
-}
-
-/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
-model ExamSessionQuestion {
-  id         String   @id() @default(cuid())
-  examBankId String
-  examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id])
-  order      Int?
-
-  @@unique([examBankId, questionId])
-  @@unique([examBankId, order])
   @@schema("khao-thi")
 }
 
@@ -2444,6 +2442,8 @@ model UserProfile {
   dischargeDate              DateTime?
   familyPhone                String?
   familyName                 String?
+  dM_TrinhDoHocVan           DM_TrinhDoHocVan? @relation(fields: [dM_TrinhDoHocVanId], references: [Id])
+  dM_TrinhDoHocVanId         String?           @db.Uuid()
   /// hồ sơ đào tạo
   educationAndTraining       Student[]
   /// hồ sơ giảng viên
@@ -3247,6 +3247,27 @@ model SurveyResponse {
 
   @@unique([surveySessionId, surveyQuestionId])
   @@schema("khao-thi")
+}
+
+model DM_TrinhDoHocVan {
+  Id             String        @id() @default(uuid()) @db.Uuid()
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  userProfile    UserProfile[]
+
+  @@schema("mta")
 }
 
 model Feedback {

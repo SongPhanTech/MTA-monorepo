@@ -2,26 +2,24 @@ import Table from '@components/commons/table'
 import type { FilterSurveyQuestionProps } from '@components/filter/filter-survey-question'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyQuestionModal } from '@components/modal'
+import { PutExam } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useCountSurveyQuestion,
-    useFindManySurveyQuestion,
-    useUpdateSurveyQuestion,
-} from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row } from 'antd'
-import _ from 'lodash'
-import { useCallback, useState } from 'react'
+import { useCountExam, useFindManyExam, useUpdateExam } from '@workspace/db/hooks'
+import { Button, Checkbox, Col, Flex, message, Row, Tag } from 'antd'
+import dayjs from 'dayjs'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type Filter = FilterSurveyQuestionProps & {
     searchText: string
 }
-function Page() {
+function Exam() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { getExamStatusLabel, getExamStatusColor } = useExamStatusOptions()
     const [_searchText, setSearchText] = useState<string>('')
 
     const [filters, setFilters] = useState<Filter>({
@@ -30,48 +28,15 @@ function Page() {
         surveyId: null,
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-    const handleAdvancedFilter = (values: FilterSurveyQuestionProps) => {
-        const newFilters = { ...filters, ...values }
-        setFilters(newFilters)
-    }
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const { data = [], refetch } = useFindManySurveyQuestion({
-        where: {
-            name: {
-                contains: filters.searchText,
-            },
-            ...(filters.surveyId ? { surveyId: filters.surveyId } : {}),
-            ...(filters.surveyQuestionTypeId
-                ? { surveyQuestionTypeId: filters.surveyQuestionTypeId }
-                : {}),
-        },
-        include: {
-            surveyQuestionType: true,
-            survey: true,
-        },
+    const { data = [], refetch } = useFindManyExam({
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSurveyQuestion()
+    const { data: count } = useCountExam()
 
-    const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure<string>({
-        tag: PutSurveyQuestionModal.name,
+        tag: PutExam.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -79,12 +44,11 @@ function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateSurveyObjectType } = useUpdateSurveyQuestion()
-
-    async function handleDelete(id: string) {
+    const { mutateAsync: updateExam } = useUpdateExam()
+    async function handleDeleteExam(id: string) {
         try {
             showSpinner()
-            await updateSurveyObjectType({
+            await updateExam({
                 where: {
                     id,
                 },
@@ -117,43 +81,105 @@ function Page() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 60,
                                 align: 'center',
+                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã đề thi',
-                                dataIndex: 'code',
-                            },
-                            {
-                                title: 'Tên đề thi',
-                                dataIndex: 'name',
+                                title: 'Tên kỳ thi',
+                                dataIndex: 'title',
+                                fixed: 'left',
+                                width: 220,
                             },
                             {
                                 title: 'Thời gian bắt dầu',
-                                dataIndex: 'name',
+                                dataIndex: 'startTime',
+                                align: 'center',
+                                width: 150,
+                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Thời gian kết thúc',
-                                dataIndex: 'name',
+                                dataIndex: 'endTime',
+                                align: 'center',
+                                width: 150,
+                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Thời gian thi',
-                                dataIndex: 'name',
+                                dataIndex: 'duration',
+                                align: 'center',
+                                width: 150,
+                                render: (value) => {
+                                    return <span>{value} phút</span>
+                                },
                             },
                             {
                                 title: 'Điểm đạt',
-                                dataIndex: 'name',
+                                dataIndex: 'passScore',
+                                align: 'center',
+                                width: 100,
                             },
                             {
-                                title: 'Tên khảo sát',
-                                render: ({ survey }) => (survey ? survey.name : ''),
+                                title: 'Xáo trộn câu hỏi',
+                                dataIndex: 'shuffleQuestions',
+                                align: 'center',
+                                width: 80,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Xáo trộn đáp án',
+                                dataIndex: 'shuffleAnswers',
+                                align: 'center',
+                                width: 80,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Hiển thị kết quả ngay',
+                                dataIndex: 'showResult',
+                                align: 'center',
+                                width: 100,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Trạng thái',
+                                dataIndex: 'status',
+                                align: 'center',
+                                fixed: 'right',
+                                width: 100,
+                                render: (value) => {
+                                    return (
+                                        <Tag color={getExamStatusColor(value)}>
+                                            {getExamStatusLabel(value)}
+                                        </Tag>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
@@ -162,7 +188,7 @@ function Page() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: () => handleDeleteExam(id),
                                             }}
                                         />
                                     </Row>
@@ -190,7 +216,7 @@ function Page() {
     )
 }
 
-export default Page
-Page.getLayout = function getLayout(page: React.ReactNode) {
+export default Exam
+Exam.getLayout = function getLayout(page: React.ReactNode) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

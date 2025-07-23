@@ -1,7 +1,6 @@
 import {
     ApartmentOutlined,
     BookOutlined,
-    FileTextOutlined,
     IdcardOutlined,
     MessageOutlined,
     PieChartOutlined,
@@ -13,13 +12,21 @@ import {
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 // biome-ignore lint/style/useImportType: <>
 import {
-    BookCheckIcon,
-    CalendarFold,
-    FileUser,
+    BarChart3,
+    BookOpenCheck,
+    CalendarRange,
+    ClipboardList,
+    FileCheck2,
     Flag,
+    FolderOpen,
+    GitCompare,
+    GraduationCap,
     House,
-    LayoutDashboard,
+    Landmark,
+    Library,
+    ListTree,
     LucideProps,
+    Settings,
 } from 'lucide-react'
 import ROUTER_PATH from '../generated/router'
 import './index.css'
@@ -311,7 +318,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'chuong-trinh-dao-tao',
                 label: 'Chương trình đào tạo',
-                icon: BookCheckIcon,
+                icon: Library,
                 children: [
                     {
                         id: 'danh-muc-chuong-trinh-dao-tao',
@@ -337,7 +344,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ke-hoach-giao-duc',
                 label: 'Kế hoạch đào tạo',
-                icon: CalendarFold,
+                icon: CalendarRange,
                 children: [
                     {
                         id: 'ke-hoach-mo-lop-mon-hoc',
@@ -362,7 +369,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'lop-mon-hoc',
                 label: 'Quản lý điểm',
-                icon: CalendarFold,
+                icon: BarChart3,
                 children: [
                     {
                         id: 'khoa-nhap-diem',
@@ -406,21 +413,21 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'schoolyear-semester',
                 label: 'Năm học kỳ học',
-                icon: CalendarFold,
+                icon: BookOpenCheck,
                 path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
                 description: 'Thông tin năm học, kỳ học',
             },
             {
                 id: 'danh-muc-chuyen-doi-diem',
                 label: 'Bảng chuyển đổi điểm',
-                icon: PieChartOutlined,
+                icon: GitCompare,
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                 description: 'Bảng chuyển đổi điểm',
             },
             {
                 id: 'category',
                 label: 'Danh mục',
-                icon: LayoutDashboard,
+                icon: ListTree,
                 children: [
                     {
                         id: 'danh-muc-nganh',
@@ -520,7 +527,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ql-xet-tot-nghiep',
                 label: 'Xét tốt nghiệp',
-                icon: CalendarFold,
+                icon: GraduationCap,
                 children: [
                     {
                         id: 'ql-dot-xet-tot-nghiep',
@@ -533,7 +540,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ql-do-an',
                 label: 'Quản lý đồ án',
-                icon: CalendarFold,
+                icon: FileCheck2,
                 children: [
                     {
                         id: 'danh-muc-do-an',
@@ -552,7 +559,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ql-ho-so',
                 label: 'Quản lý hồ sơ',
-                icon: FileUser,
+                icon: FolderOpen,
                 children: [
                     {
                         id: 'ql-ren-luyen',
@@ -621,38 +628,43 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin trang chủ',
             },
             {
-                id: 'ngan-hang',
-                label: 'Ngân hàng',
-                icon: SettingOutlined,
+                id: 'thiet-lap-de-thi',
+                label: 'Thiết lập đề thi',
+                icon: Landmark,
                 children: [
+                    {
+                        id: 'danh-sach-ky-thi',
+                        label: 'Danh sách kỳ thi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
+                    },
                     {
                         id: 'ngan-hang-cau-hoi',
                         label: 'Ngân hàng câu hỏi',
-                        path: ROUTER_PATH.KHAO_THI.NGAN_HANG_CAU_HOI,
-                    },
-                    {
-                        id: 'ngan-hang-de-thi',
-                        label: 'Ngân hàng đề thi',
-                        path: ROUTER_PATH.KHAO_THI.NGAN_HANG_DE_THI,
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
                     },
                 ],
             },
             {
                 id: 'category',
                 label: 'Danh mục',
-                icon: LayoutDashboard,
+                icon: ListTree,
                 children: [
                     {
                         id: 'danh-muc-chuong-muc',
                         label: 'Danh mục chương mục',
                         path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
                     },
+                    {
+                        id: 'danh-muc-muc-do-kho',
+                        label: 'Danh mục mức độ khó',
+                        path: ROUTER_PATH.KHAO_THI.DANH_MUC_MUC_DO_KHO,
+                    },
                 ],
             },
             {
                 id: 'thiet-lap-khao-sat',
                 label: 'Thiết lập khảo sát',
-                icon: SettingOutlined,
+                icon: Settings,
                 children: [
                     {
                         id: 'thiet-lap-chung',
@@ -669,7 +681,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'tra-loi-khao-sat',
                 label: 'Trả lời khảo sát',
-                icon: FileTextOutlined,
+                icon: ClipboardList,
                 path: ROUTER_PATH.KHAO_THI.TRA_LOI_KHAO_SAT,
             },
         ],
