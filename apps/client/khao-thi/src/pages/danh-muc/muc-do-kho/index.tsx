@@ -2,32 +2,28 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutQuestionBank } from '@components/modal'
+import { PutDifficulty } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
 import {
-    useCountQuestionBank,
-    useFindManyQuestionBank,
-    useFindManySubjectVersion,
-    useUpdateQuestionBank,
+    useCountSubjectVersion,
+    useFindManyDifficulty,
+    useUpdateDifficulty,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useRouter } from 'next/router'
-import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function QuestionBank() {
-    const router = useRouter()
+export default function Difficulty() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        subjectVersionId: undefined,
+        level: undefined,
     })
 
     const commonWhere = useMemo(
@@ -36,7 +32,7 @@ export default function QuestionBank() {
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -44,50 +40,52 @@ export default function QuestionBank() {
                 ? {
                       name: {
                           contains: filters.name,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.subjectVersionId
-                ? {
-                      subjectVersionId: {
-                          in: filters.subjectVersionId,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
         }),
-        [filters.code, filters.name, filters.subjectVersionId]
+        [filters.code, filters.name]
     )
 
-    const { data = [], refetch } = useFindManyQuestionBank({
+    const { data, refetch } = useFindManyDifficulty({
         where: commonWhere,
-        include: { subjectVersion: true },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        level: filters.level,
+                    },
+                ],
+                !!filters.level
+            ),
+            { level: 'asc' },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountQuestionBank({
+    const { data: count } = useCountSubjectVersion({
         where: {
             ...commonWhere,
             deletedAt: null,
         },
     })
 
-    const { onOpen: onOpenPutQuestionBank } = useDisclosure<string>({
-        tag: PutQuestionBank.name,
+    const { onOpen: onOpenPutDifficulty } = useDisclosure<{
+        id: string
+        subjectVersionId: string
+    }>({
+        tag: PutDifficulty.name,
     })
-
-    const handleModal = () => {
-        onOpenPutQuestionBank()
-    }
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateQuestionBank } = useUpdateQuestionBank()
-    async function handleDeleteQuestionBank(id: string) {
+    const { mutateAsync: updateDifficulty } = useUpdateDifficulty()
+    async function handleDeleteDifficulty(id: string) {
         try {
             showSpinner()
-            await updateQuestionBank({
+            await updateDifficulty({
                 where: { id },
                 data: { deletedAt: new Date() },
             })
@@ -97,18 +95,20 @@ export default function QuestionBank() {
         hideSpinner()
     }
 
-    const { data: subjectVersionData = [] } = useFindManySubjectVersion({
-        orderBy: { name: 'asc' },
-    })
-
     return (
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                    <Row gutter={[16, 16]} align="top">
+                        {/* Thêm mới */}
                         <Col span={24}>
-                            <Flex justify="end" gap={4}>
-                                <Button onClick={handleModal} type="primary">
+                            <Flex justify="end">
+                                <Button
+                                    type="primary"
+                                    onClick={() => {
+                                        onOpenPutDifficulty()
+                                    }}
+                                >
                                     <BookPlus />
                                     Thêm mới
                                 </Button>
@@ -122,27 +122,17 @@ export default function QuestionBank() {
                         rowKey="id"
                         filters={filters}
                         setFilters={setFilters}
-                        onRowClick={({ id }) => {
-                            router.push(`${ROUTER_PATH.KHAO_THI.NGAN_HANG_CAU_HOI}/${id}`)
-                        }}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã ngân hàng câu hỏi',
+                                title: 'Mã',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 fixed: 'left',
                                 type: 'input',
                             },
                             {
-                                title: 'Tên ngân hàng câu hỏi',
+                                title: 'Tên',
                                 dataIndex: 'name',
                                 width: 200,
                                 align: 'center',
@@ -150,26 +140,11 @@ export default function QuestionBank() {
                                 type: 'input',
                             },
                             {
-                                title: 'Phiên bản môn học',
-                                dataIndex: 'subjectVersionId',
+                                title: 'Mức độ',
+                                dataIndex: 'level',
                                 width: 200,
                                 align: 'center',
-                                type: 'select',
-                                options: subjectVersionData.map((i) => {
-                                    const name = i.name || ''
-                                    const period = i.period ? ` (${i.period} tiết)` : ''
-                                    const credit = i.credit ? `, ${i.credit} tín chỉ` : ''
-                                    return {
-                                        value: i.id,
-                                        label: `${name}${period}${credit}`,
-                                    }
-                                }),
-                                render: (_, record) => {
-                                    return (
-                                        `${record?.subjectVersion?.name}(${record?.subjectVersion.period} tiết), ${record?.subjectVersion.credit} tín chỉ` ||
-                                        ''
-                                    )
-                                },
+                                type: 'order',
                             },
                             {
                                 title: 'Mô tả',
@@ -193,29 +168,17 @@ export default function QuestionBank() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        onOpenPutQuestionBank(record?.id)
+                                                        onOpenPutDifficulty(record?.id)
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: (e) => {
-                                                            handleDeleteQuestionBank(record?.id)
+                                                            handleDeleteDifficulty(record?.id)
                                                             e?.stopPropagation()
                                                         },
                                                     }}
@@ -249,6 +212,6 @@ export default function QuestionBank() {
     )
 }
 
-QuestionBank.getLayout = function getLayout(page: React.ReactElement) {
+Difficulty.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

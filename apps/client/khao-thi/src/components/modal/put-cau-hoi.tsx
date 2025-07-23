@@ -7,6 +7,7 @@ import useSpinner from '@hooks/spinner'
 import { type Question, QuestionType } from '@workspace/db'
 import {
     useCreateQuestion,
+    useFindManyDifficulty,
     useFindManyKnowledgeBlock,
     useFindUniqueQuestion,
     useUpdateQuestion,
@@ -44,6 +45,7 @@ const PutQuestion = () => {
                 isAutoGraded: output.isAutoGraded,
                 questionBankId: input?.questionBankId,
                 knowledgeBlockId: output.knowledgeBlockId,
+                difficultyId: output.difficultyId,
             }
             if (input?.id) {
                 await updateQuestion({
@@ -81,6 +83,10 @@ const PutQuestion = () => {
 
     const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
         where: { subjectVersionId: initialValue?.questionBank?.subjectVersionId },
+    })
+
+    const { data: difficultyData } = useFindManyDifficulty({
+        orderBy: { level: 'asc' },
     })
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -128,6 +134,18 @@ const PutQuestion = () => {
                         maxTagCount={'responsive'}
                         placeholder="Chọn chương mục"
                         options={knowledgeBlockData?.map(({ id, name }) => ({
+                            value: id,
+                            label: name,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="difficultyId" label="Độ khó">
+                    <Select
+                        maxTagCount={'responsive'}
+                        placeholder="Chọn độ khó"
+                        options={difficultyData?.map(({ id, name }) => ({
                             value: id,
                             label: name,
                         }))}

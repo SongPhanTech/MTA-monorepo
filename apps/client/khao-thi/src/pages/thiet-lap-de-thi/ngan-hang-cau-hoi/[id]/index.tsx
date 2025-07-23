@@ -8,9 +8,10 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountQuestion,
+    useFindManyDifficulty,
+    useFindManyKnowledgeBlock,
     useFindManyQuestion,
     useFindUniqueQuestionBank,
     useUpdateQuestion,
@@ -36,6 +37,8 @@ export default function Question() {
         content: '',
         explanation: '',
         point: undefined,
+        difficultyId: undefined,
+        knowledgeBlockId: undefined,
     })
 
     const { onOpen: onOpenPutQuestion } = useDisclosure<{ id: string; questionBankId: string }>({
@@ -59,7 +62,7 @@ export default function Question() {
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -72,7 +75,7 @@ export default function Question() {
                 ? {
                       content: {
                           contains: filters.content,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -80,28 +83,40 @@ export default function Question() {
                 ? {
                       explanation: {
                           contains: filters.explanation,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
+            ...(filters.difficultyId
+                ? Array.isArray(filters.difficultyId)
+                    ? { difficultyId: { in: filters.difficultyId } }
+                    : { difficultyId: filters.difficultyId }
+                : {}),
+            ...(filters.knowledgeBlockId
+                ? Array.isArray(filters.knowledgeBlockId)
+                    ? { knowledgeBlockId: { in: filters.knowledgeBlockId } }
+                    : { knowledgeBlockId: filters.knowledgeBlockId }
+                : {}),
         }),
-        [questionBankId, filters.code, filters.questionType, filters.content, filters.explanation]
+        [
+            questionBankId,
+            filters.code,
+            filters.questionType,
+            filters.content,
+            filters.explanation,
+            filters.difficultyId,
+            filters.knowledgeBlockId,
+        ]
     )
 
-    const commonOrderBy = useMemo(
-        () => [
-            ...emptyObjectIf(
-                [
-                    {
-                        point: filters.point,
-                    },
-                ],
-                !!filters.point
-            ),
-            { point: 'asc' },
-        ],
-        [filters.point]
-    )
+    const commonOrderBy = useMemo(() => {
+        const order: { point?: 'asc' | 'desc' }[] = []
+        if (filters.point === 'asc' || filters.point === 'desc') {
+            order.push({ point: filters.point })
+        }
+        order.push({ point: 'asc' })
+        return order
+    }, [filters.point])
 
     const queryOptions = useMemo(
         () => ({
@@ -113,6 +128,10 @@ export default function Question() {
     const { data } = useFindManyQuestion(
         {
             where: commonWhere,
+            include: {
+                knowledgeBlock: true,
+                difficulty: true,
+            },
             orderBy: commonOrderBy,
         },
         queryOptions
@@ -128,6 +147,14 @@ export default function Question() {
         },
         queryOptions
     )
+
+    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
+        where: { subjectVersionId: initialValue?.subjectVersionId },
+    })
+
+    const { data: difficultyData } = useFindManyDifficulty({
+        orderBy: { level: 'asc' },
+    })
 
     const { mutateAsync: updateQuestion } = useUpdateQuestion()
     async function handleDeleteQuestion(id: string) {
@@ -240,6 +267,34 @@ export default function Question() {
                                     getQuestionTypeLabel(record?.type) || 'Chưa xác định',
                             },
                             {
+                                title: 'Chương mục',
+                                dataIndex: 'knowledgeBlockId',
+                                width: 100,
+                                align: 'center',
+                                type: 'select',
+                                options: knowledgeBlockData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (__, record) => {
+                                    return record?.knowledgeBlock?.name || 'Chưa xác định'
+                                },
+                            },
+                            {
+                                title: 'Độ khó',
+                                dataIndex: 'difficultyId',
+                                width: 100,
+                                align: 'center',
+                                type: 'select',
+                                options: difficultyData?.map(({ id, name, level }) => ({
+                                    value: id,
+                                    label: `${name} (level ${level})`,
+                                })),
+                                render: (__, record) => {
+                                    return `${record?.difficulty?.name} (level ${record?.difficulty?.level})`
+                                },
+                            },
+                            {
                                 title: 'Điểm số',
                                 dataIndex: 'point',
                                 width: 100,
@@ -321,7 +376,10 @@ Question.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
-                { title: 'Ngân hàng câu hỏi', href: ROUTER_PATH.KHAO_THI.NGAN_HANG_CAU_HOI },
+                {
+                    title: 'Ngân hàng câu hỏi',
+                    href: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+                },
                 {
                     title: 'Câu hỏi',
                 },
