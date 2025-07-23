@@ -1892,8 +1892,9 @@ Table UserProfile {
   dischargeDate DateTime
   familyPhone String
   familyName String
-  dM_TrinhDoHocVan DM_TrinhDoHocVan
-  dM_TrinhDoHocVanId String
+  relatives Relative [not null]
+  trinhDoHocVan DM_TrinhDoHocVan
+  trinhDoHocVanId String
   educationAndTraining Student [not null, note: 'hồ sơ đào tạo']
   lecturer Lecturer [note: 'hồ sơ giảng viên']
   lecturerHistory LecturerHistory [not null]
@@ -1930,8 +1931,26 @@ Table HocVi {
   nationality DM_QuocGia
   nationalityId String
   linhVuc String
-  truong String
+  truong DM_TruongDaoTaoBacDH
+  truongId String
   year Int
+}
+
+Table Relative {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  birthYear Int
+  job String
+  information String
+  profiles UserProfile [not null]
+  dM_MoiQuanHe DM_MoiQuanHe
+  dM_MoiQuanHeId String
 }
 
 Table LecturerType {
@@ -2701,23 +2720,226 @@ Table SurveyResponse {
   Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
 }
 
+Table DM_MoiQuanHe {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  relatives Relative [not null]
+}
+
 Table DM_TrinhDoHocVan {
-  Id String [pk]
-  sMa String
-  sTen String
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   userProfile UserProfile [not null]
+}
+
+Table DM_TrinhDoLyLuanChinhTri {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TrinhDoQuanLyNhaNuoc {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TinhTrangHonNhan {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TrangThaiLamViec {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_HinhThucKhenThuongChinhQuyen {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_HinhThucKhenThuongDang {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_XepLoaiDanhGiaCanBo {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_XepLoaiDanhGiaChatLuongDangVien {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_LoaiHinhCongTac {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TinhTrangCongTac {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_LoaiHinhDiHocTap {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TinhTrangDiHocTap {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_NuocCuDiHocTap {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_ChucDanhCMNVGiangVien {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_ChucDanhCMNVNghienCuuVien {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_ChucDanhCMNVKySu {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TruongDaoTaoBacDH {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  hocVi HocVi [not null]
+}
+
+Table DM_ChuyenNganhDaoTaoBacDH {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
 }
 
 Table Feedback {
@@ -3054,6 +3276,11 @@ Table GroupToRole {
 Table PermissionToRole {
   permissionsId String [ref: > Permission.id]
   roleId String [ref: > Role.id]
+}
+
+Table RelativeToUserProfile {
+  relativesId String [ref: > Relative.id]
+  profilesId String [ref: > UserProfile.id]
 }
 
 Table AcademicWarningToAcademicWarningRule {
@@ -3610,13 +3837,17 @@ Ref: UserProfile.levelId > DM_ChucDanh.Id
 
 Ref: UserProfile.positionCPVId > DM_ChucVu.Id
 
-Ref: UserProfile.dM_TrinhDoHocVanId > DM_TrinhDoHocVan.Id
+Ref: UserProfile.trinhDoHocVanId > DM_TrinhDoHocVan.id
 
 Ref: HocHam.academicRankTypeId > DM_HocHam.Id
 
 Ref: HocVi.academicDegreeTypeId > DM_HocVi.Id
 
 Ref: HocVi.nationalityId > DM_QuocGia.Id
+
+Ref: HocVi.truongId > DM_TruongDaoTaoBacDH.id
+
+Ref: Relative.dM_MoiQuanHeId > DM_MoiQuanHe.id
 
 Ref: Lecturer.userProfileId - UserProfile.id
 

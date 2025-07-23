@@ -2421,8 +2421,9 @@ model UserProfile {
   dischargeDate              DateTime?
   familyPhone                String?
   familyName                 String?
-  dM_TrinhDoHocVan           DM_TrinhDoHocVan? @relation(fields: [dM_TrinhDoHocVanId], references: [Id])
-  dM_TrinhDoHocVanId         String?           @db.Uuid()
+  relatives                  Relative[]
+  trinhDoHocVan              DM_TrinhDoHocVan? @relation(fields: [trinhDoHocVanId], references: [id])
+  trinhDoHocVanId            String?
   /// hồ sơ đào tạo
   educationAndTraining       Student[]
   /// hồ sơ giảng viên
@@ -2454,20 +2455,40 @@ model HocHam {
 }
 
 model HocVi {
-  id                   String      @id() @default(cuid())
-  code                 String?     @unique()
-  active               Boolean     @default(true)
-  description          String?     @db.Text()
+  id                   String                @id() @default(cuid())
+  code                 String?               @unique()
+  active               Boolean               @default(true)
+  description          String?               @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt()
-  academicDegreeType   DM_HocVi?   @relation(fields: [academicDegreeTypeId], references: [Id])
-  academicDegreeTypeId String?     @db.Uuid()
-  nationality          DM_QuocGia? @relation(fields: [nationalityId], references: [Id])
-  nationalityId        String?     @db.Uuid()
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt()
+  academicDegreeType   DM_HocVi?             @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId String?               @db.Uuid()
+  nationality          DM_QuocGia?           @relation(fields: [nationalityId], references: [Id])
+  nationalityId        String?               @db.Uuid()
   linhVuc              String?
-  truong               String?
+  truong               DM_TruongDaoTaoBacDH? @relation(fields: [truongId], references: [id])
+  truongId             String?
   year                 Int?
+
+  @@schema("ql-ho-so")
+}
+
+model Relative {
+  id             String        @id() @default(cuid())
+  code           String?       @unique()
+  active         Boolean       @default(true)
+  description    String?       @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  name           String        @unique()
+  birthYear      Int?
+  job            String?
+  information    String?
+  profiles       UserProfile[]
+  dM_MoiQuanHe   DM_MoiQuanHe? @relation(fields: [dM_MoiQuanHeId], references: [id])
+  dM_MoiQuanHeId String?
 
   @@schema("ql-ho-so")
 }
@@ -3265,25 +3286,266 @@ model SurveyResponse {
   @@schema("khao-thi")
 }
 
+model DM_MoiQuanHe {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+  name        String     @unique()
+  relatives   Relative[]
+
+  @@schema("ql-ho-so")
+}
+
 model DM_TrinhDoHocVan {
-  Id             String        @id() @default(uuid()) @db.Uuid()
-  sMa            String?
-  sTen           String?
-  sGhiChu        String?
-  iSTT           Int?          @default(0)
-  bActive        Boolean?      @default(true)
-  bDeleted       Boolean?      @default(false)
-  bSystem        Boolean?      @default(false)
-  iDictionaryKey Int?          @default(0)
-  dNgayTao       DateTime?
-  dNgaySua       DateTime?
-  sNguoiTao      String?
-  sNguoiSua      String?
-  sThietBiTao    String?
-  sThietBiSua    String?
-  userProfile    UserProfile[]
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  userProfile UserProfile[]
 
   @@schema("mta")
+}
+
+model DM_TrinhDoLyLuanChinhTri {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TrinhDoQuanLyNhaNuoc {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TinhTrangHonNhan {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TrangThaiLamViec {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_HinhThucKhenThuongChinhQuyen {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_HinhThucKhenThuongDang {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_XepLoaiDanhGiaCanBo {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_XepLoaiDanhGiaChatLuongDangVien {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiHinhCongTac {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TinhTrangCongTac {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiHinhDiHocTap {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TinhTrangDiHocTap {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_NuocCuDiHocTap {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChucDanhCMNVGiangVien {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChucDanhCMNVNghienCuuVien {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChucDanhCMNVKySu {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TruongDaoTaoBacDH {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+  hocVi       HocVi[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChuyenNganhDaoTaoBacDH {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
 }
 
 model Feedback {
