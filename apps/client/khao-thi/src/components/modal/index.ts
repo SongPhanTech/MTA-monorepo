@@ -1,7 +1,9 @@
 import AddTaiLieu from './add-tai-lieu'
 import ConfirmModal from './confirm-dialog'
+import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutQuestion from './put-cau-hoi'
 import PutKnowledgeBlock from './put-chuong-muc'
+import PutExamBankQuestion from './put-exam-bank-question'
 import PutExam from './put-ky-thi'
 import PutSurveyModal from './put-modal-survey'
 import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
@@ -23,4 +25,6 @@ export {
     PutKnowledgeBlock,
     PutDifficulty,
     PutExam,
+    PutTestStructureRule,
+    PutExamBankQuestion,
 }

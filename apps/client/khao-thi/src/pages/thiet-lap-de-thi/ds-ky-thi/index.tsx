@@ -1,5 +1,6 @@
+import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import type { FilterSurveyQuestionProps } from '@components/filter/filter-survey-question'
+import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutExam } from '@components/modal'
@@ -7,33 +8,118 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useCountExam, useFindManyExam, useUpdateExam } from '@workspace/db/hooks'
-import { Button, Checkbox, Col, Flex, message, Row, Tag } from 'antd'
+import { emptyObjectIf } from '@workspace/constant'
+import {
+    useCountExam,
+    useFindManyExam,
+    useFindManyQuestionBank,
+    useUpdateExam,
+} from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type Filter = FilterSurveyQuestionProps & {
-    searchText: string
-}
 function Exam() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const { getExamStatusLabel, getExamStatusColor } = useExamStatusOptions()
-    const [_searchText, setSearchText] = useState<string>('')
-
-    const [filters, setFilters] = useState<Filter>({
-        searchText: '',
-        surveyQuestionTypeId: null,
-        surveyId: null,
+    const {
+        options: examStatusOptions,
+        getExamStatusLabel,
+        getExamStatusColor,
+    } = useExamStatusOptions()
+    const [filters, setFilters] = useState<FilterProps>({
+        title: '',
+        startTime: undefined,
+        endTime: undefined,
+        duration: undefined,
+        passScore: undefined,
+        examStatus: undefined,
+        questionBankId: undefined,
     })
 
-    const { data = [], refetch } = useFindManyExam({
+    const commonWhere = useMemo(
+        () => ({
+            ...(filters.title && filters.title !== ''
+                ? {
+                      title: {
+                          contains: filters.title,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.startTime?.length === 2
+                ? {
+                      startTime: {
+                          gte: dayjs(filters.startTime?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startTime?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endTime?.length === 2
+                ? {
+                      endTime: {
+                          gte: dayjs(filters.endTime?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endTime?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examStatus && filters.examStatus.length > 0
+                ? {
+                      status: { in: filters.examStatus },
+                  }
+                : {}),
+            ...(filters.questionBankId
+                ? {
+                      questionBankId: Array.isArray(filters.questionBankId)
+                          ? { in: filters.questionBankId }
+                          : filters.questionBankId,
+                  }
+                : {}),
+        }),
+        [
+            filters.title,
+            filters.startTime,
+            filters.endTime,
+            filters.examStatus,
+            filters.questionBankId,
+        ]
+    )
+
+    const { data = [] } = useFindManyExam({
+        where: commonWhere,
+        include: {
+            questionBank: true,
+        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        duration: filters.duration,
+                    },
+                ],
+                !!filters.duration
+            ),
+            ...emptyObjectIf(
+                [
+                    {
+                        passScore: filters.passScore,
+                    },
+                ],
+                !!filters.passScore
+            ),
+            { duration: 'desc' },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountExam()
+    const { data: count } = useCountExam({
+        where: { ...commonWhere, deletedAt: null },
+    })
 
     const { onOpen } = useDisclosure<string>({
         tag: PutExam.name,
@@ -62,6 +148,8 @@ function Exam() {
         hideSpinner()
     }
 
+    const { data: questionBankData } = useFindManyQuestionBank()
+
     return (
         <div>
             <Row gutter={[16, 16]}>
@@ -78,6 +166,11 @@ function Exam() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        filters={filters}
+                        setFilters={setFilters}
+                        onRowClick={({ id }) => {
+                            router.push(`${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${id}`)
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -92,12 +185,26 @@ function Exam() {
                                 dataIndex: 'title',
                                 fixed: 'left',
                                 width: 220,
+                                type: 'input',
+                            },
+                            {
+                                title: 'Phiên bản ngân hàng câu hỏi',
+                                dataIndex: 'questionBankId',
+                                fixed: 'left',
+                                width: 220,
+                                type: 'select',
+                                options: questionBankData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) => record?.questionBank?.name || 'Chưa có',
                             },
                             {
                                 title: 'Thời gian bắt dầu',
                                 dataIndex: 'startTime',
                                 align: 'center',
                                 width: 150,
+                                type: 'date',
                                 render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
@@ -105,6 +212,7 @@ function Exam() {
                                 dataIndex: 'endTime',
                                 align: 'center',
                                 width: 150,
+                                type: 'date',
                                 render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
@@ -112,6 +220,7 @@ function Exam() {
                                 dataIndex: 'duration',
                                 align: 'center',
                                 width: 150,
+                                type: 'order',
                                 render: (value) => {
                                     return <span>{value} phút</span>
                                 },
@@ -121,6 +230,7 @@ function Exam() {
                                 dataIndex: 'passScore',
                                 align: 'center',
                                 width: 100,
+                                type: 'order',
                             },
                             {
                                 title: 'Xáo trộn câu hỏi',
@@ -163,14 +273,16 @@ function Exam() {
                             },
                             {
                                 title: 'Trạng thái',
-                                dataIndex: 'status',
+                                dataIndex: 'examStatus',
                                 align: 'center',
                                 fixed: 'right',
                                 width: 100,
-                                render: (value) => {
+                                type: 'select',
+                                options: examStatusOptions,
+                                render: (__, record) => {
                                     return (
-                                        <Tag color={getExamStatusColor(value)}>
-                                            {getExamStatusLabel(value)}
+                                        <Tag color={getExamStatusColor(record?.status)}>
+                                            {getExamStatusLabel(record?.status)}
                                         </Tag>
                                     )
                                 },
@@ -182,14 +294,21 @@ function Exam() {
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title="Cấu hình tạo đề tự động" placement="top">
+                                            <EyeOutlined className="text-sm cursor-pointer" />
+                                        </Tooltip>
                                         <EditIcon
-                                            onClick={onOpen.bind(null, id)}
+                                            onClick={(e) => {
+                                                onOpen(id)
+                                                e.stopPropagation()
+                                            }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () => handleDeleteExam(id),
                                             }}
+                                            onClick={(e) => e.stopPropagation()}
                                         />
                                     </Row>
                                 ),
