@@ -7,11 +7,11 @@ import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutScholarshipAward } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
-import type { ScholarshipAward } from '@workspace/db'
+import type { Prisma, ScholarshipAward } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useDeleteScholarshipAward,
@@ -58,6 +58,48 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         name: '',
         scholarship: undefined,
     })
+
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.TrainingCourseWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      scholarships: {
+                          some: {
+                              awards: {
+                                  some: {
+                                      semesterId,
+                                      student: {
+                                          userProfile: {
+                                              ...(filters.code && filters.code !== ''
+                                                  ? {
+                                                        code: {
+                                                            contains: filters.code,
+                                                            mode: 'insensitive',
+                                                        },
+                                                    }
+                                                  : {}),
+                                              ...(filters.name && filters.name !== ''
+                                                  ? {
+                                                        fullname: {
+                                                            contains: filters.name,
+                                                            mode: 'insensitive',
+                                                        },
+                                                    }
+                                                  : {}),
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering, semesterId]
+    )
     const [isModalVisible, setIsModalVisible] = useState(false)
     const { onOpen, onClose } = useDisclosure<{
         id: string
@@ -82,37 +124,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     )
 
     const { data: studentDataAward, refetch: refetchAward } = useFindManyTrainingCourse({
-        where: {
-            scholarships: {
-                some: {
-                    awards: {
-                        some: {
-                            semesterId,
-                            student: {
-                                userProfile: {
-                                    ...(filters.code && filters.code !== ''
-                                        ? {
-                                              code: {
-                                                  contains: filters.code,
-                                                  mode: 'insensitive',
-                                              },
-                                          }
-                                        : {}),
-                                    ...(filters.name && filters.name !== ''
-                                        ? {
-                                              fullname: {
-                                                  contains: filters.name,
-                                                  mode: 'insensitive',
-                                              },
-                                          }
-                                        : {}),
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
+        where,
         include: {
             scholarships: {
                 include: {
@@ -222,15 +234,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-            scholarships: {
-                some: {
-                    awards: {
-                        some: {
-                            semesterId,
-                        },
-                    },
-                },
-            },
+            ...where,
         },
     })
 
@@ -541,8 +545,14 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                             current: currentPage,
                                             pageSize: numberOfPages,
                                             total: count,
-                                            onChange: setCurrentPage,
-                                            onShowSizeChange: setNumberOfPages,
+                                            onChange: (page, pageSize) => {
+                                                if (numberOfPages === pageSize) {
+                                                    setCurrentPage(page)
+                                                } else {
+                                                    setCurrentPage(1)
+                                                    setNumberOfPages(pageSize)
+                                                }
+                                            },
                                         }}
                                     />
                                 </Col>
@@ -658,8 +668,14 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                             current: currentPage,
                                             pageSize: numberOfPages,
                                             total: studentData.length,
-                                            onChange: setCurrentPage,
-                                            onShowSizeChange: setNumberOfPages,
+                                            onChange: (page, pageSize) => {
+                                                if (numberOfPages === pageSize) {
+                                                    setCurrentPage(page)
+                                                } else {
+                                                    setCurrentPage(1)
+                                                    setNumberOfPages(pageSize)
+                                                }
+                                            },
                                         }}
                                     />
                                 </Col>

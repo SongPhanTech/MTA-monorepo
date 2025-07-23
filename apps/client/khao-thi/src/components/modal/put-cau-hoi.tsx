@@ -5,7 +5,13 @@ import Select from '@components/commons/select'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import { type Question, QuestionType } from '@workspace/db'
-import { useCreateQuestion, useFindUniqueQuestion, useUpdateQuestion } from '@workspace/db/hooks'
+import {
+    useCreateQuestion,
+    useFindManyDifficulty,
+    useFindManyKnowledgeBlock,
+    useFindUniqueQuestion,
+    useUpdateQuestion,
+} from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -13,7 +19,11 @@ export type PutQuestionType = Question
 const PutQuestion = () => {
     const [form] = Form.useForm<PutQuestionType>()
     const { options: questionTypeOptions } = useQuestionTypeOptions()
-    const { isOpen, onClose, input } = useDisclosure<{ id: string; questionBankId: string }>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        questionBankId: string
+        subjectVersionId: string
+    }>({
         tag: PutQuestion.name,
         onClose: form.resetFields,
     })
@@ -38,6 +48,8 @@ const PutQuestion = () => {
                 explanation: output.explanation,
                 isAutoGraded: output.isAutoGraded,
                 questionBankId: input?.questionBankId,
+                knowledgeBlockId: output.knowledgeBlockId,
+                difficultyId: output.difficultyId,
             }
             if (input?.id) {
                 await updateQuestion({
@@ -66,11 +78,20 @@ const PutQuestion = () => {
     const { data: initialValue } = useFindUniqueQuestion(
         {
             where: { id: input?.id },
+            include: { questionBank: true },
         },
         {
             enabled: !!input?.id,
         }
     )
+
+    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
+        where: { subjectVersionId: input?.subjectVersionId },
+    })
+
+    const { data: difficultyData } = useFindManyDifficulty({
+        orderBy: { level: 'asc' },
+    })
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -112,9 +133,33 @@ const PutQuestion = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="knowledgeBlockId" label="Chương mục">
+                    <Select
+                        maxTagCount={'responsive'}
+                        placeholder="Chọn chương mục"
+                        options={knowledgeBlockData?.map(({ id, name }) => ({
+                            value: id,
+                            label: name,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="difficultyId" label="Độ khó">
+                    <Select
+                        maxTagCount={'responsive'}
+                        placeholder="Chọn độ khó"
+                        options={difficultyData?.map(({ id, name }) => ({
+                            value: id,
+                            label: name,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem form={form} name="point" label="Điểm" required>
                     <InputNumber
-                        placeholder="Nhập Điểm"
+                        placeholder="Nhập điểm"
                         defaultValue={1}
                         step={0.1}
                         className="w-full"

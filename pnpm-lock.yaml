@@ -567,7 +567,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -775,7 +775,215 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/plots':
+        specifier: 'catalog:'
+        version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@casl/ability':
+        specifier: 'catalog:'
+        version: 6.7.3
+      '@casl/react':
+        specifier: 'catalog:'
+        version: 4.0.0(@casl/ability@6.7.3)(react@18.3.1)
+      '@t3-oss/env-nextjs':
+        specifier: 'catalog:'
+        version: 0.12.0(typescript@5.8.3)(zod@3.25.76)
+      '@tanstack/react-query':
+        specifier: ^5.62.3
+        version: 5.81.5(react@18.3.1)
+      '@workspace/auth':
+        specifier: workspace:*
+        version: link:../../../packages/auth
+      '@workspace/constant':
+        specifier: workspace:*
+        version: link:../../../packages/constant
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../../../packages/database
+      '@workspace/router':
+        specifier: workspace:*
+        version: link:../../../packages/router
+      '@workspace/ui':
+        specifier: workspace:*
+        version: link:../../../packages/ui
+      antd:
+        specifier: 'catalog:'
+        version: 5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      axios:
+        specifier: 'catalog:'
+        version: 1.7.9
+      chart.js:
+        specifier: 'catalog:'
+        version: 4.5.0
+      class-variance-authority:
+        specifier: 'catalog:'
+        version: 0.7.1
+      clsx:
+        specifier: 'catalog:'
+        version: 2.1.1
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.13
+      easy-peasy:
+        specifier: 'catalog:'
+        version: 6.0.5(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
+      file-saver:
+        specifier: 'catalog:'
+        version: 2.0.5
+      lodash:
+        specifier: 'catalog:'
+        version: 4.17.21
+      lucide-react:
+        specifier: 'catalog:'
+        version: 0.468.0(react@18.3.1)
+      minio:
+        specifier: 'catalog:'
+        version: 8.0.5
+      next:
+        specifier: 'catalog:'
+        version: 15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      qs:
+        specifier: 'catalog:'
+        version: 6.14.0
+      react:
+        specifier: 'catalog:'
+        version: 18.3.1
+      react-chartjs-2:
+        specifier: 'catalog:'
+        version: 5.3.0(chart.js@4.5.0)(react@18.3.1)
+      react-day-picker:
+        specifier: 'catalog:'
+        version: 8.10.1(date-fns@3.6.0)(react@18.3.1)
+      react-dnd:
+        specifier: 'catalog:'
+        version: 16.0.1(@types/node@20.19.6)(@types/react@18.3.23)(react@18.3.1)
+      react-dnd-html5-backend:
+        specifier: 'catalog:'
+        version: 16.0.1
+      react-dom:
+        specifier: 'catalog:'
+        version: 18.3.1(react@18.3.1)
+      react-hook-disclosure-modal:
+        specifier: 'catalog:'
+        version: 1.0.4(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-icons:
+        specifier: 'catalog:'
+        version: 5.4.0(react@18.3.1)
+      react-idle-timer:
+        specifier: 'catalog:'
+        version: 5.7.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-images-viewer:
+        specifier: 'catalog:'
+        version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-to-print:
+        specifier: 'catalog:'
+        version: 3.1.1(react@18.3.1)
+      react-top-loading-bar:
+        specifier: 'catalog:'
+        version: 2.3.1(react@18.3.1)
+      read-excel-file:
+        specifier: 'catalog:'
+        version: 5.8.8
+      tailwind-merge:
+        specifier: 'catalog:'
+        version: 2.6.0
+      xlsx:
+        specifier: 'catalog:'
+        version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.76
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 'catalog:'
+        version: 2.1.1
+      '@types/file-saver':
+        specifier: 'catalog:'
+        version: 2.0.7
+      '@types/lodash':
+        specifier: 'catalog:'
+        version: 4.17.20
+      '@types/minio':
+        specifier: 'catalog:'
+        version: 7.1.1
+      '@types/node':
+        specifier: 'catalog:'
+        version: 20.19.6
+      '@types/qs':
+        specifier: 'catalog:'
+        version: 6.14.0
+      '@types/react':
+        specifier: 'catalog:'
+        version: 18.3.23
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 18.3.7(@types/react@18.3.23)
+      '@types/react-image-fallback':
+        specifier: 'catalog:'
+        version: 8.0.6
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
+      autoprefixer:
+        specifier: 'catalog:'
+        version: 10.4.21(postcss@8.5.6)
+      cross-env:
+        specifier: 'catalog:'
+        version: 7.0.3
+      crypto-browserify:
+        specifier: 'catalog:'
+        version: 3.12.1
+      dotenv:
+        specifier: 'catalog:'
+        version: 16.6.1
+      glob:
+        specifier: 'catalog:'
+        version: 11.0.3
+      next-remove-imports:
+        specifier: 'catalog:'
+        version: 1.0.12(webpack@5.99.9(@swc/core@1.12.11)(esbuild@0.24.2))
+      patch-package:
+        specifier: 'catalog:'
+        version: 8.0.0
+      path-browserify:
+        specifier: 'catalog:'
+        version: 1.0.1
+      postcss:
+        specifier: 'catalog:'
+        version: 8.5.6
+      prettier-plugin-tailwindcss:
+        specifier: 'catalog:'
+        version: 0.6.13(prettier@3.6.2)
+      stream-browserify:
+        specifier: 'catalog:'
+        version: 3.0.0
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3))
+      terser-webpack-plugin:
+        specifier: 'catalog:'
+        version: 5.3.14(@swc/core@1.12.11)(esbuild@0.24.2)(webpack@5.99.9(@swc/core@1.12.11)(esbuild@0.24.2))
+      ts-node:
+        specifier: 'catalog:'
+        version: 10.9.2(@swc/core@1.12.11)(@types/node@20.19.6)(typescript@5.8.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.8.3
+
+  apps/client/ql-ho-so:
+    dependencies:
+      '@ant-design/cssinjs':
+        specifier: 'catalog:'
+        version: 1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/icons':
+        specifier: 'catalog:'
+        version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ant-design/nextjs-registry':
+        specifier: 'catalog:'
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -983,7 +1191,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@casl/ability':
         specifier: 'catalog:'
         version: 6.7.3
@@ -1146,7 +1354,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@casl/ability':
         specifier: 'catalog:'
         version: 6.7.3
@@ -1609,54 +1817,54 @@ packages:
 
   '@antv/g-camera-api@2.0.39':
     resolution: {integrity: sha512-DsVcXxnY3NNlHqkqr/egAlOGRfFErGfVNGmHCsEHswr0bL8kmo4B5VarAYsCymjgzHxEQ/g39gEagUPnD/3O8g==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-canvas@2.0.45':
     resolution: {integrity: sha512-CV3KxLnRnP5Ae3NfnJ9k9tIfj2HJTzGjDWCoEfgK347vIsVxIVFVz1sR4zWmDcj9EVp/oD6OktUDAsBFN2qRGA==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-dom-mutation-observer-api@2.0.36':
     resolution: {integrity: sha512-W0oJv6yGLVy3xD05201RP2+GtinIFQznSivVKpkBWerCFw/nms7a2WvwBeN5EVaZ7qPUnFTKGapDETufw7KhuA==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-lite@2.3.0':
     resolution: {integrity: sha512-Gua5FtIAumkT/bPcIl7twQF5T1RtuaUT9CpbIYKaiEAwMbecrjGLeTbm9kNKoUT5Tub4HcW2gzfQQ4O21zJdzg==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-math@3.0.1':
     resolution: {integrity: sha512-FvkDBNRpj+HsLINunrL2PW0OlG368MlpHuihbxleuajGim5kra8tgISwCLmAf8Yz2b1CgZ9PvpohqiLzHS7HLg==}
 
   '@antv/g-plugin-canvas-path-generator@2.1.20':
     resolution: {integrity: sha512-11sBBD0O0d3RKaovKd2EBhixRv99Uk1r3tAEb85TxMkthMJctGkxfhCJWdgRUwMg3AGAKtZuZd2MHgr3IKFvyA==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-canvas-picker@2.1.24':
     resolution: {integrity: sha512-RbzBTDG5+ZPzolj6vutm31Q1ThOd8Wobx4Q3j4+9o1unvGIhHqoQIMtbRK0M5aaOWDWXTfKSut5aA6v99ZdXMg==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-canvas-renderer@2.3.0':
     resolution: {integrity: sha512-uWamPK6TJCtg7AW4X33N+F0uq5+kDDhEZF3iIphZEIVAVPXE+oTWR3s1Vcx11a03B4MSj3wuW8d+E8hxCtE/IA==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-dom-interaction@2.1.25':
     resolution: {integrity: sha512-Qqc5dbuteW6xcJ5juMLTpCAZ3tQjjZNWLrNZO1nNKBQIsNivA/sGQ+wSpZggreKP0WuobV5w0kALixskeA9qSg==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-dragndrop@2.0.36':
     resolution: {integrity: sha512-LGkvrT0tal5NEYnR2F+CKffsTEgi6dB8FaQ/HC5Pd0bN6ZKhbPisdXWZkliGDrmS9wL+Yr9K5qguFsLv9KDvHg==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-html-renderer@2.1.25':
     resolution: {integrity: sha512-kmS2vW+SltsQH6NhjbzXK0R+UPHjQRDno5LwL2dX8BG1SegTkckUAGo5QNK/Ajk25fdwd1KbvKZU6iq6bAzZkQ==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-image-loader@2.1.24':
     resolution: {integrity: sha512-uSdsEp35Mrw718fuDyHIXzje3CiQcwWWwePM/FshQOL7IKvq7pClqTPmiaavHVvIf19tuBaBP0/byPO/+ZVOtA==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g-web-animations-api@2.1.26':
     resolution: {integrity: sha512-8tSGpxDBudfLkalcupzOOlO7p+7cW2j3kYoBer288o56SyQC1PXHxZmbDGgCNMqZRsO9SDfQZYVExJ/hgNbJDg==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/g2-extension-plot@0.2.2':
     resolution: {integrity: sha512-KJXCXO7as+h0hDqirGXf1omrNuYzQmY3VmBmp7lIvkepbQ7sz3pPwy895r1FWETGF3vTk5UeFcAF5yzzBHWgbw==}
@@ -1666,7 +1874,7 @@ packages:
 
   '@antv/g@6.1.26':
     resolution: {integrity: sha512-+Pf23pz8o/u98pKpb3CqLfz4iJaZh6HIo0Z5FJdSTCZUrMIEgmNMFnZiJf9Ow0mnLA9KVdv5ekF17f82G5TyRw==}
-    deprecated: This version is deprecated. Please upgrade to the latest version.
+    deprecated: This version has been deprecated. Please upgrade to the latest version.
 
   '@antv/scale@0.4.16':
     resolution: {integrity: sha512-5wg/zB5kXHxpTV5OYwJD3ja6R8yTiqIOkjOhmpEJiowkzRlbEC/BOyMvNUq5fqFIHnMCE9woO7+c3zxEQCKPjw==}
@@ -8070,7 +8278,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@ant-design/nextjs-registry@1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@ant-design/nextjs-registry@1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@ant-design/cssinjs': 1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       antd: 5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -10035,7 +10243,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 6.0.0
-      '@types/node': 20.19.6
+      '@types/node': 24.0.12
 
   '@types/hast@3.0.4':
     dependencies:
@@ -10058,7 +10266,7 @@ snapshots:
 
   '@types/minimatch@6.0.0':
     dependencies:
-      minimatch: 9.0.5
+      minimatch: 10.0.3
 
   '@types/minio@7.1.1':
     dependencies:
@@ -10099,7 +10307,7 @@ snapshots:
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 20.19.6
+      '@types/node': 24.0.12
 
   '@types/tinycolor2@1.4.6': {}
 
@@ -12507,7 +12715,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.19.6
+      '@types/node': 24.0.12
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -13234,7 +13442,7 @@ snapshots:
   normalize-package-data@2.5.0:
     dependencies:
       hosted-git-info: 2.8.9
-      resolve: 1.22.2
+      resolve: 1.22.10
       semver: 5.7.2
       validate-npm-package-license: 3.0.4
 

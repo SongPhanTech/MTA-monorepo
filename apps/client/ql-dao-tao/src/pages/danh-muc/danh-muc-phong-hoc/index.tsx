@@ -3,8 +3,8 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutBuildingModal } from '@components/modal'
 import PutTrainingLocationModal from '@components/modal/put-khu-vuc'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Room } from '@workspace/db'
@@ -293,8 +293,14 @@ export default function TrainingLocationPage() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>

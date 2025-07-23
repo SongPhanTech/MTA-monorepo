@@ -1,5 +1,5 @@
 import '../ql-dao-tao/plan-training'
-import '../ql-nguoi-dung/profile'
+import '../ql-ho-so/profile'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/staff'
@@ -51,21 +51,28 @@ model DM_ChucDanh extends CoreBase {
 }
 
 model DM_ChucVu extends CoreBase {
+  iNhomChucVu Int?          @default(0)
   userProfile UserProfile[]
   @@schema("mta")
 }
 
 model DM_HocHam extends CoreBase {
   profiles UserProfile[]
+  hocHam   HocHam[]
   @@schema("mta")
 }
 
 model DM_HocVi extends CoreBase {
   profiles UserProfile[]
+  hocVi    HocVi[]
   @@schema("mta")
 }
 
 model DM_ChungChiTinHoc extends CoreBase {
+  sNguonCap String?
+  sNoiDung  String?
+  sGiaTri   String?
+  sDoiTuong String?
   @@schema("mta")
 }
 
@@ -81,11 +88,10 @@ model DM_DanToc extends CoreBase {
 model DM_DonVi extends CoreBase {
   sCode            String?
   sTenVietTat      String?
-  sTruongDonVi     String?
+  sParentId        String?           @db.Uuid
+  sTruongDonVi     String?           @db.Uuid
   sChucNangNhiemVu String?
   sDiaChi          String?
-
-  sParentId        String?           @db.Uuid
 
   lecturers        Lecturer[]
   lecturerHistory  LecturerHistory[]
@@ -193,15 +199,15 @@ model DM_NhomUngDung extends CoreBase {
 
 model DM_QuocGia extends CoreBase {
   sLanguage   String?
-
+  hocVi       HocVi[]
   userProfile UserProfile[]
   @@schema("mta")
 }
 
 model DM_Tinh extends CoreBase {
   sDM_QuocGiaId               String?       @db.Uuid
-  iDM_KhuVucDiaLy_Id          String?       @db.Uuid
-  iDM_DonViHanhChinhId        String?       @db.Uuid
+  iDM_KhuVucDiaLy_Id          Int?
+  iDM_DonViHanhChinhId        Int?
 
   userProfileHometown         UserProfile[] @relation("ProvinceHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
@@ -212,25 +218,11 @@ model DM_Tinh extends CoreBase {
   @@schema("mta")
 }
 
-model DM_QuanHuyen extends CoreBase {
-  sDM_TinhId                  String?       @db.Uuid
-  sDM_Tinh_Ma                 String?
-  iDM_DonViHanhChinhId        String?       @db.Uuid
-
-  userProfileHometown         UserProfile[] @relation("DistrictHometown")
-  userProfilePlaceOfBirth     UserProfile[] @relation("DistrictPlaceOfBirth")
-  userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
-  userProfileCurrentAddress   UserProfile[] @relation("DistrictCurrentAddress")
-
-  @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
-  @@schema("mta")
-}
-
 model DM_XaPhuong extends CoreBase {
   sDM_QuanHuyen_Ma            String?
   sDM_TinhId                  String?       @db.Uuid
   sDM_QuanHuyenId             String?       @db.Uuid
-  iDM_DonViHanhChinhId        String?       @db.Uuid
+  iDM_DonViHanhChinhId        Int?
 
   userProfileHometown         UserProfile[] @relation("CommuneHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("CommunePlaceOfBirth")

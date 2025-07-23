@@ -4,6 +4,7 @@ import type {
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
+    ExamStatus,
     ExamType,
     Gender,
     GraduationSessionStatus,
@@ -106,6 +107,17 @@ export type FilterProps = {
     questionType?: QuestionType[]
     explanation?: string | ''
     point?: 'asc' | 'desc'
+    level?: 'asc' | 'desc'
+    difficultyId?: string | null
+    knowledgeBlockId?: string | null
+    title?: string | ''
+    startTime?: Date[]
+    endTime?: Date[]
+    duration?: 'asc' | 'desc'
+    passScore?: 'asc' | 'desc'
+    examStatus?: ExamStatus[]
+    questionBankId?: string | null
+    questionPoint?: 'asc' | 'desc'
 }
 
 export type ColumnTypeProps = ColumnsType & {

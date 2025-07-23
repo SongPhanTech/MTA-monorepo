@@ -26,6 +26,7 @@ Table QuestionBank {
   subjectVersion SubjectVersion [not null]
   subjectVersionId String [not null]
   questions Question [not null]
+  exam Exam [not null]
 
   indexes {
     (subjectVersionId, name) [unique]
@@ -45,7 +46,6 @@ Table Difficulty {
   name String [unique, not null]
   level Int [unique]
   questions Question [not null]
-  structureRules TestStructureRule [not null]
 
   Note: 'Mức độ khó'
 }
@@ -58,6 +58,8 @@ Table KnowledgeBlock {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  subjectVersion SubjectVersion [not null]
+  subjectVersionId String [not null]
   name String [unique, not null]
   questions Question [not null]
   structureRules TestStructureRule [not null]
@@ -74,83 +76,20 @@ Table Question {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   content String [not null]
-  type QuestionType [not null]
+  type QuestionType [not null, default: 'ESSAY']
   point Float [not null, default: 1]
   explanation String
   isAutoGraded Boolean [not null, default: false]
-  multipleChoiceOptions MultipleChoiceOption [not null]
-  fillInBlankSlots FillInBlankSlot [not null]
-  orderingItems OrderingItem [not null]
   questionBank QuestionBank [not null]
   questionBankId String [not null]
   knowledgeBlock KnowledgeBlock
   knowledgeBlockId String
   difficulty Difficulty
   difficultyId String
-  sessionQuestions ExamSessionQuestion [not null]
-  answers Answer [not null]
+  sessionQuestions ExamBankQuestion [not null]
+  answers Answer [not null, note: 'Câu trả lời của thí sinh trong các phiên thi']
 
   Note: 'Câu hỏi'
-}
-
-Table MultipleChoiceOption {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  questionId String [not null]
-  question Question [not null]
-  content String [not null]
-  isCorrect Boolean [not null, default: false]
-  order Int [not null]
-  selectedInAnswers SelectedMultipleChoiceOption [not null]
-
-  Note: 'Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)'
-}
-
-Table FillInBlankSlot {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  questionId String [not null]
-  question Question [not null]
-  order Int [not null]
-  correctAnswer String [not null]
-  fillInBlankAnswers FillInBlankAnswer [not null]
-
-  indexes {
-    (questionId, order) [unique]
-  }
-
-  Note: 'Chỗ trống cần điền cho câu hỏi điền khuyết'
-}
-
-Table OrderingItem {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  questionId String [not null]
-  question Question [not null]
-  content String [not null]
-  correctOrder Int [not null]
-  orderingAnswers OrderingAnswer [not null]
-
-  indexes {
-    (questionId, correctOrder) [unique]
-  }
-
-  Note: 'Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự'
 }
 
 Table Answer {
@@ -169,70 +108,12 @@ Table Answer {
   score Float
   comment String
   essayAnswer String [not null]
-  multipleChoiceSelections SelectedMultipleChoiceOption [not null]
-  fillInBlankAnswers FillInBlankAnswer [not null]
-  orderingAnswers OrderingAnswer [not null]
 
   indexes {
     (sessionId, questionId) [unique]
   }
 
-  Note: 'Câu trả lời'
-}
-
-Table SelectedMultipleChoiceOption {
-  answer Answer [not null]
-  answerId String [not null]
-  option MultipleChoiceOption [not null]
-  optionId String [not null]
-
-  indexes {
-    (answerId, optionId) [pk]
-  }
-
-  Note: 'Bảng nối, ghi lại lựa chọn của thí sinh cho câu hỏi trắc nghiệm'
-}
-
-Table FillInBlankAnswer {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  answer Answer [not null]
-  answerId String [not null]
-  slot FillInBlankSlot [not null]
-  slotId String [not null]
-  content String [not null]
-
-  indexes {
-    (answerId, slotId) [unique]
-  }
-
-  Note: 'Nội dung trả lời cho một ô trống trong câu hỏi đi���n khuyết'
-}
-
-Table OrderingAnswer {
-  id String [pk]
-  code String [unique]
-  active Boolean [not null, default: true]
-  description String
-  deletedAt DateTime
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
-  answerId String [not null]
-  answer Answer [not null]
-  itemId String [not null]
-  item OrderingItem [not null]
-  order Int [not null]
-
-  indexes {
-    (answerId, itemId) [unique]
-  }
-
-  Note: 'Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp'
+  Note: 'Câu trả lời của thí sinh'
 }
 
 Table Exam {
@@ -245,8 +126,8 @@ Table Exam {
   updatedAt DateTime [not null]
   title String [not null]
   status ExamStatus [not null, default: 'DRAFT']
-  subjectVersion SubjectVersion [not null]
-  subjectVersionId String [not null]
+  questionBank QuestionBank [not null]
+  questionBankId String [not null]
   startTime DateTime [not null]
   endTime DateTime [not null]
   duration Int [not null]
@@ -254,6 +135,7 @@ Table Exam {
   shuffleQuestions Boolean [not null, default: true]
   shuffleAnswers Boolean [not null, default: true]
   showResult Boolean [not null, default: false]
+  examBank ExamBank [not null]
   testStructureRules TestStructureRule [not null]
   examSessions ExamSession [not null]
 
@@ -262,16 +144,59 @@ Table Exam {
 
 Table TestStructureRule {
   id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
   exam Exam [not null]
   examId String [not null]
   knowledgeBlock KnowledgeBlock [not null]
   knowledgeBlockId String [not null]
-  difficulty Difficulty [not null]
-  difficultyId String [not null]
+  questionPoint Float [not null]
   questionType QuestionType [not null]
   count Int [not null]
 
   Note: 'Cấu hình tạo đề tự động cho kỳ thi'
+}
+
+Table ExamBank {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  exam Exam [not null]
+  examId String [not null]
+  examSession ExamSession [not null]
+  questions ExamBankQuestion [not null]
+
+  Note: 'Đề thi'
+}
+
+Table ExamBankQuestion {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  examBankId String [not null]
+  examBank ExamBank [not null]
+  questionId String [not null]
+  question Question [not null]
+  order Int
+
+  indexes {
+    (examBankId, questionId) [unique]
+    (examBankId, order) [unique]
+  }
+
+  Note: 'Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào'
 }
 
 Table ExamSession {
@@ -292,26 +217,15 @@ Table ExamSession {
   examId String [not null]
   room Room
   roomId String
-  questions ExamSessionQuestion [not null]
+  examBank ExamBank
+  examBankId String
   answers Answer [not null]
 
-  Note: 'Bài thi / Đề thi'
-}
-
-Table ExamSessionQuestion {
-  id String [pk]
-  sessionId String [not null]
-  session ExamSession [not null]
-  questionId String [not null]
-  question Question [not null]
-  order Int [not null]
-
   indexes {
-    (sessionId, questionId) [unique]
-    (sessionId, order) [unique]
+    (studentId, examId) [unique]
   }
 
-  Note: 'Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào'
+  Note: 'Bài thi'
 }
 
 Table StudentSubjectScore {
@@ -635,8 +549,8 @@ Table Subject {
   updatedAt DateTime [not null]
   name String [unique, not null]
   englishName String [unique]
-  managementOrganization DM_DonVi [not null]
-  managementOrganizationId String [not null]
+  managementOrganization DM_DonVi
+  managementOrganizationId String
   information String
   subjectVersion SubjectVersion [not null]
 
@@ -671,8 +585,8 @@ Table SubjectVersion {
   academicResults String
   materials String
   rules String
-  managementOrganization DM_DonVi [not null]
-  managementOrganizationId String [not null]
+  managementOrganization DM_DonVi
+  managementOrganizationId String
   subject Subject [not null]
   subjectId String [not null]
   trainingBlocks TrainingBlockSubject [not null, note: 'môn học khối kiến thức - CTĐT']
@@ -680,10 +594,10 @@ Table SubjectVersion {
   dependentSubject SubjectVersion [not null]
   coRequisiteSubject SubjectVersion [not null]
   depCoRequisiteSubject SubjectVersion [not null]
+  knowledgeBlocks KnowledgeBlock [not null]
   subjectClass SubjectClass [not null]
   studentSubjectScore StudentSubjectScore [not null]
   documentFiles DocumentFile [not null]
-  exams Exam [not null]
   questionBanks QuestionBank [not null]
 
   Note: 'Phiên bản môn học'
@@ -1407,7 +1321,8 @@ Table Message {
 
 Table DM_CapBac {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1420,13 +1335,13 @@ Table DM_CapBac {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   profiles UserProfile [not null]
 }
 
 Table DM_ChucDanh {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1439,15 +1354,14 @@ Table DM_ChucDanh {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   iLoaiChucDanh Int [default: 0]
-  DM_ViTriCongViec DM_ViTriCongViec [not null]
   userProfile UserProfile [not null]
 }
 
 Table DM_ChucVu {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1460,13 +1374,14 @@ Table DM_ChucVu {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
+  iNhomChucVu Int [default: 0]
   userProfile UserProfile [not null]
 }
 
 Table DM_HocHam {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1479,13 +1394,14 @@ Table DM_HocHam {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   profiles UserProfile [not null]
+  hocHam HocHam [not null]
 }
 
 Table DM_HocVi {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1498,13 +1414,14 @@ Table DM_HocVi {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   profiles UserProfile [not null]
+  hocVi HocVi [not null]
 }
 
 Table DM_ChungChiTinHoc {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1517,12 +1434,16 @@ Table DM_ChungChiTinHoc {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
+  sNguonCap String
+  sNoiDung String
+  sGiaTri String
+  sDoiTuong String
 }
 
 Table DM_DanToc {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1535,7 +1456,6 @@ Table DM_DanToc {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   sTenKhac String
   sDiaChiCuTru String
   userProfile UserProfile [not null]
@@ -1543,7 +1463,8 @@ Table DM_DanToc {
 
 Table DM_DonVi {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1556,16 +1477,12 @@ Table DM_DonVi {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
-  sCode String [unique]
+  sCode String
   sTenVietTat String
+  sParentId String
   sTruongDonVi String
   sChucNangNhiemVu String
   sDiaChi String
-  DM_NhanVien DM_NhanVien [not null]
-  parent DM_DonVi
-  sParentId String
-  children DM_DonVi [not null]
   lecturers Lecturer [not null]
   lecturerHistory LecturerHistory [not null]
   staffs Staff [not null]
@@ -1582,7 +1499,8 @@ Table DM_DonVi {
 
 Table DM_DonViHanhChinh {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1595,16 +1513,13 @@ Table DM_DonViHanhChinh {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   sTen_En String
-  tinh DM_Tinh [not null]
-  huyen DM_QuanHuyen [not null]
-  xaPhuong DM_XaPhuong [not null]
 }
 
 Table DM_KhuVuc_DiaLy {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1617,15 +1532,14 @@ Table DM_KhuVuc_DiaLy {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   sTen_En String
-  tinh DM_Tinh [not null]
   student Student [not null]
 }
 
 Table DM_NgoaiNgu {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1638,12 +1552,12 @@ Table DM_NgoaiNgu {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
 }
 
 Table DM_TonGiao {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1656,13 +1570,13 @@ Table DM_TonGiao {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   userProfile UserProfile [not null]
 }
 
 Table DM_TrinhDoNgoaiNgu {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1675,13 +1589,13 @@ Table DM_TrinhDoNgoaiNgu {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   sKhung String
 }
 
 Table DM_TrinhDoTinHoc {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1694,38 +1608,12 @@ Table DM_TrinhDoTinHoc {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
-}
-
-Table DM_UngDung {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  sTen String [unique, not null]
-  sMoTa String
-  sLogoUrl String
-  sUrl String
-  bTatCaNguoiDung Boolean [default: false]
-  bTatCaNhanVien Boolean [default: false]
-  sClientId String
-  sClientSecret String
-  sRedirectDefault String
 }
 
 Table DM_NhanVien {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1738,7 +1626,7 @@ Table DM_NhanVien {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String
+  sCCCD String
   sHoVaDem String
   sTenDayDu String
   dNgaySinh DateTime
@@ -1747,19 +1635,13 @@ Table DM_NhanVien {
   sSDTDiDong String
   sEmail String
   bLaNguoiDung Boolean
-  DM_DonVi DM_DonVi
   sDM_DonViId String
-  DM_ViTriCongViec DM_ViTriCongViec
   sDM_ViTriCongViecId String
   sQuanlyTrucTiepId String
   sAvatarId String
   group Group
   groupId String
-  taiKhoan TaiKhoan
   userProfile UserProfile [not null]
-  NguoiDungTrongNhom NguoiDungTrongNhom [not null]
-  Quyen_VaiTro Quyen_VaiTro [not null]
-  nhatKyHoatDong NhatKyHoatDong [not null]
   notification Notification [not null]
   feedback Feedback [not null]
   conversation Conversation [not null]
@@ -1771,7 +1653,8 @@ Table DM_NhanVien {
 
 Table DM_PhanCap_ChatLuong_TrangThietBi {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1784,12 +1667,12 @@ Table DM_PhanCap_ChatLuong_TrangThietBi {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
 }
 
 Table DM_PhanLoai_CSKT {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1802,12 +1685,12 @@ Table DM_PhanLoai_CSKT {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
 }
 
 Table DM_NhomNguoiDung {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1820,14 +1703,12 @@ Table DM_NhomNguoiDung {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
-  vaiTroTrongNhom VaiTroTrongNhom [not null]
-  nguoiDungTrongNhom NguoiDungTrongNhom [not null]
 }
 
 Table DM_NhomUngDung {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1840,13 +1721,13 @@ Table DM_NhomUngDung {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   sMoTa String
 }
 
 Table DM_QuocGia {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1859,15 +1740,15 @@ Table DM_QuocGia {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   sLanguage String
+  hocVi HocVi [not null]
   userProfile UserProfile [not null]
-  tinh DM_Tinh [not null]
 }
 
 Table DM_Tinh {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1880,56 +1761,19 @@ Table DM_Tinh {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
-  quocGia DM_QuocGia
   sDM_QuocGiaId String
-  dM_KhuVuc_DiaLy DM_KhuVuc_DiaLy
-  iDM_KhuVucDiaLy_Id String
-  dM_DonViHanhChinh DM_DonViHanhChinh
-  iDM_DonViHanhChinhId String
-  huyen DM_QuanHuyen [not null]
-  xaPhuong DM_XaPhuong [not null]
+  iDM_KhuVucDiaLy_Id Int
+  iDM_DonViHanhChinhId Int
   userProfileHometown UserProfile [not null]
   userProfilePlaceOfBirth UserProfile [not null]
   userProfilePermanentAddress UserProfile [not null]
   userProfileCurrentAddress UserProfile [not null]
-}
-
-Table DM_QuanHuyen {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  sTen String [not null]
-  dM_Tinh DM_Tinh
-  sDM_TinhId String
-  sDM_Tinh_Ma String
-  dM_DonViHanhChinh DM_DonViHanhChinh
-  iDM_DonViHanhChinhId String
-  xaPhuong DM_XaPhuong [not null]
-  userProfileHometown UserProfile [not null]
-  userProfilePlaceOfBirth UserProfile [not null]
-  userProfilePermanentAddress UserProfile [not null]
-  userProfileCurrentAddress UserProfile [not null]
-
-  indexes {
-    (sDM_TinhId, sTen) [unique]
-  }
 }
 
 Table DM_XaPhuong {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1942,48 +1786,20 @@ Table DM_XaPhuong {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [not null]
-  sDM_TinhId String
-  quanHuyen DM_QuanHuyen
-  sDM_QuanHuyenId String
   sDM_QuanHuyen_Ma String
-  dM_Tinh DM_Tinh
-  dM_TinhId String
-  dM_DonViHanhChinh DM_DonViHanhChinh
-  iDM_DonViHanhChinhId String
+  sDM_TinhId String
+  sDM_QuanHuyenId String
+  iDM_DonViHanhChinhId Int
   userProfileHometown UserProfile [not null]
   userProfilePlaceOfBirth UserProfile [not null]
   userProfilePermanentAddress UserProfile [not null]
   userProfileCurrentAddress UserProfile [not null]
-
-  indexes {
-    (sDM_QuanHuyenId, sTen) [unique]
-  }
-}
-
-Table DM_VaiTro {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  sTen String [unique, not null]
-  Quyen_VaiTro Quyen_VaiTro [not null]
-  VaiTroTrongNhom VaiTroTrongNhom [not null]
 }
 
 Table DM_ViTriCongViec {
   Id String [pk]
-  sMa String [unique]
+  sMa String
+  sTen String
   sGhiChu String
   iSTT Int [default: 0]
   bActive Boolean [default: true]
@@ -1996,150 +1812,8 @@ Table DM_ViTriCongViec {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  sTen String [unique, not null]
   sDM_ChucDanhId String
   sDM_NhomViTriId String [not null]
-  DM_NhanVien DM_NhanVien [not null]
-  DM_ChucDanh DM_ChucDanh
-}
-
-Table NguoiDungTrongNhom {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  DM_NhomNguoiDung DM_NhomNguoiDung
-  sDM_NhomNguoiDungId String
-  DM_NhanVien DM_NhanVien
-  sDM_NhanVienId String
-
-  indexes {
-    (sDM_NhomNguoiDungId, sDM_NhanVienId) [unique]
-  }
-}
-
-Table NhatKyHoatDong {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  DM_NhanVien DM_NhanVien
-  sNhanVienId String
-  dLogTime DateTime
-  iState Int
-  sObjectName String
-  sReferenceName String
-  sDescription String
-  sIPAddress String
-}
-
-Table Policy {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  sTen String [unique, not null]
-  bXacThuc2YeuTo Boolean [default: false]
-  bGioiHanTCIP Boolean [default: false]
-  bGioiHanTG Boolean [default: false]
-  iApDungChoUD Int [default: 0]
-}
-
-Table Quyen_VaiTro {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  sTen String [unique, not null]
-  sTenChucNang String [default: 'N'Tên quyền'']
-  sDM_NhanVienId String
-  sDM_VaiTroId String
-  fValue Int
-  DM_NhanVien DM_NhanVien
-  DM_VaiTro DM_VaiTro
-}
-
-Table TaiKhoan {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  sTen String [not null]
-  sUserName String [unique]
-  sAvatar String
-  sDM_NhanVienId String [unique]
-  nhanVien DM_NhanVien
-}
-
-Table VaiTroTrongNhom {
-  Id String [pk]
-  sMa String [unique]
-  sGhiChu String
-  iSTT Int [default: 0]
-  bActive Boolean [default: true]
-  bDeleted Boolean [default: false]
-  bSystem Boolean [default: false]
-  iDictionaryKey Int [default: 0]
-  dNgayTao DateTime
-  dNgaySua DateTime
-  sNguoiTao String
-  sNguoiSua String
-  sThietBiTao String
-  sThietBiSua String
-  dM_NhomNguoiDung DM_NhomNguoiDung
-  sDM_NhomNguoiDungId String
-  DM_VaiTro DM_VaiTro
-  sDM_VaiTroId String
 }
 
 Table UserProfile {
@@ -2164,16 +1838,12 @@ Table UserProfile {
   currentAddress String
   provinceCurrentAddress DM_Tinh
   provinceCurrentAddressId String
-  districtCurrentAddress DM_QuanHuyen
-  districtCurrentAddressId String
   communeCurrentAddress DM_XaPhuong
   communeCurrentAddressId String
   dateOfBirth DateTime
   placeOfBirth String
   provinceOfBirth DM_Tinh
   provinceOfBirthId String
-  districtOfBirth DM_QuanHuyen
-  districtOfBirthId String
   communeOfBirth DM_XaPhuong
   communeOfBirthId String
   homeTown String
@@ -2182,8 +1852,6 @@ Table UserProfile {
   permanentAddress String
   provincePermanentAddress DM_Tinh
   provincePermanentAddressId String
-  districtPermanentAddress DM_QuanHuyen
-  districtPermanentAddressId String
   communePermanentAddress DM_XaPhuong
   communePermanentAddressId String
   temporaryAddress String
@@ -2198,8 +1866,6 @@ Table UserProfile {
   ethnicityId String
   provinceHometown DM_Tinh
   provinceHometownId String
-  districtHometown DM_QuanHuyen
-  districtHometownId String
   communeHometown DM_XaPhuong
   communeHometownId String
   officerNumber String
@@ -2226,11 +1892,65 @@ Table UserProfile {
   dischargeDate DateTime
   familyPhone String
   familyName String
+  relatives Relative [not null]
+  trinhDoHocVan DM_TrinhDoHocVan
+  trinhDoHocVanId String
   educationAndTraining Student [not null, note: 'hồ sơ đào tạo']
   lecturer Lecturer [note: 'hồ sơ giảng viên']
   lecturerHistory LecturerHistory [not null]
   staffs Staff [note: 'hồ sơ cán bộ']
   staffHistory StaffHistory [not null]
+}
+
+Table HocHam {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  academicRankType DM_HocHam
+  academicRankTypeId String
+  noiCap String
+  soQuyetDinh String
+  from DateTime
+  to DateTime
+}
+
+Table HocVi {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  academicDegreeType DM_HocVi
+  academicDegreeTypeId String
+  nationality DM_QuocGia
+  nationalityId String
+  linhVuc String
+  truong DM_TruongDaoTaoBacDH
+  truongId String
+  year Int
+}
+
+Table Relative {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  birthYear Int
+  job String
+  information String
+  profiles UserProfile [not null]
+  dM_MoiQuanHe DM_MoiQuanHe
+  dM_MoiQuanHeId String
 }
 
 Table LecturerType {
@@ -2453,6 +2173,7 @@ Table ExpertProfile {
   updatedAt DateTime [not null]
   lecturer Lecturer
   lecturerId String [unique]
+  name String
   title String
   specialization String
   workplace String
@@ -2887,7 +2608,7 @@ Table SurveyTopic {
   survey Survey [not null]
 }
 
-Table SurveyQuestionType {
+Table SurveyQuestionGroup {
   id String [pk]
   code String [unique]
   active Boolean [not null, default: true]
@@ -2914,6 +2635,8 @@ Table Survey {
   surveyObjectId String [not null]
   surveyTopic SurveyTopic [not null]
   surveyTopicId String [not null]
+  additionalSuggestion Boolean [not null]
+  surveyChoice SurveyChoice [not null]
   surveyQuestion SurveyQuestion [not null]
   surveySessions SurveySession [not null]
 }
@@ -2927,11 +2650,11 @@ Table SurveyQuestion {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
-  surveyQuestionType SurveyQuestionType [not null]
-  surveyQuestionTypeId String [not null]
+  type SurveyQuestionType [not null]
+  surveyQuestionGroup SurveyQuestionGroup [not null]
+  surveyQuestionGroupId String [not null]
   survey Survey [not null]
   surveyId String [not null]
-  surveyAnswer SurveyChoice [not null]
   surveyResponses SurveyResponse [not null]
 }
 
@@ -2944,8 +2667,8 @@ Table SurveyChoice {
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   answer String
-  surveyQuestion SurveyQuestion [not null]
-  surveyQuestionId String [not null]
+  survey Survey [not null]
+  surveyId String [not null]
   surveyResponses SurveyResponse [not null]
 
   Note: 'Lựa chọn của câu hỏi khảo sát'
@@ -2961,6 +2684,7 @@ Table SurveySession {
   updatedAt DateTime [not null]
   survey Survey [not null]
   surveyId String [not null]
+  additionalSuggestion String
   student Student
   studentId String
   startedAt DateTime [default: `now()`, not null]
@@ -2997,6 +2721,228 @@ Table SurveyResponse {
   }
 
   Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
+}
+
+Table DM_MoiQuanHe {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  relatives Relative [not null]
+}
+
+Table DM_TrinhDoHocVan {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  userProfile UserProfile [not null]
+}
+
+Table DM_TrinhDoLyLuanChinhTri {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TrinhDoQuanLyNhaNuoc {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TinhTrangHonNhan {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TrangThaiLamViec {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_HinhThucKhenThuongChinhQuyen {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_HinhThucKhenThuongDang {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_XepLoaiDanhGiaCanBo {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_XepLoaiDanhGiaChatLuongDangVien {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_LoaiHinhCongTac {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TinhTrangCongTac {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_LoaiHinhDiHocTap {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TinhTrangDiHocTap {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_NuocCuDiHocTap {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_ChucDanhCMNVGiangVien {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_ChucDanhCMNVNghienCuuVien {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_ChucDanhCMNVKySu {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+}
+
+Table DM_TruongDaoTaoBacDH {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
+  hocVi HocVi [not null]
+}
+
+Table DM_ChuyenNganhDaoTaoBacDH {
+  id String [pk]
+  code String [unique]
+  active Boolean [not null, default: true]
+  description String
+  deletedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [unique, not null]
 }
 
 Table Feedback {
@@ -3335,6 +3281,11 @@ Table PermissionToRole {
   roleId String [ref: > Role.id]
 }
 
+Table RelativeToUserProfile {
+  relativesId String [ref: > Relative.id]
+  profilesId String [ref: > UserProfile.id]
+}
+
 Table AcademicWarningToAcademicWarningRule {
   academicwarningId String [ref: > AcademicWarning.id]
   rulesId String [ref: > AcademicWarningRule.id]
@@ -3348,14 +3299,11 @@ Table DisciplinaryWarningToDisciplinaryWarningReason {
 Enum ConfigKey {
   DIRECTOR
   ACADEMY_NAME
+  USER_SESSION_TIMEOUT
 }
 
 Enum QuestionType {
-  SINGLE_CHOICE
-  MULTIPLE_CHOICE
   ESSAY
-  FILL_IN_BLANK
-  ORDERING
 }
 
 Enum ExamStatus {
@@ -3637,6 +3585,11 @@ Enum CriteriaOperator {
   IN
 }
 
+Enum SurveyQuestionType {
+  ESSAY
+  SINGLE_CHOICE
+}
+
 Enum FeedbackStatus {
   Pending
   InProgress
@@ -3680,41 +3633,29 @@ Enum TemplateFileType {
 
 Ref: QuestionBank.subjectVersionId > SubjectVersion.id
 
+Ref: KnowledgeBlock.subjectVersionId > SubjectVersion.id
+
 Ref: Question.questionBankId > QuestionBank.id
 
 Ref: Question.knowledgeBlockId > KnowledgeBlock.id
 
 Ref: Question.difficultyId > Difficulty.id
 
-Ref: MultipleChoiceOption.questionId > Question.id [delete: Cascade]
-
-Ref: FillInBlankSlot.questionId > Question.id [delete: Cascade]
-
-Ref: OrderingItem.questionId > Question.id [delete: Cascade]
-
 Ref: Answer.sessionId > ExamSession.id [delete: Cascade]
 
 Ref: Answer.questionId > Question.id
 
-Ref: SelectedMultipleChoiceOption.answerId > Answer.id [delete: Cascade]
-
-Ref: SelectedMultipleChoiceOption.optionId > MultipleChoiceOption.id
-
-Ref: FillInBlankAnswer.answerId > Answer.id [delete: Cascade]
-
-Ref: FillInBlankAnswer.slotId > FillInBlankSlot.id
-
-Ref: OrderingAnswer.answerId > Answer.id [delete: Cascade]
-
-Ref: OrderingAnswer.itemId > OrderingItem.id
-
-Ref: Exam.subjectVersionId > SubjectVersion.id
+Ref: Exam.questionBankId > QuestionBank.id
 
 Ref: TestStructureRule.examId > Exam.id
 
 Ref: TestStructureRule.knowledgeBlockId > KnowledgeBlock.id
 
-Ref: TestStructureRule.difficultyId > Difficulty.id
+Ref: ExamBank.examId > Exam.id
+
+Ref: ExamBankQuestion.examBankId > ExamBank.id [delete: Cascade]
+
+Ref: ExamBankQuestion.questionId > Question.id
 
 Ref: ExamSession.studentId > Student.id
 
@@ -3722,9 +3663,7 @@ Ref: ExamSession.examId > Exam.id
 
 Ref: ExamSession.roomId > Room.id
 
-Ref: ExamSessionQuestion.sessionId > ExamSession.id [delete: Cascade]
-
-Ref: ExamSessionQuestion.questionId > Question.id
+Ref: ExamSession.examBankId > ExamBank.id
 
 Ref: StudentSubjectScore.subjectClassId > SubjectClass.id
 
@@ -3870,65 +3809,19 @@ Ref: Conversation.userId > DM_NhanVien.Id
 
 Ref: Message.conversationId > Conversation.id
 
-Ref: DM_DonVi.sParentId - DM_DonVi.Id
-
-Ref: DM_NhanVien.sDM_DonViId > DM_DonVi.Id [delete: No Action]
-
-Ref: DM_NhanVien.sDM_ViTriCongViecId > DM_ViTriCongViec.Id [delete: No Action]
-
 Ref: DM_NhanVien.groupId > Group.id
-
-Ref: DM_Tinh.sDM_QuocGiaId > DM_QuocGia.Id
-
-Ref: DM_Tinh.iDM_KhuVucDiaLy_Id > DM_KhuVuc_DiaLy.Id
-
-Ref: DM_Tinh.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
-
-Ref: DM_QuanHuyen.sDM_TinhId > DM_Tinh.Id
-
-Ref: DM_QuanHuyen.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
-
-Ref: DM_XaPhuong.sDM_QuanHuyenId > DM_QuanHuyen.Id
-
-Ref: DM_XaPhuong.dM_TinhId > DM_Tinh.Id
-
-Ref: DM_XaPhuong.iDM_DonViHanhChinhId > DM_DonViHanhChinh.Id
-
-Ref: DM_ViTriCongViec.sDM_ChucDanhId > DM_ChucDanh.Id [delete: No Action]
-
-Ref: NguoiDungTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id [delete: No Action]
-
-Ref: NguoiDungTrongNhom.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
-
-Ref: NhatKyHoatDong.sNhanVienId > DM_NhanVien.Id [delete: No Action]
-
-Ref: Quyen_VaiTro.sDM_NhanVienId > DM_NhanVien.Id [delete: No Action]
-
-Ref: Quyen_VaiTro.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
-
-Ref: TaiKhoan.sDM_NhanVienId - DM_NhanVien.Id [delete: No Action]
-
-Ref: VaiTroTrongNhom.sDM_NhomNguoiDungId > DM_NhomNguoiDung.Id
-
-Ref: VaiTroTrongNhom.sDM_VaiTroId > DM_VaiTro.Id [delete: No Action]
 
 Ref: UserProfile.userId > DM_NhanVien.Id
 
 Ref: UserProfile.provinceCurrentAddressId > DM_Tinh.Id
 
-Ref: UserProfile.districtCurrentAddressId > DM_QuanHuyen.Id
-
 Ref: UserProfile.communeCurrentAddressId > DM_XaPhuong.Id
 
 Ref: UserProfile.provinceOfBirthId > DM_Tinh.Id
 
-Ref: UserProfile.districtOfBirthId > DM_QuanHuyen.Id
-
 Ref: UserProfile.communeOfBirthId > DM_XaPhuong.Id
 
 Ref: UserProfile.provincePermanentAddressId > DM_Tinh.Id
-
-Ref: UserProfile.districtPermanentAddressId > DM_QuanHuyen.Id
 
 Ref: UserProfile.communePermanentAddressId > DM_XaPhuong.Id
 
@@ -3939,8 +3832,6 @@ Ref: UserProfile.religionId > DM_TonGiao.Id
 Ref: UserProfile.ethnicityId > DM_DanToc.Id
 
 Ref: UserProfile.provinceHometownId > DM_Tinh.Id
-
-Ref: UserProfile.districtHometownId > DM_QuanHuyen.Id
 
 Ref: UserProfile.communeHometownId > DM_XaPhuong.Id
 
@@ -3953,6 +3844,18 @@ Ref: UserProfile.academicRankTypeId > DM_HocHam.Id
 Ref: UserProfile.levelId > DM_ChucDanh.Id
 
 Ref: UserProfile.positionCPVId > DM_ChucVu.Id
+
+Ref: UserProfile.trinhDoHocVanId > DM_TrinhDoHocVan.id
+
+Ref: HocHam.academicRankTypeId > DM_HocHam.Id
+
+Ref: HocVi.academicDegreeTypeId > DM_HocVi.Id
+
+Ref: HocVi.nationalityId > DM_QuocGia.Id
+
+Ref: HocVi.truongId > DM_TruongDaoTaoBacDH.id
+
+Ref: Relative.dM_MoiQuanHeId > DM_MoiQuanHe.id
 
 Ref: Lecturer.userProfileId - UserProfile.id
 
@@ -4076,11 +3979,11 @@ Ref: Survey.surveyObjectId > SurveyObjectType.id
 
 Ref: Survey.surveyTopicId > SurveyTopic.id
 
-Ref: SurveyQuestion.surveyQuestionTypeId > SurveyQuestionType.id
+Ref: SurveyQuestion.surveyQuestionGroupId > SurveyQuestionGroup.id
 
 Ref: SurveyQuestion.surveyId > Survey.id
 
-Ref: SurveyChoice.surveyQuestionId > SurveyQuestion.id
+Ref: SurveyChoice.surveyId > Survey.id
 
 Ref: SurveySession.surveyId > Survey.id
 

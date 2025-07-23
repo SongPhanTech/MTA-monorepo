@@ -7,8 +7,8 @@ import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
 import { PutStudentAcademicDecision } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
@@ -17,6 +17,7 @@ import {
     type AcademicActionType,
     DecisionStatus,
     type FixedClass,
+    type Prisma,
     type TrainingCourse,
 } from '@workspace/db'
 import {
@@ -70,74 +71,86 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         status: undefined,
         decisionDate: undefined,
     })
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
 
+    const where: Prisma.StudentAcademicDecisionWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      student: {
+                          userProfile: {
+                              ...(filters.code && filters.code !== ''
+                                  ? {
+                                        code: {
+                                            contains: filters.code,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.name && filters.name !== ''
+                                  ? {
+                                        fullname: {
+                                            contains: filters.name,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                          },
+                          ...(filters.fixedClass
+                              ? {
+                                    fixedClassId: {
+                                        in: Array.isArray(filters.fixedClass)
+                                            ? filters.fixedClass
+                                            : [filters.fixedClass],
+                                    },
+                                }
+                              : {}),
+                          fixedClass: {
+                              ...(filters.trainingCourse
+                                  ? {
+                                        trainingCourseId: {
+                                            in: Array.isArray(filters.trainingCourse)
+                                                ? filters.trainingCourse
+                                                : [filters.trainingCourse],
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.organization
+                                  ? {
+                                        managementOrganizationId: {
+                                            in: Array.isArray(filters.organization)
+                                                ? filters.organization
+                                                : [filters.organization],
+                                        },
+                                    }
+                                  : {}),
+                          },
+                      },
+                      ...(filters.status
+                          ? {
+                                status: { in: filters.status },
+                            }
+                          : {}),
+                      ...(filters.decisionDate?.length === 2
+                          ? {
+                                decisionDate: {
+                                    gte: dayjs(filters.decisionDate?.[0], 'DD/MM/YYYY').toDate(),
+                                    lte: dayjs(filters.decisionDate?.[1], 'DD/MM/YYYY').toDate(),
+                                },
+                            }
+                          : {}),
+                  }
+                : {},
+        [filters, isFiltering]
+    )
     const { data, refetch } = useFindManyStudentAcademicDecision(
         {
             where: {
                 semesterId,
                 actionTaken,
-                student: {
-                    userProfile: {
-                        ...(filters.code && filters.code !== ''
-                            ? {
-                                  code: {
-                                      contains: filters.code,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                        ...(filters.name && filters.name !== ''
-                            ? {
-                                  fullname: {
-                                      contains: filters.name,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                    },
-                    ...(filters.fixedClass
-                        ? {
-                              fixedClassId: {
-                                  in: Array.isArray(filters.fixedClass)
-                                      ? filters.fixedClass
-                                      : [filters.fixedClass],
-                              },
-                          }
-                        : {}),
-                    fixedClass: {
-                        ...(filters.trainingCourse
-                            ? {
-                                  trainingCourseId: {
-                                      in: Array.isArray(filters.trainingCourse)
-                                          ? filters.trainingCourse
-                                          : [filters.trainingCourse],
-                                  },
-                              }
-                            : {}),
-                        ...(filters.organization
-                            ? {
-                                  managementOrganizationId: {
-                                      in: Array.isArray(filters.organization)
-                                          ? filters.organization
-                                          : [filters.organization],
-                                  },
-                              }
-                            : {}),
-                    },
-                },
-                ...(filters.status
-                    ? {
-                          status: { in: filters.status },
-                      }
-                    : {}),
-                ...(filters.decisionDate?.length === 2
-                    ? {
-                          decisionDate: {
-                              gte: dayjs(filters.decisionDate?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.decisionDate?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
+                ...where,
             },
             include: {
                 student: {
@@ -503,8 +516,14 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                onChange: setCurrentPage,
-                                onShowSizeChange: setNumberOfPages,
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
                                 showTotal: (total, range) =>
                                     `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                             }}

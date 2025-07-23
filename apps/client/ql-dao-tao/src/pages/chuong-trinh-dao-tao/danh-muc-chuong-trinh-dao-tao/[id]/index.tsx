@@ -4,7 +4,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutTrainingBlockOnCurriculumVersion, PutTrainingBlockSubject } from '@components/modal'
 import ImportCurriculumVersionModal from '@components/modal/import-ctdt'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
+import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
@@ -13,8 +13,8 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import type {
     CurriculumVersion,
-    DM_DonVi,
     DocumentFile,
+    Prisma,
     SubjectVersion,
     TrainingBlockOnCurriculumVersion,
 } from '@workspace/db'
@@ -31,7 +31,7 @@ import { Button, Col, Divider, Dropdown, Flex, Menu, message, Row, Tag, Tooltip 
 import { BookPlus, CopyPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
@@ -83,55 +83,85 @@ export default function TrainingProgramSubjects() {
 
     const { options, getExamTypeLabel } = useExamTypeOptions()
 
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.TrainingBlockOnCurriculumVersionWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      subjects: {
+                          some: {
+                              subject: {
+                                  ...(filters.name
+                                      ? {
+                                            name: {
+                                                contains: filters.name,
+                                                mode: 'insensitive',
+                                            },
+                                        }
+                                      : {}),
+                                  ...(filters.code
+                                      ? {
+                                            code: {
+                                                contains: filters.code,
+                                                mode: 'insensitive',
+                                            },
+                                        }
+                                      : {}),
+                                  ...emptyObjectIf(
+                                      {
+                                          managementOrganizationId: {
+                                              in: filters.organization,
+                                          },
+                                      },
+                                      !!filters.organization
+                                  ),
+                                  ...emptyObjectIf(
+                                      {
+                                          examType: {
+                                              in: filters.examType,
+                                          },
+                                      },
+                                      !!filters.examType
+                                  ),
+                              },
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
+
     const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
             curriculumVersionId: id,
             curriculumVersion: {
                 deletedAt: null,
             },
-            subjects: {
-                some: {
-                    subject: {
-                        name: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                        code: {
-                            contains: filters.code,
-                            mode: 'insensitive',
-                        },
-                        ...emptyObjectIf(
-                            {
-                                managementOrganizationId: {
-                                    in: filters.organization,
-                                },
-                            },
-                            !!filters.organization
-                        ),
-                        ...emptyObjectIf(
-                            {
-                                examType: {
-                                    in: filters.examType,
-                                },
-                            },
-                            !!filters.examType
-                        ),
-                    },
-                },
-            },
+            ...where,
         },
         include: {
             subjects: {
                 where: {
                     subject: {
-                        name: {
-                            contains: filters.name,
-                            mode: 'insensitive',
-                        },
-                        code: {
-                            contains: filters.code,
-                            mode: 'insensitive',
-                        },
+                        ...(filters.name
+                            ? {
+                                  name: {
+                                      contains: filters.name,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                        ...(filters.code
+                            ? {
+                                  code: {
+                                      contains: filters.code,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
                         ...emptyObjectIf(
                             {
                                 managementOrganizationId: {
@@ -456,14 +486,7 @@ export default function TrainingProgramSubjects() {
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
-                                render: (
-                                    __,
-                                    record: {
-                                        subject?: SubjectVersion & {
-                                            managementOrganization?: DM_DonVi
-                                        }
-                                    }
-                                ) => {
+                                render: (_, record) => {
                                     return record?.subject?.managementOrganization?.sTen
                                 },
                             },

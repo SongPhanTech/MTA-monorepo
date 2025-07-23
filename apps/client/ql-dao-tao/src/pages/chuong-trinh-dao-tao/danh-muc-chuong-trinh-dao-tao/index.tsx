@@ -4,8 +4,8 @@ import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -30,10 +30,10 @@ import {
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { BookPlus, Eye } from 'lucide-react'
+import { BookPlus, Eye, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
@@ -64,6 +64,24 @@ export default function TrainingProgramCatalog() {
         () =>
             isFiltering
                 ? {
+                      ...(filters.searchText
+                          ? {
+                                OR: [
+                                    {
+                                        code: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                    {
+                                        name: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                ],
+                            }
+                          : {}),
                       curriculumVersion: {
                           some: {
                               ...(filters.name
@@ -311,13 +329,16 @@ export default function TrainingProgramCatalog() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
-                            {/* <Flex>
+                            <Flex>
                                 <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
                                             onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
+                                                setFilters({
+                                                    ...filters,
+                                                    searchText: e.target.value,
+                                                })
                                             }
                                             className="py-0"
                                             placeholder="Tìm kiếm chương trình đào tạo"
@@ -333,56 +354,7 @@ export default function TrainingProgramCatalog() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8} className="max-w-[200px]">
-                                    <Form.Item name="trainingObjectId">
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingObjectId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Item className="mb-0" name="trainingCourseId">
-                                        <Select
-                                            placeholder="Khoá đào tạo"
-                                            options={trainingCourseData.map(
-                                                (i: TrainingCourse) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingCourseId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item className="mb-0" name="trainingMajorId">
-                                        <Select
-                                            placeholder="Chọn chuyên ngành đào tạo"
-                                            options={trainingMajorData.map((i: TrainingMajor) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingMajorId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Flex> */}
+                            </Flex>
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
@@ -418,7 +390,7 @@ export default function TrainingProgramCatalog() {
                                 type: 'input',
                             },
                             {
-                                title: 'Tên chương trình',
+                                title: 'Tên phiên bản CTĐT',
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
@@ -666,8 +638,14 @@ export default function TrainingProgramCatalog() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>

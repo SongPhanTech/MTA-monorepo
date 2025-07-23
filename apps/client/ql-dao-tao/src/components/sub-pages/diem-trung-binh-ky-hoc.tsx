@@ -2,15 +2,15 @@ import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag, TreeSelec
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { buildOrgTree } from '@lib/utils'
 import { useMutation } from '@tanstack/react-query'
-import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
+import type { Prisma, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyDM_DonVi,
@@ -19,7 +19,7 @@ import {
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import _ from 'lodash'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 dayjs.locale('vi')
 
@@ -42,56 +42,87 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: dataStudents, refetch } = useFindManyFixedClass(
-        {
-            where: {
-                students: {
-                    some: {
-                        studentSemesterResult: {
-                            some: {
-                                semesterId: semesterId,
-                            },
-                        },
-                        userProfile: {
-                            ...(filters.code && filters.code !== ''
-                                ? {
-                                      code: {
-                                          contains: filters.code,
-                                          mode: 'insensitive',
-                                      },
-                                  }
-                                : {}),
-                            ...(filters.name && filters.name !== ''
-                                ? {
-                                      fullname: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  }
-                                : {}),
-                        },
-                    },
-                },
-                ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                    ? {
-                          trainingCourse: {
-                              is: {
-                                  trainingObjectTypeId: filters.trainingObjectId,
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.FixedClassWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      ...(filters.searchText
+                          ? {
+                                OR: [
+                                    {
+                                        code: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                    {
+                                        name: {
+                                            contains: filters.searchText,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                ],
+                            }
+                          : {}),
+                      students: {
+                          some: {
+                              studentSemesterResult: {
+                                  some: {
+                                      semesterId: semesterId,
+                                  },
+                              },
+                              userProfile: {
+                                  ...(filters.code && filters.code !== ''
+                                      ? {
+                                            code: {
+                                                contains: filters.code,
+                                                mode: 'insensitive',
+                                            },
+                                        }
+                                      : {}),
+                                  ...(filters.name && filters.name !== ''
+                                      ? {
+                                            fullname: {
+                                                contains: filters.name,
+                                                mode: 'insensitive',
+                                            },
+                                        }
+                                      : {}),
                               },
                           },
-                      }
-                    : {}),
-                ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                    ? {
-                          trainingCourseId: filters.trainingCourseId,
-                      }
-                    : {}),
-                ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
-                    ? {
-                          managementOrganizationId: filters.managementOrganizationId,
-                      }
-                    : {}),
-            },
+                      },
+                      ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                          ? {
+                                trainingCourse: {
+                                    is: {
+                                        trainingObjectTypeId: filters.trainingObjectId,
+                                    },
+                                },
+                            }
+                          : {}),
+                      ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                          ? {
+                                trainingCourseId: filters.trainingCourseId,
+                            }
+                          : {}),
+                      ...(filters.managementOrganizationId &&
+                      filters.managementOrganizationId !== ''
+                          ? {
+                                managementOrganizationId: filters.managementOrganizationId,
+                            }
+                          : {}),
+                  }
+                : {},
+        [filters, isFiltering, semesterId]
+    )
+
+    const { data: dataStudents, refetch } = useFindManyFixedClass(
+        {
+            where,
             include: {
                 managementOrganization: true,
                 trainingCourse: {
@@ -142,54 +173,8 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     const { data: count } = useCountFixedClass(
         {
             where: {
-                students: {
-                    some: {
-                        studentSemesterResult: {
-                            some: {
-                                semesterId,
-                            },
-                        },
-                        ...(filters.searchText && filters.searchText !== ''
-                            ? {
-                                  OR: [
-                                      {
-                                          code: {
-                                              contains: filters.searchText,
-                                              mode: 'insensitive',
-                                          },
-                                      },
-                                      {
-                                          userProfile: {
-                                              fullname: {
-                                                  contains: filters.searchText,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                      },
-                                  ],
-                              }
-                            : {}),
-                    },
-                },
-                ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                    ? {
-                          trainingCourse: {
-                              is: {
-                                  trainingObjectTypeId: filters.trainingObjectId,
-                              },
-                          },
-                      }
-                    : {}),
-                ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                    ? {
-                          trainingCourseId: filters.trainingCourseId,
-                      }
-                    : {}),
-                ...(filters.managementOrganizationId && filters.managementOrganizationId !== ''
-                    ? {
-                          managementOrganizationId: filters.managementOrganizationId,
-                      }
-                    : {}),
+                ...where,
+                deletedAt: null,
             },
         },
         { enabled: !!semesterId }
@@ -651,8 +636,14 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>

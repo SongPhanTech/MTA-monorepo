@@ -1,7 +1,7 @@
 import '../base'
 import '../tro-ly-ao/chat-bot'
 import 'feedback'
-import 'profile'
+import '../ql-ho-so/profile'
 import '../khao-thi/survey'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/research'

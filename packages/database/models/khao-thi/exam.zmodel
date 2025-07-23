@@ -41,11 +41,11 @@ model QuestionBank extends Base {
 
 /// Mức độ khó
 model Difficulty extends Base {
-  name           String              @unique // VD: "Nhận biết", "Thông hiểu", "Vận dụng", "Vận dụng cao"
-  level          Int?                @unique // Mức độ ưu tiên hoặc sắp xếp, VD: 1, 2, 3, 4
+  name      String     @unique // VD: "Nhận biết", "Thông hiểu", "Vận dụng", "Vận dụng cao"
+  level     Int?       @unique // Mức độ ưu tiên hoặc sắp xếp, VD: 1, 2, 3, 4
 
-  questions      Question[]
-  structureRules TestStructureRule[]
+  questions Question[]
+  // structureRules TestStructureRule[]
 
   @@schema("khao-thi")
 }
@@ -67,24 +67,24 @@ model KnowledgeBlock extends Base {
 /// Câu hỏi
 model Question extends Base {
   content          String // Nội dung câu hỏi. Với FILL_IN_BLANK, có thể chứa placeholder như {$1}
-  type             QuestionType          @default(ESSAY)
-  point            Float                 @default(1) // Điểm số
+  type             QuestionType       @default(ESSAY)
+  point            Float              @default(1) // Điểm số
   explanation      String? // Giải thích đáp án
-  isAutoGraded     Boolean               @default(false)
+  isAutoGraded     Boolean            @default(false)
 
   // // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
   // multipleChoiceOptions MultipleChoiceOption[]
   // fillInBlankSlots      FillInBlankSlot[]
   // orderingItems         OrderingItem[]
 
-  questionBank     QuestionBank          @relation(fields: [questionBankId], references: [id])
+  questionBank     QuestionBank       @relation(fields: [questionBankId], references: [id])
   questionBankId   String
-  knowledgeBlock   KnowledgeBlock?       @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlock   KnowledgeBlock?    @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String?
-  difficulty       Difficulty?           @relation(fields: [difficultyId], references: [id])
+  difficulty       Difficulty?        @relation(fields: [difficultyId], references: [id])
   difficultyId     String?
 
-  sessionQuestions ExamSessionQuestion[]
+  sessionQuestions ExamBankQuestion[]
   /// Câu trả lời của thí sinh trong các phiên thi
   answers          Answer[]
 
@@ -174,7 +174,7 @@ model Answer extends Base {
 // }
 
 // /// Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp
-// model OrderingAnswer  extends Base {
+// model OrderingAnswer extends Base {
 //   answerId String
 //   answer   Answer       @relation(fields: [answerId], references: [id], onDelete: Cascade)
 //   itemId   String
@@ -209,14 +209,14 @@ model Exam  extends Base {
 }
 
 /// Cấu hình tạo đề tự động cho kỳ thi
-model TestStructureRule {
-  id               String         @id @default(cuid())
+model TestStructureRule extends Base {
   exam             Exam           @relation(fields: [examId], references: [id])
   examId           String
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String
-  difficulty       Difficulty     @relation(fields: [difficultyId], references: [id])
-  difficultyId     String         // Dùng ID của mức độ khó
+  questionPoint    Float
+  // difficulty       Difficulty     @relation(fields: [difficultyId], references: [id])
+  // difficultyId     String         // Dùng ID của mức độ khó
   questionType     QuestionType
   count            Int
   @@schema("khao-thi")
@@ -224,16 +224,28 @@ model TestStructureRule {
 
 /// Đề thi
 model ExamBank extends Base {
-  exam        Exam                  @relation(fields: [examId], references: [id])
+  exam        Exam               @relation(fields: [examId], references: [id])
   examId      String
 
   examSession ExamSession[]
-  questions   ExamSessionQuestion[] // Danh sách câu hỏi trong đề thi
+  questions   ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
   @@schema("khao-thi")
 }
 
+/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
+model ExamBankQuestion extends Base {
+  examBankId String
+  examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  order      Int? // Thứ tự câu hỏi trong đề thi của phiên này
 
-/// Bài thi / Đề thi
+  @@unique([examBankId, questionId])
+  @@unique([examBankId, order])
+  @@schema("khao-thi")
+}
+
+/// Bài thi
 model ExamSession extends Base {
   startTime  DateTime  @default(now())
   endTime    DateTime?
@@ -253,19 +265,5 @@ model ExamSession extends Base {
   answers    Answer[]              // Tất cả câu trả lời trong phiên này
 
   @@unique([studentId, examId])
-  @@schema("khao-thi")
-}
-
-/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
-model ExamSessionQuestion {
-  id         String   @id @default(cuid())
-  examBankId String
-  examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id])
-  order      Int? // Thứ tự câu hỏi trong đề thi của phiên này
-
-  @@unique([examBankId, questionId])
-  @@unique([examBankId, order])
   @@schema("khao-thi")
 }

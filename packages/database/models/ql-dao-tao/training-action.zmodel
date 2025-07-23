@@ -1,6 +1,6 @@
 import '../base'
 import '../ql-danh-muc/document'
-import '../ql-nguoi-dung/profile'
+import '../ql-ho-so/profile'
 import 'student'
 import 'training-score'
 import 'categories'

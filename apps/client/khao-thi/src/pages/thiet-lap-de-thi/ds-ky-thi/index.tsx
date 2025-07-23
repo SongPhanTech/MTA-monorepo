@@ -1,77 +1,128 @@
+import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
-import type { FilterSurveyQuestionProps } from '@components/filter/filter-survey-question'
+import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyQuestionModal } from '@components/modal'
+import { PutExam } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
 import {
-    useCountSurveyQuestion,
-    useFindManySurveyQuestion,
-    useUpdateSurveyQuestion,
+    useCountExam,
+    useFindManyExam,
+    useFindManyQuestionBank,
+    useUpdateExam,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row } from 'antd'
-import _ from 'lodash'
-import { useCallback, useState } from 'react'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type Filter = FilterSurveyQuestionProps & {
-    searchText: string
-}
-function Page() {
+function Exam() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [_searchText, setSearchText] = useState<string>('')
-
-    const [filters, setFilters] = useState<Filter>({
-        searchText: '',
-        surveyQuestionTypeId: null,
-        surveyId: null,
+    const {
+        options: examStatusOptions,
+        getExamStatusLabel,
+        getExamStatusColor,
+    } = useExamStatusOptions()
+    const [filters, setFilters] = useState<FilterProps>({
+        title: '',
+        startTime: undefined,
+        endTime: undefined,
+        duration: undefined,
+        passScore: undefined,
+        examStatus: undefined,
+        questionBankId: undefined,
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-    const handleAdvancedFilter = (values: FilterSurveyQuestionProps) => {
-        const newFilters = { ...filters, ...values }
-        setFilters(newFilters)
-    }
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const { data = [], refetch } = useFindManySurveyQuestion({
-        where: {
-            name: {
-                contains: filters.searchText,
-            },
-            ...(filters.surveyId ? { surveyId: filters.surveyId } : {}),
-            ...(filters.surveyQuestionTypeId
-                ? { surveyQuestionTypeId: filters.surveyQuestionTypeId }
+    const commonWhere = useMemo(
+        () => ({
+            ...(filters.title && filters.title !== ''
+                ? {
+                      title: {
+                          contains: filters.title,
+                          mode: 'insensitive' as const,
+                      },
+                  }
                 : {}),
-        },
+            ...(filters.startTime?.length === 2
+                ? {
+                      startTime: {
+                          gte: dayjs(filters.startTime?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startTime?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endTime?.length === 2
+                ? {
+                      endTime: {
+                          gte: dayjs(filters.endTime?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endTime?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examStatus && filters.examStatus.length > 0
+                ? {
+                      status: { in: filters.examStatus },
+                  }
+                : {}),
+            ...(filters.questionBankId
+                ? {
+                      questionBankId: Array.isArray(filters.questionBankId)
+                          ? { in: filters.questionBankId }
+                          : filters.questionBankId,
+                  }
+                : {}),
+        }),
+        [
+            filters.title,
+            filters.startTime,
+            filters.endTime,
+            filters.examStatus,
+            filters.questionBankId,
+        ]
+    )
+
+    const { data = [] } = useFindManyExam({
+        where: commonWhere,
         include: {
-            surveyQuestionType: true,
-            survey: true,
+            questionBank: true,
         },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        duration: filters.duration,
+                    },
+                ],
+                !!filters.duration
+            ),
+            ...emptyObjectIf(
+                [
+                    {
+                        passScore: filters.passScore,
+                    },
+                ],
+                !!filters.passScore
+            ),
+            { duration: 'desc' },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSurveyQuestion()
+    const { data: count } = useCountExam({
+        where: { ...commonWhere, deletedAt: null },
+    })
 
-    const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure<string>({
-        tag: PutSurveyQuestionModal.name,
+        tag: PutExam.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -79,12 +130,11 @@ function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateSurveyObjectType } = useUpdateSurveyQuestion()
-
-    async function handleDelete(id: string) {
+    const { mutateAsync: updateExam } = useUpdateExam()
+    async function handleDeleteExam(id: string) {
         try {
             showSpinner()
-            await updateSurveyObjectType({
+            await updateExam({
                 where: {
                     id,
                 },
@@ -97,6 +147,8 @@ function Page() {
         }
         hideSpinner()
     }
+
+    const { data: questionBankData } = useFindManyQuestionBank()
 
     return (
         <div>
@@ -114,56 +166,149 @@ function Page() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        filters={filters}
+                        setFilters={setFilters}
+                        onRowClick={({ id }) => {
+                            router.push(`${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${id}`)
+                        }}
                         columns={[
                             {
                                 title: 'STT',
-                                width: 20,
+                                width: 60,
                                 align: 'center',
+                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã đề thi',
-                                dataIndex: 'code',
+                                title: 'Tên kỳ thi',
+                                dataIndex: 'title',
+                                fixed: 'left',
+                                width: 220,
+                                type: 'input',
                             },
                             {
-                                title: 'Tên đề thi',
-                                dataIndex: 'name',
+                                title: 'Phiên bản ngân hàng câu hỏi',
+                                dataIndex: 'questionBankId',
+                                fixed: 'left',
+                                width: 220,
+                                type: 'select',
+                                options: questionBankData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) => record?.questionBank?.name || 'Chưa có',
                             },
                             {
                                 title: 'Thời gian bắt dầu',
-                                dataIndex: 'name',
+                                dataIndex: 'startTime',
+                                align: 'center',
+                                width: 150,
+                                type: 'date',
+                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Thời gian kết thúc',
-                                dataIndex: 'name',
+                                dataIndex: 'endTime',
+                                align: 'center',
+                                width: 150,
+                                type: 'date',
+                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Thời gian thi',
-                                dataIndex: 'name',
+                                dataIndex: 'duration',
+                                align: 'center',
+                                width: 150,
+                                type: 'order',
+                                render: (value) => {
+                                    return <span>{value} phút</span>
+                                },
                             },
                             {
                                 title: 'Điểm đạt',
-                                dataIndex: 'name',
+                                dataIndex: 'passScore',
+                                align: 'center',
+                                width: 100,
+                                type: 'order',
                             },
                             {
-                                title: 'Tên khảo sát',
-                                render: ({ survey }) => (survey ? survey.name : ''),
+                                title: 'Xáo trộn câu hỏi',
+                                dataIndex: 'shuffleQuestions',
+                                align: 'center',
+                                width: 80,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Xáo trộn đáp án',
+                                dataIndex: 'shuffleAnswers',
+                                align: 'center',
+                                width: 80,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Hiển thị kết quả ngay',
+                                dataIndex: 'showResult',
+                                align: 'center',
+                                width: 100,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Trạng thái',
+                                dataIndex: 'examStatus',
+                                align: 'center',
+                                fixed: 'right',
+                                width: 100,
+                                type: 'select',
+                                options: examStatusOptions,
+                                render: (__, record) => {
+                                    return (
+                                        <Tag color={getExamStatusColor(record?.status)}>
+                                            {getExamStatusLabel(record?.status)}
+                                        </Tag>
+                                    )
+                                },
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title="Cấu hình tạo đề tự động" placement="top">
+                                            <EyeOutlined className="text-sm cursor-pointer" />
+                                        </Tooltip>
                                         <EditIcon
-                                            onClick={onOpen.bind(null, id)}
+                                            onClick={(e) => {
+                                                onOpen(id)
+                                                e.stopPropagation()
+                                            }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: () => handleDeleteExam(id),
                                             }}
+                                            onClick={(e) => e.stopPropagation()}
                                         />
                                     </Row>
                                 ),
@@ -174,8 +319,14 @@ function Page() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>
@@ -184,7 +335,7 @@ function Page() {
     )
 }
 
-export default Page
-Page.getLayout = function getLayout(page: React.ReactNode) {
+export default Exam
+Exam.getLayout = function getLayout(page: React.ReactNode) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
