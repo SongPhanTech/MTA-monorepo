@@ -1299,6 +1299,7 @@ Table Conversation {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  name String
   user DM_NhanVien
   userId String
   type DocumentType
@@ -2744,7 +2745,7 @@ Table SurveyResponse {
     (surveySessionId, surveyQuestionId) [unique]
   }
 
-  Note: 'Bảng lưu câu trả lời cụ thể của học vi��n cho từng câu hỏi'
+  Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
 }
 
 Table DM_MoiQuanHe {

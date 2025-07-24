@@ -45,6 +45,7 @@ model Prompt extends Base {
 }
 
 model Conversation extends Base {
+  name    String?
   user    DM_NhanVien?  @relation(fields: [userId], references: [Id])
   userId  String?       @db.Uuid
   type    DocumentType?

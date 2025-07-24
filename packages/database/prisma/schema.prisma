@@ -1777,6 +1777,7 @@ model Conversation {
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt()
+  name        String?
   user        DM_NhanVien?  @relation(fields: [userId], references: [Id])
   userId      String?       @db.Uuid()
   type        DocumentType?
