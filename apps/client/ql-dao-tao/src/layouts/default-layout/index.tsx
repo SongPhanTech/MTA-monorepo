@@ -53,7 +53,7 @@ const DefaultLayout = ({
                   ...breadcrumb.map((i: { title: string; href?: string }) => {
                       if (i?.href) {
                           return {
-                              title: <a href={`/lms${i.href}`}>{i.title}</a>,
+                              title: <Link href={i.href}>{i.title}</Link>,
                           }
                       }
                       return {
@@ -74,7 +74,7 @@ const DefaultLayout = ({
                     ...breadcrumbList.map((i: { title: string; href?: string }) => {
                         if (i?.href) {
                             return {
-                                title: <a href={`/lms${i.href}`}>{i.title}</a>,
+                                title: <Link href={i.href}>{i.title}</Link>,
                             }
                         }
                         return {

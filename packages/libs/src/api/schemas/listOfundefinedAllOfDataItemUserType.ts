@@ -16,7 +16,5 @@ export const ListOfundefinedAllOfDataItemUserType = {
   STAFF: 'STAFF',
   PROFESSIONAL: 'PROFESSIONAL',
   CONTRACT: 'CONTRACT',
-  CIVIL_STUDENT: 'CIVIL_STUDENT',
-  TEACHER: 'TEACHER',
   OTHER: 'OTHER',
 } as const;

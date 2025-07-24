@@ -1,6 +1,6 @@
 import { FilterFilled } from '@ant-design/icons'
-import type { ColumnTypeProps, FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { ColumnTypeProps, FilterProps } from '@constants/type'
 import {
     AutoComplete,
     Button,
@@ -706,9 +706,6 @@ const Table = <T extends Record<string, unknown>>({
                           },
                           showTotal: (total, range) =>
                               `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                          onShowSizeChange(current, size) {
-                              pagination?.onShowSizeChange?.(size)
-                          },
                           ...pagination,
                       }
                     : false

@@ -11,7 +11,6 @@ import {
 } from '../services/student-result.service'
 import {
     buildCurriculumMapOrThrow,
-    buildDistrictMapOrThrow,
     buildEthnicityMapOrThrow,
     buildNationalityMapOrThrow,
     buildProvinceMapOrThrow,
@@ -238,11 +237,6 @@ app.openapi(importHeQuanSu, async (c) => {
         data.students.map((student) => student.provinceHometown)
     )
 
-    const districtMap = await buildDistrictMapOrThrow(
-        prisma,
-        data.students.map((student) => student.districtHometown)
-    )
-
     const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
 
     const existingStudent = await prisma.student.findMany({
@@ -301,7 +295,6 @@ app.openapi(importHeQuanSu, async (c) => {
                         ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
                         nationalityId: nationalityMap.get(student.nationality ?? '') || null,
                         provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
-                        districtHometownId: districtMap.get(student.districtHometown ?? '') || null,
                     }
 
                 const existingId = existingStudentMap.get(student.code)

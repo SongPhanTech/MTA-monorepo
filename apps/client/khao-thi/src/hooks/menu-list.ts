@@ -13,7 +13,7 @@ const useMenuList = () => {
         where: {
             users: {
                 every: {
-                    ssoId: data?.sub,
+                    Id: data?.sub,
                 },
             },
         },
@@ -28,7 +28,7 @@ const useMenuList = () => {
     const permissions = useMemo(
         () =>
             groups
-                .flatMap((group) => group.roles.flatMap((role: any) => role?.permissions))
+                .flatMap((group) => group.roles.flatMap((role) => role.permissions))
                 .filter((permission) => permission.permissionType === $Enums.PermissionType.READ),
         [groups]
     )

@@ -6,13 +6,17 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["mta", "he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao"]
+  schemas  = ["mta", "he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao", "ql-ho-so"]
 }
 
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema", "typedSql", "fullTextSearchPostgres"]
   binaryTargets   = ["native"]
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
 }
 
 enum ConfigKey {
@@ -25,11 +29,7 @@ enum ConfigKey {
 
 /// Loại câu hỏi
 enum QuestionType {
-  SINGLE_CHOICE
-  MULTIPLE_CHOICE
   ESSAY
-  FILL_IN_BLANK
-  ORDERING
 
   @@schema("khao-thi")
 }
@@ -387,6 +387,13 @@ enum CriteriaOperator {
   @@schema("ql-dao-tao")
 }
 
+enum SurveyQuestionType {
+  ESSAY
+  SINGLE_CHOICE
+
+  @@schema("khao-thi")
+}
+
 enum FeedbackStatus {
   Pending
   InProgress
@@ -475,33 +482,34 @@ model QuestionBank {
 
 /// Mức độ khó
 model Difficulty {
-  id             String              @id() @default(cuid())
-  code           String?             @unique()
-  active         Boolean             @default(true)
-  description    String?             @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt()
-  name           String              @unique()
-  level          Int?                @unique()
-  questions      Question[]
-  structureRules TestStructureRule[]
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+  name        String     @unique()
+  level       Int?       @unique()
+  questions   Question[]
 
   @@schema("khao-thi")
 }
 
 /// Khối kiến thức / Chương mục
 model KnowledgeBlock {
-  id             String              @id() @default(cuid())
-  code           String?             @unique()
-  active         Boolean             @default(true)
-  description    String?             @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt()
-  name           String
-  questions      Question[]
-  structureRules TestStructureRule[]
+  id               String              @id() @default(cuid())
+  code             String?             @unique()
+  active           Boolean             @default(true)
+  description      String?             @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt()
+  subjectVersion   SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  name             String
+  questions        Question[]
+  structureRules   TestStructureRule[]
 
   @@unique([name])
   @@schema("khao-thi")
@@ -509,161 +517,50 @@ model KnowledgeBlock {
 
 /// Câu hỏi
 model Question {
-  id                    String                 @id() @default(cuid())
-  code                  String?                @unique()
-  active                Boolean                @default(true)
-  description           String?                @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt()
-  content               String
-  type                  QuestionType
-  point                 Float                  @default(1)
-  explanation           String?
-  isAutoGraded          Boolean                @default(false)
-  multipleChoiceOptions MultipleChoiceOption[]
-  fillInBlankSlots      FillInBlankSlot[]
-  orderingItems         OrderingItem[]
-  questionBank          QuestionBank           @relation(fields: [questionBankId], references: [id])
-  questionBankId        String
-  knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId      String?
-  difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
-  difficultyId          String?
-  sessionQuestions      ExamSessionQuestion[]
-  answers               Answer[]
+  id               String             @id() @default(cuid())
+  code             String?            @unique()
+  active           Boolean            @default(true)
+  description      String?            @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt()
+  content          String
+  type             QuestionType       @default(ESSAY)
+  point            Float              @default(1)
+  explanation      String?
+  isAutoGraded     Boolean            @default(false)
+  questionBank     QuestionBank       @relation(fields: [questionBankId], references: [id])
+  questionBankId   String
+  knowledgeBlock   KnowledgeBlock?    @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId String?
+  difficulty       Difficulty?        @relation(fields: [difficultyId], references: [id])
+  difficultyId     String?
+  sessionQuestions ExamBankQuestion[]
+  /// Câu trả lời của thí sinh trong các phiên thi
+  answers          Answer[]
 
   @@schema("khao-thi")
 }
 
-/// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
-model MultipleChoiceOption {
-  id                String                         @id() @default(cuid())
-  code              String?                        @unique()
-  active            Boolean                        @default(true)
-  description       String?                        @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime                       @default(now())
-  updatedAt         DateTime                       @updatedAt()
-  questionId        String
-  question          Question                       @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content           String
-  isCorrect         Boolean                        @default(false)
-  order             Int
-  selectedInAnswers SelectedMultipleChoiceOption[]
-
-  @@schema("khao-thi")
-}
-
-/// Chỗ trống cần điền cho câu hỏi điền khuyết
-model FillInBlankSlot {
-  id                 String              @id() @default(cuid())
-  code               String?             @unique()
-  active             Boolean             @default(true)
-  description        String?             @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt()
-  questionId         String
-  question           Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  order              Int
-  correctAnswer      String
-  fillInBlankAnswers FillInBlankAnswer[]
-
-  @@unique([questionId, order])
-  @@schema("khao-thi")
-}
-
-/// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
-model OrderingItem {
-  id              String           @id() @default(cuid())
-  code            String?          @unique()
-  active          Boolean          @default(true)
-  description     String?          @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt()
-  questionId      String
-  question        Question         @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content         String
-  correctOrder    Int
-  orderingAnswers OrderingAnswer[]
-
-  @@unique([questionId, correctOrder])
-  @@schema("khao-thi")
-}
-
-/// Câu trả lời
+/// Câu trả lời của thí sinh
 model Answer {
-  id                       String                         @id() @default(cuid())
-  code                     String?                        @unique()
-  active                   Boolean                        @default(true)
-  description              String?                        @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                       @default(now())
-  updatedAt                DateTime                       @updatedAt()
-  sessionId                String
-  session                  ExamSession                    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  questionId               String
-  question                 Question                       @relation(fields: [questionId], references: [id])
-  isCorrect                Boolean?
-  score                    Float?
-  comment                  String?
-  essayAnswer              String
-  multipleChoiceSelections SelectedMultipleChoiceOption[]
-  fillInBlankAnswers       FillInBlankAnswer[]
-  orderingAnswers          OrderingAnswer[]
+  id          String      @id() @default(cuid())
+  code        String?     @unique()
+  active      Boolean     @default(true)
+  description String?     @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt()
+  sessionId   String
+  session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question    @relation(fields: [questionId], references: [id])
+  isCorrect   Boolean?
+  score       Float?
+  comment     String?
+  essayAnswer String
 
   @@unique([sessionId, questionId])
-  @@schema("khao-thi")
-}
-
-/// Bảng nối, ghi lại lựa chọn của thí sinh cho câu hỏi trắc nghiệm
-model SelectedMultipleChoiceOption {
-  answer   Answer               @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId String
-  option   MultipleChoiceOption @relation(fields: [optionId], references: [id])
-  optionId String
-
-  @@id([answerId, optionId])
-  @@schema("khao-thi")
-}
-
-/// Nội dung trả lời cho một ô trống trong câu hỏi điền khuyết
-model FillInBlankAnswer {
-  id          String          @id() @default(cuid())
-  code        String?         @unique()
-  active      Boolean         @default(true)
-  description String?         @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt()
-  answer      Answer          @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId    String
-  slot        FillInBlankSlot @relation(fields: [slotId], references: [id])
-  slotId      String
-  content     String
-
-  @@unique([answerId, slotId])
-  @@schema("khao-thi")
-}
-
-/// Thứ tự do thí sinh sắp xếp cho một mục trong câu hỏi sắp xếp
-model OrderingAnswer {
-  id          String       @id() @default(cuid())
-  code        String?      @unique()
-  active      Boolean      @default(true)
-  description String?      @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
-  answerId    String
-  answer      Answer       @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  itemId      String
-  item        OrderingItem @relation(fields: [itemId], references: [id])
-  order       Int
-
-  @@unique([answerId, itemId])
   @@schema("khao-thi")
 }
 
@@ -687,6 +584,7 @@ model Exam {
   shuffleQuestions   Boolean             @default(true)
   shuffleAnswers     Boolean             @default(true)
   showResult         Boolean             @default(false)
+  examBank           ExamBank[]
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]
 
@@ -696,35 +594,61 @@ model Exam {
 /// Cấu hình tạo đề tự động cho kỳ thi
 model TestStructureRule {
   id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt()
   exam             Exam           @relation(fields: [examId], references: [id])
   examId           String
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String
-  difficulty       Difficulty     @relation(fields: [difficultyId], references: [id])
-  difficultyId     String
+  questionPoint    Float
   questionType     QuestionType
   count            Int
 
   @@schema("khao-thi")
 }
 
-/// Ngân hàng đề thi
+/// Đề thi
 model ExamBank {
-  id          String                @id() @default(cuid())
-  code        String?               @unique()
-  active      Boolean               @default(true)
-  description String?               @db.Text()
+  id          String             @id() @default(cuid())
+  code        String?            @unique()
+  active      Boolean            @default(true)
+  description String?            @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @updatedAt()
-  name        String
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt()
+  exam        Exam               @relation(fields: [examId], references: [id])
+  examId      String
   examSession ExamSession[]
-  questions   ExamSessionQuestion[]
+  questions   ExamBankQuestion[]
 
   @@schema("khao-thi")
 }
 
-/// Bài thi / Đề thi
+/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
+model ExamBankQuestion {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  examBankId  String
+  examBank    ExamBank  @relation(fields: [examBankId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question  @relation(fields: [questionId], references: [id])
+  order       Int?
+
+  @@unique([examBankId, questionId])
+  @@unique([examBankId, order])
+  @@schema("khao-thi")
+}
+
+/// Bài thi
 model ExamSession {
   id          String    @id() @default(cuid())
   code        String?   @unique()
@@ -747,20 +671,7 @@ model ExamSession {
   examBankId  String?
   answers     Answer[]
 
-  @@schema("khao-thi")
-}
-
-/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
-model ExamSessionQuestion {
-  id         String   @id() @default(cuid())
-  examBankId String
-  examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id])
-  order      Int?
-
-  @@unique([examBankId, questionId])
-  @@unique([examBankId, order])
+  @@unique([studentId, examId])
   @@schema("khao-thi")
 }
 
@@ -1087,8 +998,8 @@ model Subject {
   updatedAt                DateTime         @updatedAt()
   name                     String           @unique()
   englishName              String?          @unique()
-  managementOrganization   DM_DonVi         @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String           @db.Uuid()
+  managementOrganization   DM_DonVi?        @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?          @db.Uuid()
   information              String?
   subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
 
@@ -1124,8 +1035,8 @@ model SubjectVersion {
   academicResults          String?
   materials                String?
   rules                    String?
-  managementOrganization   DM_DonVi               @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String                 @db.Uuid()
+  managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                @db.Uuid()
   subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
   /// môn học khối kiến thức - CTĐT
@@ -1135,6 +1046,7 @@ model SubjectVersion {
   dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
   coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
@@ -1948,6 +1860,7 @@ model DM_ChucVu {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  iNhomChucVu    Int?          @default(0)
   userProfile    UserProfile[]
 
   @@schema("mta")
@@ -1970,6 +1883,7 @@ model DM_HocHam {
   sThietBiTao    String?
   sThietBiSua    String?
   profiles       UserProfile[]
+  hocHam         HocHam[]
 
   @@schema("mta")
 }
@@ -1991,6 +1905,7 @@ model DM_HocVi {
   sThietBiTao    String?
   sThietBiSua    String?
   profiles       UserProfile[]
+  hocVi          HocVi[]
 
   @@schema("mta")
 }
@@ -2011,6 +1926,10 @@ model DM_ChungChiTinHoc {
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  sNguonCap      String?
+  sNoiDung       String?
+  sGiaTri        String?
+  sDoiTuong      String?
 
   @@schema("mta")
 }
@@ -2056,10 +1975,10 @@ model DM_DonVi {
   sThietBiSua      String?
   sCode            String?
   sTenVietTat      String?
-  sTruongDonVi     String?
+  sParentId        String?           @db.Uuid()
+  sTruongDonVi     String?           @db.Uuid()
   sChucNangNhiemVu String?
   sDiaChi          String?
-  sParentId        String?           @db.Uuid()
   lecturers        Lecturer[]
   lecturerHistory  LecturerHistory[]
   staffs           Staff[]
@@ -2348,6 +2267,7 @@ model DM_QuocGia {
   sThietBiTao    String?
   sThietBiSua    String?
   sLanguage      String?
+  hocVi          HocVi[]
   userProfile    UserProfile[]
 
   @@schema("mta")
@@ -2370,42 +2290,14 @@ model DM_Tinh {
   sThietBiTao                 String?
   sThietBiSua                 String?
   sDM_QuocGiaId               String?       @db.Uuid()
-  iDM_KhuVucDiaLy_Id          String?       @db.Uuid()
-  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  iDM_KhuVucDiaLy_Id          Int?
+  iDM_DonViHanhChinhId        Int?
   userProfileHometown         UserProfile[] @relation("ProvinceHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
   userProfileCurrentAddress   UserProfile[] @relation("ProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
-  @@schema("mta")
-}
-
-model DM_QuanHuyen {
-  Id                          String        @id() @default(uuid()) @db.Uuid()
-  sMa                         String?
-  sTen                        String?
-  sGhiChu                     String?
-  iSTT                        Int?          @default(0)
-  bActive                     Boolean?      @default(true)
-  bDeleted                    Boolean?      @default(false)
-  bSystem                     Boolean?      @default(false)
-  iDictionaryKey              Int?          @default(0)
-  dNgayTao                    DateTime?
-  dNgaySua                    DateTime?
-  sNguoiTao                   String?
-  sNguoiSua                   String?
-  sThietBiTao                 String?
-  sThietBiSua                 String?
-  sDM_TinhId                  String?       @db.Uuid()
-  sDM_Tinh_Ma                 String?
-  iDM_DonViHanhChinhId        String?       @db.Uuid()
-  userProfileHometown         UserProfile[] @relation("DistrictHometown")
-  userProfilePlaceOfBirth     UserProfile[] @relation("DistrictPlaceOfBirth")
-  userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
-  userProfileCurrentAddress   UserProfile[] @relation("DistrictCurrentAddress")
-
-  @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("mta")
 }
 
@@ -2428,7 +2320,7 @@ model DM_XaPhuong {
   sDM_QuanHuyen_Ma            String?
   sDM_TinhId                  String?       @db.Uuid()
   sDM_QuanHuyenId             String?       @db.Uuid()
-  iDM_DonViHanhChinhId        String?       @db.Uuid()
+  iDM_DonViHanhChinhId        Int?
   userProfileHometown         UserProfile[] @relation("CommuneHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("CommunePlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("CommunePermanentAddress")
@@ -2482,16 +2374,12 @@ model UserProfile {
   currentAddress             String?
   provinceCurrentAddress     DM_Tinh?          @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?           @db.Uuid()
-  districtCurrentAddress     DM_QuanHuyen?     @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
-  districtCurrentAddressId   String?           @db.Uuid()
   communeCurrentAddress      DM_XaPhuong?      @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
   communeCurrentAddressId    String?           @db.Uuid()
   dateOfBirth                DateTime?
   placeOfBirth               String?
   provinceOfBirth            DM_Tinh?          @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
   provinceOfBirthId          String?           @db.Uuid()
-  districtOfBirth            DM_QuanHuyen?     @relation(name: "DistrictPlaceOfBirth", fields: [districtOfBirthId], references: [Id])
-  districtOfBirthId          String?           @db.Uuid()
   communeOfBirth             DM_XaPhuong?      @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
   communeOfBirthId           String?           @db.Uuid()
   homeTown                   String?
@@ -2500,8 +2388,6 @@ model UserProfile {
   permanentAddress           String?
   provincePermanentAddress   DM_Tinh?          @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
   provincePermanentAddressId String?           @db.Uuid()
-  districtPermanentAddress   DM_QuanHuyen?     @relation(name: "DistrictPermanentAddress", fields: [districtPermanentAddressId], references: [Id])
-  districtPermanentAddressId String?           @db.Uuid()
   communePermanentAddress    DM_XaPhuong?      @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
   communePermanentAddressId  String?           @db.Uuid()
   temporaryAddress           String?
@@ -2516,8 +2402,6 @@ model UserProfile {
   ethnicityId                String?           @db.Uuid()
   provinceHometown           DM_Tinh?          @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
   provinceHometownId         String?           @db.Uuid()
-  districtHometown           DM_QuanHuyen?     @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
-  districtHometownId         String?           @db.Uuid()
   communeHometown            DM_XaPhuong?      @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
   communeHometownId          String?           @db.Uuid()
   officerNumber              String?
@@ -2544,6 +2428,9 @@ model UserProfile {
   dischargeDate              DateTime?
   familyPhone                String?
   familyName                 String?
+  relatives                  Relative[]
+  trinhDoHocVan              DM_TrinhDoHocVan? @relation(fields: [trinhDoHocVanId], references: [id])
+  trinhDoHocVanId            String?
   /// hồ sơ đào tạo
   educationAndTraining       Student[]
   /// hồ sơ giảng viên
@@ -2554,6 +2441,63 @@ model UserProfile {
   staffHistory               StaffHistory[]
 
   @@schema("ql-nguoi-dung")
+}
+
+model HocHam {
+  id                 String     @id() @default(cuid())
+  code               String?    @unique()
+  active             Boolean    @default(true)
+  description        String?    @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt()
+  academicRankType   DM_HocHam? @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId String?    @db.Uuid()
+  noiCap             String?
+  soQuyetDinh        String?
+  from               DateTime?
+  to                 DateTime?
+
+  @@schema("ql-ho-so")
+}
+
+model HocVi {
+  id                   String                @id() @default(cuid())
+  code                 String?               @unique()
+  active               Boolean               @default(true)
+  description          String?               @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt()
+  academicDegreeType   DM_HocVi?             @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId String?               @db.Uuid()
+  nationality          DM_QuocGia?           @relation(fields: [nationalityId], references: [Id])
+  nationalityId        String?               @db.Uuid()
+  linhVuc              String?
+  truong               DM_TruongDaoTaoBacDH? @relation(fields: [truongId], references: [id])
+  truongId             String?
+  year                 Int?
+
+  @@schema("ql-ho-so")
+}
+
+model Relative {
+  id             String        @id() @default(cuid())
+  code           String?       @unique()
+  active         Boolean       @default(true)
+  description    String?       @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt()
+  name           String        @unique()
+  birthYear      Int?
+  job            String?
+  information    String?
+  profiles       UserProfile[]
+  dM_MoiQuanHe   DM_MoiQuanHe? @relation(fields: [dM_MoiQuanHeId], references: [id])
+  dM_MoiQuanHeId String?
+
+  @@schema("ql-ho-so")
 }
 
 /// Loại giáo viên
@@ -2770,6 +2714,7 @@ model StudentThesisRegistration {
   reviewedBy      Lecturer?                       @relation(fields: [reviewedById], references: [id])
   reviewedById    String?
   reviewNote      String?                         @db.Text()
+  council         Council?
 
   @@unique([studentId, thesisProjectId])
   @@schema("ql-dao-tao")
@@ -2786,6 +2731,7 @@ model ExpertProfile {
   updatedAt          DateTime        @updatedAt()
   lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
   lecturerId         String?         @unique()
+  name               String?
   title              String?
   specialization     String?
   workplace          String?
@@ -2838,21 +2784,23 @@ model Invitation {
 
 /// Hội đồng đánh giá
 model Council {
-  id                  String                @id() @default(cuid())
-  code                String?               @unique()
-  active              Boolean               @default(true)
-  description         String?               @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt()
-  proposedDate        DateTime              @default(now())
-  proposedDefenseDate DateTime?
-  status              CouncilProposalStatus @default(PENDING)
-  defenseDate         DateTime?
-  location            String?
-  thesisId            String                @unique()
-  thesis              ThesisProject         @relation(fields: [thesisId], references: [id])
-  members             CouncilMember[]
+  id                          String                     @id() @default(cuid())
+  code                        String?                    @unique()
+  active                      Boolean                    @default(true)
+  description                 String?                    @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime                   @default(now())
+  updatedAt                   DateTime                   @updatedAt()
+  proposedDate                DateTime                   @default(now())
+  proposedDefenseDate         DateTime?
+  status                      CouncilProposalStatus      @default(PENDING)
+  defenseDate                 DateTime?
+  location                    String?
+  thesisId                    String
+  thesis                      ThesisProject              @relation(fields: [thesisId], references: [id])
+  studentThesisRegistration   StudentThesisRegistration? @relation(fields: [studentThesisRegistrationId], references: [id])
+  studentThesisRegistrationId String?                    @unique()
+  members                     CouncilMember[]
 
   @@schema("ql-dao-tao")
 }
@@ -3233,7 +3181,7 @@ model SurveyTopic {
   @@schema("khao-thi")
 }
 
-model SurveyQuestionType {
+model SurveyQuestionGroup {
   id             String           @id() @default(cuid())
   code           String?          @unique()
   active         Boolean          @default(true)
@@ -3248,79 +3196,82 @@ model SurveyQuestionType {
 }
 
 model Survey {
-  id               String           @id() @default(cuid())
-  code             String?          @unique()
-  active           Boolean          @default(true)
-  description      String?          @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt()
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
-  surveyObjectType SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
-  surveyObjectId   String
-  surveyTopic      SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId    String
-  surveyQuestion   SurveyQuestion[]
-  surveySessions   SurveySession[]
+  id                   String           @id() @default(cuid())
+  code                 String?          @unique()
+  active               Boolean          @default(true)
+  description          String?          @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt()
+  name                 String
+  startDate            DateTime
+  endDate              DateTime?
+  surveyObjectType     SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
+  surveyObjectId       String
+  surveyTopic          SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
+  additionalSuggestion Boolean
+  surveyChoice         SurveyChoice[]
+  surveyQuestion       SurveyQuestion[]
+  surveySessions       SurveySession[]
 
   @@schema("khao-thi")
 }
 
 model SurveyQuestion {
-  id                   String             @id() @default(cuid())
-  code                 String?            @unique()
-  active               Boolean            @default(true)
-  description          String?            @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt()
-  name                 String
-  surveyQuestionType   SurveyQuestionType @relation(fields: [surveyQuestionTypeId], references: [id])
-  surveyQuestionTypeId String
-  survey               Survey             @relation(fields: [surveyId], references: [id])
-  surveyId             String
-  surveyAnswer         SurveyChoice[]
-  surveyResponses      SurveyResponse[]
+  id                    String               @id() @default(cuid())
+  code                  String?              @unique()
+  active                Boolean              @default(true)
+  description           String?              @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt()
+  name                  String
+  type                  SurveyQuestionType
+  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String?
+  survey                Survey               @relation(fields: [surveyId], references: [id])
+  surveyId              String
+  surveyResponses       SurveyResponse[]
 
   @@schema("khao-thi")
 }
 
 /// Lựa chọn của câu hỏi khảo sát
 model SurveyChoice {
-  id               String           @id() @default(cuid())
-  code             String?          @unique()
-  active           Boolean          @default(true)
-  description      String?          @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt()
-  answer           String?
-  surveyQuestion   SurveyQuestion   @relation(fields: [surveyQuestionId], references: [id])
-  surveyQuestionId String
-  surveyResponses  SurveyResponse[]
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt()
+  answer          String?
+  survey          Survey           @relation(fields: [surveyId], references: [id])
+  surveyId        String
+  surveyResponses SurveyResponse[]
 
   @@schema("khao-thi")
 }
 
 /// Bảng lưu phiên khảo sát của từng học viên
 model SurveySession {
-  id          String           @id() @default(cuid())
-  code        String?          @unique()
-  active      Boolean          @default(true)
-  description String?          @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt()
-  survey      Survey           @relation(fields: [surveyId], references: [id])
-  surveyId    String
-  student     Student?         @relation(fields: [studentId], references: [id])
-  studentId   String?
-  startedAt   DateTime         @default(now())
-  completedAt DateTime?
-  isCompleted Boolean          @default(false)
-  responses   SurveyResponse[]
+  id                   String           @id() @default(cuid())
+  code                 String?          @unique()
+  active               Boolean          @default(true)
+  description          String?          @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt()
+  survey               Survey           @relation(fields: [surveyId], references: [id])
+  surveyId             String
+  additionalSuggestion String?
+  student              Student?         @relation(fields: [studentId], references: [id])
+  studentId            String?
+  startedAt            DateTime         @default(now())
+  completedAt          DateTime?
+  isCompleted          Boolean          @default(false)
+  responses            SurveyResponse[]
 
   @@unique([surveyId, studentId])
   @@schema("khao-thi")
@@ -3346,6 +3297,268 @@ model SurveyResponse {
 
   @@unique([surveySessionId, surveyQuestionId])
   @@schema("khao-thi")
+}
+
+model DM_MoiQuanHe {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt()
+  name        String     @unique()
+  relatives   Relative[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TrinhDoHocVan {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt()
+  userProfile UserProfile[]
+
+  @@schema("mta")
+}
+
+model DM_TrinhDoLyLuanChinhTri {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TrinhDoQuanLyNhaNuoc {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TinhTrangHonNhan {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TrangThaiLamViec {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_HinhThucKhenThuongChinhQuyen {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_HinhThucKhenThuongDang {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_XepLoaiDanhGiaCanBo {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_XepLoaiDanhGiaChatLuongDangVien {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiHinhCongTac {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TinhTrangCongTac {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiHinhDiHocTap {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TinhTrangDiHocTap {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_NuocCuDiHocTap {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChucDanhCMNVGiangVien {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChucDanhCMNVNghienCuuVien {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChucDanhCMNVKySu {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
+}
+
+model DM_TruongDaoTaoBacDH {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+  hocVi       HocVi[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChuyenNganhDaoTaoBacDH {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  name        String    @unique()
+
+  @@schema("ql-ho-so")
 }
 
 model Feedback {

@@ -2,7 +2,7 @@ import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-danh-muc/common'
-import '../ql-nguoi-dung/profile'
+import '../ql-ho-so/profile'
 import 'categories'
 import 'training-score'
 import 'criteria'
@@ -125,14 +125,13 @@ model AcademicRankingConvert extends Base {
 
   rankingCondition   RankingCondition[]
   downgradeRules     GraduationRankDowngradeRule[]
+  graduationDecision GraduationDecision[]
 
   @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
   @@validate(!(baseScore == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")
-
-  graduationDecision GraduationDecision[]
 }
 
 /// Quy tắc cấu hình việc hạ bậc xếp hạng tốt nghiệp

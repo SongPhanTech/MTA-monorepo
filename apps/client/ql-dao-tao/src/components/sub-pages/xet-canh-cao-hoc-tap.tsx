@@ -7,8 +7,8 @@ import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutAcademicWarning } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
@@ -45,6 +45,57 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         trainingCourse: undefined,
         organization: undefined,
     })
+
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.AcademicWarningWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      student: {
+                          userProfile: {
+                              ...(filters.code && filters.code !== ''
+                                  ? {
+                                        code: { contains: filters.code, mode: 'insensitive' },
+                                    }
+                                  : {}),
+                              ...(filters.name && filters.name !== ''
+                                  ? {
+                                        fullname: { contains: filters.name, mode: 'insensitive' },
+                                    }
+                                  : {}),
+                          },
+                          ...emptyObjectIf(
+                              {
+                                  fixedClassId: {
+                                      in: Array.isArray(filters.fixedClass)
+                                          ? filters.fixedClass
+                                          : filters.fixedClass
+                                            ? [filters.fixedClass]
+                                            : undefined,
+                                  },
+                              },
+                              !!filters.fixedClass
+                          ),
+                          fixedClass: {
+                              ...(filters.trainingCourse
+                                  ? {
+                                        trainingCourseId: { in: filters.trainingCourse },
+                                    }
+                                  : {}),
+                              ...(filters.organization
+                                  ? {
+                                        managementOrganizationId: { in: filters.organization },
+                                    }
+                                  : {}),
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: upsertAcademicWarning } = useUpsertAcademicWarning()
     const { mutateAsync: updateManyAcademicWarning } = useUpdateManyAcademicWarning()
@@ -65,44 +116,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
     const { data: academicWarningData, refetch } = useFindManyAcademicWarning({
         where: {
             semesterId: semesterId,
-            student: {
-                userProfile: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: { contains: filters.code, mode: 'insensitive' },
-                          }
-                        : {}),
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              fullname: { contains: filters.name, mode: 'insensitive' },
-                          }
-                        : {}),
-                },
-                ...emptyObjectIf(
-                    {
-                        fixedClassId: {
-                            in: Array.isArray(filters.fixedClass)
-                                ? filters.fixedClass
-                                : filters.fixedClass
-                                  ? [filters.fixedClass]
-                                  : undefined,
-                        },
-                    },
-                    !!filters.fixedClass
-                ),
-                fixedClass: {
-                    ...(filters.trainingCourse
-                        ? {
-                              trainingCourseId: { in: filters.trainingCourse },
-                          }
-                        : {}),
-                    ...(filters.organization
-                        ? {
-                              managementOrganizationId: { in: filters.organization },
-                          }
-                        : {}),
-                },
-            },
+            ...where,
         },
         include: {
             student: {
@@ -407,8 +421,14 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                onChange: setCurrentPage,
-                                onShowSizeChange: setNumberOfPages,
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
                                 showTotal: (total, range) =>
                                     `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                             }}
@@ -455,8 +475,14 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                 current: currentPage,
                                 pageSize: numberOfPages,
                                 total: studentData.length,
-                                onChange: setCurrentPage,
-                                onShowSizeChange: setNumberOfPages,
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
                             }}
                         />
                     </Col>

@@ -3,11 +3,10 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { Survey, SurveyQuestion, SurveyQuestionType } from '@workspace/db'
+import { type Survey, type SurveyQuestion, SurveyQuestionType } from '@workspace/db'
 import {
     useCreateSurveyQuestion,
     useFindManySurvey,
-    useFindManySurveyQuestionType,
     useFindUniqueSurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
@@ -31,7 +30,6 @@ const PutSurveyQuestionModal = () => {
     const { mutateAsync: update } = useUpdateSurveyQuestion()
 
     const { data: surveys = [] } = useFindManySurvey()
-    const { data: surveyQuestionTypes = [] } = useFindManySurveyQuestionType()
 
     async function onOk(output?: SurveyQuestion) {
         console.log(output)
@@ -44,7 +42,7 @@ const PutSurveyQuestionModal = () => {
                         code: output.code,
                         name: output.name,
                         surveyId: output.surveyId,
-                        surveyQuestionTypeId: output.surveyQuestionTypeId,
+                        type: SurveyQuestionType.ESSAY,
                         description: output.description,
                     },
                     where: {
@@ -58,7 +56,7 @@ const PutSurveyQuestionModal = () => {
                         code: output.code,
                         name: output.name,
                         surveyId: output.surveyId,
-                        surveyQuestionTypeId: output.surveyQuestionTypeId,
+                        type: SurveyQuestionType.ESSAY,
                         description: output.description,
                     },
                 })
@@ -110,24 +108,6 @@ const PutSurveyQuestionModal = () => {
                     <Select
                         placeholder="Chọn chủ đề khảo sát"
                         options={surveys.map((i: Survey) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="surveyQuestionTypeId"
-                    label="Loại câu hỏi khảo sát"
-                    required
-                >
-                    <Select
-                        placeholder="Chọn đối tượng khảo sát"
-                        options={surveyQuestionTypes.map((i: SurveyQuestionType) => {
                             return {
                                 value: i.id,
                                 label: i.name,

@@ -1,0 +1,341 @@
+import { EyeOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
+import type { FilterProps } from '@components/commons/typeFilte'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { PutExam } from '@components/modal'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useExamStatusOptions } from '@hooks/exam-status'
+import useSpinner from '@hooks/spinner'
+import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
+import {
+    useCountExam,
+    useFindManyExam,
+    useFindManyQuestionBank,
+    useUpdateExam,
+} from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
+function Exam() {
+    const router = useRouter()
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const {
+        options: examStatusOptions,
+        getExamStatusLabel,
+        getExamStatusColor,
+    } = useExamStatusOptions()
+    const [filters, setFilters] = useState<FilterProps>({
+        title: '',
+        startTime: undefined,
+        endTime: undefined,
+        duration: undefined,
+        passScore: undefined,
+        examStatus: undefined,
+        questionBankId: undefined,
+    })
+
+    const commonWhere = useMemo(
+        () => ({
+            ...(filters.title && filters.title !== ''
+                ? {
+                      title: {
+                          contains: filters.title,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.startTime?.length === 2
+                ? {
+                      startTime: {
+                          gte: dayjs(filters.startTime?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startTime?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endTime?.length === 2
+                ? {
+                      endTime: {
+                          gte: dayjs(filters.endTime?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endTime?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examStatus && filters.examStatus.length > 0
+                ? {
+                      status: { in: filters.examStatus },
+                  }
+                : {}),
+            ...(filters.questionBankId
+                ? {
+                      questionBankId: Array.isArray(filters.questionBankId)
+                          ? { in: filters.questionBankId }
+                          : filters.questionBankId,
+                  }
+                : {}),
+        }),
+        [
+            filters.title,
+            filters.startTime,
+            filters.endTime,
+            filters.examStatus,
+            filters.questionBankId,
+        ]
+    )
+
+    const { data = [] } = useFindManyExam({
+        where: commonWhere,
+        include: {
+            questionBank: true,
+        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        duration: filters.duration,
+                    },
+                ],
+                !!filters.duration
+            ),
+            ...emptyObjectIf(
+                [
+                    {
+                        passScore: filters.passScore,
+                    },
+                ],
+                !!filters.passScore
+            ),
+            { duration: 'desc' },
+        ],
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: count } = useCountExam({
+        where: { ...commonWhere, deletedAt: null },
+    })
+
+    const { onOpen } = useDisclosure<string>({
+        tag: PutExam.name,
+    })
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleModal = () => {
+        onOpen()
+    }
+    const { mutateAsync: updateExam } = useUpdateExam()
+    async function handleDeleteExam(id: string) {
+        try {
+            showSpinner()
+            await updateExam({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    const { data: questionBankData } = useFindManyQuestionBank()
+
+    return (
+        <div>
+            <Row gutter={[16, 16]}>
+                <Col span={24}>
+                    <Row gutter={[16, 16]} align="top" justify="end">
+                        <Col span={24}>
+                            <Flex justify="end">
+                                <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button>
+                            </Flex>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col span={24}>
+                    <Table
+                        filters={filters}
+                        setFilters={setFilters}
+                        onRowClick={({ id }) => {
+                            router.push(`${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${id}`)
+                        }}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Tên kỳ thi',
+                                dataIndex: 'title',
+                                fixed: 'left',
+                                width: 220,
+                                type: 'input',
+                            },
+                            {
+                                title: 'Phiên bản ngân hàng câu hỏi',
+                                dataIndex: 'questionBankId',
+                                fixed: 'left',
+                                width: 220,
+                                type: 'select',
+                                options: questionBankData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) => record?.questionBank?.name || 'Chưa có',
+                            },
+                            {
+                                title: 'Thời gian bắt dầu',
+                                dataIndex: 'startTime',
+                                align: 'center',
+                                width: 150,
+                                type: 'date',
+                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
+                            },
+                            {
+                                title: 'Thời gian kết thúc',
+                                dataIndex: 'endTime',
+                                align: 'center',
+                                width: 150,
+                                type: 'date',
+                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
+                            },
+                            {
+                                title: 'Thời gian thi',
+                                dataIndex: 'duration',
+                                align: 'center',
+                                width: 150,
+                                type: 'order',
+                                render: (value) => {
+                                    return <span>{value} phút</span>
+                                },
+                            },
+                            {
+                                title: 'Điểm đạt',
+                                dataIndex: 'passScore',
+                                align: 'center',
+                                width: 100,
+                                type: 'order',
+                            },
+                            {
+                                title: 'Xáo trộn câu hỏi',
+                                dataIndex: 'shuffleQuestions',
+                                align: 'center',
+                                width: 80,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Xáo trộn đáp án',
+                                dataIndex: 'shuffleAnswers',
+                                align: 'center',
+                                width: 80,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Hiển thị kết quả ngay',
+                                dataIndex: 'showResult',
+                                align: 'center',
+                                width: 100,
+                                render: (value) => {
+                                    return (
+                                        <div className="flex items-center justify-center">
+                                            <Checkbox checked={value} disabled />
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Trạng thái',
+                                dataIndex: 'examStatus',
+                                align: 'center',
+                                fixed: 'right',
+                                width: 100,
+                                type: 'select',
+                                options: examStatusOptions,
+                                render: (__, record) => {
+                                    return (
+                                        <Tag color={getExamStatusColor(record?.status)}>
+                                            {getExamStatusLabel(record?.status)}
+                                        </Tag>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, { id }) => (
+                                    <Row className="justify-center gap-2">
+                                        <Tooltip title="Cấu hình tạo đề tự động" placement="top">
+                                            <EyeOutlined className="text-sm cursor-pointer" />
+                                        </Tooltip>
+                                        <EditIcon
+                                            onClick={(e) => {
+                                                onOpen(id)
+                                                e.stopPropagation()
+                                            }}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: () => handleDeleteExam(id),
+                                            }}
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
+                                    </Row>
+                                ),
+                            },
+                        ]}
+                        data={data}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
+                        }}
+                    />
+                </Col>
+            </Row>
+        </div>
+    )
+}
+
+export default Exam
+Exam.getLayout = function getLayout(page: React.ReactNode) {
+    return <DefaultLayout>{page}</DefaultLayout>
+}

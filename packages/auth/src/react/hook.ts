@@ -19,14 +19,21 @@ export const useSession = () => {
         }
     }, [])
 
-    const goToLastPage = useCallback(() => {
-        const lastPage = localStorage.getItem('lastPage')
-        if (lastPage && lastPage !== '/') {
-            router.push(lastPage)
-            return true
-        }
-        return false
-    }, [router])
+    const goToLastPage = useCallback(
+        (basePath?: string) => {
+            const lastPage = localStorage.getItem('lastPage')
+            const lastSubsystem = localStorage.getItem('lastSubsystem')
+            if (lastPage && lastPage !== '/' && lastSubsystem) {
+                if (lastSubsystem.split('/')[1] === basePath) {
+                    router.push(lastPage)
+                    return true
+                }
+                return false
+            }
+            return false
+        },
+        [router]
+    )
 
     return {
         status,

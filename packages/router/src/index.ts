@@ -1,7 +1,6 @@
 import {
     ApartmentOutlined,
     BookOutlined,
-    FileTextOutlined,
     IdcardOutlined,
     MessageOutlined,
     PieChartOutlined,
@@ -13,13 +12,21 @@ import {
 import type { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 // biome-ignore lint/style/useImportType: <>
 import {
-    BookCheckIcon,
-    CalendarFold,
-    FileUser,
+    BarChart3,
+    BookOpenCheck,
+    CalendarRange,
+    ClipboardList,
+    FileCheck2,
     Flag,
+    FolderOpen,
+    GitCompare,
+    GraduationCap,
     House,
-    LayoutDashboard,
+    Landmark,
+    Library,
+    ListTree,
     LucideProps,
+    Settings,
 } from 'lucide-react'
 import ROUTER_PATH from '../generated/router'
 import './index.css'
@@ -311,7 +318,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'chuong-trinh-dao-tao',
                 label: 'Chương trình đào tạo',
-                icon: BookCheckIcon,
+                icon: Library,
                 children: [
                     {
                         id: 'danh-muc-chuong-trinh-dao-tao',
@@ -337,7 +344,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ke-hoach-giao-duc',
                 label: 'Kế hoạch đào tạo',
-                icon: CalendarFold,
+                icon: CalendarRange,
                 children: [
                     {
                         id: 'ke-hoach-mo-lop-mon-hoc',
@@ -362,7 +369,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'lop-mon-hoc',
                 label: 'Quản lý điểm',
-                icon: CalendarFold,
+                icon: BarChart3,
                 children: [
                     {
                         id: 'khoa-nhap-diem',
@@ -406,21 +413,21 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'schoolyear-semester',
                 label: 'Năm học kỳ học',
-                icon: CalendarFold,
+                icon: BookOpenCheck,
                 path: ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC,
                 description: 'Thông tin năm học, kỳ học',
             },
             {
                 id: 'danh-muc-chuyen-doi-diem',
                 label: 'Bảng chuyển đổi điểm',
-                icon: PieChartOutlined,
+                icon: GitCompare,
                 path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                 description: 'Bảng chuyển đổi điểm',
             },
             {
                 id: 'category',
                 label: 'Danh mục',
-                icon: LayoutDashboard,
+                icon: ListTree,
                 children: [
                     {
                         id: 'danh-muc-nganh',
@@ -520,7 +527,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ql-xet-tot-nghiep',
                 label: 'Xét tốt nghiệp',
-                icon: CalendarFold,
+                icon: GraduationCap,
                 children: [
                     {
                         id: 'ql-dot-xet-tot-nghiep',
@@ -531,12 +538,31 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
-                id: 'ql-ho-so',
-                label: 'Quản lý hồ sơ',
-                icon: FileUser,
+                id: 'ql-do-an',
+                label: 'Quản lý đồ án',
+                icon: FileCheck2,
                 children: [
                     {
-                        id: 'ql-ren-luyen',
+                        id: 'danh-muc-do-an',
+                        label: 'Danh mục đồ án',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                        description: 'Danh mục đồ án',
+                    },
+                    {
+                        id: 'danh-sach-chuyen-gia',
+                        label: 'Danh sách chuyên gia',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
+                        description: 'Danh sách chuyên gia',
+                    },
+                ],
+            },
+            {
+                id: 'ql-ren-luyen',
+                label: 'Quản lý rèn luyện',
+                icon: FolderOpen,
+                children: [
+                    {
+                        id: 'ql-dot-ren-luyen',
                         label: 'QL đợt rèn luyện',
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA,
@@ -553,186 +579,7 @@ const NAVIGATION: NavigationType = {
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_REN_LUYEN_DANH_GIA_TONG,
                     },
-                    {
-                        id: 'user-profile-ds',
-                        label: 'Quản lý hồ sơ sinh viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
-                        description: 'Quản lý hồ sơ sinh viên',
-                    },
-                    {
-                        id: 'ql-hoc-vien',
-                        label: 'Quản lý hồ sơ học viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_HOC_VIEN,
-                        description: 'Quản lý hồ sơ học viên',
-                    },
-                    {
-                        id: 'user-profile-lecture',
-                        label: 'Quản lý hồ sơ giảng viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_GIANG_VIEN,
-                        description: 'Quản lý hồ sơ giảng viên',
-                    },
-                    {
-                        id: 'user-profile-staff',
-                        label: 'Quản lý hồ sơ cán bộ',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_CAN_BO,
-                        description: 'Quản lý hồ sơ cán bộ',
-                    },
                 ],
-            },
-            {
-                id: 'danh-muc-ho-so',
-                label: 'Danh mục hồ sơ',
-                icon: ReadOutlined,
-                children: [
-                    {
-                        id: 'educational-level',
-                        label: 'Trình độ học vấn',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_TRINH_DO_HOC_VAN,
-                        description: 'Trình độ học vấn',
-                    },
-                    {
-                        id: 'political-theory-level',
-                        label: 'Trình độ lý luận chính trị',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_TRINH_DO_LY_LUAN_CHINH_TRI,
-                        description: 'Trình độ lý luận chính trị',
-                    },
-                    {
-                        id: 'state-management-level',
-                        label: 'Trình độ quản lý nhà nước',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_TRINH_DO_QUAN_LY_NHA_NUOC,
-                        description: 'Trình độ quản lý nhà nước',
-                    },
-                    {
-                        id: 'working-status',
-                        label: 'Trạng thái làm việc',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_TRANG_THAI_LAM_VIEC,
-                        description: 'Trạng thái làm việc',
-                    },
-                    {
-                        id: 'marital-status',
-                        label: 'Tình trạng hôn nhân',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_TINH_TRANG_HON_NHAN,
-                        description: 'Tình trạng hôn nhân',
-                    },
-                    {
-                        id: 'family-relationship',
-                        label: 'Quan hệ thân nhân',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_QUAN_HE_THAN_NHAN,
-                        description: 'Quan hệ thân nhân',
-                    },
-                    {
-                        id: 'forms-of-government-commendation',
-                        label: 'Hình thức khen thưởng của chính quyền',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .DANH_MUC_HO_SO_HINH_THUC_KHEN_THUONG_CUA_CHINH_QUYEN,
-                        description: 'Hình thức khen thưởng của chính quyền',
-                    },
-                    {
-                        id: 'forms-of-party-commendation',
-                        label: 'Hình thức khen thưởng của Đảng',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_HINH_THUC_KHEN_THUONG_CUA_DANG,
-                        description: 'Hình thức khen thưởng của Đảng',
-                    },
-                    {
-                        id: 'cadre-evaluation',
-                        label: 'Xếp loại đánh giá cán bộ',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_XEP_LOAI_DANH_GIA_CAN_BO,
-                        description: 'Xếp loại đánh giá cán bộ',
-                    },
-                    {
-                        id: 'party-member-quality-evaluation',
-                        label: 'Xếp loại đánh giá chất lượng đảng viên',
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .DANH_MUC_HO_SO_XEP_LOAI_DANH_GIA_CHAT_LUONG_DANG_VIEN,
-                        description: 'Xếp loại đánh giá chất lượng đảng viên',
-                    },
-                    {
-                        id: 'type-of-work',
-                        label: 'Loại hình công tác',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_LOAI_HINH_CONG_TAC,
-                        description: 'Loại hình công tác',
-                    },
-                    {
-                        id: 'working-status',
-                        label: 'Tình Trạng Công Tác',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_TINH_TRANG_CONG_TAC,
-                        description: 'Tình Trạng Công Tác',
-                    },
-                    {
-                        id: 'type-of-study',
-                        label: 'Loại hình đi học tập',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_LOAI_HINH_DI_HOC_TAP,
-                        description: 'Loại hình đi học tập',
-                    },
-                    {
-                        id: 'study-status',
-                        label: 'Tình trạng đi học tập',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_TINH_TRANG_DI_HOC_TAP,
-                        description: 'Tình trạng đi học tập',
-                    },
-                    {
-                        id: 'coutries-sending-for-study',
-                        label: 'Các nước cử đi học tập',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_CAC_NUOC_CU_DI_HOC_TAP,
-                        description: 'Các nước cử đi học tập',
-                    },
-                    {
-                        id: 'professional-title-of-lecturer',
-                        label: 'Chức danh CMNV ngạch giảng viên',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_GIANG_VIEN,
-                        description: 'Chức danh CMNV ngạch giảng viên',
-                    },
-                    {
-                        id: 'professional-title-of-researcher',
-                        label: 'Chức danh CMNV ngạch nghiên cứu viên',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_NGHIEN_CUU_VIEN,
-                        description: 'Chức danh CMNV ngạch nghiên cứu viên',
-                    },
-                    {
-                        id: 'professional-title-of-engineer',
-                        label: 'Chức danh CMNV ngạch kỹ sư',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_KY_SU,
-                        description: 'Chức danh CMNV ngạch kỹ sư',
-                    },
-                    {
-                        id: 'universities',
-                        label: 'Các trường đào tạo bậc đại học',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HO_SO_CAC_TRUONG_DAO_TAO_BAC_DAI_HOC,
-                        description: 'Các trường đào tạo bậc đại học',
-                    },
-                    {
-                        id: 'undergraduate-training-majors',
-                        label: 'Các chuyên ngành đào tạo bậc đại học',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO
-                            .DANH_MUC_HO_SO_CAC_CHUYEN_NGANH_DAO_TAO_BAC_DAI_HOC,
-                        description: 'Các chuyên ngành đào tạo bậc đại học',
-                    },
-                ],
-                description: 'Danh mục hồ sơ',
             },
         ],
         label: 'Quản lý đào tạo',
@@ -781,9 +628,43 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin trang chủ',
             },
             {
+                id: 'thiet-lap-de-thi',
+                label: 'Thiết lập đề thi',
+                icon: Landmark,
+                children: [
+                    {
+                        id: 'danh-sach-ky-thi',
+                        label: 'Danh sách kỳ thi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI,
+                    },
+                    {
+                        id: 'ngan-hang-cau-hoi',
+                        label: 'Ngân hàng câu hỏi',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI,
+                    },
+                ],
+            },
+            {
+                id: 'category',
+                label: 'Danh mục',
+                icon: ListTree,
+                children: [
+                    {
+                        id: 'danh-muc-chuong-muc',
+                        label: 'Danh mục chương mục',
+                        path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
+                    },
+                    {
+                        id: 'danh-muc-muc-do-kho',
+                        label: 'Danh mục mức độ khó',
+                        path: ROUTER_PATH.KHAO_THI.DANH_MUC_MUC_DO_KHO,
+                    },
+                ],
+            },
+            {
                 id: 'thiet-lap-khao-sat',
                 label: 'Thiết lập khảo sát',
-                icon: SettingOutlined,
+                icon: Settings,
                 children: [
                     {
                         id: 'thiet-lap-chung',
@@ -800,8 +681,206 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'tra-loi-khao-sat',
                 label: 'Trả lời khảo sát',
-                icon: FileTextOutlined,
+                icon: ClipboardList,
                 path: ROUTER_PATH.KHAO_THI.TRA_LOI_KHAO_SAT,
+            },
+        ],
+    },
+    QL_HO_SO: {
+        label: 'Quản lý hồ sơ',
+        menus: [
+            {
+                id: 'home',
+                label: 'Trang chủ',
+                icon: House,
+                path: ROUTER_PATH.KHAO_THI.HOME,
+                description: 'Thông tin trang chủ',
+            },
+            {
+                id: 'quan-tri',
+                label: 'Quản trị hồ sơ',
+                icon: SettingOutlined,
+                children: [
+                    {
+                        id: 'user-profile-ds',
+                        label: 'Quản lý hồ sơ sinh viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_SINH_VIEN,
+                        description: 'Quản lý hồ sơ sinh viên',
+                    },
+                    {
+                        id: 'ql-hoc-vien',
+                        label: 'Quản lý hồ sơ học viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_HOC_VIEN,
+                        description: 'Quản lý hồ sơ học viên',
+                    },
+                    {
+                        id: 'user-profile-lecture',
+                        label: 'Quản lý hồ sơ giảng viên',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_GIANG_VIEN,
+                        description: 'Quản lý hồ sơ giảng viên',
+                    },
+                    {
+                        id: 'user-profile-staff',
+                        label: 'Quản lý hồ sơ cán bộ',
+                        icon: IdcardOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_CAN_BO,
+                        description: 'Quản lý hồ sơ cán bộ',
+                    },
+                ],
+            },
+            {
+                id: 'danh-muc-ho-so',
+                label: 'Danh mục hồ sơ',
+                icon: ReadOutlined,
+                children: [
+                    {
+                        id: 'educational-level',
+                        label: 'Trình độ học vấn',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TRINH_DO_HOC_VAN,
+                        description: 'Trình độ học vấn',
+                    },
+                    {
+                        id: 'political-theory-level',
+                        label: 'Trình độ lý luận chính trị',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TRINH_DO_LY_LUAN_CHINH_TRI,
+                        description: 'Trình độ lý luận chính trị',
+                    },
+                    {
+                        id: 'state-management-level',
+                        label: 'Trình độ quản lý nhà nước',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TRINH_DO_QUAN_LY_NHA_NUOC,
+                        description: 'Trình độ quản lý nhà nước',
+                    },
+                    {
+                        id: 'working-status',
+                        label: 'Trạng thái làm việc',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TRANG_THAI_LAM_VIEC,
+                        description: 'Trạng thái làm việc',
+                    },
+                    {
+                        id: 'marital-status',
+                        label: 'Tình trạng hôn nhân',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TINH_TRANG_HON_NHAN,
+                        description: 'Tình trạng hôn nhân',
+                    },
+                    {
+                        id: 'family-relationship',
+                        label: 'Quan hệ thân nhân',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_QUAN_HE_THAN_NHAN,
+                        description: 'Quan hệ thân nhân',
+                    },
+                    {
+                        id: 'forms-of-government-commendation',
+                        label: 'Hình thức khen thưởng của chính quyền',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO
+                            .DANH_MUC_HO_SO_HINH_THUC_KHEN_THUONG_CUA_CHINH_QUYEN,
+                        description: 'Hình thức khen thưởng của chính quyền',
+                    },
+                    {
+                        id: 'forms-of-party-commendation',
+                        label: 'Hình thức khen thưởng của Đảng',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_HINH_THUC_KHEN_THUONG_CUA_DANG,
+                        description: 'Hình thức khen thưởng của Đảng',
+                    },
+                    {
+                        id: 'cadre-evaluation',
+                        label: 'Xếp loại đánh giá cán bộ',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_XEP_LOAI_DANH_GIA_CAN_BO,
+                        description: 'Xếp loại đánh giá cán bộ',
+                    },
+                    {
+                        id: 'party-member-quality-evaluation',
+                        label: 'Xếp loại đánh giá chất lượng đảng viên',
+                        path: ROUTER_PATH.QL_HO_SO
+                            .DANH_MUC_HO_SO_XEP_LOAI_DANH_GIA_CHAT_LUONG_DANG_VIEN,
+                        description: 'Xếp loại đánh giá chất lượng đảng viên',
+                    },
+                    {
+                        id: 'type-of-work',
+                        label: 'Loại hình công tác',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_LOAI_HINH_CONG_TAC,
+                        description: 'Loại hình công tác',
+                    },
+                    {
+                        id: 'working-status',
+                        label: 'Tình Trạng Công Tác',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TINH_TRANG_CONG_TAC,
+                        description: 'Tình Trạng Công Tác',
+                    },
+                    {
+                        id: 'type-of-study',
+                        label: 'Loại hình đi học tập',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_LOAI_HINH_DI_HOC_TAP,
+                        description: 'Loại hình đi học tập',
+                    },
+                    {
+                        id: 'study-status',
+                        label: 'Tình trạng đi học tập',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TINH_TRANG_DI_HOC_TAP,
+                        description: 'Tình trạng đi học tập',
+                    },
+                    {
+                        id: 'coutries-sending-for-study',
+                        label: 'Các nước cử đi học tập',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_CAC_NUOC_CU_DI_HOC_TAP,
+                        description: 'Các nước cử đi học tập',
+                    },
+                    {
+                        id: 'professional-title-of-lecturer',
+                        label: 'Chức danh CMNV ngạch giảng viên',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_GIANG_VIEN,
+                        description: 'Chức danh CMNV ngạch giảng viên',
+                    },
+                    {
+                        id: 'professional-title-of-researcher',
+                        label: 'Chức danh CMNV ngạch nghiên cứu viên',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO
+                            .DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_NGHIEN_CUU_VIEN,
+                        description: 'Chức danh CMNV ngạch nghiên cứu viên',
+                    },
+                    {
+                        id: 'professional-title-of-engineer',
+                        label: 'Chức danh CMNV ngạch kỹ sư',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_CHUC_DANH_CMNV_NGACH_KY_SU,
+                        description: 'Chức danh CMNV ngạch kỹ sư',
+                    },
+                    {
+                        id: 'universities',
+                        label: 'Các trường đào tạo bậc đại học',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_CAC_TRUONG_DAO_TAO_BAC_DAI_HOC,
+                        description: 'Các trường đào tạo bậc đại học',
+                    },
+                    {
+                        id: 'undergraduate-training-majors',
+                        label: 'Các chuyên ngành đào tạo bậc đại học',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_HO_SO
+                            .DANH_MUC_HO_SO_CAC_CHUYEN_NGANH_DAO_TAO_BAC_DAI_HOC,
+                        description: 'Các chuyên ngành đào tạo bậc đại học',
+                    },
+                ],
+                description: 'Danh mục hồ sơ',
             },
         ],
     },

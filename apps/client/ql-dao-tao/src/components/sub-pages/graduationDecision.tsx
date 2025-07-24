@@ -3,11 +3,13 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutGraduationDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
-import { ApplicationStatus } from '@workspace/db'
+import { ApplicationStatus, type Prisma } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useDeleteGraduationDecision,
+    useFindManyDiplomaType,
     useFindManyTrainingCourse,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
@@ -23,22 +25,82 @@ interface GraduationDecisionProps {
 export default function GraduationDecision({ sessionId }: GraduationDecisionProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        decisionDate: undefined,
+        finalGpa: undefined,
+        diplomaNumber: '',
+        diplomaIssueDate: undefined,
+    })
 
-    const { data = [], refetch } = useFindManyTrainingCourse({
-        where: {
-            academicRankingConvert: {
-                some: {
-                    graduationDecision: {
-                        some: {
-                            application: {
-                                sessionId,
-                                status: ApplicationStatus.APPROVED,
-                            },
-                        },
-                    },
-                },
-            },
-        },
+    const isFiltering = useMemo(() => {
+        return Object.values(filters).some((value) => !!value)
+    }, [filters])
+
+    const where: Prisma.TrainingCourseWhereInput = useMemo(
+        () =>
+            isFiltering
+                ? {
+                      academicRankingConvert: {
+                          some: {
+                              graduationDecision: {
+                                  some: {
+                                      student: {
+                                          userProfile: {
+                                              ...(filters.name
+                                                  ? {
+                                                        name: {
+                                                            contains: filters.name,
+                                                            mode: 'insensitive',
+                                                        },
+                                                    }
+                                                  : {}),
+                                              ...(filters.code
+                                                  ? {
+                                                        code: {
+                                                            contains: filters.code,
+                                                            mode: 'insensitive',
+                                                        },
+                                                    }
+                                                  : {}),
+                                              ...(filters.decisionDate
+                                                  ? {
+                                                        decisionDate: {
+                                                            gte: filters.decisionDate[0],
+                                                            lte: filters.decisionDate[1],
+                                                        },
+                                                    }
+                                                  : {}),
+                                              ...(filters.diplomaIssueDate
+                                                  ? {
+                                                        diplomaIssueDate: {
+                                                            gte: filters.diplomaIssueDate[0],
+                                                            lte: filters.diplomaIssueDate[1],
+                                                        },
+                                                    }
+                                                  : {}),
+                                              ...(filters.diplomaNumber
+                                                  ? {
+                                                        diplomaNumber: {
+                                                            contains: filters.diplomaNumber,
+                                                            mode: 'insensitive',
+                                                        },
+                                                    }
+                                                  : {}),
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {},
+        [filters, isFiltering]
+    )
+    const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
+    const { data = [] } = useFindManyTrainingCourse({
+        where,
         include: {
             academicRankingConvert: {
                 where: {
@@ -70,9 +132,11 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                         },
                     },
                 },
-                orderBy: {
-                    createdAt: 'asc',
-                },
+                orderBy: [
+                    {
+                        createdAt: 'asc',
+                    },
+                ],
             },
         },
         orderBy: {
@@ -97,26 +161,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         }))
     }, [data])
 
-    console.log(transformedData)
-
     const { data: count } = useCountTrainingCourse({
         where: {
-            academicRankingConvert: {
-                some: {
-                    graduationDecision: {
-                        some: {
-                            application: {
-                                sessionId,
-                                status: ApplicationStatus.APPROVED,
-                            },
-                        },
-                    },
-                },
-            },
+            ...where,
+            deletedAt: null,
         },
     })
 
-    const { onOpen, onClose } = useDisclosure<{ id: string; trainingCourseId: string }>({
+    const { onOpen } = useDisclosure<{ id: string; trainingCourseId: string }>({
         tag: PutGraduationDecision.name,
     })
 
@@ -152,6 +204,8 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                         headerTitleKey="name"
                         childrenFieldName="graduationDecisions"
                         data={transformedData}
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'Mã sinh viên',
@@ -190,17 +244,26 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 title: 'GPA cuối cùng',
                                 align: 'center',
                                 width: 100,
+                                dataIndex: 'finalGpa',
+                                type: 'order',
                                 render: (_, record) => record?.finalGpa,
                             },
                             {
                                 title: 'Loại bằng',
                                 align: 'center',
+                                type: 'select',
+                                options: diplomaTypeData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
                                 width: 100,
                                 render: (_, record) => record?.diplomaType?.name,
                             },
                             {
                                 title: 'Số hiệu văn bằng',
                                 align: 'center',
+                                dataIndex: 'diplomaNumber',
+                                type: 'input',
                                 width: 120,
                                 render: (_, record) => record?.diplomaNumber,
                             },
@@ -219,6 +282,8 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 title: 'Xếp loại',
                                 align: 'center',
                                 fixed: 'right',
+                                type: 'select',
+                                dataIndex: 'classification',
                                 width: 100,
                                 render: (_, record) => record?.finalRanking?.classification,
                             },
@@ -260,8 +325,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                     />
                 </Col>

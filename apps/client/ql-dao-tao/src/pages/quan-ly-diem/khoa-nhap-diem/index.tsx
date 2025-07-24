@@ -3,8 +3,8 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { HanNhapDiem } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType } from '@workspace/db'
 import {
@@ -623,8 +623,15 @@ export default function SubjectClassScore() {
                                 current: currentPage,
                                 pageSize: numberOfPages,
                                 total: count,
-                                onChange: setCurrentPage,
-                                onShowSizeChange: setNumberOfPages,
+
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
                             }}
                         />
                     </Col>

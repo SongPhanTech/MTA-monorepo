@@ -39,6 +39,7 @@ const systemPrefix = {
     QL_DAO_TAO: '',
     QL_NGUOI_DUNG: '',
     TRO_LY_AO: '',
+    QL_HO_SO: '',
 }
 
 for (const subsystem of subsystems.sort()) {

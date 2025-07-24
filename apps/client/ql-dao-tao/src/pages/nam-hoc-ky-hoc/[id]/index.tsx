@@ -43,11 +43,15 @@ export default function CanhCaoHocBong() {
                         label: 'Điểm trung bình kỳ học',
                         children: <DiemTrungBinhKyHoc semesterId={semesterId} />,
                     },
-                    {
-                        key: '2',
-                        label: 'Xét học bổng',
-                        children: <XetHocBong semesterId={semesterId} />,
-                    },
+                    ...(initialValue?.semesterType
+                        ? [
+                              {
+                                  key: '2',
+                                  label: 'Xét học bổng',
+                                  children: <XetHocBong semesterId={semesterId} />,
+                              },
+                          ]
+                        : []),
                     {
                         key: '3',
                         label: 'Xét cảnh cáo học tập',

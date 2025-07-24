@@ -417,8 +417,8 @@ const AddStudentToFixedClassModal = () => {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 80,
-                                render: (record) =>
-                                    record.userProfile?.gender
+                                render: (__, record) =>
+                                    record?.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
@@ -474,8 +474,15 @@ const AddStudentToFixedClassModal = () => {
                             current: currentPageNotClass,
                             pageSize: numberOfPagesNotClass,
                             total: countNotClass,
-                            onChange: setCurrentPageNotClass,
-                            onShowSizeChange: setNumberOfPagesNotClass,
+
+                            onChange: (page, pageSize) => {
+                                if (numberOfPagesNotClass === pageSize) {
+                                    setCurrentPageNotClass(page)
+                                } else {
+                                    setCurrentPageNotClass(1)
+                                    setNumberOfPagesNotClass(pageSize)
+                                }
+                            },
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
@@ -551,8 +558,8 @@ const AddStudentToFixedClassModal = () => {
                                 title: 'Giới tính',
                                 align: 'center',
                                 width: 80,
-                                render: (record) =>
-                                    record.userProfile?.gender
+                                render: (__, record) =>
+                                    record?.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
@@ -612,8 +619,14 @@ const AddStudentToFixedClassModal = () => {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                             showTotal: (total, range) =>
                                 `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}

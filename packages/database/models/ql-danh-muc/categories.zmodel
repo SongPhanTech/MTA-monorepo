@@ -1,5 +1,5 @@
 import '../base'
-import '../ql-nguoi-dung/profile'
+import '../ql-ho-so/profile'
 import '../ql-dao-tao/student'
 
 // /// khu vực đăng ký (Bắc, Trung, Nam)

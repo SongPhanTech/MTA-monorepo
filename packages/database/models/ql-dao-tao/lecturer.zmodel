@@ -5,7 +5,7 @@ import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/plan-training'
-import '../ql-nguoi-dung/profile'
+import '../ql-ho-so/profile'
 import '../ql-dao-tao/research'
 import '../ql-dao-tao/thesis'
 

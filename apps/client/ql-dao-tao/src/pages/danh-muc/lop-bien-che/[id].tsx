@@ -1,13 +1,12 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import { AddStudentToFixedClassModal, ModalPrintToDSHV, PutStudentModal } from '@components/modal'
-import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
+import { AddStudentToFixedClassModal, ModalPrintToDSHV } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
     GENDER_MEAN,
 } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Student } from '@workspace/db'
@@ -228,17 +227,18 @@ export default function StudentFixedClassPage() {
         tag: ModalPrintToDSHV.name,
     })
 
-    const { onOpen: onOpenUpdate } = useDisclosure<{
-        tag?: string
-        preSelectedValues?: {
-            trainingObjectTypeId?: string
-            trainingCourseId?: string
-            fixedClassId?: string
-        }
-        id: string | null
-    }>({
-        tag: PutStudentModal.name,
-    })
+    // TODO!: anh TUẤN sửa
+    // const { onOpen: onOpenUpdate } = useDisclosure<{
+    //     tag?: string
+    //     preSelectedValues?: {
+    //         trainingObjectTypeId?: string
+    //         trainingCourseId?: string
+    //         fixedClassId?: string
+    //     }
+    //     id: string | null
+    // }>({
+    //     tag: PutStudentModal.name,
+    // })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -422,7 +422,7 @@ export default function StudentFixedClassPage() {
                                 ],
 
                                 render: (__, record) =>
-                                    record.userProfile?.gender
+                                    record?.userProfile?.gender
                                         ? GENDER_MEAN[
                                               record.userProfile.gender as keyof typeof GENDER_MEAN
                                           ]
@@ -514,12 +514,12 @@ export default function StudentFixedClassPage() {
                                                 size={16}
                                             />
                                         </Tooltip>
-                                        <EditIcon
+                                        {/* <EditIcon
                                             onClick={onOpenUpdate.bind(null, {
                                                 id: id,
                                             })}
                                             className="text-sm text-blue-700 cursor-pointer"
-                                        />
+                                        /> */}
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () => handleDelete(id),
