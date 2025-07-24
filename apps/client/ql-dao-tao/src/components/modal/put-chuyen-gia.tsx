@@ -6,6 +6,7 @@ import {
     useCreateExpertProfile,
     useFindManyLecturer,
     useFindUniqueExpertProfile,
+    useFindUniqueLecturer,
     useUpdateExpertProfile,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio, Select } from 'antd'
@@ -27,9 +28,10 @@ const PutExpertProfile = () => {
         tag: PutExpertProfile.name,
         onClose: form.resetFields,
     })
+    const [selectedLecturerId, setSelectedLecturerId] = useState<string | undefined>()
     const { data: expert } = useFindUniqueExpertProfile({ where: { id: id } }, { enabled: !!id })
 
-    const [isInternal, setIsInternal] = useState(!!expert?.lecturerId)
+    const [isInternal, setIsInternal] = useState(true)
 
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: lecturer = [] } = useFindManyLecturer({
@@ -38,11 +40,26 @@ const PutExpertProfile = () => {
         },
     })
 
+    const { data: selectedLecturer } = useFindUniqueLecturer(
+        {
+            where: {
+                lectureID: selectedLecturerId,
+            },
+            include: {
+                userProfile: true,
+            },
+        },
+        {
+            enabled: !!selectedLecturerId,
+        }
+    )
+
     useEffect(() => {
         if (expert) {
             form.setFieldsValue({
                 ...expert,
             })
+            setIsInternal(!!expert.lecturerId)
         }
     }, [expert, form])
 
@@ -50,14 +67,24 @@ const PutExpertProfile = () => {
     const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()
     async function onOk(output?: PutExpertProfile) {
         if (!output) return
-        const payload = {
-            title: output.title,
-            lecturerId: output.lecturerId,
-            specialization: output.specialization,
-            workplace: output.workplace,
-            phone: output.phone,
-            email: output.email,
-            name: output.name,
+
+        let payload = {}
+
+        if (selectedLecturer) {
+            payload = {
+                name: selectedLecturer.userProfile.fullname,
+                phone: selectedLecturer.userProfile.phoneNumber,
+                email: selectedLecturer.userProfile.email,
+            }
+        } else {
+            payload = {
+                title: output.title,
+                specialization: output.specialization,
+                workplace: output.workplace,
+                phone: output.phone,
+                email: output.email,
+                name: output.name,
+            }
         }
 
         try {
@@ -101,7 +128,7 @@ const PutExpertProfile = () => {
                             form.resetFields()
                         }
                     }}
-                    defaultValue={expert?.lecturerId ? 'internal' : 'external'}
+                    value={isInternal ? 'internal' : 'external'}
                 >
                     <Radio value="internal">Chuyên gia trong trường</Radio>
                     <Radio value="external">Chuyên gia ngoài trường</Radio>
@@ -117,6 +144,9 @@ const PutExpertProfile = () => {
                                 value: item.id,
                             }))}
                             allowClear
+                            onChange={(value) => {
+                                setSelectedLecturerId(value)
+                            }}
                         />
                     </FormItem>
                 </Col>
