@@ -339,7 +339,7 @@ export default function ThesisProjectDetail() {
                             title: 'Tên chuyên gia',
                             width: 200,
                             fixed: 'left',
-                            render: (record) => record.expert?.lecturer?.userProfile.fullname,
+                            render: (record) => record.expert?.name,
                         },
                         {
                             title: 'Vai trò',

@@ -185,7 +185,7 @@ const PutThesisProject = () => {
                     <Select
                         placeholder="Chọn chuyên gia hướng dẫn"
                         options={expert.map((item) => ({
-                            label: `${item.lecturer?.userProfile.fullname} - ${item.code}`,
+                            label: `${item.name} - ${item.code}`,
                             value: item.id,
                         }))}
                         showSearch
