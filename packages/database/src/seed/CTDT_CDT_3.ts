@@ -10,9 +10,8 @@ async function main() {
         skipDuplicates: true,
         data: [
             {
-                // VLĐC1 exists
                 id: 'VLĐC1_CĐT_1',
-                subjectId: 'VLĐC1',
+                subjectId: 'VLĐC1_CĐT',
                 name: 'Vật lý đại cương 1',
                 description: 'Vật lý đại cương 1',
                 credit: 4,
@@ -21,7 +20,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'VLĐC1_CĐT_1',
             },
             {
@@ -35,13 +34,12 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNVLĐC1_CĐT_1',
             },
             {
-                // VLĐC2 exists
                 id: 'VLĐC2_CĐT_1',
-                subjectId: 'VLĐC2',
+                subjectId: 'VLĐC2_CĐT',
                 name: 'Vật lý đại cương 2',
                 description: 'Vật lý đại cương 2',
                 credit: 4,
@@ -50,7 +48,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'VLĐC2_CĐT_1',
             },
             {
@@ -64,7 +62,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNVLĐC2_CĐT_1',
             },
             {
@@ -79,7 +77,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CSLTHH_1',
             },
             {
@@ -93,7 +91,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNCSDLTHH_1',
             },
             {
@@ -108,7 +106,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DSTTHGT_1',
             },
             {
@@ -123,7 +121,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'GT1_1',
             },
             {
@@ -138,7 +136,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'GT2_1',
             },
             {
@@ -153,12 +151,13 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTXSTK_1',
             },
             {
+                // exists
                 id: 'LTCB_1',
-                subjectId: 'LTCB',
+                subjectId: '1', // check
                 name: 'Lập trình cơ bản',
                 description:
                     'Môn học cung cấp kiến thức cơ bản về lập trình, cấu trúc dữ liệu, giải thuật và ứng dụng trong kỹ thuật.',
@@ -168,13 +167,13 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTCB_1',
             },
             {
                 // TAB11 exists
                 id: 'TA_B11_1',
-                subjectId: 'TAB11',
+                subjectId: 'TA_B11',
                 name: 'Tiếng Anh B11',
                 description: 'Môn học tiếng Anh B11',
                 credit: 3,
@@ -183,13 +182,13 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TA_B11_1',
             },
             {
                 // TAB12 exists
                 id: 'TA_B12_1',
-                subjectId: 'TAB12',
+                subjectId: 'TA_B12',
                 name: 'Tiếng Anh B12',
                 description: 'Môn học tiếng Anh B12',
                 credit: 3,
@@ -198,7 +197,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TA_B12_1',
             },
             {
@@ -212,7 +211,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'HHVKTCB_1',
             },
             {
@@ -226,7 +225,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'NNLCBCNMLN1_1',
             },
             {
@@ -240,13 +239,12 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'NNLCBCNMLN2_1',
             },
             {
-                // PLVNĐC exists
                 id: 'PLĐC_1',
-                subjectId: 'PLVNĐC',
+                subjectId: 'PLĐC',
                 name: 'Pháp luật đại cương',
                 description: 'Môn học Pháp luật đại cương',
                 credit: 2,
@@ -255,7 +253,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PLĐC_1',
             },
             {
@@ -269,7 +267,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTHCM_1',
             },
             {
@@ -283,10 +281,10 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DLCM_1',
             },
-            // Cơ sở ngành
+            // // Cơ sở ngành
             {
                 id: 'CLT1_1',
                 subjectId: 'CLT1',
@@ -298,7 +296,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CLT1_1',
             },
             {
@@ -312,7 +310,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'SBVL1_1',
             },
             {
@@ -326,7 +324,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNCH_1',
             },
             {
@@ -340,7 +338,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CLT2_1',
             },
             {
@@ -354,7 +352,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'SBVL2_1',
             },
             {
@@ -368,7 +366,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'VKTCK_1',
             },
             {
@@ -382,7 +380,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'NLM_1',
             },
             {
@@ -396,7 +394,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CTM_1',
             },
             {
@@ -410,7 +408,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACTM_1',
             },
             {
@@ -424,7 +422,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TLMTL_1',
             },
             {
@@ -438,7 +436,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DSBTL_1',
             },
             {
@@ -452,7 +450,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CNKL_1',
             },
             {
@@ -466,7 +464,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CSCNCTM_1',
             },
             {
@@ -480,7 +478,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'VLHĐC_1',
             },
             {
@@ -494,7 +492,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNVL_1',
             },
             {
@@ -508,7 +506,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DCD_1',
             },
             {
@@ -522,7 +520,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CADCAE_1',
             },
             {
@@ -536,7 +534,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CKDT_1',
             },
             {
@@ -550,7 +548,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNCKDT_1',
             },
             {
@@ -564,7 +562,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTMBTL_1',
             },
             {
@@ -578,7 +576,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNLTM_1',
             },
             {
@@ -592,7 +590,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTDKTD1_1',
             },
             {
@@ -606,7 +604,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'ATLDVBVMT_1',
             },
             {
@@ -620,7 +618,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTDKTD2_1',
             },
             // Chuyên ngành
@@ -635,7 +633,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'HTTDTK_1',
             },
             {
@@ -649,7 +647,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PTCHNVNMT_1',
             },
             {
@@ -663,7 +661,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'KTRB_1',
             },
             {
@@ -677,7 +675,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PTVTHHTCDT_1',
             },
             {
@@ -691,7 +689,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DAPTVTHHTCDT_1',
             },
             {
@@ -705,7 +703,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DKMTHTSX_1',
             },
             {
@@ -719,7 +717,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DACNCAD_1',
             },
             {
@@ -733,7 +731,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'HTSXLHVTH_1',
             },
             {
@@ -747,7 +745,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DTSBTL_1',
             },
             {
@@ -761,7 +759,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNDTS_1',
             },
             {
@@ -775,7 +773,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DTTTBTL_1',
             },
             {
@@ -789,7 +787,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TNDTTT_1',
             },
             {
@@ -803,7 +801,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TKHTN_1',
             },
             {
@@ -817,7 +815,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DATKHTN_1',
             },
             {
@@ -831,7 +829,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'PLCPCMTTCN_1',
             },
             {
@@ -845,7 +843,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DTCSVKTBD_1',
             },
             {
@@ -859,7 +857,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CSTDD_1',
             },
             {
@@ -873,7 +871,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'LTPTCADCAE_1',
             },
             {
@@ -887,7 +885,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'CSTDHMCC_1',
             },
             {
@@ -901,7 +899,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTCK_1',
             },
             {
@@ -915,7 +913,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTCDT_1',
             },
             {
@@ -929,7 +927,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTD_1',
             },
             {
@@ -943,7 +941,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTDTCB_1',
             },
             {
@@ -957,12 +955,12 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'ATDKCD_1',
             },
             {
                 id: 'TTTN_K6_1',
-                subjectId: 'TTTN',
+                subjectId: 'TTTN_MTA',
                 name: 'Thực tập tốt nghiệp',
                 description: 'Môn học Thực tập tốt nghiệp',
                 credit: 3,
@@ -971,7 +969,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TTTN_K6_1',
             },
             {
@@ -985,7 +983,7 @@ async function main() {
                 updatedAt: new Date(),
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K6',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'DATN_1',
             },
         ],
@@ -997,7 +995,7 @@ async function main() {
         data: [
             {
                 id: 'CDT_K6_V1',
-                curriculumId: 'CDT_K6',
+                curriculumId: 'CDT_3f9eb08b-029b-4c0e-b77f-d69a6e66ae6e',
                 name: 'Phiên bản 1',
                 description: 'Phiên bản test của chương trình đào tạo Cơ điện tử K6',
                 createdAt: new Date(),
