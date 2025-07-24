@@ -679,6 +679,7 @@ const Table = <T extends Record<string, unknown>>({
         <TableAntd<T>
             id={id}
             rowKey={rowKey}
+            size="small"
             className="mt-4 custom-scrollbar"
             rowSelection={rowSelection}
             columns={

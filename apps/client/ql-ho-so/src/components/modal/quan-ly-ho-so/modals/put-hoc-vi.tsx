@@ -32,7 +32,6 @@ export default function PutHocViModal() {
     const { mutateAsync: updateHocVi } = useUpdateHocVi()
 
     async function onOk(output: HocVi) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -60,6 +59,7 @@ export default function PutHocViModal() {
                     },
                 })
             }
+            message.success(input?.id ? 'Cập nhật học vị thành công' : 'Thêm mới học vị thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
