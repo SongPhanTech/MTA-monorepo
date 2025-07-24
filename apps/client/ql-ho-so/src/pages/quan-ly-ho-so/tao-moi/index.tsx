@@ -1,3 +1,4 @@
+import { CameraFilled, UserOutlined } from '@ant-design/icons'
 import HocHamForm from '@components/modal/quan-ly-ho-so/form/hoc-ham'
 import HocViForm from '@components/modal/quan-ly-ho-so/form/hoc-vi'
 import ThongTinCoBan from '@components/modal/quan-ly-ho-so/form/thong-tin-co-ban'
@@ -5,12 +6,16 @@ import ThongTinThanNhanForm from '@components/modal/quan-ly-ho-so/form/thong-tin
 import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trinh-do-ly-luan-chinh-tri'
 import CreateLayout from '@layouts/create-layout'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Flex, Input } from 'antd'
+import { Button, Flex, Form, Input, Upload, type UploadFile, type UploadProps } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
+import './index.css'
+import ImgCrop from 'antd-img-crop'
 export default function CreateUserPage() {
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
+    const [avatar, setAvatar] = useState<UploadFile[]>([])
+    const [fileList, setFileList] = useState<UploadFile[]>([])
     const router = useRouter()
     const listTabs = [
         {
@@ -59,6 +64,9 @@ export default function CreateUserPage() {
             id: 'keKhaiTaiSan',
         },
     ]
+    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+        setFileList(newFileList.slice(-1))
+    }
 
     const listTabsRender = useMemo(() => {
         return (
@@ -116,10 +124,41 @@ export default function CreateUserPage() {
                         </div>
                     )}
                 </div>
-                <div className="p-4 bg-white rounded-lg shadow h-full overflow-y-auto w-[calc(100%-266px)] ">
-                    {listTabs.map((i) => {
-                        return i?.render || ''
-                    })}
+                <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
+                    <div className="p-6 shadow rounded-lg bg-white mb-4">
+                        <Form.Item name={'file'} className="mb-0">
+                            <ImgCrop rotationSlider>
+                                <Upload
+                                    listType="picture-circle"
+                                    maxCount={1}
+                                    fileList={avatar?.length > 0 ? avatar : fileList}
+                                    onChange={onChange}
+                                    onRemove={() => {
+                                        setAvatar([])
+                                    }}
+                                    className="!w-[64px] !h-[64px] avatar-upload"
+                                >
+                                    {avatar?.length > 0 || fileList.length > 0
+                                        ? ''
+                                        : fileList.length < 1 && (
+                                              <div className="relative flex items-center justify-center">
+                                                  <UserOutlined
+                                                      style={{ fontSize: '20px', color: '#686C7B' }}
+                                                  />
+                                                  <div className="absolute bottom-[-24px] right-[-24px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0]">
+                                                      <CameraFilled style={{ color: '#686C7B' }} />
+                                                  </div>
+                                              </div>
+                                          )}
+                                </Upload>
+                            </ImgCrop>
+                        </Form.Item>
+                    </div>
+                    <div className="p-6 shadow rounded-lg bg-white form-userprofile">
+                        {listTabs.map((i) => {
+                            return i?.render || ''
+                        })}
+                    </div>
                 </div>
             </Flex>
         </div>
