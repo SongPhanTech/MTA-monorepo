@@ -4,12 +4,15 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutQuestion } from '@components/modal'
+import { WordImportModal } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Question } from '@workspace/db'
 import {
     useCountQuestion,
+    useCreateManyQuestion,
     useFindManyDifficulty,
     useFindManyKnowledgeBlock,
     useFindManyQuestion,
@@ -24,13 +27,14 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function Question() {
+export default function QuestionPage() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const questionBankId = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
+    const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         questionType: undefined,
@@ -174,16 +178,40 @@ export default function Question() {
         hideSpinner()
     }
 
+    const { mutateAsync: createManyQuestions } = useCreateManyQuestion()
+
+    const handleImportSuccess = async (questions: Partial<Question>[]) => {
+        try {
+            showSpinner()
+            await createManyQuestions({
+                data: questions
+                    .filter((q) => typeof q.content === 'string' && q.content.trim() !== '')
+                    .map((q) => ({
+                        ...q,
+                        content: q.content as string,
+                        questionBankId,
+                        type: q.type || 'ESSAY',
+                        isAutoGraded: q.isAutoGraded || false,
+                    })),
+            })
+            message.success(`Đã thêm ${questions.length} câu hỏi thành công`)
+            setImportModalVisible(false)
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi thêm câu hỏi')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const itemsDownload = [
         {
             key: 'import',
-            label: 'Nhập dữ liệu bằng excel',
-            onClick: () => {},
-            // onClick: () => setImportModalVisible(true),
+            label: 'Nhập dữ liệu bằng word',
+            onClick: () => setImportModalVisible(true),
         },
         {
             key: 'update',
-            label: 'Tải file mẫu excel',
+            label: 'Tải file mẫu',
             onClick: () => {},
             // onClick: () => onOpenTrainingBlock,
         },
@@ -264,7 +292,7 @@ export default function Question() {
                             {
                                 title: 'Loại câu hỏi',
                                 dataIndex: 'questionType',
-                                width: 120,
+                                width: 100,
                                 align: 'center',
                                 type: 'select',
                                 options: questionTypeOptions,
@@ -288,7 +316,7 @@ export default function Question() {
                             {
                                 title: 'Độ khó',
                                 dataIndex: 'difficultyId',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'select',
                                 options: difficultyData?.map(({ id, name, level }) => ({
@@ -296,13 +324,22 @@ export default function Question() {
                                     label: `${name} (level ${level})`,
                                 })),
                                 render: (__, record) => {
-                                    return `${record?.difficulty?.name} (level ${record?.difficulty?.level})`
+                                    if (!record?.difficulty) {
+                                        return 'Chưa xác định'
+                                    }
+                                    if (!record.difficulty.name) {
+                                        return `Level ${record.difficulty.level || 'N/A'}`
+                                    }
+                                    if (!record.difficulty.level) {
+                                        return record.difficulty.name
+                                    }
+                                    return `${record.difficulty.name} (level ${record.difficulty.level})`
                                 },
                             },
                             {
                                 title: 'Điểm số',
                                 dataIndex: 'point',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                             },
@@ -376,11 +413,19 @@ export default function Question() {
                     />
                 </Col>
             </Row>
+            <WordImportModal
+                visible={importModalVisible}
+                onCancel={() => setImportModalVisible(false)}
+                onImportSuccess={(questions) => {
+                    console.log('Imported questions:', questions)
+                    handleImportSuccess(questions)
+                }}
+            />
         </div>
     )
 }
 
-Question.getLayout = function getLayout(page: React.ReactElement) {
+QuestionPage.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
