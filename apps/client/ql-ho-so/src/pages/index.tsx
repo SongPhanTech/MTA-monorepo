@@ -13,13 +13,13 @@ const IndexPage: NextPage = () => {
     useEffect(() => {
         console.log(status)
         if (status === 'authenticated') {
-            if (goToLastPage()) return
+            if (goToLastPage('hrm')) return
             const firstMenu = menus.flat()
             if (firstMenu.length > 0 && firstMenu[0].path) {
                 router.push(firstMenu[0].path)
             }
         }
-    }, [status, goToLastPage, menus.flat, router.push])
+    }, [status, menus.flat, router.push, goToLastPage])
     return <Loading />
 }
 export default IndexPage
