@@ -19,6 +19,7 @@
         "@prisma/client": "catalog:",
         "@zenstackhq/runtime": "catalog:",
         "dayjs": "catalog:",
+        "decimal.js": "catalog:",
         "zod": "catalog:"
     },
     "devDependencies": {

@@ -1,5 +1,9 @@
-import { $Enums, PrismaClient } from '@prisma/client'
-import { academicRankingGraduation, academicRankingStudying } from './seed/academic-ranking-convert'
+import { $Enums, AcademicRankingBaseType, PrismaClient } from '@prisma/client'
+import {
+    academicRankingGraduationCivilian,
+    academicRankingGraduationMilitary,
+    academicRankingStudying,
+} from './seed/academic-ranking-convert'
 import { scoreConversions } from './seed/score-convert'
 import { trainingData } from './seed/trainingData'
 
@@ -375,7 +379,7 @@ async function main() {
 
     // Seed TrainingCourse
     const trainingCourses = await prisma.trainingCourse.createManyAndReturn({
-        select: { id: true },
+        select: { id: true, trainingObjectType: { select: { baseScore: true } } },
         skipDuplicates: true,
         data: [
             {
@@ -413,17 +417,62 @@ async function main() {
     )
 
     await Promise.all(
-        trainingCourses.map((trainingCourse) =>
-            prisma.academicRankingConvert.createMany({
-                data: [...academicRankingGraduation, ...academicRankingStudying].map(
-                    (conversion) => ({
-                        trainingCourseId: trainingCourse.id,
-                        ...conversion,
-                    })
-                ),
-            })
-        )
+        trainingCourses
+            .filter(
+                ({ trainingObjectType }) =>
+                    trainingObjectType.baseScore === AcademicRankingBaseType.Base10
+            )
+            .map((trainingCourse) =>
+                prisma.academicRankingConvert.createMany({
+                    skipDuplicates: true,
+                    data: [...academicRankingGraduationMilitary, ...academicRankingStudying].map(
+                        (conversion) => ({
+                            trainingCourseId: trainingCourse.id,
+                            ...conversion,
+                        })
+                    ),
+                })
+            )
     )
+
+    await Promise.all(
+        trainingCourses
+            .filter(
+                ({ trainingObjectType }) =>
+                    trainingObjectType.baseScore === AcademicRankingBaseType.Base4
+            )
+            .map((trainingCourse) =>
+                prisma.academicRankingConvert.createMany({
+                    skipDuplicates: true,
+                    data: [...academicRankingGraduationCivilian, ...academicRankingStudying].map(
+                        (conversion) => ({
+                            trainingCourseId: trainingCourse.id,
+                            ...conversion,
+                        })
+                    ),
+                })
+            )
+    )
+
+    const ranks = await prisma.academicRankingConvert.findMany({
+        where: { rankOrder: { in: [1, 2] } },
+        select: { id: true },
+    })
+
+    for (const rank of ranks) {
+        await prisma.graduationRankDowngradeRule.create({
+            data: {
+                initialRankId: rank.id,
+                conditions: {
+                    create: {
+                        field: 'CONDUCT_SCORE',
+                        operator: 'LT',
+                        value: 80,
+                    },
+                },
+            },
+        })
+    }
 
     // Seed FixedClass
     await prisma.fixedClass.createMany({

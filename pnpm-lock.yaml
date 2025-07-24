@@ -1589,6 +1589,9 @@ importers:
       dayjs:
         specifier: 'catalog:'
         version: 1.11.13
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
       zod:
         specifier: 'catalog:'
         version: 3.25.76
