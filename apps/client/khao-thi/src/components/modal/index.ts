@@ -8,7 +8,6 @@ import PutExam from './put-ky-thi'
 import PutSurveyModal from './put-modal-survey'
 import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
 import PutSurveyQuestionModal from './put-modal-survey-question'
-import PutSurveyQuestionTypeModal from './put-modal-survey-question-type'
 import PutSurveyTopicModal from './put-modal-survey-topic'
 import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
@@ -17,7 +16,6 @@ export {
     AddTaiLieu,
     PutSurveyObjectTypeModal,
     PutSurveyTopicModal,
-    PutSurveyQuestionTypeModal,
     PutSurveyModal,
     PutSurveyQuestionModal,
     PutQuestionBank,

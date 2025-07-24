@@ -149,7 +149,7 @@ export default function ThesisProject() {
                             {
                                 title: 'Chuyên gia hướng dẫn',
                                 width: 180,
-                                render: (record) => record.supervisor.lecturer.userProfile.fullname,
+                                render: (record) => record.supervisor.name,
                             },
                             {
                                 title: 'Đơn vị quản lý',

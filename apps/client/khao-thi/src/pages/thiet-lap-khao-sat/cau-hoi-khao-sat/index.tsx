@@ -61,10 +61,7 @@ function Page() {
                 ? { surveyQuestionTypeId: filters.surveyQuestionTypeId }
                 : {}),
         },
-        include: {
-            surveyQuestionType: true,
-            survey: true,
-        },
+        include: { survey: true },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })

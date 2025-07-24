@@ -43,7 +43,7 @@ const PutExpertProfile = () => {
     const { data: selectedLecturer } = useFindUniqueLecturer(
         {
             where: {
-                lectureID: selectedLecturerId,
+                id: selectedLecturerId,
             },
             include: {
                 userProfile: true,
@@ -62,6 +62,8 @@ const PutExpertProfile = () => {
             setIsInternal(!!expert.lecturerId)
         }
     }, [expert, form])
+
+    console.log(selectedLecturer)
 
     const { mutateAsync: createExpertProfile } = useCreateExpertProfile()
     const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()

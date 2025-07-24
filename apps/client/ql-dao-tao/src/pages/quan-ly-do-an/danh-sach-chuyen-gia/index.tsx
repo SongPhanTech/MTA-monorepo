@@ -103,9 +103,9 @@ export default function ExpertProfile() {
                             },
                             {
                                 title: 'Tên chuyên gia',
+                                dataIndex: 'name',
                                 width: 150,
                                 type: 'input',
-                                render: (record) => record?.lecturer?.userProfile.fullname,
                             },
                             {
                                 title: 'Hàm vị, học vị',

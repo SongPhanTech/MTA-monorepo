@@ -60,6 +60,7 @@ const PutSurveyModal = () => {
                 await create({
                     data: {
                         code: output.code,
+                        additionalSuggestion: false,
                         name: output.name,
                         surveyObjectId: output.surveyObjectId,
                         surveyTopicId: output.surveyTopicId,
