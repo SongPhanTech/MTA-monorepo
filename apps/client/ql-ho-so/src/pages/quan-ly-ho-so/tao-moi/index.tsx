@@ -1,4 +1,8 @@
+import HocHamForm from '@components/modal/quan-ly-ho-so/form/hoc-ham'
+import HocViForm from '@components/modal/quan-ly-ho-so/form/hoc-vi'
 import ThongTinCoBan from '@components/modal/quan-ly-ho-so/form/thong-tin-co-ban'
+import ThongTinThanNhanForm from '@components/modal/quan-ly-ho-so/form/thong-tin-than-nhan'
+import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trinh-do-ly-luan-chinh-tri'
 import CreateLayout from '@layouts/create-layout'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Flex, Input } from 'antd'
@@ -21,14 +25,22 @@ export default function CreateUserPage() {
         {
             title: 'Thông tin thân nhân',
             id: 'thongTinThanNhan',
+            render: <ThongTinThanNhanForm />,
         },
         {
-            title: 'Học hàm học vị',
-            id: 'hocHamHocVi',
+            title: 'Học vị',
+            id: 'hocVi',
+            render: <HocViForm />,
         },
         {
-            title: 'Trình độ chứng chỉ',
-            id: 'trinhDoChungChi',
+            title: 'Học hàm',
+            id: 'hocHam',
+            render: <HocHamForm />,
+        },
+        {
+            title: 'Trình độ lý luận chính trị',
+            id: 'trinhDoLyLuanChinhTri',
+            render: <TrinhDoLyLuanChinhTriForm />,
         },
         {
             title: 'Quá trình công tác',

@@ -26,6 +26,7 @@ import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutHocHamModal from './quan-ly-ho-so/modals/put-hoc-ham'
 import PutHocViModal from './quan-ly-ho-so/modals/put-hoc-vi'
+import PutThongTinThanNhan from './quan-ly-ho-so/modals/put-thong-tin-than-nhan'
 export {
     PutStudentModal,
     PutHocvienModal,
@@ -55,4 +56,5 @@ export {
     XepLoaiDanhGiaCanBoModal,
     XepLoaiDanhGiaChatLuongDangVienModal,
     ChuyenNganhDaoTaoModal,
+    PutThongTinThanNhan,
 }
