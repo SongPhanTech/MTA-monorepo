@@ -1,53 +1,104 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import { ChuyenNganhDaoTaoModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Col, Flex, Row } from 'antd'
-import { useState } from 'react'
-
-const fakeData = [
-    {
-        id: 1,
-        code: 'CN001',
-        name: 'Công nghệ thông tin1',
-        description: 'Chuyên ngành về công nghệ thông tin',
-    },
-    {
-        id: 2,
-        code: 'CN002',
-        name: 'Công nghệ thông tin2',
-        description: 'Chuyên ngành về công nghệ thông tin',
-    },
-    {
-        id: 3,
-        code: 'CN003',
-        name: 'Công nghệ thông tin3',
-        description: 'Chuyên ngành về công nghệ thông tin',
-    },
-    {
-        id: 4,
-        code: 'CN004',
-        name: 'Công nghệ thông tin4',
-        description: 'Chuyên ngành về công nghệ thông tin',
-    },
-]
+import type { DM_ChuyenNganhDaoTaoBacDH } from '@workspace/db'
+import {
+    useCountDM_ChuyenNganhDaoTaoBacDH,
+    useFindManyDM_ChuyenNganhDaoTaoBacDH,
+    useUpdateDM_ChuyenNganhDaoTaoBacDH,
+} from '@workspace/db/hooks'
+import { Button, Col, Flex, Input, message, Row } from 'antd'
+import _ from 'lodash'
+import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function UndergraduateTrainingMajors() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [filters, setFilters] = useState<{
+        search: string
+    }>({
+        search: '',
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
+    const { onOpen } = useDisclosure<Partial<DM_ChuyenNganhDaoTaoBacDH>>({
+        tag: ChuyenNganhDaoTaoModal.name,
+    })
 
-    const handleModal = () => {}
+    const { data = [], refetch } = useFindManyDM_ChuyenNganhDaoTaoBacDH({
+        where: {
+            name: {
+                contains: filters.search,
+                mode: 'insensitive',
+            },
+        },
+    })
+    const { data: count } = useCountDM_ChuyenNganhDaoTaoBacDH({
+        where: {
+            name: {
+                contains: filters.search,
+                mode: 'insensitive',
+            },
+        },
+    })
+    const { mutateAsync: updateChuyenNganhDaoTao } = useUpdateDM_ChuyenNganhDaoTaoBacDH()
+
+    const handleModal = () => {
+        onOpen()
+    }
+
+    const handleDeleteChuyenNganhDaoTao = async (id: string) => {
+        try {
+            showSpinner()
+            await updateChuyenNganhDaoTao({
+                where: {
+                    id,
+                },
+                data: {
+                    name: new Date().toISOString(),
+                    deletedAt: new Date(),
+                },
+            })
+            message.success('Xóa thành công')
+            refetch()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFilters((prev) => ({ ...prev, search: e.target.value }))
+        setCurrentPage(1)
+        debouncedRefetch()
+    }
 
     return (
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>Filter</Col>
+                        <Col span={8}>
+                            <Input
+                                placeholder="Tìm kiếm theo tên chuyên ngành...."
+                                value={filters.search}
+                                onChange={handleSearchChange}
+                                allowClear
+                            />
+                        </Col>
                         <Col span={6}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
@@ -70,46 +121,47 @@ export default function UndergraduateTrainingMajors() {
                                     index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
                             {
-                                title: 'Mã chuyên ngành',
-                                width: 80,
-                                align: 'center',
-                                dataIndex: 'code',
-                            },
-                            {
                                 title: 'Tên chuyên ngành',
                                 width: 150,
                                 align: 'center',
-                                dataIndex: 'name',
+                                render: (_, record) => record.name || '',
                             },
                             {
                                 title: 'Mô tả',
                                 width: 150,
                                 align: 'center',
-                                dataIndex: 'description',
+                                render: (_, record) => record.description || '',
                             },
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => {
-                                    if (id) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                <EditIcon className="text-sm text-blue-700 cursor-pointer" />
-                                                <DeleteIcon />
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
+                                render: (_, record) => {
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            <EditIcon
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                                onClick={() => onOpen(record)}
+                                            />
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDeleteChuyenNganhDaoTao(record.id),
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        </Row>
+                                    )
                                 },
                             },
                         ]}
-                        data={fakeData}
+                        data={data}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
-                            total: fakeData.length,
+                            total: count,
+
                             onChange: (page, pageSize) => {
                                 if (numberOfPages === pageSize) {
                                     setCurrentPage(page)
@@ -118,8 +170,6 @@ export default function UndergraduateTrainingMajors() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>
