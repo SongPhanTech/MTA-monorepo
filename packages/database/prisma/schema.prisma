@@ -659,7 +659,7 @@ model ExamSession {
   updatedAt   DateTime  @updatedAt()
   startTime   DateTime  @default(now())
   endTime     DateTime?
-  score       Float?
+  score       Decimal?  @db.Decimal(5, 2)
   isGraded    Boolean   @default(false)
   student     Student?  @relation(fields: [studentId], references: [id])
   studentId   String?
@@ -693,7 +693,7 @@ model StudentSubjectScore {
   attendanceScore  Float?
   midtermScore     Float?
   examScore        Float?
-  finalScore       Float?
+  finalScore       Decimal?                                   @db.Decimal(5, 2)
   manualFinalScore Float?
   examPostponed    Boolean                                    @default(false)
   exempted         Boolean                                    @default(false)
@@ -1557,10 +1557,10 @@ model StudentSemesterResult {
   semesterIndexInCourse    Int
   isLastSemester           Boolean
   baseScore                AcademicRankingBaseType
-  gpaBase4                 Float
-  cumulativeGpaBase4       Float
-  gpaBase10                Float
-  cumulativeGpaBase10      Float
+  gpaBase4                 Decimal                 @db.Decimal(5, 2)
+  cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)
+  gpaBase10                Decimal                 @db.Decimal(5, 2)
+  cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
   conductScore             Float?
   studentTrainingType      StudentTrainingType
   lowestFinalScore         Float
@@ -1603,10 +1603,10 @@ model StudentYearResult {
   studyYear                Int
   isLastStudyYear          Boolean
   baseScore                AcademicRankingBaseType
-  gpaBase4                 Float
-  cumulativeGpaBase4       Float
-  gpaBase10                Float
-  cumulativeGpaBase10      Float
+  gpaBase4                 Decimal                 @db.Decimal(5, 2)
+  cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)
+  gpaBase10                Decimal                 @db.Decimal(5, 2)
+  cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)
   conductScore             Float?
   studentTrainingType      StudentTrainingType
   totalCredits             Int
@@ -2301,6 +2301,30 @@ model DM_Tinh {
   @@schema("mta")
 }
 
+model DM_QuanHuyen {
+  Id                   String    @id() @default(uuid()) @db.Uuid()
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?      @default(0)
+  bActive              Boolean?  @default(true)
+  bDeleted             Boolean?  @default(false)
+  bSystem              Boolean?  @default(false)
+  iDictionaryKey       Int?      @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  sDM_TinhId           String?   @db.Uuid()
+  sDM_Tinh_Ma          String?
+  iDM_DonViHanhChinhId Int?
+
+  @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
+  @@schema("mta")
+}
+
 model DM_XaPhuong {
   Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
@@ -2834,7 +2858,7 @@ model DefenseRecord {
   deletedAt         DateTime?
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt()
-  finalScore        Float?
+  finalScore        Decimal?       @db.Decimal(5, 2)
   comments          String?        @db.Text()
   isProfileComplete Boolean        @default(false)
   thesis            ThesisProject  @relation(fields: [thesisId], references: [id])
@@ -2873,7 +2897,7 @@ model PaymentRecord {
   deletedAt       DateTime?
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt()
-  amount          Float
+  amount          Decimal
   status          PaymentStatus  @default(PENDING)
   paymentDate     DateTime?
   transactionCode String?
@@ -3734,7 +3758,7 @@ model GraduationDecision {
   studentId        String                       @unique()
   decisionDate     DateTime                     @default(now())
   notes            String?
-  finalGpa         Float
+  finalGpa         Decimal                      @db.Decimal(5, 2)
   finalRanking     AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
   finalRankingId   String
   diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])

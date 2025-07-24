@@ -16,6 +16,7 @@ import {
     StudentTrainingType,
 } from '@workspace/db'
 import { criteriaFieldLabels, criteriaOperatorLabels } from '@workspace/libs/constants'
+import Decimal from 'decimal.js'
 import { prisma } from '..'
 import {
     CourseStudentResult,
@@ -218,7 +219,7 @@ const ThongTinTichLuy = async (
             if (item.examPostponed || item.withdrew) {
                 return // Bỏ qua nếu có lý do không tính điểm
             }
-            let diemHe10 = item.manualFinalScore ?? item.finalScore // Lấy điểm thủ công nếu có, nếu không thì lấy điểm cuối
+            let diemHe10 = item.manualFinalScore ?? item.finalScore?.toNumber() // Lấy điểm thủ công nếu có, nếu không thì lấy điểm cuối
             // Kiểm tra xem có lý do cấm thi không
             if (item.examBanned || item.suspended) {
                 diemHe10 = 0 // Cấm thi thì điểm là 0
@@ -254,7 +255,7 @@ const ThongTinTichLuy = async (
             if (
                 !checkScorePassed(
                     AcademicRankingBaseType.Base10,
-                    item.manualFinalScore ?? item.finalScore ?? 0,
+                    item.manualFinalScore ?? item.finalScore?.toNumber() ?? 0,
                     DsDiemChuyenDoi
                 )
             ) {
@@ -506,7 +507,7 @@ const ThongTinDiemHocKy = async (
             if (item.examPostponed || item.withdrew) {
                 return // Bỏ qua nếu có lý do không tính điểm
             }
-            let diemHe10 = item.manualFinalScore ?? item.finalScore // Lấy điểm thủ công nếu có, nếu không thì lấy điểm cuối
+            let diemHe10 = item.manualFinalScore ?? item.finalScore?.toNumber() // Lấy điểm thủ công nếu có, nếu không thì lấy điểm cuối
             // Kiểm tra xem có lý do cấm thi không
             if (item.examBanned || item.suspended) {
                 diemHe10 = 0 // Cấm thi thì điểm là 0
@@ -699,10 +700,10 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
 
                     baseScore:
                         student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base4
-                    gpaBase4: thongTinDiemHocKy.diemTrungBinh4TrongKy,
-                    gpaBase10: thongTinDiemHocKy.diemTrungBinh10TrongKy,
-                    cumulativeGpaBase4: thongTinTichLuy.diemTrungBinh4TichLuy,
-                    cumulativeGpaBase10: thongTinTichLuy.diemTrungBinh10TichLuy,
+                    gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
+                    gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
+                    cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
+                    cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
 
                     lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
                     lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
@@ -759,10 +760,10 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
 
                     baseScore:
                         student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10,
-                    gpaBase4: thongTinDiemHocKy.diemTrungBinh4TrongKy,
-                    gpaBase10: thongTinDiemHocKy.diemTrungBinh10TrongKy,
-                    cumulativeGpaBase4: thongTinTichLuy.diemTrungBinh4TichLuy,
-                    cumulativeGpaBase10: thongTinTichLuy.diemTrungBinh10TichLuy,
+                    gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
+                    gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
+                    cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
+                    cumulativeGpaBase10: new Decimal(thongTinTichLuy.diemTrungBinh10TichLuy),
 
                     lowestFinalScore: thongTinDiemHocKy.diemThapNhat,
                     lowestGraduationScore: thongTinDiemHocKy.diemThapNhat,
@@ -891,8 +892,16 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     item.student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là 10 nếu không có thông tin
                 const xepLoaiHocTap =
                     baseScore === AcademicRankingBaseType.Base10
-                        ? await phanLoaiDiemHe10(item.gpaBase10, trainingCourseId, scoreConvert)
-                        : await phanLoaiDiemHe4(item.gpaBase4, trainingCourseId, scoreConvert)
+                        ? await phanLoaiDiemHe10(
+                              item.gpaBase10.toNumber(),
+                              trainingCourseId,
+                              scoreConvert
+                          )
+                        : await phanLoaiDiemHe4(
+                              item.gpaBase4.toNumber(),
+                              trainingCourseId,
+                              scoreConvert
+                          )
                 return {
                     stt: 0,
                     id: item.student.id ?? '',
@@ -921,8 +930,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     fullDiemD: true,
                     diemMonThuongNhoNhat: item.lowestFinalScore,
                     diemMonTotNghiepNhoNhat: item.lowestGraduationScore ?? 0,
-                    diemTrungBinh4: item.gpaBase4 || 0,
-                    diemTrungBinh10: item.gpaBase10 || 0,
+                    diemTrungBinh4: item.gpaBase4.toNumber() || 0,
+                    diemTrungBinh10: item.gpaBase10.toNumber() || 0,
                     xepLoaiHocTap: xepLoaiHocTap || 'Chưa có dữ liệu',
                     soTinChiTichLuy: item.accumulatedCredits || 0,
                     soTinChiYeuCau: item.totalCreditsByCurriculum || 0,
@@ -953,8 +962,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                     // Add missing properties with default values or calculated from item if possible
                     noTinChiTrongKy: 0,
                     tongSoTinChiNo: 0,
-                    diemHe10TichLuy: item.cumulativeGpaBase10 || 0,
-                    diemHe4TichLuy: item.cumulativeGpaBase4 || 0,
+                    diemHe10TichLuy: item.cumulativeGpaBase10.toNumber() || 0,
+                    diemHe4TichLuy: item.cumulativeGpaBase4.toNumber() || 0,
                     soTinChiDatTichLuy: 0,
                     soTinChiKhongDatTichLuy: 0,
                     xepLoaiHocTapTichLuy: '',

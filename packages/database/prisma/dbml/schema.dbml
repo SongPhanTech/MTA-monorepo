@@ -209,7 +209,7 @@ Table ExamSession {
   updatedAt DateTime [not null]
   startTime DateTime [default: `now()`, not null]
   endTime DateTime
-  score Float
+  score Decimal
   isGraded Boolean [not null, default: false]
   student Student
   studentId String
@@ -245,7 +245,7 @@ Table StudentSubjectScore {
   attendanceScore Float
   midtermScore Float
   examScore Float
-  finalScore Float
+  finalScore Decimal
   manualFinalScore Float
   examPostponed Boolean [not null, default: false]
   exempted Boolean [not null, default: false]
@@ -1090,10 +1090,10 @@ Table StudentSemesterResult {
   semesterIndexInCourse Int [not null]
   isLastSemester Boolean [not null]
   baseScore AcademicRankingBaseType [not null]
-  gpaBase4 Float [not null]
-  cumulativeGpaBase4 Float [not null]
-  gpaBase10 Float [not null]
-  cumulativeGpaBase10 Float [not null]
+  gpaBase4 Decimal [not null]
+  cumulativeGpaBase4 Decimal [not null]
+  gpaBase10 Decimal [not null]
+  cumulativeGpaBase10 Decimal [not null]
   conductScore Float
   studentTrainingType StudentTrainingType [not null]
   lowestFinalScore Float [not null]
@@ -1137,10 +1137,10 @@ Table StudentYearResult {
   studyYear Int [not null]
   isLastStudyYear Boolean [not null]
   baseScore AcademicRankingBaseType [not null]
-  gpaBase4 Float [not null]
-  cumulativeGpaBase4 Float [not null]
-  gpaBase10 Float [not null]
-  cumulativeGpaBase10 Float [not null]
+  gpaBase4 Decimal [not null]
+  cumulativeGpaBase4 Decimal [not null]
+  gpaBase10 Decimal [not null]
+  cumulativeGpaBase10 Decimal [not null]
   conductScore Float
   studentTrainingType StudentTrainingType [not null]
   totalCredits Int [not null]
@@ -1770,6 +1770,27 @@ Table DM_Tinh {
   userProfileCurrentAddress UserProfile [not null]
 }
 
+Table DM_QuanHuyen {
+  Id String [pk]
+  sMa String
+  sTen String
+  sGhiChu String
+  iSTT Int [default: 0]
+  bActive Boolean [default: true]
+  bDeleted Boolean [default: false]
+  bSystem Boolean [default: false]
+  iDictionaryKey Int [default: 0]
+  dNgayTao DateTime
+  dNgaySua DateTime
+  sNguoiTao String
+  sNguoiSua String
+  sThietBiTao String
+  sThietBiSua String
+  sDM_TinhId String
+  sDM_Tinh_Ma String
+  iDM_DonViHanhChinhId Int
+}
+
 Table DM_XaPhuong {
   Id String [pk]
   sMa String
@@ -2275,7 +2296,7 @@ Table DefenseRecord {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  finalScore Float
+  finalScore Decimal
   comments String
   isProfileComplete Boolean [not null, default: false]
   thesis ThesisProject [not null]
@@ -2312,7 +2333,7 @@ Table PaymentRecord {
   deletedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  amount Float [not null]
+  amount Decimal [not null]
   status PaymentStatus [not null, default: 'PENDING']
   paymentDate DateTime
   transactionCode String
@@ -2413,7 +2434,7 @@ Table AcademicActionCondition {
   yearCondition Int
   isPriorityStudent Boolean
 
-  Note: 'Điều kiện cụ thể để kích ho��t xử lý'
+  Note: 'Điều kiện cụ thể để kích hoạt xử lý'
 }
 
 Table StudentAcademicDecision {
@@ -2723,7 +2744,7 @@ Table SurveyResponse {
     (surveySessionId, surveyQuestionId) [unique]
   }
 
-  Note: 'Bảng lưu câu trả lời cụ thể của học viên cho từng câu hỏi'
+  Note: 'Bảng lưu câu trả lời cụ thể của học vi��n cho từng câu hỏi'
 }
 
 Table DM_MoiQuanHe {
@@ -3116,7 +3137,7 @@ Table GraduationDecision {
   studentId String [unique, not null]
   decisionDate DateTime [default: `now()`, not null]
   notes String
-  finalGpa Float [not null]
+  finalGpa Decimal [not null]
   finalRanking AcademicRankingConvert [not null]
   finalRankingId String [not null]
   diplomaType DiplomaType

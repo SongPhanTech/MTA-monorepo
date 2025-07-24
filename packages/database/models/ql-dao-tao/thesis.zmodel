@@ -208,7 +208,7 @@ model CouncilMember extends Base {
 
 /// Hồ sơ và Kết quả bảo vệ
 model DefenseRecord extends Base {
-  finalScore        Float? // Điểm cuối cùng
+  finalScore        Decimal?       @db.Decimal(5, 2) // Điểm cuối cùng
   comments          String?        @db.Text // Nhận xét chung của hội đồng
   isProfileComplete Boolean        @default(false)
 
@@ -245,7 +245,7 @@ enum PaymentStatus {
 
 /// Quản lý việc thanh toán
 model PaymentRecord  extends Base {
-  amount          Float
+  amount          Decimal
   status          PaymentStatus  @default(PENDING)
   paymentDate     DateTime?
   transactionCode String?

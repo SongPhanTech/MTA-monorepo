@@ -141,6 +141,9 @@ catalogs:
     dayjs:
       specifier: ^1.11.13
       version: 1.11.13
+    decimal.js:
+      specifier: 10.6.0
+      version: 10.6.0
     docxtemplater:
       specifier: ^3.61.0
       version: 3.65.1
@@ -470,6 +473,9 @@ importers:
       axios:
         specifier: 'catalog:'
         version: 1.7.9
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
       docxtemplater:
         specifier: 'catalog:'
         version: 3.65.1
@@ -567,7 +573,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -775,7 +781,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -824,6 +830,9 @@ importers:
       dayjs:
         specifier: 'catalog:'
         version: 1.11.13
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
       easy-peasy:
         specifier: 'catalog:'
         version: 6.0.5(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -983,7 +992,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/plots':
         specifier: 'catalog:'
         version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1191,7 +1200,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@casl/ability':
         specifier: 'catalog:'
         version: 6.7.3
@@ -1354,7 +1363,7 @@ importers:
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/nextjs-registry':
         specifier: 'catalog:'
-        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@casl/ability':
         specifier: 'catalog:'
         version: 6.7.3
@@ -1620,6 +1629,9 @@ importers:
       dayjs:
         specifier: 'catalog:'
         version: 1.11.13
+      decimal.js:
+        specifier: 'catalog:'
+        version: 10.6.0
       xlsx:
         specifier: 'catalog:'
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
@@ -1817,54 +1829,54 @@ packages:
 
   '@antv/g-camera-api@2.0.39':
     resolution: {integrity: sha512-DsVcXxnY3NNlHqkqr/egAlOGRfFErGfVNGmHCsEHswr0bL8kmo4B5VarAYsCymjgzHxEQ/g39gEagUPnD/3O8g==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-canvas@2.0.45':
     resolution: {integrity: sha512-CV3KxLnRnP5Ae3NfnJ9k9tIfj2HJTzGjDWCoEfgK347vIsVxIVFVz1sR4zWmDcj9EVp/oD6OktUDAsBFN2qRGA==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-dom-mutation-observer-api@2.0.36':
     resolution: {integrity: sha512-W0oJv6yGLVy3xD05201RP2+GtinIFQznSivVKpkBWerCFw/nms7a2WvwBeN5EVaZ7qPUnFTKGapDETufw7KhuA==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-lite@2.3.0':
     resolution: {integrity: sha512-Gua5FtIAumkT/bPcIl7twQF5T1RtuaUT9CpbIYKaiEAwMbecrjGLeTbm9kNKoUT5Tub4HcW2gzfQQ4O21zJdzg==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-math@3.0.1':
     resolution: {integrity: sha512-FvkDBNRpj+HsLINunrL2PW0OlG368MlpHuihbxleuajGim5kra8tgISwCLmAf8Yz2b1CgZ9PvpohqiLzHS7HLg==}
 
   '@antv/g-plugin-canvas-path-generator@2.1.20':
     resolution: {integrity: sha512-11sBBD0O0d3RKaovKd2EBhixRv99Uk1r3tAEb85TxMkthMJctGkxfhCJWdgRUwMg3AGAKtZuZd2MHgr3IKFvyA==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-canvas-picker@2.1.24':
     resolution: {integrity: sha512-RbzBTDG5+ZPzolj6vutm31Q1ThOd8Wobx4Q3j4+9o1unvGIhHqoQIMtbRK0M5aaOWDWXTfKSut5aA6v99ZdXMg==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-canvas-renderer@2.3.0':
     resolution: {integrity: sha512-uWamPK6TJCtg7AW4X33N+F0uq5+kDDhEZF3iIphZEIVAVPXE+oTWR3s1Vcx11a03B4MSj3wuW8d+E8hxCtE/IA==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-dom-interaction@2.1.25':
     resolution: {integrity: sha512-Qqc5dbuteW6xcJ5juMLTpCAZ3tQjjZNWLrNZO1nNKBQIsNivA/sGQ+wSpZggreKP0WuobV5w0kALixskeA9qSg==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-dragndrop@2.0.36':
     resolution: {integrity: sha512-LGkvrT0tal5NEYnR2F+CKffsTEgi6dB8FaQ/HC5Pd0bN6ZKhbPisdXWZkliGDrmS9wL+Yr9K5qguFsLv9KDvHg==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-html-renderer@2.1.25':
     resolution: {integrity: sha512-kmS2vW+SltsQH6NhjbzXK0R+UPHjQRDno5LwL2dX8BG1SegTkckUAGo5QNK/Ajk25fdwd1KbvKZU6iq6bAzZkQ==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-plugin-image-loader@2.1.24':
     resolution: {integrity: sha512-uSdsEp35Mrw718fuDyHIXzje3CiQcwWWwePM/FshQOL7IKvq7pClqTPmiaavHVvIf19tuBaBP0/byPO/+ZVOtA==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g-web-animations-api@2.1.26':
     resolution: {integrity: sha512-8tSGpxDBudfLkalcupzOOlO7p+7cW2j3kYoBer288o56SyQC1PXHxZmbDGgCNMqZRsO9SDfQZYVExJ/hgNbJDg==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/g2-extension-plot@0.2.2':
     resolution: {integrity: sha512-KJXCXO7as+h0hDqirGXf1omrNuYzQmY3VmBmp7lIvkepbQ7sz3pPwy895r1FWETGF3vTk5UeFcAF5yzzBHWgbw==}
@@ -1874,7 +1886,7 @@ packages:
 
   '@antv/g@6.1.26':
     resolution: {integrity: sha512-+Pf23pz8o/u98pKpb3CqLfz4iJaZh6HIo0Z5FJdSTCZUrMIEgmNMFnZiJf9Ow0mnLA9KVdv5ekF17f82G5TyRw==}
-    deprecated: This version has been deprecated. Please upgrade to the latest version.
+    deprecated: This version is deprecated. Please upgrade to the latest version.
 
   '@antv/scale@0.4.16':
     resolution: {integrity: sha512-5wg/zB5kXHxpTV5OYwJD3ja6R8yTiqIOkjOhmpEJiowkzRlbEC/BOyMvNUq5fqFIHnMCE9woO7+c3zxEQCKPjw==}
@@ -8278,7 +8290,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@ant-design/nextjs-registry@1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@ant-design/nextjs-registry@1.0.2(@ant-design/cssinjs@1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(antd@5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@ant-design/cssinjs': 1.23.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       antd: 5.26.4(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

@@ -249,7 +249,7 @@ model ExamBankQuestion extends Base {
 model ExamSession extends Base {
   startTime  DateTime  @default(now())
   endTime    DateTime?
-  score      Float?
+  score      Decimal?  @db.Decimal(5, 2)
   isGraded   Boolean   @default(false)
 
   student    Student?  @relation(fields: [studentId], references: [id])
