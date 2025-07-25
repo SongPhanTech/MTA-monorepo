@@ -24,8 +24,23 @@ import PutUserProfileStaffModal from './put-nhan-vien'
 import PutStudentModal from './put-sinh-vien'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
+import PutBoiDuongQuocPhongModal from './quan-ly-ho-so/modals/put-boi-duong-quoc-phong-an-ninh'
+import PutCapBacModal from './quan-ly-ho-so/modals/put-cap-bac'
+import PutDoiTuongChinhSachModal from './quan-ly-ho-so/modals/put-doi-tuong-chinh-sach'
 import PutHocHamModal from './quan-ly-ho-so/modals/put-hoc-ham'
 import PutHocViModal from './quan-ly-ho-so/modals/put-hoc-vi'
+import PutKeKhaiTaiSanModal from './quan-ly-ho-so/modals/put-ke-khai-tai-san'
+import PutNgoaiNguModal from './quan-ly-ho-so/modals/put-ngoai-ngu'
+import PutQuaTrinhCongTacModal from './quan-ly-ho-so/modals/put-qua-trinh-cong-tac'
+import PutQuaTrinhCuDiCongTacModal from './quan-ly-ho-so/modals/put-qua-trinh-cu-di-cong-tac'
+import PutQuaTrinhCuDiBoiDuongModal from './quan-ly-ho-so/modals/put-qua-trinh-di-dao-tao-boi-duong'
+import PutKhenThuongModal from './quan-ly-ho-so/modals/put-thong-tin-khen-thuong'
+import PutKyLuatModal from './quan-ly-ho-so/modals/put-thong-tin-ky-luat'
+import PutThongTinThanNhan from './quan-ly-ho-so/modals/put-thong-tin-than-nhan'
+import PutTinHocModal from './quan-ly-ho-so/modals/put-tin-hoc'
+import PutTrinhDoLyLuanChinhTriModal from './quan-ly-ho-so/modals/put-trinh-do-ly-luan-chinh-tri'
+import PutTrinhDoQuanLyHanhChinhModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
+import PutTrinhDoQuanyNhaNuocModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 export {
     PutStudentModal,
     PutHocvienModal,
@@ -55,4 +70,19 @@ export {
     XepLoaiDanhGiaCanBoModal,
     XepLoaiDanhGiaChatLuongDangVienModal,
     ChuyenNganhDaoTaoModal,
+    PutThongTinThanNhan,
+    PutBoiDuongQuocPhongModal,
+    PutTrinhDoLyLuanChinhTriModal,
+    PutTrinhDoQuanLyHanhChinhModal,
+    PutTrinhDoQuanyNhaNuocModal,
+    PutNgoaiNguModal,
+    PutTinHocModal,
+    PutCapBacModal,
+    PutQuaTrinhCongTacModal,
+    PutQuaTrinhCuDiCongTacModal,
+    PutQuaTrinhCuDiBoiDuongModal,
+    PutKhenThuongModal,
+    PutKyLuatModal,
+    PutDoiTuongChinhSachModal,
+    PutKeKhaiTaiSanModal,
 }

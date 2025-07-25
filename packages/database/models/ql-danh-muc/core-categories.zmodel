@@ -41,6 +41,7 @@ abstract model CoreBase {
 
 model DM_CapBac extends CoreBase {
   profiles UserProfile[]
+  capBac   CapBac[]
   @@schema("mta")
 }
 
@@ -51,8 +52,12 @@ model DM_ChucDanh extends CoreBase {
 }
 
 model DM_ChucVu extends CoreBase {
-  iNhomChucVu Int?          @default(0)
-  userProfile UserProfile[]
+  iNhomChucVu         Int?                  @default(0)
+  userProfile         UserProfile[]
+  quaTrinhCongTac     QuaTrinhCongTac[]
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
+
+
   @@schema("mta")
 }
 
@@ -107,6 +112,8 @@ model DM_DonVi extends CoreBase {
   researchProjects ResearchProject[]         // Đề tài của đơn vị
   thesisProjects   ThesisProject[]             // Đồ án của đơn vị
 
+
+
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
   @@schema("mta")
@@ -126,6 +133,7 @@ model DM_KhuVuc_DiaLy extends CoreBase {
 }
 
 model DM_NgoaiNgu extends CoreBase {
+  ngoaiNgu NgoaiNgu[]
   @@schema("mta")
 }
 
@@ -140,6 +148,7 @@ model DM_TrinhDoNgoaiNgu extends CoreBase {
 }
 
 model DM_TrinhDoTinHoc extends CoreBase {
+  tinHoc TinHoc[]
   @@schema("mta")
 }
 

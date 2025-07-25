@@ -1,12 +1,34 @@
+import { CameraFilled, UserOutlined } from '@ant-design/icons'
+import HocHamForm from '@components/modal/quan-ly-ho-so/form/hoc-ham'
+import HocViForm from '@components/modal/quan-ly-ho-so/form/hoc-vi'
 import ThongTinCoBan from '@components/modal/quan-ly-ho-so/form/thong-tin-co-ban'
+import ThongTinThanNhanForm from '@components/modal/quan-ly-ho-so/form/thong-tin-than-nhan'
+import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trinh-do-ly-luan-chinh-tri'
 import CreateLayout from '@layouts/create-layout'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Flex, Input } from 'antd'
+import { Button, Flex, Form, Input, Upload, type UploadFile, type UploadProps } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
+import './index.css'
+import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
+import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
+import DoiTuongChinhSachForm from '@components/modal/quan-ly-ho-so/form/doi-tuong-chinh-sach'
+import KeKhaiTaiSanForm from '@components/modal/quan-ly-ho-so/form/ke-khai-taI-san'
+import NgoaiNguForm from '@components/modal/quan-ly-ho-so/form/ngoai-ngu'
+import QuaTrinhCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cong-tac'
+import QuaTrinhCuDiCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cu-di-cong-tac'
+import QuaTrinhDiDaoTaoBoiDuongForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-di-dao-tao-boi-duong'
+import ThongTinKhenThuongForm from '@components/modal/quan-ly-ho-so/form/thong-tin-khen-thuong'
+import ThongTinKyLuatForm from '@components/modal/quan-ly-ho-so/form/thong-tin-ky-luat'
+import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
+import TrinhDoQuanLyHanhChinhForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-hanh-chinh'
+import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
+import ImgCrop from 'antd-img-crop'
 export default function CreateUserPage() {
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
+    const [avatar, setAvatar] = useState<UploadFile[]>([])
+    const [fileList, setFileList] = useState<UploadFile[]>([])
     const router = useRouter()
     const listTabs = [
         {
@@ -21,32 +43,92 @@ export default function CreateUserPage() {
         {
             title: 'Thông tin thân nhân',
             id: 'thongTinThanNhan',
+            render: <ThongTinThanNhanForm />,
         },
         {
-            title: 'Học hàm học vị',
-            id: 'hocHamHocVi',
+            title: 'Học vị',
+            id: 'hocVi',
+            render: <HocViForm />,
         },
         {
-            title: 'Trình độ chứng chỉ',
-            id: 'trinhDoChungChi',
+            title: 'Học hàm',
+            id: 'hocHam',
+            render: <HocHamForm />,
+        },
+        {
+            title: 'Trình độ lý luận chính trị',
+            id: 'trinhDoLyLuanChinhTri',
+            render: <TrinhDoLyLuanChinhTriForm />,
+        },
+        {
+            title: 'Trình độ quản lý hành chính',
+            id: 'trinhDoQuanLyHanhChinh',
+            render: <TrinhDoQuanLyHanhChinhForm />,
+        },
+        {
+            title: 'Trình độ quản lý nhà nước',
+            id: 'trinhDoQuanLyNhaNuoc',
+            render: <TrinhDoQuanLyNhaNuocForm />,
+        },
+        {
+            title: 'Ngoại ngữ',
+            id: 'ngoaiNgu',
+            render: <NgoaiNguForm />,
+        },
+        {
+            title: 'Tin học',
+            id: 'tinHoc',
+            render: <TinHocForm />,
+        },
+        {
+            title: 'Bồi dưỡng quốc phòng an ninh',
+            id: 'boiDuongQuocPhongAnNinh',
+            render: <BoiDuongQuocPhongAnNinhForm />,
+        },
+        {
+            title: 'Cấp bậc',
+            id: 'capBac',
+            render: <CapBacForm />,
         },
         {
             title: 'Quá trình công tác',
             id: 'quaTrinhCongTac',
+            render: <QuaTrinhCongTacForm />,
         },
         {
-            title: 'Khen thưởng - kỷ luật',
-            id: 'khenThuongKyLuat',
+            title: 'Quá trình được cử đi công tác',
+            id: 'quaTrinhDuocCuDiCongTac',
+            render: <QuaTrinhCuDiCongTacForm />,
+        },
+        {
+            title: 'Quá trình được cử đi đào tạo bồi dưỡng',
+            id: 'quaTrinhDiDaoTaoBoiDuong',
+            render: <QuaTrinhDiDaoTaoBoiDuongForm />,
+        },
+        {
+            title: 'Khen thưởng',
+            id: 'khenThuong',
+            render: <ThongTinKhenThuongForm />,
+        },
+        {
+            title: 'Kỷ luật',
+            id: 'kyLuat',
+            render: <ThongTinKyLuatForm />,
         },
         {
             title: 'Đối tượng chính sách',
             id: 'doiTuongChinhSach',
+            render: <DoiTuongChinhSachForm />,
         },
         {
             title: 'Kê khai tài sản',
             id: 'keKhaiTaiSan',
+            render: <KeKhaiTaiSanForm />,
         },
     ]
+    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+        setFileList(newFileList.slice(-1))
+    }
 
     const listTabsRender = useMemo(() => {
         return (
@@ -104,10 +186,41 @@ export default function CreateUserPage() {
                         </div>
                     )}
                 </div>
-                <div className="p-4 bg-white rounded-lg shadow h-full overflow-y-auto w-[calc(100%-266px)] ">
-                    {listTabs.map((i) => {
-                        return i?.render || ''
-                    })}
+                <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
+                    <div className="p-6 shadow rounded-lg bg-white mb-4">
+                        <Form.Item name={'file'} className="mb-0">
+                            <ImgCrop rotationSlider>
+                                <Upload
+                                    listType="picture-circle"
+                                    maxCount={1}
+                                    fileList={avatar?.length > 0 ? avatar : fileList}
+                                    onChange={onChange}
+                                    onRemove={() => {
+                                        setAvatar([])
+                                    }}
+                                    className="!w-[64px] !h-[64px] avatar-upload"
+                                >
+                                    {avatar?.length > 0 || fileList.length > 0
+                                        ? ''
+                                        : fileList.length < 1 && (
+                                              <div className="relative flex items-center justify-center">
+                                                  <UserOutlined
+                                                      style={{ fontSize: '20px', color: '#686C7B' }}
+                                                  />
+                                                  <div className="absolute bottom-[-24px] right-[-24px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0]">
+                                                      <CameraFilled style={{ color: '#686C7B' }} />
+                                                  </div>
+                                              </div>
+                                          )}
+                                </Upload>
+                            </ImgCrop>
+                        </Form.Item>
+                    </div>
+                    <div className="p-6 shadow rounded-lg bg-white form-userprofile">
+                        {listTabs.map((i) => {
+                            return i?.render || ''
+                        })}
+                    </div>
                 </div>
             </Flex>
         </div>

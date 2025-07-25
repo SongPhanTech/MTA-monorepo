@@ -70,10 +70,13 @@ export class MinIOService {
         console.log(`Bucket ${this.bucketName} is ready`)
     }
 
-    async generatePresignedUrl({ path: folder, extension }: PresignedUrlDto): Promise<UrlDto> {
-        const uuid = randomUUIDv7('base64')
+    async generatePresignedUrl({
+        path: folder,
+        extension,
+        name = randomUUIDv7(),
+    }: PresignedUrlDto): Promise<UrlDto> {
         const dateFolder = dayjs().format('YYYY-MM-DD')
-        const path = `${folder}/${dateFolder}/${uuid}${extension ? `.${extension}` : ''}`
+        const path = `${folder}/${dateFolder}/${name}${extension ? `.${extension}` : ''}`
         const url = await this.minioClient.presignedPutObject(this.bucketName, path, 3600)
 
         return { url, fileName: `${this.bucketName}/${path}` }
