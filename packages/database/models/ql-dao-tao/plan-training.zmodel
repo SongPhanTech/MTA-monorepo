@@ -358,10 +358,18 @@ enum ExamType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectVersionType {
+  Normal
+  Project
+
+  @@schema("ql-dao-tao")
+}
+
 /// Phiên bản môn học
 model SubjectVersion extends Base {
   name                     String
   examType                 ExamType
+  type                     SubjectVersionType     @default(Normal) // loại môn học
   subjectEquivalentType    SubjectEquivalentType  @default(NONE) // loại môn học tương đương
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
@@ -503,6 +511,7 @@ model SubjectClass extends Base {
   subjectClassStudent        StudentSubjectScore[]
   fixedClasses               FixedClass[]
   classSchedules             ClassSchedule[]        // Thêm relation với thời khóa biểu
+  thesisProjects             ThesisProject[]
 
   @@schema("ql-dao-tao")
 }

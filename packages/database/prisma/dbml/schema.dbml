@@ -567,6 +567,7 @@ Table SubjectVersion {
   updatedAt DateTime [not null]
   name String [not null]
   examType ExamType [not null]
+  type SubjectVersionType [not null, default: 'Normal']
   subjectEquivalentType SubjectEquivalentType [not null, default: 'NONE']
   credit Int [not null]
   week Int
@@ -662,6 +663,7 @@ Table SubjectClass {
   subjectClassStudent StudentSubjectScore [not null]
   fixedClasses FixedClass [not null]
   classSchedules ClassSchedule [not null]
+  thesisProjects ThesisProject [not null]
 
   Note: 'Lớp môn học'
 }
@@ -1917,6 +1919,7 @@ Table UserProfile {
   tenureDate DateTime
   enlistmentDate DateTime
   dischargeDate DateTime
+  originalPlace String
   familyPhone String
   familyName String
   relatives Relative [not null]
@@ -2381,6 +2384,8 @@ Table ThesisProject {
   requirements String
   technologies String
   status ThesisProjectStatus [not null, default: 'PROPOSED']
+  subjectClass SubjectClass [not null]
+  subjectClassId String [not null]
   supervisor ExpertProfile [not null]
   supervisorId String [not null]
   organization DM_DonVi [not null]
@@ -3614,6 +3619,11 @@ Enum ExamType {
   Other
 }
 
+Enum SubjectVersionType {
+  Normal
+  Project
+}
+
 Enum SubjectRequirementType {
   None
   Mandatory
@@ -4191,6 +4201,8 @@ Ref: StudentResearchRegistration.studentId > Student.id
 Ref: StudentResearchRegistration.researchProjectId > ResearchProject.id
 
 Ref: StudentResearchRegistration.reviewedById > Lecturer.id
+
+Ref: ThesisProject.subjectClassId > SubjectClass.id
 
 Ref: ThesisProject.supervisorId > ExpertProfile.id
 

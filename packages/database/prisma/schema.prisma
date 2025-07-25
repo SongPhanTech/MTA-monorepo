@@ -85,6 +85,13 @@ enum ExamType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectVersionType {
+  Normal
+  Project
+
+  @@schema("ql-dao-tao")
+}
+
 /// loại bắt buộc
 enum SubjectRequirementType {
   None
@@ -1017,6 +1024,7 @@ model SubjectVersion {
   updatedAt                DateTime               @updatedAt()
   name                     String
   examType                 ExamType
+  type                     SubjectVersionType     @default(Normal)
   subjectEquivalentType    SubjectEquivalentType  @default(NONE)
   credit                   Int
   week                     Int?
@@ -1116,6 +1124,7 @@ model SubjectClass {
   subjectClassStudent        StudentSubjectScore[]
   fixedClasses               FixedClass[]
   classSchedules             ClassSchedule[]
+  thesisProjects             ThesisProject[]
 
   @@schema("ql-dao-tao")
 }
@@ -2456,6 +2465,7 @@ model UserProfile {
   tenureDate                 DateTime?
   enlistmentDate             DateTime?
   dischargeDate              DateTime?
+  originalPlace              String?
   familyPhone                String?
   familyName                 String?
   relatives                  Relative[]
@@ -2965,6 +2975,8 @@ model ThesisProject {
   requirements      String?                     @db.Text()
   technologies      String?                     @db.Text()
   status            ThesisProjectStatus         @default(PROPOSED)
+  subjectClass      SubjectClass                @relation(fields: [subjectClassId], references: [id])
+  subjectClassId    String
   supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId      String
   organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])

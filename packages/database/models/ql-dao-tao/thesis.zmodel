@@ -1,6 +1,7 @@
 import '../base'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/student'
+import '../ql-dao-tao/plan-training'
 import '../ql-danh-muc/core-categories.zmodel'
 import '../ql-danh-muc/document'
 
@@ -32,6 +33,9 @@ model ThesisProject extends Base {
   technologies      String?                     @db.Text() // Công nghệ sử dụng
 
   status            ThesisProjectStatus         @default(PROPOSED)
+
+  subjectClass      SubjectClass                @relation(fields: [subjectClassId], references: [id])
+  subjectClassId    String
   
   // Chuyên gia hướng dẫn
   supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
