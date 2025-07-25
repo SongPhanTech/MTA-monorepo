@@ -134,7 +134,7 @@ export default function TrainingProgramSubjects() {
         [filters, isFiltering]
     )
 
-    const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
+    const { data = [] } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
             curriculumVersionId: id,
             curriculumVersion: {
@@ -339,6 +339,7 @@ export default function TrainingProgramSubjects() {
                     deletedAt: new Date(),
                 },
             })
+            message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -723,7 +724,9 @@ export default function TrainingProgramSubjects() {
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>
-                                                            handleDeleteTrainingBlockSubject(id),
+                                                            handleDeleteTrainingBlockSubject(
+                                                                record.id
+                                                            ),
                                                     }}
                                                 />
                                             </Row>

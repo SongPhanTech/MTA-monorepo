@@ -7,13 +7,17 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
+import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountThesisProject,
+    useFindManyDM_DonVi,
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -24,6 +28,10 @@ type FilterPropsThesis = FilterProps & {
     title?: string
     status?: string[]
     titleEN?: string
+    supervisor?: string
+    organization?: string[]
+    currentStudents?: 'asc' | 'desc'
+    maxStudents?: 'asc' | 'desc'
 }
 
 export default function ThesisProject() {
@@ -36,7 +44,12 @@ export default function ThesisProject() {
         code: undefined,
         title: undefined,
         titleEN: undefined,
+        supervisor: undefined,
+        organization: undefined,
+        maxStudents: undefined,
     })
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
 
     const { data: thesisProjectData } = useFindManyThesisProject({
         where: {
@@ -45,6 +58,19 @@ export default function ThesisProject() {
             ...(filters.titleEN
                 ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
                 : {}),
+            ...(filters.supervisor
+                ? {
+                      supervisor: { name: { contains: filters.supervisor, mode: 'insensitive' } },
+                  }
+                : {}),
+            ...emptyObjectIf(
+                {
+                    organizationId: {
+                        in: filters.organization,
+                    },
+                },
+                !!filters.organization
+            ),
         },
         include: {
             organization: true,
@@ -52,6 +78,13 @@ export default function ThesisProject() {
                 include: { lecturer: { include: { userProfile: true } } },
             },
         },
+        orderBy: [
+            ...emptyObjectIf(
+                [{ currentStudents: filters.currentStudents }],
+                !!filters.currentStudents
+            ),
+            ...emptyObjectIf([{ maxStudents: filters.maxStudents }], !!filters.maxStudents),
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -148,25 +181,48 @@ export default function ThesisProject() {
                             },
                             {
                                 title: 'Chuyên gia hướng dẫn',
-                                width: 180,
-                                render: (record) => record.supervisor.name,
+                                dataIndex: 'supervisor',
+                                width: 200,
+                                type: 'input',
+                                render: (record) => record?.name,
                             },
                             {
                                 title: 'Đơn vị quản lý',
+                                dataIndex: 'organization',
                                 width: 150,
-                                render: (record) => record.organization.sTen,
+                                type: 'tree_select',
+                                options: treeData,
+                                render: (record) => record.sTen,
                             },
                             {
                                 title: 'Số lượng học viên',
                                 dataIndex: 'currentStudents',
                                 align: 'center',
                                 width: 150,
+                                type: 'order',
                             },
                             {
                                 title: 'Số lượng học viên tối đa',
                                 dataIndex: 'maxStudents',
                                 align: 'center',
                                 width: 180,
+                                type: 'order',
+                            },
+                            {
+                                title: 'Thời gian mở đăng ký',
+                                dataIndex: 'registrationStart',
+                                align: 'center',
+                                width: 180,
+                                render: (record) =>
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
+                            },
+                            {
+                                title: 'Thời gian đóng đăng ký',
+                                dataIndex: 'registrationEnd',
+                                align: 'center',
+                                width: 180,
+                                render: (record) =>
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Trạng thái',

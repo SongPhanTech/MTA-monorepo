@@ -10,6 +10,7 @@ import {
     PutStudentThesisRegistration,
 } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import { useCouncilRoleOptions } from '@hooks/councilRole'
 import { useDecisionTypeOptions } from '@hooks/decisionType'
 import useSpinner from '@hooks/spinner'
@@ -32,6 +33,12 @@ import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+type FilterPropsStudent = FilterProps & {
+    title?: string
+    status?: string[]
+    titleEN?: string
+}
+
 export default function ThesisProjectDetail() {
     const { getStudentThesisRegistrationStatusColor, getStudentThesisRegistrationStatusLabel } =
         useStudentThesisRegistrationStatusOptions()
@@ -40,11 +47,19 @@ export default function ThesisProjectDetail() {
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [filters, setFilters] = useState<FilterPropsStudent>({
+        code: undefined,
+    })
     const thesisProjectId = router.query.id as string
 
-    const { data: studentThesisRegistration } = useFindManyStudentThesisRegistration({
+    const { data: studentThesisRegistration, refetch } = useFindManyStudentThesisRegistration({
         where: {
             thesisProjectId: thesisProjectId,
+            ...(filters.code
+                ? {
+                      student: { code: { contains: filters.code, mode: 'insensitive' } },
+                  }
+                : {}),
         },
         include: {
             student: { include: { userProfile: true } },
@@ -211,6 +226,8 @@ export default function ThesisProjectDetail() {
                     rowKey="key"
                     id="student-thesis-registration"
                     dataSource={studentThesisRegistration}
+                    filters={filters}
+                    setFilters={setFilters}
                     columns={[
                         {
                             title: 'STT',
@@ -221,9 +238,11 @@ export default function ThesisProjectDetail() {
                         },
                         {
                             title: 'Mã sinh viên',
-                            width: 100,
+                            // dataIndex: 'code',
+                            width: 120,
                             fixed: 'left',
-                            render: (record) => record.student.code,
+                            type: 'input',
+                            render: (record) => record?.student.code,
                         },
                         {
                             title: 'Họ và tên',

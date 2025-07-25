@@ -16,7 +16,6 @@ import type {
     TrainingObjectType,
 } from '@workspace/db'
 import {
-    useCountStudentSubjectScore,
     useFindManySemester,
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -208,8 +207,7 @@ export default function SubjectClassScore() {
         orderBy: {
             createdAt: 'desc',
         },
-        // take: numberOfPages,
-        // skip: (currentPage - 1) * numberOfPages,
+        take: 20,
     })
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
@@ -275,8 +273,6 @@ export default function SubjectClassScore() {
                     },
                 },
             },
-            // take: numberOfPages,
-            // skip: (currentPage - 1) * numberOfPages,
         },
         { refetchOnWindowFocus: false }
     )
@@ -287,12 +283,6 @@ export default function SubjectClassScore() {
         }, 500),
         []
     )
-
-    const { data: count } = useCountStudentSubjectScore({
-        where: {
-            subjectClassId: selectedFixedClass || '',
-        },
-    })
 
     const handleChangeFixedClass = async (id: string) => {
         try {
@@ -629,7 +619,7 @@ export default function SubjectClassScore() {
             >
                 <Col span={24}>
                     <Row gutter={[0, 16]} align="top" justify="space-between">
-                        <Col span={15}>
+                        <Col span={13}>
                             <Flex gap={4}>
                                 <Col span={10}>
                                     <Form.Item name="searchText">
@@ -781,7 +771,7 @@ export default function SubjectClassScore() {
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        id="training-category"
+                        id="student-subject-score"
                         columns={[
                             {
                                 title: 'STT',
@@ -801,7 +791,7 @@ export default function SubjectClassScore() {
                                 title: 'Họ và tên',
                                 width: 150,
                                 fixed: 'left',
-                                render: (text, record) => record.student?.userProfile?.fullname,
+                                render: (record) => record.student?.userProfile?.fullname,
                             },
                             {
                                 title: 'Ngày sinh',
@@ -812,10 +802,9 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Tên lớp',
-                                dataIndex: 'stc',
                                 width: 150,
                                 align: 'center',
-                                render: (text, record) =>
+                                render: (record) =>
                                     record.student?.fixedClass?.name || 'Chưa có lớp',
                             },
                             // #region Điểm CC
