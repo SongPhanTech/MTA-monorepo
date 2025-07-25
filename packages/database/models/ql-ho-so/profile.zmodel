@@ -216,7 +216,7 @@ model NgoaiNgu extends Base {
   thoiGianKetThuc DateTime?
 
   dM_NgoaiNgu     DM_NgoaiNgu @relation(fields: [dM_NgoaiNguId], references: [Id])
-  dM_NgoaiNguId   String
+  dM_NgoaiNguId   String      @db.Uuid
 
   userProfile     UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId   String
@@ -231,7 +231,7 @@ model TinHoc extends Base {
   thoiGianKetThuc    DateTime?
 
   dM_TrinhDoTinHoc   DM_TrinhDoTinHoc @relation(fields: [dM_TrinhDoTinHocId], references: [Id])
-  dM_TrinhDoTinHocId String
+  dM_TrinhDoTinHocId String           @db.Uuid
 
   userProfile        UserProfile      @relation(fields: [userProfileId], references: [id])
   userProfileId      String
@@ -256,7 +256,7 @@ model CapBac extends Base {
   ngayNhanQuyetDinh String?
 
   capBac            DM_CapBac   @relation(fields: [capBacId], references: [Id])
-  capBacId          String
+  capBacId          String      @db.Uuid
 
   userProfile       UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId     String
@@ -271,7 +271,7 @@ model QuaTrinhCongTac extends Base {
   donvi             String?
 
   chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
-  chucVuId          String
+  chucVuId          String             @db.Uuid
 
   loaiHinhCongTac   DM_LoaiHinhCongTac @relation(fields: [loaiHinhCongTacId], references: [id])
   loaiHinhCongTacId String
@@ -289,7 +289,7 @@ model QuaTrinhCuDiCongTac extends Base {
   donvi         String
 
   chucVu        DM_ChucVu   @relation(fields: [chucVuId], references: [Id])
-  chucVuId      String
+  chucVuId      String      @db.Uuid
 
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId String
