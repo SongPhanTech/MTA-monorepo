@@ -2,15 +2,23 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import PutTrinhDoQuanLyHanhChinhModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function TrinhDoQuanLyHanhChinhForm() {
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {}
+    const { onOpen } = useDisclosure({
+        tag: PutTrinhDoQuanLyHanhChinhModal.name,
+    })
+
+    const handleModal = () => {
+        onOpen()
+    }
 
     const hasData = true
 
@@ -121,11 +129,11 @@ export default function TrinhDoQuanLyHanhChinhForm() {
     }
 
     return (
-        <div className="mt-5">
+        <div>
             <Collapse
                 items={[
                     {
-                        key: 'trinh-do-ly-luan-chinh-tri',
+                        key: 'trinh-do-quan-ly-hanh-chinh',
                         label: (
                             <Title level={4} className="mb-0">
                                 Trình độ quản lý hành chính
@@ -136,6 +144,7 @@ export default function TrinhDoQuanLyHanhChinhForm() {
                 ]}
                 bordered={false}
                 expandIconPosition="end"
+                className="bg-transparent"
             />
         </div>
     )

@@ -10,6 +10,19 @@ import { Button, Flex, Form, Input, Upload, type UploadFile, type UploadProps } 
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import './index.css'
+import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
+import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
+import DoiTuongChinhSachForm from '@components/modal/quan-ly-ho-so/form/doi-tuong-chinh-sach'
+import KeKhaiTaiSanForm from '@components/modal/quan-ly-ho-so/form/ke-khai-taI-san'
+import NgoaiNguForm from '@components/modal/quan-ly-ho-so/form/ngoai-ngu'
+import QuaTrinhCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cong-tac'
+import QuaTrinhCuDiCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cu-di-cong-tac'
+import QuaTrinhDiDaoTaoBoiDuongForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-di-dao-tao-boi-duong'
+import ThongTinKhenThuongForm from '@components/modal/quan-ly-ho-so/form/thong-tin-khen-thuong'
+import ThongTinKyLuatForm from '@components/modal/quan-ly-ho-so/form/thong-tin-ky-luat'
+import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
+import TrinhDoQuanLyHanhChinhForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-hanh-chinh'
+import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import ImgCrop from 'antd-img-crop'
 export default function CreateUserPage() {
     const [search, setSearch] = useState<string>('')
@@ -48,20 +61,69 @@ export default function CreateUserPage() {
             render: <TrinhDoLyLuanChinhTriForm />,
         },
         {
-            title: 'Quá trình công tác',
-            id: 'quaTrinhCongTac',
+            title: 'Trình độ quản lý hành chính',
+            id: 'trinhDoQuanLyHanhChinh',
+            render: <TrinhDoQuanLyHanhChinhForm />,
         },
         {
-            title: 'Khen thưởng - kỷ luật',
-            id: 'khenThuongKyLuat',
+            title: 'Trình độ quản lý nhà nước',
+            id: 'trinhDoQuanLyNhaNuoc',
+            render: <TrinhDoQuanLyNhaNuocForm />,
+        },
+        {
+            title: 'Ngoại ngữ',
+            id: 'ngoaiNgu',
+            render: <NgoaiNguForm />,
+        },
+        {
+            title: 'Tin học',
+            id: 'tinHoc',
+            render: <TinHocForm />,
+        },
+        {
+            title: 'Bồi dưỡng quốc phòng an ninh',
+            id: 'boiDuongQuocPhongAnNinh',
+            render: <BoiDuongQuocPhongAnNinhForm />,
+        },
+        {
+            title: 'Cấp bậc',
+            id: 'capBac',
+            render: <CapBacForm />,
+        },
+        {
+            title: 'Quá trình công tác',
+            id: 'quaTrinhCongTac',
+            render: <QuaTrinhCongTacForm />,
+        },
+        {
+            title: 'Quá trình được cử đi công tác',
+            id: 'quaTrinhDuocCuDiCongTac',
+            render: <QuaTrinhCuDiCongTacForm />,
+        },
+        {
+            title: 'Quá trình được cử đi đào tạo bồi dưỡng',
+            id: 'quaTrinhDiDaoTaoBoiDuong',
+            render: <QuaTrinhDiDaoTaoBoiDuongForm />,
+        },
+        {
+            title: 'Khen thưởng',
+            id: 'khenThuong',
+            render: <ThongTinKhenThuongForm />,
+        },
+        {
+            title: 'Kỷ luật',
+            id: 'kyLuat',
+            render: <ThongTinKyLuatForm />,
         },
         {
             title: 'Đối tượng chính sách',
             id: 'doiTuongChinhSach',
+            render: <DoiTuongChinhSachForm />,
         },
         {
             title: 'Kê khai tài sản',
             id: 'keKhaiTaiSan',
+            render: <KeKhaiTaiSanForm />,
         },
     ]
     const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {

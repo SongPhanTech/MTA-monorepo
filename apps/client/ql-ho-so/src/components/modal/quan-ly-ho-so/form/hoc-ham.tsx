@@ -156,7 +156,7 @@ export default function HocHamForm() {
     }
 
     return (
-        <div className="mt-5">
+        <div>
             <Collapse
                 items={[
                     {
@@ -171,6 +171,7 @@ export default function HocHamForm() {
                 ]}
                 bordered={false}
                 expandIconPosition="end"
+                className="bg-transparent"
             />
         </div>
     )

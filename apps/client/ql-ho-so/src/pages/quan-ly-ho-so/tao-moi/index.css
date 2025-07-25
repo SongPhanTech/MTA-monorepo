@@ -2,11 +2,11 @@
     width: 64px !important;
     height: 64px !important;
 }
-.avatar-upload  .ant-upload-list-item {
+.avatar-upload .ant-upload-list-item {
     width: 64px !important;
     height: 64px !important;
 }
-.form-userprofile .ant-col .ant-form-item-label{
-    width:30%;
+.form-userprofile .ant-col .ant-form-item-label {
+    width: 30%;
     text-align: left;
 }
