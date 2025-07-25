@@ -194,6 +194,23 @@ export default function QuestionPage() {
         }
     }
 
+    const handleDownloadTemplate = () => {
+        try {
+            const fileUrl = '/files/file-mau-import-diem.docx'
+            const link = document.createElement('a')
+            link.href = fileUrl
+            link.download = 'file-mau-import-diem.docx'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+
+            message.success('Đang tải file mẫu...')
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi tải file mẫu')
+            console.error(error)
+        }
+    }
+
     const itemsDownload = [
         {
             key: 'import',
@@ -203,8 +220,7 @@ export default function QuestionPage() {
         {
             key: 'update',
             label: 'Tải file mẫu',
-            onClick: () => {},
-            // onClick: () => onOpenTrainingBlock,
+            onClick: handleDownloadTemplate,
         },
     ]
     const menuDownload = (
@@ -259,6 +275,13 @@ export default function QuestionPage() {
                         filters={filters}
                         setFilters={setFilters}
                         columns={[
+                            {
+                                title: 'STT',
+                                width: 30,
+                                align: 'center',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
                             {
                                 title: 'Nội dung câu hỏi',
                                 dataIndex: 'content',
@@ -322,6 +345,12 @@ export default function QuestionPage() {
                                 width: 80,
                                 align: 'center',
                                 type: 'order',
+                                render: (__, record) => {
+                                    if (!record?.point) {
+                                        return ''
+                                    }
+                                    return `${record.point} điểm`
+                                },
                             },
                             {
                                 title: 'Giải thích đáp án',

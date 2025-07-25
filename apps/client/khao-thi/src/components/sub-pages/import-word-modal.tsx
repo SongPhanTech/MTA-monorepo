@@ -100,7 +100,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
         for (const img of images) {
             const extension = 'png'
             const resPresignedUrl = await generatePresignedUrl({
-                path: 'mta-question-images',
+                path: 'question-images',
                 extension,
             })
 
@@ -110,7 +110,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             })
 
             const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
-            result = result.replace(img.name, `<img src="${imageUrl}" style="max-width: 100px;" />`)
+            result = result.replace(img.name, `<img src="${imageUrl}" style="max-width: 100%;" />`)
         }
 
         return result
@@ -193,16 +193,49 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
         }
     }
 
+    const renderContentWithImagePlaceholders = (text: string, images: any[]) => {
+        if (!images || images.length === 0) return text
+
+        let result = text
+        images.forEach((img) => {
+            const blobUrl = URL.createObjectURL(img.blob)
+            result = result.replace(img.name, `<img src="${blobUrl}" style="max-width: 100%;" />`)
+        })
+        return result
+    }
+
     const columns = [
         {
             title: 'Câu hỏi',
             dataIndex: 'content',
+            width: 100,
             key: 'content',
+            render: (text: string, record: any) => (
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: renderContentWithImagePlaceholders(
+                            text,
+                            record.contentImagesRaw || []
+                        ),
+                    }}
+                />
+            ),
         },
         {
             title: 'Giải thích',
             dataIndex: 'explanation',
+            width: 300,
             key: 'explanation',
+            render: (text: string, record: any) => (
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: renderContentWithImagePlaceholders(
+                            text,
+                            record.explanationImagesRaw || []
+                        ),
+                    }}
+                />
+            ),
         },
         {
             title: 'Điểm',
@@ -210,10 +243,17 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             key: 'point',
             width: 80,
             align: 'center' as const,
+            render: (point: number) => `${point} đ`,
         },
     ]
-
     const handleCancel = () => {
+        questions.forEach((q) => {
+            ;[...(q.contentImagesRaw || []), ...(q.explanationImagesRaw || [])].forEach((img) => {
+                if (img.blobUrl) {
+                    URL.revokeObjectURL(img.blobUrl)
+                }
+            })
+        })
         onCancel()
         setQuestions([])
     }
@@ -224,6 +264,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             open={visible}
             className="w-[80vw]"
             onCancel={handleCancel}
+            style={{ top: 20 }}
             footer={[
                 <Button key="cancel" onClick={handleCancel}>
                     Đóng
@@ -244,11 +285,10 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                                         q.explanation,
                                         q.explanationImagesRaw || []
                                     )
-                                    const point = q.point
                                     return {
                                         content,
                                         explanation,
-                                        point,
+                                        point: q.point,
                                     }
                                 })
                             )
@@ -295,9 +335,26 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                         columns={columns}
                         dataSource={questions}
                         rowKey={(record, index) => index?.toString() || ''}
-                        pagination={false}
-                        scroll={{ x: true }}
-                        size="small"
+                        scroll={{
+                            x: '100%',
+                            y: 'calc(80vh - 100px)',
+                        }}
+                        sticky={{
+                            offsetHeader: 0,
+                        }}
+                        style={{
+                            height: '80vh',
+                        }}
+                        pagination={{
+                            position: ['bottomRight'],
+                            defaultPageSize: 5,
+                            showSizeChanger: {
+                                labelRender: ({ value }) => `${value} / trang`,
+                                optionRender: (oriOption) => `${oriOption.value} / trang`,
+                            },
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
                     />
                 </div>
             )}
