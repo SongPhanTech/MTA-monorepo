@@ -162,12 +162,12 @@ const PutQuestion = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="content" label="Nội dung câu hỏi" required>
-                    <Input.TextArea placeholder="Nhập nội dung câu hỏi" />
+                    <Input.TextArea placeholder="Nhập nội dung câu hỏi" className="min-h-[20vh]" />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="explanation" label="Giải thích đáp án">
-                    <Input.TextArea placeholder="Nhập giải thích đáp án" />
+                    <Input.TextArea placeholder="Nhập giải thích đáp án" className="min-h-[20vh]" />
                 </FormItem>
             </Col>
             <Col span={12}>
