@@ -24,10 +24,11 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
         attributeNamePrefix: '@_',
     })
 
-    const extractTextFromCell = (cell: any) => {
+    const extractTextAndImagesFromCell = (cell: any, zip: PizZip, relMap: Map<string, string>) => {
         const paragraphs = Array.isArray(cell?.['w:p']) ? cell['w:p'] : [cell?.['w:p']]
         let rawText = ''
         let prevEndedWithChar = false
+        const images: string[] = []
 
         for (const p of paragraphs) {
             const runs = Array.isArray(p?.['w:r']) ? p['w:r'] : [p?.['w:r']]
@@ -40,17 +41,31 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     value = t['#text']
                 }
 
-                if (!value) continue
-
-                const startsWithPunctuation = /^[.,!?;:]/.test(value)
-                const endsWithChar = /[a-zA-ZÀ-ỹ0-9]$/.test(value)
-
-                if (rawText && prevEndedWithChar && !startsWithPunctuation) {
-                    rawText += ' '
+                if (value) {
+                    const startsWithPunctuation = /^[.,!?;:]/.test(value)
+                    const endsWithChar = /[a-zA-ZÀ-ỹ0-9]$/.test(value)
+                    if (rawText && prevEndedWithChar && !startsWithPunctuation) {
+                        rawText += ' '
+                    }
+                    rawText += value
+                    prevEndedWithChar = endsWithChar
                 }
 
-                rawText += value
-                prevEndedWithChar = endsWithChar
+                const drawing = r?.['w:drawing']
+                const blip =
+                    drawing?.['wp:inline']?.['a:graphic']?.['a:graphicData']?.['pic:pic']?.[
+                        'pic:blipFill'
+                    ]?.['a:blip']
+                const relId = blip?.['@_r:embed']
+                if (relId) {
+                    const imagePath = `word/${relMap.get(relId)}`
+                    const file = zip.file(imagePath)
+                    if (file) {
+                        const base64 = btoa(file.asBinary())
+                        const ext = imagePath.split('.').pop()?.toLowerCase() || 'png'
+                        images.push(`data:image/${ext};base64,${base64}`)
+                    }
+                }
             }
         }
 
@@ -59,11 +74,11 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             .replace(/\s{2,}/g, ' ')
             .trim()
 
-        return cleanedText
+        return { text: cleanedText, images }
     }
 
-    const extractPointFromCell = (cell: any) => {
-        const text = extractTextFromCell(cell)
+    const extractPointFromCell = (cell: any, zip: PizZip, relMap: Map<string, string>) => {
+        const { text } = extractTextAndImagesFromCell(cell, zip, relMap)
         const match = text.match(/(\d+(?:[.,]\d+)?)\s*(đ|điểm)?/i)
         if (match) {
             return Number.parseFloat(match[1].replace(',', '.'))
@@ -106,17 +121,31 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     const contentCells = Array.isArray(contentRow['w:tc'])
                         ? contentRow['w:tc']
                         : [contentRow['w:tc']]
-                    question.content = extractTextFromCell(contentCells[0])
+                    const contentResult = await extractTextAndImagesFromCell(
+                        contentCells[0],
+                        zip,
+                        relMap
+                    )
+                    question.content = contentResult.text
+                    question.contentImages = contentResult.images
+                    question.point = extractPointFromCell(
+                        contentCells[contentCells.length - 1],
+                        zip,
+                        relMap
+                    )
 
                     // Row chẵn (giải thích + điểm)
                     const explanationRow = rows[i + 1]
                     const explanationCells = Array.isArray(explanationRow['w:tc'])
                         ? explanationRow['w:tc']
                         : [explanationRow['w:tc']]
-                    question.explanation = extractTextFromCell(explanationCells[0])
-                    question.point = extractPointFromCell(
-                        explanationCells[explanationCells.length - 1]
+                    const explanationResult = await extractTextAndImagesFromCell(
+                        explanationCells[0],
+                        zip,
+                        relMap
                     )
+                    question.explanation = explanationResult.text
+                    question.explanationImages = explanationResult.images
 
                     if (question.content && question.explanation && question.point !== undefined) {
                         extractedQuestions.push(question)
@@ -141,11 +170,37 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             title: 'Câu hỏi',
             dataIndex: 'content',
             key: 'content',
+            render: (_: any, record: any) => (
+                <div>
+                    <div>{record.content}</div>
+                    {record.contentImages?.map((src: string, idx: number) => (
+                        <img
+                            key={src}
+                            src={src}
+                            alt={`content-img-${idx}`}
+                            style={{ maxWidth: 100, maxHeight: 100, marginTop: 8 }}
+                        />
+                    ))}
+                </div>
+            ),
         },
         {
             title: 'Giải thích',
             dataIndex: 'explanation',
             key: 'explanation',
+            render: (_: any, record: any) => (
+                <div>
+                    <div>{record.explanation}</div>
+                    {record.explanationImages?.map((src: string, idx: number) => (
+                        <img
+                            key={src}
+                            src={src}
+                            alt={`explanation-img-${idx}`}
+                            style={{ maxWidth: 100, maxHeight: 100, marginTop: 8 }}
+                        />
+                    ))}
+                </div>
+            ),
         },
         {
             title: 'Điểm',
@@ -193,7 +248,6 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     if (file) {
                         handleImport(file)
                     }
-                    // Reset giá trị input để có thể chọn lại cùng file
                     e.target.value = ''
                 }}
                 style={{ display: 'none' }}
