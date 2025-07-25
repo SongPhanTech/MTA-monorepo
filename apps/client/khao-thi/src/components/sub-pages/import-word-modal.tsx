@@ -146,7 +146,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                 for (let i = 0; i < rows.length - 1; i += 2) {
                     const question: any = {}
 
-                    // Row lẻ (câu hỏi)
+                    // Row lẻ (câu hỏi + điểm)
                     const contentRow = rows[i]
                     const contentCells = Array.isArray(contentRow['w:tc'])
                         ? contentRow['w:tc']
@@ -164,7 +164,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                         relMap
                     )
 
-                    // Row chẵn (giải thích + điểm)
+                    // Row chẵn (giải thích)
                     const explanationRow = rows[i + 1]
                     const explanationCells = Array.isArray(explanationRow['w:tc'])
                         ? explanationRow['w:tc']
@@ -182,8 +182,6 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     }
                 }
             }
-
-            console.log('Extracted:', extractedQuestions)
             setQuestions(extractedQuestions)
 
             message.success(`Đã import thành công ${extractedQuestions.length} câu hỏi`)
@@ -222,7 +220,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
 
     return (
         <Modal
-            title="Import Câu Hỏi từ Word"
+            title="Import câu hỏi từ Word"
             open={visible}
             className="w-[80vw]"
             onCancel={handleCancel}
@@ -248,9 +246,9 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                                     )
                                     const point = q.point
                                     return {
-                                        point,
                                         content,
                                         explanation,
+                                        point,
                                     }
                                 })
                             )

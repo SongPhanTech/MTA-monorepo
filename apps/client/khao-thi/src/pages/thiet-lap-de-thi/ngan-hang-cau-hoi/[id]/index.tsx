@@ -37,7 +37,6 @@ export default function QuestionPage() {
     const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
-        code: '',
         questionType: undefined,
         content: '',
         explanation: '',
@@ -67,14 +66,6 @@ export default function QuestionPage() {
     const commonWhere = useMemo(
         () => ({
             questionBankId,
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
             ...(filters.questionType && filters.questionType.length > 0
                 ? {
                       type: { in: filters.questionType },
@@ -109,7 +100,6 @@ export default function QuestionPage() {
         }),
         [
             questionBankId,
-            filters.code,
             filters.questionType,
             filters.content,
             filters.explanation,
@@ -410,7 +400,6 @@ export default function QuestionPage() {
                 visible={importModalVisible}
                 onCancel={() => setImportModalVisible(false)}
                 onImportSuccess={(questions) => {
-                    console.log('Imported questions:', questions)
                     handleImportSuccess(questions)
                 }}
             />
