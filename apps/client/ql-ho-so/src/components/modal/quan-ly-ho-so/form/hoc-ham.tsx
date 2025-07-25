@@ -4,13 +4,12 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutHocHamModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-ham'
 import useSpinner from '@hooks/spinner'
-import { formatDate } from '@lib/utils'
 import type { HocHam } from '@workspace/db'
 import { useFindManyHocHam, useUpdateHocHam } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row, Typography } from 'antd'
+import { Button, Col, Collapse, Flex, message, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
 export default function HocHamForm() {
     const { showSpinner, hideSpinner } = useSpinner()
@@ -52,16 +51,14 @@ export default function HocHamForm() {
         }
     }
 
-    return (
-        <div className="mt-7">
-            <Row justify="space-between" align="middle">
-                <Col span={12}>
-                    <Title level={4} className="mb-0">
-                        Học hàm
-                    </Title>
-                </Col>
-                <Col span={12}>
-                    <Flex justify="end">
+    const renderContent = () => {
+        if (!hasData) {
+            return (
+                <Row justify="space-between" align="middle">
+                    <Col>
+                        <Text type="secondary">Không có dữ liệu</Text>
+                    </Col>
+                    <Col>
                         <Button
                             onClick={handleModal}
                             icon={<PlusOutlined />}
@@ -69,11 +66,27 @@ export default function HocHamForm() {
                         >
                             Thêm mới
                         </Button>
-                    </Flex>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+            )
+        }
 
-            {hasData && (
+        return (
+            <div>
+                <Row justify="space-between" align="middle">
+                    <Col span={24}>
+                        <Flex justify="end">
+                            <Button
+                                onClick={handleModal}
+                                icon={<PlusOutlined />}
+                                className="border-green-700 text-green-700 hover:bg-green-50"
+                            >
+                                Thêm mới
+                            </Button>
+                        </Flex>
+                    </Col>
+                </Row>
+
                 <Table
                     columns={[
                         {
@@ -84,35 +97,35 @@ export default function HocHamForm() {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Chức danh chuyên môn',
+                            title: 'Học vị',
                             align: 'center',
-                            width: 180,
+                            width: 120,
                             fixed: 'left',
-                            render: (_, record) => record?.academicRankType?.sTen || '',
+                            render: (_, record) => record?.academicDegreeType?.sTen || '',
                         },
                         {
-                            title: 'Nơi cấp',
+                            title: 'Lĩnh vực',
                             align: 'center',
-                            width: 160,
-                            render: (_, record) => record?.noiCap || '',
+                            width: 200,
+                            render: (_, record) => record.linhVuc || '',
                         },
                         {
-                            title: 'Số quyết định',
+                            title: 'Trường',
                             align: 'center',
-                            width: 140,
-                            render: (_, record) => record?.soQuyetDinh || '',
+                            width: 200,
+                            render: (_, record) => record?.truong?.name || '',
                         },
                         {
-                            title: 'Thời gian bắt đầu',
+                            title: 'Quốc gia',
                             align: 'center',
-                            width: 140,
-                            render: (_, record) => formatDate(record.from) || '',
+                            width: 120,
+                            render: (_, record) => record?.nationality?.sTen || '',
                         },
                         {
-                            title: 'Thời gian kết thúc',
+                            title: 'Năm nhận',
                             align: 'center',
-                            width: 140,
-                            render: (_, record) => formatDate(record.to) || '',
+                            width: 120,
+                            render: (_, record) => record.year || '',
                         },
                         {
                             title: 'Thao tác',
@@ -138,7 +151,27 @@ export default function HocHamForm() {
                     dataSource={hocHamData}
                     pagination={false}
                 />
-            )}
+            </div>
+        )
+    }
+
+    return (
+        <div className="mt-5">
+            <Collapse
+                items={[
+                    {
+                        key: 'hoc-ham',
+                        label: (
+                            <Title level={4} className="mb-0">
+                                Học hàm
+                            </Title>
+                        ),
+                        children: renderContent(),
+                    },
+                ]}
+                bordered={false}
+                expandIconPosition="end"
+            />
         </div>
     )
 }

@@ -3,9 +3,9 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import useSpinner from '@hooks/spinner'
-import { Button, Col, Flex, Row, Typography } from 'antd'
+import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
 export default function TrinhDoLyLuanChinhTriForm() {
     const { showSpinner, hideSpinner } = useSpinner()
@@ -14,16 +14,14 @@ export default function TrinhDoLyLuanChinhTriForm() {
 
     const hasData = true
 
-    return (
-        <div className="mt-7">
-            <Row justify="space-between" align="middle">
-                <Col span={12}>
-                    <Title level={4} className="mb-0">
-                        Trình độ lý luận chính trị
-                    </Title>
-                </Col>
-                <Col span={12}>
-                    <Flex justify="end">
+    const renderContent = () => {
+        if (!hasData) {
+            return (
+                <Row justify="space-between" align="middle">
+                    <Col>
+                        <Text type="secondary">Không có dữ liệu</Text>
+                    </Col>
+                    <Col>
                         <Button
                             onClick={handleModal}
                             icon={<PlusOutlined />}
@@ -31,11 +29,27 @@ export default function TrinhDoLyLuanChinhTriForm() {
                         >
                             Thêm mới
                         </Button>
-                    </Flex>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+            )
+        }
 
-            {hasData && (
+        return (
+            <div>
+                <Row justify="space-between" align="middle">
+                    <Col span={24}>
+                        <Flex justify="end">
+                            <Button
+                                onClick={handleModal}
+                                icon={<PlusOutlined />}
+                                className="border-green-700 text-green-700 hover:bg-green-50"
+                            >
+                                Thêm mới
+                            </Button>
+                        </Flex>
+                    </Col>
+                </Row>
+
                 <Table
                     columns={[
                         {
@@ -46,32 +60,32 @@ export default function TrinhDoLyLuanChinhTriForm() {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Tên thân nhân',
+                            title: 'Hình thức đào tạo',
                             align: 'center',
                             width: 180,
                             fixed: 'left',
                             render: (_, record) => record?.name || '',
                         },
                         {
-                            title: 'Tên mối quan hệ',
+                            title: 'Trình độ',
                             align: 'center',
                             width: 160,
                             render: (_, record) => record?.dM_MoiQuanHe?.name || '',
                         },
                         {
-                            title: 'Năm sinh',
+                            title: 'Cơ sở đào tạo',
                             align: 'center',
                             width: 140,
                             render: (_, record) => record?.birthYear || '',
                         },
                         {
-                            title: 'Nghề nghiệp',
+                            title: 'Thời gian bắt đầu',
                             align: 'center',
                             width: 140,
                             render: (_, record) => record?.job || '',
                         },
                         {
-                            title: 'Thông tin khác',
+                            title: 'Thời gian kết thúc ',
                             align: 'center',
                             width: 140,
                             render: (_, record) => record?.information || '',
@@ -102,7 +116,27 @@ export default function TrinhDoLyLuanChinhTriForm() {
                     // dataSource={relatives}
                     pagination={false}
                 />
-            )}
+            </div>
+        )
+    }
+
+    return (
+        <div className="mt-5">
+            <Collapse
+                items={[
+                    {
+                        key: 'trinh-do-ly-luan-chinh-tri',
+                        label: (
+                            <Title level={4} className="mb-0">
+                                Trình độ lý luận chính trị
+                            </Title>
+                        ),
+                        children: renderContent(),
+                    },
+                ]}
+                bordered={false}
+                expandIconPosition="end"
+            />
         </div>
     )
 }
