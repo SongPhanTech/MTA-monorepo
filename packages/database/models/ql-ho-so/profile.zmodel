@@ -239,7 +239,7 @@ model TinHoc extends Base {
   @@schema("ql-ho-so")
 }
 
-model  BoiDuongQuocPhongAnNinh extends Base {
+model BoiDuongQuocPhongAnNinh extends Base {
   name            String?
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
@@ -268,8 +268,7 @@ model QuaTrinhCongTac extends Base {
   tuThangNam        DateTime?
   denThangNam       DateTime?
 
-  donvi             DM_DonVi           @relation(fields: [donviId], references: [Id])
-  donviId           String
+  donvi             String?
 
   chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
   chucVuId          String
@@ -287,8 +286,7 @@ model QuaTrinhCuDiCongTac extends Base {
   tuThangNam    DateTime?
   denThangNam   DateTime?
 
-  donvi         DM_DonVi    @relation(fields: [donviId], references: [Id])
-  donviId       String
+  donvi         String
 
   chucVu        DM_ChucVu   @relation(fields: [chucVuId], references: [Id])
   chucVuId      String
