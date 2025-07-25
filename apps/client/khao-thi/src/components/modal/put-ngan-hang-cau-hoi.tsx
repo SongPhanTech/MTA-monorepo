@@ -93,7 +93,7 @@ const PutQuestionBank = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name="code" label="Mã ngân hàng câu hỏi" required>
+                <FormItem form={form} name="code" label="Mã ngân hàng câu hỏi">
                     <Input placeholder="Nhập mã ngân hàng câu hỏi" />
                 </FormItem>
             </Col>

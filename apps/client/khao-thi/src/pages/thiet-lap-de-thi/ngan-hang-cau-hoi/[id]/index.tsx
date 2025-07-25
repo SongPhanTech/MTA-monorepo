@@ -4,12 +4,16 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutQuestion } from '@components/modal'
+import { WordImportModal } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
+import type { Question } from '@workspace/db'
 import {
     useCountQuestion,
+    useCreateManyQuestion,
     useFindManyDifficulty,
     useFindManyKnowledgeBlock,
     useFindManyQuestion,
@@ -24,15 +28,15 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function Question() {
+export default function QuestionPage() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const questionBankId = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
+    const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
-        code: '',
         questionType: undefined,
         content: '',
         explanation: '',
@@ -62,14 +66,6 @@ export default function Question() {
     const commonWhere = useMemo(
         () => ({
             questionBankId,
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
             ...(filters.questionType && filters.questionType.length > 0
                 ? {
                       type: { in: filters.questionType },
@@ -104,7 +100,6 @@ export default function Question() {
         }),
         [
             questionBankId,
-            filters.code,
             filters.questionType,
             filters.content,
             filters.explanation,
@@ -112,15 +107,6 @@ export default function Question() {
             filters.knowledgeBlockId,
         ]
     )
-
-    const commonOrderBy = useMemo(() => {
-        const order: { point?: 'asc' | 'desc' }[] = []
-        if (filters.point === 'asc' || filters.point === 'desc') {
-            order.push({ point: filters.point })
-        }
-        order.push({ point: 'asc' })
-        return order
-    }, [filters.point])
 
     const queryOptions = useMemo(
         () => ({
@@ -136,7 +122,17 @@ export default function Question() {
                 knowledgeBlock: true,
                 difficulty: true,
             },
-            orderBy: commonOrderBy,
+            orderBy: [
+                ...emptyObjectIf(
+                    [
+                        {
+                            point: filters.point,
+                        },
+                    ],
+                    !!filters.point
+                ),
+                { point: 'asc' },
+            ],
         },
         queryOptions
     )
@@ -147,7 +143,6 @@ export default function Question() {
                 ...commonWhere,
                 deletedAt: null,
             },
-            orderBy: commonOrderBy,
         },
         queryOptions
     )
@@ -174,18 +169,58 @@ export default function Question() {
         hideSpinner()
     }
 
+    const { mutateAsync: createManyQuestions } = useCreateManyQuestion()
+
+    const handleImportSuccess = async (questions: Partial<Question>[]) => {
+        try {
+            showSpinner()
+            await createManyQuestions({
+                data: questions
+                    .filter((q) => typeof q.content === 'string' && q.content.trim() !== '')
+                    .map((q) => ({
+                        ...q,
+                        content: q.content as string,
+                        questionBankId,
+                        type: q.type || 'ESSAY',
+                        isAutoGraded: q.isAutoGraded || false,
+                    })),
+            })
+            message.success(`Đã thêm ${questions.length} câu hỏi thành công`)
+            setImportModalVisible(false)
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi thêm câu hỏi')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleDownloadTemplate = () => {
+        try {
+            const fileUrl = '/files/file-mau-import-diem.docx'
+            const link = document.createElement('a')
+            link.href = fileUrl
+            link.download = 'file-mau-import-diem.docx'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+
+            message.success('Đang tải file mẫu...')
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi tải file mẫu')
+            console.error(error)
+        }
+    }
+
     const itemsDownload = [
         {
             key: 'import',
-            label: 'Nhập dữ liệu bằng excel',
-            onClick: () => {},
-            // onClick: () => setImportModalVisible(true),
+            label: 'Nhập dữ liệu bằng word',
+            onClick: () => setImportModalVisible(true),
         },
         {
             key: 'update',
-            label: 'Tải file mẫu excel',
-            onClick: () => {},
-            // onClick: () => onOpenTrainingBlock,
+            label: 'Tải file mẫu',
+            onClick: handleDownloadTemplate,
         },
     ]
     const menuDownload = (
@@ -241,15 +276,11 @@ export default function Question() {
                         setFilters={setFilters}
                         columns={[
                             {
-                                title: 'Mã',
-                                dataIndex: 'code',
-                                width: 80,
+                                title: 'STT',
+                                width: 30,
                                 align: 'center',
-                                fixed: 'left',
-                                type: 'input',
-                                render: (__, record) => {
-                                    return record?.code
-                                },
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'Nội dung câu hỏi',
@@ -257,14 +288,14 @@ export default function Question() {
                                 width: 200,
                                 fixed: 'left',
                                 type: 'input',
-                                render: (__, record) => {
-                                    return record?.content
-                                },
+                                render: (html: string) => (
+                                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                                ),
                             },
                             {
                                 title: 'Loại câu hỏi',
                                 dataIndex: 'questionType',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'select',
                                 options: questionTypeOptions,
@@ -274,7 +305,7 @@ export default function Question() {
                             {
                                 title: 'Chương mục',
                                 dataIndex: 'knowledgeBlockId',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'select',
                                 options: knowledgeBlockData?.map(({ id, name }) => ({
@@ -288,7 +319,7 @@ export default function Question() {
                             {
                                 title: 'Độ khó',
                                 dataIndex: 'difficultyId',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'select',
                                 options: difficultyData?.map(({ id, name, level }) => ({
@@ -296,21 +327,39 @@ export default function Question() {
                                     label: `${name} (level ${level})`,
                                 })),
                                 render: (__, record) => {
-                                    return `${record?.difficulty?.name} (level ${record?.difficulty?.level})`
+                                    if (!record?.difficulty) {
+                                        return 'Chưa xác định'
+                                    }
+                                    if (!record.difficulty.name) {
+                                        return `Level ${record.difficulty.level || 'N/A'}`
+                                    }
+                                    if (!record.difficulty.level) {
+                                        return record.difficulty.name
+                                    }
+                                    return `${record.difficulty.name} (level ${record.difficulty.level})`
                                 },
                             },
                             {
                                 title: 'Điểm số',
                                 dataIndex: 'point',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
+                                render: (__, record) => {
+                                    if (!record?.point) {
+                                        return ''
+                                    }
+                                    return `${record.point} điểm`
+                                },
                             },
                             {
                                 title: 'Giải thích đáp án',
                                 dataIndex: 'explanation',
-                                width: 200,
+                                width: 300,
                                 type: 'input',
+                                render: (html: string) => (
+                                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                                ),
                             },
                             // {
                             //     title: 'Tự động chấm điểm',
@@ -327,7 +376,7 @@ export default function Question() {
                             // },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 60,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (__, record) => {
@@ -376,11 +425,18 @@ export default function Question() {
                     />
                 </Col>
             </Row>
+            <WordImportModal
+                visible={importModalVisible}
+                onCancel={() => setImportModalVisible(false)}
+                onImportSuccess={(questions) => {
+                    handleImportSuccess(questions)
+                }}
+            />
         </div>
     )
 }
 
-Question.getLayout = function getLayout(page: React.ReactElement) {
+QuestionPage.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
