@@ -41,7 +41,6 @@ const PutQuestion = () => {
                 return
             }
             const data = {
-                code: output.code,
                 content: output.content,
                 type: output.type,
                 point: output.point,
@@ -118,11 +117,6 @@ const PutQuestion = () => {
             title={input?.id ? 'Chỉnh sửa câu hỏi' : 'Thêm mới câu hỏi'}
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã câu hỏi">
-                    <Input placeholder="Nhập mã câu hỏi" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="type" label="Loại câu hỏi" required>
                     <Select
                         maxTagCount={'responsive'}
@@ -167,14 +161,6 @@ const PutQuestion = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name={'isAutoGraded'} label="Tự động chấm điểm" required>
-                    <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>Có</Radio>
-                        <Radio value={false}>Không</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="content" label="Nội dung câu hỏi" required>
                     <Input.TextArea placeholder="Nhập nội dung câu hỏi" />
                 </FormItem>
@@ -182,6 +168,14 @@ const PutQuestion = () => {
             <Col span={12}>
                 <FormItem form={form} name="explanation" label="Giải thích đáp án">
                     <Input.TextArea placeholder="Nhập giải thích đáp án" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name={'isAutoGraded'} label="Tự động chấm điểm" required>
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
         </PutFormModal>

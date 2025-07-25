@@ -9,6 +9,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { emptyObjectIf } from '@workspace/constant'
 import type { Question } from '@workspace/db'
 import {
     useCountQuestion,
@@ -117,15 +118,6 @@ export default function QuestionPage() {
         ]
     )
 
-    const commonOrderBy = useMemo(() => {
-        const order: { point?: 'asc' | 'desc' }[] = []
-        if (filters.point === 'asc' || filters.point === 'desc') {
-            order.push({ point: filters.point })
-        }
-        order.push({ point: 'asc' })
-        return order
-    }, [filters.point])
-
     const queryOptions = useMemo(
         () => ({
             enabled: !!questionBankId,
@@ -140,7 +132,17 @@ export default function QuestionPage() {
                 knowledgeBlock: true,
                 difficulty: true,
             },
-            orderBy: commonOrderBy,
+            orderBy: [
+                ...emptyObjectIf(
+                    [
+                        {
+                            point: filters.point,
+                        },
+                    ],
+                    !!filters.point
+                ),
+                { point: 'asc' },
+            ],
         },
         queryOptions
     )
@@ -151,7 +153,6 @@ export default function QuestionPage() {
                 ...commonWhere,
                 deletedAt: null,
             },
-            orderBy: commonOrderBy,
         },
         queryOptions
     )
@@ -269,30 +270,19 @@ export default function QuestionPage() {
                         setFilters={setFilters}
                         columns={[
                             {
-                                title: 'Mã',
-                                dataIndex: 'code',
-                                width: 80,
-                                align: 'center',
-                                fixed: 'left',
-                                type: 'input',
-                                render: (__, record) => {
-                                    return record?.code
-                                },
-                            },
-                            {
                                 title: 'Nội dung câu hỏi',
                                 dataIndex: 'content',
                                 width: 200,
                                 fixed: 'left',
                                 type: 'input',
-                                render: (__, record) => {
-                                    return record?.content
-                                },
+                                render: (html: string) => (
+                                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                                ),
                             },
                             {
                                 title: 'Loại câu hỏi',
                                 dataIndex: 'questionType',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'select',
                                 options: questionTypeOptions,
@@ -302,7 +292,7 @@ export default function QuestionPage() {
                             {
                                 title: 'Chương mục',
                                 dataIndex: 'knowledgeBlockId',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'select',
                                 options: knowledgeBlockData?.map(({ id, name }) => ({
@@ -346,8 +336,11 @@ export default function QuestionPage() {
                             {
                                 title: 'Giải thích đáp án',
                                 dataIndex: 'explanation',
-                                width: 200,
+                                width: 300,
                                 type: 'input',
+                                render: (html: string) => (
+                                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                                ),
                             },
                             // {
                             //     title: 'Tự động chấm điểm',
@@ -364,7 +357,7 @@ export default function QuestionPage() {
                             // },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 60,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (__, record) => {

@@ -1,9 +1,11 @@
 import { UploadOutlined } from '@ant-design/icons'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { Button, Modal, message, Table } from 'antd'
 import { XMLParser } from 'fast-xml-parser'
 import PizZip from 'pizzip'
 import type React from 'react'
 import { useState } from 'react'
+import { env } from '@/env'
 
 interface WordImportModalProps {
     visible: boolean
@@ -28,7 +30,8 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
         const paragraphs = Array.isArray(cell?.['w:p']) ? cell['w:p'] : [cell?.['w:p']]
         let rawText = ''
         let prevEndedWithChar = false
-        const images: string[] = []
+        const images: { name: string; blob: Blob }[] = []
+        let imgIndex = 1
 
         for (const p of paragraphs) {
             const runs = Array.isArray(p?.['w:r']) ? p['w:r'] : [p?.['w:r']]
@@ -61,9 +64,11 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     const imagePath = `word/${relMap.get(relId)}`
                     const file = zip.file(imagePath)
                     if (file) {
-                        const base64 = btoa(file.asBinary())
-                        const ext = imagePath.split('.').pop()?.toLowerCase() || 'png'
-                        images.push(`data:image/${ext};base64,${base64}`)
+                        const blob = new Blob([file.asUint8Array()], { type: 'image/png' })
+                        const placeholder = `{img_${imgIndex}}`
+                        rawText += ` ${placeholder} `
+                        images.push({ name: placeholder, blob })
+                        imgIndex++
                     }
                 }
             }
@@ -84,6 +89,31 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             return Number.parseFloat(match[1].replace(',', '.'))
         }
         return undefined
+    }
+
+    const uploadImagesAndReplacePlaceholders = async (
+        rawText: string,
+        images: { name: string; blob: Blob }[]
+    ): Promise<string> => {
+        let result = rawText
+
+        for (const img of images) {
+            const extension = 'png'
+            const resPresignedUrl = await generatePresignedUrl({
+                path: 'mta-question-images',
+                extension,
+            })
+
+            await fetch(resPresignedUrl.data.url, {
+                method: 'PUT',
+                body: img.blob,
+            })
+
+            const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+            result = result.replace(img.name, `<img src="${imageUrl}" style="max-width: 100px;" />`)
+        }
+
+        return result
     }
 
     const handleImport = async (file: File) => {
@@ -127,7 +157,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                         relMap
                     )
                     question.content = contentResult.text
-                    question.contentImages = contentResult.images
+                    question.contentImagesRaw = contentResult.images
                     question.point = extractPointFromCell(
                         contentCells[contentCells.length - 1],
                         zip,
@@ -145,7 +175,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                         relMap
                     )
                     question.explanation = explanationResult.text
-                    question.explanationImages = explanationResult.images
+                    question.explanationImagesRaw = explanationResult.images
 
                     if (question.content && question.explanation && question.point !== undefined) {
                         extractedQuestions.push(question)
@@ -170,37 +200,11 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             title: 'Câu hỏi',
             dataIndex: 'content',
             key: 'content',
-            render: (_: any, record: any) => (
-                <div>
-                    <div>{record.content}</div>
-                    {record.contentImages?.map((src: string, idx: number) => (
-                        <img
-                            key={src}
-                            src={src}
-                            alt={`content-img-${idx}`}
-                            style={{ maxWidth: 100, maxHeight: 100, marginTop: 8 }}
-                        />
-                    ))}
-                </div>
-            ),
         },
         {
             title: 'Giải thích',
             dataIndex: 'explanation',
             key: 'explanation',
-            render: (_: any, record: any) => (
-                <div>
-                    <div>{record.explanation}</div>
-                    {record.explanationImages?.map((src: string, idx: number) => (
-                        <img
-                            key={src}
-                            src={src}
-                            alt={`explanation-img-${idx}`}
-                            style={{ maxWidth: 100, maxHeight: 100, marginTop: 8 }}
-                        />
-                    ))}
-                </div>
-            ),
         },
         {
             title: 'Điểm',
@@ -230,10 +234,34 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     key="submit"
                     type="primary"
                     disabled={questions.length === 0}
-                    onClick={() => {
-                        onImportSuccess(questions)
-                        onCancel()
-                        setQuestions([])
+                    onClick={async () => {
+                        try {
+                            const processedQuestions = await Promise.all(
+                                questions.map(async (q) => {
+                                    const content = await uploadImagesAndReplacePlaceholders(
+                                        q.content,
+                                        q.contentImagesRaw || []
+                                    )
+                                    const explanation = await uploadImagesAndReplacePlaceholders(
+                                        q.explanation,
+                                        q.explanationImagesRaw || []
+                                    )
+                                    const point = q.point
+                                    return {
+                                        point,
+                                        content,
+                                        explanation,
+                                    }
+                                })
+                            )
+
+                            onImportSuccess(processedQuestions)
+                            onCancel()
+                            setQuestions([])
+                        } catch (error) {
+                            message.error('Lỗi khi upload ảnh lên MinIO')
+                            console.error(error)
+                        }
                     }}
                 >
                     Lưu Câu Hỏi
