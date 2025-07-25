@@ -154,7 +154,7 @@ export default function ThongTinThanNhanForm() {
     }
 
     return (
-        <div className="mt-5">
+        <div>
             <Collapse
                 items={[
                     {
@@ -169,6 +169,7 @@ export default function ThongTinThanNhanForm() {
                 ]}
                 bordered={false}
                 expandIconPosition="end"
+                className="bg-transparent"
             />
         </div>
     )

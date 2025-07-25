@@ -2,15 +2,23 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import PutTrinhDoQuanyNhaNuocModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function TrinhDoQuanLyNhaNuocForm() {
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {}
+    const { onOpen } = useDisclosure({
+        tag: PutTrinhDoQuanyNhaNuocModal.name,
+    })
+
+    const handleModal = () => {
+        onOpen()
+    }
 
     const hasData = true
 
@@ -121,7 +129,7 @@ export default function TrinhDoQuanLyNhaNuocForm() {
     }
 
     return (
-        <div className="mt-5">
+        <div>
             <Collapse
                 items={[
                     {
@@ -136,6 +144,7 @@ export default function TrinhDoQuanLyNhaNuocForm() {
                 ]}
                 bordered={false}
                 expandIconPosition="end"
+                className="bg-transparent"
             />
         </div>
     )
