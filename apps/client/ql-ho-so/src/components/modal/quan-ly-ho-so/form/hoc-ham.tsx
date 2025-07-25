@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutHocHamModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-ham'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import type { HocHam } from '@workspace/db'
 import { useFindManyHocHam, useUpdateHocHam } from '@workspace/db/hooks'
@@ -11,7 +12,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function HocHamForm() {
+export default function HocHamForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure<Partial<HocHam>>({
@@ -160,7 +161,7 @@ export default function HocHamForm() {
             <Collapse
                 items={[
                     {
-                        key: 'hoc-ham',
+                        key: 'hocHam',
                         label: (
                             <Title level={4} className="mb-0">
                                 Học hàm
@@ -172,6 +173,10 @@ export default function HocHamForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

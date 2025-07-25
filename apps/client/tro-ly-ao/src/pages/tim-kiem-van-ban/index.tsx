@@ -147,7 +147,7 @@ export default function Page() {
                             </div>
                         </div>
                         <Button
-                            className="bg-primary text-white w-full h-[36px] flex items-center justify-center gap-2" // Giảm chiều cao của button
+                            className="bg-primary text-white w-full h-9 flex items-center justify-center gap-2" // Giảm chiều cao của button
                             onClick={(e) => {
                                 e.stopPropagation()
                                 onDownload(

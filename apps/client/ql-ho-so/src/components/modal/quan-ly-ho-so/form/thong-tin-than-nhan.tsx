@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutThongTinThanNhan from '@components/modal/quan-ly-ho-so/modals/put-thong-tin-than-nhan'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import type { Relative } from '@workspace/db'
 import { useFindManyRelative, useUpdateRelative } from '@workspace/db/hooks'
@@ -11,7 +12,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function ThongTinThanNhanForm() {
+export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure<Partial<Relative>>({
@@ -158,7 +159,7 @@ export default function ThongTinThanNhanForm() {
             <Collapse
                 items={[
                     {
-                        key: 'thong-tin-than-nhan',
+                        key: 'thongTinThanNhan',
                         label: (
                             <Title level={4} className="mb-0">
                                 Thông tin thân nhân
@@ -170,6 +171,10 @@ export default function ThongTinThanNhanForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

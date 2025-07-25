@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutCapBacModal from '@components/modal/quan-ly-ho-so/modals/put-cap-bac'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function CapBacForm() {
+export default function CapBacForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -127,7 +128,7 @@ export default function CapBacForm() {
             <Collapse
                 items={[
                     {
-                        key: 'cap-bac',
+                        key: 'capBac',
                         label: (
                             <Title level={4} className="mb-0">
                                 Cấp bậc
@@ -139,6 +140,10 @@ export default function CapBacForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

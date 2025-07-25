@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutDoiTuongChinhSachModal from '@components/modal/quan-ly-ho-so/modals/put-doi-tuong-chinh-sach'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function DoiTuongChinhSachForm() {
+export default function DoiTuongChinhSachForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -128,7 +129,7 @@ export default function DoiTuongChinhSachForm() {
             <Collapse
                 items={[
                     {
-                        key: 'doi-tuong-chinh-sach',
+                        key: 'doiTuongChinhSach',
                         label: (
                             <Title level={4} className="mb-0">
                                 Đối tượng chính sách
@@ -140,6 +141,10 @@ export default function DoiTuongChinhSachForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )
