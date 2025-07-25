@@ -6,10 +6,10 @@ import PutThongTinThanNhan from '@components/modal/quan-ly-ho-so/modals/put-thon
 import useSpinner from '@hooks/spinner'
 import type { Relative } from '@workspace/db'
 import { useFindManyRelative, useUpdateRelative } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row, Typography } from 'antd'
+import { Button, Col, Collapse, message, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
 export default function ThongTinThanNhanForm() {
     const { showSpinner, hideSpinner } = useSpinner()
@@ -23,7 +23,7 @@ export default function ThongTinThanNhanForm() {
             dM_MoiQuanHe: true,
         },
     })
-    const { mutate: updateRelative } = useUpdateRelative()
+    const { mutateAsync: updateRelative } = useUpdateRelative()
 
     const handleModal = () => {
         onOpen()
@@ -51,16 +51,14 @@ export default function ThongTinThanNhanForm() {
         }
     }
 
-    return (
-        <div className="mt-7">
-            <Row justify="space-between" align="middle">
-                <Col span={12}>
-                    <Title level={4} className="mb-0">
-                        Thông tin thân nhân
-                    </Title>
-                </Col>
-                <Col span={12}>
-                    <Flex justify="end">
+    const renderContent = () => {
+        if (!hasData) {
+            return (
+                <Row justify="space-between" align="middle">
+                    <Col>
+                        <Text type="secondary">Không có dữ liệu</Text>
+                    </Col>
+                    <Col>
                         <Button
                             onClick={handleModal}
                             icon={<PlusOutlined />}
@@ -68,11 +66,25 @@ export default function ThongTinThanNhanForm() {
                         >
                             Thêm mới
                         </Button>
-                    </Flex>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+            )
+        }
 
-            {hasData && (
+        return (
+            <div>
+                <Row justify="end">
+                    <Col>
+                        <Button
+                            onClick={handleModal}
+                            icon={<PlusOutlined />}
+                            className="border-green-700 text-green-700 hover:bg-green-50"
+                        >
+                            Thêm mới
+                        </Button>
+                    </Col>
+                </Row>
+
                 <Table
                     columns={[
                         {
@@ -137,7 +149,27 @@ export default function ThongTinThanNhanForm() {
                     dataSource={relatives}
                     pagination={false}
                 />
-            )}
+            </div>
+        )
+    }
+
+    return (
+        <div className="mt-5">
+            <Collapse
+                items={[
+                    {
+                        key: 'thong-tin-than-nhan',
+                        label: (
+                            <Title level={4} className="mb-0">
+                                Thông tin thân nhân
+                            </Title>
+                        ),
+                        children: renderContent(),
+                    },
+                ]}
+                bordered={false}
+                expandIconPosition="end"
+            />
         </div>
     )
 }
