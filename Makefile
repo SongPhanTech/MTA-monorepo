@@ -60,7 +60,7 @@ khao-thi:
 	pnpm build && \
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
-	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf esm-cdn && unzip out.zip && mv out esm-cdn && docker compose -f app-docker-compose.yml up -d"
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf ems-cdn && unzip out.zip && mv out ems-cdn && docker compose -f app-docker-compose.yml up -d"
 
 # Pattern rule: build-<name>
 build-%:
