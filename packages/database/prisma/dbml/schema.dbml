@@ -132,6 +132,7 @@ Table Exam {
   endTime DateTime [not null]
   duration Int [not null]
   passScore Float [not null, default: 5]
+  maxScore Float [not null, default: 10]
   shuffleQuestions Boolean [not null, default: true]
   shuffleAnswers Boolean [not null, default: true]
   showResult Boolean [not null, default: false]
@@ -157,6 +158,10 @@ Table TestStructureRule {
   questionPoint Float [not null]
   questionType QuestionType [not null]
   count Int [not null]
+
+  indexes {
+    (examId, knowledgeBlockId, questionPoint, questionType) [unique]
+  }
 
   Note: 'Cấu hình tạo đề tự động cho kỳ thi'
 }

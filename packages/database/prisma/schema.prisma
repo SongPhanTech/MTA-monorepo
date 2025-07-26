@@ -588,6 +588,7 @@ model Exam {
   endTime            DateTime
   duration           Int
   passScore          Float               @default(5)
+  maxScore           Float               @default(10)
   shuffleQuestions   Boolean             @default(true)
   shuffleAnswers     Boolean             @default(true)
   showResult         Boolean             @default(false)
@@ -615,6 +616,7 @@ model TestStructureRule {
   questionType     QuestionType
   count            Int
 
+  @@unique([examId, knowledgeBlockId, questionPoint, questionType])
   @@schema("khao-thi")
 }
 

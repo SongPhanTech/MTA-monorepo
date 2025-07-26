@@ -139,7 +139,19 @@ export default function TestStructureRule() {
     )
 
     const { data: examData = [] } = useFindManyExamBank(
-        { where: { examId }, orderBy: { createdAt: 'desc' } },
+        {
+            where: { examId },
+            orderBy: { createdAt: 'desc' },
+            include: {
+                questions: {
+                    select: {
+                        question: { select: { point: true } },
+                    },
+                },
+                _count: { select: { questions: true } },
+            },
+        },
+
         { enabled: !!examId }
     )
     const { data: countExam } = useCountExamBank(
@@ -260,7 +272,6 @@ export default function TestStructureRule() {
                             {
                                 title: 'Chương mục',
                                 dataIndex: 'knowledgeBlockId',
-                                width: 100,
                                 align: 'center',
                                 type: 'select',
                                 options: knowledgeBlockData?.map(({ id, name }) => ({
@@ -274,7 +285,7 @@ export default function TestStructureRule() {
                             {
                                 title: 'Loại câu hỏi',
                                 dataIndex: 'questionType',
-                                width: 120,
+                                width: 200,
                                 align: 'center',
                                 type: 'select',
                                 options: questionTypeOptions,
@@ -284,20 +295,20 @@ export default function TestStructureRule() {
                             {
                                 title: 'Số lượng câu hỏi',
                                 dataIndex: 'count',
-                                width: 120,
+                                width: 200,
                                 align: 'center',
                                 type: 'order',
                             },
                             {
                                 title: 'Điểm từng câu',
                                 dataIndex: 'questionPoint',
-                                width: 120,
+                                width: 200,
                                 align: 'center',
                                 type: 'order',
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 150,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (__, record) => {
@@ -379,9 +390,33 @@ export default function TestStructureRule() {
                                     `Đề ${index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE}`,
                             },
                             {
+                                title: 'Số câu hỏi',
+                                align: 'center',
+                                fixed: 'left',
+                                width: 200,
+                                dataIndex: ['_count', 'questions'],
+                            },
+                            {
+                                title: 'Tổng điểm',
+                                align: 'center',
+                                fixed: 'left',
+                                width: 200,
+                                render: (__, record) => {
+                                    let total = 0
+                                    if (!record?.questions) {
+                                        return '-'
+                                    }
+                                    for (const q of record.questions) {
+                                        total += q.question.point || 0
+                                    }
+                                    return total
+                                },
+                            },
+                            {
                                 title: 'Thao tác',
                                 align: 'center',
                                 fixed: 'right',
+                                width: 150,
                                 render: (__, record) => {
                                     if (record?.id) {
                                         return (
