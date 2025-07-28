@@ -8,4 +8,6 @@
 export interface PresignedUrlDto {
   path: string;
   extension: string;
+  /** @nullable */
+  name?: string | null;
 }

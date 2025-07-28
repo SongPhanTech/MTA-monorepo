@@ -263,12 +263,12 @@ app.openapi(graduationCheck, async (c) => {
         const studentDataContext: StudentDataContext = {
             SEMESTER_GPA:
                 baseScore === 'Base10'
-                    ? student.studentSemesterResult[0]?.gpaBase10 || 0
-                    : student.studentSemesterResult[0]?.gpaBase4 || 0,
+                    ? student.studentSemesterResult[0]?.gpaBase10.toNumber() || 0
+                    : student.studentSemesterResult[0]?.gpaBase4.toNumber() || 0,
             YEARLY_GPA:
                 baseScore === 'Base10'
-                    ? student.studentYearResult[0]?.gpaBase10 || 0
-                    : student.studentYearResult[0]?.gpaBase4 || 0,
+                    ? student.studentYearResult[0]?.gpaBase10.toNumber() || 0
+                    : student.studentYearResult[0]?.gpaBase4.toNumber() || 0,
             CUMULATIVE_GPA,
             ENTRY_SCORE: student.entryScore || 0,
             COURSE_GRADE_LOWEST: courseGradeLowest,

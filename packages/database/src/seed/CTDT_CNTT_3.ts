@@ -10,8 +10,9 @@ async function main() {
         skipDuplicates: true,
         data: [
             {
+                // exist
                 id: 'CSDL_CNTT_1',
-                subjectId: 'CSDL_CNTT',
+                subjectId: 'cmdcutrt5003poks5tvh39mzp',
                 name: 'Cơ sở dữ liệu',
                 description: 'Cơ sở dữ liệu',
                 credit: 1,
@@ -76,7 +77,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K13',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TA_B11_1',
             },
             {
@@ -90,7 +91,7 @@ async function main() {
                 updatedAt: '2025-07-20T16:20:00.000Z',
                 examType: 'OfflineWritten',
                 subjectEquivalentType: 'NONE',
-                managementOrganizationId: 'K13',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
                 code: 'TA_B12_1',
             },
             {
@@ -136,8 +137,9 @@ async function main() {
                 code: 'NLHDH_CNTT_1',
             },
             {
+                // exist
                 id: 'CNWEB_CNTT_1',
-                subjectId: 'CNWEB_CNTT',
+                subjectId: 'cmdcutrzk004goks5hls8v328',
                 name: 'Công nghệ Web',
                 description: 'Công nghệ Web',
                 credit: 1,
@@ -178,8 +180,9 @@ async function main() {
                 code: 'VL_CNTT_1',
             },
             {
+                // exist
                 id: 'CTDLGT_CNTT_1',
-                subjectId: 'CTDLGT_CNTT',
+                subjectId: 'cmdcutrom0037oks5fdcw4xbw',
                 name: 'Cấu trúc dữ liệu và giải thuật',
                 description: 'Cấu trúc dữ liệu và giải thuật',
                 credit: 1,
@@ -262,8 +265,9 @@ async function main() {
                 code: 'CD1IT_CNTT_1',
             },
             {
+                // exist
                 id: 'PTTKHT_CNTT_1',
-                subjectId: 'PTTKHT_CNTT',
+                subjectId: 'cmdcuts2b004soks5bc3psf9y',
                 name: 'Phân tích và thiết kế hệ thống',
                 description: 'Phân tích và thiết kế hệ thống',
                 credit: 1,
@@ -290,8 +294,9 @@ async function main() {
                 code: 'TACNTH1_CNTT_1',
             },
             {
+                // exist
                 id: 'TR_CNTT_1',
-                subjectId: 'TR_CNTT',
+                subjectId: 'cmdcutrpf003aoks5k9pc35h6',
                 name: 'Toán rời rạc',
                 description: 'Toán rời rạc',
                 credit: 1,
@@ -318,8 +323,9 @@ async function main() {
                 code: 'HTS_CNTT_1',
             },
             {
+                // exist
                 id: 'MMT_CNTT_1',
-                subjectId: 'MMT_CNTT',
+                subjectId: 'cmdcutrqy003goks5bnqj5l6z',
                 name: 'Mạng máy tính',
                 description: 'Mạng máy tính',
                 credit: 1,
@@ -346,8 +352,9 @@ async function main() {
                 code: 'CNWEBNC_CNTT_1',
             },
             {
+                // exist
                 id: 'CNPM_CNTT_1',
-                subjectId: 'CNPM_CNTT',
+                subjectId: 'cmdcutryv004doks5oslkvqew',
                 name: 'Công nghệ phần mềm',
                 description: 'Công nghệ phần mềm',
                 credit: 1,
@@ -570,8 +577,9 @@ async function main() {
                 code: 'QLDA_CNTT_1',
             },
             {
+                // exist
                 id: 'TTNT_CNTT_1',
-                subjectId: 'TTNT_CNTT',
+                subjectId: 'cmdcuts5v0057oks5472v9fiy',
                 name: 'Trí tuệ nhân tạo',
                 description: 'Trí tuệ nhân tạo',
                 credit: 1,
@@ -710,8 +718,9 @@ async function main() {
                 code: 'HH_CNTT_1',
             },
             {
+                // exist
                 id: 'THML_CNTT_1',
-                subjectId: 'THML_CNTT',
+                subjectId: 'cmdcutr9a001goks5hetlurp6',
                 name: 'Triết học Mác - Lênin',
                 description: 'Triết học Mác - Lênin',
                 credit: 1,
@@ -724,8 +733,9 @@ async function main() {
                 code: 'THML_CNTT_1',
             },
             {
+                // exist
                 id: 'TTHCM_CNTT_1',
-                subjectId: 'TTHCM_CNTT',
+                subjectId: 'TTHCM',
                 name: 'Tư tưởng Hồ Chí Minh',
                 description: 'Tư tưởng Hồ Chí Minh',
                 credit: 1,
@@ -738,8 +748,9 @@ async function main() {
                 code: 'TTHCM_CNTT_1',
             },
             {
+                // exist
                 id: 'PLDC_CNTT_1',
-                subjectId: 'PLDC_CNTT',
+                subjectId: 'PLĐC',
                 name: 'Pháp luật đại cương',
                 description: 'Pháp luật đại cương',
                 credit: 1,
@@ -906,8 +917,9 @@ async function main() {
                 code: 'TKDHVHH_CNTT_1',
             },
             {
+                // exist
                 id: 'KTCTML_CNTT_1',
-                subjectId: 'KTCTML_CNTT',
+                subjectId: 'cmdcutra3001joks5salnnqd4',
                 name: 'Kinh tế chính trị Mác - Lênin',
                 description: 'Kinh tế chính trị Mác - Lênin',
                 credit: 1,
@@ -1102,8 +1114,9 @@ async function main() {
                 code: 'KXPATH_CNTT_1',
             },
             {
+                // exist
                 id: 'CNXHKH_CNTT_1',
-                subjectId: 'CNXHKH_CNTT',
+                subjectId: 'cmdcutrat001moks5k2pe09gn',
                 name: 'Chủ nghĩa xã hội khoa học',
                 description: 'Chủ nghĩa xã hội khoa học',
                 credit: 1,

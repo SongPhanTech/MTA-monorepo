@@ -86,7 +86,7 @@ model GraduationDecision extends Base {
   notes            String?          // Ghi chú của hội đồng
 
   // Thông tin tại thời điểm tốt nghiệp (snapshot)
-  finalGpa         Float            // GPA cuối cùng
+  finalGpa         Decimal                      @db.Decimal(5, 2)            // GPA cuối cùng
   finalRanking     AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
   finalRankingId   String
 

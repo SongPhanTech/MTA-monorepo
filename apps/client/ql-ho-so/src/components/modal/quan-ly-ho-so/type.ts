@@ -167,6 +167,8 @@ export type FilterProps = {
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]
+    email?: string
+    phoneNumber?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

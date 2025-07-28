@@ -16,11 +16,13 @@ export const env = createEnv({
      * `NEXT_PUBLIC_`.
      */
     client: {
+        NEXT_PUBLIC_APP_CODE: z.string(),
         NEXT_PUBLIC_API_BASE_URL: z.string().url(),
         NEXT_PUBLIC_API_MODEL_BASE_URL: z.string().url(),
         NEXT_PUBLIC_MY_ACCOUNT: z.string().url(),
         NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url(),
         NEXT_PUBLIC_AUTH_ISSUER: z.string().url().optional(),
+        NEXT_PUBLIC_ASSET_PREFIX: z.string().url(),
     },
 
     /**
@@ -28,12 +30,14 @@ export const env = createEnv({
      * middlewares) or client-side so we need to destruct manually.
      */
     runtimeEnv: {
+        NEXT_PUBLIC_APP_CODE: process.env.NEXT_PUBLIC_APP_CODE,
         ENVIRONMENT: process.env.ENVIRONMENT,
         NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
         NEXT_PUBLIC_API_MODEL_BASE_URL: process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
         NEXT_PUBLIC_MY_ACCOUNT: process.env.NEXT_PUBLIC_MY_ACCOUNT,
         NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
         NEXT_PUBLIC_AUTH_ISSUER: process.env.NEXT_PUBLIC_AUTH_ISSUER,
+        NEXT_PUBLIC_ASSET_PREFIX: process.env.NEXT_PUBLIC_ASSET_PREFIX,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

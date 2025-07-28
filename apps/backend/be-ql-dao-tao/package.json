@@ -20,6 +20,7 @@
     "@workspace/db": "workspace:*",
     "@workspace/libs": "workspace:*",
     "axios": "catalog:",
+    "decimal.js": "catalog:",
     "docxtemplater": "catalog:",
     "hono": "catalog:",
     "pizzip": "catalog:",

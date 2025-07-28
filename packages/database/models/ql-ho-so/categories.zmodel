@@ -16,12 +16,16 @@ model DM_TrinhDoHocVan extends Base {
 }
 
 model DM_TrinhDoLyLuanChinhTri extends Base {
-  name String @unique
+  name                  String                  @unique
+
+  trinhDoLyLuanChinhTri TrinhDoLyLuanChinhTri[]
   @@schema("ql-ho-so")
 }
 
 model DM_TrinhDoQuanLyNhaNuoc extends Base {
-  name String @unique
+  name                 String                 @unique
+
+  trinhDoQuanLyNhaNuoc TrinhDoQuanLyNhaNuoc[]
   @@schema("ql-ho-so")
 }
 
@@ -56,17 +60,22 @@ model DM_XepLoaiDanhGiaChatLuongDangVien extends Base {
 }
 
 model DM_LoaiHinhCongTac extends Base {
-  name String @unique
+  name            String            @unique
+  quaTrinhCongTac QuaTrinhCongTac[]
+
   @@schema("ql-ho-so")
 }
 
 model DM_TinhTrangCongTac extends Base {
   name String @unique
+
   @@schema("ql-ho-so")
 }
 
 model DM_LoaiHinhDiHocTap extends Base {
-  name String @unique
+  name               String               @unique
+  quaTrinhCuDiDaoTao QuaTrinhCuDiDaoTao[]
+
   @@schema("ql-ho-so")
 }
 

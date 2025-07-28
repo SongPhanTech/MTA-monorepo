@@ -1,0 +1,22 @@
+.avatar-upload .ant-upload-select {
+    width: 72px !important;
+    height: 72px !important;
+}
+.avatar-upload .ant-upload-list-item,
+.ant-upload-list-item-container {
+    width: 72px !important;
+    height: 72px !important;
+    padding: 0px !important;
+}
+.avatar-upload .ant-upload-list-item::before {
+    width: 72px !important;
+    height: 72px !important;
+}
+.form-userprofile .ant-col .ant-form-item-label {
+    min-width: 200px;
+    text-align: left;
+}
+
+.form-userprofile .ant-form-item-control-input-content {
+    min-width: 200px;
+}

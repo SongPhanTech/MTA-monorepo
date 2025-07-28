@@ -1,7 +1,6 @@
 import {
     ApartmentOutlined,
     BookOutlined,
-    IdcardOutlined,
     MessageOutlined,
     PieChartOutlined,
     ReadOutlined,
@@ -698,38 +697,10 @@ const NAVIGATION: NavigationType = {
             },
             {
                 id: 'quan-tri',
-                label: 'Quản trị hồ sơ',
+                label: 'Quản lý hồ sơ',
                 icon: SettingOutlined,
-                children: [
-                    {
-                        id: 'user-profile-ds',
-                        label: 'Quản lý hồ sơ sinh viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_SINH_VIEN,
-                        description: 'Quản lý hồ sơ sinh viên',
-                    },
-                    {
-                        id: 'ql-hoc-vien',
-                        label: 'Quản lý hồ sơ học viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_HOC_VIEN,
-                        description: 'Quản lý hồ sơ học viên',
-                    },
-                    {
-                        id: 'user-profile-lecture',
-                        label: 'Quản lý hồ sơ giảng viên',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_GIANG_VIEN,
-                        description: 'Quản lý hồ sơ giảng viên',
-                    },
-                    {
-                        id: 'user-profile-staff',
-                        label: 'Quản lý hồ sơ cán bộ',
-                        icon: IdcardOutlined,
-                        path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_CAN_BO,
-                        description: 'Quản lý hồ sơ cán bộ',
-                    },
-                ],
+                path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO,
+                description: 'Quản lý hồ sơ',
             },
             {
                 id: 'danh-muc-ho-so',

@@ -7,11 +7,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
-import {
-    useCountSubjectVersion,
-    useFindManyDifficulty,
-    useUpdateDifficulty,
-} from '@workspace/db/hooks'
+import { useCountDifficulty, useFindManyDifficulty, useUpdateDifficulty } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -65,7 +61,7 @@ export default function Difficulty() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSubjectVersion({
+    const { data: count } = useCountDifficulty({
         where: {
             ...commonWhere,
             deletedAt: null,
@@ -123,6 +119,13 @@ export default function Difficulty() {
                         filters={filters}
                         setFilters={setFilters}
                         columns={[
+                            {
+                                title: 'STT',
+                                width: 30,
+                                align: 'center',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
                             {
                                 title: 'Mã',
                                 dataIndex: 'code',

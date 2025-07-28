@@ -1,0 +1,277 @@
+import { CameraFilled, UserOutlined } from '@ant-design/icons'
+import HocHamForm from '@components/modal/quan-ly-ho-so/form/hoc-ham'
+import HocViForm from '@components/modal/quan-ly-ho-so/form/hoc-vi'
+import ThongTinCoBan from '@components/modal/quan-ly-ho-so/form/thong-tin-co-ban'
+import ThongTinThanNhanForm from '@components/modal/quan-ly-ho-so/form/thong-tin-than-nhan'
+import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trinh-do-ly-luan-chinh-tri'
+import CreateLayout from '@layouts/create-layout'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Flex, Form, Input, Upload, type UploadFile, type UploadProps } from 'antd'
+import { useRouter } from 'next/router'
+import { useMemo, useState } from 'react'
+import './index.css'
+import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
+import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
+import DoanDang from '@components/modal/quan-ly-ho-so/form/doan-dang'
+import DoiTuongChinhSachForm from '@components/modal/quan-ly-ho-so/form/doi-tuong-chinh-sach'
+import KeKhaiTaiSanForm from '@components/modal/quan-ly-ho-so/form/ke-khai-taI-san'
+import NgoaiNguForm from '@components/modal/quan-ly-ho-so/form/ngoai-ngu'
+import QuaTrinhCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cong-tac'
+import QuaTrinhCuDiCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cu-di-cong-tac'
+import QuaTrinhDiDaoTaoBoiDuongForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-di-dao-tao-boi-duong'
+import ThongTinKhenThuongForm from '@components/modal/quan-ly-ho-so/form/thong-tin-khen-thuong'
+import ThongTinKyLuatForm from '@components/modal/quan-ly-ho-so/form/thong-tin-ky-luat'
+import ThongTinLienHe from '@components/modal/quan-ly-ho-so/form/thong-tin-lien-he'
+import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
+import TrinhDoQuanLyHanhChinhForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-hanh-chinh'
+import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
+import ImgCrop from 'antd-img-crop'
+import dayjs from 'dayjs'
+
+dayjs.locale('vi')
+interface itemType {
+    id: string
+    render?: JSX.Element
+    title: string
+}
+export default function CreateUserPage() {
+    const [search, setSearch] = useState<string>('')
+    const [activeKey, setActiveKey] = useState('thongTinCoBan')
+    const [expland, setExpland] = useState<string[]>(['thongTinCoBan', 'thongTinLienHe'])
+    const [avatar, setAvatar] = useState<UploadFile[]>([])
+    const [fileList, setFileList] = useState<UploadFile[]>([])
+    const router = useRouter()
+    const listTabs: itemType[] = [
+        {
+            title: 'Thông tin cơ bản',
+            id: 'thongTinCoBan',
+            render: <ThongTinCoBan expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Thông tin liên hệ',
+            id: 'thongTinLienHe',
+            render: <ThongTinLienHe expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Đoàn - Đảng',
+            id: 'DoanDang',
+            render: <DoanDang expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Thông tin thân nhân',
+            id: 'thongTinThanNhan',
+            render: <ThongTinThanNhanForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Học vị',
+            id: 'hocVi',
+            render: <HocViForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Học hàm',
+            id: 'hocHam',
+            render: <HocHamForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Trình độ lý luận chính trị',
+            id: 'trinhDoLyLuanChinhTri',
+            render: <TrinhDoLyLuanChinhTriForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Trình độ quản lý hành chính',
+            id: 'trinhDoQuanLyHanhChinh',
+            render: <TrinhDoQuanLyHanhChinhForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Trình độ quản lý nhà nước',
+            id: 'trinhDoQuanLyNhaNuoc',
+            render: <TrinhDoQuanLyNhaNuocForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Ngoại ngữ',
+            id: 'ngoaiNgu',
+            render: <NgoaiNguForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Tin học',
+            id: 'tinHoc',
+            render: <TinHocForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Bồi dưỡng quốc phòng an ninh',
+            id: 'boiDuongQuocPhongAnNinh',
+            render: <BoiDuongQuocPhongAnNinhForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Cấp bậc',
+            id: 'capBac',
+            render: <CapBacForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Quá trình công tác',
+            id: 'quaTrinhCongTac',
+            render: <QuaTrinhCongTacForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Quá trình được cử đi công tác',
+            id: 'quaTrinhDuocCuDiCongTac',
+            render: <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Quá trình được cử đi đào tạo bồi dưỡng',
+            id: 'quaTrinhDiDaoTaoBoiDuong',
+            render: <QuaTrinhDiDaoTaoBoiDuongForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Khen thưởng',
+            id: 'khenThuong',
+            render: <ThongTinKhenThuongForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Kỷ luật',
+            id: 'kyLuat',
+            render: <ThongTinKyLuatForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Đối tượng chính sách',
+            id: 'doiTuongChinhSach',
+            render: <DoiTuongChinhSachForm expland={expland} setExpland={setExpland} />,
+        },
+        {
+            title: 'Kê khai tài sản',
+            id: 'keKhaiTaiSan',
+            render: <KeKhaiTaiSanForm expland={expland} setExpland={setExpland} />,
+        },
+    ]
+    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+        setFileList(newFileList.slice(-1))
+    }
+
+    const handleScroll = (item: itemType) => {
+        setActiveKey(item.id)
+        setExpland([...expland, item.id])
+        const el = document.getElementById(item.id)
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+    }
+
+    const listTabsRender = useMemo(() => {
+        return (
+            listTabs.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())) || []
+        )
+    }, [search, listTabs.filter])
+
+    return (
+        <div>
+            <Flex justify="space-between" className="p-4">
+                <div className="text-xl font-semibold">Thêm hồ sơ</div>
+                <Flex justify="end">
+                    <Button
+                        className="mr-3"
+                        onClick={() => {
+                            router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
+                        }}
+                    >
+                        Hủy
+                    </Button>
+                    <Button type="primary">Lưu</Button>
+                </Flex>
+            </Flex>
+            <Flex justify="space-between" className="w-full h-[calc(100vh-175px)]">
+                <div className="bg-white rounded-lg shadow h-full overflow-y-auto w-[250px]">
+                    <div className="p-4">
+                        <Input
+                            id="search"
+                            className="w-full"
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Tìm kiếm ..."
+                        />
+                    </div>
+
+                    {listTabsRender.length ? (
+                        <div className="mt-2">
+                            {listTabsRender.map((item) => (
+                                <div
+                                    className="relative cursor-pointer mb-2 px-5 py-2 hover:bg-gray-100"
+                                    key={item.id}
+                                    onClick={() => handleScroll(item)}
+                                >
+                                    {activeKey === item.id && (
+                                        <div className="bg-primary absolute top-0 left-0 h-full w-[3px]" />
+                                    )}
+                                    <div
+                                        className={
+                                            activeKey === item.id ? 'text-primary font-[500]' : ''
+                                        }
+                                    >
+                                        {item.title}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="px-4">Không tìm thấy kết quả</div>
+                    )}
+                </div>
+                <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
+                    <div className="p-6 shadow rounded-lg bg-white mb-4">
+                        <Form.Item name={'file'} className="mb-0 relative">
+                            <ImgCrop rotationSlider>
+                                <Upload
+                                    listType="picture-circle"
+                                    maxCount={1}
+                                    fileList={avatar?.length > 0 ? avatar : fileList}
+                                    onChange={onChange}
+                                    onRemove={() => {
+                                        setAvatar([])
+                                    }}
+                                    showUploadList={{
+                                        showPreviewIcon: false,
+                                    }}
+                                    className="avatar-upload "
+                                >
+                                    {fileList.length > 0
+                                        ? ''
+                                        : fileList.length < 1 && (
+                                              <div className="relative flex items-center justify-center">
+                                                  <UserOutlined
+                                                      style={{
+                                                          fontSize: '20px',
+                                                          color: '#686C7B',
+                                                      }}
+                                                  />
+                                              </div>
+                                          )}
+                                </Upload>
+                            </ImgCrop>
+                            <div className="absolute bottom-[0px] left-[52px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0] flex items-center justify-center">
+                                <CameraFilled style={{ color: '#686C7B' }} />
+                            </div>
+                        </Form.Item>
+                    </div>
+                    <div className="p-6 shadow rounded-lg bg-white form-userprofile">
+                        {listTabs.map((i) => {
+                            return (
+                                <div key={i.id} id={i.id}>
+                                    {i?.render}
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            </Flex>
+        </div>
+    )
+}
+
+CreateUserPage.getLayout = function getLayout(page: React.ReactElement) {
+    return (
+        <CreateLayout
+            breadcrumbList={[
+                { title: 'Quản lý hồ sơ', href: '/quan-ly-ho-so' },
+                { title: 'Tạo mới' },
+            ]}
+        >
+            {page}
+        </CreateLayout>
+    )
+}

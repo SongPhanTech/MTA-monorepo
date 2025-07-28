@@ -1,7 +1,8 @@
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
+import Decimal from 'decimal.js'
 
 type StudentSubjectScoreRelation = StudentSubjectScore & {
-    finalScore: number | null
+    finalScore: Decimal | null
     student?: {
         fixedClass?: {
             trainingCourse?: {
@@ -43,7 +44,7 @@ export const calcFinalScore = (
             awards: { include: { archivedAward: true } }
         }
     }>
-) => {
+): Decimal | null => {
     const rawFinalScore = !subjectScore.examScore
         ? null
         : subjectScore.examScore < coef.scoreToPass
@@ -64,7 +65,7 @@ export const calcFinalScore = (
     }
 
     if (rawFinalScore && maxCertFinalScore === null && rawFinalScore < coef.scoreToPass) {
-        return rawFinalScore
+        return new Decimal(rawFinalScore)
     }
 
     const bonusScore = subjectScore.awards.reduce(
@@ -72,16 +73,16 @@ export const calcFinalScore = (
         0
     )
 
-    return Math.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
+    return Decimal.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
 }
 
-function getScoreClassification(finalScore: number | null, scoreConverts: ScoreConvert[]) {
+function getScoreClassification(finalScore: Decimal | null, scoreConverts: ScoreConvert[]) {
     if (!finalScore) {
         return { classification: 'Vắng', base10Max: null }
     }
 
     const rank = scoreConverts.find(
-        (item) => finalScore >= item.base10Min && finalScore <= item.base10Max
+        (item) => finalScore.gte(item.base10Min) && finalScore.lte(item.base10Max)
     )
 
     const classification = rank

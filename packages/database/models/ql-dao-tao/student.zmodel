@@ -106,10 +106,10 @@ model StudentSemesterResult extends Base {
   isLastSemester           Boolean
 
   baseScore                AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
-  gpaBase4                 Float    // Điểm trung bình học kỳ hệ 4
-  cumulativeGpaBase4       Float    // Tích luỹ hệ 4
-  gpaBase10                Float    // Điểm trung bình học kỳ hệ 10
-  cumulativeGpaBase10      Float    // Tích luỹ hệ 10
+  gpaBase4                 Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 4
+  cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 4
+  gpaBase10                Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 10
+  cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
 
   conductScore             Float?   // Điểm rèn luyện trung bình của học kỳ
   studentTrainingType      StudentTrainingType // xếp loại rèn luyện
@@ -157,10 +157,10 @@ model StudentYearResult extends Base {
   isLastStudyYear          Boolean
 
   baseScore                AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
-  gpaBase4                 Float    // Điểm trung bình học kỳ hệ 4
-  cumulativeGpaBase4       Float    // Tích luỹ hệ 4
-  gpaBase10                Float    // Điểm trung bình học kỳ hệ 10
-  cumulativeGpaBase10      Float    // Tích luỹ hệ 10
+  gpaBase4                 Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 4
+  cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 4
+  gpaBase10                Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 10
+  cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
 
   conductScore             Float?   // Điểm rèn luyện trung bình của năm
   studentTrainingType      StudentTrainingType // xếp loại rèn luyện

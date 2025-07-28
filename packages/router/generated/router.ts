@@ -12,7 +12,6 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung",
     "TRA_LOI_KHAO_SAT": "/tra-loi-khao-sat"
   },
-  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -101,6 +100,8 @@ export default {
     "QUAN_LY_HO_SO_QL_HOC_VIEN": "/quan-ly-ho-so/ql-hoc-vien",
     "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
     "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
+    "QUAN_LY_HO_SO": "/quan-ly-ho-so",
+    "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi",
     "DANH_MUC_HO_SO_CAC_CHUYEN_NGANH_DAO_TAO_BAC_DAI_HOC": "/danh-muc-ho-so/cac-chuyen-nganh-dao-tao-bac-dai-hoc",
     "DANH_MUC_HO_SO_CAC_NUOC_CU_DI_HOC_TAP": "/danh-muc-ho-so/cac-nuoc-cu-di-hoc-tap",
     "DANH_MUC_HO_SO_CAC_TRUONG_DAO_TAO_BAC_DAI_HOC": "/danh-muc-ho-so/cac-truong-dao-tao-bac-dai-hoc",

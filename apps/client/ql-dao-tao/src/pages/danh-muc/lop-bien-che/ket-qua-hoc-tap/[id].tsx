@@ -290,7 +290,7 @@ export default function StudentScoreClassPage() {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     return (
                                         subjectClassStudent?.manualFinalScore ??
-                                        subjectClassStudent?.finalScore ??
+                                        subjectClassStudent?.finalScore?.toNumber() ??
                                         ''
                                     )
                                 },
@@ -303,7 +303,7 @@ export default function StudentScoreClassPage() {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ||
-                                        subjectClassStudent?.finalScore ||
+                                        subjectClassStudent?.finalScore?.toNumber() ||
                                         0
                                     return score !== undefined ? convertScore(score).base4 : ''
                                 },
@@ -316,7 +316,7 @@ export default function StudentScoreClassPage() {
                                     const subjectClassStudent = record?.subjectClassStudent?.[0]
                                     const score =
                                         subjectClassStudent?.manualFinalScore ||
-                                        subjectClassStudent?.finalScore ||
+                                        subjectClassStudent?.finalScore?.toNumber() ||
                                         0
                                     return score !== undefined ? convertScore(score).letter : ''
                                 },

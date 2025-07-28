@@ -197,6 +197,7 @@ model Exam  extends Base {
   duration           Int
 
   passScore          Float               @default(5) // Điểm đạt
+  maxScore           Float               @default(10) // Điểm tối đa
   shuffleQuestions   Boolean             @default(true) // Xáo trộn câu hỏi
   shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
   showResult         Boolean             @default(false) // Hiển thị kết quả ngay
@@ -219,6 +220,8 @@ model TestStructureRule extends Base {
   // difficultyId     String         // Dùng ID của mức độ khó
   questionType     QuestionType
   count            Int
+
+  @@unique([examId, knowledgeBlockId, questionPoint, questionType])
   @@schema("khao-thi")
 }
 
@@ -249,7 +252,7 @@ model ExamBankQuestion extends Base {
 model ExamSession extends Base {
   startTime  DateTime  @default(now())
   endTime    DateTime?
-  score      Float?
+  score      Decimal?  @db.Decimal(5, 2)
   isGraded   Boolean   @default(false)
 
   student    Student?  @relation(fields: [studentId], references: [id])

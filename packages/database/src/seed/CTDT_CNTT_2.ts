@@ -72,13 +72,13 @@ async function main() {
                 id: 'TA_B11',
                 code: 'TA_B11',
                 name: 'Tiếng Anh B11',
-                managementOrganizationId: 'K13',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
             },
             {
                 id: 'TA_B12',
                 code: 'TA_B12',
                 name: 'Tiếng Anh B12',
-                managementOrganizationId: 'K13',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
             },
             {
                 id: 'LTHDTJAVACB_CNTT',
