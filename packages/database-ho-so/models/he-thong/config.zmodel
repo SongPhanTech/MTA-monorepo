@@ -1,0 +1,15 @@
+import '../base.zmodel'
+
+enum ConfigKey {
+    DIRECTOR
+    ACADEMY_NAME
+    USER_SESSION_TIMEOUT
+
+    @@schema("he-thong")
+}
+
+model Config extends Base {
+    key   ConfigKey @unique
+    value String
+    @@schema("he-thong")
+}
