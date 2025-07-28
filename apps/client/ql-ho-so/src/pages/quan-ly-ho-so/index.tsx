@@ -4,18 +4,12 @@ import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
 import { PutStudentModal } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    FIXED_CLASS_STUDENT_STATUS,
-    GENDER_MEAN,
-    USER_TYPE,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN, USER_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { $Enums } from '@workspace/db'
-import { useCountStudent, useFindManyStudent, useUpdateStudent } from '@workspace/db/hooks'
+import { useCountUserProfile, useFindManyUserProfile, useUpdateStudent } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -41,231 +35,96 @@ export default function UserProfilePageDs() {
     const router = useRouter()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-    const { data = [], refetch } = useFindManyStudent({
-        where: {
-            trainingObjectType: {
-                type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
-                },
-            },
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
-                ...(filters.gender
-                    ? {
-                          gender: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
-            },
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.curriculumVersion
-                ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
-                      },
-                  }
-                : {}),
-            // ...(filters.fixedClass
-            //     ? {
-            //           fixedClassId: {
-            //               in: filters.fixedClass,
-            //           },
-            //       }
-            //     : {}),
-            // ...(filters.trainingMajors || filters.trainingField
-            //     ? {
-            //           fixedClass: {
-            //               curriculumVersion: {
-            //                   curriculum: {
-            //                       trainingMajor: {
-            //                           ...(filters.trainingMajors
-            //                               ? {
-            //                                     id: {
-            //                                         in: filters.trainingMajors,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                           ...(filters.trainingField
-            //                               ? {
-            //                                     trainingFieldId: {
-            //                                         in: filters.trainingField,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                       },
-            //                   },
-            //               },
-            //           },
-            //       }
-            //     : {}),
-        },
-        include: {
-            userProfile: true,
-            trainingObjectType: true,
-            // fixedClass: {
-            //     include: {
-            //         trainingCourse: true,
-            //         curriculumVersion: {
-            //             include: {
-            //                 curriculum: {
-            //                     include: {
-            //                         trainingMajor: {
-            //                             include: {
-            //                                 trainingField: true,
-            //                             },
-            //                         },
-            //                     },
-            //                 },
-            //             },
-            //         },
-            //     },
-            // },
-        },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
+    const { data: UserProfileData = [], refetch } = useFindManyUserProfile()
 
-    // const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
-    //     include: {
-    //         fixedClass: true,
-    //     },
-    //     orderBy: { name: 'asc' },
-    // })
-
-    // const { data: fixedClassData = [] } = useFindManyFixedClass({
-    //     include: {
-    //         trainingCourse: true,
+    // const { data: count } = useCountStudent({
+    //     where: {
+    //         trainingObjectType: {
+    //             type: {
+    //                 equals: $Enums.TrainingObjectTypes.CIVILIAN,
+    //             },
+    //         },
+    //         userProfile: {
+    //             OR: [
+    //                 {
+    //                     firstName: {
+    //                         contains: filters.name,
+    //                     },
+    //                 },
+    //                 {
+    //                     lastName: {
+    //                         contains: filters.name,
+    //                     },
+    //                 },
+    //             ],
+    //             ...(filters.gender
+    //                 ? {
+    //                       gender: {
+    //                           in: filters.gender,
+    //                       },
+    //                   }
+    //                 : {}),
+    //             ...(filters.dateOfBirth?.length === 2
+    //                 ? {
+    //                       dateOfBirth: {
+    //                           gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+    //                           lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+    //                       },
+    //                   }
+    //                 : {}),
+    //         },
+    //         ...(filters.code
+    //             ? {
+    //                   code: {
+    //                       contains: filters.code,
+    //                       mode: 'insensitive',
+    //                   },
+    //               }
+    //             : {}),
+    //         ...(filters.curriculumVersion
+    //             ? {
+    //                   curriculumVersionId: {
+    //                       in: filters.curriculumVersion,
+    //                   },
+    //               }
+    //             : {}),
+    //         // ...(filters.fixedClass
+    //         //     ? {
+    //         //           fixedClassId: {
+    //         //               in: filters.fixedClass,
+    //         //           },
+    //         //       }
+    //         //     : {}),
+    //         // ...(filters.trainingMajors || filters.trainingField
+    //         //     ? {
+    //         //           fixedClass: {
+    //         //               curriculumVersion: {
+    //         //                   curriculum: {
+    //         //                       trainingMajor: {
+    //         //                           ...(filters.trainingMajors
+    //         //                               ? {
+    //         //                                     id: {
+    //         //                                         in: filters.trainingMajors,
+    //         //                                     },
+    //         //                                 }
+    //         //                               : {}),
+    //         //                           ...(filters.trainingField
+    //         //                               ? {
+    //         //                                     trainingFieldId: {
+    //         //                                         in: filters.trainingField,
+    //         //                                     },
+    //         //                                 }
+    //         //                               : {}),
+    //         //                       },
+    //         //                   },
+    //         //               },
+    //         //           },
+    //         //       }
+    //         //     : {}),
     //     },
     // })
 
-    // const { data: trainingFieldData = [] } = useFindManyTrainingField()
-
-    // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-    //     orderBy: { name: 'asc' },
-    // })
-
-    // const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
-    //     orderBy: { name: 'asc' },
-    // })
-
-    const { data: count } = useCountStudent({
-        where: {
-            trainingObjectType: {
-                type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
-                },
-            },
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
-                ...(filters.gender
-                    ? {
-                          gender: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
-            },
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.curriculumVersion
-                ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
-                      },
-                  }
-                : {}),
-            // ...(filters.fixedClass
-            //     ? {
-            //           fixedClassId: {
-            //               in: filters.fixedClass,
-            //           },
-            //       }
-            //     : {}),
-            // ...(filters.trainingMajors || filters.trainingField
-            //     ? {
-            //           fixedClass: {
-            //               curriculumVersion: {
-            //                   curriculum: {
-            //                       trainingMajor: {
-            //                           ...(filters.trainingMajors
-            //                               ? {
-            //                                     id: {
-            //                                         in: filters.trainingMajors,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                           ...(filters.trainingField
-            //                               ? {
-            //                                     trainingFieldId: {
-            //                                         in: filters.trainingField,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                       },
-            //                   },
-            //               },
-            //           },
-            //       }
-            //     : {}),
-        },
-    })
+    const { data: count } = useCountUserProfile()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -376,9 +235,7 @@ export default function UserProfilePageDs() {
                                 width: 180,
                                 fixed: 'left',
                                 render: (__, record) =>
-                                    record.userProfile
-                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
-                                        : '',
+                                    record ? `${record.lastName} ${record.firstName}` : '',
                                 type: 'input',
                                 dataIndex: 'name',
                             },
@@ -389,8 +246,8 @@ export default function UserProfilePageDs() {
                                 dataIndex: 'dateOfBirth',
                                 type: 'date',
                                 render: (__, record) =>
-                                    record.userProfile?.dateOfBirth
-                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                    record?.dateOfBirth
+                                        ? dayjs(record.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -405,10 +262,8 @@ export default function UserProfilePageDs() {
                                 ],
 
                                 render: (__, record) =>
-                                    record?.userProfile?.gender
-                                        ? GENDER_MEAN[
-                                              record.userProfile.gender as keyof typeof GENDER_MEAN
-                                          ]
+                                    record?.gender
+                                        ? GENDER_MEAN[record?.gender as keyof typeof GENDER_MEAN]
                                         : '',
                             },
                             {
@@ -418,9 +273,7 @@ export default function UserProfilePageDs() {
                                 type: 'input',
                                 dataIndex: 'phoneNumber',
                                 render: (__, record) =>
-                                    record?.userProfile?.phoneNumber
-                                        ? record?.userProfile?.phoneNumber
-                                        : '',
+                                    record?.phoneNumber ? record?.phoneNumber : '',
                             },
                             {
                                 title: 'Email',
@@ -428,18 +281,16 @@ export default function UserProfilePageDs() {
                                 width: 150,
                                 type: 'input',
                                 dataIndex: 'email',
-                                render: (__, record) =>
-                                    record?.userProfile?.email ? record?.userProfile?.email : '',
+                                render: (__, record) => (record.email ? record?.email : ''),
                             },
                             {
                                 title: 'Vị trí công việc',
                                 align: 'center',
                                 width: 150,
                                 render: (__, record) =>
-                                    record?.userProfile?.userType
-                                        ? USER_TYPE.find(
-                                              (item) => item.value === record?.userProfile?.userType
-                                          )?.label
+                                    record?.userType
+                                        ? USER_TYPE.find((item) => item.value === record?.userType)
+                                              ?.label
                                         : '',
                             },
                             // {
@@ -523,22 +374,22 @@ export default function UserProfilePageDs() {
                             //         return record?.fixedClass?.curriculumVersion?.curriculum?.name
                             //     },
                             // },
-                            {
-                                title: 'Trạng thái',
-                                align: 'center',
-                                width: 120,
-                                render: (_, record) => {
-                                    const statusInfo =
-                                        FIXED_CLASS_STUDENT_STATUS[
-                                            record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
-                                        ]
-                                    return statusInfo ? (
-                                        <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
-                                    ) : (
-                                        <Tag color="default">Không xác định</Tag>
-                                    )
-                                },
-                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     width: 120,
+                            //     render: (_, record) => {
+                            //         const statusInfo =
+                            //             FIXED_CLASS_STUDENT_STATUS[
+                            //                 record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
+                            //             ]
+                            //         return statusInfo ? (
+                            //             <Tag color={statusInfo.color}>{statusInfo.label}</Tag>
+                            //         ) : (
+                            //             <Tag color="default">Không xác định</Tag>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,
@@ -576,7 +427,7 @@ export default function UserProfilePageDs() {
                         //     selectedRowKeys,
                         //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                         // }}
-                        data={data}
+                        data={UserProfileData}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

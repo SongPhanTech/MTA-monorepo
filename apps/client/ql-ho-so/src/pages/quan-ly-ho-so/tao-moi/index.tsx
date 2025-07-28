@@ -6,10 +6,22 @@ import ThongTinThanNhanForm from '@components/modal/quan-ly-ho-so/form/thong-tin
 import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trinh-do-ly-luan-chinh-tri'
 import CreateLayout from '@layouts/create-layout'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Flex, Form, Input, Upload, type UploadFile, type UploadProps } from 'antd'
+import {
+    Button,
+    Flex,
+    Form,
+    type GetProp,
+    Input,
+    message,
+    Upload,
+    type UploadFile,
+    type UploadProps,
+} from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import './index.css'
+import { queryClient } from '@api/index'
+import FormItem from '@components/commons/form-item'
 import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
 import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
 import DoanDang from '@components/modal/quan-ly-ho-so/form/doan-dang'
@@ -25,6 +37,10 @@ import ThongTinLienHe from '@components/modal/quan-ly-ho-so/form/thong-tin-lien-
 import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
 import TrinhDoQuanLyHanhChinhForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-hanh-chinh'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
+import useSpinner from '@hooks/spinner'
+import type { Prisma } from '@workspace/db'
+import { useCreateUserProfile } from '@workspace/db/hooks'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
 import ImgCrop from 'antd-img-crop'
 import dayjs from 'dayjs'
 
@@ -34,7 +50,35 @@ interface itemType {
     render?: JSX.Element
     title: string
 }
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+
+export type SubmitForm = Prisma.UserProfileGetPayload<{
+    include: {
+        tinHoc: true
+        hocVi: true
+        hocHam: true
+        trinhDoLyLuanChinhTri: true
+        trinhDoQuanLyHanhChinh: true
+        trinhDoQuanLyNhaNuoc: true
+        ngoaiNgu: true
+        boiDuongQuocPhongAnNinh: true
+        capBac: true
+        doanDang: true
+        doiTuongChinhSach: true
+        keKhaiTaiSan: true
+        quaTrinhCongTac: true
+        quaTrinhCuDiCongTac: true
+        quaTrinhDiDaoTaoBoiDuong: true
+        thongTinKhenThuong: true
+        thongTinKyLuat: true
+    }
+}> & {
+    file?: FileType
+}
+
 export default function CreateUserPage() {
+    const [form] = Form.useForm<SubmitForm>()
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
     const [expland, setExpland] = useState<string[]>(['thongTinCoBan', 'thongTinLienHe'])
@@ -143,6 +187,7 @@ export default function CreateUserPage() {
             render: <KeKhaiTaiSanForm expland={expland} setExpland={setExpland} />,
         },
     ]
+
     const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList.slice(-1))
     }
@@ -160,106 +205,190 @@ export default function CreateUserPage() {
         )
     }, [search, listTabs.filter])
 
-    return (
-        <div>
-            <Flex justify="space-between" className="p-4">
-                <div className="text-xl font-semibold">Thêm hồ sơ</div>
-                <Flex justify="end">
-                    <Button
-                        className="mr-3"
-                        onClick={() => {
-                            router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
-                        }}
-                    >
-                        Hủy
-                    </Button>
-                    <Button type="primary">Lưu</Button>
-                </Flex>
-            </Flex>
-            <Flex justify="space-between" className="w-full h-[calc(100vh-175px)]">
-                <div className="bg-white rounded-lg shadow h-full overflow-y-auto w-[250px]">
-                    <div className="p-4">
-                        <Input
-                            id="search"
-                            className="w-full"
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Tìm kiếm ..."
-                        />
-                    </div>
+    const { showSpinner, hideSpinner } = useSpinner()
 
-                    {listTabsRender.length ? (
-                        <div className="mt-2">
-                            {listTabsRender.map((item) => (
-                                <div
-                                    className="relative cursor-pointer mb-2 px-5 py-2 hover:bg-gray-100"
-                                    key={item.id}
-                                    onClick={() => handleScroll(item)}
-                                >
-                                    {activeKey === item.id && (
-                                        <div className="bg-primary absolute top-0 left-0 h-full w-[3px]" />
-                                    )}
-                                    <div
-                                        className={
-                                            activeKey === item.id ? 'text-primary font-[500]' : ''
-                                        }
-                                    >
-                                        {item.title}
-                                    </div>
-                                </div>
-                            ))}
+    const { mutateAsync: createUserProfile } = useCreateUserProfile()
+
+    const handleSubmit = async (values: SubmitForm) => {
+        if (!values) return
+        let fileName = values.avatar
+        if (fileList.length > 0) {
+            const file = fileList[0]
+            const resPresignedUrl = await generatePresignedUrl({
+                path: 'avatar',
+                extension: file.name?.split('.').pop() ?? '',
+            })
+
+            await fetch(resPresignedUrl.data.url, {
+                method: 'PUT',
+                body: file.originFileObj,
+            })
+
+            fileName = resPresignedUrl.data.fileName
+        }
+
+        console.log('File name to be saved:', fileName)
+
+        try {
+            showSpinner()
+            await createUserProfile({
+                data: {
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    email: values.email,
+                    phoneNumber: values.phoneNumber,
+                    idCardNumber: values.idCardNumber,
+                    userType: values.userType,
+                    gender: values.gender,
+                    dateOfBirth: values.dateOfBirth
+                        ? dayjs(values.dateOfBirth).format('YYYY-MM-DD')
+                        : null,
+                    placeOfBirth: values.placeOfBirth,
+                    nationalityId: values.nationalityId,
+                    religionId: values.religionId,
+                    ethnicityId: values.ethnicityId,
+                    originalPlace: values.originalPlace,
+                    idCardDate: values.idCardDate
+                        ? dayjs(values.idCardDate).format('YYYY-MM-DD')
+                        : null,
+                    healthInsuranceNumber: values.healthInsuranceNumber,
+                    bankAccountNumber: values.bankAccountNumber,
+                    bankName: values.bankName,
+                    permanentAddress: values.permanentAddress,
+                    currentAddress: values.currentAddress,
+                    unionDate: values.unionDate
+                        ? dayjs(values.unionDate).format('YYYY-MM-DD')
+                        : null,
+                    unionPlace: values.unionPlace,
+                    CPVJoinDate: values.CPVJoinDate
+                        ? dayjs(values.CPVJoinDate).format('YYYY-MM-DD')
+                        : null,
+                    officialCPVDate: values.officialCPVDate
+                        ? dayjs(values.officialCPVDate).format('YYYY-MM-DD')
+                        : null,
+                    CPVJoinPlace: values.CPVJoinPlace,
+                    tenureDate: values.tenureDate
+                        ? dayjs(values.tenureDate).format('YYYY-MM-DD')
+                        : null,
+                    avatar: fileName,
+                },
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['UserProfile'],
+            })
+            router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
+        } catch (error) {
+            message.error('Đã có lỗi xảy ra, vui lòng thử lại sau')
+        }
+        hideSpinner()
+    }
+
+    return (
+        <Form form={form} onFinish={handleSubmit}>
+            <div>
+                <Flex justify="space-between" className="p-4">
+                    <div className="text-xl font-semibold">Thêm hồ sơ</div>
+                    <Flex justify="end">
+                        <Button
+                            className="mr-3"
+                            onClick={() => {
+                                router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
+                            }}
+                        >
+                            Hủy
+                        </Button>
+                        <Button type="primary" htmlType="submit">
+                            Lưu
+                        </Button>
+                    </Flex>
+                </Flex>
+                <Flex justify="space-between" className="w-full h-[calc(100vh-175px)]">
+                    <div className="bg-white rounded-lg shadow h-full overflow-y-auto w-[250px]">
+                        <div className="p-4">
+                            <Input
+                                id="search"
+                                className="w-full"
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Tìm kiếm ..."
+                            />
                         </div>
-                    ) : (
-                        <div className="px-4">Không tìm thấy kết quả</div>
-                    )}
-                </div>
-                <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
-                    <div className="p-6 shadow rounded-lg bg-white mb-4">
-                        <Form.Item name={'file'} className="mb-0 relative">
-                            <ImgCrop rotationSlider>
-                                <Upload
-                                    listType="picture-circle"
-                                    maxCount={1}
-                                    fileList={avatar?.length > 0 ? avatar : fileList}
-                                    onChange={onChange}
-                                    onRemove={() => {
-                                        setAvatar([])
-                                    }}
-                                    showUploadList={{
-                                        showPreviewIcon: false,
-                                    }}
-                                    className="avatar-upload "
-                                >
-                                    {fileList.length > 0
-                                        ? ''
-                                        : fileList.length < 1 && (
-                                              <div className="relative flex items-center justify-center">
-                                                  <UserOutlined
-                                                      style={{
-                                                          fontSize: '20px',
-                                                          color: '#686C7B',
-                                                      }}
-                                                  />
-                                              </div>
-                                          )}
-                                </Upload>
-                            </ImgCrop>
-                            <div className="absolute bottom-[0px] left-[52px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0] flex items-center justify-center">
-                                <CameraFilled style={{ color: '#686C7B' }} />
+
+                        {listTabsRender.length ? (
+                            <div className="mt-2">
+                                {listTabsRender.map((item) => (
+                                    <div
+                                        className="relative cursor-pointer mb-2 px-5 py-2 hover:bg-gray-100"
+                                        key={item.id}
+                                        onClick={() => handleScroll(item)}
+                                    >
+                                        {activeKey === item.id && (
+                                            <div className="bg-primary absolute top-0 left-0 h-full w-[3px]" />
+                                        )}
+                                        <div
+                                            className={
+                                                activeKey === item.id
+                                                    ? 'text-primary font-[500]'
+                                                    : ''
+                                            }
+                                        >
+                                            {item.title}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        </Form.Item>
+                        ) : (
+                            <div className="px-4">Không tìm thấy kết quả</div>
+                        )}
                     </div>
-                    <div className="p-6 shadow rounded-lg bg-white form-userprofile">
-                        {listTabs.map((i) => {
-                            return (
-                                <div key={i.id} id={i.id}>
-                                    {i?.render}
+                    <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
+                        <div className="p-6 shadow rounded-lg bg-white mb-4">
+                            <FormItem name="file" form={form} className="mb-0 relative">
+                                <ImgCrop rotationSlider>
+                                    <Upload
+                                        listType="picture-circle"
+                                        maxCount={1}
+                                        fileList={avatar?.length > 0 ? avatar : fileList}
+                                        onChange={onChange}
+                                        onRemove={() => {
+                                            setAvatar([])
+                                        }}
+                                        showUploadList={{
+                                            showPreviewIcon: false,
+                                        }}
+                                        className="avatar-upload "
+                                    >
+                                        {fileList.length > 0
+                                            ? ''
+                                            : fileList.length < 1 && (
+                                                  <div className="relative flex items-center justify-center">
+                                                      <UserOutlined
+                                                          style={{
+                                                              fontSize: '20px',
+                                                              color: '#686C7B',
+                                                          }}
+                                                      />
+                                                  </div>
+                                              )}
+                                    </Upload>
+                                </ImgCrop>
+                                <div className="absolute bottom-[0px] left-[52px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0] flex items-center justify-center">
+                                    <CameraFilled style={{ color: '#686C7B' }} />
                                 </div>
-                            )
-                        })}
+                            </FormItem>
+                        </div>
+                        <div className="p-6 shadow rounded-lg bg-white form-userprofile">
+                            {listTabs.map((i) => {
+                                return (
+                                    <div key={i.id} id={i.id}>
+                                        {i?.render}
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
-                </div>
-            </Flex>
-        </div>
+                </Flex>
+            </div>
+        </Form>
     )
 }
 
