@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutHocViModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-vi'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import type { HocVi } from '@workspace/db'
 import { useFindManyHocVi, useUpdateHocVi } from '@workspace/db/hooks'
@@ -11,7 +12,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function HocViForm() {
+export default function HocViForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure<Partial<HocVi>>({
@@ -162,7 +163,7 @@ export default function HocViForm() {
             <Collapse
                 items={[
                     {
-                        key: 'hoc-vi',
+                        key: 'hocVi',
                         label: (
                             <Title level={4} className="mb-0">
                                 Học vị
@@ -174,6 +175,10 @@ export default function HocViForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

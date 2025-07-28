@@ -26,12 +26,12 @@ const PutThesisProject = () => {
     const { thesisProjectStatusOptions } = useThesisProjectStatusOptions()
     const [searchExpert, setSearchExpert] = useState('')
     const [searchOrganization, setSearchOrganization] = useState('')
+    const [searchSubjectClass, setSearchSubjectClass] = useState('')
     const [form] = Form.useForm<PutThesisProject>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        subjectClassId: string
+        thesisProjectId: string
+    }>({
         tag: PutThesisProject.name,
         onClose: form.resetFields,
     })
@@ -67,8 +67,8 @@ const PutThesisProject = () => {
         },
     })
     const { data: thesisProject } = useFindUniqueThesisProject(
-        { where: { id: id } },
-        { enabled: !!id }
+        { where: { id: input?.thesisProjectId } },
+        { enabled: !!input?.thesisProjectId }
     )
 
     const debouncedRefetch = useCallback(
@@ -130,13 +130,14 @@ const PutThesisProject = () => {
             registrationEnd: output.registrationEnd,
             projectStart: output.projectStart,
             projectEnd: output.projectEnd,
+            subjectClassId: input?.subjectClassId || '',
         }
 
         try {
             showSpinner()
-            if (id) {
+            if (input?.thesisProjectId) {
                 await updateThesisProject({
-                    where: { id: id },
+                    where: { id: input.thesisProjectId },
                     data: payload,
                 })
                 message.success('Cập nhật thành công')
@@ -162,7 +163,7 @@ const PutThesisProject = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa đồ án' : 'Thêm mới đồ án'}
+            title={input?.thesisProjectId ? 'Chỉnh sửa đồ án' : 'Thêm mới đồ án'}
             className="w-[60vw]"
         >
             <Col span={8}>

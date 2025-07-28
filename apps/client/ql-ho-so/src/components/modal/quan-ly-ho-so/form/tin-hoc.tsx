@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutTinHocModal from '@components/modal/quan-ly-ho-so/modals/put-tin-hoc'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function TinHocForm() {
+export default function TinHocForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -133,7 +134,7 @@ export default function TinHocForm() {
             <Collapse
                 items={[
                     {
-                        key: 'tin-hoc',
+                        key: 'tinHoc',
                         label: (
                             <Title level={4} className="mb-0">
                                 Tin học
@@ -145,6 +146,10 @@ export default function TinHocForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

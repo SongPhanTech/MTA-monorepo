@@ -1,15 +1,29 @@
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
-import { Col, Form, Input, Row } from 'antd'
+import { GENDER_LIST } from '@constants/constants'
+import type { DomProps } from '@constants/type'
+import {
+    useFindManyDM_DanToc,
+    useFindManyDM_QuocGia,
+    useFindManyDM_TonGiao,
+} from '@workspace/db/hooks'
+import { Col, Collapse, Form, Input, Row, Select, Typography } from 'antd'
+import dayjs from 'dayjs'
 
-export default function ThongTinCoBan() {
+dayjs.locale('vi')
+const { Title, Text } = Typography
+export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<any>()
-    return (
-        <div>
-            <div className="text-lg font-semibold mb-6">Thông tin cơ bản</div>
-            <div className="px-2">
-                <div className="mb-6 font-semibold text-md">Thông tin chung</div>
-                <Row gutter={[16, 16]}>
-                    <Col sm={12} lg={12}>
+
+    const { data: nationalityData = [] } = useFindManyDM_QuocGia()
+    const { data: religionData = [] } = useFindManyDM_TonGiao()
+    const { data: ethnicityData = [] } = useFindManyDM_DanToc()
+    const renderContent = () => {
+        return (
+            <div className="px-6">
+                <div className="mb-6 font-semibold text-base">Thông tin chung</div>
+                <Row className="mb-6" gutter={[16, 16]}>
+                    <Col span={12}>
                         <FormItem
                             form={form}
                             name="code"
@@ -22,26 +36,11 @@ export default function ThongTinCoBan() {
                             ]}
                             className="mb-0"
                         >
-                            <Input placeholder="Nhập mã" className="h-[36px]" />
+                            <Input placeholder="Nhập mã" className="h-9" />
                         </FormItem>
                     </Col>
-                    <Col sm={12} lg={12}>
-                        <FormItem
-                            form={form}
-                            name="code"
-                            label="Nguyên quán"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập mã!',
-                                },
-                            ]}
-                            className="mb-0"
-                        >
-                            <Input placeholder="Nhập mã" className="h-[36px]" />
-                        </FormItem>
-                    </Col>
-                    <Col sm={12} lg={12}>
+
+                    <Col span={12}>
                         <FormItem
                             form={form}
                             name="code"
@@ -54,10 +53,11 @@ export default function ThongTinCoBan() {
                             ]}
                             className="mb-0"
                         >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-[36px]" />
+                            <Input placeholder="Nhập họ và tên đệm" className="h-9" />
                         </FormItem>
                     </Col>
-                    <Col sm={12} lg={12}>
+
+                    <Col span={12}>
                         <FormItem
                             form={form}
                             name="code"
@@ -70,91 +70,194 @@ export default function ThongTinCoBan() {
                             ]}
                             className="mb-0"
                         >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-[36px]" />
+                            <Input placeholder="Nhập họ và tên đệm" className="h-9" />
                         </FormItem>
                     </Col>
-                    <Col sm={12} lg={12}>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="nationalityId"
+                            label="Quốc tịch"
+                            className="mb-0 w-full"
+                            normalize={(value) => (value === undefined ? null : value)}
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn quốc tịch"
+                                className="h-9"
+                                options={nationalityData.map((i) => {
+                                    return {
+                                        value: i.Id,
+                                        label: i.sTen,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="religionId"
+                            label="Tôn giáo"
+                            className="mb-0"
+                            normalize={(value) => (value === undefined ? null : value)}
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn tôn giáo"
+                                className="h-9 !w-full"
+                                options={religionData.map((i) => {
+                                    return {
+                                        value: i.Id,
+                                        label: i.sTen,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="ethnicityId"
+                            label="Dân tộc"
+                            className="mb-0"
+                            normalize={(value) => (value === undefined ? null : value)}
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn dân tộc"
+                                className="h-9"
+                                options={ethnicityData.map((i) => {
+                                    return {
+                                        value: i.Id,
+                                        label: i.sTen,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="code" label="Nguyên quán" className="mb-0">
+                            <Input placeholder="Nhập nguyên quán" className="h-9" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="dateOfBirth" label="Ngày sinh" className="mb-0">
+                            <DatePicker
+                                format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                                }}
+                                className="w-full h-9"
+                                disabledDate={(date) => date && date > dayjs().endOf('day')}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="code" label="Nơi sinh" className="mb-0">
+                            <Input placeholder="Nhập nơi sinh" className="h-9" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="gender" label="Giới tính" className="mb-0">
+                            <Select
+                                allowClear
+                                placeholder="Chọn giới tính"
+                                className="h-9"
+                                options={GENDER_LIST.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                </Row>
+                <div className="mb-6 font-semibold text-base">CCCD/CMND</div>
+                <Row className="mb-6" gutter={[16, 16]}>
+                    <Col span={12}>
                         <FormItem
                             form={form}
                             name="code"
-                            label="Tên"
+                            label="CCCD/CMND"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Vui lòng nhập họ và tên đệm!',
+                                    message: 'Vui lòng nhập CCCD/CMND!',
                                 },
                             ]}
                             className="mb-0"
                         >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-[36px]" />
+                            <Input placeholder="Nhập CCCD/CMND" className="h-9" />
                         </FormItem>
                     </Col>
-                    <Col sm={12} lg={12}>
+                    <Col span={12}>
                         <FormItem
                             form={form}
-                            name="code"
-                            label="Tên"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập họ và tên đệm!',
-                                },
-                            ]}
+                            name="idCardDate"
+                            label="Ngày cấp CCCD"
                             className="mb-0"
                         >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-[36px]" />
+                            <DatePicker
+                                format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                                }}
+                                className="w-full h-9"
+                                disabledDate={(date) => date && date > dayjs().endOf('day')}
+                            />
                         </FormItem>
                     </Col>
-                    <Col sm={12} lg={12}>
-                        <FormItem
-                            form={form}
-                            name="code"
-                            label="Tên"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập họ và tên đệm!',
-                                },
-                            ]}
-                            className="mb-0"
-                        >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-[36px]" />
+                    <Col span={12}>
+                        <FormItem form={form} name="code" label="Nơi cấp CCCD" className="mb-0">
+                            <Input placeholder="Nhập nơi cấp" className="h-9" />
                         </FormItem>
                     </Col>
-                    <Col sm={12} lg={12}>
+                    <Col span={12}>
                         <FormItem
                             form={form}
-                            name="code"
-                            label="Tên"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập họ và tên đệm!',
-                                },
-                            ]}
+                            name="idCardDate"
+                            label="Ngày hết hạn CCCD"
                             className="mb-0"
                         >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-[36px]" />
-                        </FormItem>
-                    </Col>
-                    <Col sm={12} lg={12}>
-                        <FormItem
-                            form={form}
-                            name="code"
-                            label="Tên"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập họ và tên đệm!',
-                                },
-                            ]}
-                            className="mb-0"
-                        >
-                            <Input placeholder="Nhập họ và tên đệm" className="h-[36px]" />
+                            <DatePicker
+                                format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                                }}
+                                className="w-full h-9"
+                                disabledDate={(date) => date && date > dayjs().endOf('day')}
+                            />
                         </FormItem>
                     </Col>
                 </Row>
             </div>
+        )
+    }
+    return (
+        <div>
+            <Collapse
+                items={[
+                    {
+                        key: 'thongTinCoBan',
+                        label: (
+                            <Title level={4} className="mb-0">
+                                Thông tin cơ bản
+                            </Title>
+                        ),
+                        children: renderContent(),
+                    },
+                ]}
+                bordered={false}
+                expandIconPosition="end"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
+                className="bg-transparent"
+            />
         </div>
     )
 }

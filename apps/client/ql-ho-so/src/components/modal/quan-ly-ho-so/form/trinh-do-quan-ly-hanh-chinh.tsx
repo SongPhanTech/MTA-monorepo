@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutTrinhDoQuanLyHanhChinhModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function TrinhDoQuanLyHanhChinhForm() {
+export default function TrinhDoQuanLyHanhChinhForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -133,7 +134,7 @@ export default function TrinhDoQuanLyHanhChinhForm() {
             <Collapse
                 items={[
                     {
-                        key: 'trinh-do-quan-ly-hanh-chinh',
+                        key: 'trinhDoQuanLyHanhChinh',
                         label: (
                             <Title level={4} className="mb-0">
                                 Trình độ quản lý hành chính
@@ -145,6 +146,10 @@ export default function TrinhDoQuanLyHanhChinhForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

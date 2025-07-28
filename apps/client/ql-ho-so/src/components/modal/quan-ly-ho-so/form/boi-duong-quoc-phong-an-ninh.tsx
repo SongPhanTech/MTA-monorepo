@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutBoiDuongQuocPhongModal from '@components/modal/quan-ly-ho-so/modals/put-boi-duong-quoc-phong-an-ninh'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function BoiDuongQuocPhongAnNinhForm() {
+export default function BoiDuongQuocPhongAnNinhForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -133,7 +134,7 @@ export default function BoiDuongQuocPhongAnNinhForm() {
             <Collapse
                 items={[
                     {
-                        key: 'boi-duong-quoc-phong-an-ninh',
+                        key: 'boiDuongQuocPhongAnNinh',
                         label: (
                             <Title level={4} className="mb-0">
                                 Bồi dưỡng quốc phòng an ninh
@@ -143,8 +144,12 @@ export default function BoiDuongQuocPhongAnNinhForm() {
                     },
                 ]}
                 bordered={false}
-                expandIconPosition="end"
                 className="bg-transparent"
+                expandIconPosition="end"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

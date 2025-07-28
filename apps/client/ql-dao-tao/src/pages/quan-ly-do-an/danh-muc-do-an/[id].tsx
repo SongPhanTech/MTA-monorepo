@@ -52,7 +52,7 @@ export default function ThesisProjectDetail() {
     })
     const thesisProjectId = router.query.id as string
 
-    const { data: studentThesisRegistration, refetch } = useFindManyStudentThesisRegistration({
+    const { data: studentThesisRegistration } = useFindManyStudentThesisRegistration({
         where: {
             thesisProjectId: thesisProjectId,
             ...(filters.code

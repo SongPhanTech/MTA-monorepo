@@ -6,8 +6,9 @@ import type { StudentThesisRegistration } from '@workspace/db'
 import {
     useCreateManyStudentThesisRegistration,
     useFindManyLecturer,
-    useFindManyStudent,
     useFindUniqueStudentThesisRegistration,
+    useFindUniqueSubjectClass,
+    useFindUniqueThesisProject,
     useUpdateStudentThesisRegistration,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Select } from 'antd'
@@ -47,28 +48,66 @@ const PutStudentThesisRegistration = () => {
         { enabled: !!input?.studentThesisId }
     )
 
-    const { data: students, refetch } = useFindManyStudent({
+    const { data: thesisProject } = useFindUniqueThesisProject({
         where: {
-            ...(searchText && searchText !== ''
-                ? {
-                      OR: [
-                          { code: { contains: searchText, mode: 'insensitive' } },
-                          {
-                              userProfile: {
-                                  OR: [
-                                      { fullname: { contains: searchText, mode: 'insensitive' } },
-                                      { code: { contains: searchText, mode: 'insensitive' } },
-                                  ],
-                              },
-                          },
-                      ],
-                  }
-                : {}),
+            id: input?.thesisProjectId,
+        },
+    })
+
+    const { data: studentData, refetch } = useFindUniqueSubjectClass({
+        where: {
+            id: thesisProject?.subjectClassId,
         },
         include: {
-            userProfile: true,
+            subjectClassStudent: {
+                where: {
+                    student: {
+                        AND: [
+                            {
+                                OR: [
+                                    {
+                                        ...(searchText
+                                            ? {
+                                                  code: {
+                                                      contains: searchText,
+                                                      mode: 'insensitive',
+                                                  },
+                                              }
+                                            : {}),
+                                    },
+                                    {
+                                        ...(searchText
+                                            ? {
+                                                  userProfile: {
+                                                      fullname: {
+                                                          contains: searchText,
+                                                          mode: 'insensitive',
+                                                      },
+                                                  },
+                                              }
+                                            : {}),
+                                    },
+                                ],
+                            },
+                            {
+                                thesisRegistrations: {
+                                    none: {
+                                        thesisProjectId: input?.thesisProjectId,
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+                include: {
+                    student: {
+                        include: {
+                            userProfile: true,
+                        },
+                    },
+                },
+            },
         },
-        take: 500,
     })
 
     const { data: reviewer = [] } = useFindManyLecturer({
@@ -209,11 +248,14 @@ const PutStudentThesisRegistration = () => {
                         placeholder={
                             input?.studentThesisId ? 'Chọn sinh viên' : 'Chọn nhiều sinh viên'
                         }
-                        options={students?.map((item) => ({
-                            label: [item.userProfile.fullname, item.userProfile.code]
+                        options={studentData?.subjectClassStudent?.map((item) => ({
+                            label: [
+                                item.student.userProfile.fullname,
+                                item.student.userProfile.code,
+                            ]
                                 .filter(Boolean)
                                 .join(' - '),
-                            value: item.id,
+                            value: item.student.id,
                         }))}
                         showSearch
                         onSearch={handleSearch}
@@ -231,11 +273,12 @@ const PutStudentThesisRegistration = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        defaultValue={dayjs()}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="reviewedById" label="Người phê duyệt" required>
+                <FormItem form={form} name="reviewedById" label="Người phê duyệt">
                     <Select
                         placeholder="Người phê duyệt"
                         options={reviewer.map((item) => ({

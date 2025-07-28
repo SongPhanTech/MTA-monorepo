@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutKeKhaiTaiSanModal from '@components/modal/quan-ly-ho-so/modals/put-ke-khai-tai-san'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function KeKhaiTaiSanForm() {
+export default function KeKhaiTaiSanForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -121,7 +122,7 @@ export default function KeKhaiTaiSanForm() {
             <Collapse
                 items={[
                     {
-                        key: 'ke-khai-tai-san',
+                        key: 'keKhaiTaiSan',
                         label: (
                             <Title level={4} className="mb-0">
                                 Kê khai tài sản
@@ -133,6 +134,10 @@ export default function KeKhaiTaiSanForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

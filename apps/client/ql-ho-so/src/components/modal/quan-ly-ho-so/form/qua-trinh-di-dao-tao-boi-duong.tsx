@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutTinHocModal from '@components/modal/quan-ly-ho-so/modals/put-tin-hoc'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function QuaTrinhDiDaoTaoBoiDuongForm() {
+export default function QuaTrinhDiDaoTaoBoiDuongForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -133,7 +134,7 @@ export default function QuaTrinhDiDaoTaoBoiDuongForm() {
             <Collapse
                 items={[
                     {
-                        key: 'qua-trinh-di-dao-tao-boi-duong',
+                        key: 'quaTrinhDiDaoTaoBoiDuong',
                         label: (
                             <Title level={4} className="mb-0">
                                 Quá trình được cử đi đào tạo bồi dưỡng
@@ -145,6 +146,10 @@ export default function QuaTrinhDiDaoTaoBoiDuongForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

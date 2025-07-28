@@ -3,13 +3,14 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutQuaTrinhCongTacModal from '@components/modal/quan-ly-ho-so/modals/put-qua-trinh-cong-tac'
+import type { DomProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
-export default function QuaTrinhCongTacForm() {
+export default function QuaTrinhCongTacForm({ expland, setExpland }: DomProps) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure({
@@ -127,7 +128,7 @@ export default function QuaTrinhCongTacForm() {
             <Collapse
                 items={[
                     {
-                        key: 'qua-trinh-cong-tac',
+                        key: 'quaTrinhCongTac',
                         label: (
                             <Title level={4} className="mb-0">
                                 Quá trình công tác
@@ -139,6 +140,10 @@ export default function QuaTrinhCongTacForm() {
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"
+                activeKey={expland}
+                onChange={(value) => {
+                    setExpland([...value])
+                }}
             />
         </div>
     )

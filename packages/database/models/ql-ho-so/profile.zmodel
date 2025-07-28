@@ -100,6 +100,9 @@ model UserProfile extends Base {
   enlistmentDate             DateTime? // ngày nhập ngũ
   dischargeDate              DateTime? // ngày xuất ngũ
 
+  //nguyên quán
+  originalPlace             String?
+
   // người thân
   familyPhone                String?
   familyName                 String?
