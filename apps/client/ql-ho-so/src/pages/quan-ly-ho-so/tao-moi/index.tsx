@@ -50,7 +50,6 @@ interface itemType {
     render?: JSX.Element
     title: string
 }
-<<<<<<< Updated upstream
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -78,8 +77,6 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
     file?: FileType
 }
 
-=======
->>>>>>> Stashed changes
 export default function CreateUserPage() {
     const [form] = Form.useForm<SubmitForm>()
     const [search, setSearch] = useState<string>('')
@@ -207,7 +204,6 @@ export default function CreateUserPage() {
             listTabs.filter((item) => item.title.toLowerCase().includes(search.toLowerCase())) || []
         )
     }, [search, listTabs.filter])
-<<<<<<< Updated upstream
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -286,8 +282,6 @@ export default function CreateUserPage() {
         }
         hideSpinner()
     }
-=======
->>>>>>> Stashed changes
 
     return (
         <Form form={form} onFinish={handleSubmit}>
@@ -308,7 +302,6 @@ export default function CreateUserPage() {
                         </Button>
                     </Flex>
                 </Flex>
-<<<<<<< Updated upstream
                 <Flex justify="space-between" className="w-full h-[calc(100vh-175px)]">
                     <div className="bg-white rounded-lg shadow h-full overflow-y-auto w-[250px]">
                         <div className="p-4">
@@ -396,93 +389,6 @@ export default function CreateUserPage() {
                 </Flex>
             </div>
         </Form>
-=======
-            </Flex>
-            <Flex justify="space-between" className="w-full h-[calc(100vh-175px)]">
-                <div className="bg-white rounded-lg shadow h-full overflow-y-auto w-[250px]">
-                    <div className="p-4">
-                        <Input
-                            id="search"
-                            className="w-full"
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Tìm kiếm ..."
-                        />
-                    </div>
-
-                    {listTabsRender.length ? (
-                        <div className="mt-2">
-                            {listTabsRender.map((item) => (
-                                <div
-                                    className="relative cursor-pointer mb-2 px-5 py-2 hover:bg-gray-100"
-                                    key={item.id}
-                                    onClick={() => handleScroll(item)}
-                                >
-                                    {activeKey === item.id && (
-                                        <div className="bg-primary absolute top-0 left-0 h-full w-[3px]" />
-                                    )}
-                                    <div
-                                        className={
-                                            activeKey === item.id ? 'text-primary font-[500]' : ''
-                                        }
-                                    >
-                                        {item.title}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="px-4">Không tìm thấy kết quả</div>
-                    )}
-                </div>
-                <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
-                    <div className="p-6 shadow rounded-lg bg-white mb-4">
-                        <Form.Item name={'file'} className="mb-0 relative">
-                            <ImgCrop rotationSlider>
-                                <Upload
-                                    listType="picture-circle"
-                                    maxCount={1}
-                                    fileList={avatar?.length > 0 ? avatar : fileList}
-                                    onChange={onChange}
-                                    onRemove={() => {
-                                        setAvatar([])
-                                    }}
-                                    showUploadList={{
-                                        showPreviewIcon: false,
-                                    }}
-                                    className="avatar-upload "
-                                >
-                                    {fileList.length > 0
-                                        ? ''
-                                        : fileList.length < 1 && (
-                                              <div className="relative flex items-center justify-center">
-                                                  <UserOutlined
-                                                      style={{
-                                                          fontSize: '20px',
-                                                          color: '#686C7B',
-                                                      }}
-                                                  />
-                                              </div>
-                                          )}
-                                </Upload>
-                            </ImgCrop>
-                            <div className="absolute bottom-[0px] left-[52px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0] flex items-center justify-center">
-                                <CameraFilled style={{ color: '#686C7B' }} />
-                            </div>
-                        </Form.Item>
-                    </div>
-                    <div className="p-6 shadow rounded-lg bg-white form-userprofile">
-                        {listTabs.map((i) => {
-                            return (
-                                <div key={i.id} id={i.id}>
-                                    {i?.render}
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            </Flex>
-        </div>
->>>>>>> Stashed changes
     )
 }
 
