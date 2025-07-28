@@ -28,3 +28,71 @@ export const workHistoryData = [
         partyPosition: 'Đảng viên',
     },
 ]
+
+interface TableRow {
+    school?: string
+    major?: string
+    duration?: string
+    type?: string
+    certificate?: string
+}
+
+interface WorkRow {
+    duration?: string
+    detail?: string
+}
+
+interface TableRow2 {
+    relationship?: string
+    fullName?: string
+    yearOfBirth?: string
+    details?: string
+}
+
+const data: TableRow[] = [
+    // dữ liệu thực tế ở đây, ví dụ:
+    {
+        school: 'ĐH Quốc Gia',
+        major: 'CNTT',
+        duration: '01/2018 - 06/2022',
+        type: 'Chính quy',
+        certificate: 'Kỹ sư',
+    },
+    // thêm hoặc bớt dòng ở đây
+]
+
+const data2: WorkRow[] = [
+    // thêm dữ liệu ở đây nếu có
+    {
+        duration: '123',
+        detail: 'ádasdasd',
+    },
+]
+
+const data3: TableRow2[] = [
+    // Example data - you can add or remove rows here
+    {
+        relationship: 'Cha',
+        fullName: 'Nguyễn Văn A',
+        yearOfBirth: '1970',
+        details: 'Hà Nội, Kỹ sư xây dựng, Công ty Xây dựng ABC, Thành viên Mặt trận Tổ quốc',
+    },
+    {
+        relationship: 'Mẹ',
+        fullName: 'Trần Thị B',
+        yearOfBirth: '1972',
+        details: 'Hà Nội, Giáo viên, Trường THPT XYZ, Thành viên Hội Phụ nữ',
+    },
+    // Add more rows as needed
+]
+
+const totalRows = Math.max(5, data.length)
+const filledRows = [...data, ...Array(totalRows - data.length).fill({})]
+
+const totalRows2 = Math.max(9, data2.length)
+const filledRows2 = [...data2, ...Array(totalRows2 - data2.length).fill({})]
+
+const totalRows3 = Math.max(5, data3.length)
+const filledRows3 = [...data, ...Array(totalRows3 - data3.length).fill({})]
+
+export { filledRows, filledRows2, filledRows3 }

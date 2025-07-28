@@ -1,7 +1,9 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import PrinterIcon from '@components/icons/print'
 import {
+    ModalLyLichCanBo,
     PutUpdateProfileModal,
     PutUploadProfileModal,
     PutUserProfileStaffModal,
@@ -27,7 +29,6 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 export default function StaffManagement() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -277,6 +278,12 @@ export default function StaffManagement() {
 
     const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } = useDisclosure({
         tag: PutUserProfileStaffModal.name,
+    })
+
+    const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
+        id: string
+    }>({
+        tag: ModalLyLichCanBo.name,
     })
 
     const handleModal = () => {
@@ -577,6 +584,12 @@ export default function StaffManagement() {
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <PrinterIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenModalTomTatLyLich({ id })
+                                            }}
+                                        />
                                         <EditIcon
                                             onClick={onOpen.bind(id, {
                                                 id: id,
