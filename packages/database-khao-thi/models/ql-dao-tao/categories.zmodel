@@ -1,0 +1,246 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+import '../ql-dao-tao/student'
+import '../ql-danh-muc/common'
+import '../ql-ho-so/profile'
+import '../ql-danh-muc/core-categories'
+import '../khao-thi/exam'
+
+enum TrainingObjectTypes {
+  MILITARY // Học viên quân sự
+  CIVILIAN // Học viên dân sự
+  INTERNATIONAL_MILITARY // Học viên quân sự quốc tế
+
+  @@schema("ql-dao-tao")
+}
+
+model TrainingObjectType extends Base {
+  name              String                              @unique
+  type              TrainingObjectTypes
+  baseScore         AcademicRankingBaseType
+  trainingCourse    TrainingCourse[]
+  curriculumVersion CurriculumVersion[]
+  trainingMajors    TrainingMajorOnTrainingObjectType[]
+  trainingFields    TrainingFieldOnTrainingObjectType[]
+  students          Student[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// đối tượng ưu tiên
+model PriorityObject extends Base {
+  name     String    @unique
+
+  students Student[]
+  @@schema("ql-dao-tao")
+}
+
+/// loại hình đào tạo (Chính quy, không chính quy, từ xa, tại chức)
+model TrainingType extends Base {
+  name     String    @unique
+
+  students Student[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
+model TrainingLevel extends Base {
+  name              String              @unique
+
+  curriculumVersion CurriculumVersion[]
+  students          Student[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
+model TrainingForm extends Base {
+  name     String    @unique
+
+  students Student[]
+  @@schema("ql-dao-tao")
+}
+
+/// địa điểm đào tạo
+model TrainingLocation extends Base {
+  name      String     @unique
+
+  students  Student[]
+  buildings Building[]
+  @@schema("ql-dao-tao")
+}
+
+model Building extends Base {
+  name               String
+  floor              Int?
+
+  trainingLocation   TrainingLocation? @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId String?
+
+  rooms              Room[]
+
+  @@unique([trainingLocationId, name])
+  @@schema("ql-dao-tao")
+}
+
+model Room extends Base {
+  name           String
+
+  trainingRoom   Boolean         @default(true)
+  computerRoom   Boolean         @default(false)
+  laboratoryRoom Boolean         @default(false)
+  examRoom       Boolean         @default(false)
+
+  capacity       Int
+  examCapacity   Int?
+
+  building       Building?       @relation(fields: [buildingId], references: [id])
+  buildingId     String?
+
+  subjectClasses SubjectClass[]
+  classSchedules ClassSchedule[]
+  examSession    ExamSession[]
+
+  @@unique([buildingId, name])
+  @@schema("ql-dao-tao")
+}
+
+/// ngành đào tạo
+model TrainingField extends Base {
+  name                String                              @unique
+  englishName         String
+  publishDate         DateTime
+  organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
+  organizationId      String                              @db.Uuid
+  trainingObjectTypes TrainingFieldOnTrainingObjectType[]
+  trainingMajors      TrainingMajor[]
+
+  @@schema("ql-dao-tao")
+}
+
+model TrainingFieldOnTrainingObjectType extends Base {
+  trainingField        TrainingField      @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId      String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingFieldId, trainingObjectTypeId])
+
+  @@schema("ql-dao-tao")
+}
+
+/// chuyên ngành đào tạo
+model TrainingMajor extends Base {
+  name                  String
+  englishName           String?
+  summary               String
+  /// Số tín chỉ chuyên ngành
+  numberCreditsMajor    Int                                 @default(0)
+  /// Số tín chỉ bắt buộc
+  numberCreditsRequired Int                                 @default(0)
+  /// Số tín chỉ tự chọn
+  numberCreditsElective Int                                 @default(0)
+  organization          DM_DonVi                            @relation(fields: [organizationId], references: [Id])
+  organizationId        String                              @db.Uuid
+  trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId       String
+  trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
+  curriculum            Curriculum[]
+
+  @@unique([trainingFieldId, name])
+  @@schema("ql-dao-tao")
+}
+
+model TrainingMajorOnTrainingObjectType extends Base {
+  trainingMajor        TrainingMajor      @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId      String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  @@unique([trainingMajorId, trainingObjectTypeId])
+  @@schema("ql-dao-tao")
+}
+
+/// khối kiến thức
+model TrainingBlock extends Base {
+  name               String                             @unique
+  /// ưu tiên sắp xếp
+  priority           Int                                @default(0)
+
+  curriculumVersions TrainingBlockOnCurriculumVersion[]
+  @@schema("ql-dao-tao")
+}
+
+model TrainingBlockOnCurriculumVersion extends Base {
+  trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
+  trainingBlockId         String
+  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId     String
+
+  /// ưu tiên sắp xếp
+  priority                Int                    @default(0)
+  electiveCreditsRequired Int                    @default(0)
+  subjects                TrainingBlockSubject[]
+
+  @@unique([trainingBlockId, curriculumVersionId])
+  @@schema("ql-dao-tao")
+}
+
+/// thời gian đào tạo
+model TrainingTime extends Base {
+  name              String
+
+  curriculumVersion CurriculumVersion[]
+  @@schema("ql-dao-tao")
+}
+
+model DiplomaType extends Base {
+  name              String              @unique
+  englishName       String?
+
+  curriculumVersion CurriculumVersion[]
+  @@schema("ql-dao-tao")
+}
+
+/// Bảng chuyển đổi điểm từ hệ 10 sang hệ 4 và hệ chữ; order by base10Max desc
+// | **Loại điểm** | **Thang điểm 10**       | **Điểm chữ** | **Thang điểm 4** |
+// |---------------|--------------------------|--------------|------------------|
+// | **Xuất sắc**  | Từ 9,0 đến 10            | A+           | 4.0              |
+// | **Giỏi**      | Từ 8,5 đến 8,9           | A            | 3.7              |
+// |               | Từ 8,0 đến 8,4           | B+           | 3.5              |
+// | **Khá**       | Từ 7,0 đến 7,9           | B            | 3.0              |
+// | **TBK**       | Từ 6,5 đến 6,9           | C+           | 2.5              |
+// | **TB**        | Từ 5,5 đến 6,4           | C            | 2.0              |
+// |               | Từ 5,0 đến 5,4           | D+           | 1.5              | (Được học cải thiện)
+// | **Yếu**       | Từ 4,0 đến 4,9           | D            | 1.0              | (Được học cải thiện)
+// | **Kém**       | Dưới 4,0                 | F            | 0.0              | (Không đạt)
+model ScoreConvert extends Base {
+  classification      String // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu; Kém
+  base10Min           Float
+  base10Max           Float
+  letter              String
+  base4               Float
+
+  pass                Boolean
+  improvementRegister Boolean        @default(false) // có thể học cải thiện
+
+  trainingCourse      TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId    String
+
+  @@schema("ql-dao-tao")
+}
+
+enum AcademicRankingBaseType {
+  Base10
+  Base4
+
+  @@schema("ql-dao-tao")
+}
+
+/// Nội dung tính tải đào tạo
+// TODO: add relations
+model TrainingKPI extends Base {
+  name String
+  @@schema("ql-dao-tao")
+}

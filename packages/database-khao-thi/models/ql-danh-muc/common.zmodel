@@ -1,0 +1,124 @@
+import '../base'
+import '../ql-dao-tao/plan-training'
+import '../ql-ho-so/profile'
+import '../ql-dao-tao/categories'
+import '../ql-dao-tao/lecturer'
+import '../ql-dao-tao/staff'
+
+// model Province extends Base {
+//   name     String
+
+//   profiles UserProfile[]
+//   Commune  Commune[]
+//   @@schema("ql-danh-muc")
+// }
+
+// model Commune extends Base {
+//   name       String
+//   province   Province      @relation(fields: [provinceId], references: [id])
+//   provinceId String
+//   profiles   UserProfile[]
+//   @@unique([name, provinceId])
+//   @@schema("ql-danh-muc")
+// }
+
+// model Level extends Base {
+//   name     String
+
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
+
+// /// cấp bậc hàm
+// model Rank extends Base {
+//   name     String
+
+//   profiles UserProfile[]
+
+//   @@schema("ql-danh-muc")
+// }
+
+// /// học hàm
+// model AcademicDegreeType extends Base {
+//   name     String
+
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
+
+// /// học vị
+// model AcademicRankType extends Base {
+//   name     String
+
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
+
+/// Loại giáo viên
+model LecturerType extends Base {
+  name            String            @unique
+
+  lecturers       Lecturer[]
+  lecturerHistory LecturerHistory[]
+  @@schema("ql-danh-muc")
+}
+
+/// Loại nhân viên
+model StaffType extends Base {
+  name         String         @unique
+
+  staffs       Staff[]
+  staffHistory StaffHistory[]
+  @@schema("ql-danh-muc")
+}
+
+/// Chức vụ nhân viên
+model StaffPosition extends Base {
+  name         String
+
+  staffs       Staff[]
+  staffHistory StaffHistory[]
+
+  @@schema("ql-danh-muc")
+}
+
+// /// chức vụ Đảng
+// model PositionCPV extends Base {
+//   name     String
+
+//   profiles UserProfile[]
+//   @@schema("ql-danh-muc")
+// }
+
+// /// loại đơn vị
+// model OrganizationType extends Base {
+//   name          String
+
+//   organizations Organization[]
+//   @@schema("ql-danh-muc")
+// }
+
+// /// đơn vị
+// model Organization extends Base {
+//   name            String            @unique
+//   type            OrganizationType  @relation(fields: [typeId], references: [id])
+//   typeId          String
+//   parent          Organization?     @relation("ParentChild", fields: [parentId], references: [id])
+//   parentId        String?
+//   children        Organization[]    @relation("ParentChild")
+//   address         String?
+
+//   lecturers       Lecturer[]
+//   lecturerHistory LecturerHistory[]
+//   staffs          Staff[]
+//   staffHistory    StaffHistory[]
+
+//   curriculum      Curriculum[]
+//   fixedClass      FixedClass[]
+//   subjectVersions SubjectVersion[]
+//   subjects        Subject[]
+//   trainingFields  TrainingField[]
+//   trainingMajors  TrainingMajor[]
+
+//   @@schema("ql-danh-muc")
+// }

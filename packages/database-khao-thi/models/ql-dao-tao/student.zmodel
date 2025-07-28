@@ -1,0 +1,173 @@
+import '../base'
+import '../ql-nguoi-dung/user'
+import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
+import '../ql-ho-so/profile'
+import '../ql-danh-muc/common'
+import '../khao-thi/survey'
+import '../khao-thi/exam'
+import 'categories'
+import 'plan-training'
+import '../khao-thi/exam'
+
+/// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
+model Student extends Base {
+  entryScore               Float?   // Điểm thi đầu vào (nếu có)
+
+  from                     DateTime? // từ ngày
+  to                       DateTime? // đến ngày
+
+  trainingLocation         TrainingLocation?       @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId       String?
+
+  /// đối tượng ưu tiên
+  priorityObject           PriorityObject[]
+
+  unionLeader              String?
+
+  status                   StudentStatus           @default(ENROLLED)
+
+  classMonitor             FixedClass?             @relation("ClassMonitor")
+  unionLeaderOf            FixedClass?             @relation("UnionLeader")
+  fixedClass               FixedClass?             @relation(fields: [fixedClassId], references: [id])
+  fixedClassId             String?
+  subjectClassStudent      StudentSubjectScore[]
+
+  userProfileId            String
+  userProfile              UserProfile             @relation(fields: [userProfileId], references: [id])
+
+  trainingLevel            TrainingLevel?          @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId          String?
+
+  trainingObjectType       TrainingObjectType?     @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectTypeId     String?
+
+  trainingType             TrainingType?           @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId           String?
+
+  trainingForm             TrainingForm?           @relation(fields: [trainingFormId], references: [id])
+  trainingFormId           String?
+
+  registrationArea         DM_KhuVuc_DiaLy?        @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
+  registrationAreaId       String?                 @db.Uuid
+
+  // phiên bản chương trình đào tạo, được copy từ lớp quản lý
+  // phiên bản -> CTĐT -> chuyên ngành
+  curriculumVersion        CurriculumVersion?      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId      String?
+
+  // Giảm 1 khi kỳ hiện tại không vi phạm
+  academicWarningLevel     Int                     @default(0) // mức cảnh cáo học tập
+  disciplinaryWarningLevel Int                     @default(0) // mức cảnh cáo học đường
+
+  suspended                Boolean                 @default(false) // đình chỉ học
+  expelled                 Boolean                 @default(false) // đuổi học
+
+  // Điều kiện để xét tốt nghiệp
+  foreignLangPass          Boolean                 @default(false) // Đạt chuẩn ngoại ngữ
+  ITCertificationPass      Boolean                 @default(false) // Đạt chứng chỉ CNTT
+  strengthTrainingPass     Boolean                 @default(false) // Đạt yêu cầu rèn luyện sức khoẻ
+  militaryTrainingPass     Boolean                 @default(false) // Đạt yêu cầu giáo dục quốc phòng, quân sự
+
+  studentSemesterResult    StudentSemesterResult[]
+  studentYearResult        StudentYearResult[]
+  surveySessions           SurveySession[]   // Thêm relation với khảo sát
+  examSession              ExamSession[]
+
+  @@schema("ql-dao-tao")
+}
+
+model StudentSemesterResult extends Base {
+  student                  Student                 @relation(fields: [studentId], references: [id])
+  studentId                String
+  semester                 Semester                @relation(fields: [semesterId], references: [id])
+  semesterId               String
+
+  studyYear                Int   // năm học thứ mấy
+  semesterIndexInCourse    Int   // học kỳ thứ mấy trong toàn khoá học
+  isLastSemester           Boolean
+
+  baseScore                AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
+  gpaBase4                 Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 4
+  cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 4
+  gpaBase10                Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 10
+  cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
+
+  conductScore             Float?   // Điểm rèn luyện trung bình của học kỳ
+
+  lowestFinalScore         Float    // Điểm học phần thấp nhất
+  lowestGraduationScore    Float?
+
+  totalCredits             Int      // Tổng tín chỉ mở trong học kỳ cho CTĐT
+
+  registeredCredits        Int      // Số tín chỉ đăng ký
+  retakingCredits          Int      // Số tín chỉ học lại + cải thiện
+  passedCredits            Int      // Số tín đạt
+  failedCredits            Int      // số tín chỉ không đạt trong học kỳ
+
+  accumulatedCredits       Int      // Tổng tín chỉ tích lũy
+  totalCreditsByCurriculum Int      // Tổng tín chỉ học kỳ theo chương trình đào tạo
+  totalFailedCredits       Int      // tổng tín chỉ nợ từ đầu khoá đến hiện tại
+
+  foreignLangPass          Boolean  // Đạt chuẩn ngoại ngữ
+
+  isClassMonitor           Boolean  // Lớp trưởng
+  isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị
+  entryScore               Float?   // Điểm thi đầu vào (nếu có)
+
+  isImproving              Boolean  // Có đang học lại hoặc cải thiện không
+
+  postponeWithReason       Boolean                 @default(false) // tạm ngưng có lý do
+  academicWarningLevel     Int                     @default(0) // mức cảnh cáo học tập
+  disciplinaryWarningLevel Int                     @default(0) // mức cảnh cáo học đường
+  suspended                Boolean                 @default(false) // đình chỉ học
+  expelled                 Boolean                 @default(false) // đuổi học
+
+  @@unique([studentId, semesterId])
+  @@schema("ql-dao-tao")
+}
+
+model StudentYearResult extends Base {
+  student                  Student                 @relation(fields: [studentId], references: [id])
+  studentId                String
+
+  schoolYear               SchoolYear              @relation(fields: [schoolYearId], references: [id])
+  schoolYearId             String
+
+  studyYear                Int   // năm học thứ mấy
+  isLastStudyYear          Boolean
+
+  baseScore                AcademicRankingBaseType // xét học bổng dựa trên hệ 4 hay hệ 10
+  gpaBase4                 Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 4
+  cumulativeGpaBase4       Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 4
+  gpaBase10                Decimal                 @db.Decimal(5, 2)    // Điểm trung bình học kỳ hệ 10
+  cumulativeGpaBase10      Decimal                 @db.Decimal(5, 2)    // Tích luỹ hệ 10
+
+  conductScore             Float?   // Điểm rèn luyện trung bình của năm
+
+  totalCredits             Int      // tổng số tín chỉ tích lũy
+  failedCredits            Int      // tín chỉ nợ tích lũy
+
+  isClassMonitor           Boolean  // Lớp trưởng
+  isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị
+
+  academicWarningLevel     Int                     @default(0)
+  disciplinaryWarningLevel Int                     @default(0)
+  suspended                Boolean                 @default(false)
+  expelled                 Boolean                 @default(false)
+
+  @@unique([studentId, schoolYearId])
+  @@schema("ql-dao-tao")
+}
+
+enum StudentStatus {
+  ENROLLED // Đang học: Sinh viên đang theo học tại trường.
+  GRADUATED // Tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo và được công nhận tốt nghiệp.
+  DEFERRED_STUDY // Bảo lưu: Sinh viên tạm ngưng học có lý do chính đáng.
+  SUSPENDED_STUDY // Tạm ngưng học: Sinh viên tạm ngưng học không có lý do chính đáng.
+  WITHDRAWN // Thôi học: Sinh viên đã ngừng học tại trường.
+  TRANSFERRED // Chuyển trường: Sinh viên đã chuyển sang trường khác.
+  PENDING_GRADUATION_REVIEW // Chờ xét tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo nhưng chưa được công nhận tốt nghiệp.
+  ACADEMIC_SUSPENSION // Đình chỉ học: Sinh viên bị đình chỉ học do lý do kỷ luật hoặc lý do khác.
+  @@schema("ql-dao-tao")
+}

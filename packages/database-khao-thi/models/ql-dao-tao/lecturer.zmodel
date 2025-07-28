@@ -1,0 +1,54 @@
+import '../base'
+import '../ql-nguoi-dung/user'
+import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
+import '../ql-danh-muc/common'
+import '../ql-dao-tao/categories'
+import '../ql-dao-tao/plan-training'
+import '../ql-ho-so/profile'
+
+model Lecturer extends Base {
+  from                DateTime? // từ ngày
+  
+  // lecture/staff information
+  lectureID           String?         @unique // giảng viên ID
+  serviceDate         DateTime? // ngày vào ngành
+
+  userProfile         UserProfile     @relation(fields: [userProfileId], references: [id])
+  userProfileId       String          @unique
+
+  organization        DM_DonVi        @relation(fields: [organizationId], references: [Id])
+  organizationId      String          @db.Uuid
+
+  lecturerType        LecturerType    @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId      String
+
+  mainSubjectClasses  SubjectClass[]  @relation("MainLecturer")
+  extraSubjectClasses SubjectClass[]  @relation("ExtraLecturer")
+  enterGradeClasses   SubjectClass[]  @relation("EnterGradeLecturer")
+  manageFixedClass    FixedClass[]    @relation("ManageLecturer")
+  classSchedules      ClassSchedule[]
+
+  @@schema("ql-dao-tao")
+}
+
+model LecturerHistory extends Base {
+  from           DateTime? // từ ngày
+  to             DateTime? // đến ngày
+  
+  // lecture/staff information
+  lectureID      String?
+  lectureCode    String?
+  serviceDate    DateTime? // ngày vào ngành
+
+  userProfile    UserProfile  @relation(fields: [userProfileId], references: [id])
+  userProfileId  String       @unique
+
+  organization   DM_DonVi?    @relation(fields: [organizationId], references: [Id])
+  organizationId String?      @db.Uuid
+
+  lecturerType   LecturerType @relation(fields: [lecturerTypeId], references: [id])
+  lecturerTypeId String
+
+  @@schema("ql-dao-tao")
+}
