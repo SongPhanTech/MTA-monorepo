@@ -1,4 +1,6 @@
-import Table from '@components/commons/table'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import TableCollapse from '@components/commons/tableCollapse'
+import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutThesisProject } from '@components/modal'
@@ -7,23 +9,33 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
+import { emptyObjectIf } from '@workspace/constant'
+import { SubjectVersionType } from '@workspace/db'
 import {
-    useCountThesisProject,
-    useFindManyThesisProject,
+    useCountSubjectClass,
+    useFindManyDM_DonVi,
+    useFindManySemester,
+    useFindManySubjectClass,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
-import { BookPlus } from 'lucide-react'
+import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import dayjs from 'dayjs'
+import { Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type FilterPropsThesis = FilterProps & {
     title?: string
     status?: string[]
     titleEN?: string
+    supervisor?: string
+    organization?: string[]
+    currentStudents?: 'asc' | 'desc'
+    maxStudents?: 'asc' | 'desc'
 }
 
 export default function ThesisProject() {
@@ -36,42 +48,185 @@ export default function ThesisProject() {
         code: undefined,
         title: undefined,
         titleEN: undefined,
+        supervisor: undefined,
+        organization: undefined,
+        maxStudents: undefined,
     })
+    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
 
-    const { data: thesisProjectData } = useFindManyThesisProject({
+    const { data: subjectClass } = useFindManySubjectClass({
         where: {
-            ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
-            ...(filters.title ? { title: { contains: filters.title, mode: 'insensitive' } } : {}),
-            ...(filters.titleEN
-                ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
-                : {}),
+            AND: [
+                {
+                    subject: {
+                        type: SubjectVersionType.Project,
+                    },
+                },
+                {
+                    ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
+                },
+                {
+                    OR: [
+                        {
+                            ...(filters.searchText
+                                ? { name: { contains: filters.searchText, mode: 'insensitive' } }
+                                : {}),
+                        },
+                        {
+                            ...(filters.searchText
+                                ? { code: { contains: filters.searchText, mode: 'insensitive' } }
+                                : {}),
+                        },
+                        {
+                            ...(filters.searchText
+                                ? {
+                                      subject: {
+                                          name: {
+                                              contains: filters.searchText,
+                                              mode: 'insensitive',
+                                          },
+                                      },
+                                  }
+                                : {}),
+                        },
+                    ],
+                },
+                {
+                    thesisProjects: {
+                        some: {
+                            ...(filters.code
+                                ? { code: { contains: filters.code, mode: 'insensitive' } }
+                                : {}),
+                            ...(filters.title
+                                ? { title: { contains: filters.title, mode: 'insensitive' } }
+                                : {}),
+                            ...(filters.titleEN
+                                ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
+                                : {}),
+                            ...(filters.supervisor
+                                ? {
+                                      supervisor: {
+                                          name: {
+                                              contains: filters.supervisor,
+                                              mode: 'insensitive',
+                                          },
+                                      },
+                                  }
+                                : {}),
+                            ...emptyObjectIf(
+                                {
+                                    organizationId: {
+                                        in: filters.organization,
+                                    },
+                                },
+                                !!filters.organization
+                            ),
+                        },
+                    },
+                },
+            ],
         },
         include: {
-            organization: true,
-            supervisor: {
-                include: { lecturer: { include: { userProfile: true } } },
+            subject: true,
+            thesisProjects: {
+                include: {
+                    organization: true,
+                    supervisor: true,
+                },
             },
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountThesisProject({
+    const { data: count } = useCountSubjectClass({
         where: {
-            ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
-            ...(filters.title ? { title: { contains: filters.title, mode: 'insensitive' } } : {}),
+            AND: [
+                {
+                    subject: {
+                        type: SubjectVersionType.Project,
+                    },
+                },
+                {
+                    OR: [
+                        {
+                            ...(filters.searchText
+                                ? { name: { contains: filters.searchText, mode: 'insensitive' } }
+                                : {}),
+                        },
+                        {
+                            ...(filters.searchText
+                                ? { code: { contains: filters.searchText, mode: 'insensitive' } }
+                                : {}),
+                        },
+                        {
+                            ...(filters.searchText
+                                ? {
+                                      subject: {
+                                          name: {
+                                              contains: filters.searchText,
+                                              mode: 'insensitive',
+                                          },
+                                      },
+                                  }
+                                : {}),
+                        },
+                    ],
+                },
+                {
+                    thesisProjects: {
+                        some: {
+                            ...(filters.code
+                                ? { code: { contains: filters.code, mode: 'insensitive' } }
+                                : {}),
+                            ...(filters.title
+                                ? { title: { contains: filters.title, mode: 'insensitive' } }
+                                : {}),
+                            ...(filters.titleEN
+                                ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
+                                : {}),
+                            ...(filters.supervisor
+                                ? {
+                                      supervisor: {
+                                          name: {
+                                              contains: filters.supervisor,
+                                              mode: 'insensitive',
+                                          },
+                                      },
+                                  }
+                                : {}),
+                            ...emptyObjectIf(
+                                {
+                                    organizationId: {
+                                        in: filters.organization,
+                                    },
+                                },
+                                !!filters.organization
+                            ),
+                        },
+                    },
+                },
+            ],
         },
     })
 
-    const { onOpen } = useDisclosure<string>({
+    const { data: semesters } = useFindManySemester({
+        include: { schoolYear: true },
+        orderBy: { startDate: 'desc' },
+    })
+
+    useEffect(() => {
+        if (semesters && semesters?.length > 0 && !selectedSemesterId) {
+            setSelectedSemesterId(semesters[0].id)
+        }
+    }, [semesters, selectedSemesterId])
+
+    const { onOpen } = useDisclosure<{ subjectClassId: string; thesisProjectId: string }>({
         tag: PutThesisProject.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleModal = () => {
-        onOpen()
-    }
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
     async function handleDelete(id: string) {
         try {
@@ -101,72 +256,133 @@ export default function ThesisProject() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="end">
-                        <Col span={6}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={12}>
+                            <Flex>
+                                <Col span={12}>
+                                    <Form.Item name="searchText">
+                                        <Input
+                                            id="search"
+                                            onChange={(e) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    searchText: e.target.value,
+                                                })
+                                            }
+                                            className="py-0"
+                                            placeholder="Tìm kiếm chương lớp môn học"
+                                            prefix={
+                                                <Search
+                                                    size={12}
+                                                    style={{
+                                                        color: 'rgba(0, 0, 0, 0.25)',
+                                                    }}
+                                                />
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={10}>
+                                    <TreeSelectSemester
+                                        style={{ width: '250px' }}
+                                        value={selectedSemesterId}
+                                        onChange={(val) => setSelectedSemesterId(val)}
+                                    />
+                                </Col>
                             </Flex>
                         </Col>
                     </Row>
                 </Col>
 
                 <Col span={24}>
-                    <Table
+                    <TableCollapse
                         rowKey="id"
-                        id="training-block"
+                        id="thesis-project"
                         filters={filters}
+                        headerTitleKey={({ code, name, subject }) =>
+                            `${[subject.name, name, code].filter(Boolean).join(' - ')}`
+                        }
                         setFilters={setFilters}
+                        data={subjectClass}
+                        childrenFieldName="thesisProjects"
                         onRowClick={(record) => handleNavigate(record)}
+                        headerRight={({ id }) => (
+                            <div className="flex gap-2.5 w-[85px] items-center justify-center">
+                                <CreateIcon
+                                    onClick={() => {
+                                        onOpen({
+                                            subjectClassId: id,
+                                            thesisProjectId: '',
+                                        })
+                                    }}
+                                    title="Thêm mới đề tài"
+                                />
+                            </div>
+                        )}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Tên đồ án',
+                                title: 'Tên đề tài',
                                 dataIndex: 'title',
                                 width: 150,
+                                fixed: 'left',
                                 type: 'input',
                             },
                             {
-                                title: 'Tên đồ án(Tiếng Anh)',
+                                title: 'Tên đề tài(Tiếng Anh)',
                                 dataIndex: 'titleEN',
                                 width: 180,
                                 type: 'input',
                             },
                             {
-                                title: 'Tóm tắt đồ án',
+                                title: 'Tóm tắt đề tài',
                                 dataIndex: 'summary',
                                 width: 150,
                             },
                             {
                                 title: 'Chuyên gia hướng dẫn',
-                                width: 180,
-                                render: (record) => record.supervisor.lecturer.userProfile.fullname,
+                                dataIndex: 'supervisor',
+                                width: 200,
+                                type: 'input',
+                                render: (record) => record?.name,
                             },
                             {
                                 title: 'Đơn vị quản lý',
+                                dataIndex: 'organization',
                                 width: 150,
-                                render: (record) => record.organization.sTen,
+                                type: 'tree_select',
+                                options: treeData,
+                                render: (record) => record?.sTen,
                             },
                             {
                                 title: 'Số lượng học viên',
                                 dataIndex: 'currentStudents',
                                 align: 'center',
                                 width: 150,
+                                type: 'order',
                             },
                             {
                                 title: 'Số lượng học viên tối đa',
                                 dataIndex: 'maxStudents',
                                 align: 'center',
                                 width: 180,
+                                type: 'order',
+                            },
+                            {
+                                title: 'Thời gian mở đăng ký',
+                                dataIndex: 'registrationStart',
+                                align: 'center',
+                                width: 180,
+                                render: (record) =>
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
+                            },
+                            {
+                                title: 'Thời gian đóng đăng ký',
+                                dataIndex: 'registrationEnd',
+                                align: 'center',
+                                width: 180,
+                                render: (record) =>
+                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Trạng thái',
@@ -187,13 +403,16 @@ export default function ThesisProject() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => {
-                                    if (id) {
+                                render: (_, record) => {
+                                    if (record.id) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
                                                     onClick={(e) => {
-                                                        onOpen(id)
+                                                        onOpen({
+                                                            subjectClassId: record.subjectClassId,
+                                                            thesisProjectId: record.id,
+                                                        })
                                                         e.stopPropagation()
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -201,7 +420,7 @@ export default function ThesisProject() {
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: (e) => {
-                                                            handleDelete(id)
+                                                            handleDelete(record.id)
                                                             e?.stopPropagation()
                                                         },
                                                         onCancel: (e) => e?.stopPropagation(),
@@ -218,10 +437,15 @@ export default function ThesisProject() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
-                        data={thesisProjectData}
                     />
                 </Col>
             </Row>

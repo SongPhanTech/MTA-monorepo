@@ -246,7 +246,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 width: 100,
                                 dataIndex: 'finalGpa',
                                 type: 'order',
-                                render: (_, record) => record?.finalGpa.toNumber(),
+                                render: (_, record) => record?.finalGpa?.toNumber(),
                             },
                             {
                                 title: 'Loại bằng',

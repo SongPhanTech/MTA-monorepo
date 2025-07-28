@@ -189,6 +189,7 @@ const ModalLearningResult = () => {
                             dataIndex: 'finalScore',
                             width: 80,
                             align: 'center',
+                            render: (record) => record?.toNumber(),
                         },
                     ]}
                     pagination={{
@@ -256,6 +257,7 @@ const ModalLearningResult = () => {
                             dataIndex: 'finalScore',
                             width: 80,
                             align: 'center',
+                            render: (record) => record?.toNumber(),
                         },
                     ]}
                     pagination={{
@@ -323,6 +325,7 @@ const ModalLearningResult = () => {
                             dataIndex: 'finalScore',
                             width: 80,
                             align: 'center',
+                            render: (record) => record?.toNumber(),
                         },
                     ]}
                     pagination={{
