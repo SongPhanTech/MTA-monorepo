@@ -4,24 +4,61 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutTinHocModal from '@components/modal/quan-ly-ho-so/modals/put-tin-hoc'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { formatDate } from '@lib/utils'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { TinHoc } from '@workspace/db'
+import { useFindManyDM_TrinhDoTinHoc } from '@workspace/db/hooks'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function TinHocForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
 
-    const { onOpen } = useDisclosure({
+    const tinHocList: TinHoc[] = Form.useWatch('tinHoc', form)
+    console.log(form.getFieldsValue(), '129837')
+
+    const { onOpen } = useDisclosure<
+        Partial<TinHoc> & {
+            onSave: (val: TinHoc) => void
+        }
+    >({
         tag: PutTinHocModal.name,
     })
+    const { data = [] } = useFindManyDM_TrinhDoTinHoc()
 
-    const handleModal = () => {
-        onOpen()
+    const handleSave = (data: TinHoc) => {
+        const currentList = form.getFieldValue('tinHoc') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('tinHoc', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: TinHoc, index: number) => {
+        const currentList = form.getFieldValue('tinHoc') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('tinHoc', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('tinHoc') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('tinHoc', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: TinHoc, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: TinHoc) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = tinHocList && tinHocList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,56 +110,59 @@ export default function TinHocForm({ expland, setExpland }: DomProps) {
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => record?.hinhThucDaoTao || '',
                         },
                         {
                             title: 'Trình độ',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => {
+                                const found = data.find(
+                                    (item) => item.Id === record?.dM_TrinhDoTinHocId
+                                )
+                                return found ? found.sTen : ''
+                            },
                         },
                         {
                             title: 'Cơ sở đào tạo',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => record?.noiDaoTao || '',
                         },
                         {
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => formatDate(record?.thoiGianBatDau || ''),
                         },
                         {
                             title: 'Thời gian kết thúc',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.information || '',
+                            render: (_, record) => formatDate(record?.thoiGianKetThuc) || '',
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={tinHocList}
                     pagination={false}
                 />
             </div>

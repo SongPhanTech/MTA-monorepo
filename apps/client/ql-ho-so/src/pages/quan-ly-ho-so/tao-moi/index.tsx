@@ -56,7 +56,11 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 export type SubmitForm = Prisma.UserProfileGetPayload<{
     include: {
-        tinHoc: true
+        tinHoc: {
+            include: {
+                dM_TrinhDoTinHoc: true
+            }
+        }
         hocVi: true
         hocHam: true
         trinhDoLyLuanChinhTri: true
@@ -76,6 +80,7 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
     }
 }> & {
     file?: FileType
+    tinHoc?: any[]
 }
 
 export default function CreateUserPage() {
@@ -140,7 +145,11 @@ export default function CreateUserPage() {
         {
             title: 'Tin học',
             id: 'tinHoc',
-            render: <TinHocForm expland={expland} setExpland={setExpland} />,
+            render: (
+                <Form.Item name="tinHoc">
+                    <TinHocForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
         },
         {
             title: 'Bồi dưỡng quốc phòng an ninh',
@@ -231,6 +240,8 @@ export default function CreateUserPage() {
         }
         try {
             showSpinner()
+            console.log('Submitting form with values:', form.getFieldsValue())
+
             await createUserProfile({
                 data: {
                     firstName: values.firstName,
@@ -271,6 +282,13 @@ export default function CreateUserPage() {
                         ? dayjs(values.tenureDate).format('YYYY-MM-DD')
                         : null,
                     avatar: fileName,
+                    tinHoc: {
+                        createMany: {
+                            data: values.tinHoc?.map((item) => ({
+                                ...item,
+                            })),
+                        },
+                    },
                 },
             })
             queryClient.invalidateQueries({

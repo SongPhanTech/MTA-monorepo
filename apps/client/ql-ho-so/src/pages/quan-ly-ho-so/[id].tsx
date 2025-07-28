@@ -143,7 +143,11 @@ export default function UpdateUserPage() {
             {
                 title: 'Tin học',
                 id: 'tinHoc',
-                render: <TinHocForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="tinHoc">
+                        <TinHocForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Bồi dưỡng quốc phòng an ninh',
@@ -300,6 +304,7 @@ export default function UpdateUserPage() {
                 academicDegreeType: true,
                 academicRankType: true,
                 level: true,
+                tinHoc: true,
             },
         },
         {
@@ -343,6 +348,7 @@ export default function UpdateUserPage() {
                 officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
                 CPVJoinPlace: userData.CPVJoinPlace,
                 tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
+                tinHoc: userData.tinHoc || [],
             })
         },
         [form]
