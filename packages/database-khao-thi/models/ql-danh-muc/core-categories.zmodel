@@ -1,0 +1,246 @@
+import '../ql-dao-tao/plan-training'
+import '../ql-ho-so/profile'
+import '../ql-dao-tao/categories'
+import '../ql-dao-tao/lecturer'
+import '../ql-dao-tao/staff'
+import '../ql-dao-tao/student'
+import '../ql-nguoi-dung/user'
+import '../ql-nguoi-dung/feedback'
+
+abstract model CoreBase {
+  Id             String    @id() @default(uuid()) @db.Uuid
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+
+  @@schema("mta")
+
+  // TODO: change this
+  @@allow('all', auth() != null)
+
+  @@deny('read', bDeleted == true)
+  /// TODO: allow all for now, will be restricted later
+  // @@allow('all', auth().role == 'ADMIN')
+  @@allow('read', auth() != null)
+}
+
+model DM_CapBac extends CoreBase {
+  profiles UserProfile[]
+  capBac   CapBac[]
+  @@schema("mta")
+}
+
+model DM_ChucDanh extends CoreBase {
+  iLoaiChucDanh Int?          @default(0)
+  userProfile   UserProfile[]
+  @@schema("mta")
+}
+
+model DM_ChucVu extends CoreBase {
+  iNhomChucVu         Int?                  @default(0)
+  userProfile         UserProfile[]
+  quaTrinhCongTac     QuaTrinhCongTac[]
+  quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
+
+
+  @@schema("mta")
+}
+
+model DM_HocHam extends CoreBase {
+  profiles UserProfile[]
+  hocHam   HocHam[]
+  @@schema("mta")
+}
+
+model DM_HocVi extends CoreBase {
+  profiles UserProfile[]
+  hocVi    HocVi[]
+  @@schema("mta")
+}
+
+model DM_ChungChiTinHoc extends CoreBase {
+  sNguonCap String?
+  sNoiDung  String?
+  sGiaTri   String?
+  sDoiTuong String?
+  @@schema("mta")
+}
+
+model DM_DanToc extends CoreBase {
+  sTenKhac     String?
+  sDiaChiCuTru String?
+
+  userProfile  UserProfile[]
+
+  @@schema("mta")
+}
+
+model DM_DonVi extends CoreBase {
+  sCode            String?
+  sTenVietTat      String?
+  sParentId        String?           @db.Uuid
+  sTruongDonVi     String?           @db.Uuid
+  sChucNangNhiemVu String?
+  sDiaChi          String?
+
+  lecturers        Lecturer[]
+  lecturerHistory  LecturerHistory[]
+  staffs           Staff[]
+  staffHistory     StaffHistory[]
+
+  curriculum       Curriculum[]
+  fixedClass       FixedClass[]
+  subjectVersions  SubjectVersion[]
+  subjects         Subject[]
+  trainingFields   TrainingField[]
+  trainingMajors   TrainingMajor[]
+
+
+
+  @@index([sParentId], map: "IX_DM_DonVi_iParentId")
+  @@index([sMa], map: "IX_DM_DonVi_sMa")
+  @@schema("mta")
+}
+
+model DM_DonViHanhChinh extends CoreBase {
+  sTen_En String?
+
+  @@schema("mta")
+}
+
+model DM_KhuVuc_DiaLy extends CoreBase {
+  sTen_En String?
+
+  student Student[]
+  @@schema("mta")
+}
+
+model DM_NgoaiNgu extends CoreBase {
+  ngoaiNgu NgoaiNgu[]
+  @@schema("mta")
+}
+
+model DM_TonGiao extends CoreBase {
+  userProfile UserProfile[]
+  @@schema("mta")
+}
+
+model DM_TrinhDoNgoaiNgu extends CoreBase {
+  sKhung String?
+  @@schema("mta")
+}
+
+model DM_TrinhDoTinHoc extends CoreBase {
+  tinHoc TinHoc[]
+  @@schema("mta")
+}
+
+model DM_NhanVien extends CoreBase {
+  sCCCD               String?
+  sHoVaDem            String?
+  sTenDayDu           String?
+  dNgaySinh           DateTime?
+  iGioiTinh           Int?
+  sDiaChi             String?
+  sSDTDiDong          String?
+  sEmail              String?
+  bLaNguoiDung        Boolean?
+  sDM_DonViId         String?       @db.Uuid
+  sDM_ViTriCongViecId String?       @db.Uuid
+  sQuanlyTrucTiepId   String?       @db.Uuid
+  sAvatarId           String?
+
+  group               Group?        @relation(fields: [groupId], references: [id])
+  groupId             String?
+
+  userProfile         UserProfile[]
+  feedback            Feedback[]
+
+  @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")
+  @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
+  @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
+  @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
+
+  @@auth()
+  @@schema("mta")
+}
+
+model DM_PhanCap_ChatLuong_TrangThietBi extends CoreBase {
+  @@schema("mta")
+}
+
+model DM_PhanLoai_CSKT extends CoreBase {
+  @@schema("mta")
+}
+
+
+model DM_NhomNguoiDung extends CoreBase {
+  @@schema("mta")
+}
+
+model DM_NhomUngDung extends CoreBase {
+  sMoTa String?
+  @@schema("mta")
+}
+
+model DM_QuocGia extends CoreBase {
+  sLanguage   String?
+  hocVi       HocVi[]
+  userProfile UserProfile[]
+  @@schema("mta")
+}
+
+model DM_Tinh extends CoreBase {
+  sDM_QuocGiaId               String?       @db.Uuid
+  iDM_KhuVucDiaLy_Id          Int?
+  iDM_DonViHanhChinhId        Int?
+
+  userProfileHometown         UserProfile[] @relation("ProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("ProvinceCurrentAddress")
+
+  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
+  @@schema("mta")
+}
+
+model DM_QuanHuyen extends CoreBase {
+  sDM_TinhId           String? @db.Uuid
+  sDM_Tinh_Ma          String?
+  iDM_DonViHanhChinhId Int?
+
+  @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
+  @@schema("mta")
+}
+
+model DM_XaPhuong extends CoreBase {
+  sDM_QuanHuyen_Ma            String?
+  sDM_TinhId                  String?       @db.Uuid
+  sDM_QuanHuyenId             String?       @db.Uuid
+  iDM_DonViHanhChinhId        Int?
+
+  userProfileHometown         UserProfile[] @relation("CommuneHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("CommunePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("CommunePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("CommuneCurrentAddress")
+
+  @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
+  @@schema("mta")
+}
+
+model DM_ViTriCongViec extends CoreBase {
+  sDM_ChucDanhId  String? @db.Uuid
+  sDM_NhomViTriId String  @db.Uuid
+  @@schema("mta")
+}

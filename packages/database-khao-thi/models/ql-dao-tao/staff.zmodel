@@ -1,0 +1,47 @@
+import '../base'
+import '../ql-nguoi-dung/user'
+import '../ql-danh-muc/categories'
+import '../ql-danh-muc/core-categories'
+import '../ql-danh-muc/common'
+import '../ql-dao-tao/categories'
+import '../ql-dao-tao/plan-training'
+import '../ql-ho-so/profile'
+
+model Staff extends Base {
+  from            DateTime? // từ ngày
+
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique
+
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String        @db.Uuid
+
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
+
+  fixedClass      FixedClass[]  @relation("ManageStaff")
+
+  @@schema("ql-dao-tao")
+}
+
+model StaffHistory extends Base {
+  from            DateTime? // từ ngày
+  to              DateTime? // đến ngày
+
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique
+
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String        @db.Uuid
+
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
+
+  @@schema("ql-dao-tao")
+}
