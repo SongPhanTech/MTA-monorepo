@@ -1644,10 +1644,16 @@ Table DM_NhanVien {
   sTenDayDu String
   dNgaySinh DateTime
   iGioiTinh Int
+  sDM_QuocGiaId String
+  sDM_TinhId String
+  sDM_QuanHuyenId String
+  sDM_XaPhuongId String
   sDiaChi String
   sSDTDiDong String
   sEmail String
   bLaNguoiDung Boolean
+  bLaCanBoNhanVien Boolean
+  bLaHocVien Boolean
   sDM_DonViId String
   sDM_ViTriCongViecId String
   sQuanlyTrucTiepId String
@@ -1847,7 +1853,7 @@ Table DM_ViTriCongViec {
   sThietBiTao String
   sThietBiSua String
   sDM_ChucDanhId String
-  sDM_NhomViTriId String [not null]
+  sDM_NhomViTriId String
 }
 
 Table UserProfile {

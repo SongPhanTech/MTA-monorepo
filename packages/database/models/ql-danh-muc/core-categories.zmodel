@@ -158,10 +158,16 @@ model DM_NhanVien extends CoreBase {
   sTenDayDu           String?
   dNgaySinh           DateTime?
   iGioiTinh           Int?
+  sDM_QuocGiaId       String?        @db.Uuid
+  sDM_TinhId          String?        @db.Uuid
+  sDM_QuanHuyenId     String?        @db.Uuid
+  sDM_XaPhuongId      String?        @db.Uuid
   sDiaChi             String?
   sSDTDiDong          String?
   sEmail              String?
   bLaNguoiDung        Boolean?
+  bLaCanBoNhanVien    Boolean?
+  bLaHocVien          Boolean?
   sDM_DonViId         String?        @db.Uuid
   sDM_ViTriCongViecId String?        @db.Uuid
   sQuanlyTrucTiepId   String?        @db.Uuid
@@ -253,6 +259,6 @@ model DM_XaPhuong extends CoreBase {
 
 model DM_ViTriCongViec extends CoreBase {
   sDM_ChucDanhId  String? @db.Uuid
-  sDM_NhomViTriId String  @db.Uuid
+  sDM_NhomViTriId String? @db.Uuid
   @@schema("mta")
 }

@@ -4,7 +4,8 @@
     "scripts": {
         "generate:sql": "prisma generate --sql",
         "generate": "zenstack generate",
-        "db:push": "prisma db push --skip-generate"
+        "db:push": "prisma db push --skip-generate",
+        "db:sync": "zenstack generate && prisma db push --skip-generate"
     },
     "exports": {
         ".": "./src/index.ts",

@@ -28,6 +28,9 @@
         },
         "db:push": {
             "cache": false
+        },
+        "db:sync": {
+            "cache": false
         }
     }
 }
