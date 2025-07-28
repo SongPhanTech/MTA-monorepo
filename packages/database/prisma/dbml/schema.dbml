@@ -1871,6 +1871,7 @@ Table UserProfile {
   firstName String [not null]
   lastName String [not null]
   idCardNumber String [unique, not null]
+  placeOfIdCardNumber String
   fullname String
   healthInsuranceNumber String
   bankAccountNumber String
@@ -1888,6 +1889,7 @@ Table UserProfile {
   communeOfBirthId String
   homeTown String
   idCardDate DateTime
+  idCardExpirationDate DateTime
   gender Gender
   permanentAddress String
   provincePermanentAddress DM_Tinh

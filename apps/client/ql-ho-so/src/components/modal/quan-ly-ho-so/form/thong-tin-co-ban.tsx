@@ -1,5 +1,6 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
 import { GENDER_LIST } from '@constants/constants'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -8,20 +9,13 @@ import {
     useFindManyDM_QuocGia,
     useFindManyDM_TonGiao,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, Row, Select, Typography } from 'antd'
+import { Col, Collapse, Form, Input, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
 
 dayjs.locale('vi')
 const { Title, Text } = Typography
 export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
-
-    const userTypeOptions = [
-        { value: 'MILITARY_STUDENT', label: 'Học viên quân sự' },
-        { value: 'CIVILIAN_STUDENT', label: 'Sinh viên dân sự' },
-        { value: 'LECTURER', label: 'Giảng viên' },
-        { value: 'STAFF', label: 'Nhân viên' },
-    ]
 
     const { data: nationalityData = [] } = useFindManyDM_QuocGia()
     const { data: religionData = [] } = useFindManyDM_TonGiao()
@@ -79,32 +73,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             className="mb-0"
                         >
                             <Input placeholder="Nhập họ và tên đệm" className="h-9" />
-                        </FormItem>
-                    </Col>
-
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="userType"
-                            label="Chọn đối tượng đào tạo"
-                            className="mb-0"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng chọn đối tượng đào tạo!',
-                                },
-                            ]}
-                        >
-                            <Select
-                                placeholder="Chọn đối tượng đào tạo"
-                                className="h-9"
-                                options={userTypeOptions.map((i) => {
-                                    return {
-                                        value: i.value,
-                                        label: i.label,
-                                    }
-                                })}
-                            />
                         </FormItem>
                     </Col>
 
@@ -250,14 +218,19 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="code" label="Nơi cấp CCCD" className="mb-0">
+                        <FormItem
+                            form={form}
+                            name="placeOfIdCardNumber"
+                            label="Nơi cấp CCCD"
+                            className="mb-0"
+                        >
                             <Input placeholder="Nhập nơi cấp" className="h-9" />
                         </FormItem>
                     </Col>
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="idCardDate"
+                            name="idCardExpirationDate"
                             label="Ngày hết hạn CCCD"
                             className="mb-0"
                         >

@@ -38,6 +38,7 @@ import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
 import TrinhDoQuanLyHanhChinhForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-hanh-chinh'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
+import { getMinioUrl } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateUserProfile } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
@@ -82,7 +83,7 @@ export default function CreateUserPage() {
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
     const [expland, setExpland] = useState<string[]>(['thongTinCoBan', 'thongTinLienHe'])
-    const [avatar, setAvatar] = useState<UploadFile[]>([])
+
     const [fileList, setFileList] = useState<UploadFile[]>([])
     const router = useRouter()
     const listTabs: itemType[] = [
@@ -211,7 +212,7 @@ export default function CreateUserPage() {
 
     const handleSubmit = async (values: SubmitForm) => {
         if (!values) return
-        let fileName = values.avatar
+        const fileName = values.avatar
         if (fileList.length > 0) {
             const file = fileList[0]
             const resPresignedUrl = await generatePresignedUrl({
@@ -224,11 +225,10 @@ export default function CreateUserPage() {
                 body: file.originFileObj,
             })
 
-            fileName = resPresignedUrl.data.fileName
+            form.setFieldsValue({
+                avatar: resPresignedUrl.data.fileName,
+            })
         }
-
-        console.log('File name to be saved:', fileName)
-
         try {
             showSpinner()
             await createUserProfile({
@@ -282,6 +282,18 @@ export default function CreateUserPage() {
         }
         hideSpinner()
     }
+    const avatar = Form.useWatch('avatar', form)
+    const fileListValue = useMemo(() => {
+        if (avatar) {
+            const avatarFile: UploadFile = {
+                uid: '-1',
+                name: 'avatar.jpg',
+                status: 'done',
+                url: getMinioUrl(avatar), // Sử dụng getMinioUrl để tạo URL hiển thị
+            }
+            return [avatarFile]
+        }
+    }, [avatar])
 
     return (
         <Form form={form} onFinish={handleSubmit}>
@@ -342,15 +354,16 @@ export default function CreateUserPage() {
                     </div>
                     <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
                         <div className="p-6 shadow rounded-lg bg-white mb-4">
-                            <FormItem name="file" form={form} className="mb-0 relative">
+                            <FormItem name="avatar" form={form} className="mb-0 relative">
                                 <ImgCrop rotationSlider>
                                     <Upload
                                         listType="picture-circle"
                                         maxCount={1}
-                                        fileList={avatar?.length > 0 ? avatar : fileList}
+                                        fileList={avatar ? fileListValue : fileList}
                                         onChange={onChange}
                                         onRemove={() => {
-                                            setAvatar([])
+                                            setFileList([])
+                                            form.setFieldValue('avatar', null)
                                         }}
                                         showUploadList={{
                                             showPreviewIcon: false,

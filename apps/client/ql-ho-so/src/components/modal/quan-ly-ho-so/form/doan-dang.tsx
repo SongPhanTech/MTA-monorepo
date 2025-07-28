@@ -106,7 +106,7 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
         )
     }
     return (
-        <div className="mt-5">
+        <div className="">
             <Collapse
                 items={[
                     {

@@ -2414,6 +2414,7 @@ model UserProfile {
   firstName                  String
   lastName                   String
   idCardNumber               String                    @unique()
+  placeOfIdCardNumber        String?
   fullname                   String?
   healthInsuranceNumber      String?
   bankAccountNumber          String?
@@ -2431,6 +2432,7 @@ model UserProfile {
   communeOfBirthId           String?                   @db.Uuid()
   homeTown                   String?
   idCardDate                 DateTime?
+  idCardExpirationDate       DateTime?
   gender                     Gender?
   permanentAddress           String?
   provincePermanentAddress   DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])

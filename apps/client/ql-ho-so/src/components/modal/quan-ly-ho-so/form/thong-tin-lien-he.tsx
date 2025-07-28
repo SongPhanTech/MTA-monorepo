@@ -81,7 +81,7 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
         )
     }
     return (
-        <div className="mt-5">
+        <div className="">
             <Collapse
                 items={[
                     {
