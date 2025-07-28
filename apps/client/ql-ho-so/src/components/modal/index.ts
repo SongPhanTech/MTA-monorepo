@@ -18,6 +18,8 @@ import TrinhDoLyLuanChinhTriModal from './danh-muc-chung/put-trinh-do-ly-luan-ch
 import TrinhDoQuanLyNhaNuocModal from './danh-muc-chung/put-trinh-do-quan-ly-nha-nuoc'
 import XepLoaiDanhGiaCanBoModal from './danh-muc-chung/put-xep-loai-danh-gia-can-bo'
 import XepLoaiDanhGiaChatLuongDangVienModal from './danh-muc-chung/put-xep-loai-danh-gia-chat-luong'
+import ModalLyLichCanBo from './modal-ly-lich-can-bo'
+import ModalTomTatLyLich from './modal-ly-lich-sinh-vien'
 import PutUserProfileLectureModal from './put-giang-vien'
 import PutHocvienModal from './put-hoc-vien'
 import PutUserProfileStaffModal from './put-nhan-vien'
@@ -85,4 +87,6 @@ export {
     PutKyLuatModal,
     PutDoiTuongChinhSachModal,
     PutKeKhaiTaiSanModal,
+    ModalTomTatLyLich,
+    ModalLyLichCanBo,
 }

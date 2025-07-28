@@ -1,8 +1,8 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import ViewIcon from '@components/icons/view'
-import { PutStudentModal } from '@components/modal'
+import PrinterIcon from '@components/icons/print'
+import { ModalTomTatLyLich, PutStudentModal } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
@@ -193,6 +193,12 @@ export default function UserProfilePageDs() {
         tag: PutStudentModal.name,
     })
 
+    const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
+        id: string
+    }>({
+        tag: ModalTomTatLyLich.name,
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
@@ -353,15 +359,11 @@ export default function UserProfilePageDs() {
                                 fixed: 'right',
                                 render: (_, { id, idCardNumber }) => (
                                     <Row className="justify-center gap-2">
-                                        <ViewIcon
-                                            onClick={() =>
-                                                router.push(
-                                                    ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
-                                                        '[id]',
-                                                        id
-                                                    )
-                                                )
-                                            }
+                                        <PrinterIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenModalTomTatLyLich({ id })
+                                            }}
                                         />
                                         <EditIcon
                                             onClick={() => {
