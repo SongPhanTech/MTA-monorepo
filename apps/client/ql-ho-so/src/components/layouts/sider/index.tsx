@@ -1,5 +1,5 @@
 import type { MenuItem } from '@workspace/router'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Tooltip } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -20,12 +20,22 @@ interface SiderDefaultLayoutProps {
 // Hàm hỗ trợ để chuyển đổi "item props" thành thành cấu trúc phù hợp
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
     return menus.map((item) => ({
-        label: item.children ? item.label : <Link href={item.path || '#'}>{item.label}</Link>,
+        label: item.children ? (
+            item.label
+        ) : (
+            <Tooltip title={item.label}>
+                <Link href={item.path || '#'}>{item.label}</Link>
+            </Tooltip>
+        ),
         key: item.path || item.id,
         icon: item.icon ? <item.icon /> : undefined,
         children: item.children
             ? item.children.map((child) => ({
-                  label: <Link href={child.path || '#'}>{child.label}</Link>,
+                  label: (
+                      <Tooltip title={child.label}>
+                          <Link href={child.path || '#'}>{child.label}</Link>
+                      </Tooltip>
+                  ),
                   key: child.path || child.id,
               }))
             : undefined,
@@ -74,7 +84,7 @@ const SiderDefaultLayout = ({
             onCollapse={onCollapse}
             collapsed={collapsed}
             theme={theme}
-            width={280}
+            width={230}
         >
             <div className="flex items-center justify-center my-3">{collapsed ? logo1 : logo2}</div>
             <Menu
@@ -87,6 +97,7 @@ const SiderDefaultLayout = ({
                 items={getMenus(items)}
                 style={{
                     background: 'transparent',
+                    borderTop: '1px solid #f1f1f1',
                 }}
             />
         </Sider>

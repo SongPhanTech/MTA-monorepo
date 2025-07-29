@@ -1,70 +1,47 @@
 import type { MenuItem } from '@workspace/router'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Tooltip } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 const { Sider } = Layout
 
+// Định nghĩa kiểu dữ liệu cho props của SiderDefaultLayout
 interface SiderDefaultLayoutProps {
     collapsed: boolean
     theme: 'light' | 'dark'
     items: MenuItem[]
     onCollapse?: (collapsed: boolean) => void
-    logo1: React.ReactNode
-    logo2: React.ReactNode
+    logo1: ReactNode
+    logo2: ReactNode
 }
 
-// Chuyển đổi item sang định dạng Menu phù hợp
+// Hàm hỗ trợ để chuyển đổi "item props" thành thành cấu trúc phù hợp
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
-    const router = useRouter()
-
-    return menus.map((item) => {
-        if (item.type === 'group' && item.children) {
-            return {
-                type: 'group',
-                label: item.label,
-                key: item.id,
-                children: item.children.map((child) => ({
-                    key: child.path || child.id,
-                    label: (
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => {
-                                if (child.path) {
-                                    router.push(child.path)
-                                }
-                            }}
-                        >
-                            {child.label}
-                        </div>
-                    ),
-                })),
-            }
-        }
-
-        return {
-            label: (
-                <div
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        if (item.path) {
-                            router.push(item.path)
-                        }
-                    }}
-                >
-                    {item.label}
-                </div>
-            ),
-            key: item.path || item.id,
-            icon: item.icon ? <item.icon /> : undefined,
-            children: item.children ? getMenus(item.children) : undefined,
-        }
-    })
+    return menus.map((item) => ({
+        label: item.children ? (
+            item.label
+        ) : (
+            <Tooltip title={item.label}>
+                <Link href={item.path || '#'}>{item.label}</Link>
+            </Tooltip>
+        ),
+        key: item.path || item.id,
+        icon: item.icon ? <item.icon /> : undefined,
+        children: item.children
+            ? item.children.map((child) => ({
+                  label: (
+                      <Tooltip title={child.label}>
+                          <Link href={child.path || '#'}>{child.label}</Link>
+                      </Tooltip>
+                  ),
+                  key: child.path || child.id,
+              }))
+            : undefined,
+    }))
 }
 
-// Tìm các menu mở sẵn theo pathname
 const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] => {
     for (const item of menus) {
         if (item.children) {
@@ -79,7 +56,7 @@ const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] =
     }
     return []
 }
-
+// Component SiderDefaultLayout
 const SiderDefaultLayout = ({
     collapsed,
     theme,
@@ -89,8 +66,9 @@ const SiderDefaultLayout = ({
     logo2,
 }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
-    const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
 
+    // State để quản lý các menu đang mở
+    const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
     return (
         <Sider
             style={{
@@ -106,18 +84,20 @@ const SiderDefaultLayout = ({
             onCollapse={onCollapse}
             collapsed={collapsed}
             theme={theme}
-            width={280}
+            width={230}
         >
             <div className="flex items-center justify-center my-3">{collapsed ? logo1 : logo2}</div>
             <Menu
-                theme={theme}
+                className="pb-20"
+                theme={'light'}
                 mode="inline"
                 selectedKeys={pathname ? [pathname] : []}
                 openKeys={openKeys}
-                onOpenChange={setOpenKeys}
+                onOpenChange={setOpenKeys} // Cập nhật trạng thái openKeys khi menu được mở/đóng
                 items={getMenus(items)}
                 style={{
                     background: 'transparent',
+                    borderTop: '1px solid #f1f1f1',
                 }}
             />
         </Sider>
