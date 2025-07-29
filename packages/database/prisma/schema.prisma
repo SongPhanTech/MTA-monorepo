@@ -1665,6 +1665,7 @@ model Group {
   name        String
   users       DM_NhanVien[]
   roles       Role[]
+  userProfile UserProfile[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -2172,7 +2173,6 @@ model DM_NhanVien {
   sAvatarId           String?
   group               Group?         @relation(fields: [groupId], references: [id])
   groupId             String?
-  userProfile         UserProfile?
   notification        Notification[]
   feedback            Feedback[]
   conversation        Conversation[]
@@ -2403,9 +2403,21 @@ model UserProfile {
   deletedAt                  DateTime?
   createdAt                  DateTime                  @default(now())
   updatedAt                  DateTime                  @updatedAt()
-  user                       DM_NhanVien?              @relation(fields: [userId], references: [Id])
-  userId                     String?                   @unique() @db.Uuid()
   userType                   UserType                  @default(OTHER)
+  bLaNguoiDung               Boolean?
+  bLaCanBoNhanVien           Boolean?
+  bLaHocVien                 Boolean?
+  group                      Group?                    @relation(fields: [groupId], references: [id])
+  groupId                    String?
+  sDM_DonViId                String?                   @db.Uuid()
+  sDM_ViTriCongViecId        String?                   @db.Uuid()
+  sQuanlyTrucTiepId          String?                   @db.Uuid()
+  iDictionaryKey             Int?
+  bSystem                    Boolean?
+  sNguoiTao                  String?
+  sNguoiSua                  String?
+  sThietBiTao                String?
+  sThietBiSua                String?
   avatar                     String?
   firstName                  String
   lastName                   String
@@ -2416,6 +2428,7 @@ model UserProfile {
   bankAccountNumber          String?
   bankName                   String?
   currentAddress             String?
+  nationalId                 String?                   @db.Uuid()
   provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?                   @db.Uuid()
   communeCurrentAddress      DM_XaPhuong?              @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])

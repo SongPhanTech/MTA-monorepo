@@ -177,7 +177,6 @@ model DM_NhanVien extends CoreBase {
   group               Group?         @relation(fields: [groupId], references: [id])
   groupId             String?
 
-  userProfile         UserProfile?
   notification        Notification[]
   feedback            Feedback[]
   conversation        Conversation[]

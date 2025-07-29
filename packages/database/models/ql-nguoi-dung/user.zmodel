@@ -37,9 +37,10 @@ enum UserRole {
 }
 
 model Group extends Base {
-  name  String
-  users DM_NhanVien[]
-  roles Role[]
+  name        String
+  users       DM_NhanVien[]
+  roles       Role[]
+  userProfile UserProfile[]
   @@schema("ql-nguoi-dung")
 }
 
