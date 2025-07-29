@@ -29,6 +29,8 @@ import type {
   PresignedGetObjectParams,
   PresignedUrlDto,
   Session,
+  SqlTransaction200Item,
+  SqlTransactionBodyItem,
   Unauthorized,
   UrlDto
 } from './schemas';
@@ -438,3 +440,83 @@ export function usePresignedGetObject<TData = Awaited<ReturnType<typeof presigne
 
   return query;
 }
+
+
+
+
+export type sqlTransactionResponse200 = {
+  data: SqlTransaction200Item[]
+  status: 200
+}
+    
+export type sqlTransactionResponseComposite = sqlTransactionResponse200;
+    
+export type sqlTransactionResponse = sqlTransactionResponseComposite & {
+  headers: Headers;
+}
+
+export const getSqlTransactionUrl = () => {
+
+
+  
+
+  return `/api/sql/transaction`
+}
+
+export const sqlTransaction = async (sqlTransactionBodyItem: SqlTransactionBodyItem[], options?: RequestInit): Promise<sqlTransactionResponse> => {
+  
+  return customModelFetch<sqlTransactionResponse>(getSqlTransactionUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      sqlTransactionBodyItem,)
+  }
+);}
+
+
+
+
+export const getSqlTransactionMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sqlTransaction>>, TError,{data: SqlTransactionBodyItem[]}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof sqlTransaction>>, TError,{data: SqlTransactionBodyItem[]}, TContext> => {
+
+const mutationKey = ['sqlTransaction'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sqlTransaction>>, {data: SqlTransactionBodyItem[]}> = (props) => {
+          const {data} = props ?? {};
+
+          return  sqlTransaction(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SqlTransactionMutationResult = NonNullable<Awaited<ReturnType<typeof sqlTransaction>>>
+    export type SqlTransactionMutationBody = SqlTransactionBodyItem[]
+    export type SqlTransactionMutationError = unknown
+
+    export const useSqlTransaction = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sqlTransaction>>, TError,{data: SqlTransactionBodyItem[]}, TContext>, request?: SecondParameter<typeof customModelFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof sqlTransaction>>,
+        TError,
+        {data: SqlTransactionBodyItem[]},
+        TContext
+      > => {
+
+      const mutationOptions = getSqlTransactionMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }

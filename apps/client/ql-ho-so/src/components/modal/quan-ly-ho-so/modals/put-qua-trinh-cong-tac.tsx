@@ -5,7 +5,8 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { QuaTrinhCongTac } from '@workspace/db'
 import { useFindManyDM_ChucVu, useFindManyDM_LoaiHinhCongTac } from '@workspace/db/hooks'
-import { Col, Form, message } from 'antd'
+import { Col, Form, Input, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -46,7 +47,11 @@ export default function PutQuaTrinhCongTacModal() {
         if (isOpen && input) {
             const { onSave, ...formData } = input
             if (Object.keys(formData).length > 0) {
-                form.setFieldsValue(formData)
+                form.setFieldsValue({
+                    ...formData,
+                    tuThangNam: formData.tuThangNam ? dayjs(formData.tuThangNam) : '',
+                    denThangNam: formData.denThangNam ? dayjs(formData.denThangNam) : '',
+                })
             }
         }
     }, [isOpen, input, form])
@@ -88,7 +93,7 @@ export default function PutQuaTrinhCongTacModal() {
                     />
                 </FormItem>
             </Col>
-            <Col>
+            <Col span={24}>
                 <FormItem label="Loại hình công tác" name="loaiHinhCongTacId" required form={form}>
                     <Select
                         placeholder="Chọn loại hình công tác"
@@ -97,6 +102,11 @@ export default function PutQuaTrinhCongTacModal() {
                             value: item.id,
                         }))}
                     />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem label="Đơn vị" name="donVi" required form={form}>
+                    <Input placeholder="Nhập tên đơn vị" />
                 </FormItem>
             </Col>
             <Col span={24}>

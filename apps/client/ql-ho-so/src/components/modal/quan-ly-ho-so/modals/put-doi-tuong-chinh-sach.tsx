@@ -4,6 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { DoiTuongChinhSach } from '@workspace/db'
 import { Col, Form, Input, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -42,7 +43,11 @@ export default function PutDoiTuongChinhSachModal() {
         if (isOpen && input) {
             const { onSave, ...formData } = input
             if (Object.keys(formData).length > 0) {
-                form.setFieldsValue(formData)
+                form.setFieldsValue({
+                    ...formData,
+                    ngayBatDau: formData.ngayBatDau ? dayjs(formData.ngayBatDau) : '',
+                    ngayKetThuc: formData.ngayKetThuc ? dayjs(formData.ngayKetThuc) : '',
+                })
             }
         }
     }, [isOpen, input, form])

@@ -145,12 +145,12 @@ export type ItemProps = {
     value: string
     label: string
 }
-export function diffArrays(a: ItemProps[], b: ItemProps[]) {
-    const onlyInA = a.filter((itemA) => !b.some((itemB) => itemA.value === itemB.value))
+export function diffArrays<T, K extends keyof T>(a: T[], b: T[], key: K) {
+    const onlyInA = a.filter((itemA) => !b.some((itemB) => itemA[key] === itemB[key]))
 
-    const onlyInB = b.filter((itemB) => !a.some((itemA) => itemA.value === itemB.value))
+    const onlyInB = b.filter((itemB) => !a.some((itemA) => itemA[key] === itemB[key]))
 
-    const both = a.filter((itemA) => b.some((itemB) => itemA.value === itemB.value))
+    const both = a.filter((itemA) => b.some((itemB) => itemA[key] === itemB[key]))
 
     return { onlyInA, onlyInB, both }
 }
