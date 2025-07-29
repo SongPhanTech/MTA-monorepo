@@ -1,0 +1,50 @@
+import '../base'
+import '../ql-nguoi-dung/user'
+import 'core-categories'
+
+// Enum loại thông báo
+enum NotificationType {
+  GENERAL           // Thông báo chung
+  ACADEMIC          // Học vụ
+  EXAM              // Thi cử
+  EVENT             // Sự kiện
+  SCHOLARSHIP       // Học bổng
+  TUITION           // Học phí
+  URGENT            // Khẩn cấp
+  MAINTENANCE       // Bảo trì hệ thống
+
+  @@schema("ql-danh-muc")
+}
+
+// Enum mức độ ưu tiên
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+
+  @@schema("ql-danh-muc")
+}
+
+// Bảng thông báo
+model Notification extends Base {
+  title       String               // Tiêu đề thông báo
+  content     String
+  type        NotificationType     @default(GENERAL)
+  priority    NotificationPriority @default(NORMAL)
+
+  // Thời gian hiển thị
+  publishedAt DateTime             @default(now())
+  expiresAt   DateTime?            // Hết hạn hiển thị
+
+  // Đối tượng nhận thông báo
+  targetAll   Boolean              @default(false) // Gửi cho tất cả
+
+  // Thông tin tác giả
+  createdBy   DM_NhanVien          @relation(fields: [createdById], references: [Id])
+  createdById String               @db.Uuid
+
+
+
+  @@schema("ql-danh-muc")
+}

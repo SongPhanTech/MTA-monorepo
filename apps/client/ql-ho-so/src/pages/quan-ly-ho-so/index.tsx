@@ -12,8 +12,7 @@ import {
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { $Enums } from '@workspace/db'
-import { useCountStudent, useFindManyStudent, useUpdateStudent } from '@workspace/db/hooks'
+import { useCountUserProfile, useFindManyUserProfile, useUpdateStudent } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -34,6 +33,7 @@ export default function UserProfilePageDs() {
         gender: undefined,
         email: '',
         phoneNumber: '',
+        idCardNumber: '',
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
@@ -41,42 +41,8 @@ export default function UserProfilePageDs() {
     const router = useRouter()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-    const { data = [], refetch } = useFindManyStudent({
+    const { data: UserProfileData = [], refetch } = useFindManyUserProfile({
         where: {
-            trainingObjectType: {
-                type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
-                },
-            },
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
-                ...(filters.gender
-                    ? {
-                          gender: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
-            },
             ...(filters.code
                 ? {
                       code: {
@@ -85,137 +51,66 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...(filters.curriculumVersion
+            ...(filters.idCardNumber
                 ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
+                      idCardNumber: {
+                          contains: filters.idCardNumber,
+                          mode: 'insensitive',
                       },
                   }
                 : {}),
-            // ...(filters.fixedClass
-            //     ? {
-            //           fixedClassId: {
-            //               in: filters.fixedClass,
-            //           },
-            //       }
-            //     : {}),
-            // ...(filters.trainingMajors || filters.trainingField
-            //     ? {
-            //           fixedClass: {
-            //               curriculumVersion: {
-            //                   curriculum: {
-            //                       trainingMajor: {
-            //                           ...(filters.trainingMajors
-            //                               ? {
-            //                                     id: {
-            //                                         in: filters.trainingMajors,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                           ...(filters.trainingField
-            //                               ? {
-            //                                     trainingFieldId: {
-            //                                         in: filters.trainingField,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                       },
-            //                   },
-            //               },
-            //           },
-            //       }
-            //     : {}),
+            ...(filters.name
+                ? {
+                      OR: [
+                          {
+                              firstName: {
+                                  contains: filters.name,
+                              },
+                          },
+                          {
+                              lastName: {
+                                  contains: filters.name,
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.dateOfBirth?.length === 2
+                ? {
+                      dateOfBirth: {
+                          gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.gender
+                ? {
+                      gender: {
+                          in: filters.gender,
+                      },
+                  }
+                : {}),
+            ...(filters.phoneNumber
+                ? {
+                      phoneNumber: {
+                          contains: filters.phoneNumber,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.email
+                ? {
+                      email: {
+                          contains: filters.email,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
         },
-        include: {
-            userProfile: true,
-            trainingObjectType: true,
-            // fixedClass: {
-            //     include: {
-            //         trainingCourse: true,
-            //         curriculumVersion: {
-            //             include: {
-            //                 curriculum: {
-            //                     include: {
-            //                         trainingMajor: {
-            //                             include: {
-            //                                 trainingField: true,
-            //                             },
-            //                         },
-            //                     },
-            //                 },
-            //             },
-            //         },
-            //     },
-            // },
-        },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
     })
 
-    // const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
-    //     include: {
-    //         fixedClass: true,
-    //     },
-    //     orderBy: { name: 'asc' },
-    // })
-
-    // const { data: fixedClassData = [] } = useFindManyFixedClass({
-    //     include: {
-    //         trainingCourse: true,
-    //     },
-    // })
-
-    // const { data: trainingFieldData = [] } = useFindManyTrainingField()
-
-    // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-    //     orderBy: { name: 'asc' },
-    // })
-
-    // const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
-    //     orderBy: { name: 'asc' },
-    // })
-
-    const { data: count } = useCountStudent({
+    const { data: count } = useCountUserProfile({
         where: {
-            trainingObjectType: {
-                type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
-                },
-            },
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
-                ...(filters.gender
-                    ? {
-                          gender: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
-            },
             ...(filters.code
                 ? {
                       code: {
@@ -224,46 +119,56 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...(filters.curriculumVersion
+            ...(filters.name
                 ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
+                      OR: [
+                          {
+                              firstName: {
+                                  contains: filters.name,
+                              },
+                          },
+                          {
+                              lastName: {
+                                  contains: filters.name,
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            ...(filters.dateOfBirth?.length === 2
+                ? {
+                      dateOfBirth: {
+                          gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),
-            // ...(filters.fixedClass
-            //     ? {
-            //           fixedClassId: {
-            //               in: filters.fixedClass,
-            //           },
-            //       }
-            //     : {}),
-            // ...(filters.trainingMajors || filters.trainingField
-            //     ? {
-            //           fixedClass: {
-            //               curriculumVersion: {
-            //                   curriculum: {
-            //                       trainingMajor: {
-            //                           ...(filters.trainingMajors
-            //                               ? {
-            //                                     id: {
-            //                                         in: filters.trainingMajors,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                           ...(filters.trainingField
-            //                               ? {
-            //                                     trainingFieldId: {
-            //                                         in: filters.trainingField,
-            //                                     },
-            //                                 }
-            //                               : {}),
-            //                       },
-            //                   },
-            //               },
-            //           },
-            //       }
-            //     : {}),
+            ...(filters.gender
+                ? {
+                      gender: {
+                          in: filters.gender,
+                      },
+                  }
+                : {}),
+            ...(filters.phoneNumber
+                ? {
+                      phoneNumber: {
+                          contains: filters.phoneNumber,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.email
+                ? {
+                      email: {
+                          contains: filters.email,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+        },
+        orderBy: {
+            fullname: 'asc',
         },
     })
 
@@ -376,11 +281,19 @@ export default function UserProfilePageDs() {
                                 width: 180,
                                 fixed: 'left',
                                 render: (__, record) =>
-                                    record.userProfile
-                                        ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
-                                        : '',
+                                    record ? `${record.lastName} ${record.firstName}` : '',
                                 type: 'input',
                                 dataIndex: 'name',
+                            },
+                            {
+                                title: 'CCCD/CMND',
+                                align: 'center',
+                                width: 150,
+                                fixed: 'left',
+                                render: (__, record) =>
+                                    record.idCardNumber ? record.idCardNumber : '',
+                                type: 'input',
+                                dataIndex: 'idCardNumber',
                             },
                             {
                                 title: 'Ngày sinh',
@@ -389,8 +302,8 @@ export default function UserProfilePageDs() {
                                 dataIndex: 'dateOfBirth',
                                 type: 'date',
                                 render: (__, record) =>
-                                    record.userProfile?.dateOfBirth
-                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                    record?.dateOfBirth
+                                        ? dayjs(record.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -405,10 +318,8 @@ export default function UserProfilePageDs() {
                                 ],
 
                                 render: (__, record) =>
-                                    record?.userProfile?.gender
-                                        ? GENDER_MEAN[
-                                              record.userProfile.gender as keyof typeof GENDER_MEAN
-                                          ]
+                                    record?.gender
+                                        ? GENDER_MEAN[record?.gender as keyof typeof GENDER_MEAN]
                                         : '',
                             },
                             {
@@ -418,9 +329,7 @@ export default function UserProfilePageDs() {
                                 type: 'input',
                                 dataIndex: 'phoneNumber',
                                 render: (__, record) =>
-                                    record?.userProfile?.phoneNumber
-                                        ? record?.userProfile?.phoneNumber
-                                        : '',
+                                    record?.phoneNumber ? record?.phoneNumber : '',
                             },
                             {
                                 title: 'Email',
@@ -428,106 +337,23 @@ export default function UserProfilePageDs() {
                                 width: 150,
                                 type: 'input',
                                 dataIndex: 'email',
-                                render: (__, record) =>
-                                    record?.userProfile?.email ? record?.userProfile?.email : '',
+                                render: (__, record) => (record.email ? record?.email : ''),
                             },
                             {
                                 title: 'Vị trí công việc',
                                 align: 'center',
                                 width: 150,
                                 render: (__, record) =>
-                                    record?.userProfile?.userType
-                                        ? USER_TYPE.find(
-                                              (item) => item.value === record?.userProfile?.userType
-                                          )?.label
+                                    record?.userType
+                                        ? USER_TYPE.find((item) => item.value === record?.userType)
+                                              ?.label
                                         : '',
                             },
-                            // {
-                            //     title: 'ĐTĐT',
-                            //     align: 'center',
-                            //     width: 150,
-                            //     render: (__, record) =>
-                            //         record.trainingObjectType ? record.trainingObjectType.name : '',
-                            // },
-                            // {
-                            //     title: 'Lớp',
-                            //     align: 'center',
-                            //     width: 200,
-                            //     dataIndex: 'fixedClass',
-                            //     type: 'select',
-                            //     options: fixedClassData.map((item: FixedClass) => ({
-                            //         label: item.name,
-                            //         value: item.id,
-                            //     })),
-                            //     render: (__, record) => {
-                            //         if (!record.fixedClass) return ''
-                            //         const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
-                            //         return fiexedClass || ''
-                            //     },
-                            // },
-                            // {
-                            //     title: 'Khóa',
-                            //     align: 'center',
-                            //     width: 100,
-                            //     dataIndex: 'trainingCourse',
-                            //     type: 'select',
-                            //     options: TrainingCourseData.map((item: TrainingCourse) => ({
-                            //         label: item.name,
-                            //         value: item.id,
-                            //     })),
-                            //     render: (__, record) => {
-                            //         const trainingCourse = record?.fixedClass?.trainingCourse
-                            //         return trainingCourse ? trainingCourse?.name : ''
-                            //     },
-                            // },
-                            // {
-                            //     title: 'Ngành',
-                            //     align: 'center',
-                            //     width: 160,
-                            //     dataIndex: 'trainingField',
-                            //     type: 'select',
-                            //     options: trainingFieldData.map((item: TrainingField) => ({
-                            //         label: item.name,
-                            //         value: item.id,
-                            //     })),
-                            //     render: (__, record) => {
-                            //         return record?.fixedClass?.curriculumVersion?.curriculum
-                            //             ?.trainingMajor?.trainingField?.name
-                            //     },
-                            // },
-                            // {
-                            //     title: 'Chuyên ngành',
-                            //     align: 'center',
-                            //     width: 180,
-                            //     type: 'select',
-                            //     dataIndex: 'trainingMajors',
-                            //     options: trainingMajorData.map((item: TrainingMajor) => ({
-                            //         label: item.name,
-                            //         value: item.id,
-                            //     })),
-                            //     render: (__, record) => {
-                            //         return record?.fixedClass?.curriculumVersion?.curriculum
-                            //             ?.trainingMajor?.name
-                            //     },
-                            // },
-                            // {
-                            //     title: 'CTĐT',
-                            //     align: 'center',
-                            //     dataIndex: 'curriculumVersion',
-                            //     width: 180,
-                            //     options: TrainingCurriculumVersionData.map((item) => ({
-                            //         label: item.name,
-                            //         value: item.name,
-                            //     })),
-                            //     render: (__, record) => {
-                            //         return record?.fixedClass?.curriculumVersion?.curriculum?.name
-                            //     },
-                            // },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 120,
-                                render: (_, record) => {
+                                render: (_, record: { status?: string }) => {
                                     const statusInfo =
                                         FIXED_CLASS_STUDENT_STATUS[
                                             record.status as keyof typeof FIXED_CLASS_STUDENT_STATUS
@@ -544,7 +370,7 @@ export default function UserProfilePageDs() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => (
+                                render: (_, { id, idCardNumber }) => (
                                     <Row className="justify-center gap-2">
                                         <ViewIcon
                                             onClick={() =>
@@ -557,9 +383,9 @@ export default function UserProfilePageDs() {
                                             }
                                         />
                                         <EditIcon
-                                            onClick={onOpenUpdate.bind(null, {
-                                                id: id,
-                                            })}
+                                            onClick={() => {
+                                                router.push(`quan-ly-ho-so/${idCardNumber}`)
+                                            }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon
@@ -576,7 +402,7 @@ export default function UserProfilePageDs() {
                         //     selectedRowKeys,
                         //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
                         // }}
-                        data={data}
+                        data={UserProfileData}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

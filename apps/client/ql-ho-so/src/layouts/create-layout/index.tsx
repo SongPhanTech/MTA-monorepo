@@ -1,5 +1,5 @@
 import { HomeOutlined } from '@ant-design/icons'
-import logo_mta from '@assets/images/logo_mta.png'
+import logo_mta from '@assets/images/hoso.svg'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderCreateLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
@@ -124,12 +124,12 @@ const CreateLayout = ({
         >
             <Layout style={{ minHeight: '100vh' }} hasSider>
                 <SiderCreateLayout
-                    logo1={<Image src={logo_mta} alt="logo k01" className="size-12" />}
+                    logo1={<Image src={logo_mta} alt="logo k01" className="size-10" />}
                     logo2={
-                        <div className="flex items-center justify-center flex-col text-center">
-                            <Image src={logo_mta} alt="logo k01" className="w-12 h-12 mb-2" />
-                            <span className="text-base font-bold color text-primary">
-                                HỌC VIỆN KỸ THUẬT QUÂN SỰ
+                        <div className="flex items-center justify-center text-center">
+                            <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
+                            <span className="text-xl font-bold color text-[#212121]">
+                                Quản lý hồ sơ
                             </span>
                         </div>
                     }
@@ -140,11 +140,11 @@ const CreateLayout = ({
                 />
                 <Layout
                     style={{
-                        marginInlineStart: collapsed ? 80 : 280, // Điều chỉnh margin theo trạng thái collapsed
+                        marginInlineStart: collapsed ? 80 : 230, // Điều chỉnh margin theo trạng thái collapsed
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
+                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-full fixed z-[1000]">
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
@@ -156,7 +156,7 @@ const CreateLayout = ({
                             <AvatarDropdown />
                         </div> */}
                     </Header>
-                    <Content className="mx-2">
+                    <Content className="mx-2 mt-20">
                         {unLayout ? (
                             children
                         ) : (

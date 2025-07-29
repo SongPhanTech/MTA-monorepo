@@ -35,6 +35,8 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
 
         for (const p of paragraphs) {
             const runs = Array.isArray(p?.['w:r']) ? p['w:r'] : [p?.['w:r']]
+            let paragraphText = ''
+
             for (const r of runs) {
                 const t = r?.['w:t']
                 let value = ''
@@ -47,10 +49,10 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                 if (value) {
                     const startsWithPunctuation = /^[.,!?;:]/.test(value)
                     const endsWithChar = /[a-zA-ZÀ-ỹ0-9]$/.test(value)
-                    if (rawText && prevEndedWithChar && !startsWithPunctuation) {
-                        rawText += ' '
+                    if (paragraphText && prevEndedWithChar && !startsWithPunctuation) {
+                        paragraphText += ' '
                     }
-                    rawText += value
+                    paragraphText += value
                     prevEndedWithChar = endsWithChar
                 }
 
@@ -66,12 +68,15 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     if (file) {
                         const blob = new Blob([file.asUint8Array()], { type: 'image/png' })
                         const placeholder = `{img_${imgIndex}}`
-                        rawText += ` ${placeholder} `
+                        paragraphText += ` ${placeholder} `
                         images.push({ name: placeholder, blob })
                         imgIndex++
                     }
                 }
             }
+
+            // Sau mỗi đoạn văn, thêm xuống dòng
+            rawText += `${paragraphText.trim()}\n`
         }
 
         const cleanedText = rawText
@@ -112,6 +117,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
             result = result.replace(img.name, `<img src="${imageUrl}" style="max-width: 100%;" />`)
         }
+        result = result.replace(/\n/g, '<br />')
 
         return result
     }
@@ -212,6 +218,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             key: 'content',
             render: (text: string, record: any) => (
                 <div
+                    style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
                     dangerouslySetInnerHTML={{
                         __html: renderContentWithImagePlaceholders(
                             text,
@@ -228,6 +235,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
             key: 'explanation',
             render: (text: string, record: any) => (
                 <div
+                    style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
                     dangerouslySetInnerHTML={{
                         __html: renderContentWithImagePlaceholders(
                             text,
@@ -262,7 +270,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
         <Modal
             title="Import câu hỏi từ Word"
             open={visible}
-            className="w-[80vw]"
+            className="w-[80vw] max-h-[80vh]"
             onCancel={handleCancel}
             style={{ top: 20 }}
             footer={[
@@ -337,13 +345,13 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                         rowKey={(record, index) => index?.toString() || ''}
                         scroll={{
                             x: '100%',
-                            y: 'calc(80vh - 100px)',
+                            y: 'calc(70vh - 130px)',
                         }}
                         sticky={{
                             offsetHeader: 0,
                         }}
                         style={{
-                            height: '80vh',
+                            maxHeight: '70vh',
                         }}
                         pagination={{
                             position: ['bottomRight'],

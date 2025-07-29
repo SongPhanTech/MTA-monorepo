@@ -4,24 +4,51 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutTrinhDoQuanLyHanhChinhModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function TrinhDoQuanLyHanhChinhForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<any>() // Thay any bằng type phù hợp nếu có
 
-    const { onOpen } = useDisclosure({
+    const hanhChinhList = Form.useWatch('trinhDoQuanLyHanhChinh', form) || []
+
+    const { onOpen } = useDisclosure<Partial<any> & { onSave: (val: any) => void }>({
         tag: PutTrinhDoQuanLyHanhChinhModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const handleSave = (data: any) => {
+        const currentList = form.getFieldValue('trinhDoQuanLyHanhChinh') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('trinhDoQuanLyHanhChinh', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: any, index: number) => {
+        const currentList = form.getFieldValue('trinhDoQuanLyHanhChinh') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('trinhDoQuanLyHanhChinh', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('trinhDoQuanLyHanhChinh') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('trinhDoQuanLyHanhChinh', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: any, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: any) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = hanhChinhList && hanhChinhList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,56 +100,54 @@ export default function TrinhDoQuanLyHanhChinhForm({ expland, setExpland }: DomP
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => record?.hinhThucDaoTao || '',
                         },
                         {
                             title: 'Trình độ',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => record?.trinhDoName || '',
                         },
                         {
                             title: 'Cơ sở đào tạo',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => record?.noiDaoTao || '',
                         },
                         {
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => record?.thoiGianBatDau || '',
                         },
                         {
                             title: 'Thời gian kết thúc ',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.information || '',
+                            render: (_, record) => record?.thoiGianKetThuc || '',
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={hanhChinhList}
                     pagination={false}
                 />
             </div>

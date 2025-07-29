@@ -1,0 +1,53 @@
+import './models/index.zmodel'
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["mta", "he-thong", "ql-danh-muc", "khao-thi", "ql-dao-tao", "ql-nguoi-dung", "tro-ly-ao","ql-ho-so"]
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["multiSchema", "typedSql","fullTextSearchPostgres"]
+  binaryTargets = ["native"]
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+// generator drizzle {
+//   provider = "drizzle-prisma-generator"
+//   output   = "../src/drizzle"
+// }
+
+plugin zod {
+  provider = '@core/zod'
+  output = 'generated/zod'
+  modelOnly = true // default is false
+  compile = false // default is true
+  // generateModels = ['User', 'Post']
+}
+
+plugin hooks {
+  provider = '@zenstackhq/tanstack-query'
+  target = 'react'
+  output = 'generated/hooks'
+}
+
+// plugin openapi {
+//   provider = '@zenstackhq/openapi'
+//   // flavor = 'rest'
+//   output = './openapi.json'
+//   title = 'Auto generated API'
+//   version = '0.1.0'
+//   summary = 'Created with ZenStack'
+//   description = 'Auto generated API created with ZenStack'
+//   prefix = '/api/models'
+//   securitySchemes = {
+//         bearer: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+//         basic: { type: 'http', scheme: 'basic' },
+//   // apiKey: { type: 'apiKey', in: 'header', name: 'X-API-KEY' }
+//     }
+// }
+

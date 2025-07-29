@@ -1,19 +1,21 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
 import { GENDER_LIST } from '@constants/constants'
 import type { DomProps } from '@constants/type'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import {
     useFindManyDM_DanToc,
     useFindManyDM_QuocGia,
     useFindManyDM_TonGiao,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, Row, Select, Typography } from 'antd'
+import { Col, Collapse, Form, Input, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
 
 dayjs.locale('vi')
 const { Title, Text } = Typography
 export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
-    const form = Form.useFormInstance<any>()
+    const form = Form.useFormInstance<SubmitForm>()
 
     const { data: nationalityData = [] } = useFindManyDM_QuocGia()
     const { data: religionData = [] } = useFindManyDM_TonGiao()
@@ -43,7 +45,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="code"
+                            name="lastName"
                             label="Họ và tên đệm"
                             rules={[
                                 {
@@ -60,7 +62,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="code"
+                            name="firstName"
                             label="Tên"
                             rules={[
                                 {
@@ -138,7 +140,12 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="code" label="Nguyên quán" className="mb-0">
+                        <FormItem
+                            form={form}
+                            name="originalPlace"
+                            label="Nguyên quán"
+                            className="mb-0"
+                        >
                             <Input placeholder="Nhập nguyên quán" className="h-9" />
                         </FormItem>
                     </Col>
@@ -155,7 +162,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="code" label="Nơi sinh" className="mb-0">
+                        <FormItem form={form} name="placeOfBirth" label="Nơi sinh" className="mb-0">
                             <Input placeholder="Nhập nơi sinh" className="h-9" />
                         </FormItem>
                     </Col>
@@ -180,7 +187,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="code"
+                            name="idCardNumber"
                             label="CCCD/CMND"
                             rules={[
                                 {
@@ -211,14 +218,19 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="code" label="Nơi cấp CCCD" className="mb-0">
+                        <FormItem
+                            form={form}
+                            name="placeOfIdCardNumber"
+                            label="Nơi cấp CCCD"
+                            className="mb-0"
+                        >
                             <Input placeholder="Nhập nơi cấp" className="h-9" />
                         </FormItem>
                     </Col>
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="idCardDate"
+                            name="idCardExpirationDate"
                             label="Ngày hết hạn CCCD"
                             className="mb-0"
                         >

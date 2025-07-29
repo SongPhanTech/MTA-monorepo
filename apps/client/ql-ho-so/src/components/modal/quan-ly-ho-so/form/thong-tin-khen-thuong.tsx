@@ -4,24 +4,53 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutKhenThuongModal from '@components/modal/quan-ly-ho-so/modals/put-thong-tin-khen-thuong'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { formatDate } from '@lib/utils'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { KhenThuong } from '@workspace/db'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function ThongTinKhenThuongForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
+    const khenThuongList: KhenThuong[] = Form.useWatch('khenThuong', form)
 
-    const { onOpen } = useDisclosure({
+    const { onOpen } = useDisclosure<Partial<KhenThuong> & { onSave: (val: KhenThuong) => void }>({
         tag: PutKhenThuongModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const handleSave = (data: KhenThuong) => {
+        const currentList = form.getFieldValue('khenThuong') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('khenThuong', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: KhenThuong, index: number) => {
+        const currentList = form.getFieldValue('khenThuong') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('khenThuong', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('khenThuong') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('khenThuong', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: KhenThuong, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: KhenThuong) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = khenThuongList && khenThuongList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,56 +102,54 @@ export default function ThongTinKhenThuongForm({ expland, setExpland }: DomProps
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => record?.hinhThucKhenThuong || '',
                         },
                         {
                             title: 'Cấp khen thưởng',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => record?.capKhenThuong || '',
                         },
                         {
                             title: 'Số quyết định',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => record?.soQuyetDinh || '',
                         },
                         {
                             title: 'Người ký',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => record?.nguoiKy || '',
                         },
                         {
                             title: 'Ngày nhận quyết định',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.information || '',
+                            render: (_, record) => formatDate(record?.ngayNhanQuyetDinh) || '',
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={khenThuongList}
                     pagination={false}
                 />
             </div>

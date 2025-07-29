@@ -1,4 +1,4 @@
-import logo_mta from '@assets/images/logo_mta.png'
+import logo_mta from '@assets/images/khaothi.svg'
 import HeaderApp from '@components/header'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
@@ -47,12 +47,12 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
         >
             <Layout style={{ minHeight: '100vh' }} hasSider className="bg-blue-50">
                 <SiderDefaultLayout
-                    logo1={<Image src={logo_mta} alt="logo k01" className="size-12" />}
+                    logo1={<Image src={logo_mta} alt="logo k01" className="size-10" />}
                     logo2={
-                        <div className="flex items-center justify-center flex-col text-center">
-                            <Image src={logo_mta} alt="logo k01" className="w-12 h-12 mb-2" />
-                            <span className="text-base font-bold color text-primary">
-                                HỌC VIỆN KỸ THUẬT QUÂN SỰ
+                        <div className="flex items-center justify-center text-center">
+                            <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
+                            <span className="text-xl font-bold color text-primary">
+                                Quản lý khảo thí
                             </span>
                         </div>
                     }
@@ -63,15 +63,15 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
                 />
                 <Layout
                     style={{
-                        marginInlineStart: collapsed ? 80 : 280, // Điều chỉnh margin theo trạng thái collapsed
+                        marginInlineStart: collapsed ? 80 : 230, // Điều chỉnh margin theo trạng thái collapsed
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm rounded-lg m-2">
-                        <span className="text-lg font-bold text-primary">PHÂN HỆ KHẢO THÍ</span>
+                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-full fixed z-[1000]">
+                        <span className="text-lg font-bold text-primary" />
                         <HeaderApp />
                     </Header>
-                    <Content className="mx-2">
+                    <Content className="mx-2 mt-20">
                         {/* <div
                             className={cn(
                                 'min-h-[calc(100vh-64px-24px)] rounded-lg',

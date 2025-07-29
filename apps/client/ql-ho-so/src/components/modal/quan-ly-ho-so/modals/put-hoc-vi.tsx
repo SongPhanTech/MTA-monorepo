@@ -4,11 +4,9 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { HocVi } from '@workspace/db'
 import {
-    useCreateHocVi,
     useFindManyDM_HocVi,
     useFindManyDM_QuocGia,
     useFindManyDM_TruongDaoTaoBacDH,
-    useUpdateHocVi,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
@@ -17,7 +15,11 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function PutHocViModal() {
     const [form] = Form.useForm<HocVi>()
 
-    const { isOpen, onClose, input } = useDisclosure<HocVi>({
+    const { isOpen, onClose, input } = useDisclosure<
+        Partial<HocVi> & {
+            onSave: (val: HocVi) => void
+        }
+    >({
         tag: PutHocViModal.name,
         onClose: form.resetFields,
     })
@@ -28,38 +30,18 @@ export default function PutHocViModal() {
     const { data: quocGia = [] } = useFindManyDM_QuocGia()
     const { data: truong = [] } = useFindManyDM_TruongDaoTaoBacDH()
 
-    const { mutateAsync: createHocVi } = useCreateHocVi()
-    const { mutateAsync: updateHocVi } = useUpdateHocVi()
-
     async function onOk(output: HocVi) {
         if (!output) return
         try {
             showSpinner()
-            if (input?.id) {
-                await updateHocVi({
-                    where: {
-                        id: input.id,
-                    },
-                    data: {
-                        academicDegreeTypeId: output.academicDegreeTypeId,
-                        linhVuc: output.linhVuc,
-                        truongId: output.truongId,
-                        nationalityId: output.nationalityId,
-                        year: output.year,
-                    },
-                })
-            } else {
-                await createHocVi({
-                    data: {
-                        academicDegreeTypeId: output.academicDegreeTypeId,
-                        linhVuc: output.linhVuc,
-                        truongId: output.truongId,
-                        nationalityId: output.nationalityId,
-                        year: output.year,
-                    },
-                })
+            const dataToSave: HocVi = {
+                ...output,
             }
-            message.success(input?.id ? 'Cập nhật học vị thành công' : 'Thêm mới học vị thành công')
+
+            if (input?.onSave) {
+                input.onSave(dataToSave)
+            }
+            message.success(isEdit ? 'Cập nhật học vị thành công' : 'Thêm mới học vị thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -68,16 +50,15 @@ export default function PutHocViModal() {
     }
 
     useEffect(() => {
-        if (input && isOpen) {
-            form.setFieldsValue({
-                academicDegreeTypeId: input.academicDegreeTypeId,
-                linhVuc: input.linhVuc,
-                truongId: input.truongId,
-                nationalityId: input.nationalityId,
-                year: input.year,
-            })
+        if (isOpen && input) {
+            const { onSave, ...formData } = input
+            if (Object.keys(formData).length > 0) {
+                form.setFieldsValue(formData)
+            }
         }
-    }, [input, isOpen, form])
+    }, [isOpen, input, form])
+
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
 
     return (
         <PutFormModal
@@ -85,7 +66,7 @@ export default function PutHocViModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật học vị' : 'Thêm mới học vị'}
+            title={isEdit ? 'Cập nhật học vị' : 'Thêm mới học vị'}
             className="w-[40vw]"
             layout="vertical"
         >

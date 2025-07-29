@@ -6,16 +6,15 @@ import type {
     TrainingBlockSubject,
 } from '@workspace/db'
 import { useCreateCurriculumVersion } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { message } from 'antd'
+import { useRouter } from 'next/router'
 import useSpinner from './spinner'
 
-interface UseCloneCurriculumVersionProps {
-    refetch?: () => void
-}
-
-export const useCloneCurriculumVersion = ({ refetch }: UseCloneCurriculumVersionProps) => {
+export const useCloneCurriculumVersion = () => {
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { showSpinner, hideSpinner } = useSpinner()
+    const router = useRouter()
 
     const handleCloneCurriculumVersion = async (
         initialValue: CurriculumVersion & {
@@ -103,12 +102,18 @@ export const useCloneCurriculumVersion = ({ refetch }: UseCloneCurriculumVersion
                 },
             }
 
-            await createCurriculumVersion({
+            const result = await createCurriculumVersion({
                 data: cloneData,
             })
 
             message.success('Sao chép phiên bản chương trình đào tạo thành công')
-            if (refetch) refetch()
+            if (result?.id) {
+                router.push(
+                    `${
+                        ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
+                    }/${result.id}`
+                )
+            }
         } catch (error) {
             console.error('Lỗi khi sao chép:', error)
             message.error('Đã xảy ra lỗi khi sao chép phiên bản')

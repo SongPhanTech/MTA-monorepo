@@ -133,7 +133,6 @@ model DM_KhuVuc_DiaLy extends CoreBase {
 }
 
 model DM_NgoaiNgu extends CoreBase {
-  ngoaiNgu NgoaiNgu[]
   @@schema("mta")
 }
 
@@ -143,7 +142,9 @@ model DM_TonGiao extends CoreBase {
 }
 
 model DM_TrinhDoNgoaiNgu extends CoreBase {
-  sKhung String?
+  sKhung   String?
+  ngoaiNgu NgoaiNgu[]
+
   @@schema("mta")
 }
 
@@ -158,10 +159,16 @@ model DM_NhanVien extends CoreBase {
   sTenDayDu           String?
   dNgaySinh           DateTime?
   iGioiTinh           Int?
+  sDM_QuocGiaId       String?        @db.Uuid
+  sDM_TinhId          String?        @db.Uuid
+  sDM_QuanHuyenId     String?        @db.Uuid
+  sDM_XaPhuongId      String?        @db.Uuid
   sDiaChi             String?
   sSDTDiDong          String?
   sEmail              String?
   bLaNguoiDung        Boolean?
+  bLaCanBoNhanVien    Boolean?
+  bLaHocVien          Boolean?
   sDM_DonViId         String?        @db.Uuid
   sDM_ViTriCongViecId String?        @db.Uuid
   sQuanlyTrucTiepId   String?        @db.Uuid
@@ -170,7 +177,6 @@ model DM_NhanVien extends CoreBase {
   group               Group?         @relation(fields: [groupId], references: [id])
   groupId             String?
 
-  userProfile         UserProfile[]
   notification        Notification[]
   feedback            Feedback[]
   conversation        Conversation[]
@@ -253,6 +259,6 @@ model DM_XaPhuong extends CoreBase {
 
 model DM_ViTriCongViec extends CoreBase {
   sDM_ChucDanhId  String? @db.Uuid
-  sDM_NhomViTriId String  @db.Uuid
+  sDM_NhomViTriId String? @db.Uuid
   @@schema("mta")
 }

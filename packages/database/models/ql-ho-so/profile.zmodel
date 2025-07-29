@@ -24,20 +24,34 @@ enum UserType {
 }
 
 model UserProfile extends Base {
-  user                       DM_NhanVien?              @relation(fields: [userId], references: [Id])
-  userId                     String?                   @unique @db.Uuid
   userType                   UserType                  @default(OTHER)
+  bLaNguoiDung               Boolean?
+  bLaCanBoNhanVien           Boolean?
+  bLaHocVien                 Boolean?
+  group                      Group?                    @relation(fields: [groupId], references: [id])
+  groupId                    String?
+  sDM_DonViId                String?                   @db.Uuid
+  sDM_ViTriCongViecId        String?                   @db.Uuid
+  sQuanlyTrucTiepId          String?                   @db.Uuid
+  iDictionaryKey             Int?
+  bSystem                    Boolean?
+  sNguoiTao                  String?
+  sNguoiSua                  String?
+  sThietBiTao                String?
+  sThietBiSua                String?  
 
   // general information
   avatar                     String? // đường dẫn ảnh đại diện
   firstName                  String
   lastName                   String
   idCardNumber               String                    @unique // số căn cước công dân
+  placeOfIdCardNumber        String?
   fullname                   String?
   healthInsuranceNumber      String?   // số bảo hiểm y tế
   bankAccountNumber          String?   // số tài khoản ngân hàng
   bankName                   String?   // tên ngân hàng
   currentAddress             String? // địa chỉ hiện tại
+  nationalId                 String?                   @db.Uuid
   provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?                   @db.Uuid
   communeCurrentAddress      DM_XaPhuong?              @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
@@ -50,6 +64,7 @@ model UserProfile extends Base {
   communeOfBirthId           String?                   @db.Uuid
   homeTown                   String? // quê quán
   idCardDate                 DateTime? // ngày cấp
+  idCardExpirationDate       DateTime? // ngày hết hạn CCCD
   gender                     Gender?
   permanentAddress           String? // địa chỉ thường trú
   provincePermanentAddress   DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
@@ -101,7 +116,7 @@ model UserProfile extends Base {
   dischargeDate              DateTime? // ngày xuất ngũ
 
   //nguyên quán
-  originalPlace             String?
+  originalPlace              String?
 
   // người thân
   familyPhone                String?
@@ -123,6 +138,8 @@ model UserProfile extends Base {
   kyLuat                     KyLuat[]
   doiTuongChinhSach          DoiTuongChinhSach[]
   keKhaiTaiSan               KeKhaiTaiSan[]
+  hocVi                      HocVi[]
+  hocHam                     HocHam[]
 
 
   trinhDoHocVan              DM_TrinhDoHocVan?         @relation(fields: [trinhDoHocVanId], references: [id])
@@ -141,13 +158,16 @@ model UserProfile extends Base {
 }
 
 model HocHam extends Base {
-  academicRankType   DM_HocHam? @relation(fields: [academicRankTypeId], references: [Id])
-  academicRankTypeId String?    @db.Uuid
+  academicRankType   DM_HocHam?  @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId String?     @db.Uuid
 
   noiCap             String?
   soQuyetDinh        String?
   from               DateTime?
   to                 DateTime?
+
+  userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId      String
 
   @@schema("ql-ho-so")
 }
@@ -164,6 +184,9 @@ model HocVi extends Base {
   truongId             String?
   year                 Int?
 
+  userProfile          UserProfile           @relation(fields: [userProfileId], references: [id])
+  userProfileId        String
+
   @@schema("ql-ho-so")
 }
 
@@ -174,7 +197,8 @@ model Relative extends Base {
   job            String?
   information    String?
 
-  profiles       UserProfile[]
+  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId  String
 
   dM_MoiQuanHe   DM_MoiQuanHe? @relation(fields: [dM_MoiQuanHeId], references: [id])
   dM_MoiQuanHeId String?
@@ -218,10 +242,10 @@ model NgoaiNgu extends Base {
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
 
-  dM_NgoaiNgu     DM_NgoaiNgu @relation(fields: [dM_NgoaiNguId], references: [Id])
-  dM_NgoaiNguId   String      @db.Uuid
+  trinhDo         DM_TrinhDoNgoaiNgu @relation(fields: [trinhDoId], references: [Id])
+  trinhDoId       String             @db.Uuid
 
-  userProfile     UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfile     UserProfile        @relation(fields: [userProfileId], references: [id])
   userProfileId   String
 
   @@schema("ql-ho-so")
@@ -256,7 +280,7 @@ model BoiDuongQuocPhongAnNinh extends Base {
 model CapBac extends Base {
   noiRaQuyetDinh    String?
   capRaQuyetDinh    String?
-  ngayNhanQuyetDinh String?
+  ngayNhanQuyetDinh DateTime?
 
   capBac            DM_CapBac   @relation(fields: [capBacId], references: [Id])
   capBacId          String      @db.Uuid
@@ -271,7 +295,7 @@ model QuaTrinhCongTac extends Base {
   tuThangNam        DateTime?
   denThangNam       DateTime?
 
-  donvi             String?
+  donVi             String?
 
   chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
   chucVuId          String             @db.Uuid
@@ -289,7 +313,7 @@ model QuaTrinhCuDiCongTac extends Base {
   tuThangNam    DateTime?
   denThangNam   DateTime?
 
-  donvi         String
+  donVi         String
 
   chucVu        DM_ChucVu   @relation(fields: [chucVuId], references: [Id])
   chucVuId      String      @db.Uuid
@@ -345,6 +369,7 @@ model DoiTuongChinhSach extends Base {
   tenDoiTuong   String?
   ngayBatDau    DateTime?
   ngayKetThuc   DateTime?
+  ghiChu        String?
 
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId String

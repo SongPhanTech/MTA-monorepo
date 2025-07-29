@@ -4,24 +4,55 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutKeKhaiTaiSanModal from '@components/modal/quan-ly-ho-so/modals/put-ke-khai-tai-san'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { formatDate } from '@lib/utils'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { KeKhaiTaiSan } from '@workspace/db'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function KeKhaiTaiSanForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
+    const keKhaiList: KeKhaiTaiSan[] = Form.useWatch('keKhaiTaiSan', form)
 
-    const { onOpen } = useDisclosure({
+    const { onOpen } = useDisclosure<
+        Partial<KeKhaiTaiSan> & { onSave: (val: KeKhaiTaiSan) => void }
+    >({
         tag: PutKeKhaiTaiSanModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const handleSave = (data: KeKhaiTaiSan) => {
+        const currentList = form.getFieldValue('keKhaiTaiSan') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('keKhaiTaiSan', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: KeKhaiTaiSan, index: number) => {
+        const currentList = form.getFieldValue('keKhaiTaiSan') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('keKhaiTaiSan', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('keKhaiTaiSan') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('keKhaiTaiSan', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: KeKhaiTaiSan, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: KeKhaiTaiSan) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = keKhaiList && keKhaiList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,44 +104,42 @@ export default function KeKhaiTaiSanForm({ expland, setExpland }: DomProps) {
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => record?.tenDot || '',
                         },
                         {
                             title: 'Loại',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => record?.loai || '',
                         },
                         {
                             title: 'Thời gian kê khai',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => formatDate(record?.thoiGianKeKhai) || '',
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={keKhaiList}
                     pagination={false}
                 />
             </div>

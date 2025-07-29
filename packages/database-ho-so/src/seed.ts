@@ -1,0 +1,270 @@
+import { PrismaClient, UserType } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+async function main() {
+    await prisma.dM_DonVi.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                Id: 'K6',
+                sTen: 'Khoa Cơ khí',
+                sMa: 'K6',
+                sGhiChu: 'Khoa Cơ khí',
+                sParentId: null,
+            },
+            {
+                Id: 'K6',
+                sTen: 'Khoa Quân sự',
+                sMa: 'K6',
+                sGhiChu: 'Khoa Quân sự',
+                sParentId: null,
+            },
+            {
+                Id: 'K13',
+                sTen: 'Khoa Ngoại ngữ',
+                sMa: 'K13',
+                sGhiChu: 'Khoa Ngoại ngữ',
+                sParentId: null,
+            },
+            {
+                Id: 'K21',
+                sTen: 'Khoa Vũ khí',
+                sMa: 'K21',
+                sGhiChu: 'Khoa Vũ khí',
+                sParentId: null,
+            },
+            {
+                Id: 'K11',
+                sTen: 'Khoa Hàng không vũ trụ',
+                sMa: 'K11',
+                sGhiChu: 'Khoa Hàng không vũ trụ',
+                sParentId: null,
+            },
+            {
+                Id: 'K31',
+                sTen: 'Khoa Vô tuyến điện tử',
+                sMa: 'K31',
+                sGhiChu: 'Khoa Vô tuyến điện tử',
+                sParentId: null,
+            },
+            {
+                Id: 'CNTT',
+                sTen: 'Khoa Công nghệ thông tin',
+                sMa: 'KCNTT',
+                sGhiChu: 'Khoa CNTT',
+                sParentId: null,
+            },
+            {
+                Id: 'K51',
+                sTen: 'Khoa Mác- Lênin, Tư tưởng Hồ Chí Minh',
+                sMa: 'K51',
+                sGhiChu: 'Khoa Mác- Lênin, Tư tưởng Hồ Chí Minh',
+                sParentId: null,
+            },
+            {
+                Id: 'K52',
+                sTen: 'Khoa Công tác Đảng-Công tác Chính trị',
+                sMa: 'K52',
+                sGhiChu: 'Khoa Công tác Đảng-Công tác Chính trị',
+                sParentId: null,
+            },
+            {
+                Id: 'V4',
+                sTen: 'Viện Cơ khí động lực',
+                sMa: 'V4',
+                sGhiChu: 'Viện Cơ khí động lực',
+                sParentId: null,
+            },
+            {
+                Id: 'V6',
+                sTen: ' Viện Công nghệ Mô phỏng',
+                sMa: 'V6',
+                sGhiChu: ' Viện Công nghệ Mô phỏng',
+                sParentId: null,
+            },
+        ],
+    })
+
+    await prisma.userProfile.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: 'UPF1',
+                firstName: 'Nguyễn Thành',
+                lastName: 'An',
+                idCardNumber: '0010202020202',
+                dateOfBirth: new Date('2004-07-22'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF2',
+                firstName: 'Trần Văn',
+                lastName: 'Bình',
+                idCardNumber: '0010202020203',
+                dateOfBirth: new Date('2003-05-10'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF3',
+                firstName: 'Lê Thị',
+                lastName: 'Cẩm',
+                idCardNumber: '0010202020204',
+                dateOfBirth: new Date('2002-11-01'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF4',
+                firstName: 'Phạm Minh',
+                lastName: 'Dũng',
+                idCardNumber: '0010202020205',
+                dateOfBirth: new Date('2000-01-20'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF5',
+                firstName: 'Hoàng Thị',
+                lastName: 'Em',
+                idCardNumber: '0010202020206',
+                dateOfBirth: new Date('2001-09-05'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF6',
+                firstName: 'Võ Văn',
+                lastName: 'Phát',
+                idCardNumber: '0010202020207',
+                dateOfBirth: new Date('2002-02-14'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF7',
+                firstName: 'Ngô Thị',
+                lastName: 'Giang',
+                idCardNumber: '0010202020208',
+                dateOfBirth: new Date('2003-07-01'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF8',
+                firstName: 'Đỗ Minh',
+                lastName: 'Hải',
+                idCardNumber: '0010202020209',
+                dateOfBirth: new Date('2001-12-30'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF9',
+                firstName: 'Bùi Thị',
+                lastName: 'Hương',
+                idCardNumber: '0010202020210',
+                dateOfBirth: new Date('2004-04-09'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF10',
+                firstName: 'Nguyễn Văn',
+                lastName: 'Khoa',
+                idCardNumber: '0010202020211',
+                dateOfBirth: new Date('2000-06-20'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF11',
+                firstName: 'Lê Thị',
+                lastName: 'Linh',
+                idCardNumber: '0010202020212',
+                dateOfBirth: new Date('2001-03-22'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF12',
+                firstName: 'Phan Minh',
+                lastName: 'Long',
+                idCardNumber: '0010202020213',
+                dateOfBirth: new Date('2002-08-19'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF13',
+                firstName: 'Đặng Thị',
+                lastName: 'Mai',
+                idCardNumber: '0010202020214',
+                dateOfBirth: new Date('2004-10-01'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF14',
+                firstName: 'Trương Văn',
+                lastName: 'Nam',
+                idCardNumber: '0010202020215',
+                dateOfBirth: new Date('2003-01-12'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF15',
+                firstName: 'Nguyễn Thị',
+                lastName: 'Oanh',
+                idCardNumber: '0010202020216',
+                dateOfBirth: new Date('2002-09-09'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF16',
+                firstName: 'Tô Văn',
+                lastName: 'Phú',
+                idCardNumber: '0010202020217',
+                dateOfBirth: new Date('2000-04-01'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF17',
+                firstName: 'Nguyễn Thị',
+                lastName: 'Quỳnh',
+                idCardNumber: '0010202020218',
+                dateOfBirth: new Date('2001-07-17'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF18',
+                firstName: 'Trần Văn',
+                lastName: 'Sơn',
+                idCardNumber: '0010202020219',
+                dateOfBirth: new Date('2003-11-23'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF19',
+                firstName: 'Mai Thị',
+                lastName: 'Trang',
+                idCardNumber: '0010202020220',
+                dateOfBirth: new Date('2002-06-18'),
+                userType: UserType.CIVILIAN_STUDENT,
+            },
+            {
+                id: 'UPF20',
+                firstName: 'Vũ Văn',
+                lastName: 'Vũ',
+                idCardNumber: '0010202020221',
+                dateOfBirth: new Date('2000-12-05'),
+                userType: UserType.MILITARY_STUDENT,
+            },
+            {
+                id: 'UPF20',
+                firstName: 'Vũ Văn',
+                lastName: 'Việt',
+                idCardNumber: '0010202020221',
+                dateOfBirth: new Date('1980-11-04'),
+                userType: UserType.LECTURER,
+            },
+        ],
+    })
+}
+
+main()
+    .catch((e) => {
+        console.error(e)
+    })
+    .finally(async () => {
+        await prisma.$disconnect()
+    })

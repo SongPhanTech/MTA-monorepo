@@ -98,7 +98,8 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                               label: i?.trainingBlock?.name,
                           })
                       )
-                    : []
+                    : [],
+                'value'
             )
 
             if (onlyInOld.length || onlyInNew.length) {

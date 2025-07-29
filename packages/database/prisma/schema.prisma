@@ -15,10 +15,6 @@ generator client {
   binaryTargets   = ["native"]
 }
 
-generator dbml {
-  provider = "prisma-dbml-generator"
-}
-
 enum ConfigKey {
   DIRECTOR
   ACADEMY_NAME
@@ -702,7 +698,7 @@ model StudentSubjectScore {
   attendanceScore  Float?
   midtermScore     Float?
   examScore        Float?
-  finalScore       Decimal?                                   @db.Decimal(5, 2)
+  finalScore       Decimal?                                   @db.Decimal(5, 1)
   manualFinalScore Float?
   examPostponed    Boolean                                    @default(false)
   exempted         Boolean                                    @default(false)
@@ -1669,6 +1665,7 @@ model Group {
   name        String
   users       DM_NhanVien[]
   roles       Role[]
+  userProfile UserProfile[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -2056,22 +2053,21 @@ model DM_KhuVuc_DiaLy {
 }
 
 model DM_NgoaiNgu {
-  Id             String     @id() @default(uuid()) @db.Uuid()
+  Id             String    @id() @default(uuid()) @db.Uuid()
   sMa            String?
   sTen           String?
   sGhiChu        String?
-  iSTT           Int?       @default(0)
-  bActive        Boolean?   @default(true)
-  bDeleted       Boolean?   @default(false)
-  bSystem        Boolean?   @default(false)
-  iDictionaryKey Int?       @default(0)
+  iSTT           Int?      @default(0)
+  bActive        Boolean?  @default(true)
+  bDeleted       Boolean?  @default(false)
+  bSystem        Boolean?  @default(false)
+  iDictionaryKey Int?      @default(0)
   dNgayTao       DateTime?
   dNgaySua       DateTime?
   sNguoiTao      String?
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
-  ngoaiNgu       NgoaiNgu[]
 
   @@schema("mta")
 }
@@ -2098,15 +2094,15 @@ model DM_TonGiao {
 }
 
 model DM_TrinhDoNgoaiNgu {
-  Id             String    @id() @default(uuid()) @db.Uuid()
+  Id             String     @id() @default(uuid()) @db.Uuid()
   sMa            String?
   sTen           String?
   sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
+  iSTT           Int?       @default(0)
+  bActive        Boolean?   @default(true)
+  bDeleted       Boolean?   @default(false)
+  bSystem        Boolean?   @default(false)
+  iDictionaryKey Int?       @default(0)
   dNgayTao       DateTime?
   dNgaySua       DateTime?
   sNguoiTao      String?
@@ -2114,6 +2110,7 @@ model DM_TrinhDoNgoaiNgu {
   sThietBiTao    String?
   sThietBiSua    String?
   sKhung         String?
+  ngoaiNgu       NgoaiNgu[]
 
   @@schema("mta")
 }
@@ -2160,17 +2157,22 @@ model DM_NhanVien {
   sTenDayDu           String?
   dNgaySinh           DateTime?
   iGioiTinh           Int?
+  sDM_QuocGiaId       String?        @db.Uuid()
+  sDM_TinhId          String?        @db.Uuid()
+  sDM_QuanHuyenId     String?        @db.Uuid()
+  sDM_XaPhuongId      String?        @db.Uuid()
   sDiaChi             String?
   sSDTDiDong          String?
   sEmail              String?
   bLaNguoiDung        Boolean?
+  bLaCanBoNhanVien    Boolean?
+  bLaHocVien          Boolean?
   sDM_DonViId         String?        @db.Uuid()
   sDM_ViTriCongViecId String?        @db.Uuid()
   sQuanlyTrucTiepId   String?        @db.Uuid()
   sAvatarId           String?
   group               Group?         @relation(fields: [groupId], references: [id])
   groupId             String?
-  userProfile         UserProfile[]
   notification        Notification[]
   feedback            Feedback[]
   conversation        Conversation[]
@@ -2388,7 +2390,7 @@ model DM_ViTriCongViec {
   sThietBiTao     String?
   sThietBiSua     String?
   sDM_ChucDanhId  String?   @db.Uuid()
-  sDM_NhomViTriId String    @db.Uuid()
+  sDM_NhomViTriId String?   @db.Uuid()
 
   @@schema("mta")
 }
@@ -2401,18 +2403,32 @@ model UserProfile {
   deletedAt                  DateTime?
   createdAt                  DateTime                  @default(now())
   updatedAt                  DateTime                  @updatedAt()
-  user                       DM_NhanVien?              @relation(fields: [userId], references: [Id])
-  userId                     String?                   @unique() @db.Uuid()
   userType                   UserType                  @default(OTHER)
+  bLaNguoiDung               Boolean?
+  bLaCanBoNhanVien           Boolean?
+  bLaHocVien                 Boolean?
+  group                      Group?                    @relation(fields: [groupId], references: [id])
+  groupId                    String?
+  sDM_DonViId                String?                   @db.Uuid()
+  sDM_ViTriCongViecId        String?                   @db.Uuid()
+  sQuanlyTrucTiepId          String?                   @db.Uuid()
+  iDictionaryKey             Int?
+  bSystem                    Boolean?
+  sNguoiTao                  String?
+  sNguoiSua                  String?
+  sThietBiTao                String?
+  sThietBiSua                String?
   avatar                     String?
   firstName                  String
   lastName                   String
   idCardNumber               String                    @unique()
+  placeOfIdCardNumber        String?
   fullname                   String?
   healthInsuranceNumber      String?
   bankAccountNumber          String?
   bankName                   String?
   currentAddress             String?
+  nationalId                 String?                   @db.Uuid()
   provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?                   @db.Uuid()
   communeCurrentAddress      DM_XaPhuong?              @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
@@ -2425,6 +2441,7 @@ model UserProfile {
   communeOfBirthId           String?                   @db.Uuid()
   homeTown                   String?
   idCardDate                 DateTime?
+  idCardExpirationDate       DateTime?
   gender                     Gender?
   permanentAddress           String?
   provincePermanentAddress   DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
@@ -2484,6 +2501,8 @@ model UserProfile {
   kyLuat                     KyLuat[]
   doiTuongChinhSach          DoiTuongChinhSach[]
   keKhaiTaiSan               KeKhaiTaiSan[]
+  hocVi                      HocVi[]
+  hocHam                     HocHam[]
   trinhDoHocVan              DM_TrinhDoHocVan?         @relation(fields: [trinhDoHocVanId], references: [id])
   trinhDoHocVanId            String?
   /// hồ sơ đào tạo
@@ -2499,19 +2518,21 @@ model UserProfile {
 }
 
 model HocHam {
-  id                 String     @id() @default(cuid())
-  code               String?    @unique()
-  active             Boolean    @default(true)
-  description        String?    @db.Text()
+  id                 String      @id() @default(cuid())
+  code               String?     @unique()
+  active             Boolean     @default(true)
+  description        String?     @db.Text()
   deletedAt          DateTime?
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt()
-  academicRankType   DM_HocHam? @relation(fields: [academicRankTypeId], references: [Id])
-  academicRankTypeId String?    @db.Uuid()
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt()
+  academicRankType   DM_HocHam?  @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId String?     @db.Uuid()
   noiCap             String?
   soQuyetDinh        String?
   from               DateTime?
   to                 DateTime?
+  userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId      String
 
   @@schema("ql-ho-so")
 }
@@ -2532,6 +2553,8 @@ model HocVi {
   truong               DM_TruongDaoTaoBacDH? @relation(fields: [truongId], references: [id])
   truongId             String?
   year                 Int?
+  userProfile          UserProfile           @relation(fields: [userProfileId], references: [id])
+  userProfileId        String
 
   @@schema("ql-ho-so")
 }
@@ -2548,7 +2571,8 @@ model Relative {
   birthYear      Int?
   job            String?
   information    String?
-  profiles       UserProfile[]
+  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId  String
   dM_MoiQuanHe   DM_MoiQuanHe? @relation(fields: [dM_MoiQuanHeId], references: [id])
   dM_MoiQuanHeId String?
 
@@ -2596,20 +2620,20 @@ model TrinhDoQuanLyNhaNuoc {
 }
 
 model NgoaiNgu {
-  id              String      @id() @default(cuid())
-  code            String?     @unique()
-  active          Boolean     @default(true)
-  description     String?     @db.Text()
+  id              String             @id() @default(cuid())
+  code            String?            @unique()
+  active          Boolean            @default(true)
+  description     String?            @db.Text()
   deletedAt       DateTime?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt()
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt()
   hinhThucDaoTao  String?
   noiDaoTao       String?
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
-  dM_NgoaiNgu     DM_NgoaiNgu @relation(fields: [dM_NgoaiNguId], references: [Id])
-  dM_NgoaiNguId   String      @db.Uuid()
-  userProfile     UserProfile @relation(fields: [userProfileId], references: [id])
+  trinhDo         DM_TrinhDoNgoaiNgu @relation(fields: [trinhDoId], references: [Id])
+  trinhDoId       String             @db.Uuid()
+  userProfile     UserProfile        @relation(fields: [userProfileId], references: [id])
   userProfileId   String
 
   @@schema("ql-ho-so")
@@ -2662,7 +2686,7 @@ model CapBac {
   updatedAt         DateTime    @updatedAt()
   noiRaQuyetDinh    String?
   capRaQuyetDinh    String?
-  ngayNhanQuyetDinh String?
+  ngayNhanQuyetDinh DateTime?
   capBac            DM_CapBac   @relation(fields: [capBacId], references: [Id])
   capBacId          String      @db.Uuid()
   userProfile       UserProfile @relation(fields: [userProfileId], references: [id])
@@ -2681,7 +2705,7 @@ model QuaTrinhCongTac {
   updatedAt         DateTime           @updatedAt()
   tuThangNam        DateTime?
   denThangNam       DateTime?
-  donvi             String?
+  donVi             String?
   chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
   chucVuId          String             @db.Uuid()
   loaiHinhCongTac   DM_LoaiHinhCongTac @relation(fields: [loaiHinhCongTacId], references: [id])
@@ -2702,7 +2726,7 @@ model QuaTrinhCuDiCongTac {
   updatedAt     DateTime    @updatedAt()
   tuThangNam    DateTime?
   denThangNam   DateTime?
-  donvi         String
+  donVi         String
   chucVu        DM_ChucVu   @relation(fields: [chucVuId], references: [Id])
   chucVuId      String      @db.Uuid()
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
@@ -2780,6 +2804,7 @@ model DoiTuongChinhSach {
   tenDoiTuong   String?
   ngayBatDau    DateTime?
   ngayKetThuc   DateTime?
+  ghiChu        String?
   userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId String
 

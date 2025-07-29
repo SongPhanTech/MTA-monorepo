@@ -4,7 +4,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import useScoreToWords from '@hooks/useScoreToWords'
-import type { SubjectClass } from '@workspace/db'
+import type { Prisma, SubjectClass } from '@workspace/db'
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { Button, Col, Modal, message, Row } from 'antd'
 import dayjs from 'dayjs'
@@ -21,9 +21,63 @@ export enum EnumInPhieuDiem {
 }
 
 type ModalPrintToKQHTInput = {
-    dataTable: any
+    dataTable: DataTable[]
     type?: EnumInPhieuDiem // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
 }
+
+type DataTable = Prisma.StudentSubjectScoreGetPayload<{
+    include: {
+        student: {
+            include: {
+                userProfile: true
+                fixedClass: {
+                    include: {
+                        trainingCourse: {
+                            include: {
+                                scoreConverts: true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        subjectClass: {
+            include: {
+                subject: true
+                semester: {
+                    include: {
+                        schoolYear: true
+                    }
+                }
+                mainLecturer: {
+                    include: {
+                        userProfile: true
+                    }
+                }
+                extraLecturer: {
+                    include: {
+                        userProfile: true
+                    }
+                }
+                enterGradeLecturer: {
+                    include: {
+                        userProfile: true
+                    }
+                }
+            }
+        }
+        awards: {
+            include: {
+                archivedAward: true
+            }
+        }
+        certificates: {
+            include: {
+                archivedCertificate: true
+            }
+        }
+    }
+}>
 
 const ModalPrintStudentSubjectScore = () => {
     const formattedDate = '..., ngày ... tháng ... năm ...'
@@ -34,6 +88,8 @@ const ModalPrintStudentSubjectScore = () => {
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
         tag: ModalPrintStudentSubjectScore.name,
     })
+
+    console.log(input?.dataTable)
 
     const { data } = useFindUniqueSubjectClass(
         {
@@ -198,7 +254,7 @@ const ModalPrintStudentSubjectScore = () => {
         },
         {
             title: 'Ngày thi:',
-            value: <span>{dayjs(data?.examDate).format('DD/MM/YYYY')}</span>,
+            value: <span>{data?.examDate ? dayjs(data?.examDate).format('DD/MM/YYYY') : '-'}</span>,
         },
         {
             title: 'Quân số:',
@@ -396,7 +452,7 @@ const ModalPrintStudentSubjectScore = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {input?.dataTable?.map((item: any, index: number) => (
+                            {input?.dataTable?.map((item, index: number) => (
                                 <tr key={item.id}>
                                     <td className="border border-black text-center">{index + 1}</td>
                                     <td className="border border-black text-center">
@@ -423,11 +479,15 @@ const ModalPrintStudentSubjectScore = () => {
                                         {item?.examScore}
                                     </td>
                                     <td className="border border-black text-center">
-                                        {item?.manualFinalScore || item?.finalScore}
+                                        {item?.manualFinalScore || item?.finalScore?.toString()}
                                     </td>
                                     <td className="border border-black text-center">{''}</td>
                                     <td className="border border-black text-left">
-                                        {convert(item?.manualFinalScore || item?.finalScore)}
+                                        {convert(
+                                            item?.manualFinalScore ||
+                                                item?.finalScore?.toNumber() ||
+                                                0
+                                        )}
                                     </td>
                                     <td className="border border-black text-left">
                                         {(() => {

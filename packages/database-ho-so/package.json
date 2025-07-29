@@ -1,0 +1,36 @@
+{
+    "name": "@workspace/db-ho-so",
+    "version": "0.0.0",
+    "scripts": {
+        "generate:sql": "prisma generate --sql",
+        "generate": "zenstack generate",
+        "db:push": "prisma db push --skip-generate",
+        "db:sync": "zenstack generate && prisma db push --skip-generate"
+    },
+    "exports": {
+        ".": "./src/index.ts",
+        "./sql": "./src/typedSql.ts",
+        "./zod": "./generated/zod/index.ts",
+        "./zod/models": "./generated/zod/models/index.ts",
+        "./zod/enums": "./generated/zod/enums/index.ts",
+        "./hooks": "./generated/hooks/index.ts",
+        "./hono": "./src/hono/index.ts"
+    },
+    "dependencies": {
+        "@prisma/client": "catalog:",
+        "@zenstackhq/runtime": "catalog:",
+        "dayjs": "catalog:",
+        "decimal.js": "catalog:",
+        "zod": "catalog:"
+    },
+    "devDependencies": {
+        "@paralleldrive/cuid2": "github:paralleldrive/cuid2",
+        "@workspace/typescript-config": "workspace:*",
+        "@zenstackhq/openapi": "catalog:",
+        "@zenstackhq/server": "catalog:",
+        "@zenstackhq/tanstack-query": "catalog:",
+        "prisma": "catalog:",
+        "prisma-dbml-generator": "catalog:",
+        "zenstack": "catalog:"
+    }
+}

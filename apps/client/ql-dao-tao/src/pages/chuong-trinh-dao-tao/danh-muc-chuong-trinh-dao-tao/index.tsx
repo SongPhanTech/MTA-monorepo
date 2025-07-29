@@ -32,11 +32,10 @@ import {
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import { BookPlus, Eye, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingProgramCatalog() {
@@ -250,13 +249,6 @@ export default function TrainingProgramCatalog() {
         orderBy: { name: 'asc' },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-
     const { onOpen: onOpenCurriculum, onClose: onCloseCurriculum } = useDisclosure<string>({
         tag: PutCurriculum.name,
     })
@@ -319,9 +311,7 @@ export default function TrainingProgramCatalog() {
         }
     }
 
-    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({
-        refetch,
-    })
+    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion()
 
     return (
         <div>

@@ -2,26 +2,65 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutTinHocModal from '@components/modal/quan-ly-ho-so/modals/put-tin-hoc'
+import PutQuaTrinhCuDiBoiDuongModal from '@components/modal/quan-ly-ho-so/modals/put-qua-trinh-di-dao-tao-boi-duong'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { formatDate } from '@lib/utils'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { QuaTrinhCuDiDaoTao } from '@workspace/db'
+import { useFindManyDM_LoaiHinhDiHocTap } from '@workspace/db/hooks'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function QuaTrinhDiDaoTaoBoiDuongForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
+    const daoTaoList: QuaTrinhCuDiDaoTao[] = Form.useWatch('quaTrinhCuDiDaoTao', form)
 
-    const { onOpen } = useDisclosure({
-        tag: PutTinHocModal.name,
+    const { onOpen } = useDisclosure<
+        Partial<QuaTrinhCuDiDaoTao> & { onSave: (val: QuaTrinhCuDiDaoTao) => void }
+    >({
+        tag: PutQuaTrinhCuDiBoiDuongModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const { data: loaiHinhList } = useFindManyDM_LoaiHinhDiHocTap(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCuDiDaoTao'),
+        }
+    )
+
+    const handleSave = (data: QuaTrinhCuDiDaoTao) => {
+        const currentList = form.getFieldValue('quaTrinhCuDiDaoTao') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('quaTrinhCuDiDaoTao', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: QuaTrinhCuDiDaoTao, index: number) => {
+        const currentList = form.getFieldValue('quaTrinhCuDiDaoTao') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('quaTrinhCuDiDaoTao', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('quaTrinhCuDiDaoTao') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('quaTrinhCuDiDaoTao', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: QuaTrinhCuDiDaoTao, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: QuaTrinhCuDiDaoTao) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = daoTaoList && daoTaoList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,56 +112,59 @@ export default function QuaTrinhDiDaoTaoBoiDuongForm({ expland, setExpland }: Do
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => record?.ten || '',
                         },
                         {
                             title: 'Đơn vị tổ chức',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => record?.donViToChuc || '',
                         },
                         {
                             title: 'Loại',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => {
+                                const loaiHinh = loaiHinhList?.find(
+                                    (item) => item.id === record?.loaiId
+                                )
+                                return loaiHinh ? loaiHinh.name : ''
+                            },
                         },
                         {
                             title: 'Từ ngày',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => formatDate(record?.tuNgay) || '',
                         },
                         {
                             title: 'Đến ngày',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.information || '',
+                            render: (_, record) => formatDate(record?.denNgay) || '',
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={daoTaoList}
                     pagination={false}
                 />
             </div>

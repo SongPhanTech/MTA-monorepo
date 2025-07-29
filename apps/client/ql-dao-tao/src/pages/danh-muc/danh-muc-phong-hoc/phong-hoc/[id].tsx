@@ -178,6 +178,18 @@ export default function BuildingPage() {
                                 type: 'input',
                             },
                             {
+                                title: 'Số chỗ ngồi',
+                                dataIndex: 'capacity',
+                                align: 'center',
+                                type: 'order',
+                            },
+                            {
+                                title: 'Số chỗ ngồi thi',
+                                dataIndex: 'examCapacity',
+                                align: 'center',
+                                type: 'order',
+                            },
+                            {
                                 title: 'Mô tả',
                                 align: 'center',
                                 dataIndex: 'description',

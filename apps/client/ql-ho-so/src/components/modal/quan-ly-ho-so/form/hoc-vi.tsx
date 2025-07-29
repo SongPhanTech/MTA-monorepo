@@ -4,55 +4,81 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutHocViModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-vi'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { HocVi } from '@workspace/db'
-import { useFindManyHocVi, useUpdateHocVi } from '@workspace/db/hooks'
-import { Button, Col, Collapse, Flex, message, Row, Typography } from 'antd'
+import {
+    useFindManyDM_HocVi,
+    useFindManyDM_QuocGia,
+    useFindManyDM_TruongDaoTaoBacDH,
+} from '@workspace/db/hooks'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function HocViForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
 
-    const { onOpen } = useDisclosure<Partial<HocVi>>({
+    const hocViList: HocVi[] = Form.useWatch('hocVi', form)
+
+    const { onOpen } = useDisclosure<
+        Partial<HocVi> & {
+            onSave: (val: HocVi) => void
+        }
+    >({
         tag: PutHocViModal.name,
     })
 
-    const { data: hocViData = [], refetch } = useFindManyHocVi({
-        include: {
-            nationality: true,
-            truong: true,
-            academicDegreeType: true,
-        },
-    })
-    const { mutate: updateHocVi } = useUpdateHocVi()
+    const { data: quocGiaData = [] } = useFindManyDM_QuocGia(
+        {},
+        {
+            enabled: expland.includes('hocVi'),
+        }
+    )
+    const { data: truongData = [] } = useFindManyDM_TruongDaoTaoBacDH(
+        {},
+        {
+            enabled: expland.includes('hocVi'),
+        }
+    )
+    const { data: hocViData = [] } = useFindManyDM_HocVi(
+        {},
+        {
+            enabled: expland.includes('hocVi'),
+        }
+    )
+
+    const handleSave = (data: HocVi) => {
+        const currentList = form.getFieldValue('hocVi') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('hocVi', newList)
+    }
+
+    const handleUpdate = (data: HocVi, index: number) => {
+        const currentList = form.getFieldValue('hocVi') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('hocVi', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('hocVi') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('hocVi', newList)
+    }
 
     const handleModal = () => {
-        onOpen()
+        onOpen({ onSave: handleSave })
     }
 
-    const hasData = hocViData && hocViData.length > 0
-
-    const handleDeleteHocVi = async (id: string) => {
-        try {
-            showSpinner()
-            await updateHocVi({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-            message.success('Xóa thành công')
-            refetch()
-        } catch (error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
+    const handleEdit = (data: HocVi, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: HocVi) => handleUpdate(data, index),
+        })
     }
+
+    const hasData = hocViList && hocViList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -104,7 +130,12 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
                             align: 'center',
                             width: 120,
                             fixed: 'left',
-                            render: (_, record) => record?.academicDegreeType?.sTen || '',
+                            render: (_, record) => {
+                                const found = hocViData.find(
+                                    (item) => item.Id === record.academicDegreeTypeId
+                                )
+                                return found ? found.sTen : ''
+                            },
                         },
                         {
                             title: 'Lĩnh vực',
@@ -116,13 +147,21 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
                             title: 'Trường',
                             align: 'center',
                             width: 200,
-                            render: (_, record) => record?.truong?.name || '',
+                            render: (_, record) => {
+                                const found = truongData.find((item) => item.id === record.truongId)
+                                return found ? found.name : ''
+                            },
                         },
                         {
                             title: 'Quốc gia',
                             align: 'center',
                             width: 120,
-                            render: (_, record) => record?.nationality?.sTen || '',
+                            render: (_, record) => {
+                                const found = quocGiaData.find(
+                                    (item) => item.Id === record.nationalityId
+                                )
+                                return found ? found.sTen : ''
+                            },
                         },
                         {
                             title: 'Năm nhận',
@@ -135,15 +174,15 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
                                         popConfirm={{
-                                            onConfirm: () => handleDeleteHocVi(record.id),
+                                            onConfirm: () => handleDelete(index),
                                         }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
@@ -151,7 +190,7 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
                             ),
                         },
                     ]}
-                    dataSource={hocViData}
+                    dataSource={hocViList}
                     pagination={false}
                 />
             </div>

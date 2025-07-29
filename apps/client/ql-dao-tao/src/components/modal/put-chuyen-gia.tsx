@@ -43,7 +43,7 @@ const PutExpertProfile = () => {
     const { data: selectedLecturer } = useFindUniqueLecturer(
         {
             where: {
-                lectureID: selectedLecturerId,
+                id: selectedLecturerId,
             },
             include: {
                 userProfile: true,
@@ -75,6 +75,7 @@ const PutExpertProfile = () => {
                 name: selectedLecturer.userProfile.fullname,
                 phone: selectedLecturer.userProfile.phoneNumber,
                 email: selectedLecturer.userProfile.email,
+                lecturerId: selectedLecturer.id,
             }
         } else {
             payload = {

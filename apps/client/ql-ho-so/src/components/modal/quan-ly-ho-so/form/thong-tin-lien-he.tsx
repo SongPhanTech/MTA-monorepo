@@ -1,5 +1,6 @@
 import FormItem from '@components/commons/form-item'
 import type { DomProps } from '@constants/type'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 
 import { Col, Collapse, Form, Input, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
@@ -7,7 +8,7 @@ import dayjs from 'dayjs'
 const { Title, Text } = Typography
 dayjs.locale('vi')
 export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
-    const form = Form.useFormInstance<any>()
+    const form = Form.useFormInstance<SubmitForm>()
 
     const renderContent = () => {
         return (
@@ -58,7 +59,7 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="email"
+                            name="permanentAddress"
                             label="Hộ khẩu thường trú"
                             className="mb-0"
                         >
@@ -66,7 +67,12 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="email" label="Nơi ở hiện tại" className="mb-0">
+                        <FormItem
+                            form={form}
+                            name="currentAddress"
+                            label="Nơi ở hiện tại"
+                            className="mb-0"
+                        >
                             <Input placeholder="Nhập nơi ở hiện tại" className="h-9" />
                         </FormItem>
                     </Col>
@@ -75,7 +81,7 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
         )
     }
     return (
-        <div className="mt-5">
+        <div className="">
             <Collapse
                 items={[
                     {

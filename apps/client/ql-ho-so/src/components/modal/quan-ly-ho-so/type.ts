@@ -169,6 +169,7 @@ export type FilterProps = {
     diplomaIssueDate?: Date[]
     email?: string
     phoneNumber?: string
+    idCardNumber?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
