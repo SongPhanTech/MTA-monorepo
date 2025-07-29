@@ -3,7 +3,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { Relative } from '@workspace/db'
-import { useCreateRelative, useFindManyDM_MoiQuanHe, useUpdateRelative } from '@workspace/db/hooks'
+import { useFindManyDM_MoiQuanHe } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -11,47 +11,27 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function PutThongTinThanNhan() {
     const [form] = Form.useForm<Relative>()
 
-    const { isOpen, onClose, input } = useDisclosure<Relative>({
+    const { isOpen, onClose, input } = useDisclosure<
+        Partial<Relative> & { onSave: (val: Relative) => void }
+    >({
         tag: PutThongTinThanNhan.name,
         onClose: form.resetFields,
     })
 
     const { data: quanHeData = [] } = useFindManyDM_MoiQuanHe()
-
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutate: createRelative } = useCreateRelative()
-    const { mutate: updateRelative } = useUpdateRelative()
-
     async function onOk(output: Relative) {
-        if (!output) return
         try {
             showSpinner()
-            if (input?.id) {
-                await updateRelative({
-                    where: {
-                        id: input.id,
-                    },
-                    data: {
-                        name: output.name,
-                        dM_MoiQuanHeId: output.dM_MoiQuanHeId,
-                        birthYear: output.birthYear,
-                        job: output.job,
-                        information: output.information,
-                    },
-                })
-            } else {
-                await createRelative({
-                    data: {
-                        name: output.name,
-                        dM_MoiQuanHeId: output.dM_MoiQuanHeId,
-                        birthYear: output.birthYear,
-                        job: output.job,
-                        information: output.information,
-                    },
-                })
+            if (input?.onSave) {
+                input.onSave(output)
             }
-            message.success('Cập nhật thành công')
+            message.success(
+                input?.id
+                    ? 'Cập nhật thông tin thân nhân thành công'
+                    : 'Thêm mới thông tin thân nhân thành công'
+            )
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -60,16 +40,13 @@ export default function PutThongTinThanNhan() {
     }
 
     useEffect(() => {
-        if (input && isOpen) {
-            form.setFieldsValue({
-                name: input.name,
-                dM_MoiQuanHeId: input.dM_MoiQuanHeId,
-                birthYear: input.birthYear,
-                job: input.job,
-                information: input.information,
-            })
+        if (isOpen && input) {
+            const { onSave, ...formData } = input
+            if (Object.keys(formData).length > 0) {
+                form.setFieldsValue(formData)
+            }
         }
-    }, [input, isOpen, form])
+    }, [isOpen, input, form])
 
     return (
         <PutFormModal

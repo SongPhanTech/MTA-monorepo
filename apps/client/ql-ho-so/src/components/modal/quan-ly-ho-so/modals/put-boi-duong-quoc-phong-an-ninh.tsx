@@ -1,20 +1,50 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { Col, Form, Input } from 'antd'
+import type { BoiDuongQuocPhongAnNinh } from '@workspace/db'
+import { Col, DatePicker, Form, Input, message } from 'antd'
+import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function PutBoiDuongQuocPhongModal() {
-    const [form] = Form.useForm()
+    const [form] = Form.useForm<BoiDuongQuocPhongAnNinh>()
 
-    const { isOpen, onClose, input } = useDisclosure({
+    const { isOpen, onClose, input } = useDisclosure<
+        Partial<BoiDuongQuocPhongAnNinh> & { onSave: (val: BoiDuongQuocPhongAnNinh) => void }
+    >({
         tag: PutBoiDuongQuocPhongModal.name,
         onClose: form.resetFields,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    async function onOk(output: any) {}
+    async function onOk(output: BoiDuongQuocPhongAnNinh) {
+        try {
+            showSpinner()
+            const dataToSave: BoiDuongQuocPhongAnNinh = { ...output }
+            if (input?.onSave) {
+                input.onSave(dataToSave)
+            }
+            message.success(
+                input?.id
+                    ? 'Cập nhật bồi dưỡng quốc phòng an ninh thành công'
+                    : 'Thêm mới bồi dưỡng quốc phòng an ninh thành công'
+            )
+            onClose()
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+        hideSpinner()
+    }
+
+    useEffect(() => {
+        if (isOpen && input) {
+            const { onSave, ...formData } = input
+            if (Object.keys(formData).length > 0) {
+                form.setFieldsValue(formData)
+            }
+        }
+    }, [isOpen, input, form])
 
     return (
         <PutFormModal
@@ -22,39 +52,31 @@ export default function PutBoiDuongQuocPhongModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input ? 'Cập nhật trình độ ngoại ngữ' : 'Thêm mới trình độ ngoại ngữ'}
+            title={input?.id ? 'Cập nhật trình độ ngoại ngữ' : 'Thêm mới trình độ ngoại ngữ'}
             className="w-[40vw]"
             layout="vertical"
         >
             <Col span={24}>
-                <FormItem
-                    label="Hình thức đào tạo"
-                    name="academicDegreeTypeId"
-                    required
-                    form={form}
-                >
-                    <Input placeholder="Nhập lĩnh vực" />
-                </FormItem>
-            </Col>
-
-            <Col span={24}>
-                <FormItem label="Trình độ" name="linhVuc" required form={form}>
-                    <Input placeholder="Nhập lĩnh vực" />
+                <FormItem label="Tên lớp bồi dưỡng" name="name" required form={form}>
+                    <Input placeholder="Nhập tên lớp bồi dưỡng" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Cơ sở đào tạo" name="truongId" required form={form}>
-                    <Input placeholder="Nhập lĩnh vực" />
+                <FormItem label="Thời gian bắt đầu" name="thoiGianBatDau" required form={form}>
+                    <DatePicker
+                        placeholder="Chọn thời gian bắt đầu"
+                        className="w-full"
+                        format="DD/MM/YYYY"
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Thời gian bắt đầu" name="nationalityId" required form={form}>
-                    <Input placeholder="Nhập lĩnh vực" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem label="Thời gian kết thúc" name="year" required form={form}>
-                    <Input placeholder="Nhập lĩnh vực" />
+                <FormItem label="Thời gian kết thúc" name="thoiGianKetThuc" required form={form}>
+                    <DatePicker
+                        placeholder="Chọn thời gian kết thúc"
+                        className="w-full"
+                        format="DD/MM/YYYY"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

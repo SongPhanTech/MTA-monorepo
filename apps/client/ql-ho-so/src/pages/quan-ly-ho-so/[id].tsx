@@ -35,7 +35,6 @@ import ThongTinKhenThuongForm from '@components/modal/quan-ly-ho-so/form/thong-t
 import ThongTinKyLuatForm from '@components/modal/quan-ly-ho-so/form/thong-tin-ky-luat'
 import ThongTinLienHe from '@components/modal/quan-ly-ho-so/form/thong-tin-lien-he'
 import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
-import TrinhDoQuanLyHanhChinhForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-hanh-chinh'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
 import { getMinioUrl } from '@workspace/constant'
@@ -70,14 +69,14 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
         keKhaiTaiSan: true
         quaTrinhCongTac: true
         quaTrinhCuDiCongTac: true
-        quaTrinhDiDaoTaoBoiDuong: true
-        thongTinKhenThuong: true
-        thongTinKyLuat: true
+        quaTrinhCuDiDaoTao: true
+        khenThuong: true
+        kyLuat: true
+        relatives: true
     }
 }> & {
     file?: FileType
 }
-
 export default function UpdateUserPage() {
     const router = useRouter()
     const cccd = router.query.id as string
@@ -108,87 +107,151 @@ export default function UpdateUserPage() {
             {
                 title: 'Thông tin thân nhân',
                 id: 'thongTinThanNhan',
-                render: <ThongTinThanNhanForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="relatives">
+                        <ThongTinThanNhanForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Học vị',
                 id: 'hocVi',
-                render: <HocViForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="hocVi">
+                        <HocViForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Học hàm',
                 id: 'hocHam',
-                render: <HocHamForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="hocHam">
+                        <HocHamForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Trình độ lý luận chính trị',
                 id: 'trinhDoLyLuanChinhTri',
-                render: <TrinhDoLyLuanChinhTriForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="trinhDoLyLuanChinhTri">
+                        <TrinhDoLyLuanChinhTriForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
-            {
-                title: 'Trình độ quản lý hành chính',
-                id: 'trinhDoQuanLyHanhChinh',
-                render: <TrinhDoQuanLyHanhChinhForm expland={expland} setExpland={setExpland} />,
-            },
+            // {
+            //     title: 'Trình độ quản lý hành chính',
+            //     id: 'trinhDoQuanLyHanhChinh',
+            //     render: <TrinhDoQuanLyHanhChinhForm expland={expland} setExpland={setExpland} />,
+            // },
             {
                 title: 'Trình độ quản lý nhà nước',
                 id: 'trinhDoQuanLyNhaNuoc',
-                render: <TrinhDoQuanLyNhaNuocForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="trinhDoQuanLyNhaNuoc">
+                        <TrinhDoQuanLyNhaNuocForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Ngoại ngữ',
                 id: 'ngoaiNgu',
-                render: <NgoaiNguForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="ngoaiNgu">
+                        <NgoaiNguForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Tin học',
                 id: 'tinHoc',
-                render: <TinHocForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="tinHoc">
+                        <TinHocForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Bồi dưỡng quốc phòng an ninh',
                 id: 'boiDuongQuocPhongAnNinh',
-                render: <BoiDuongQuocPhongAnNinhForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="boiDuongQuocPhongAnNinh">
+                        <BoiDuongQuocPhongAnNinhForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Cấp bậc',
                 id: 'capBac',
-                render: <CapBacForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="capBac">
+                        <CapBacForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Quá trình công tác',
                 id: 'quaTrinhCongTac',
-                render: <QuaTrinhCongTacForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="quaTrinhCongTac">
+                        <QuaTrinhCongTacForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Quá trình được cử đi công tác',
                 id: 'quaTrinhDuocCuDiCongTac',
-                render: <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="quaTrinhCuDiCongTac">
+                        <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Quá trình được cử đi đào tạo bồi dưỡng',
                 id: 'quaTrinhDiDaoTaoBoiDuong',
-                render: <QuaTrinhDiDaoTaoBoiDuongForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="quaTrinhCuDiDaoTao">
+                        <QuaTrinhDiDaoTaoBoiDuongForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Khen thưởng',
                 id: 'khenThuong',
-                render: <ThongTinKhenThuongForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="khenThuong">
+                        <ThongTinKhenThuongForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Kỷ luật',
                 id: 'kyLuat',
-                render: <ThongTinKyLuatForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="kyLuat">
+                        <ThongTinKyLuatForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Đối tượng chính sách',
                 id: 'doiTuongChinhSach',
-                render: <DoiTuongChinhSachForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="doiTuongChinhSach">
+                        <DoiTuongChinhSachForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Kê khai tài sản',
                 id: 'keKhaiTaiSan',
-                render: <KeKhaiTaiSanForm expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item name="keKhaiTaiSan">
+                        <KeKhaiTaiSanForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
         ]
     }, [expland])
@@ -300,6 +363,7 @@ export default function UpdateUserPage() {
                 academicDegreeType: true,
                 academicRankType: true,
                 level: true,
+                tinHoc: true,
             },
         },
         {
@@ -343,6 +407,21 @@ export default function UpdateUserPage() {
                 officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
                 CPVJoinPlace: userData.CPVJoinPlace,
                 tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
+                tinHoc: userData.tinHoc || [],
+                hocVi: userData.hocVi || [],
+                hocHam: userData.hocHam || [],
+                trinhDoLyLuanChinhTri: userData.trinhDoLyLuanChinhTri || [],
+                trinhDoQuanLyNhaNuoc: userData.trinhDoQuanLyNhaNuoc || [],
+                ngoaiNgu: userData.ngoaiNgu || [],
+                boiDuongQuocPhongAnNinh: userData.boiDuongQuocPhongAnNinh || [],
+                capBac: userData.capBac || [],
+                doiTuongChinhSach: userData.doiTuongChinhSach || [],
+                keKhaiTaiSan: userData.keKhaiTaiSan || [],
+                quaTrinhCongTac: userData.quaTrinhCongTac || [],
+                quaTrinhCuDiCongTac: userData.quaTrinhCuDiCongTac || [],
+                quaTrinhCuDiDaoTao: userData.quaTrinhCuDiDaoTao || [],
+                khenThuong: userData.khenThuong || [],
+                kyLuat: userData.kyLuat || [],
             })
         },
         [form]

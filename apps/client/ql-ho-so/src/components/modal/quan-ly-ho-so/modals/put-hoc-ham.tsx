@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { HocHam } from '@workspace/db'
-import { useCreateHocHam, useFindManyDM_HocHam, useUpdateHocHam } from '@workspace/db/hooks'
+import { useFindManyDM_HocHam } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -12,7 +12,9 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function PutHocHamModal() {
     const [form] = Form.useForm<HocHam>()
 
-    const { isOpen, onClose, input } = useDisclosure<HocHam>({
+    const { isOpen, onClose, input } = useDisclosure<
+        Partial<HocHam> & { onSave: (val: HocHam) => void }
+    >({
         tag: PutHocHamModal.name,
         onClose: form.resetFields,
     })
@@ -21,38 +23,18 @@ export default function PutHocHamModal() {
 
     const { data: hocHam = [] } = useFindManyDM_HocHam()
 
-    const { mutateAsync: createHocHam } = useCreateHocHam()
-    const { mutateAsync: updateHocHam } = useUpdateHocHam()
-
     async function onOk(output: HocHam) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
-            if (input?.id) {
-                await updateHocHam({
-                    where: {
-                        id: input.id,
-                    },
-                    data: {
-                        academicRankTypeId: output.academicRankTypeId,
-                        noiCap: output.noiCap,
-                        soQuyetDinh: output.soQuyetDinh,
-                        from: output.from,
-                        to: output.to,
-                    },
-                })
-            } else {
-                await createHocHam({
-                    data: {
-                        academicRankTypeId: output.academicRankTypeId,
-                        noiCap: output.noiCap,
-                        soQuyetDinh: output.soQuyetDinh,
-                        from: output.from,
-                        to: output.to,
-                    },
-                })
+            const dataToSave: HocHam = {
+                ...output,
             }
+
+            if (input?.onSave) {
+                input.onSave(dataToSave)
+            }
+            message.success(input ? 'Cập nhật học hàm thành công' : 'Thêm mới học hàm thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -61,16 +43,13 @@ export default function PutHocHamModal() {
     }
 
     useEffect(() => {
-        if (input && isOpen) {
-            form.setFieldsValue({
-                academicRankTypeId: input.academicRankTypeId,
-                noiCap: input.noiCap,
-                soQuyetDinh: input.soQuyetDinh,
-                from: input.from,
-                to: input.to,
-            })
+        if (isOpen && input) {
+            const { onSave, ...formData } = input
+            if (Object.keys(formData).length > 0) {
+                form.setFieldsValue(formData)
+            }
         }
-    }, [form, input, isOpen])
+    }, [isOpen, input, form])
 
     return (
         <PutFormModal

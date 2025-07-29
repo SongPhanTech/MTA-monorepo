@@ -2,26 +2,57 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutBoiDuongQuocPhongModal from '@components/modal/quan-ly-ho-so/modals/put-boi-duong-quoc-phong-an-ninh'
+import PutBoiDuongQuocPhongAnNinhModal from '@components/modal/quan-ly-ho-so/modals/put-boi-duong-quoc-phong-an-ninh'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { formatDate } from '@lib/utils'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { BoiDuongQuocPhongAnNinh } from '@workspace/db'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function BoiDuongQuocPhongAnNinhForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
+    const boiDuongList: BoiDuongQuocPhongAnNinh[] = Form.useWatch('boiDuongQuocPhongAnNinh', form)
 
-    const { onOpen } = useDisclosure({
-        tag: PutBoiDuongQuocPhongModal.name,
+    const { onOpen } = useDisclosure<
+        Partial<BoiDuongQuocPhongAnNinh> & { onSave: (val: BoiDuongQuocPhongAnNinh) => void }
+    >({
+        tag: PutBoiDuongQuocPhongAnNinhModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const handleSave = (data: BoiDuongQuocPhongAnNinh) => {
+        const currentList = form.getFieldValue('boiDuongQuocPhongAnNinh') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('boiDuongQuocPhongAnNinh', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: BoiDuongQuocPhongAnNinh, index: number) => {
+        const currentList = form.getFieldValue('boiDuongQuocPhongAnNinh') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('boiDuongQuocPhongAnNinh', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('boiDuongQuocPhongAnNinh') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('boiDuongQuocPhongAnNinh', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: BoiDuongQuocPhongAnNinh, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: BoiDuongQuocPhongAnNinh) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = boiDuongList && boiDuongList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -69,60 +100,46 @@ export default function BoiDuongQuocPhongAnNinhForm({ expland, setExpland }: Dom
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Hình thức đào tạo',
+                            title: 'Tên lớp bồi dưỡng',
                             align: 'center',
                             width: 180,
                             fixed: 'left',
                             render: (_, record) => record?.name || '',
                         },
                         {
-                            title: 'Trình độ',
-                            align: 'center',
-                            width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
-                        },
-                        {
-                            title: 'Cơ sở đào tạo',
-                            align: 'center',
-                            width: 140,
-                            render: (_, record) => record?.birthYear || '',
-                        },
-                        {
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => formatDate(record?.thoiGianBatDau) || '',
                         },
                         {
-                            title: 'Thời gian kết thúc ',
+                            title: 'Thời gian kết thúc',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.information || '',
+                            render: (_, record) => formatDate(record?.thoiGianKetThuc) || '',
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={boiDuongList}
                     pagination={false}
                 />
             </div>
@@ -144,8 +161,8 @@ export default function BoiDuongQuocPhongAnNinhForm({ expland, setExpland }: Dom
                     },
                 ]}
                 bordered={false}
-                className="bg-transparent"
                 expandIconPosition="end"
+                className="bg-transparent"
                 activeKey={expland}
                 onChange={(value) => {
                     setExpland([...value])
