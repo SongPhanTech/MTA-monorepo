@@ -9,7 +9,6 @@ import DefaultLayout from '@layouts/default-layout'
 import type { Prisma, TrainingCourse } from '@workspace/db'
 import {
     useCountScoreConvert,
-    useCreateManyScoreConvert,
     useDeleteManyScoreConvert,
     useDeleteScoreConvert,
     useFindManyTrainingCourse,
@@ -82,6 +81,24 @@ export default function TrainingFieldPage() {
         include: {
             scoreConverts: {
                 orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
+                where: {
+                    ...(filters.searchText && filters.searchText.trim() !== ''
+                        ? {
+                              AND: [
+                                  {
+                                      base10Min: {
+                                          lte: Number(filters.searchText),
+                                      },
+                                  },
+                                  {
+                                      base10Max: {
+                                          gte: Number(filters.searchText),
+                                      },
+                                  },
+                              ],
+                          }
+                        : {}),
+                },
             },
         },
         orderBy: {
@@ -124,7 +141,6 @@ export default function TrainingFieldPage() {
         onOpen()
     }
 
-    const { mutateAsync: createManyScoreConvert } = useCreateManyScoreConvert()
     const { mutateAsync: UpdateScoreConvert } = useDeleteScoreConvert()
     const { mutateAsync: UpdateManyScoreConvert } = useDeleteManyScoreConvert()
     async function handleDelete(id: string) {
@@ -177,7 +193,7 @@ export default function TrainingFieldPage() {
                                         type="number"
                                         min={0}
                                         max={10}
-                                        step={0.1}
+                                        step={0.5}
                                         onChange={(e) =>
                                             handleFilterChange('searchText', e.target.value)
                                         }

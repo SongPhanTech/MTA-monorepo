@@ -11,7 +11,7 @@ import {
     useFindManyArchivedCertificate,
     useUpdateArchivedCertificate,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -57,14 +57,6 @@ export default function ArchivedCertificate() {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
-    }
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
     }
 
     const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
@@ -118,19 +110,7 @@ export default function ArchivedCertificate() {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24} className="mt-3">
-                            <Flex justify="space-between">
-                                <Col span={6}>
-                                    <Form.Item className="mb-0" name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
-                                            }
-                                            placeholder="Tìm kiếm"
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
+                            <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>

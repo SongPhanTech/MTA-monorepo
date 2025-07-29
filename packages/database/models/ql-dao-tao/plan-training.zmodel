@@ -41,7 +41,7 @@ model StudentSubjectScore extends Base {
   // maxCertFinalScore = Math.max(.certificates.archivedCertificate.finalScore)
   // bonusScore = sum(.awards.archivedAward.bonusScore)
   // finalScore = Math.max(computedFinalScore, maxCertFinalScore) + bonusScore
-  finalScore       Decimal?                                   @db.Decimal(5, 2) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
+  finalScore       Decimal?                                   @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
   // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp manualFinalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
   manualFinalScore Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết chuyển trường
 

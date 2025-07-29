@@ -1,4 +1,3 @@
-import { EllipsisOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -27,8 +26,8 @@ import {
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Dropdown, Flex, Menu, message, Row, Tag, Tooltip } from 'antd'
-import { BookPlus, CopyPlus } from 'lucide-react'
+import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -348,28 +347,7 @@ export default function TrainingProgramSubjects() {
 
     const treeData = buildOrgTree(manageOrgData)
 
-    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion({})
-    const itemsDownload = [
-        {
-            key: 'import',
-            label: 'Nhập dữ liệu bằng excel',
-            onClick: () => setImportModalVisible(true),
-        },
-        {
-            key: 'update',
-            label: 'Tải file mẫu excel',
-            onClick: () => onOpenTrainingBlock,
-        },
-    ]
-    const menuDownload = (
-        <Menu>
-            {itemsDownload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
+    const { handleCloneCurriculumVersion } = useCloneCurriculumVersion()
 
     return (
         <div>
@@ -389,12 +367,20 @@ export default function TrainingProgramSubjects() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
-                                <Dropdown overlay={menuDownload} trigger={['hover']}>
-                                    <Button
-                                        className="text-primary border-primary mr-2 min-w-[32px]"
-                                        icon={<EllipsisOutlined />}
-                                    />
-                                </Dropdown>
+                                <Button
+                                    onClick={() => setImportModalVisible(true)}
+                                    className="text-primary border-primary mr-2"
+                                >
+                                    <FileUp />
+                                    Nhập dữ liệu bằng excel
+                                </Button>
+                                <Button
+                                    onClick={() => onOpenTrainingBlock()}
+                                    className="text-primary border-primary mr-2"
+                                >
+                                    <FileDown />
+                                    Tải file mẫu excel
+                                </Button>
                                 <ImportCurriculumVersionModal
                                     visible={importModalVisible}
                                     onCancel={() => setImportModalVisible(false)}

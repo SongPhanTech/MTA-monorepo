@@ -1,4 +1,4 @@
-export const workHistoryData = [
+const workHistoryData = [
     {
         from: '9/2014',
         to: '2/2015',
@@ -86,13 +86,4 @@ const data3: TableRow2[] = [
     // Add more rows as needed
 ]
 
-const totalRows = Math.max(5, data.length)
-const filledRows = [...data, ...Array(totalRows - data.length).fill({})]
-
-const totalRows2 = Math.max(9, data2.length)
-const filledRows2 = [...data2, ...Array(totalRows2 - data2.length).fill({})]
-
-const totalRows3 = Math.max(5, data3.length)
-const filledRows3 = [...data, ...Array(totalRows3 - data3.length).fill({})]
-
-export { filledRows, filledRows2, filledRows3 }
+export { workHistoryData, data, data2, data3 }

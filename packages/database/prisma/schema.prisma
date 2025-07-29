@@ -698,7 +698,7 @@ model StudentSubjectScore {
   attendanceScore  Float?
   midtermScore     Float?
   examScore        Float?
-  finalScore       Decimal?                                   @db.Decimal(5, 2)
+  finalScore       Decimal?                                   @db.Decimal(5, 1)
   manualFinalScore Float?
   examPostponed    Boolean                                    @default(false)
   exempted         Boolean                                    @default(false)
@@ -2172,7 +2172,7 @@ model DM_NhanVien {
   sAvatarId           String?
   group               Group?         @relation(fields: [groupId], references: [id])
   groupId             String?
-  userProfile         UserProfile[]
+  userProfile         UserProfile?
   notification        Notification[]
   feedback            Feedback[]
   conversation        Conversation[]

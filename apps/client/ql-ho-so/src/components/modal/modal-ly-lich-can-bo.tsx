@@ -1,12 +1,12 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GridBlock } from '@components/commons/grid-block'
 import { useFindUniqueStaff } from '@workspace/db/hooks'
-import { Button, Input, Modal } from 'antd'
+import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import { filledRows, filledRows2, filledRows3 } from '@/utils/dataFake'
+import { data, data2, data3 } from '@/utils/dataFake'
 
 dayjs.locale('vi')
 
@@ -17,7 +17,6 @@ type ModalLyLichCanBoInput = {
 const ModalLyLichCanBo = () => {
     const formattedDate = `..., Ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
     const printRef = useRef<HTMLDivElement>(null)
-    const [signerName, setSignerName] = useState('Đại úy Đào Văn Thắng')
 
     const { isOpen, onClose, input } = useDisclosure<ModalLyLichCanBoInput>({
         tag: ModalLyLichCanBo.name,
@@ -69,6 +68,15 @@ const ModalLyLichCanBo = () => {
         { enabled: !!input?.id }
     )
 
+    const totalRows = Math.max(5, data.length)
+    const filledRows = [...data, ...Array(totalRows - data.length).fill({})]
+
+    const totalRows2 = Math.max(9, data2.length)
+    const filledRows2 = [...data2, ...Array(totalRows2 - data2.length).fill({})]
+
+    const totalRows3 = Math.max(5, data3.length)
+    const filledRows3 = [...data, ...Array(totalRows3 - data3.length).fill({})]
+
     return (
         <Modal
             open={isOpen}
@@ -79,13 +87,6 @@ const ModalLyLichCanBo = () => {
             title={
                 <div className="flex items-center justify-between w-[95%]">
                     <span>Modal tóm tắt lý lịch</span>
-                    {/* TODO: Làm select chọn trưởng phòng đào tạo */}
-                    <Input
-                        placeholder="Nhập tên người ký"
-                        value={signerName}
-                        onChange={(e) => setSignerName(e.target.value)}
-                        className="w-64"
-                    />
                     <Button
                         icon={<PrinterOutlined />}
                         onClick={handlePrint}
@@ -123,8 +124,9 @@ const ModalLyLichCanBo = () => {
                         Ảnh màu <br /> (4 x 6 cm)
                     </div>
                     <div className="w-full flex flex-col items-start justify-center">
-                        <p className="flex w-full">
+                        <p className="flex w-full uppercase">
                             1) Họ và tên khai sinh (viết chữ in hoa):{' '}
+                            {initialData?.userProfile?.fullname}
                             <span className="inline-block flex-1 border-b border-dotted  border-black" />
                         </p>
                         <p className="flex w-full">
@@ -442,24 +444,19 @@ const ModalLyLichCanBo = () => {
                 <span>31) Diễn biến quá trình lương của cán bộ, công chức</span>
                 <table className="min-w-full border border-black">
                     <tbody>
-                        {['Thang/nam.', 'Ma ngach/bac', 'H8. so luong', 'NhSn val A4nh nia or'].map(
-                            (header) => (
-                                <tr key={header}>
-                                    <td className="border border-black p-2 font-medium w-1/4">
-                                        {header}
-                                    </td>
-                                    {[...Array(5)].map((_, cellIndex) => {
-                                        const cellKey = `${header.replace(/\s+/g, '-')}-cell-${cellIndex}`
-                                        return (
-                                            <td
-                                                key={cellKey}
-                                                className="border border-black p-2 h-8"
-                                            />
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        )}
+                        {['Tháng/năm', 'Mã ngạch/bậc', 'Hệ số lương'].map((header) => (
+                            <tr key={header}>
+                                <td className="border border-black p-2 font-medium w-1/4">
+                                    {header}
+                                </td>
+                                {[...Array(5)].map((_, cellIndex) => {
+                                    const cellKey = `${header.replace(/\s+/g, '-')}-cell-${cellIndex}`
+                                    return (
+                                        <td key={cellKey} className="border border-black p-2 h-8" />
+                                    )
+                                })}
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
                 <span>
