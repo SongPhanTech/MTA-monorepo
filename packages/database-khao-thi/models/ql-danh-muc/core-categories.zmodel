@@ -127,7 +127,6 @@ model DM_KhuVuc_DiaLy extends CoreBase {
 }
 
 model DM_NgoaiNgu extends CoreBase {
-  ngoaiNgu NgoaiNgu[]
   @@schema("mta")
 }
 
@@ -137,8 +136,10 @@ model DM_TonGiao extends CoreBase {
 }
 
 model DM_TrinhDoNgoaiNgu extends CoreBase {
-  sKhung String?
+  sKhung   String?
   @@schema("mta")
+
+  ngoaiNgu NgoaiNgu[]
 }
 
 model DM_TrinhDoTinHoc extends CoreBase {

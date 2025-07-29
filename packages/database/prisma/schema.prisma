@@ -15,10 +15,6 @@ generator client {
   binaryTargets   = ["native"]
 }
 
-generator dbml {
-  provider = "prisma-dbml-generator"
-}
-
 enum ConfigKey {
   DIRECTOR
   ACADEMY_NAME
@@ -2562,7 +2558,8 @@ model Relative {
   birthYear      Int?
   job            String?
   information    String?
-  profiles       UserProfile[]
+  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId  String
   dM_MoiQuanHe   DM_MoiQuanHe? @relation(fields: [dM_MoiQuanHeId], references: [id])
   dM_MoiQuanHeId String?
 

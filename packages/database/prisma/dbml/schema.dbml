@@ -1994,8 +1994,8 @@ Table HocVi {
   truong DM_TruongDaoTaoBacDH
   truongId String
   year Int
-  userProfile UserProfile [not null]
-  userProfileId String [not null]
+  userProfile UserProfile
+  userProfileId String
 }
 
 Table Relative {
@@ -2010,7 +2010,8 @@ Table Relative {
   birthYear Int
   job String
   information String
-  profiles UserProfile [not null]
+  userProfile UserProfile [not null]
+  userProfileId String [not null]
   dM_MoiQuanHe DM_MoiQuanHe
   dM_MoiQuanHeId String
 }
@@ -3575,11 +3576,6 @@ Table PermissionToRole {
   roleId String [ref: > Role.id]
 }
 
-Table RelativeToUserProfile {
-  relativesId String [ref: > Relative.id]
-  profilesId String [ref: > UserProfile.id]
-}
-
 Table AcademicWarningToAcademicWarningRule {
   academicwarningId String [ref: > AcademicWarning.id]
   rulesId String [ref: > AcademicWarningRule.id]
@@ -4157,6 +4153,8 @@ Ref: HocVi.nationalityId > DM_QuocGia.Id
 Ref: HocVi.truongId > DM_TruongDaoTaoBacDH.id
 
 Ref: HocVi.userProfileId > UserProfile.id
+
+Ref: Relative.userProfileId > UserProfile.id
 
 Ref: Relative.dM_MoiQuanHeId > DM_MoiQuanHe.id
 

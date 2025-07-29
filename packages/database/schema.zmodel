@@ -12,9 +12,9 @@ generator client {
   binaryTargets = ["native"]
 }
 
-generator dbml {
-  provider = "prisma-dbml-generator"
-}
+// generator dbml {
+//   provider = "prisma-dbml-generator"
+// }
 
 // generator drizzle {
 //   provider = "drizzle-prisma-generator"
