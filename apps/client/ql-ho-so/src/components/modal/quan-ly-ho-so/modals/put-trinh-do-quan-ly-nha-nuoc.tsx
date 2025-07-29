@@ -6,6 +6,7 @@ import useSpinner from '@hooks/spinner'
 import type { TrinhDoQuanLyNhaNuoc } from '@workspace/db'
 import { useFindManyDM_TrinhDoQuanLyNhaNuoc } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -44,7 +45,13 @@ export default function PutTrinhDoQuanLyNhaNuocModal() {
         if (isOpen && input) {
             const { onSave, ...formData } = input
             if (Object.keys(formData).length > 0) {
-                form.setFieldsValue(formData)
+                form.setFieldsValue({
+                    ...formData,
+                    thoiGianBatDau: formData.thoiGianBatDau ? dayjs(formData.thoiGianBatDau) : null,
+                    thoiGianKetThuc: formData.thoiGianKetThuc
+                        ? dayjs(formData.thoiGianKetThuc)
+                        : null,
+                })
             }
         }
     }, [isOpen, input, form])

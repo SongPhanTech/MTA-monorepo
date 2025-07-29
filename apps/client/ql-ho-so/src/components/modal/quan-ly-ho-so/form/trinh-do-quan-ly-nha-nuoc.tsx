@@ -4,6 +4,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutTrinhDoQuanLyNhaNuocModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 import type { DomProps } from '@constants/type'
+import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { TrinhDoQuanLyNhaNuoc } from '@workspace/db'
 import { useFindManyDM_TrinhDoQuanLyNhaNuoc } from '@workspace/db/hooks'
@@ -134,13 +135,15 @@ export default function TrinhDoQuanLyNhaNuocForm({ expland, setExpland }: DomPro
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.thoiGianBatDau || '',
+                            render: (_, record) =>
+                                record?.thoiGianBatDau ? formatDate(record.thoiGianBatDau) : '',
                         },
                         {
                             title: 'Thời gian kết thúc ',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.thoiGianKetThuc || '',
+                            render: (_, record) =>
+                                record?.thoiGianKetThuc ? formatDate(record.thoiGianKetThuc) : '',
                         },
                         {
                             title: 'Thao tác',

@@ -6,6 +6,7 @@ import useSpinner from '@hooks/spinner'
 import type { QuaTrinhCuDiCongTac } from '@workspace/db'
 import { useFindManyDM_ChucVu } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -44,7 +45,11 @@ export default function PutQuaTrinhCuDiCongTacModal() {
         if (isOpen && input) {
             const { onSave, ...formData } = input
             if (Object.keys(formData).length > 0) {
-                form.setFieldsValue(formData)
+                form.setFieldsValue({
+                    ...formData,
+                    tuThangNam: formData.tuThangNam ? dayjs(formData.tuThangNam) : '',
+                    denThangNam: formData.denThangNam ? dayjs(formData.denThangNam) : '',
+                })
             }
         }
     }, [isOpen, input, form])

@@ -5,6 +5,7 @@ import useSpinner from '@hooks/spinner'
 import type { TinHoc } from '@workspace/db'
 import { useFindManyDM_TrinhDoTinHoc } from '@workspace/db/hooks'
 import { Col, DatePicker, Form, Input, message } from 'antd'
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -29,7 +30,13 @@ export default function PutTinHocModal() {
         if (isOpen && input) {
             const { onSave, ...formData } = input
             if (Object.keys(formData).length > 0) {
-                form.setFieldsValue(formData)
+                form.setFieldsValue({
+                    ...formData,
+                    thoiGianBatDau: formData.thoiGianBatDau ? dayjs(formData.thoiGianBatDau) : '',
+                    thoiGianKetThuc: formData.thoiGianKetThuc
+                        ? dayjs(formData.thoiGianKetThuc)
+                        : '',
+                })
             }
         }
     }, [isOpen, input, form])
