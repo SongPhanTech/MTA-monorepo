@@ -4,24 +4,55 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutDoiTuongChinhSachModal from '@components/modal/quan-ly-ho-so/modals/put-doi-tuong-chinh-sach'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { formatDate } from '@lib/utils'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { DoiTuongChinhSach } from '@workspace/db'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function DoiTuongChinhSachForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
+    const doiTuongList: DoiTuongChinhSach[] = Form.useWatch('doiTuongChinhSach', form)
 
-    const { onOpen } = useDisclosure({
+    const { onOpen } = useDisclosure<
+        Partial<DoiTuongChinhSach> & { onSave: (val: DoiTuongChinhSach) => void }
+    >({
         tag: PutDoiTuongChinhSachModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const handleSave = (data: DoiTuongChinhSach) => {
+        const currentList = form.getFieldValue('doiTuongChinhSach') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('doiTuongChinhSach', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: DoiTuongChinhSach, index: number) => {
+        const currentList = form.getFieldValue('doiTuongChinhSach') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('doiTuongChinhSach', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('doiTuongChinhSach') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('doiTuongChinhSach', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: DoiTuongChinhSach, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: DoiTuongChinhSach) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = doiTuongList && doiTuongList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,25 +104,25 @@ export default function DoiTuongChinhSachForm({ expland, setExpland }: DomProps)
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => record?.tenDoiTuong || '',
                         },
                         {
                             title: 'Bắt đầu từ',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => formatDate(record?.ngayBatDau) || '',
                         },
                         {
                             title: 'Kết thúc vào',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => formatDate(record?.ngayKetThuc) || '',
                         },
                         {
                             title: 'Ghi chú',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => record?.ghiChu || '',
                         },
 
                         {
@@ -99,25 +130,23 @@ export default function DoiTuongChinhSachForm({ expland, setExpland }: DomProps)
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={doiTuongList}
                     pagination={false}
                 />
             </div>

@@ -17,7 +17,6 @@ export default function TinHocForm({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
 
     const tinHocList: TinHoc[] = Form.useWatch('tinHoc', form)
-    console.log(form.getFieldsValue(), '129837')
 
     const { onOpen } = useDisclosure<
         Partial<TinHoc> & {

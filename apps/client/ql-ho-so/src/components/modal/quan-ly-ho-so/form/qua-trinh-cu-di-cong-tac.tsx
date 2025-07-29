@@ -4,24 +4,58 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutQuaTrinhCuDiCongTacModal from '@components/modal/quan-ly-ho-so/modals/put-qua-trinh-cu-di-cong-tac'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { formatDate } from '@lib/utils'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { QuaTrinhCuDiCongTac } from '@workspace/db'
+import { useFindManyDM_ChucVu } from '@workspace/db/hooks'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
+    const cuDiCongTacList: QuaTrinhCuDiCongTac[] = Form.useWatch('quaTrinhCuDiCongTac', form)
 
-    const { onOpen } = useDisclosure({
+    const { onOpen } = useDisclosure<
+        Partial<QuaTrinhCuDiCongTac> & { onSave: (val: QuaTrinhCuDiCongTac) => void }
+    >({
         tag: PutQuaTrinhCuDiCongTacModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const { data: chucVuList = [] } = useFindManyDM_ChucVu()
+
+    const handleSave = (data: QuaTrinhCuDiCongTac) => {
+        const currentList = form.getFieldValue('quaTrinhCuDiCongTac') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('quaTrinhCuDiCongTac', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: QuaTrinhCuDiCongTac, index: number) => {
+        const currentList = form.getFieldValue('quaTrinhCuDiCongTac') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('quaTrinhCuDiCongTac', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('quaTrinhCuDiCongTac') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('quaTrinhCuDiCongTac', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: QuaTrinhCuDiCongTac, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: QuaTrinhCuDiCongTac) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = cuDiCongTacList && cuDiCongTacList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,50 +107,51 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => formatDate(record?.tuThangNam) || '',
                         },
                         {
                             title: 'Đến tháng năm',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => formatDate(record?.denThangNam) || '',
                         },
                         {
                             title: 'Đơn vị',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => record?.donVi || '',
                         },
                         {
                             title: 'Chức vụ',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => {
+                                const chucVu = chucVuList.find((cv) => cv.Id === record?.chucVuId)
+                                return chucVu ? chucVu.sTen : ''
+                            },
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={cuDiCongTacList}
                     pagination={false}
                 />
             </div>

@@ -2,26 +2,59 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutTrinhDoQuanyNhaNuocModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
+import PutTrinhDoQuanLyNhaNuocModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 import type { DomProps } from '@constants/type'
-import useSpinner from '@hooks/spinner'
-import { Button, Col, Collapse, Flex, Row, Typography } from 'antd'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
+import type { TrinhDoQuanLyNhaNuoc } from '@workspace/db'
+import { useFindManyDM_TrinhDoQuanLyNhaNuoc } from '@workspace/db/hooks'
+import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title, Text } = Typography
 
 export default function TrinhDoQuanLyNhaNuocForm({ expland, setExpland }: DomProps) {
-    const { showSpinner, hideSpinner } = useSpinner()
+    const form = Form.useFormInstance<SubmitForm>()
 
-    const { onOpen } = useDisclosure({
-        tag: PutTrinhDoQuanyNhaNuocModal.name,
+    const nhaNuocList = Form.useWatch('trinhDoQuanLyNhaNuoc', form) || []
+    const { data } = useFindManyDM_TrinhDoQuanLyNhaNuoc()
+
+    const { onOpen } = useDisclosure<
+        Partial<TrinhDoQuanLyNhaNuoc> & { onSave: (val: TrinhDoQuanLyNhaNuoc) => void }
+    >({
+        tag: PutTrinhDoQuanLyNhaNuocModal.name,
     })
 
-    const handleModal = () => {
-        onOpen()
+    const handleSave = (data: TrinhDoQuanLyNhaNuoc) => {
+        const currentList = form.getFieldValue('trinhDoQuanLyNhaNuoc') || []
+        const newList = [...currentList, { ...data }]
+        form.setFieldValue('trinhDoQuanLyNhaNuoc', newList)
     }
 
-    const hasData = true
+    const handleUpdate = (data: TrinhDoQuanLyNhaNuoc, index: number) => {
+        const currentList = form.getFieldValue('trinhDoQuanLyNhaNuoc') || []
+        const newList = [...currentList]
+        newList[index] = { ...data }
+        form.setFieldValue('trinhDoQuanLyNhaNuoc', newList)
+    }
+
+    const handleDelete = (index: number) => {
+        const currentList = form.getFieldValue('trinhDoQuanLyNhaNuoc') || []
+        const newList = currentList.filter((_: any, i: number) => i !== index)
+        form.setFieldValue('trinhDoQuanLyNhaNuoc', newList)
+    }
+
+    const handleModal = () => {
+        onOpen({ onSave: handleSave })
+    }
+
+    const handleEdit = (data: TrinhDoQuanLyNhaNuoc, index: number) => {
+        onOpen({
+            ...data,
+            onSave: (data: TrinhDoQuanLyNhaNuoc) => handleUpdate(data, index),
+        })
+    }
+
+    const hasData = nhaNuocList && nhaNuocList.length > 0
 
     const renderContent = () => {
         if (!hasData) {
@@ -73,56 +106,57 @@ export default function TrinhDoQuanLyNhaNuocForm({ expland, setExpland }: DomPro
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => record?.name || '',
+                            render: (_, record) => record?.hinhThucDaoTao || '',
                         },
                         {
                             title: 'Trình độ',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.dM_MoiQuanHe?.name || '',
+                            render: (_, record) => {
+                                const trinhDo = data?.find((item) => item.id === record.trinhDoId)
+                                return trinhDo ? trinhDo.name : ''
+                            },
                         },
                         {
                             title: 'Cơ sở đào tạo',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.birthYear || '',
+                            render: (_, record) => record?.noiDaoTao || '',
                         },
                         {
                             title: 'Thời gian bắt đầu',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.job || '',
+                            render: (_, record) => record?.thoiGianBatDau || '',
                         },
                         {
                             title: 'Thời gian kết thúc ',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.information || '',
+                            render: (_, record) => record?.thoiGianKetThuc || '',
                         },
                         {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
                             fixed: 'right',
-                            render: (_, record) => (
+                            render: (_, record, index) => (
                                 <Row className="justify-center gap-2">
                                     <EditIcon
                                         className="text-sm text-blue-700 cursor-pointer"
-                                        // onClick={onOpen.bind(null, record)}
+                                        onClick={() => handleEdit(record as any, index)}
                                     />
                                     <DeleteIcon
-                                        popConfirm={
-                                            {
-                                                // onConfirm: () => handleDeleteRelative(record.id),
-                                            }
-                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(index),
+                                        }}
                                         onClick={(e) => e.stopPropagation()}
                                     />
                                 </Row>
                             ),
                         },
                     ]}
-                    // dataSource={relatives}
+                    dataSource={nhaNuocList}
                     pagination={false}
                 />
             </div>

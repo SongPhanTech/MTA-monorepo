@@ -1,10 +1,9 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { TinHoc } from '@workspace/db'
 import { useFindManyDM_TrinhDoTinHoc } from '@workspace/db/hooks'
-import { Col, DatePicker, Form, Input } from 'antd'
+import { Col, DatePicker, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -40,13 +39,12 @@ export default function PutTinHocModal() {
 
             const dataToSave: TinHoc = {
                 ...values,
-                ...(input?.id && { id: input.id }),
             }
 
             if (input?.onSave) {
                 input.onSave(dataToSave)
             }
-
+            message.success(input ? 'Cập nhật tin học thành công' : 'Thêm mới tin học thành công')
             onClose()
         } catch (error) {
             console.error('Error:', error)
@@ -75,13 +73,13 @@ export default function PutTinHocModal() {
 
             <Col span={24}>
                 <FormItem label="Trình độ" name="dM_TrinhDoTinHocId" required form={form}>
-                    <Select
+                    {/* <Select
                         placeholder="Chọn trình độ"
                         options={data.map((i) => ({
                             label: i.sTen,
                             value: i.Id,
                         }))}
-                    />
+                    /> */}
                 </FormItem>
             </Col>
 
