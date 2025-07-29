@@ -28,6 +28,11 @@ const GENDER_MEAN = {
     Female: 'Nữ',
 }
 
+const GENDER_MEAN_NEW = {
+    0: 'Nam',
+    1: 'Nữ',
+}
+
 const GENDER_LIST = [
     {
         name: 'Nam',
@@ -196,4 +201,5 @@ export {
     SUBJECT_CLASS_SCHEDULE_TYPE,
     CUSTOM_VI_LOCALE,
     USER_TYPE,
+    GENDER_MEAN_NEW,
 }

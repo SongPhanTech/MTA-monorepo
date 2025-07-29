@@ -7,12 +7,12 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
-    GENDER_MEAN,
+    GENDER_MEAN_NEW,
     USER_TYPE,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useCountUserProfile, useFindManyUserProfile, useUpdateStudent } from '@workspace/db/hooks'
+import { useCountUserProfile, useFindManyDM_NhanVien, useUpdateStudent } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -30,7 +30,7 @@ export default function UserProfilePageDs() {
         code: '',
         name: '',
         dateOfBirth: undefined,
-        gender: undefined,
+        iGioiTinh: undefined,
         email: '',
         phoneNumber: '',
     })
@@ -40,11 +40,11 @@ export default function UserProfilePageDs() {
     const router = useRouter()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-    const { data: UserProfileData = [], refetch } = useFindManyUserProfile({
+    const { data: UserProfileData = [], refetch } = useFindManyDM_NhanVien({
         where: {
             ...(filters.code
                 ? {
-                      code: {
+                      sMa: {
                           contains: filters.code,
                           mode: 'insensitive',
                       },
@@ -54,12 +54,12 @@ export default function UserProfilePageDs() {
                 ? {
                       OR: [
                           {
-                              firstName: {
+                              sTen: {
                                   contains: filters.name,
                               },
                           },
                           {
-                              lastName: {
+                              sHoVaDem: {
                                   contains: filters.name,
                               },
                           },
@@ -68,35 +68,35 @@ export default function UserProfilePageDs() {
                 : {}),
             ...(filters.dateOfBirth?.length === 2
                 ? {
-                      dateOfBirth: {
+                      dNgaySinh: {
                           gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
                           lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),
-            ...(filters.gender
-                ? {
-                      gender: {
-                          in: filters.gender,
-                      },
-                  }
-                : {}),
-            ...(filters.phoneNumber
-                ? {
-                      phoneNumber: {
-                          contains: filters.phoneNumber,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.email
-                ? {
-                      email: {
-                          contains: filters.email,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
+            // ...(filters.iGioiTinh
+            //     ? {
+            //           iGioiTinh: {
+            //               in: filters.iGioiTinh,
+            //           },
+            //       }
+            //     : {}),
+            // ...(filters.phoneNumber
+            //     ? {
+            //           sSDTDiDong: {
+            //               contains: filters.phoneNumber,
+            //               mode: 'insensitive',
+            //           },
+            //       }
+            //     : {}),
+            // ...(filters.email
+            //     ? {
+            //           sEmail: {
+            //               contains: filters.email,
+            //               mode: 'insensitive',
+            //           },
+            //       }
+            //     : {}),
         },
     })
 
@@ -271,6 +271,7 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
+                                render: (__, record) => record.sMa,
                             },
                             {
                                 title: 'Họ và tên',
@@ -278,19 +279,30 @@ export default function UserProfilePageDs() {
                                 width: 180,
                                 fixed: 'left',
                                 render: (__, record) =>
-                                    record ? `${record.lastName} ${record.firstName}` : '',
+                                    record.sTenDayDu
+                                        ? record.sTenDayDu
+                                        : `${record?.sHoVaDem} ${record?.sTenDayDu}`,
                                 type: 'input',
                                 dataIndex: 'name',
+                            },
+                            {
+                                title: 'CCCD/CMND',
+                                align: 'center',
+                                width: 150,
+                                fixed: 'left',
+                                render: (__, record) => (record.sCCCD ? record.sCCCD : ''),
+                                type: 'input',
+                                dataIndex: 'sCCCD',
                             },
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
                                 width: 150,
-                                dataIndex: 'dateOfBirth',
+                                dataIndex: 'dNgaySinh',
                                 type: 'date',
                                 render: (__, record) =>
-                                    record?.dateOfBirth
-                                        ? dayjs(record.dateOfBirth).format('DD/MM/YYYY')
+                                    record?.dNgaySinh
+                                        ? dayjs(record.dNgaySinh).format('DD/MM/YYYY')
                                         : '',
                             },
                             {
@@ -300,13 +312,15 @@ export default function UserProfilePageDs() {
                                 type: 'select',
                                 dataIndex: 'gender',
                                 options: [
-                                    { label: 'Nam', value: 'Male' },
-                                    { label: 'Nữ', value: 'Female' },
+                                    { label: 'Nam', value: 0 },
+                                    { label: 'Nữ', value: 1 },
                                 ],
 
                                 render: (__, record) =>
-                                    record?.gender
-                                        ? GENDER_MEAN[record?.gender as keyof typeof GENDER_MEAN]
+                                    record?.iGioiTinh
+                                        ? GENDER_MEAN_NEW[
+                                              record?.iGioiTinh as keyof typeof GENDER_MEAN_NEW
+                                          ]
                                         : '',
                             },
                             {
@@ -316,7 +330,7 @@ export default function UserProfilePageDs() {
                                 type: 'input',
                                 dataIndex: 'phoneNumber',
                                 render: (__, record) =>
-                                    record?.phoneNumber ? record?.phoneNumber : '',
+                                    record?.sSDTDiDong ? record?.sSDTDiDong : '',
                             },
                             {
                                 title: 'Email',
@@ -324,16 +338,17 @@ export default function UserProfilePageDs() {
                                 width: 150,
                                 type: 'input',
                                 dataIndex: 'email',
-                                render: (__, record) => (record.email ? record?.email : ''),
+                                render: (__, record) => (record.sEmail ? record?.sEmail : ''),
                             },
                             {
                                 title: 'Vị trí công việc',
                                 align: 'center',
                                 width: 150,
                                 render: (__, record) =>
-                                    record?.userType
-                                        ? USER_TYPE.find((item) => item.value === record?.userType)
-                                              ?.label
+                                    record?.sDM_ViTriCongViecId
+                                        ? USER_TYPE.find(
+                                              (item) => item.value === record?.sDM_ViTriCongViecId
+                                          )?.label
                                         : '',
                             },
                             {
@@ -357,30 +372,30 @@ export default function UserProfilePageDs() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id, idCardNumber }) => (
+                                render: (_, { Id, sCCCD }) => (
                                     <Row className="justify-center gap-2">
                                         <PrinterIcon
                                             onClick={(e) => {
                                                 e.stopPropagation()
-                                                onOpenModalTomTatLyLich({ id })
+                                                onOpenModalTomTatLyLich({ id: Id })
                                             }}
                                         />
                                         <EditIcon
                                             onClick={() => {
-                                                router.push(`quan-ly-ho-so/${idCardNumber}`)
+                                                router.push(`quan-ly-ho-so/${sCCCD}`)
                                             }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: () => handleDelete(Id),
                                             }}
                                         />
                                     </Row>
                                 ),
                             },
                         ]}
-                        rowKey="id"
+                        rowKey="Id"
                         // rowSelection={{
                         //     selectedRowKeys,
                         //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
