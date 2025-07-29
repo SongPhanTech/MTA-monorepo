@@ -23,7 +23,12 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
         tag: PutQuaTrinhCuDiCongTacModal.name,
     })
 
-    const { data: chucVuList = [] } = useFindManyDM_ChucVu()
+    const { data: chucVuList = [] } = useFindManyDM_ChucVu(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCuDiCongTac'),
+        }
+    )
 
     const handleSave = (data: QuaTrinhCuDiCongTac) => {
         const currentList = form.getFieldValue('quaTrinhCuDiCongTac') || []

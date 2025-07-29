@@ -29,9 +29,24 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
         tag: PutHocViModal.name,
     })
 
-    const { data: quocGiaData = [] } = useFindManyDM_QuocGia()
-    const { data: truongData = [] } = useFindManyDM_TruongDaoTaoBacDH()
-    const { data: hocViData = [] } = useFindManyDM_HocVi()
+    const { data: quocGiaData = [] } = useFindManyDM_QuocGia(
+        {},
+        {
+            enabled: expland.includes('hocVi'),
+        }
+    )
+    const { data: truongData = [] } = useFindManyDM_TruongDaoTaoBacDH(
+        {},
+        {
+            enabled: expland.includes('hocVi'),
+        }
+    )
+    const { data: hocViData = [] } = useFindManyDM_HocVi(
+        {},
+        {
+            enabled: expland.includes('hocVi'),
+        }
+    )
 
     const handleSave = (data: HocVi) => {
         const currentList = form.getFieldValue('hocVi') || []

@@ -25,7 +25,12 @@ export default function TinHocForm({ expland, setExpland }: DomProps) {
     >({
         tag: PutTinHocModal.name,
     })
-    const { data = [] } = useFindManyDM_TrinhDoTinHoc()
+    const { data = [] } = useFindManyDM_TrinhDoTinHoc(
+        {},
+        {
+            enabled: expland.includes('tinHoc'),
+        }
+    )
 
     const handleSave = (data: TinHoc) => {
         const currentList = form.getFieldValue('tinHoc') || []

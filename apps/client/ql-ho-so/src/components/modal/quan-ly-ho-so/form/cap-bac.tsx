@@ -16,7 +16,12 @@ const { Title, Text } = Typography
 export default function CapBacForm({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
     const capBacList: CapBac[] = Form.useWatch('capBac', form)
-    const { data: capBacData = [] } = useFindManyDM_CapBac()
+    const { data: capBacData = [] } = useFindManyDM_CapBac(
+        {},
+        {
+            enabled: expland.includes('capBac'),
+        }
+    )
 
     const { onOpen } = useDisclosure<Partial<CapBac> & { onSave: (val: CapBac) => void }>({
         tag: PutCapBacModal.name,

@@ -23,7 +23,12 @@ export default function QuaTrinhDiDaoTaoBoiDuongForm({ expland, setExpland }: Do
         tag: PutQuaTrinhCuDiBoiDuongModal.name,
     })
 
-    const { data: loaiHinhList } = useFindManyDM_LoaiHinhDiHocTap()
+    const { data: loaiHinhList } = useFindManyDM_LoaiHinhDiHocTap(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCuDiDaoTao'),
+        }
+    )
 
     const handleSave = (data: QuaTrinhCuDiDaoTao) => {
         const currentList = form.getFieldValue('quaTrinhCuDiDaoTao') || []

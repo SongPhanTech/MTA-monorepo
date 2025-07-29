@@ -26,7 +26,12 @@ export default function HocHamForm({ expland, setExpland }: DomProps) {
         tag: PutHocHamModal.name,
     })
 
-    const { data: hocHamData = [] } = useFindManyDM_HocHam()
+    const { data: hocHamData = [] } = useFindManyDM_HocHam(
+        {},
+        {
+            enabled: expland.includes('hocHam'),
+        }
+    )
 
     const handleSave = (data: HocHam) => {
         const currentList = form.getFieldValue('hocHam') || []

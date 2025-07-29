@@ -26,7 +26,12 @@ export default function TrinhDoLyLuanChinhTriForm({ expland, setExpland }: DomPr
         tag: PutTrinhDoLyLuanChinhTriModal.name,
     })
 
-    const { data: chinhTriData = [] } = useFindManyDM_TrinhDoLyLuanChinhTri()
+    const { data: chinhTriData = [] } = useFindManyDM_TrinhDoLyLuanChinhTri(
+        {},
+        {
+            enabled: expland.includes('trinhDoLyLuanChinhTri'),
+        }
+    )
 
     const handleSave = (data: TrinhDoLyLuanChinhTri) => {
         const currentList = form.getFieldValue('trinhDoLyLuanChinhTri') || []

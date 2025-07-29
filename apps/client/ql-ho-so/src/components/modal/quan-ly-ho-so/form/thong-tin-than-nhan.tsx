@@ -20,7 +20,12 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
         tag: PutThongTinThanNhan.name,
     })
 
-    const { data: quanHeData = [] } = useFindManyDM_MoiQuanHe()
+    const { data: quanHeData = [] } = useFindManyDM_MoiQuanHe(
+        {},
+        {
+            enabled: expland.includes('thongTinThanNhan'),
+        }
+    )
 
     const handleSave = (data: Relative) => {
         const currentList = form.getFieldValue('relatives') || []

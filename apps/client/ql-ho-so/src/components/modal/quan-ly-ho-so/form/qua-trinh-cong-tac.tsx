@@ -17,7 +17,12 @@ export default function QuaTrinhCongTacForm({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
     const congTacList: QuaTrinhCongTac[] = Form.useWatch('quaTrinhCongTac', form)
 
-    const { data: chucVuList = [] } = useFindManyDM_ChucVu()
+    const { data: chucVuList = [] } = useFindManyDM_ChucVu(
+        {},
+        {
+            enabled: expland.includes('quaTrinhCongTac'),
+        }
+    )
 
     const { onOpen } = useDisclosure<
         Partial<QuaTrinhCongTac> & { onSave: (val: QuaTrinhCongTac) => void }
@@ -25,7 +30,12 @@ export default function QuaTrinhCongTacForm({ expland, setExpland }: DomProps) {
         tag: PutQuaTrinhCongTacModal.name,
     })
 
-    const { data: loaiHinhCongTacList = [] } = useFindManyDM_LoaiHinhCongTac()
+    const { data: loaiHinhCongTacList = [] } = useFindManyDM_LoaiHinhCongTac(
+        {},
+        {
+            enabled: expland.includes('trinhDoQuanLyNhaNuoc'),
+        }
+    )
 
     const handleSave = (data: QuaTrinhCongTac) => {
         const currentList = form.getFieldValue('quaTrinhCongTac') || []

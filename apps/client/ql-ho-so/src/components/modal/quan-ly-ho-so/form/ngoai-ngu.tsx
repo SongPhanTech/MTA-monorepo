@@ -16,7 +16,12 @@ const { Title, Text } = Typography
 export default function NgoaiNguForm({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
     const ngoaiNguList = Form.useWatch('ngoaiNgu', form) || []
-    const { data: trinhDoData = [] } = useFindManyDM_TrinhDoNgoaiNgu()
+    const { data: trinhDoData = [] } = useFindManyDM_TrinhDoNgoaiNgu(
+        {},
+        {
+            enabled: expland.includes('ngoaiNgu'),
+        }
+    )
 
     const { onOpen } = useDisclosure<Partial<NgoaiNgu> & { onSave: (val: NgoaiNgu) => void }>({
         tag: PutNgoaiNguModal.name,

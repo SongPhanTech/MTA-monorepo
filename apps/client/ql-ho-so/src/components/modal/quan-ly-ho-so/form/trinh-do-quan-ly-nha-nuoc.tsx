@@ -16,7 +16,12 @@ export default function TrinhDoQuanLyNhaNuocForm({ expland, setExpland }: DomPro
     const form = Form.useFormInstance<SubmitForm>()
 
     const nhaNuocList = Form.useWatch('trinhDoQuanLyNhaNuoc', form) || []
-    const { data } = useFindManyDM_TrinhDoQuanLyNhaNuoc()
+    const { data } = useFindManyDM_TrinhDoQuanLyNhaNuoc(
+        {},
+        {
+            enabled: expland.includes('trinhDoQuanLyNhaNuoc'),
+        }
+    )
 
     const { onOpen } = useDisclosure<
         Partial<TrinhDoQuanLyNhaNuoc> & {
