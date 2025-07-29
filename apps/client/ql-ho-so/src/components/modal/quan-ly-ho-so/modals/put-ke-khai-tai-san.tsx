@@ -25,7 +25,7 @@ export default function PutKeKhaiTaiSanModal() {
                 input.onSave(output)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật kê khai tài sản thành công'
                     : 'Thêm mới kê khai tài sản thành công'
             )
@@ -45,13 +45,15 @@ export default function PutKeKhaiTaiSanModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật kê khai tài sản' : 'Thêm mới kê khai tài sản '}
+            title={isEdit ? 'Cập nhật kê khai tài sản' : 'Thêm mới kê khai tài sản '}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -70,7 +72,10 @@ export default function PutKeKhaiTaiSanModal() {
                 <FormItem label="Thời gian kê khai" name="thoiGianKeKhai" required form={form}>
                     <DatePicker
                         placeholder="Chọn thời gian kê khai"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                         className="w-full"
                     />
                 </FormItem>

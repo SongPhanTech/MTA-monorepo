@@ -34,7 +34,7 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
                 input.onSave(dataToSave)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật lý luận chính trị thành công'
                     : 'Thêm mới lý luận chính trị thành công'
             )
@@ -55,6 +55,8 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
@@ -62,7 +64,7 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
             onFinish={onOk}
             onCancel={onClose}
             title={
-                input?.id
+                isEdit
                     ? 'Cập nhật trình độ lý luận chính trị'
                     : 'Thêm mới trình độ lý luận chính trị'
             }
@@ -93,7 +95,10 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
                     <DatePicker
                         placeholder="Chọn thời gian bắt đầu"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -102,7 +107,10 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
                     <DatePicker
                         placeholder="Chọn thời gian kết thúc"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>

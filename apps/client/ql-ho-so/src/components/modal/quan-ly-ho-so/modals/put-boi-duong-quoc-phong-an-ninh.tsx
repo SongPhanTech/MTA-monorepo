@@ -26,7 +26,7 @@ export default function PutBoiDuongQuocPhongModal() {
                 input.onSave(dataToSave)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật bồi dưỡng quốc phòng an ninh thành công'
                     : 'Thêm mới bồi dưỡng quốc phòng an ninh thành công'
             )
@@ -46,13 +46,15 @@ export default function PutBoiDuongQuocPhongModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật trình độ ngoại ngữ' : 'Thêm mới trình độ ngoại ngữ'}
+            title={isEdit ? 'Cập nhật trình độ ngoại ngữ' : 'Thêm mới trình độ ngoại ngữ'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -66,7 +68,10 @@ export default function PutBoiDuongQuocPhongModal() {
                     <DatePicker
                         placeholder="Chọn thời gian bắt đầu"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -75,7 +80,10 @@ export default function PutBoiDuongQuocPhongModal() {
                     <DatePicker
                         placeholder="Chọn thời gian kết thúc"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>

@@ -41,7 +41,7 @@ export default function PutHocViModal() {
             if (input?.onSave) {
                 input.onSave(dataToSave)
             }
-            message.success(input?.id ? 'Cập nhật học vị thành công' : 'Thêm mới học vị thành công')
+            message.success(isEdit ? 'Cập nhật học vị thành công' : 'Thêm mới học vị thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -58,7 +58,7 @@ export default function PutHocViModal() {
         }
     }, [isOpen, input, form])
 
-    const isEdit = !!input?.id
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
 
     return (
         <PutFormModal

@@ -29,7 +29,7 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
                 input.onSave(output)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật quá trình được cử đi đào tạo bồi dưỡng thành công'
                     : 'Thêm mới quá trình được cử đi đào tạo bồi dưỡng thành công'
             )
@@ -49,6 +49,8 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
@@ -56,7 +58,7 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
             onFinish={onOk}
             onCancel={onClose}
             title={
-                input?.id
+                isEdit
                     ? 'Cập nhật quá trình đi đào tạo bồi dưỡng'
                     : 'Thêm mới quá trình đi đào tạo bồi dưỡng'
             }
@@ -87,12 +89,26 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
             </Col>
             <Col span={24}>
                 <FormItem label="Từ ngày" name="tuNgay" required form={form}>
-                    <DatePicker placeholder="Từ ngày" format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        placeholder="Từ ngày"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem label="Đến ngày " name="denNgay" required form={form}>
-                    <DatePicker placeholder="Đến ngày" format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        placeholder="Đến ngày"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

@@ -4,6 +4,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutHocHamModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-ham'
 import type { DomProps } from '@constants/type'
+import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { HocHam } from '@workspace/db'
 import { useFindManyDM_HocHam } from '@workspace/db/hooks'
@@ -117,28 +118,28 @@ export default function HocHamForm({ expland, setExpland }: DomProps) {
                             },
                         },
                         {
-                            title: 'Lĩnh vực',
+                            title: 'Nơi cấp',
                             align: 'center',
                             width: 200,
-                            render: (_, record) => record.linhVuc || '',
+                            render: (_, record) => record.noiCap || '',
                         },
                         {
-                            title: 'Trường',
+                            title: 'Số quyết định',
                             align: 'center',
                             width: 200,
-                            render: (_, record) => record?.truong?.name || '',
+                            render: (_, record) => record.soQuyetDinh || '',
                         },
                         {
-                            title: 'Quốc gia',
+                            title: 'Thời gian bắt đầu',
                             align: 'center',
                             width: 120,
-                            render: (_, record) => record?.nationality?.sTen || '',
+                            render: (_, record) => formatDate(record?.from) || '',
                         },
                         {
-                            title: 'Năm nhận',
+                            title: 'Thời gian kết thúc',
                             align: 'center',
                             width: 120,
-                            render: (_, record) => record.year || '',
+                            render: (_, record) => formatDate(record?.to) || '',
                         },
                         {
                             title: 'Thao tác',

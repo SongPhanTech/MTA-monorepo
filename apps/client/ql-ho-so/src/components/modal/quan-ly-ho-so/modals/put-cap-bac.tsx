@@ -28,9 +28,7 @@ export default function PutCapBacModal() {
             if (input?.onSave) {
                 input.onSave(output)
             }
-            message.success(
-                input?.id ? 'Cập nhật cấp bậc thành công' : 'Thêm mới cấp bậc thành công'
-            )
+            message.success(isEdit ? 'Cập nhật cấp bậc thành công' : 'Thêm mới cấp bậc thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -47,13 +45,15 @@ export default function PutCapBacModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
+            title={isEdit ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -71,7 +71,7 @@ export default function PutCapBacModal() {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem label="Cấp ra quyết định" name="capRaQuyetDinh" form={form} r>
+                <FormItem label="Cấp ra quyết định" name="capRaQuyetDinh" form={form} required>
                     <Input placeholder="Nhập cấp ra quyết định" />
                 </FormItem>
             </Col>
@@ -85,7 +85,10 @@ export default function PutCapBacModal() {
                     <DatePicker
                         placeholder="Chọn ngày nhận quyết định"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>

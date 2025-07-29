@@ -29,7 +29,7 @@ export default function PutQuaTrinhCuDiCongTacModal() {
                 input.onSave(output)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật quá trình được cử đi công tác thành công'
                     : 'Thêm mới quá trình được cử đi công tác thành công'
             )
@@ -49,13 +49,15 @@ export default function PutQuaTrinhCuDiCongTacModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
+            title={isEdit ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -64,7 +66,10 @@ export default function PutQuaTrinhCuDiCongTacModal() {
                     <DatePicker
                         placeholder="Chọn từ tháng năm"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -74,7 +79,10 @@ export default function PutQuaTrinhCuDiCongTacModal() {
                     <DatePicker
                         placeholder="Chọn đến tháng năm"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>

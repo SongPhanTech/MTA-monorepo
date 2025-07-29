@@ -26,7 +26,7 @@ export default function PutDoiTuongChinhSachModal() {
                 input.onSave(output)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật đối tượng chính sách thành công'
                     : 'Thêm mới đối tượng chính sách thành công'
             )
@@ -47,13 +47,15 @@ export default function PutDoiTuongChinhSachModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật đối tượng chính sách' : 'Thêm mới đối tượng chính sách'}
+            title={isEdit ? 'Cập nhật đối tượng chính sách' : 'Thêm mới đối tượng chính sách'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -67,7 +69,10 @@ export default function PutDoiTuongChinhSachModal() {
                 <FormItem label="Bắt đầu từ" name="ngayBatDau" required form={form}>
                     <DatePicker
                         placeholder="Chọn ngày bắt đầu"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                         className="w-full"
                     />
                 </FormItem>
@@ -76,7 +81,10 @@ export default function PutDoiTuongChinhSachModal() {
                 <FormItem label="Kết thúc vào" name="ngayKetThuc" required form={form}>
                     <DatePicker
                         placeholder="Chọn ngày kết thúc"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                         className="w-full"
                     />
                 </FormItem>

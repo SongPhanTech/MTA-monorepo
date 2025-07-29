@@ -4,7 +4,6 @@ import HocViForm from '@components/modal/quan-ly-ho-so/form/hoc-vi'
 import ThongTinCoBan from '@components/modal/quan-ly-ho-so/form/thong-tin-co-ban'
 import ThongTinThanNhanForm from '@components/modal/quan-ly-ho-so/form/thong-tin-than-nhan'
 import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trinh-do-ly-luan-chinh-tri'
-import CreateLayout from '@layouts/create-layout'
 import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
@@ -37,6 +36,7 @@ import ThongTinLienHe from '@components/modal/quan-ly-ho-so/form/thong-tin-lien-
 import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
+import CreateLayout from '@layouts/create-layout'
 import { getMinioUrl } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateUserProfile, useFindUniqueUserProfile } from '@workspace/db/hooks'
@@ -364,6 +364,18 @@ export default function UpdateUserPage() {
                 academicRankType: true,
                 level: true,
                 tinHoc: true,
+                hocVi: true,
+                hocHam: true,
+                trinhDoLyLuanChinhTri: true,
+                trinhDoQuanLyNhaNuoc: true,
+                ngoaiNgu: true,
+                boiDuongQuocPhongAnNinh: true,
+                capBac: true,
+                doiTuongChinhSach: true,
+                keKhaiTaiSan: true,
+                khenThuong: true,
+                kyLuat: true,
+                quaTrinhCongTac: true,
             },
         },
         {
@@ -375,53 +387,19 @@ export default function UpdateUserPage() {
     const fillUserInfo = useCallback(
         (userData: any) => {
             if (!userData) return
-
             // Fill thông tin cơ bản từ UserProfile
             form.setFieldsValue({
-                avatar: userData.avatar,
-                code: userData.code,
-                firstName: userData.firstName,
-                lastName: userData.lastName,
+                ...userData,
                 dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
-                gender: userData.gender,
-                phoneNumber: userData.phoneNumber,
-                email: userData.email,
                 idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,
                 idCardExpirationDate: userData.idCardExpirationDate
                     ? dayjs(userData.idCardExpirationDate)
                     : null,
-                officerNumber: userData.officerNumber,
-                healthInsuranceNumber: userData.healthInsuranceNumber,
-                bankAccountNumber: userData.bankAccountNumber,
-                bankName: userData.bankName,
-                currentAddress: userData.currentAddress,
-                placeOfIdCardNumber: userData.placeOfIdCardNumber,
-
                 // Thông tin cá nhân khác
-                nationalityId: userData.nationalityId,
-                religionId: userData.religionId,
-                ethnicityId: userData.ethnicityId,
                 unionDate: userData.unionDate ? dayjs(userData.unionDate) : null,
-                unionPlace: userData.unionPlace,
                 CPVJoinDate: userData.CPVJoinDate ? dayjs(userData.CPVJoinDate) : null,
                 officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
-                CPVJoinPlace: userData.CPVJoinPlace,
                 tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
-                tinHoc: userData.tinHoc || [],
-                hocVi: userData.hocVi || [],
-                hocHam: userData.hocHam || [],
-                trinhDoLyLuanChinhTri: userData.trinhDoLyLuanChinhTri || [],
-                trinhDoQuanLyNhaNuoc: userData.trinhDoQuanLyNhaNuoc || [],
-                ngoaiNgu: userData.ngoaiNgu || [],
-                boiDuongQuocPhongAnNinh: userData.boiDuongQuocPhongAnNinh || [],
-                capBac: userData.capBac || [],
-                doiTuongChinhSach: userData.doiTuongChinhSach || [],
-                keKhaiTaiSan: userData.keKhaiTaiSan || [],
-                quaTrinhCongTac: userData.quaTrinhCongTac || [],
-                quaTrinhCuDiCongTac: userData.quaTrinhCuDiCongTac || [],
-                quaTrinhCuDiDaoTao: userData.quaTrinhCuDiDaoTao || [],
-                khenThuong: userData.khenThuong || [],
-                kyLuat: userData.kyLuat || [],
             })
         },
         [form]

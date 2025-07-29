@@ -34,7 +34,7 @@ export default function PutHocHamModal() {
             if (input?.onSave) {
                 input.onSave(dataToSave)
             }
-            message.success(input ? 'Cập nhật học hàm thành công' : 'Thêm mới học hàm thành công')
+            message.success(isEdit ? 'Cập nhật học hàm thành công' : 'Thêm mới học hàm thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -51,13 +51,15 @@ export default function PutHocHamModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật học hàm' : 'Thêm mới học hàm'}
+            title={isEdit ? 'Cập nhật học hàm' : 'Thêm mới học hàm'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -85,7 +87,10 @@ export default function PutHocHamModal() {
                     <DatePicker
                         placeholder="Nhập thời gian bắt đầu"
                         style={{ width: '100%' }}
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -94,7 +99,10 @@ export default function PutHocHamModal() {
                     <DatePicker
                         placeholder="Nhập thời gian kết thúc"
                         style={{ width: '100%' }}
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>

@@ -4,8 +4,8 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { QuaTrinhCongTac } from '@workspace/db'
-import { useFindManyDM_ChucVu } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { useFindManyDM_ChucVu, useFindManyDM_LoaiHinhCongTac } from '@workspace/db/hooks'
+import { Col, Form, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -20,6 +20,8 @@ export default function PutQuaTrinhCongTacModal() {
         onClose: form.resetFields,
     })
 
+    const { data: loaiHinhCongTacList = [] } = useFindManyDM_LoaiHinhCongTac()
+
     const { data: chucVuOptions } = useFindManyDM_ChucVu()
 
     async function onOk(output: QuaTrinhCongTac) {
@@ -29,7 +31,7 @@ export default function PutQuaTrinhCongTacModal() {
                 input.onSave(output)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật quá trình công tác thành công'
                     : 'Thêm mới quá trình công tác thành công'
             )
@@ -49,13 +51,15 @@ export default function PutQuaTrinhCongTacModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
+            title={isEdit ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -64,7 +68,10 @@ export default function PutQuaTrinhCongTacModal() {
                     <DatePicker
                         placeholder="Chọn từ tháng năm"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -74,13 +81,22 @@ export default function PutQuaTrinhCongTacModal() {
                     <DatePicker
                         placeholder="Chọn đến tháng năm"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <FormItem label="Đơn vị" name="donVi" required form={form}>
-                    <Input placeholder="Nhập đơn vị" />
+            <Col>
+                <FormItem label="Loại hình công tác" name="loaiHinhCongTacId" required form={form}>
+                    <Select
+                        placeholder="Chọn loại hình công tác"
+                        options={loaiHinhCongTacList?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

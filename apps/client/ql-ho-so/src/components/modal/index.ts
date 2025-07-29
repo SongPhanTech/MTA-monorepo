@@ -42,7 +42,7 @@ import PutThongTinThanNhan from './quan-ly-ho-so/modals/put-thong-tin-than-nhan'
 import PutTinHocModal from './quan-ly-ho-so/modals/put-tin-hoc'
 import PutTrinhDoLyLuanChinhTriModal from './quan-ly-ho-so/modals/put-trinh-do-ly-luan-chinh-tri'
 import PutTrinhDoQuanLyHanhChinhModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
-import PutTrinhDoQuanyNhaNuocModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
+import PutTrinhDoQuanLyNhaNuocModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 export {
     PutStudentModal,
     PutHocvienModal,
@@ -76,7 +76,7 @@ export {
     PutBoiDuongQuocPhongModal,
     PutTrinhDoLyLuanChinhTriModal,
     PutTrinhDoQuanLyHanhChinhModal,
-    PutTrinhDoQuanyNhaNuocModal,
+    PutTrinhDoQuanLyNhaNuocModal,
     PutNgoaiNguModal,
     PutTinHocModal,
     PutCapBacModal,

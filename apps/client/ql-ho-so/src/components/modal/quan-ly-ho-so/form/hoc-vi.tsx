@@ -143,7 +143,7 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
                             width: 120,
                             render: (_, record) => {
                                 const found = quocGiaData.find(
-                                    (item) => item.id === record.quocGiaId
+                                    (item) => item.Id === record.nationalityId
                                 )
                                 return found ? found.sTen : ''
                             },

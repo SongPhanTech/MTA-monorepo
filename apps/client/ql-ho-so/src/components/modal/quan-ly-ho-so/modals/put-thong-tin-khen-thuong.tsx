@@ -25,7 +25,7 @@ export default function PutKhenThuongModal() {
                 input.onSave(output)
             }
             message.success(
-                input?.id ? 'Cập nhật khen thưởng thành công' : 'Thêm mới khen thưởng thành công'
+                isEdit ? 'Cập nhật khen thưởng thành công' : 'Thêm mới khen thưởng thành công'
             )
             onClose()
         } catch (error) {
@@ -43,13 +43,15 @@ export default function PutKhenThuongModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật hình thức khen thưởng' : 'Thêm mới hình thức khen thưởng'}
+            title={isEdit ? 'Cập nhật hình thức khen thưởng' : 'Thêm mới hình thức khen thưởng'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -88,7 +90,10 @@ export default function PutKhenThuongModal() {
                 >
                     <DatePicker
                         placeholder="Chọn ngày nhận quyết định"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                         className="w-full"
                     />
                 </FormItem>

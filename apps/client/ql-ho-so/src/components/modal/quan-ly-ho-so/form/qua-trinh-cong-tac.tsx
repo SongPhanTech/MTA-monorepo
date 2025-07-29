@@ -7,7 +7,7 @@ import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { QuaTrinhCongTac } from '@workspace/db'
-import { useFindManyDM_ChucVu } from '@workspace/db/hooks'
+import { useFindManyDM_ChucVu, useFindManyDM_LoaiHinhCongTac } from '@workspace/db/hooks'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -24,6 +24,8 @@ export default function QuaTrinhCongTacForm({ expland, setExpland }: DomProps) {
     >({
         tag: PutQuaTrinhCongTacModal.name,
     })
+
+    const { data: loaiHinhCongTacList = [] } = useFindManyDM_LoaiHinhCongTac()
 
     const handleSave = (data: QuaTrinhCongTac) => {
         const currentList = form.getFieldValue('quaTrinhCongTac') || []
@@ -114,6 +116,17 @@ export default function QuaTrinhCongTacForm({ expland, setExpland }: DomProps) {
                             align: 'center',
                             width: 160,
                             render: (_, record) => formatDate(record?.denThangNam) || '',
+                        },
+                        {
+                            title: 'Loại hình công tác',
+                            align: 'center',
+                            width: 160,
+                            render: (_, record) => {
+                                const loaiHinh = loaiHinhCongTacList.find(
+                                    (item) => item.id === record?.loaiHinhCongTacId
+                                )
+                                return loaiHinh ? loaiHinh.name : ''
+                            },
                         },
                         {
                             title: 'Đơn vị',
