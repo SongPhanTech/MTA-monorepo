@@ -7,7 +7,7 @@ import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { NgoaiNgu } from '@workspace/db'
-import { useFindManyDM_NgoaiNgu } from '@workspace/db/hooks'
+import { useFindManyDM_TrinhDoNgoaiNgu } from '@workspace/db/hooks'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -16,7 +16,7 @@ const { Title, Text } = Typography
 export default function NgoaiNguForm({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
     const ngoaiNguList = Form.useWatch('ngoaiNgu', form) || []
-    const { data } = useFindManyDM_NgoaiNgu()
+    const { data: trinhDoData = [] } = useFindManyDM_TrinhDoNgoaiNgu()
 
     const { onOpen } = useDisclosure<Partial<NgoaiNgu> & { onSave: (val: NgoaiNgu) => void }>({
         tag: PutNgoaiNguModal.name,
@@ -104,22 +104,22 @@ export default function NgoaiNguForm({ expland, setExpland }: DomProps) {
                             align: 'center',
                             width: 180,
                             fixed: 'left',
-                            render: (_, record) => {
-                                const nn = data?.find((item) => item.id === record.ngoaiNguId)
-                                return nn ? nn.name : ''
-                            },
+                            render: (_, record) => record?.hinhThucDaoTao || '',
                         },
                         {
                             title: 'Trình độ',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => record?.trinhDo || '',
+                            render: (_, record) => {
+                                const nn = trinhDoData?.find((item) => item.Id === record.trinhDoId)
+                                return nn ? nn.sTen : ''
+                            },
                         },
                         {
                             title: 'Cơ sở đào tạo',
                             align: 'center',
                             width: 140,
-                            render: (_, record) => record?.chungChi || '',
+                            render: (_, record) => record?.noiDaoTao || '',
                         },
                         {
                             title: 'Thời gian bắt đầu',

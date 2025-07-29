@@ -19,7 +19,9 @@ export default function TrinhDoQuanLyNhaNuocForm({ expland, setExpland }: DomPro
     const { data } = useFindManyDM_TrinhDoQuanLyNhaNuoc()
 
     const { onOpen } = useDisclosure<
-        Partial<TrinhDoQuanLyNhaNuoc> & { onSave: (val: TrinhDoQuanLyNhaNuoc) => void }
+        Partial<TrinhDoQuanLyNhaNuoc> & {
+            onSave: (val: TrinhDoQuanLyNhaNuoc) => void
+        }
     >({
         tag: PutTrinhDoQuanLyNhaNuocModal.name,
     })
@@ -157,6 +159,7 @@ export default function TrinhDoQuanLyNhaNuocForm({ expland, setExpland }: DomPro
                         },
                     ]}
                     dataSource={nhaNuocList}
+                    rowKey="id"
                     pagination={false}
                 />
             </div>

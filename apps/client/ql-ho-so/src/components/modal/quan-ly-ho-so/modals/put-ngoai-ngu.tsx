@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { NgoaiNgu } from '@workspace/db'
-import { useFindManyDM_NgoaiNgu } from '@workspace/db/hooks'
+import { useFindManyDM_NgoaiNgu, useFindManyDM_TrinhDoNgoaiNgu } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -21,6 +21,8 @@ export default function PutNgoaiNguModal() {
         onClose: form.resetFields,
     })
 
+    const { data: trinhDoData = [] } = useFindManyDM_TrinhDoNgoaiNgu()
+
     async function onOk(output: NgoaiNgu) {
         try {
             showSpinner()
@@ -28,7 +30,7 @@ export default function PutNgoaiNguModal() {
                 input.onSave(output)
             }
             message.success(
-                input?.id ? 'Cập nhật ngoại ngữ thành công' : 'Thêm mới ngoại ngữ thành công'
+                isEdit ? 'Cập nhật ngoại ngữ thành công' : 'Thêm mới ngoại ngữ thành công'
             )
             onClose()
         } catch (error) {
@@ -46,13 +48,15 @@ export default function PutNgoaiNguModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật ngoại ngữ' : 'Thêm mới ngoại ngữ'}
+            title={isEdit ? 'Cập nhật ngoại ngữ' : 'Thêm mới ngoại ngữ'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -63,10 +67,10 @@ export default function PutNgoaiNguModal() {
             </Col>
 
             <Col span={24}>
-                <FormItem label="Trình độ" name="dM_NgoaiNguId" required form={form}>
+                <FormItem label="Trình độ" name="trinhDoId" required form={form}>
                     <Select
                         placeholder="Chọn trình độ"
-                        options={data.map((i) => ({ label: i.name, value: i.id }))}
+                        options={trinhDoData.map((i) => ({ label: i.sTen, value: i.Id }))}
                     />
                 </FormItem>
             </Col>
@@ -80,7 +84,10 @@ export default function PutNgoaiNguModal() {
                     <DatePicker
                         placeholder="Chọn thời gian bắt đầu"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -89,7 +96,10 @@ export default function PutNgoaiNguModal() {
                     <DatePicker
                         placeholder="Chọn thời gian kết thúc"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>

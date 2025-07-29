@@ -1,5 +1,6 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { TinHoc } from '@workspace/db'
 import { useFindManyDM_TrinhDoTinHoc } from '@workspace/db/hooks'
@@ -44,7 +45,7 @@ export default function PutTinHocModal() {
             if (input?.onSave) {
                 input.onSave(dataToSave)
             }
-            message.success(input ? 'Cập nhật tin học thành công' : 'Thêm mới tin học thành công')
+            message.success(isEdit ? 'Cập nhật tin học thành công' : 'Thêm mới tin học thành công')
             onClose()
         } catch (error) {
             console.error('Error:', error)
@@ -53,7 +54,7 @@ export default function PutTinHocModal() {
         }
     }
 
-    const isEdit = !!input?.id
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
 
     return (
         <PutFormModal
@@ -73,13 +74,13 @@ export default function PutTinHocModal() {
 
             <Col span={24}>
                 <FormItem label="Trình độ" name="dM_TrinhDoTinHocId" required form={form}>
-                    {/* <Select
+                    <Select
                         placeholder="Chọn trình độ"
                         options={data.map((i) => ({
                             label: i.sTen,
                             value: i.Id,
                         }))}
-                    /> */}
+                    />
                 </FormItem>
             </Col>
 
@@ -94,7 +95,10 @@ export default function PutTinHocModal() {
                     <DatePicker
                         placeholder="Chọn thời gian bắt đầu"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -104,7 +108,10 @@ export default function PutTinHocModal() {
                     <DatePicker
                         placeholder="Chọn thời gian kết thúc"
                         className="w-full"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>

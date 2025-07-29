@@ -1,3 +1,4 @@
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -28,7 +29,7 @@ export default function PutTrinhDoQuanLyNhaNuocModal() {
                 input.onSave(output)
             }
             message.success(
-                input
+                isEdit
                     ? 'Cập nhật trình độ quản lý nhà nước thành công'
                     : 'Thêm mới trình độ quản lý nhà nước thành công'
             )
@@ -48,6 +49,8 @@ export default function PutTrinhDoQuanLyNhaNuocModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
@@ -55,9 +58,7 @@ export default function PutTrinhDoQuanLyNhaNuocModal() {
             onFinish={onOk}
             onCancel={onClose}
             title={
-                input?.id
-                    ? 'Cập nhật trình độ quản lý nhà nước'
-                    : 'Thêm mới trình độ quản lý nhà nước'
+                isEdit ? 'Cập nhật trình độ quản lý nhà nước' : 'Thêm mới trình độ quản lý nhà nước'
             }
             className="w-[40vw]"
             layout="vertical"
@@ -85,12 +86,26 @@ export default function PutTrinhDoQuanLyNhaNuocModal() {
             </Col>
             <Col span={24}>
                 <FormItem label="Thời gian bắt đầu" name="thoiGianBatDau" required form={form}>
-                    <Input placeholder="Nhập thời gian bắt đầu" />
+                    <DatePicker
+                        placeholder="Chọn thời gian bắt đầu"
+                        className="w-full"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem label="Thời gian kết thúc" name="thoiGianKetThuc" required form={form}>
-                    <Input placeholder="Nhập thời gian kết thúc" />
+                    <DatePicker
+                        placeholder="Chọn thời gian kết thúc"
+                        className="w-full"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

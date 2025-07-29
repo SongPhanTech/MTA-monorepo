@@ -24,9 +24,7 @@ export default function PutKyLuatModal() {
             if (input?.onSave) {
                 input.onSave(output)
             }
-            message.success(
-                input?.id ? 'Cập nhật kỷ luật thành công' : 'Thêm mới kỷ luật thành công'
-            )
+            message.success(isEdit ? 'Cập nhật kỷ luật thành công' : 'Thêm mới kỷ luật thành công')
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -43,13 +41,15 @@ export default function PutKyLuatModal() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật hình thức khen thưởng' : 'Thêm mới hình thức khen thưởng'}
+            title={isEdit ? 'Cập nhật hình thức khen thưởng' : 'Thêm mới hình thức khen thưởng'}
             className="w-[40vw]"
             layout="vertical"
         >
@@ -83,7 +83,10 @@ export default function PutKyLuatModal() {
                 >
                     <DatePicker
                         placeholder="Chọn ngày nhận quyết định"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                         className="w-full"
                     />
                 </FormItem>

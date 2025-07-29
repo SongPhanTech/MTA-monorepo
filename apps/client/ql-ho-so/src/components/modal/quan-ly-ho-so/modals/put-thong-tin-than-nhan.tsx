@@ -28,7 +28,7 @@ export default function PutThongTinThanNhan() {
                 input.onSave(output)
             }
             message.success(
-                input?.id
+                isEdit
                     ? 'Cập nhật thông tin thân nhân thành công'
                     : 'Thêm mới thông tin thân nhân thành công'
             )
@@ -48,13 +48,15 @@ export default function PutThongTinThanNhan() {
         }
     }, [isOpen, input, form])
 
+    const isEdit = input && Object.keys(input).some((key) => key !== 'onSave')
+
     return (
         <PutFormModal
             open={isOpen}
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật thông tin thân nhân' : 'Thêm mới thông tin thân nhân'}
+            title={isEdit ? 'Cập nhật thông tin thân nhân' : 'Thêm mới thông tin thân nhân'}
             layout="vertical"
             className="w-[40vw]"
         >

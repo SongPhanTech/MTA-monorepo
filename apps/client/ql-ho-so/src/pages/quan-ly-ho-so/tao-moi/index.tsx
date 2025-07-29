@@ -37,7 +37,7 @@ import ThongTinLienHe from '@components/modal/quan-ly-ho-so/form/thong-tin-lien-
 import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
-import { getMinioUrl } from '@workspace/constant'
+import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateUserProfile } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
@@ -90,23 +90,35 @@ export default function CreateUserPage() {
         {
             title: 'Thông tin cơ bản',
             id: 'thongTinCoBan',
-            render: <ThongTinCoBan expland={expland} setExpland={setExpland} />,
+            render: (
+                <Form.Item className="mb-0">
+                    <ThongTinCoBan expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
         },
         {
             title: 'Thông tin liên hệ',
             id: 'thongTinLienHe',
-            render: <ThongTinLienHe expland={expland} setExpland={setExpland} />,
+            render: (
+                <Form.Item className="mb-0">
+                    <ThongTinLienHe expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
         },
         {
             title: 'Đoàn - Đảng',
             id: 'DoanDang',
-            render: <DoanDang expland={expland} setExpland={setExpland} />,
+            render: (
+                <Form.Item className="mb-0">
+                    <DoanDang expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
         },
         {
             title: 'Thông tin thân nhân',
             id: 'thongTinThanNhan',
             render: (
-                <Form.Item name="relatives">
+                <Form.Item name="relatives" className="mb-0">
                     <ThongTinThanNhanForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -115,7 +127,7 @@ export default function CreateUserPage() {
             title: 'Học vị',
             id: 'hocVi',
             render: (
-                <Form.Item name="hocVi">
+                <Form.Item name="hocVi" className="mb-0">
                     <HocViForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -124,7 +136,7 @@ export default function CreateUserPage() {
             title: 'Học hàm',
             id: 'hocHam',
             render: (
-                <Form.Item name="hocHam">
+                <Form.Item name="hocHam" className="mb-0">
                     <HocHamForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -133,7 +145,7 @@ export default function CreateUserPage() {
             title: 'Trình độ lý luận chính trị',
             id: 'trinhDoLyLuanChinhTri',
             render: (
-                <Form.Item name="trinhDoLyLuanChinhTri">
+                <Form.Item name="trinhDoLyLuanChinhTri" className="mb-0">
                     <TrinhDoLyLuanChinhTriForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -147,7 +159,7 @@ export default function CreateUserPage() {
             title: 'Trình độ quản lý nhà nước',
             id: 'trinhDoQuanLyNhaNuoc',
             render: (
-                <Form.Item name="trinhDoQuanLyNhaNuoc">
+                <Form.Item name="trinhDoQuanLyNhaNuoc" className="mb-0">
                     <TrinhDoQuanLyNhaNuocForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -156,7 +168,7 @@ export default function CreateUserPage() {
             title: 'Ngoại ngữ',
             id: 'ngoaiNgu',
             render: (
-                <Form.Item name="ngoaiNgu">
+                <Form.Item name="ngoaiNgu" className="mb-0">
                     <NgoaiNguForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -165,7 +177,7 @@ export default function CreateUserPage() {
             title: 'Tin học',
             id: 'tinHoc',
             render: (
-                <Form.Item name="tinHoc">
+                <Form.Item name="tinHoc" className="mb-0">
                     <TinHocForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -174,7 +186,7 @@ export default function CreateUserPage() {
             title: 'Bồi dưỡng quốc phòng an ninh',
             id: 'boiDuongQuocPhongAnNinh',
             render: (
-                <Form.Item name="boiDuongQuocPhongAnNinh">
+                <Form.Item name="boiDuongQuocPhongAnNinh" className="mb-0">
                     <BoiDuongQuocPhongAnNinhForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -183,7 +195,7 @@ export default function CreateUserPage() {
             title: 'Cấp bậc',
             id: 'capBac',
             render: (
-                <Form.Item name="capBac">
+                <Form.Item name="capBac" className="mb-0">
                     <CapBacForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -192,7 +204,7 @@ export default function CreateUserPage() {
             title: 'Quá trình công tác',
             id: 'quaTrinhCongTac',
             render: (
-                <Form.Item name="quaTrinhCongTac">
+                <Form.Item name="quaTrinhCongTac" className="mb-0">
                     <QuaTrinhCongTacForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -201,7 +213,7 @@ export default function CreateUserPage() {
             title: 'Quá trình được cử đi công tác',
             id: 'quaTrinhDuocCuDiCongTac',
             render: (
-                <Form.Item name="quaTrinhCuDiCongTac">
+                <Form.Item name="quaTrinhCuDiCongTac" className="mb-0">
                     <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -210,7 +222,7 @@ export default function CreateUserPage() {
             title: 'Quá trình được cử đi đào tạo bồi dưỡng',
             id: 'quaTrinhDiDaoTaoBoiDuong',
             render: (
-                <Form.Item name="quaTrinhCuDiDaoTao">
+                <Form.Item name="quaTrinhCuDiDaoTao" className="mb-0">
                     <QuaTrinhDiDaoTaoBoiDuongForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -219,7 +231,7 @@ export default function CreateUserPage() {
             title: 'Khen thưởng',
             id: 'khenThuong',
             render: (
-                <Form.Item name="khenThuong">
+                <Form.Item name="khenThuong" className="mb-0">
                     <ThongTinKhenThuongForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -228,7 +240,7 @@ export default function CreateUserPage() {
             title: 'Kỷ luật',
             id: 'kyLuat',
             render: (
-                <Form.Item name="kyLuat">
+                <Form.Item name="kyLuat" className="mb-0">
                     <ThongTinKyLuatForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -237,7 +249,7 @@ export default function CreateUserPage() {
             title: 'Đối tượng chính sách',
             id: 'doiTuongChinhSach',
             render: (
-                <Form.Item name="doiTuongChinhSach">
+                <Form.Item name="doiTuongChinhSach" className="mb-0">
                     <DoiTuongChinhSachForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -246,7 +258,7 @@ export default function CreateUserPage() {
             title: 'Kê khai tài sản',
             id: 'keKhaiTaiSan',
             render: (
-                <Form.Item name="keKhaiTaiSan">
+                <Form.Item name="keKhaiTaiSan" className="mb-0">
                     <KeKhaiTaiSanForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
@@ -299,149 +311,221 @@ export default function CreateUserPage() {
 
             await createUserProfile({
                 data: {
-                    firstName: values.firstName,
-                    lastName: values.lastName,
-                    email: values.email,
-                    phoneNumber: values.phoneNumber,
-                    idCardNumber: values.idCardNumber,
-                    userType: values.userType,
-                    gender: values.gender,
+                    ...values,
                     dateOfBirth: values.dateOfBirth
-                        ? dayjs(values.dateOfBirth).format('YYYY-MM-DD')
+                        ? dayjs(values.dateOfBirth).toISOString()
                         : null,
-                    placeOfBirth: values.placeOfBirth,
-                    nationalityId: values.nationalityId,
-                    religionId: values.religionId,
-                    ethnicityId: values.ethnicityId,
-                    originalPlace: values.originalPlace,
-                    idCardDate: values.idCardDate
-                        ? dayjs(values.idCardDate).format('YYYY-MM-DD')
-                        : null,
-                    healthInsuranceNumber: values.healthInsuranceNumber,
-                    bankAccountNumber: values.bankAccountNumber,
-                    bankName: values.bankName,
-                    permanentAddress: values.permanentAddress,
-                    currentAddress: values.currentAddress,
-                    unionDate: values.unionDate
-                        ? dayjs(values.unionDate).format('YYYY-MM-DD')
-                        : null,
-                    unionPlace: values.unionPlace,
+                    idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
+                    unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
                     CPVJoinDate: values.CPVJoinDate
-                        ? dayjs(values.CPVJoinDate).format('YYYY-MM-DD')
+                        ? dayjs(values.CPVJoinDate).toISOString()
                         : null,
                     officialCPVDate: values.officialCPVDate
-                        ? dayjs(values.officialCPVDate).format('YYYY-MM-DD')
+                        ? dayjs(values.officialCPVDate).toISOString()
                         : null,
-                    CPVJoinPlace: values.CPVJoinPlace,
-                    tenureDate: values.tenureDate
-                        ? dayjs(values.tenureDate).format('YYYY-MM-DD')
-                        : null,
+                    tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
                     avatar: fileName,
-                    hocVi: {
-                        createMany: {
-                            data: values.hocVi?.map((item) => ({
-                                ...item,
-                            })),
+                    ...emptyObjectIf(
+                        {
+                            hocVi: {
+                                createMany: {
+                                    data: values.hocVi?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    hocHam: {
-                        createMany: {
-                            data: values.hocHam?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.hocVi
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            hocHam: {
+                                createMany: {
+                                    data: values.hocHam?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    trinhDoLyLuanChinhTri: {
-                        createMany: {
-                            data: values.trinhDoLyLuanChinhTri?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.hocHam
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            relatives: {
+                                createMany: {
+                                    data: values.relatives?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    trinhDoQuanLyNhaNuoc: {
-                        createMany: {
-                            data: values.trinhDoQuanLyNhaNuoc?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.relatives
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            trinhDoLyLuanChinhTri: {
+                                createMany: {
+                                    data: values.trinhDoLyLuanChinhTri?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    ngoaiNgu: {
-                        createMany: {
-                            data: values.ngoaiNgu?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.trinhDoLyLuanChinhTri
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            trinhDoQuanLyNhaNuoc: {
+                                createMany: {
+                                    data: values.trinhDoQuanLyNhaNuoc?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    boiDuongQuocPhongAnNinh: {
-                        createMany: {
-                            data: values.boiDuongQuocPhongAnNinh?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.trinhDoQuanLyNhaNuoc
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            ngoaiNgu: {
+                                createMany: {
+                                    data: values.ngoaiNgu?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    capBac: {
-                        createMany: {
-                            data: values.capBac?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.ngoaiNgu
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            boiDuongQuocPhongAnNinh: {
+                                createMany: {
+                                    data: values.boiDuongQuocPhongAnNinh?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    quaTrinhCongTac: {
-                        createMany: {
-                            data: values.quaTrinhCongTac?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.boiDuongQuocPhongAnNinh
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            capBac: {
+                                createMany: {
+                                    data: values.capBac?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    quaTrinhCuDiCongTac: {
-                        createMany: {
-                            data: values.quaTrinhCuDiCongTac?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.capBac
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            quaTrinhCongTac: {
+                                createMany: {
+                                    data: values.quaTrinhCongTac?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    quaTrinhCuDiDaoTao: {
-                        createMany: {
-                            data: values.quaTrinhCuDiDaoTao?.map((item) => ({
-                                ...item,
-                            })),
+
+                        !!values.quaTrinhCongTac
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            quaTrinhCuDiCongTac: {
+                                createMany: {
+                                    data: values.quaTrinhCuDiCongTac?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    khenThuong: {
-                        createMany: {
-                            data: values.khenThuong?.map((item) => ({
-                                ...item,
-                            })),
+                        !!values.quaTrinhCuDiCongTac
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            quaTrinhCuDiDaoTao: {
+                                createMany: {
+                                    data: values.quaTrinhCuDiDaoTao?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    kyLuat: {
-                        createMany: {
-                            data: values.kyLuat?.map((item) => ({
-                                ...item,
-                            })),
+                        !!values.quaTrinhCuDiDaoTao
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            khenThuong: {
+                                createMany: {
+                                    data: values.khenThuong?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    doiTuongChinhSach: {
-                        createMany: {
-                            data: values.doiTuongChinhSach?.map((item) => ({
-                                ...item,
-                            })),
+                        !!values.khenThuong
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            kyLuat: {
+                                createMany: {
+                                    data: values.kyLuat?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    keKhaiTaiSan: {
-                        createMany: {
-                            data: values.keKhaiTaiSan?.map((item) => ({
-                                ...item,
-                            })),
+                        !!values.kyLuat
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            doiTuongChinhSach: {
+                                createMany: {
+                                    data: values.doiTuongChinhSach?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
-                    tinHoc: {
-                        createMany: {
-                            data: values.tinHoc?.map((item) => ({
-                                ...item,
-                            })),
+                        !!values.doiTuongChinhSach
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            keKhaiTaiSan: {
+                                createMany: {
+                                    data: values.keKhaiTaiSan?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
                         },
-                    },
+                        !!values.keKhaiTaiSan
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            tinHoc: {
+                                createMany: {
+                                    data: values.tinHoc?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.tinHoc
+                    ),
                 },
             })
             queryClient.invalidateQueries({
