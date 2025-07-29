@@ -67,11 +67,11 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2">
-                        <span className="text-lg font-bold text-primary"></span>
+                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-full fixed z-[1000]">
+                        <span className="text-lg font-bold text-primary" />
                         <HeaderApp />
                     </Header>
-                    <Content className="mx-2">
+                    <Content className="mx-2 mt-20">
                         {/* <div
                             className={cn(
                                 'min-h-[calc(100vh-64px-24px)] rounded-lg',

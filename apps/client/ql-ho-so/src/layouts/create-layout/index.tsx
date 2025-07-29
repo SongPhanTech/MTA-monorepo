@@ -144,7 +144,7 @@ const CreateLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2">
+                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-full fixed z-[1000]">
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
@@ -156,7 +156,7 @@ const CreateLayout = ({
                             <AvatarDropdown />
                         </div> */}
                     </Header>
-                    <Content className="mx-2">
+                    <Content className="mx-2 mt-20">
                         {unLayout ? (
                             children
                         ) : (
