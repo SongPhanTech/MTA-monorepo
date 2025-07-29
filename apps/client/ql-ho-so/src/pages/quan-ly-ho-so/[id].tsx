@@ -37,10 +37,10 @@ import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
 import CreateLayout from '@layouts/create-layout'
-import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import { getMinioUrl } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useFindUniqueUserProfile, useUpdateUserProfile } from '@workspace/db/hooks'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
 import { diffArrays } from '@workspace/libs/utils'
 import ImgCrop from 'antd-img-crop'
 import dayjs from 'dayjs'
@@ -313,350 +313,622 @@ export default function UpdateUserPage() {
             )
             console.log('item', item)
 
-            await updateUserProfile({
-                where: {
-                    idCardNumber: cccd,
+            // await updateUserProfile({
+            //     where: {
+            //         idCardNumber: cccd,
+            //     },
+            //     data: {
+            //         ...values,
+            //         dateOfBirth: values.dateOfBirth
+            //             ? dayjs(values.dateOfBirth).toISOString()
+            //             : null,
+            //         idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
+            //         unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
+            //         CPVJoinDate: values.CPVJoinDate
+            //             ? dayjs(values.CPVJoinDate).toISOString()
+            //             : null,
+            //         officialCPVDate: values.officialCPVDate
+            //             ? dayjs(values.officialCPVDate).toISOString()
+            //             : null,
+            //         tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
+            //         avatar: fileName,
+            //         ...emptyObjectIf(
+            //             {
+            //                 hocVi: {
+            //                     ...emptyObjectIf(
+            //                         {
+            //                             deleteMany: {
+            //                                 id: {
+            //                                     in: cccdUserProfileData?.hocVi.map(
+            //                                         (item) => item.id
+            //                                     ),
+            //                                 },
+            //                             },
+            //                         },
+            //                         item.onlyInA.length > 0
+            //                     ),
+            //                     ...emptyObjectIf(
+            //                         {
+            //                             createMany: {
+            //                                 data: values.hocVi,
+            //                                 skipDuplicates: true,
+            //                             },
+            //                         },
+            //                         item.onlyInB.length > 0
+            //                     ),
+            //                 },
+            //             },
+
+            //             !!values.hocVi
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 hocHam: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.hocHam.map((item) => item.id),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.hocHam?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.hocHam
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 relatives: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.relatives.map((item) => item.id),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.relatives?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.relatives
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 trinhDoLyLuanChinhTri: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.trinhDoLyLuanChinhTri.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.trinhDoLyLuanChinhTri?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.trinhDoLyLuanChinhTri
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 trinhDoQuanLyNhaNuoc: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.trinhDoQuanLyNhaNuoc.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.trinhDoQuanLyNhaNuoc?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.trinhDoQuanLyNhaNuoc
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 ngoaiNgu: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.ngoaiNgu.map((item) => item.id),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.ngoaiNgu?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.ngoaiNgu
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 boiDuongQuocPhongAnNinh: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.boiDuongQuocPhongAnNinh.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.boiDuongQuocPhongAnNinh?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.boiDuongQuocPhongAnNinh
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 capBac: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.capBac.map((item) => item.id),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.capBac?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.capBac
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 quaTrinhCongTac: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.quaTrinhCongTac.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.quaTrinhCongTac?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+
+            //             !!values.quaTrinhCongTac
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 quaTrinhCuDiCongTac: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.quaTrinhCuDiCongTac.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.quaTrinhCuDiCongTac?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+            //             !!values.quaTrinhCuDiCongTac
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 quaTrinhCuDiDaoTao: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.quaTrinhCuDiDaoTao.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.quaTrinhCuDiDaoTao?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+            //             !!values.quaTrinhCuDiDaoTao
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 khenThuong: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.khenThuong.map((item) => item.id),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.khenThuong?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+            //             !!values.khenThuong
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 kyLuat: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.kyLuat.map((item) => item.id),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.kyLuat?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+            //             !!values.kyLuat
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 doiTuongChinhSach: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.doiTuongChinhSach.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.doiTuongChinhSach?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+            //             !!values.doiTuongChinhSach
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 keKhaiTaiSan: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.keKhaiTaiSan.map(
+            //                                 (item) => item.id
+            //                             ),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.keKhaiTaiSan?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+            //             !!values.keKhaiTaiSan
+            //         ),
+            //         ...emptyObjectIf(
+            //             {
+            //                 tinHoc: {
+            //                     deleteMany: {
+            //                         id: {
+            //                             in: cccdUserProfileData?.tinHoc.map((item) => item.id),
+            //                         },
+            //                     },
+            //                     createMany: {
+            //                         data: values.tinHoc?.map((item) => ({
+            //                             ...item,
+            //                         })),
+            //                         skipDuplicates: true,
+            //                     },
+            //                 },
+            //             },
+            //             !!values.tinHoc
+            //         ),
+            //     },
+            // })
+
+            const res = await sqlTransaction([
+                {
+                    model: 'UserProfile',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            idCardNumber: cccd,
+                        },
+                        data: {
+                            hocVi: { deleteMany: {} },
+                            hocHam: { deleteMany: {} },
+                            relatives: { deleteMany: {} },
+                            trinhDoLyLuanChinhTri: { deleteMany: {} },
+                            trinhDoQuanLyNhaNuoc: { deleteMany: {} },
+                            ngoaiNgu: { deleteMany: {} },
+                            tinHoc: { deleteMany: {} },
+                            boiDuongQuocPhongAnNinh: { deleteMany: {} },
+                            capBac: { deleteMany: {} },
+                            quaTrinhCongTac: { deleteMany: {} },
+                            quaTrinhCuDiCongTac: { deleteMany: {} },
+                            quaTrinhCuDiDaoTao: { deleteMany: {} },
+                            khenThuong: { deleteMany: {} },
+                            kyLuat: { deleteMany: {} },
+                            doiTuongChinhSach: { deleteMany: {} },
+                            keKhaiTaiSan: { deleteMany: {} },
+                        },
+                    },
                 },
-                data: {
-                    ...values,
-                    dateOfBirth: values.dateOfBirth
-                        ? dayjs(values.dateOfBirth).toISOString()
-                        : null,
-                    idCardDate: values.idCardDate ? dayjs(values.idCardDate).toISOString() : null,
-                    unionDate: values.unionDate ? dayjs(values.unionDate).toISOString() : null,
-                    CPVJoinDate: values.CPVJoinDate
-                        ? dayjs(values.CPVJoinDate).toISOString()
-                        : null,
-                    officialCPVDate: values.officialCPVDate
-                        ? dayjs(values.officialCPVDate).toISOString()
-                        : null,
-                    tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
-                    avatar: fileName,
-                    ...emptyObjectIf(
-                        {
-                            hocVi: {
-                                ...emptyObjectIf(
-                                    {
-                                        deleteMany: {
-                                            id: {
-                                                in: cccdUserProfileData?.hocVi.map(
-                                                    (item) => item.id
-                                                ),
-                                            },
-                                        },
-                                    },
-                                    item.onlyInA.length > 0
-                                ),
-                                ...emptyObjectIf(
-                                    {
-                                        createMany: {
-                                            data: values.hocVi,
-                                            skipDuplicates: true,
-                                        },
-                                    },
-                                    item.onlyInB.length > 0
-                                ),
-                            },
+                {
+                    model: 'UserProfile',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            idCardNumber: cccd,
                         },
+                        data: {
+                            ...values,
+                            dateOfBirth: values.dateOfBirth
+                                ? dayjs(values.dateOfBirth).toISOString()
+                                : null,
+                            idCardDate: values.idCardDate
+                                ? dayjs(values.idCardDate).toISOString()
+                                : null,
+                            unionDate: values.unionDate
+                                ? dayjs(values.unionDate).toISOString()
+                                : null,
+                            CPVJoinDate: values.CPVJoinDate
+                                ? dayjs(values.CPVJoinDate).toISOString()
+                                : null,
+                            officialCPVDate: values.officialCPVDate
+                                ? dayjs(values.officialCPVDate).toISOString()
+                                : null,
+                            tenureDate: values.tenureDate
+                                ? dayjs(values.tenureDate).toISOString()
+                                : null,
+                            avatar: fileName,
+                            hocVi:
+                                values.hocVi && values.hocVi.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.hocVi.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.hocVi
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            hocHam: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.hocHam.map((item) => item.id),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.hocHam?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            hocHam:
+                                values.hocHam && values.hocHam.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.hocHam.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.hocHam
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            relatives: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.relatives.map((item) => item.id),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.relatives?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            relatives:
+                                values.relatives && values.relatives.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.relatives.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.relatives
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            trinhDoLyLuanChinhTri: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.trinhDoLyLuanChinhTri.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.trinhDoLyLuanChinhTri?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            trinhDoLyLuanChinhTri:
+                                values.trinhDoLyLuanChinhTri &&
+                                values.trinhDoLyLuanChinhTri.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.trinhDoLyLuanChinhTri.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.trinhDoLyLuanChinhTri
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            trinhDoQuanLyNhaNuoc: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.trinhDoQuanLyNhaNuoc.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.trinhDoQuanLyNhaNuoc?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            trinhDoQuanLyNhaNuoc:
+                                values.trinhDoQuanLyNhaNuoc &&
+                                values.trinhDoQuanLyNhaNuoc.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.trinhDoQuanLyNhaNuoc.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.trinhDoQuanLyNhaNuoc
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            ngoaiNgu: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.ngoaiNgu.map((item) => item.id),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.ngoaiNgu?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            ngoaiNgu:
+                                values.ngoaiNgu && values.ngoaiNgu.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.ngoaiNgu.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.ngoaiNgu
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            boiDuongQuocPhongAnNinh: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.boiDuongQuocPhongAnNinh.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.boiDuongQuocPhongAnNinh?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            tinHoc:
+                                values.tinHoc && values.tinHoc.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.tinHoc.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.boiDuongQuocPhongAnNinh
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            capBac: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.capBac.map((item) => item.id),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.capBac?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            boiDuongQuocPhongAnNinh:
+                                values.boiDuongQuocPhongAnNinh &&
+                                values.boiDuongQuocPhongAnNinh.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.boiDuongQuocPhongAnNinh.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.capBac
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            quaTrinhCongTac: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.quaTrinhCongTac.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.quaTrinhCongTac?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
+                            capBac:
+                                values.capBac && values.capBac.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.capBac.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
 
-                        !!values.quaTrinhCongTac
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            quaTrinhCuDiCongTac: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.quaTrinhCuDiCongTac.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.quaTrinhCuDiCongTac?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
+                            quaTrinhCongTac:
+                                values.quaTrinhCongTac && values.quaTrinhCongTac.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhCongTac.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhCuDiCongTac:
+                                values.quaTrinhCuDiCongTac && values.quaTrinhCuDiCongTac.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhCuDiCongTac.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhCuDiDaoTao:
+                                values.quaTrinhCuDiDaoTao && values.quaTrinhCuDiDaoTao.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhCuDiDaoTao.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            khenThuong:
+                                values.khenThuong && values.khenThuong.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.khenThuong.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            kyLuat:
+                                values.kyLuat && values.kyLuat.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.kyLuat.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            doiTuongChinhSach:
+                                values.doiTuongChinhSach && values.doiTuongChinhSach.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.doiTuongChinhSach.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            keKhaiTaiSan:
+                                values.keKhaiTaiSan && values.keKhaiTaiSan.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.keKhaiTaiSan.map((item) => {
+                                                  const { id, ...itemWithoutId } = item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
                         },
-                        !!values.quaTrinhCuDiCongTac
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            quaTrinhCuDiDaoTao: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.quaTrinhCuDiDaoTao.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.quaTrinhCuDiDaoTao?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
-                        !!values.quaTrinhCuDiDaoTao
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            khenThuong: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.khenThuong.map((item) => item.id),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.khenThuong?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
-                        !!values.khenThuong
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            kyLuat: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.kyLuat.map((item) => item.id),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.kyLuat?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
-                        !!values.kyLuat
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            doiTuongChinhSach: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.doiTuongChinhSach.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.doiTuongChinhSach?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
-                        !!values.doiTuongChinhSach
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            keKhaiTaiSan: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.keKhaiTaiSan.map(
-                                            (item) => item.id
-                                        ),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.keKhaiTaiSan?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
-                        !!values.keKhaiTaiSan
-                    ),
-                    ...emptyObjectIf(
-                        {
-                            tinHoc: {
-                                deleteMany: {
-                                    id: {
-                                        in: cccdUserProfileData?.tinHoc.map((item) => item.id),
-                                    },
-                                },
-                                createMany: {
-                                    data: values.tinHoc?.map((item) => ({
-                                        ...item,
-                                    })),
-                                    skipDuplicates: true,
-                                },
-                            },
-                        },
-                        !!values.tinHoc
-                    ),
+                    },
                 },
-            })
+            ])
+
             queryClient.invalidateQueries({
                 queryKey: ['UserProfile'],
             })
