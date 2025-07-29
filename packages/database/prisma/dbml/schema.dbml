@@ -1563,7 +1563,6 @@ Table DM_NgoaiNgu {
   sNguoiSua String
   sThietBiTao String
   sThietBiSua String
-  ngoaiNgu NgoaiNgu [not null]
 }
 
 Table DM_TonGiao {
@@ -1602,6 +1601,7 @@ Table DM_TrinhDoNgoaiNgu {
   sThietBiTao String
   sThietBiSua String
   sKhung String
+  ngoaiNgu NgoaiNgu [not null]
 }
 
 Table DM_TrinhDoTinHoc {
@@ -1949,6 +1949,8 @@ Table UserProfile {
   kyLuat KyLuat [not null]
   doiTuongChinhSach DoiTuongChinhSach [not null]
   keKhaiTaiSan KeKhaiTaiSan [not null]
+  hocVi HocVi [not null]
+  hocHam HocHam [not null]
   trinhDoHocVan DM_TrinhDoHocVan
   trinhDoHocVanId String
   educationAndTraining Student [not null, note: 'hồ sơ đào tạo']
@@ -1972,6 +1974,8 @@ Table HocHam {
   soQuyetDinh String
   from DateTime
   to DateTime
+  userProfile UserProfile [not null]
+  userProfileId String [not null]
 }
 
 Table HocVi {
@@ -1990,6 +1994,8 @@ Table HocVi {
   truong DM_TruongDaoTaoBacDH
   truongId String
   year Int
+  userProfile UserProfile [not null]
+  userProfileId String [not null]
 }
 
 Table Relative {
@@ -2057,8 +2063,8 @@ Table NgoaiNgu {
   noiDaoTao String
   thoiGianBatDau DateTime
   thoiGianKetThuc DateTime
-  dM_NgoaiNgu DM_NgoaiNgu [not null]
-  dM_NgoaiNguId String [not null]
+  trinhDo DM_TrinhDoNgoaiNgu [not null]
+  trinhDoId String [not null]
   userProfile UserProfile [not null]
   userProfileId String [not null]
 }
@@ -2106,7 +2112,7 @@ Table CapBac {
   updatedAt DateTime [not null]
   noiRaQuyetDinh String
   capRaQuyetDinh String
-  ngayNhanQuyetDinh String
+  ngayNhanQuyetDinh DateTime
   capBac DM_CapBac [not null]
   capBacId String [not null]
   userProfile UserProfile [not null]
@@ -2123,7 +2129,7 @@ Table QuaTrinhCongTac {
   updatedAt DateTime [not null]
   tuThangNam DateTime
   denThangNam DateTime
-  donvi String
+  donVi String
   chucVu DM_ChucVu [not null]
   chucVuId String [not null]
   loaiHinhCongTac DM_LoaiHinhCongTac [not null]
@@ -2142,7 +2148,7 @@ Table QuaTrinhCuDiCongTac {
   updatedAt DateTime [not null]
   tuThangNam DateTime
   denThangNam DateTime
-  donvi String [not null]
+  donVi String [not null]
   chucVu DM_ChucVu [not null]
   chucVuId String [not null]
   userProfile UserProfile [not null]
@@ -2212,6 +2218,7 @@ Table DoiTuongChinhSach {
   tenDoiTuong String
   ngayBatDau DateTime
   ngayKetThuc DateTime
+  ghiChu String
   userProfile UserProfile [not null]
   userProfileId String [not null]
 }
@@ -4141,11 +4148,15 @@ Ref: UserProfile.trinhDoHocVanId > DM_TrinhDoHocVan.id
 
 Ref: HocHam.academicRankTypeId > DM_HocHam.Id
 
+Ref: HocHam.userProfileId > UserProfile.id
+
 Ref: HocVi.academicDegreeTypeId > DM_HocVi.Id
 
 Ref: HocVi.nationalityId > DM_QuocGia.Id
 
 Ref: HocVi.truongId > DM_TruongDaoTaoBacDH.id
+
+Ref: HocVi.userProfileId > UserProfile.id
 
 Ref: Relative.dM_MoiQuanHeId > DM_MoiQuanHe.id
 
@@ -4157,7 +4168,7 @@ Ref: TrinhDoQuanLyNhaNuoc.userProfileId > UserProfile.id
 
 Ref: TrinhDoQuanLyNhaNuoc.trinhDoId > DM_TrinhDoQuanLyNhaNuoc.id
 
-Ref: NgoaiNgu.dM_NgoaiNguId > DM_NgoaiNgu.Id
+Ref: NgoaiNgu.trinhDoId > DM_TrinhDoNgoaiNgu.Id
 
 Ref: NgoaiNgu.userProfileId > UserProfile.id
 
