@@ -3,14 +3,14 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutQuestion } from '@components/modal'
+import { PutQuestionModal } from '@components/modal'
 import { WordImportModal } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
-import type { Question } from '@workspace/db'
+import { type Question, QuestionType } from '@workspace/db'
 import {
     useCountQuestion,
     useCreateManyQuestion,
@@ -50,7 +50,7 @@ export default function QuestionPage() {
         questionBankId: string
         subjectVersionId: string
     }>({
-        tag: PutQuestion.name,
+        tag: PutQuestionModal.name,
     })
 
     const { data: initialValue } = useFindUniqueQuestionBank(
@@ -132,6 +132,7 @@ export default function QuestionPage() {
                     !!filters.point
                 ),
                 { point: 'asc' },
+                { createdAt: 'desc' },
             ],
         },
         queryOptions
@@ -181,7 +182,7 @@ export default function QuestionPage() {
                         ...q,
                         content: q.content as string,
                         questionBankId,
-                        type: q.type || 'ESSAY',
+                        type: q.type || QuestionType.ESSAY,
                         isAutoGraded: q.isAutoGraded || false,
                     })),
             })

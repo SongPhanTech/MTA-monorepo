@@ -89,8 +89,6 @@ const ModalPrintStudentSubjectScore = () => {
         tag: ModalPrintStudentSubjectScore.name,
     })
 
-    console.log(input?.dataTable)
-
     const { data } = useFindUniqueSubjectClass(
         {
             where: { id: input?.dataTable?.[0]?.subjectClass?.id || '' },

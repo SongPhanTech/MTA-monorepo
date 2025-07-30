@@ -11,6 +11,7 @@ import PutSurveyQuestionModal from './put-modal-survey-question'
 import PutSurveyTopicModal from './put-modal-survey-topic'
 import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
+import PutQuestionModal from './put-question-modal'
 export {
     ConfirmModal,
     AddTaiLieu,
@@ -25,4 +26,5 @@ export {
     PutExam,
     PutTestStructureRule,
     PutExamBankQuestion,
+    PutQuestionModal,
 }
