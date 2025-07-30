@@ -85,6 +85,7 @@ const checkScorePassed = (
 // #region ThongTinTichLuy
 const ThongTinTichLuy = async (
     studentId: string,
+    curriculumVersionId: string,
     trainingCourseId: string,
     semesterStartDate: Date
 ) => {
@@ -141,6 +142,17 @@ const ThongTinTichLuy = async (
         }
         const kyDangHoc = DsHocKy.length
 
+        // Danh sách các môn học trong chương trình đào tạo
+        const DsCacMonTrongCTDT = await prisma.trainingBlockSubject.findMany({
+            where: {
+                trainingBlockOnCurriculumVersion: {
+                    curriculumVersionId,
+                },
+            },
+            select: {
+                subjectId: true,
+            },
+        })
         // Kiểm tra tổng tích lũy tín chỉ của sinh viên đến kỳ xác định
         const DsCacMonDaHocRaw = await prisma.studentSubjectScore.findMany({
             where: {
@@ -151,6 +163,10 @@ const ThongTinTichLuy = async (
                             lte: semesterStartDate, // lấy tất cả các kỳ trước kỳ đang xét
                         },
                     },
+                },
+                subjectVersionId: {
+                    // Chỉ lấy các môn trong chương trình đào tạo
+                    in: DsCacMonTrongCTDT.map((item) => item.subjectId),
                 },
             },
             select: {
@@ -191,6 +207,7 @@ const ThongTinTichLuy = async (
             ],
             distinct: ['subjectVersionId'],
         })
+
         // Danh sách chuyển đổi điểm
         const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
             where: {
@@ -442,15 +459,31 @@ const phanLoaiDiemHe10 = async (
 }
 const ThongTinDiemHocKy = async (
     studentId: string,
+    curriculumVersionId: string,
     trainingCourseId: string,
     semesterId: string,
     baseType: AcademicRankingBaseType
 ) => {
     try {
+        // Danh sách các môn học trong chương trình đào tạo
+        const DsCacMonTrongCTDT = await prisma.trainingBlockSubject.findMany({
+            where: {
+                trainingBlockOnCurriculumVersion: {
+                    curriculumVersionId,
+                },
+            },
+            select: {
+                subjectId: true,
+            },
+        })
         const DsDiem = await prisma.studentSubjectScore.findMany({
             where: {
                 subjectClass: { semesterId },
                 studentId,
+                subjectVersionId: {
+                    // Chỉ lấy các môn trong chương trình đào tạo
+                    in: DsCacMonTrongCTDT.map((item) => item.subjectId),
+                },
             },
             select: {
                 id: true,
@@ -609,6 +642,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 fixedClass: {
                     select: {
                         id: true,
+                        curriculumVersionId: true, // Lấy ID phiên bản chương trình đào tạo
                         trainingCourseId: true, // Lấy ID khóa học
                         classMonitorId: true, // Lấy ID lớp trưởng
                         unionLeaderId: true, // Lấy ID bí thư
@@ -654,6 +688,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
             // Lấy thông tin tích lũy của sinh viên
             const thongTinTichLuy = await ThongTinTichLuy(
                 student.id,
+                student.curriculumVersionId || student.fixedClass?.curriculumVersionId || '',
                 trainingCourseId,
                 hocKyDauVao?.startDate || new Date() // Sử dụng ngày bắt đầu của học kỳ check
             )
@@ -667,6 +702,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
             // Lấy thông tin điểm học kỳ
             const thongTinDiemHocKy = await ThongTinDiemHocKy(
                 student.id,
+                student.curriculumVersionId || student.fixedClass?.curriculumVersionId || '',
                 trainingCourseId,
                 semesterId,
                 baseType
