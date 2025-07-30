@@ -3,9 +3,10 @@ import '../ql-ho-so/profile'
 
 // Mối quan hệ
 model DM_MoiQuanHe extends Base {
-  name      String     @unique
+  name              String              @unique
 
-  relatives Relative[]
+  relatives         Relative[]
+  thanNhanNuocNgoai ThanNhanNuocNgoai[]
   @@schema("ql-ho-so")
 }
 
@@ -105,13 +106,82 @@ model DM_ChucDanhCMNVKySu extends Base {
 }
 
 model DM_TruongDaoTaoBacDH extends Base {
-  name  String  @unique
+  name           String           @unique
 
-  hocVi HocVi[]
+  hocVi          HocVi[]
+  quaTrinhHocTap QuaTrinhHocTap[]
   @@schema("ql-ho-so")
 }
 
 model DM_ChuyenNganhDaoTaoBacDH extends Base {
-  name String @unique
+  name           String           @unique
+  quaTrinhHocTap QuaTrinhHocTap[]
+  @@schema("ql-ho-so")
+}
+
+model DM_ChiHuyQuanLy extends Base {
+  name        String        @unique
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChuyenMonKyThuat extends Base {
+  name        String        @unique
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_SucKhoe extends Base {
+  name        String        @unique
+
+  userProfile UserProfile[]
+  @@schema("ql-ho-so")
+}
+
+model DM_NhomMau extends Base {
+  name        String        @unique
+
+  userProfile UserProfile[]
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiThuongTat extends Base {
+  name      String      @unique
+
+  thuongTat ThuongTat[]
+  @@schema("ql-ho-so")
+}
+
+model DM_NganhHoc extends Base {
+  name           String           @unique
+  quaTrinhHocTap QuaTrinhHocTap[]
+  @@schema("ql-ho-so")
+}
+
+model DM_ThuongBinh extends Base {
+  name        String        @unique
+
+  userProfile UserProfile[]
+  @@schema("ql-ho-so")
+}
+
+model DM_ToChucXaHoi extends Base {
+  name        String        @unique
+  toChucXaHOi ToChucXaHoi[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_Ngach extends Base {
+  name          String          @unique
+  quaTrinhLuong QuaTrinhLuong[]
+  @@schema("ql-ho-so")
+}
+
+model DM_BacLuong extends Base {
+  name          String          @unique
+  quaTrinhLuong QuaTrinhLuong[]
   @@schema("ql-ho-so")
 }

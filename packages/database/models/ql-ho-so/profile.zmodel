@@ -50,6 +50,12 @@ model UserProfile extends Base {
   bankAccountNumber          String?   // số tài khoản ngân hàng
   bankName                   String?   // tên ngân hàng
   currentAddress             String? // địa chỉ hiện tại
+  benh                       String?
+  tinhHinhNhaOi              String?
+  truocKhiNhapNgu            String?
+  thanhPhanGiaDinh           String?
+  soTruong                   String?
+  hoTenThuongDung            String?
   nationalId                 String?                   @db.Uuid
   provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?                   @db.Uuid
@@ -103,6 +109,21 @@ model UserProfile extends Base {
   level                      DM_ChucDanh?              @relation(fields: [levelId], references: [Id])
   levelId                    String?                   @db.Uuid
 
+  chiHuyQuanLy               DM_ChiHuyQuanLy?          @relation(fields: [chiHuyQuanLyId], references: [id])
+  chiHuyQuanLyId             String?
+
+  chuyenMonKyThuat           DM_ChuyenMonKyThuat?      @relation(fields: [chuyenMonKyThuatId], references: [id])
+  chuyenMonKyThuatId         String?
+
+  sucKhoe                    DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
+  sucKhoeId                  String?
+
+  thuongBinh                 DM_ThuongBinh?            @relation(fields: [thuongBinhId], references: [id])
+  thuongBinhId               String?
+
+  nhomMau                    DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
+  nhomMauId                  String?
+
   // thông tin đoàn thể
   unionDate                  DateTime? // ngày vào Đoàn
   unionPlace                 String? // nơi vào Đoàn
@@ -114,7 +135,13 @@ model UserProfile extends Base {
   positionCPVId              String?                   @db.Uuid
   tenureDate                 DateTime? // ngày vào niên chế
   enlistmentDate             DateTime? // ngày nhập ngũ
+  reenlistmentDate           DateTime? // ngày tái nhập ngũ
   dischargeDate              DateTime? // ngày xuất ngũ
+
+  recruitmentDate            DateTime? // ngày tuyển dụng
+  recruimentAgency           String? // cơ quan tuyển dụng
+  mainJobAssigned            String? // công việc chính được giao
+  revolutionaryDate          DateTime? // ngày tham gia cách mạng
 
   //nguyên quán
   originalPlace              String?
@@ -141,6 +168,18 @@ model UserProfile extends Base {
   keKhaiTaiSan               KeKhaiTaiSan[]
   hocVi                      HocVi[]
   hocHam                     HocHam[]
+  tiengDanToc                TiengDanToc[]
+  chienDau                   ChienDau[]
+  diNuocNgoai                NuocNgoai[]
+  thuongTat                  ThuongTat[]
+  danhHieu                   DanhHieu[]
+  quaTrinhHocTap             QuaTrinhHocTap[]
+  ToChucXaHoi                ToChucXaHoi[]
+  QuaTrinhLuong              QuaTrinhLuong[]
+  ToChucNuocNgoai            ToChucNuocNgoai[]
+  thanNhanNuocNgoai          ThanNhanNuocNgoai[]
+  tuToi                      TuToi[]
+  CheDoCu                    CheDoCu[]
 
 
   trinhDoHocVan              DM_TrinhDoHocVan?         @relation(fields: [trinhDoHocVanId], references: [id])
@@ -330,6 +369,7 @@ model QuaTrinhCuDiDaoTao extends Base {
   donViToChuc   String?
   tuNgay        DateTime?
   denNgay       DateTime?
+  vanBang       String?
 
   loai          DM_LoaiHinhDiHocTap @relation(fields: [loaiId], references: [id])
   loaiId        String
@@ -385,6 +425,178 @@ model KeKhaiTaiSan extends Base {
 
   userProfile    UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId  String
+
+  @@schema("ql-ho-so")
+}
+
+model TiengDanToc extends Base {
+  danToc        DM_DanToc?  @relation(fields: [danTocId], references: [Id])
+  danTocId      String?     @db.Uuid
+
+  nghe          String?
+  noi           String?
+  viet          String?
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model ChienDau extends Base {
+  cuongVi         String?
+  donVi           String?
+  diaDiem         String?
+  vaiTro          String?
+  doiTuong        String?
+  thoiGianBatDau  DateTime?
+  thoiGianKetThuc DateTime?
+
+  userProfile     UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId   String
+
+  @@schema("ql-ho-so")
+}
+
+model NuocNgoai extends Base {
+  tenNuoc       DM_QuocGia  @relation(fields: [tenNuocId], references: [Id])
+  tenNuocId     String      @db.Uuid
+
+  tuNgay        DateTime?
+  denNgay       DateTime?
+  lyDo          String?
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model ThuongTat extends Base {
+  loai             DM_LoaiThuongTat @relation(fields: [loaiId], references: [id])
+  loaiId           String
+
+  tiLe             Int?
+  nguyenNhan       String?
+  thoiGian         DateTime?
+  noiBiThuong      String?
+  thoiGianGiamDinh DateTime?
+
+  userProfile      UserProfile      @relation(fields: [userProfileId], references: [id])
+  userProfileId    String
+  @@schema("ql-ho-so")
+}
+
+model DanhHieu extends Base {
+  ten           String?
+  thoiGian      DateTime?
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+  @@schema("ql-ho-so")
+}
+
+model QuaTrinhHocTap extends Base {
+  tenTruong      DM_TruongDaoTaoBacDH?      @relation(fields: [tenTruongId], references: [id])
+  tenTruongId    String?
+
+  nganhHoc       DM_NganhHoc?               @relation(fields: [nganhHocId], references: [id])
+  nganhHocId     String?
+
+  chuyenNganh    DM_ChuyenNganhDaoTaoBacDH? @relation(fields: [chuyenNganhId], references: [id])
+  chuyenNganhId  String?
+
+  tuNgay         DateTime?
+  denNgay        DateTime?
+  ketQua         String?
+  loaiHinhDaoTao String?
+
+  userProfile    UserProfile                @relation(fields: [userProfileId], references: [id])
+  userProfileId  String
+
+  @@schema("ql-ho-so")
+}
+
+model ToChucXaHoi extends Base {
+  ten           DM_ToChucXaHoi @relation(fields: [tenId], references: [id])
+  tenId         String
+
+  tuNgay        DateTime?
+  denNgay       DateTime?
+  congViec      String?
+
+  userProfile   UserProfile    @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model QuaTrinhLuong extends Base {
+  tuNgay        DateTime?
+  denNgay       DateTime?
+  ngach         DM_Ngach    @relation(fields: [ngachId], references: [id])
+  ngachId       String
+  bacLuong      DM_BacLuong @relation(fields: [bacLuongId], references: [id])
+  bacLuongId    String
+  maNgach       String
+  phuCapChucVu  String?
+  phuCapKhac    String?
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model ToChucNuocNgoai extends Base {
+  ten           String?
+  diaDiem       String?
+  lamGi         String?
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model ThanNhanNuocNgoai extends Base {
+  ten           String?
+  quanHe        DM_MoiQuanHe? @relation(fields: [quanHeId], references: [id])
+  quanHeId      String?
+  diaChi        String?
+  lamGi         String?
+
+  userProfile   UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model TuToi extends Base {
+  tuNgay         DateTime?
+  denNgay        DateTime?
+  oDau           String?
+  daKhaiBaoChoAi String?
+  vanDe          String?
+
+  userProfile    UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId  String
+
+  @@schema("ql-ho-so")
+}
+
+model CheDoCu extends Base {
+  tuNgay        DateTime?
+  denNgay       DateTime?
+
+  coQuan        String?
+  donVi         String?
+  diaDiem       String?
+  chucVu        DM_ChucVu?  @relation(fields: [chucVuId], references: [Id])
+  chucVuId      String?     @db.Uuid
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
 
   @@schema("ql-ho-so")
 }
