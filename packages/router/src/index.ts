@@ -580,6 +580,27 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
+            {
+                id: 'ql-ho-so',
+                label: 'Quản lý hồ sơ',
+                icon: FolderOpen,
+                children: [
+                    {
+                        id: 'ql-sinh-vien',
+                        label: 'QL sinh viên',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
+                        description: 'QL sinh viên',
+                    },
+                    {
+                        id: 'ql-hoc-vien',
+                        label: 'QL học viên',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_HOC_VIEN,
+                        description: 'QL học viên',
+                    },
+                ],
+            },
         ],
         label: 'Quản lý đào tạo',
     },
@@ -701,6 +722,20 @@ const NAVIGATION: NavigationType = {
                 icon: SettingOutlined,
                 path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO,
                 description: 'Quản lý hồ sơ',
+            },
+            {
+                id: 'quan-ly-giang-vien',
+                label: 'Quản lý giảng viên',
+                icon: SettingOutlined,
+                path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_GIANG_VIEN,
+                description: 'Quản lý giảng viên',
+            },
+            {
+                id: 'quan-ly-can-bo',
+                label: 'Quản lý cán bộ nhân viên',
+                icon: SettingOutlined,
+                path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_CAN_BO,
+                description: 'Quản lý cán bộ nhân viên',
             },
             {
                 id: 'danh-muc-ho-so',

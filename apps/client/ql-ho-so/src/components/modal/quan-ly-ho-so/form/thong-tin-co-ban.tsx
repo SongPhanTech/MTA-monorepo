@@ -20,6 +20,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: nationalityData = [] } = useFindManyDM_QuocGia()
     const { data: religionData = [] } = useFindManyDM_TonGiao()
     const { data: ethnicityData = [] } = useFindManyDM_DanToc()
+
     const renderContent = () => {
         return (
             <div className="px-6">

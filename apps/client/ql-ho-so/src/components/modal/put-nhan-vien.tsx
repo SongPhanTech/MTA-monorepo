@@ -12,26 +12,18 @@ import {
     useUpsertUserProfile,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, message, Row, Tabs, type UploadFile } from 'antd'
+import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { getMinioUrl } from '@workspace/constant'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import KeKhaiTaiSanTab from './quan-ly-ho-so/tabs/ke-khai-tai-san'
-import KhenThuongKyLuatTab from './quan-ly-ho-so/tabs/khen-thuong-ky-luat'
-import ThanNhanTab from './quan-ly-ho-so/tabs/tab-danh-sach-than-nhan'
-import DoiTuongChinhSachTab from './quan-ly-ho-so/tabs/tab-doi-tuong-chinh-sach'
-import HocHamHocViTab from './quan-ly-ho-so/tabs/tab-hoc-ham-hoc-vi'
-import QuaTrinhCongTacTab from './quan-ly-ho-so/tabs/tab-qua-trinh-cong-tac'
+
 import ThongTinCaNhanTab from './quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
-import TrinhDoChungChiTab from './quan-ly-ho-so/tabs/tab-trinh-do-chung-chi'
-// import SidebarMenu from './quan-ly-ho-so/sidebar-menu'
-// import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
 import type { PutStaffProfile, StaffProfileType, UserProfileType } from './quan-ly-ho-so/type'
 
+// import TabQuanLyHoSo from './quan-ly-ho-so/tabs'uan-ly-ho-so/type'
+
 dayjs.locale('vi')
-// export type PutUserProfile = UserProfile;
 export interface PutUserProfileLectureProps {
     id: string | null
 }
@@ -39,20 +31,10 @@ export interface PutUserProfileLectureProps {
 const PutUserProfileStaffModal = () => {
     const [form] = Form.useForm<PutStaffProfile>()
 
-    const [activeKey, setActiveKey] = useState<string>('1')
-    const [avatar, setAvatar] = useState<UploadFile[]>([])
-
     const { isOpen, onClose, input } = useDisclosure<PutUserProfileLectureProps>({
         tag: PutUserProfileStaffModal.name,
         onClose: form.resetFields,
     })
-
-    // const {
-    //     onOpen: onOpenModalOganizationUser,
-    //     onClose: onCloseModalOganizationUser,
-    // } = useDisclosure<PutOrganizationUserProps>({
-    //     tag: PutOrganizationUser.name,
-    // })
 
     const { id } = input ?? { id: null }
     const { showSpinner, hideSpinner } = useSpinner()
@@ -113,7 +95,6 @@ const PutUserProfileStaffModal = () => {
         idCardNumber: output.idCardNumber,
         idCardDate: output.idCardDate,
         officerNumber: output.officerNumber,
-        gender: output.gender,
         permanentAddress: output.permanentAddress,
         temporaryAddress: output.temporaryAddress,
         contactAddress: output.contactAddress,
@@ -174,7 +155,6 @@ const PutUserProfileStaffModal = () => {
         idCardNumber: output.idCardNumber,
         idCardDate: output.idCardDate,
         officerNumber: output.officerNumber,
-        gender: output.gender,
         permanentAddress: output.permanentAddress,
         temporaryAddress: output.temporaryAddress,
         contactAddress: output.contactAddress,
@@ -327,74 +307,6 @@ const PutUserProfileStaffModal = () => {
         hideSpinner()
     }
 
-    const tabsData = useMemo(() => {
-        return [
-            {
-                key: '1',
-                label: 'Thông tin cán bộ',
-                children: (
-                    <Row gutter={[16, 16]}>
-                        <Col span={24}>
-                            <ThongTinCaNhanTab
-                                avatar={avatar}
-                                setAvatar={setAvatar}
-                                id={id}
-                                type={'LECTURER'}
-                            />
-                        </Col>
-                    </Row>
-                ),
-            },
-            {
-                key: '2',
-                label: 'Học hàm, học vị',
-                children: <HocHamHocViTab />,
-                forceRender: true,
-            },
-            {
-                key: '3',
-                label: 'Trình độ, chứng chỉ',
-                children: <TrinhDoChungChiTab />,
-                forceRender: true,
-            },
-            {
-                key: '4',
-                label: 'Quá trình công tác',
-                children: <QuaTrinhCongTacTab />,
-                forceRender: true,
-            },
-            {
-                key: '6',
-                label: 'Khen thưởng - kỷ luật',
-                children: <KhenThuongKyLuatTab />,
-                forceRender: true,
-            },
-            {
-                key: '7',
-                label: 'Đối tượng chính sách',
-                children: <DoiTuongChinhSachTab />,
-                forceRender: true,
-            },
-            {
-                key: '8',
-                label: 'Kê khai tài sản',
-                children: <KeKhaiTaiSanTab />,
-                forceRender: true,
-            },
-            {
-                key: '9',
-                label: 'Thân nhân',
-                children: <ThanNhanTab />,
-                forceRender: true,
-            },
-        ]
-    }, [avatar, id])
-
-    // const difference = (
-    //     object: Record<PropertyKey, unknown>,
-    //     base: Record<PropertyKey, unknown>
-    // ) => _.pickBy(object, (v, k) => !_.isEqual(base[k], v))
-
     // SỬA: Cập nhật useEffect để fill đầy đủ các trường
     useEffect(() => {
         if (staffData?.userProfile && id) {
@@ -421,7 +333,6 @@ const PutUserProfileStaffModal = () => {
                 idCardDate: userProfile.idCardDate ? dayjs(userProfile.idCardDate) : undefined,
 
                 officerNumber: userProfile.officerNumber,
-                gender: userProfile.gender,
                 permanentAddress: userProfile.permanentAddress,
                 temporaryAddress: userProfile.temporaryAddress,
                 contactAddress: userProfile.contactAddress,
@@ -472,17 +383,6 @@ const PutUserProfileStaffModal = () => {
                     : undefined,
             }
             form.setFieldsValue(formData)
-
-            if (userProfile?.avatar) {
-                setAvatar([
-                    {
-                        uid: '-1',
-                        name: 'avatar.png',
-                        status: 'done',
-                        url: getMinioUrl(userProfile.avatar),
-                    },
-                ])
-            }
         }
     }, [staffData, form, id])
 
@@ -494,13 +394,13 @@ const PutUserProfileStaffModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa cán bộ' : 'Thêm mới cán bộ'}
-            className="w-[90vw]"
+            className="w-[1000px]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
             <Col span={24}>
-                <Tabs className="w-full" items={tabsData} />
+                <ThongTinCaNhanTab id={id} type={'STAFF'} />
             </Col>
         </PutFormModal>
     )

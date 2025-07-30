@@ -19,7 +19,6 @@ import type {
     DM_XaPhuong,
     ExamType,
     FixedClass,
-    Gender,
     GraduationSessionStatus,
     Lecturer,
     LecturerType,

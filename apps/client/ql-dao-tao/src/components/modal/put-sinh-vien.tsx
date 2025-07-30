@@ -14,20 +14,12 @@ import {
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import type { UploadFile } from 'antd'
-import { Col, Form, message, Row, Tabs } from 'antd'
+import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { $Enums } from '@workspace/db'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import KeKhaiTaiSanTab from './quan-ly-ho-so/tabs/ke-khai-tai-san'
-import KhenThuongKyLuatTab from './quan-ly-ho-so/tabs/khen-thuong-ky-luat'
-import ThanNhanTab from './quan-ly-ho-so/tabs/tab-danh-sach-than-nhan'
-import DoiTuongChinhSachTab from './quan-ly-ho-so/tabs/tab-doi-tuong-chinh-sach'
-import HocHamHocViTab from './quan-ly-ho-so/tabs/tab-hoc-ham-hoc-vi'
-import QuaTrinhDaoTaoTab from './quan-ly-ho-so/tabs/tab-qua-trinh-dao-tao'
-import ThongTinCaNhanTab from './quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
-// import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
 import type { PutStudentProfile, UserProfileType } from './quan-ly-ho-so/type'
 
 dayjs.locale('vi')
@@ -49,13 +41,12 @@ type PreFillFormFields = {
     curriculumVersionId?: string
 }
 
-const PutHocvienModal = () => {
+const PutStudentModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
-
+    const [userSelected, setUserSelected] = useState<UserProfileType>()
     const [avatar, setAvatar] = useState<UploadFile[]>([])
-    const [userSelected, setUserSelected] = useState<UserProfileType | undefined>(undefined)
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
-        tag: PutHocvienModal.name,
+        tag: PutStudentModal.name,
         onClose: form.resetFields,
     })
     const { id, preSelectedValues } = input ?? {}
@@ -107,9 +98,7 @@ const PutHocvienModal = () => {
     const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
     const { data = [] } = useFindManyUserProfile({
         where: {
-            userType: {
-                in: [$Enums.UserType.MILITARY_STUDENT],
-            },
+            userType: $Enums.UserType.CIVILIAN_STUDENT,
             educationAndTraining: {
                 some: {
                     deletedAt: null, // Chỉ lấy Student chưa bị xóa mềm
@@ -231,7 +220,7 @@ const PutHocvienModal = () => {
 
                 await Promise.all(promises)
 
-                message.success('Cập nhật học viên thành công')
+                message.success('Cập nhật sinh viên thành công')
             } else {
                 // CREATE MODE
                 if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
@@ -250,7 +239,7 @@ const PutHocvienModal = () => {
                         },
                     })
 
-                    message.success('Cập nhật học viên thành công')
+                    message.success('Cập nhật sinh viên thành công')
                 } else {
                     const userProfile = await createUserProfile({
                         data: userProfileData,
@@ -263,7 +252,7 @@ const PutHocvienModal = () => {
                     const studentCreateData = buildStudentCreateData(output, userProfile.id)
                     await createStudent({ data: studentCreateData })
 
-                    message.success('Thêm học viên thành công')
+                    message.success('Thêm sinh viên thành công')
                 }
             }
 
@@ -278,64 +267,6 @@ const PutHocvienModal = () => {
         }
         hideSpinner()
     }
-
-    const tabsData = useMemo(() => {
-        return [
-            {
-                key: '1',
-                label: 'Thông tin học viên',
-                children: (
-                    <Row gutter={[16, 16]}>
-                        <Col span={24}>
-                            <ThongTinCaNhanTab
-                                avatar={avatar}
-                                setAvatar={setAvatar}
-                                id={id}
-                                type={'MILITARY_STUDENT'}
-                                setUserSelected={setUserSelected}
-                            />
-                        </Col>
-                    </Row>
-                ),
-            },
-            {
-                key: '2',
-                label: 'Học hàm, học vị',
-                children: <HocHamHocViTab studentData={studentData} userSelected={userSelected} />,
-                forceRender: true,
-            },
-            {
-                key: '5',
-                label: 'Quá trình đào tạo',
-                children: <QuaTrinhDaoTaoTab />,
-                forceRender: true,
-            },
-            {
-                key: '6',
-                label: 'Khen thưởng - kỷ luật',
-                children: <KhenThuongKyLuatTab />,
-                forceRender: true,
-            },
-            {
-                key: '7',
-                label: 'Đối tượng chính sách',
-                children: <DoiTuongChinhSachTab />,
-                forceRender: true,
-            },
-            {
-                key: '8',
-                label: 'Kê khai tài sản',
-                children: <KeKhaiTaiSanTab />,
-                forceRender: true,
-            },
-            {
-                key: '9',
-                label: 'Thân nhân',
-                children: <ThanNhanTab />,
-                forceRender: true,
-            },
-        ]
-    }, [studentData, userSelected, avatar, id])
 
     useEffect(() => {
         if (studentData) {
@@ -403,6 +334,7 @@ const PutHocvienModal = () => {
                 academicRankTypeId: studentData.userProfile?.academicRankTypeId ?? undefined,
                 positionCPVId: studentData.userProfile?.positionCPVId,
             })
+            // setUserSelected(studentData.userProfile)
 
             if (studentData.userProfile?.avatar) {
                 setAvatar([
@@ -458,17 +390,15 @@ const PutHocvienModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa học viên' : 'Thêm học viên'}
-            className="w-[90vw]"
+            title={id ? 'Chỉnh sửa sinh viên' : 'Thêm sinh viên'}
+            className="w-[1000px]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
-            <Col span={24}>
-                <Tabs className="w-full" items={tabsData} />
-            </Col>
+            <Col span={24} />
         </PutFormModal>
     )
 }
 
-export default PutHocvienModal
+export default PutStudentModal

@@ -21,9 +21,7 @@ import XepLoaiDanhGiaChatLuongDangVienModal from './danh-muc-chung/put-xep-loai-
 import ModalLyLichCanBo from './modal-ly-lich-can-bo'
 import ModalTomTatLyLich from './modal-ly-lich-sinh-vien'
 import PutUserProfileLectureModal from './put-giang-vien'
-import PutHocvienModal from './put-hoc-vien'
 import PutUserProfileStaffModal from './put-nhan-vien'
-import PutStudentModal from './put-sinh-vien'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutBoiDuongQuocPhongModal from './quan-ly-ho-so/modals/put-boi-duong-quoc-phong-an-ninh'
@@ -44,11 +42,8 @@ import PutTrinhDoLyLuanChinhTriModal from './quan-ly-ho-so/modals/put-trinh-do-l
 import PutTrinhDoQuanLyHanhChinhModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
 import PutTrinhDoQuanLyNhaNuocModal from './quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 export {
-    PutStudentModal,
-    PutHocvienModal,
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutUserProfileStaffModal,
     PutUserProfileLectureModal,
     PutHocViModal,
     PutHocHamModal,
@@ -89,4 +84,5 @@ export {
     PutKeKhaiTaiSanModal,
     ModalTomTatLyLich,
     ModalLyLichCanBo,
+    PutUserProfileStaffModal,
 }

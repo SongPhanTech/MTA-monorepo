@@ -83,13 +83,13 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...(filters.gender
-                ? {
-                      gender: {
-                          in: filters.gender,
-                      },
-                  }
-                : {}),
+            // ...(filters.gender
+            //     ? {
+            //           gender: {
+            //               in: filters.gender,
+            //           },
+            //       }
+            //     : {}),
             ...(filters.phoneNumber
                 ? {
                       phoneNumber: {
@@ -143,13 +143,13 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...(filters.gender
-                ? {
-                      gender: {
-                          in: filters.gender,
-                      },
-                  }
-                : {}),
+            // ...(filters.gender
+            //     ? {
+            //           gender: {
+            //               in: filters.gender,
+            //           },
+            //       }
+            //     : {}),
             ...(filters.phoneNumber
                 ? {
                       phoneNumber: {
@@ -375,7 +375,7 @@ export default function UserProfilePageDs() {
                                         <ViewIcon
                                             onClick={() =>
                                                 router.push(
-                                                    ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
+                                                    ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
                                                         '[id]',
                                                         id
                                                     )
