@@ -51,7 +51,7 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
                     logo2={
                         <div className="flex items-center justify-center text-center">
                             <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
-                            <span className="text-xl font-bold color text-primary">
+                            <span className="text-xl font-bold color text-[#212121]">
                                 Quản lý hồ sơ
                             </span>
                         </div>
@@ -67,7 +67,9 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-[calc(100%-230px)] fixed z-[1000] top-0 left-[230px]">
+                    <Header
+                        className={`flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
+                    >
                         <span className="text-lg font-bold text-primary" />
                         <HeaderApp />
                     </Header>
