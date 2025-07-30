@@ -6,7 +6,10 @@ export type QuestionTypeOption = {
 }
 
 export const useQuestionTypeOptions = () => {
-    const options: QuestionTypeOption[] = [{ value: QuestionType.ESSAY, label: 'Tự luận' }]
+    const options: QuestionTypeOption[] = [
+        { value: QuestionType.ESSAY, label: 'Tự luận' },
+        { value: QuestionType.ORAL, label: 'Vấn đáp' },
+    ]
 
     const getQuestionTypeLabel = (value: QuestionType | null | undefined): string => {
         return options.find((opt) => opt.value === value)?.label || ''

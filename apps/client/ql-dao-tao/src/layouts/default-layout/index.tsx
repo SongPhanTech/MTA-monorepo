@@ -144,7 +144,9 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-[calc(100%-230px)] fixed z-[1000] top-0 left-[230px]">
+                    <Header
+                        className={`flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
+                    >
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
