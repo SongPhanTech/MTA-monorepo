@@ -1,5 +1,5 @@
 import { HomeOutlined } from '@ant-design/icons'
-import logo_mta from '@assets/images/hoso.svg'
+import logo_mta from '@assets/images/khaothi.svg'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
