@@ -1,6 +1,5 @@
 import '../base'
 import '../ql-nguoi-dung/user'
-import '../ql-danh-muc/categories'
 import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
 import '../ql-dao-tao/categories'
@@ -65,7 +64,9 @@ model UserProfile extends Base {
   homeTown                   String? // quê quán
   idCardDate                 DateTime? // ngày cấp
   idCardExpirationDate       DateTime? // ngày hết hạn CCCD
-  gender                     Gender?
+  gender                     DM_GioiTinh?              @relation(fields: [genderId], references: [Id])
+  genderId                   String?                   @db.Uuid
+
   permanentAddress           String? // địa chỉ thường trú
   provincePermanentAddress   DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
   provincePermanentAddressId String?                   @db.Uuid

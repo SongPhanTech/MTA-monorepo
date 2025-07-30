@@ -234,13 +234,6 @@ enum UserType {
   @@schema("ql-nguoi-dung")
 }
 
-enum Gender {
-  Male
-  Female
-
-  @@schema("ql-danh-muc")
-}
-
 enum ResearchProjectStatus {
   OPEN
   FULL
@@ -2138,6 +2131,27 @@ model DM_TrinhDoTinHoc {
   @@schema("mta")
 }
 
+model DM_GioiTinh {
+  Id             String        @id() @default(uuid()) @db.Uuid()
+  sMa            String?
+  sTen           String?
+  sGhiChu        String?
+  iSTT           Int?          @default(0)
+  bActive        Boolean?      @default(true)
+  bDeleted       Boolean?      @default(false)
+  bSystem        Boolean?      @default(false)
+  iDictionaryKey Int?          @default(0)
+  dNgayTao       DateTime?
+  dNgaySua       DateTime?
+  sNguoiTao      String?
+  sNguoiSua      String?
+  sThietBiTao    String?
+  sThietBiSua    String?
+  userProfile    UserProfile[]
+
+  @@schema("mta")
+}
+
 model DM_NhanVien {
   Id                  String         @id() @default(uuid()) @db.Uuid()
   sMa                 String?
@@ -2444,7 +2458,8 @@ model UserProfile {
   homeTown                   String?
   idCardDate                 DateTime?
   idCardExpirationDate       DateTime?
-  gender                     Gender?
+  gender                     DM_GioiTinh?              @relation(fields: [genderId], references: [Id])
+  genderId                   String?                   @db.Uuid()
   permanentAddress           String?
   provincePermanentAddress   DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
   provincePermanentAddressId String?                   @db.Uuid()

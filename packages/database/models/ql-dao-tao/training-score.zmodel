@@ -1,7 +1,6 @@
 import '../base'
 import '../ql-nguoi-dung/user'
 import '../ql-ho-so/profile'
-import '../ql-danh-muc/categories'
 import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/common'
 import 'categories'
@@ -39,13 +38,13 @@ model StudentTrainingScore extends Base {
 
 // Điểm rèn luyện của sinh viên, được tính theo kỳ
 model StudentTrainingSemester extends Base {
-  semester             Semester               @relation(fields: [semesterId], references: [id])
-  semesterId           String
+  semester   Semester @relation(fields: [semesterId], references: [id])
+  semesterId String
 
-  student                Student              @relation(fields: [studentId], references: [id])
-  studentId              String
+  student    Student  @relation(fields: [studentId], references: [id])
+  studentId  String
 
-  score                  Float                @default(0) // điểm rèn luyện
+  score      Float    @default(0) // điểm rèn luyện
 
   @@unique([semesterId, studentId])
   @@schema("ql-dao-tao")

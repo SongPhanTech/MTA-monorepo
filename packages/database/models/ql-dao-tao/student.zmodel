@@ -1,7 +1,6 @@
 import '../base'
 import '../ql-danh-muc/notification'
 import '../ql-nguoi-dung/user'
-import '../ql-danh-muc/categories'
 import '../ql-danh-muc/core-categories'
 import '../ql-ho-so/profile'
 import '../ql-danh-muc/common'

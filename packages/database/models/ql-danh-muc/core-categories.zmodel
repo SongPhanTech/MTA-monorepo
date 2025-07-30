@@ -153,6 +153,11 @@ model DM_TrinhDoTinHoc extends CoreBase {
   @@schema("mta")
 }
 
+model DM_GioiTinh extends CoreBase {
+  userProfile UserProfile[]
+  @@schema("mta")
+}
+
 model DM_NhanVien extends CoreBase {
   sCCCD               String?
   sHoVaDem            String?
