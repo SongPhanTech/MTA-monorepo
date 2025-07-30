@@ -144,7 +144,7 @@ const DefaultLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-full fixed z-[1000]">
+                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 w-[calc(100%-230px)] fixed z-[1000] top-0 left-[230px]">
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
