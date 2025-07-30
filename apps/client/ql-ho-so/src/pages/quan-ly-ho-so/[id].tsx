@@ -92,23 +92,35 @@ export default function UpdateUserPage() {
             {
                 title: 'Thông tin cơ bản',
                 id: 'thongTinCoBan',
-                render: <ThongTinCoBan expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item className="mb-0">
+                        <ThongTinCoBan expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Thông tin liên hệ',
                 id: 'thongTinLienHe',
-                render: <ThongTinLienHe expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item className="mb-0">
+                        <ThongTinLienHe expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Đoàn - Đảng',
                 id: 'DoanDang',
-                render: <DoanDang expland={expland} setExpland={setExpland} />,
+                render: (
+                    <Form.Item className="mb-0">
+                        <DoanDang expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
             },
             {
                 title: 'Thông tin thân nhân',
                 id: 'thongTinThanNhan',
                 render: (
-                    <Form.Item name="relatives">
+                    <Form.Item name="relatives" className="mb-0">
                         <ThongTinThanNhanForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -117,7 +129,7 @@ export default function UpdateUserPage() {
                 title: 'Học vị',
                 id: 'hocVi',
                 render: (
-                    <Form.Item name="hocVi">
+                    <Form.Item name="hocVi" className="mb-0">
                         <HocViForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -126,7 +138,7 @@ export default function UpdateUserPage() {
                 title: 'Học hàm',
                 id: 'hocHam',
                 render: (
-                    <Form.Item name="hocHam">
+                    <Form.Item name="hocHam" className="mb-0">
                         <HocHamForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -135,7 +147,7 @@ export default function UpdateUserPage() {
                 title: 'Trình độ lý luận chính trị',
                 id: 'trinhDoLyLuanChinhTri',
                 render: (
-                    <Form.Item name="trinhDoLyLuanChinhTri">
+                    <Form.Item name="trinhDoLyLuanChinhTri" className="mb-0">
                         <TrinhDoLyLuanChinhTriForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -149,7 +161,7 @@ export default function UpdateUserPage() {
                 title: 'Trình độ quản lý nhà nước',
                 id: 'trinhDoQuanLyNhaNuoc',
                 render: (
-                    <Form.Item name="trinhDoQuanLyNhaNuoc">
+                    <Form.Item name="trinhDoQuanLyNhaNuoc" className="mb-0">
                         <TrinhDoQuanLyNhaNuocForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -158,7 +170,7 @@ export default function UpdateUserPage() {
                 title: 'Ngoại ngữ',
                 id: 'ngoaiNgu',
                 render: (
-                    <Form.Item name="ngoaiNgu">
+                    <Form.Item name="ngoaiNgu" className="mb-0">
                         <NgoaiNguForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -167,7 +179,7 @@ export default function UpdateUserPage() {
                 title: 'Tin học',
                 id: 'tinHoc',
                 render: (
-                    <Form.Item name="tinHoc">
+                    <Form.Item name="tinHoc" className="mb-0">
                         <TinHocForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -176,7 +188,7 @@ export default function UpdateUserPage() {
                 title: 'Bồi dưỡng quốc phòng an ninh',
                 id: 'boiDuongQuocPhongAnNinh',
                 render: (
-                    <Form.Item name="boiDuongQuocPhongAnNinh">
+                    <Form.Item name="boiDuongQuocPhongAnNinh" className="mb-0">
                         <BoiDuongQuocPhongAnNinhForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -185,7 +197,7 @@ export default function UpdateUserPage() {
                 title: 'Cấp bậc',
                 id: 'capBac',
                 render: (
-                    <Form.Item name="capBac">
+                    <Form.Item name="capBac" className="mb-0">
                         <CapBacForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -194,7 +206,7 @@ export default function UpdateUserPage() {
                 title: 'Quá trình công tác',
                 id: 'quaTrinhCongTac',
                 render: (
-                    <Form.Item name="quaTrinhCongTac">
+                    <Form.Item name="quaTrinhCongTac" className="mb-0">
                         <QuaTrinhCongTacForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -203,7 +215,7 @@ export default function UpdateUserPage() {
                 title: 'Quá trình được cử đi công tác',
                 id: 'quaTrinhDuocCuDiCongTac',
                 render: (
-                    <Form.Item name="quaTrinhCuDiCongTac">
+                    <Form.Item name="quaTrinhCuDiCongTac" className="mb-0">
                         <QuaTrinhCuDiCongTacForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -212,25 +224,25 @@ export default function UpdateUserPage() {
                 title: 'Quá trình được cử đi đào tạo bồi dưỡng',
                 id: 'quaTrinhDiDaoTaoBoiDuong',
                 render: (
-                    <Form.Item name="quaTrinhCuDiDaoTao">
+                    <Form.Item name="quaTrinhCuDiDaoTao" className="mb-0">
                         <QuaTrinhDiDaoTaoBoiDuongForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
             },
             {
-                title: 'Khen thưởng',
-                id: 'khenThuong',
+                title: 'Thông tin khen thưởng',
+                id: 'thongTinKhenThuong',
                 render: (
-                    <Form.Item name="khenThuong">
+                    <Form.Item name="khenThuong" className="mb-0">
                         <ThongTinKhenThuongForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
             },
             {
-                title: 'Kỷ luật',
-                id: 'kyLuat',
+                title: 'Thông tin kỷ luật',
+                id: 'thongTinKyLuat',
                 render: (
-                    <Form.Item name="kyLuat">
+                    <Form.Item name="kyLuat" className="mb-0">
                         <ThongTinKyLuatForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -239,7 +251,7 @@ export default function UpdateUserPage() {
                 title: 'Đối tượng chính sách',
                 id: 'doiTuongChinhSach',
                 render: (
-                    <Form.Item name="doiTuongChinhSach">
+                    <Form.Item name="doiTuongChinhSach" className="mb-0">
                         <DoiTuongChinhSachForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -248,7 +260,7 @@ export default function UpdateUserPage() {
                 title: 'Kê khai tài sản',
                 id: 'keKhaiTaiSan',
                 render: (
-                    <Form.Item name="keKhaiTaiSan">
+                    <Form.Item name="keKhaiTaiSan" className="mb-0">
                         <KeKhaiTaiSanForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
@@ -357,7 +369,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.hocVi.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -370,7 +383,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.hocHam.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -383,7 +397,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.relatives.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -397,7 +412,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.trinhDoLyLuanChinhTri.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -411,7 +427,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.trinhDoQuanLyNhaNuoc.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -424,7 +441,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.ngoaiNgu.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -437,7 +455,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.tinHoc.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -451,7 +470,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.boiDuongQuocPhongAnNinh.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -464,7 +484,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.capBac.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -477,7 +498,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.quaTrinhCongTac.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -490,7 +512,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.quaTrinhCuDiCongTac.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -503,7 +526,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.quaTrinhCuDiDaoTao.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -516,7 +540,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.khenThuong.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -529,7 +554,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.kyLuat.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -542,7 +568,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.doiTuongChinhSach.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -555,7 +582,8 @@ export default function UpdateUserPage() {
                                     ? {
                                           createMany: {
                                               data: values.keKhaiTaiSan.map((item) => {
-                                                  const { id, ...itemWithoutId } = item
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
                                                   return itemWithoutId
                                               }),
                                               skipDuplicates: true,
@@ -570,6 +598,8 @@ export default function UpdateUserPage() {
             queryClient.invalidateQueries({
                 queryKey: ['UserProfile'],
             })
+
+            message.success('Cập nhật thành công')
             // router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
         } catch (error) {
             message.error('Đã có lỗi xảy ra, vui lòng thử lại sau')
