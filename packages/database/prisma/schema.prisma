@@ -824,6 +824,7 @@ model Semester {
   academicWarning         AcademicWarning[]
   disciplinaryWarning     DisciplinaryWarning[]
   studentAcademicDecision StudentAcademicDecision[]
+  studentTrainingSemester StudentTrainingSemester[]
 
   @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
@@ -1544,6 +1545,7 @@ model Student {
   researchRegistrations    StudentResearchRegistration[]
   thesisRegistrations      StudentThesisRegistration[]
   examSession              ExamSession[]
+  studentTrainingSemester  StudentTrainingSemester[]
 
   @@schema("ql-dao-tao")
 }
@@ -3371,6 +3373,24 @@ model StudentTrainingScore {
   score                  Float                @default(0)
 
   @@unique([trainingScoreSessionId, studentId])
+  @@schema("ql-dao-tao")
+}
+
+model StudentTrainingSemester {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+  semester    Semester  @relation(fields: [semesterId], references: [id])
+  semesterId  String
+  student     Student   @relation(fields: [studentId], references: [id])
+  studentId   String
+  score       Float     @default(0)
+
+  @@unique([semesterId, studentId])
   @@schema("ql-dao-tao")
 }
 

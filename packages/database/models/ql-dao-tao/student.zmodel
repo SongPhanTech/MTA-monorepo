@@ -91,10 +91,8 @@ model Student extends Base {
   researchRegistrations    StudentResearchRegistration[] // Đăng ký đề tài nghiên cứu
   thesisRegistrations      StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
   examSession              ExamSession[]
-  studentTrainingScoreSemester StudentTrainingScoreSemester[]
+  studentTrainingSemester  StudentTrainingSemester[]
   @@schema("ql-dao-tao")
-
-	
 }
 
 model StudentSemesterResult extends Base {
