@@ -7,6 +7,7 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { ModalPrintStudentSubjectScore } from '@components/modal'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
@@ -29,11 +30,11 @@ import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopMonHocItem from './lop-mon-hoc'
 
-interface FilterProps {
+interface FilterPropsClassClass {
     schoolYearId: string | null //Năm học
     semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
@@ -48,6 +49,14 @@ interface FilterProps {
     examDateRange?: [string, string] | null // Khoảng thời gian thi
 }
 
+type FilterTable = FilterProps & {
+    fullname?: string
+    fixedClassName?: string
+    attendanceScore?: 'asc' | 'desc'
+    midtermScore?: 'asc' | 'desc'
+    examScore?: 'asc' | 'desc'
+}
+
 export default function SubjectClassScore() {
     const router = useRouter()
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
@@ -59,25 +68,29 @@ export default function SubjectClassScore() {
 
     const [open, setOpen] = useState(false)
     const [importModalVisible, setImportModalVisible] = useState(false)
+    const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>()
 
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
     }
 
-    const { onOpen, onClose } = useDisclosure<{
+    const { onOpen } = useDisclosure<{
         dataTable: any
         type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
     }>({
         tag: ModalPrintStudentSubjectScore.name,
     })
 
-    const { data: semesters = [] } = useFindManySemester({
-        orderBy: {
-            createdAt: 'desc',
-        },
+    const { data: semesters } = useFindManySemester({
+        include: { schoolYear: true },
+        orderBy: { startDate: 'desc' },
     })
 
-    const latestSemester = useMemo(() => semesters?.[0]?.id || null, [semesters])
+    useEffect(() => {
+        if (semesters && semesters.length > 0) {
+            setSelectedSemesterId((prev) => prev || semesters[0].id)
+        }
+    }, [semesters])
 
     useEffect(() => {
         if (subjectId) {
@@ -85,9 +98,9 @@ export default function SubjectClassScore() {
         }
     }, [subjectId])
 
-    const [filters, setFilters] = useState<FilterProps>({
+    const [filters, setFilters] = useState<FilterPropsClassClass>({
         searchText: '',
-        semesterId: latestSemester,
+        semesterId: null,
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
@@ -97,7 +110,15 @@ export default function SubjectClassScore() {
         examTypeId: null,
         LectureIds: [],
         fixedClassIds: [],
-        examDateRange: undefined, // Khoảng thời gian thi
+        examDateRange: undefined,
+    })
+
+    const [filterTable, setFilterTable] = useState<FilterTable>({
+        fullname: '',
+        fixedClassName: '',
+        attendanceScore: undefined,
+        midtermScore: undefined,
+        examScore: undefined,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -136,7 +157,7 @@ export default function SubjectClassScore() {
                       ],
                   }
                 : {}),
-            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
+            ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             ...(filters.trainingObjectTypeId
                 ? {
@@ -207,13 +228,43 @@ export default function SubjectClassScore() {
         orderBy: {
             createdAt: 'desc',
         },
-        take: 20,
+        take: 25,
     })
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
         {
             where: {
                 subjectClassId: selectedFixedClass || '',
+                ...(filterTable.fullname
+                    ? {
+                          student: {
+                              userProfile: {
+                                  fullname: { contains: filterTable.fullname, mode: 'insensitive' },
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filterTable.code
+                    ? {
+                          student: {
+                              userProfile: {
+                                  code: { contains: filterTable.code, mode: 'insensitive' },
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filterTable.fixedClassName
+                    ? {
+                          student: {
+                              fixedClass: {
+                                  name: {
+                                      contains: filterTable.fixedClassName,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                      }
+                    : {}),
             },
             include: {
                 student: {
@@ -266,13 +317,36 @@ export default function SubjectClassScore() {
                     },
                 },
             },
-            orderBy: {
-                student: {
-                    userProfile: {
-                        firstName: 'asc',
+            orderBy: [
+                ...(filterTable.attendanceScore
+                    ? [
+                          {
+                              attendanceScore: filterTable.attendanceScore,
+                          },
+                      ]
+                    : []),
+                ...(filterTable.midtermScore
+                    ? [
+                          {
+                              midtermScore: filterTable.midtermScore,
+                          },
+                      ]
+                    : []),
+                ...(filterTable.examScore
+                    ? [
+                          {
+                              examScore: filterTable.examScore,
+                          },
+                      ]
+                    : []),
+                {
+                    student: {
+                        userProfile: {
+                            firstName: 'asc',
+                        },
                     },
                 },
-            },
+            ],
         },
         { refetchOnWindowFocus: false }
     )
@@ -305,7 +379,7 @@ export default function SubjectClassScore() {
         }
     }
 
-    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
+    const handleFilterApply = (newFilters: Partial<FilterPropsClassClass>) => {
         setFilters((prev) => {
             const updatedFilters = { ...prev, ...newFilters }
             debouncedRefetch()
@@ -619,7 +693,7 @@ export default function SubjectClassScore() {
             >
                 <Col span={24}>
                     <Row gutter={[0, 16]} align="top" justify="space-between">
-                        <Col span={13}>
+                        <Col>
                             <Flex gap={4}>
                                 <Col span={10}>
                                     <Form.Item name="searchText">
@@ -644,22 +718,11 @@ export default function SubjectClassScore() {
                                 </Col>
 
                                 <Col span={10}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="semesterId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <TreeSelectSemester
-                                            style={{ width: '250px' }}
-                                            defaultValue={latestSemester || ''}
-                                            value={filters.semesterId || ''}
-                                            onChange={(val) =>
-                                                handleFilterChange('semesterId', val)
-                                            }
-                                        />
-                                    </Form.Item>
+                                    <TreeSelectSemester
+                                        style={{ width: '100%' }}
+                                        value={selectedSemesterId || undefined}
+                                        onChange={(val) => setSelectedSemesterId(val || '')}
+                                    />
                                 </Col>
                                 <Col span={10}>
                                     <Form.Item
@@ -772,6 +835,8 @@ export default function SubjectClassScore() {
                     <Table
                         rowKey="id"
                         id="student-subject-score"
+                        filters={filterTable}
+                        setFilters={setFilterTable}
                         columns={[
                             {
                                 title: 'STT',
@@ -782,16 +847,20 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Mã sinh viên',
+                                dataIndex: 'code',
                                 align: 'center',
                                 width: 150,
                                 fixed: 'left',
-                                render: (_, record) => record.student?.code || '',
+                                type: 'input',
+                                render: (_, record) => record.student?.userProfile?.code || '',
                             },
                             {
                                 title: 'Họ và tên',
+                                dataIndex: 'fullname',
                                 width: 150,
                                 fixed: 'left',
-                                render: (record) => record.student?.userProfile?.fullname,
+                                type: 'input',
+                                render: (_, record) => record?.student?.userProfile?.fullname || '',
                             },
                             {
                                 title: 'Ngày sinh',
@@ -802,17 +871,20 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Tên lớp',
+                                dataIndex: 'fixedClassName',
                                 width: 150,
                                 align: 'center',
-                                render: (record) =>
+                                type: 'input',
+                                render: (_, record) =>
                                     record.student?.fixedClass?.name || 'Chưa có lớp',
                             },
                             // #region Điểm CC
                             {
                                 title: 'Điểm CC',
                                 dataIndex: 'attendanceScore',
-                                width: 90,
+                                width: 100,
                                 align: 'center',
+                                type: 'order',
                                 render: (_, record) => {
                                     const isEditable = record.subjectClass?.scoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.scoreDeadline)
@@ -884,8 +956,9 @@ export default function SubjectClassScore() {
                             {
                                 title: 'Điểm TX',
                                 dataIndex: 'midtermScore',
-                                width: 90,
+                                width: 100,
                                 align: 'center',
+                                type: 'order',
                                 render: (_, record) => {
                                     const isEditable = record.subjectClass?.scoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.scoreDeadline)
@@ -957,7 +1030,8 @@ export default function SubjectClassScore() {
                             {
                                 title: 'Điểm thi',
                                 dataIndex: 'examScore',
-                                width: 90,
+                                width: 100,
+                                type: 'order',
                                 align: 'center',
                                 render: (_, record) => {
                                     const isEditable = record.subjectClass?.examScoreDeadline

@@ -216,10 +216,10 @@ export default function ThesisProject() {
     })
 
     useEffect(() => {
-        if (semesters && semesters?.length > 0 && !selectedSemesterId) {
-            setSelectedSemesterId(semesters[0].id)
+        if (semesters && semesters.length > 0) {
+            setSelectedSemesterId((prev) => prev || semesters[0].id)
         }
-    }, [semesters, selectedSemesterId])
+    }, [semesters])
 
     const { onOpen } = useDisclosure<{ subjectClassId: string; thesisProjectId: string }>({
         tag: PutThesisProject.name,
@@ -270,7 +270,7 @@ export default function ThesisProject() {
                                                 })
                                             }
                                             className="py-0"
-                                            placeholder="Tìm kiếm chương lớp môn học"
+                                            placeholder="Tìm kiếm lớp môn học"
                                             prefix={
                                                 <Search
                                                     size={12}
