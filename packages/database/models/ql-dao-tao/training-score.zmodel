@@ -37,6 +37,20 @@ model StudentTrainingScore extends Base {
   @@schema("ql-dao-tao")
 }
 
+// Điểm rèn luyện của sinh viên, được tính theo kỳ
+model StudentTrainingSemester extends Base {
+  semester             Semester               @relation(fields: [semesterId], references: [id])
+  semesterId           String
+
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+
+  score                  Float                @default(0) // điểm rèn luyện
+
+  @@unique([semesterId, studentId])
+  @@schema("ql-dao-tao")
+}
+
 enum StudentTrainingType {
   EXCELLENT // Xuất sắc - cho SV DS
   GOOD      // Tốt
