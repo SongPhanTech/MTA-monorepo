@@ -26,6 +26,7 @@ enum ConfigKey {
 /// Loại câu hỏi
 enum QuestionType {
   ESSAY
+  ORAL
 
   @@schema("khao-thi")
 }

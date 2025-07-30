@@ -5,8 +5,9 @@ import '../ql-dao-tao/categories'
 
 /// Loại câu hỏi
 enum QuestionType {
-  ESSAY           // Tự luận
-  // SINGLE_CHOICE // Trắc nghiệm một lựa chọn
+  ESSAY              // Tự luận
+  ORAL               // Vấn đáp
+  // SINGLE_CHOICE   // Trắc nghiệm một lựa chọn
   // MULTIPLE_CHOICE // Trắc nghiệm nhiều lựa chọn
   // FILL_IN_BLANK   // Điền vào chỗ trống
   // ORDERING        // Sắp xếp thứ tự
