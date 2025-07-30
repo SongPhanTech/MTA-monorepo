@@ -228,8 +228,8 @@ export default function CreateUserPage() {
             ),
         },
         {
-            title: 'Khen thưởng',
-            id: 'khenThuong',
+            title: 'Thông tin khen thưởng',
+            id: 'thongTinKhenThuong',
             render: (
                 <Form.Item name="khenThuong" className="mb-0">
                     <ThongTinKhenThuongForm expland={expland} setExpland={setExpland} />
@@ -237,8 +237,8 @@ export default function CreateUserPage() {
             ),
         },
         {
-            title: 'Kỷ luật',
-            id: 'kyLuat',
+            title: 'Thông tin kỷ luật',
+            id: 'thongTinKyLuat',
             render: (
                 <Form.Item name="kyLuat" className="mb-0">
                     <ThongTinKyLuatForm expland={expland} setExpland={setExpland} />
