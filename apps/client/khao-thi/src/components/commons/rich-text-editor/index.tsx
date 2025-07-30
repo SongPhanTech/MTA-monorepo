@@ -191,7 +191,7 @@ export function RichTextEditor({
             // Generate presigned URL
             const extension = file.name.split('.').pop() || 'png'
             const resPresignedUrl = await generatePresignedUrl({
-                path: 'editor-images',
+                path: 'question-images',
                 extension,
             })
 
@@ -199,9 +199,6 @@ export function RichTextEditor({
             await fetch(resPresignedUrl.data.url, {
                 method: 'PUT',
                 body: file,
-                headers: {
-                    'Content-Type': file.type,
-                },
             })
 
             const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`

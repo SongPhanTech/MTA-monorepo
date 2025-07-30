@@ -8,6 +8,8 @@ import {
     RiAlignJustify,
     RiAlignLeft,
     RiAlignRight,
+    RiBold,
+    RiCodeSSlashLine,
     RiImage2Line,
     RiItalic,
     RiListOrdered2,
