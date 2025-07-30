@@ -138,7 +138,7 @@ const PutHocvienModal = () => {
         idCardNumber: output.idCardNumber,
         idCardDate: output.idCardDate,
         officerNumber: output.officerNumber,
-        gender: output.gender,
+        // gender: output.gender,
         permanentAddress: output.permanentAddress,
         temporaryAddress: output.temporaryAddress,
         contactAddress: output.contactAddress,
@@ -302,7 +302,7 @@ const PutHocvienModal = () => {
                 idCardDate: studentData.userProfile?.idCardDate
                     ? dayjs(studentData.userProfile.idCardDate)
                     : null,
-                gender: studentData.userProfile?.gender,
+                // gender: studentData.userProfile?.gender,
                 permanentAddress: studentData.userProfile?.permanentAddress,
                 temporaryAddress: studentData.userProfile?.temporaryAddress,
                 contactAddress: studentData.userProfile?.contactAddress,

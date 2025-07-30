@@ -163,7 +163,7 @@ export default function ThongTinCaNhanTab({
                 firstName: userData.firstName,
                 lastName: userData.lastName,
                 dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
-                gender: userData.gender,
+                // gender: userData.gender,
                 phoneNumber: userData.phoneNumber,
                 email: userData.email,
                 idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,

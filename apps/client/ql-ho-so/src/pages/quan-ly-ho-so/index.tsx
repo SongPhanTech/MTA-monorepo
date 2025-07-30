@@ -2,14 +2,8 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { PutStudentModal } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    FIXED_CLASS_STUDENT_STATUS,
-    GENDER_MEAN,
-    USER_TYPE,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS, USER_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useCountUserProfile, useFindManyUserProfile, useUpdateStudent } from '@workspace/db/hooks'
@@ -20,7 +14,6 @@ import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -178,29 +171,6 @@ export default function UserProfilePageDs() {
         }, 500),
         []
     )
-    const { onOpen, onClose } = useDisclosure<{
-        tag?: string
-        preSelectedValues?: {
-            trainingObjectTypeId?: string
-            trainingCourseId?: string
-            fixedClassId?: string
-        }
-        id?: string | null
-    }>({
-        tag: PutStudentModal.name,
-    })
-
-    const { onOpen: onOpenUpdate } = useDisclosure<{
-        tag?: string
-        preSelectedValues?: {
-            trainingObjectTypeId?: string
-            trainingCourseId?: string
-            fixedClassId?: string
-        }
-        id: string | null
-    }>({
-        tag: PutStudentModal.name,
-    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -306,22 +276,22 @@ export default function UserProfilePageDs() {
                                         ? dayjs(record.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
-                            {
-                                title: 'Giới tính',
-                                align: 'center',
-                                width: 100,
-                                type: 'select',
-                                dataIndex: 'gender',
-                                options: [
-                                    { label: 'Nam', value: 'Male' },
-                                    { label: 'Nữ', value: 'Female' },
-                                ],
+                            // {
+                            //     title: 'Giới tính',
+                            //     align: 'center',
+                            //     width: 100,
+                            //     type: 'select',
+                            //     dataIndex: 'gender',
+                            //     options: [
+                            //         { label: 'Nam', value: 'Male' },
+                            //         { label: 'Nữ', value: 'Female' },
+                            //     ],
 
-                                render: (__, record) =>
-                                    record?.gender
-                                        ? GENDER_MEAN[record?.gender as keyof typeof GENDER_MEAN]
-                                        : '',
-                            },
+                            //     render: (__, record) =>
+                            //         record?.gender
+                            //             ? GENDER_MEAN[record?.gender as keyof typeof GENDER_MEAN]
+                            //             : '',
+                            // },
                             {
                                 title: 'SĐT',
                                 align: 'center',
