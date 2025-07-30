@@ -1,98 +1,108 @@
 .ProseMirror ul {
-    padding: 0 1rem;
-    list-style: disc !important;
+  padding: 0 1rem;
+  list-style: disc !important;
 }
 .ProseMirror ol {
-    padding: 0 2rem;
-    list-style: decimal !important;
+  padding: 0 2rem;
+  list-style: decimal !important;
 }
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 3px solid #68cef8;
+}
+
 mark {
-    background-color: #fbde51;
-    box-decoration-break: clone;
-    padding: 0.1rem 0.3rem;
+  background-color: #fbde51;
+  box-decoration-break: clone;
+  padding: 0.1rem 0.3rem;
 }
 
 /* for editor content */
 .editor-content {
-    line-height: 1.6;
+  line-height: 1.6;
 }
 
 /* Danh sách */
 .editor-content ul {
-    list-style-type: disc;
-    padding-left: 20px;
+  list-style-type: disc;
+  padding-left: 20px;
 }
 
 .editor-content ol {
-    list-style-type: decimal;
-    padding-left: 20px;
+  list-style-type: decimal;
+  padding-left: 20px;
 }
 
 /* Tiêu đề */
 .editor-content h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .editor-content h2 {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 8px;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .editor-content h3 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 6px;
 }
 
 /* Bảng */
 .editor-content table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px 0;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
 }
 
 .editor-content th,
 .editor-content td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
 .editor-content th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+  background-color: #f4f4f4;
+  font-weight: bold;
 }
 
 /* Code & Pre */
 .editor-content pre {
-    background: #f4f4f4;
-    padding: 10px;
-    border-radius: 5px;
-    overflow-x: auto;
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
 }
 
 .editor-content code {
-    font-family: "Courier New", Courier, monospace;
-    background: #eee;
-    padding: 2px 5px;
-    border-radius: 3px;
+  font-family: "Courier New", Courier, monospace;
+  background: #eee;
+  padding: 2px 5px;
+  border-radius: 3px;
 }
 
 /* Blockquote */
 .editor-content blockquote {
-    border-left: 4px solid #ccc;
-    padding-left: 10px;
-    color: #555;
-    font-style: italic;
+  border-left: 4px solid #ccc;
+  padding-left: 10px;
+  color: #555;
+  font-style: italic;
 }
 
 /* Đường kẻ ngang */
 .editor-content hr {
-    border: none;
-    height: 1px;
-    background: #ddd;
-    margin: 20px 0;
+  border: none;
+  height: 1px;
+  background: #ddd;
+  margin: 20px 0;
 }

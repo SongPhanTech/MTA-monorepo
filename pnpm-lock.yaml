@@ -72,6 +72,9 @@ catalogs:
     '@tiptap/extension-highlight':
       specifier: ^2.26.1
       version: 2.26.1
+    '@tiptap/extension-image':
+      specifier: ^2.26.1
+      version: 2.26.1
     '@tiptap/extension-mention':
       specifier: ^2.26.1
       version: 2.26.1
@@ -620,6 +623,9 @@ importers:
         specifier: ^5.62.3
         version: 5.81.5(react@18.3.1)
       '@tiptap/extension-highlight':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))
+      '@tiptap/extension-image':
         specifier: 'catalog:'
         version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))
       '@tiptap/extension-mention':
@@ -1645,92 +1651,6 @@ importers:
         version: 5.8.3
 
   packages/database:
-    dependencies:
-      '@prisma/client':
-        specifier: 'catalog:'
-        version: 6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3)
-      '@zenstackhq/runtime':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))
-      dayjs:
-        specifier: 'catalog:'
-        version: 1.11.13
-      decimal.js:
-        specifier: 'catalog:'
-        version: 10.6.0
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.76
-    devDependencies:
-      '@paralleldrive/cuid2':
-        specifier: github:paralleldrive/cuid2
-        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/942ba7c48d18de9fa8361df314b3b4859b69db67
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@zenstackhq/openapi':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)
-      '@zenstackhq/server':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))
-      '@zenstackhq/tanstack-query':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)
-      prisma:
-        specifier: 'catalog:'
-        version: 6.10.1(typescript@5.8.3)
-      prisma-dbml-generator:
-        specifier: 'catalog:'
-        version: 0.12.0
-      zenstack:
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3)
-
-  packages/database-ho-so:
-    dependencies:
-      '@prisma/client':
-        specifier: 'catalog:'
-        version: 6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3)
-      '@zenstackhq/runtime':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))
-      dayjs:
-        specifier: 'catalog:'
-        version: 1.11.13
-      decimal.js:
-        specifier: 'catalog:'
-        version: 10.6.0
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.76
-    devDependencies:
-      '@paralleldrive/cuid2':
-        specifier: github:paralleldrive/cuid2
-        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/942ba7c48d18de9fa8361df314b3b4859b69db67
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@zenstackhq/openapi':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)
-      '@zenstackhq/server':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))
-      '@zenstackhq/tanstack-query':
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)
-      prisma:
-        specifier: 'catalog:'
-        version: 6.10.1(typescript@5.8.3)
-      prisma-dbml-generator:
-        specifier: 'catalog:'
-        version: 0.12.0
-      zenstack:
-        specifier: 'catalog:'
-        version: 2.16.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3)
-
-  packages/database-khao-thi:
     dependencies:
       '@prisma/client':
         specifier: 'catalog:'
@@ -3578,6 +3498,11 @@ packages:
     peerDependencies:
       '@tiptap/core': ^2.7.0
       '@tiptap/pm': ^2.7.0
+
+  '@tiptap/extension-image@2.26.1':
+    resolution: {integrity: sha512-96+MaYBJebQlR/ik5W72GLUfXdEoxFs+6jsoERxbM5qEdhb7TEnodBFtWZOwgDO27kFd6rSNZuW9r5KJNtljEg==}
+    peerDependencies:
+      '@tiptap/core': ^2.7.0
 
   '@tiptap/extension-italic@2.26.1':
     resolution: {integrity: sha512-pOs6oU4LyGO89IrYE4jbE8ZYsPwMMIiKkYfXcfeD9NtpGNBnjeVXXF5I9ndY2ANrCAgC8k58C3/powDRf0T2yA==}
@@ -10602,6 +10527,10 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.26.1(@tiptap/pm@2.26.1)
       '@tiptap/pm': 2.26.1
+
+  '@tiptap/extension-image@2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))':
+    dependencies:
+      '@tiptap/core': 2.26.1(@tiptap/pm@2.26.1)
 
   '@tiptap/extension-italic@2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))':
     dependencies:

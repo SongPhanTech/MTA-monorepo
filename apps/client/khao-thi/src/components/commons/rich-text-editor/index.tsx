@@ -3,10 +3,20 @@ import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
-import { EditorContent, type EditorContentProps, mergeAttributes, useEditor } from '@tiptap/react'
+import {
+    type Editor,
+    EditorContent,
+    type EditorContentProps,
+    mergeAttributes,
+    useEditor,
+} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useEffect } from 'react'
 import './index.css'
+import Image from '@tiptap/extension-image'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { message } from 'antd'
+import { env } from '@/env'
 import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
 
@@ -60,6 +70,13 @@ export function RichTextEditor({
             //     },
             // }),
             // Highlight.configure({ multicolor: true }),
+            Image.configure({
+                inline: true,
+                allowBase64: false,
+                HTMLAttributes: {
+                    class: 'mx-auto my-2',
+                },
+            }),
             Mention.configure({
                 renderHTML({ node, options }) {
                     return [
@@ -106,9 +123,103 @@ export function RichTextEditor({
                     className
                 ),
             },
+            handlePaste: (view, event, slice) => {
+                const items = event.clipboardData?.items
+                if (!items) return false
+
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i]
+                    if (item.type.indexOf('image') === 0) {
+                        const file = item.getAsFile()
+                        if (!file) return false
+
+                        // Start async upload process
+                        uploadImageFile(file, editor).catch((error) => {
+                            console.error('Image upload failed:', error)
+                            editor
+                                ?.chain()
+                                .focus()
+                                .insertContent('<p>Image upload failed</p>')
+                                .run()
+                        })
+
+                        // Return true to prevent default paste behavior
+                        return true
+                    }
+                }
+                return false
+            },
+            handleDrop: (view, event, slice) => {
+                const files = event.dataTransfer?.files
+                if (!files || files.length === 0) return false
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i]
+                    if (file.type.indexOf('image') === 0) {
+                        event.preventDefault()
+
+                        // Start async upload process
+                        uploadImageFile(file, editor).catch((error) => {
+                            message.error('Image upload failed:', error)
+                            editor
+                                ?.chain()
+                                .focus()
+                                .insertContent('<p>Image upload failed</p>')
+                                .run()
+                        })
+
+                        return true
+                    }
+                }
+                return false
+            },
         },
     })
 
+    async function uploadImageFile(file: File, editor: Editor | null) {
+        if (!editor || editor.isDestroyed) {
+            message.error('Editor is not available or destroyed')
+            return
+        }
+        const placeholderId = `image-${Date.now()}`
+        const placeholder = document.createElement('div')
+        placeholder.textContent = 'Uploading image...'
+        placeholder.id = placeholderId
+        editor.view.dom.parentNode?.appendChild(placeholder)
+
+        try {
+            // Generate presigned URL
+            const extension = file.name.split('.').pop() || 'png'
+            const resPresignedUrl = await generatePresignedUrl({
+                path: 'editor-images',
+                extension,
+            })
+
+            // Upload to MinIO
+            await fetch(resPresignedUrl.data.url, {
+                method: 'PUT',
+                body: file,
+                headers: {
+                    'Content-Type': file.type,
+                },
+            })
+
+            const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+
+            editor
+                .chain()
+                .focus()
+                .setImage({
+                    src: imageUrl,
+                    alt: file.name,
+                    title: file.name,
+                })
+                .run()
+        } finally {
+            // Remove placeholder
+            document.getElementById(placeholderId)?.remove()
+        }
+    }
     useEffect(() => {
         if (editor && value !== editor.getHTML()) {
             editor.commands.setContent(value || '', false)

@@ -1,17 +1,20 @@
 import type { Editor } from '@tiptap/react'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { message } from 'antd'
+import { useRef } from 'react'
 import { BsTypeUnderline } from 'react-icons/bs'
 import { IoListOutline } from 'react-icons/io5'
 import {
     RiAlignJustify,
     RiAlignLeft,
     RiAlignRight,
-    RiBold,
-    RiCodeSSlashLine,
+    RiImage2Line,
     RiItalic,
     RiListOrdered2,
     RiMarkPenFill,
     RiStrikethrough,
 } from 'react-icons/ri'
+import { env } from '@/env'
 
 const Button = ({
     onClick,
@@ -35,7 +38,45 @@ const Button = ({
 )
 
 export default function TextEditorMenuBar({ editor }: { editor: Editor | null }) {
+    const fileInputRef = useRef<HTMLInputElement>(null)
     if (!editor) return null
+
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (!file) return
+
+        try {
+            const extension = file.name.split('.').pop() || 'png'
+            const resPresignedUrl = await generatePresignedUrl({
+                path: 'question-images',
+                extension,
+            })
+
+            await fetch(resPresignedUrl.data.url, {
+                method: 'PUT',
+                body: file,
+            })
+
+            const imageUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${resPresignedUrl.data.fileName}`
+
+            editor
+                .chain()
+                .focus()
+                .setImage({
+                    src: imageUrl,
+                    alt: file.name,
+                    title: file.name,
+                })
+                .run()
+        } catch (error) {
+            console.error('Image upload failed:', error)
+            message.error('Image upload failed. Please try again.')
+        } finally {
+            if (event.target) {
+                event.target.value = ''
+            }
+        }
+    }
 
     const groupedButtons = [
         [
@@ -113,6 +154,23 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 disabled:
                     !editor.isActive('orderedList') &&
                     !editor.can().chain().focus().toggleOrderedList().run(),
+            },
+            {
+                icon: (
+                    <>
+                        <RiImage2Line className="size-5" />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            ref={fileInputRef}
+                        />
+                    </>
+                ),
+                onClick: () => fileInputRef.current?.click(),
+                isActive: false,
+                disabled: false,
             },
         ],
         // [
