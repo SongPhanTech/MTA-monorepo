@@ -17,11 +17,11 @@ import {
     useFindManyTrainingScoreSession,
     useUpdateStudentTrainingScore,
 } from '@workspace/db/hooks'
-import { Col, DatePicker, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Col, DatePicker, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopBienCheItem from './lop-bien-che'
 
@@ -53,7 +53,17 @@ export default function SubjectClassScore() {
         timeFilter: undefined,
         fixedClassIds: [],
     })
-
+    // TODO: Chưa biết cách tính rèn luyện DS nên tạm thời quy đổi rèn luyện thành điểm 0-10
+    const optionsRank = [
+        { value: 7, label: 'Xuất sắc' },
+        { value: 6, label: 'Tốt' },
+        { value: 5, label: 'Khá' },
+        { value: 4, label: 'Trung bình khá' },
+        { value: 3, label: 'Trung bình' },
+        { value: 2, label: 'Yếu' },
+        { value: 1, label: 'Kém' },
+        { value: 0, label: 'Chưa xếp loại' },
+    ]
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen, onClose } = useDisclosure<string>({
@@ -200,14 +210,63 @@ export default function SubjectClassScore() {
         hideSpinner()
     }
 
-    // #endregion
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: (selectedKeys: any) => {
-            setSelectedRowKeys(selectedKeys)
-            console.log(selectedKeys)
-        },
+    const handleSave = async () => {
+        try {
+            showSpinner()
+            // Lưu điểm rèn luyện
+            console.log('Saving training scores:', scoreList, studentTrainingScoreData)
+            for (const score of scoreList) {
+                // Kiểm tra nếu điểm rèn luyện đã tồn tại
+                const existingScore = studentTrainingScoreData.find(
+                    (s) =>
+                        s.studentId === score.studentId &&
+                        s.trainingScoreSessionId === selectedTrainingScoreSessionId
+                )
+
+                if (existingScore) {
+                    // Cập nhật điểm rèn luyện
+                    console.log('Existing score:', existingScore)
+                    await updateStudentTrainingScore({
+                        where: { id: existingScore.id },
+                        data: { score: score.trainingScore },
+                    })
+                } else {
+                    // Tạo mới điểm rèn luyện
+                    console.log('Creating new score for student:', score.studentId)
+                    await createStudentTrainingScore({
+                        data: {
+                            studentId: score.studentId,
+                            trainingScoreSessionId: selectedTrainingScoreSessionId ?? '',
+                            score: score.trainingScore,
+                        },
+                    })
+                }
+                // Gọi API để lưu điểm rèn luyện cho từng sinh viên
+                // Ví dụ: await saveTrainingScore(score.id, score.trainingScore)
+                console.log(`Saving score for student ${score.studentId}: ${score.trainingScore}`)
+            }
+            message.success('Lưu điểm rèn luyện thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi khi lưu điểm rèn luyện')
+        } finally {
+            hideSpinner()
+        }
     }
+
+    const updatedScoreList = useMemo(() => {
+        return studentTrainingScoreData.map((score) => ({
+            studentId: score.studentId,
+            trainingScore: score.score,
+        }))
+    }, [studentTrainingScoreData])
+
+    useEffect(() => {
+        if (selectedTrainingScoreSessionId) {
+            setScoreList(updatedScoreList)
+        } else {
+            setScoreList([])
+        }
+    }, [selectedTrainingScoreSessionId, updatedScoreList])
 
     const { mutateAsync: createStudentTrainingScore } = useCreateStudentTrainingScore()
     const { mutateAsync: updateStudentTrainingScore } = useUpdateStudentTrainingScore()
@@ -404,50 +463,72 @@ export default function SubjectClassScore() {
                                         ),
                                     },
                                     {
-                                        title: 'Kết quả rèn luyện',
+                                        title: 'Kết quả rèn luyện trong học kỳ',
                                         dataIndex: 'trainingScore',
-                                        width: 80,
+                                        width: 120,
                                         align: 'center',
                                         render: (text, record) => {
                                             const scores = studentTrainingScoreData.filter(
                                                 (s) => s.studentId === record.id
                                             )
-                                            const score =
-                                                scores.length > 0
-                                                    ? scores.reduce(
-                                                          (total, curr) => total + curr.score,
-                                                          0
-                                                      ) / scores.length
-                                                    : null
+                                            // const score =
+                                            //     scores.length > 0
+                                            //         ? scores.reduce(
+                                            //               (total, curr) => total + curr.score,
+                                            //               0
+                                            //           ) / scores.length
+                                            //         : null
 
                                             // Tính tổng số điểm theo loại trong đợt (cho tất cả sinh viên)
                                             const countByType = {
-                                                'Xuất sắc': scores.filter((s) => s.score >= 9)
+                                                'Xuất sắc': scores.filter((s) => s.score === 7)
                                                     .length,
-                                                Tốt: scores.filter(
-                                                    (s) => s.score >= 8 && s.score < 9
+                                                Tốt: scores.filter((s) => s.score === 6).length,
+                                                Khá: scores.filter((s) => s.score === 5).length,
+                                                'Trung bình khá': scores.filter(
+                                                    (s) => s.score === 4
                                                 ).length,
-                                                Khá: scores.filter(
-                                                    (s) => s.score >= 7 && s.score < 8
-                                                ).length,
-                                                'Trung bình': scores.filter(
-                                                    (s) => s.score >= 6 && s.score < 7
-                                                ).length,
-                                                Yếu: scores.filter(
-                                                    (s) => s.score > 0 && s.score < 6
-                                                ).length,
+                                                'Trung bình': scores.filter((s) => s.score === 3)
+                                                    .length,
+                                                Yếu: scores.filter((s) => s.score === 2).length,
+                                                Kém: scores.filter((s) => s.score === 1).length,
                                             }
 
                                             return (
                                                 <div>
-                                                    <div>{score !== null ? score : '-'}</div>
                                                     <div
                                                         style={{ fontSize: '0.8em', color: 'gray' }}
                                                     >
-                                                        Xuất sắc: {countByType['Xuất sắc']} | Tốt:{' '}
-                                                        {countByType.Tốt} | Khá: {countByType.Khá} |
-                                                        Trung bình: {countByType['Trung bình']} |
-                                                        Yếu: {countByType.Yếu}
+                                                        {countByType['Xuất sắc'] > 0 && (
+                                                            <>
+                                                                Xuất sắc: {countByType['Xuất sắc']}{' '}
+                                                                |{' '}
+                                                            </>
+                                                        )}
+                                                        {countByType.Tốt > 0 && (
+                                                            <>Tốt: {countByType.Tốt} | </>
+                                                        )}
+                                                        {countByType.Khá > 0 && (
+                                                            <>Khá: {countByType.Khá} | </>
+                                                        )}
+                                                        {countByType['Trung bình khá'] > 0 && (
+                                                            <>
+                                                                Trung bình khá:{' '}
+                                                                {countByType['Trung bình khá']} |{' '}
+                                                            </>
+                                                        )}
+                                                        {countByType['Trung bình'] > 0 && (
+                                                            <>
+                                                                Trung bình:{' '}
+                                                                {countByType['Trung bình']} |{' '}
+                                                            </>
+                                                        )}
+                                                        {countByType.Yếu > 0 && (
+                                                            <>Yếu: {countByType.Yếu} | </>
+                                                        )}
+                                                        {countByType.Kém > 0 && (
+                                                            <>Kém: {countByType.Kém}</>
+                                                        )}
                                                     </div>
                                                 </div>
                                             )
@@ -459,46 +540,38 @@ export default function SubjectClassScore() {
                                         width: 150,
                                         align: 'center',
                                         render: (text, record) => {
-                                            const scores = studentTrainingScoreData.filter(
-                                                (s) => s.studentId === record.id
-                                            )
-                                            const score =
-                                                scores.length > 0
-                                                    ? scores.reduce(
-                                                          (total, curr) => total + curr.score,
-                                                          0
-                                                      ) / scores.length
-                                                    : 0
-                                            let ranking = ''
-                                            if (score >= 9) {
-                                                ranking = 'Xuất sắc'
-                                            } else if (score >= 8) {
-                                                ranking = 'Tốt'
-                                            } else if (score >= 7) {
-                                                ranking = 'Khá'
-                                            } else if (score >= 6) {
-                                                ranking = 'Trung bình'
-                                            } else if (score === 0) {
-                                                ranking = ''
-                                            } else {
-                                                ranking = 'Yếu'
-                                            }
                                             return (
-                                                <Tag
-                                                    color={
-                                                        ranking === 'Xuất sắc'
-                                                            ? 'green'
-                                                            : ranking === 'Tốt'
-                                                              ? 'blue'
-                                                              : ranking === 'Khá'
-                                                                ? 'orange'
-                                                                : ranking === 'Trung bình'
-                                                                  ? 'yellow'
-                                                                  : 'red'
+                                                <Select
+                                                    placeholder="Chọn xếp loại"
+                                                    style={{ width: '100%' }}
+                                                    options={optionsRank}
+                                                    defaultValue={
+                                                        scoreList.find(
+                                                            (s) => s.studentId === record.id
+                                                        )?.trainingScore || 0 // Mặc định là 0
                                                     }
-                                                >
-                                                    {ranking}
-                                                </Tag>
+                                                    allowClear
+                                                    onChange={(value) => {
+                                                        // Cập nhật điểm rèn luyện trong scoreList
+                                                        setScoreList((prev) => {
+                                                            const newList = [...prev]
+                                                            const index = newList.findIndex(
+                                                                (item) =>
+                                                                    item.studentId === record.id
+                                                            )
+                                                            if (index !== -1) {
+                                                                newList[index].trainingScore =
+                                                                    value as number
+                                                            } else {
+                                                                newList.push({
+                                                                    studentId: record.id,
+                                                                    trainingScore: value as number,
+                                                                })
+                                                            }
+                                                            return newList
+                                                        })
+                                                    }}
+                                                />
                                             )
                                         },
                                     },
