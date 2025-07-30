@@ -13,7 +13,6 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
     const renderContent = () => {
         return (
             <div className="px-6">
-                <div className="mb-6 font-semibold text-base">Thông tin cá nhân</div>
                 <Row className="mb-6" gutter={[16, 16]}>
                     <Col span={12}>
                         <FormItem
@@ -30,16 +29,7 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                             <Input placeholder="Nhập thư điện tử" className="h-9" />
                         </FormItem>
                     </Col>
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
-                            name="healthInsuranceNumber"
-                            label="Thẻ bảo hiểm y tế"
-                            className="mb-0"
-                        >
-                            <Input placeholder="Nhập thẻ bảo hiểm y tế" className="h-9" />
-                        </FormItem>
-                    </Col>
+
                     <Col span={12}>
                         <FormItem
                             form={form}
@@ -74,6 +64,16 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                             className="mb-0"
                         >
                             <Input placeholder="Nhập nơi ở hiện tại" className="h-9" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="healthInsuranceNumber"
+                            label="Thẻ bảo hiểm y tế"
+                            className="mb-0"
+                        >
+                            <Input placeholder="Nhập thẻ bảo hiểm y tế" className="h-9" />
                         </FormItem>
                     </Col>
                 </Row>

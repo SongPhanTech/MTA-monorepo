@@ -1,13 +1,13 @@
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import KeKhaiTaiSanTab from '@components/modal/quan-ly-ho-so/tabs/ke-khai-tai-san'
-import KhenThuongKyLuatTab from '@components/modal/quan-ly-ho-so/tabs/khen-thuong-ky-luat'
-import ThanNhanTab from '@components/modal/quan-ly-ho-so/tabs/tab-danh-sach-than-nhan'
-import DoiTuongChinhSachTab from '@components/modal/quan-ly-ho-so/tabs/tab-doi-tuong-chinh-sach'
-import HocHamHocViTab from '@components/modal/quan-ly-ho-so/tabs/tab-hoc-ham-hoc-vi'
-import QuaTrinhCongTacTab from '@components/modal/quan-ly-ho-so/tabs/tab-qua-trinh-cong-tac'
-import QuaTrinhDaoTaoTab from '@components/modal/quan-ly-ho-so/tabs/tab-qua-trinh-dao-tao'
-import ThongTinCaNhanTab from '@components/modal/quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
-import TrinhDoChungChiTab from '@components/modal/quan-ly-ho-so/tabs/tab-trinh-do-chung-chi'
+// import KeKhaiTaiSanTab from '@components/modal/quan-ly-ho-so/tabs/ke-khai-tai-san'
+// import KhenThuongKyLuatTab from '@components/modal/quan-ly-ho-so/tabs/khen-thuong-ky-luat'
+// import ThanNhanTab from '@components/modal/quan-ly-ho-so/tabs/tab-danh-sach-than-nhan'
+// import DoiTuongChinhSachTab from '@components/modal/quan-ly-ho-so/tabs/tab-doi-tuong-chinh-sach'
+// import HocHamHocViTab from '@components/modal/quan-ly-ho-so/tabs/tab-hoc-ham-hoc-vi'
+// import QuaTrinhCongTacTab from '@components/modal/quan-ly-ho-so/tabs/tab-qua-trinh-cong-tac'
+// import QuaTrinhDaoTaoTab from '@components/modal/quan-ly-ho-so/tabs/tab-qua-trinh-dao-tao'
+// import ThongTinCaNhanTab from '@components/modal/quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
+// import TrinhDoChungChiTab from '@components/modal/quan-ly-ho-so/tabs/tab-trinh-do-chung-chi'
 import DefaultLayout from '@layouts/default-layout'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Collapse, type UploadFile } from 'antd'
@@ -41,7 +41,7 @@ export default function StudentDetailPage() {
             </div>
 
             {/* Các collapse chứa thông tin chi tiết */}
-            <Collapse activeKey={activeCollapse} onChange={handleCollapseChange} ghost>
+            {/* <Collapse activeKey={activeCollapse} onChange={handleCollapseChange} ghost>
                 <Panel
                     header={
                         <div className="text-lg font-semibold text-blue-600">Thông tin chung</div>
@@ -160,7 +160,7 @@ export default function StudentDetailPage() {
                         <ThanNhanTab />
                     </div>
                 </Panel>
-            </Collapse>
+            </Collapse> */}
         </div>
     )
 }
@@ -171,8 +171,8 @@ StudentDetailPage.getLayout = function getLayout(page: React.ReactElement) {
             breadcrumbList={[
                 { title: 'Danh mục' },
                 {
-                    title: 'Quản lý hồ sơ học viên',
-                    href: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_HOC_VIEN,
+                    title: 'Quản lý hồ sơ sinh viên',
+                    href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
                 },
                 { title: 'Chi tiết sinh viên' },
             ]}

@@ -27,6 +27,7 @@ import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
 import PutHocBong from './put-hoc-bong'
+import PutHocvienModal from './put-hoc-vien'
 import PutCouncil from './put-hoi-dong-danh-gia'
 import PutTrainingCourseModal from './put-khoa-huan-luyen'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
@@ -51,6 +52,7 @@ import PutGraduationDecision from './put-quyet-dinh-tot-nghiep'
 import PutStudentAcademicDecision from './put-quyet-dinh-xu-ly-hoc-tap'
 import PutScholarshipAward from './put-scholarship-award'
 import PutScholarshipCriteria from './put-scholarship-criteria'
+import PutStudentModal from './put-sinh-vien'
 import PutStudentThesisRegistration from './put-sinh-vien-dang-ky-da'
 import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
@@ -58,13 +60,16 @@ import PutCouncilMember from './put-thanh-vien-hoi-dong'
 import PutBuildingModal from './put-toa-nha'
 import PutTrainingFormModal from './put-training-form'
 import PutTrainingTimeModal from './put-training-time'
+import PutUpdateProfileModal from './put-update-profile'
+import PutUploadProfileModal from './put-upload-profile'
 import PutAcademicRanking from './put-xep-loai-hoc-luc'
 import PutDisciplinaryWarning from './put-xet-canh-cao-hoc-duong'
 import PutAcademicActionConfig from './put-xu-ly-hoc-tap'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
-
 export {
+    PutUpdateProfileModal,
+    PutUploadProfileModal,
     ConfirmModal,
     PutSchoolYearModal,
     PutSemesterModal,
@@ -130,4 +135,6 @@ export {
     PutStudentThesisRegistration,
     PutCouncil,
     PutCouncilMember,
+    PutHocvienModal,
+    PutStudentModal,
 }

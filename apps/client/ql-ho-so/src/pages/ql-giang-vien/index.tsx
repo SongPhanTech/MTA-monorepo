@@ -1,37 +1,41 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PrinterIcon from '@components/icons/print'
 import {
-    ModalLyLichCanBo,
     PutUpdateProfileModal,
     PutUploadProfileModal,
-    PutUserProfileStaffModal,
+    PutUserProfileLectureModal,
 } from '@components/modal'
+import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import {
-    useCountStaff,
+    useCountLecturer,
     useFindManyDM_CapBac,
     useFindManyDM_DonVi,
-    useFindManyDM_HocHam,
-    useFindManyDM_HocVi,
-    useFindManyStaff,
-    useFindManyStaffType,
+    useFindManyLecturer,
+    useFindManyLecturerType,
     useFindManyTemplateFile,
-    useUpdateStaff,
+    useUpdateLecturer,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Menu, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export default function StaffManagement() {
+import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
+
+dayjs.locale('vi')
+
+export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [_organizationIds, setOrganizationIds] = useState<string[]>([])
+    const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
 
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
@@ -43,10 +47,11 @@ export default function StaffManagement() {
         gender: undefined,
         rankId: undefined,
         officerNumber: undefined,
-        staffType: undefined,
+        lecturerType: undefined,
+        idCardNumber: undefined,
     })
 
-    const { data, refetch } = useFindManyStaff({
+    const { data = [], refetch } = useFindManyLecturer({
         where: {
             userProfile: {
                 OR: [
@@ -61,13 +66,21 @@ export default function StaffManagement() {
                         },
                     },
                 ],
-                ...(filters.gender
+                ...(filters.idCardNumber
                     ? {
-                          gender: {
-                              in: filters.gender,
+                          idCardNumber: {
+                              contains: filters.idCardNumber,
+                              mode: 'insensitive',
                           },
                       }
                     : {}),
+                // ...(filters.gender
+                //     ? {
+                //           gender: {
+                //               in: filters.gender,
+                //           },
+                //       }
+                //     : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -121,19 +134,15 @@ export default function StaffManagement() {
                       },
                   }
                 : {}),
-            ...(filters.staffType
+            ...(filters.lecturerType
                 ? {
-                      staffTypeId: {
-                          in: filters.staffType,
+                      lecturerTypeId: {
+                          in: filters.lecturerType,
                       },
                   }
                 : {}),
         },
         include: {
-            organization: true,
-            staffType: true,
-            staffPosition: true,
-            fixedClass: true,
             userProfile: {
                 include: {
                     academicRankType: true,
@@ -141,6 +150,8 @@ export default function StaffManagement() {
                     rank: true,
                 },
             },
+            organization: true,
+            lecturerType: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -149,7 +160,46 @@ export default function StaffManagement() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountStaff({
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+    const { onOpen, onClose } = useDisclosure<PutUserProfileLectureProps>({
+        tag: PutUserProfileLectureModal.name,
+    })
+
+    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } = useDisclosure({
+        tag: PutUserProfileLectureModal.name,
+    })
+
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
+        tag: PutUploadProfileModal.name,
+    })
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
+        tag: PutUpdateProfileModal.name,
+    })
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleModal = () => {
+        onOpenModalAdd()
+    }
+    const handleModalUpload = (type: string) => {
+        if (type === 'upload') {
+            onOpenUpload('GV')
+        } else {
+            onOpenUpdateFile('GV')
+        }
+    }
+
+    const { data: lecturerTypeData = [] } = useFindManyLecturerType()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(manageOrgData)
+    const { data: rankTypeData = [] } = useFindManyDM_CapBac()
+
+    const { data: count } = useCountLecturer({
         where: {
             userProfile: {
                 OR: [
@@ -164,13 +214,21 @@ export default function StaffManagement() {
                         },
                     },
                 ],
-                ...(filters.gender
+                ...(filters.idCardNumber
                     ? {
-                          gender: {
-                              in: filters.gender,
+                          idCardNumber: {
+                              contains: filters.idCardNumber,
+                              mode: 'insensitive',
                           },
                       }
                     : {}),
+                // ...(filters.gender
+                //     ? {
+                //           gender: {
+                //               in: filters.gender,
+                //           },
+                //       }
+                //     : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -224,30 +282,25 @@ export default function StaffManagement() {
                       },
                   }
                 : {}),
-            ...(filters.staffType
+            ...(filters.lecturerType
                 ? {
-                      staffTypeId: {
-                          in: filters.staffType,
+                      lecturerTypeId: {
+                          in: filters.lecturerType,
                       },
                   }
                 : {}),
         },
     })
 
-    const { data: staffTypeData = [] } = useFindManyStaffType()
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-    const treeData = buildOrgTree(manageOrgData)
-    const { data: academicRankTypeData = [] } = useFindManyDM_HocHam()
-    const { data: academicDegreeTypeData = [] } = useFindManyDM_HocVi()
-    const { data: rankTypeData = [] } = useFindManyDM_CapBac()
-
-    const { mutateAsync: updateStaff } = useUpdateStaff()
+    const { mutateAsync: updateLecturer } = useUpdateLecturer()
 
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateStaff({
-                where: { id },
+            await updateLecturer({
+                where: {
+                    id,
+                },
                 data: {
                     deletedAt: new Date(),
                     code: id,
@@ -263,42 +316,16 @@ export default function StaffManagement() {
         }
         hideSpinner()
     }
+
     const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-
-    const { onOpen, onClose } = useDisclosure({
-        tag: PutUserProfileStaffModal.name,
-    })
-
-    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } = useDisclosure({
-        tag: PutUserProfileStaffModal.name,
-    })
-
-    const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
-        id: string
-    }>({
-        tag: ModalLyLichCanBo.name,
-    })
-
-    const handleModal = () => {
-        onOpenModalAdd()
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
     }
-
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
-    })
-
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
-    })
-
-    const { showSpinner, hideSpinner } = useSpinner()
 
     const handleDownloadTemplate = (type: string) => {
         const fileRecord = templateFile?.find((item) => item.code === type)
@@ -310,14 +337,6 @@ export default function StaffManagement() {
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
-        }
-    }
-
-    const handleModalUpload = (type: string) => {
-        if (type === 'upload') {
-            onOpenUpload('GV')
-        } else {
-            onOpenUpdateFile('GV')
         }
     }
 
@@ -346,7 +365,6 @@ export default function StaffManagement() {
             onClick: () => handleModalUpload('update'),
         },
     ]
-
     const menuDownload = (
         <Menu>
             {itemsDownload.map((item) => (
@@ -366,6 +384,21 @@ export default function StaffManagement() {
             ))}
         </Menu>
     )
+
+    const handleAdvancedFilter = (values: FilterProps) => {
+        const newFilters = { ...filters, ...values }
+        setFilters(newFilters)
+    }
+
+    const _handleRowOrganizationClick = (record: TreeNodeOrganization) => {
+        if (selectedRowId === record.id) {
+            setSelectedRowId(null)
+            setOrganizationIds([])
+        } else {
+            setSelectedRowId(record.id)
+            // handleSelectOrganization(record.id)
+        }
+    }
 
     return (
         <div>
@@ -423,14 +456,14 @@ export default function StaffManagement() {
                                 width: 150,
                                 type: 'input',
                             },
-                            {
-                                title: 'SHSQ/SHQN',
-                                dataIndex: 'officerNumber',
-                                render: (__, record) => record.userProfile?.officerNumber,
-                                align: 'center',
-                                width: 150,
-                                type: 'input',
-                            },
+                            // {
+                            //     title: 'SHSQ/SHQN',
+                            //     dataIndex: 'officerNumber',
+                            //     render: (__, record) => record.userProfile?.officerNumber,
+                            //     align: 'center',
+                            //     width: 150,
+                            //     type: 'input',
+                            // },
                             {
                                 title: 'Họ và tên',
                                 render: (__, record) =>
@@ -440,6 +473,15 @@ export default function StaffManagement() {
                                 align: 'center',
                                 width: 150,
                                 dataIndex: 'name',
+                                type: 'input',
+                            },
+                            {
+                                title: 'CCCD/CMND',
+                                render: (__, record) =>
+                                    record.userProfile ? `${record.userProfile.idCardNumber}` : '',
+                                align: 'center',
+                                width: 150,
+                                dataIndex: 'idCardNumber',
                                 type: 'input',
                             },
                             {
@@ -483,65 +525,65 @@ export default function StaffManagement() {
                                 type: 'tree_select',
                                 options: treeData,
                             },
-                            {
-                                title: 'Học hàm',
-                                width: 120,
-                                dataIndex: 'academicRankType',
-                                options: academicRankTypeData.map((aca) => ({
-                                    label: aca.sTen,
-                                    value: aca.Id,
-                                })),
-                                type: 'select',
-                                render: (_, record) =>
-                                    record.userProfile?.academicRankType?.name || '',
-                                align: 'center',
-                            },
-                            {
-                                title: 'Năm HH',
-                                render: (_, record) =>
-                                    record.userProfile?.academicRankDate
-                                        ? dayjs(record.userProfile.academicRankDate).format(
-                                              'DD/MM/YYYY'
-                                          )
-                                        : '',
-                                align: 'center',
-                                width: 120,
-                            },
-                            {
-                                title: 'Học vị',
-                                dataIndex: 'academicDegreeType',
-                                options: academicDegreeTypeData.map((hv) => ({
-                                    label: hv.sTen,
-                                    value: hv.Id,
-                                })),
-                                type: 'select',
-                                render: (__, record) =>
-                                    record.userProfile?.academicDegreeType?.name || '',
-                                align: 'center',
-                                width: 120,
-                            },
-                            {
-                                title: 'Năm HV',
-                                render: (_, record) =>
-                                    record.userProfile?.academicDegreeDate
-                                        ? dayjs(record.userProfile.academicDegreeDate).format(
-                                              'DD/MM/YYYY'
-                                          )
-                                        : '',
-                                align: 'center',
-                                width: 120,
-                            },
+                            // {
+                            //     title: 'Học hàm',
+                            //     width: 120,
+                            //     dataIndex: 'academicRankType',
+                            //     options: academicRankTypeData.map((aca) => ({
+                            //         label: aca.sTen,
+                            //         value: aca.Id,
+                            //     })),
+                            //     type: 'select',
+                            //     render: (_, record) =>
+                            //         record.userProfile?.academicRankType?.name || '',
+                            //     align: 'center',
+                            // },
+                            // {
+                            //     title: 'Năm HH',
+                            //     render: (_, record) =>
+                            //         record.userProfile?.academicRankDate
+                            //             ? dayjs(record.userProfile.academicRankDate).format(
+                            //                   'DD/MM/YYYY'
+                            //               )
+                            //             : '',
+                            //     align: 'center',
+                            //     width: 120,
+                            // },
+                            // {
+                            //     title: 'Học vị',
+                            //     dataIndex: 'academicDegreeType',
+                            //     options: academicDegreeTypeData.map((hv) => ({
+                            //         label: hv.sTen,
+                            //         value: hv.Id,
+                            //     })),
+                            //     type: 'select',
+                            //     render: (__, record) =>
+                            //         record.userProfile?.academicDegreeType?.name || '',
+                            //     align: 'center',
+                            //     width: 120,
+                            // },
+                            // {
+                            //     title: 'Năm HV',
+                            //     render: (_, record) =>
+                            //         record.userProfile?.academicDegreeDate
+                            //             ? dayjs(record.userProfile.academicDegreeDate).format(
+                            //                   'DD/MM/YYYY'
+                            //               )
+                            //             : '',
+                            //     align: 'center',
+                            //     width: 120,
+                            // },
                             {
                                 title: 'Loại giảng viên',
                                 align: 'center',
-                                options: staffTypeData.map((type) => ({
+                                options: lecturerTypeData.map((type) => ({
                                     label: type.name,
                                     value: type.id,
                                 })),
-                                dataIndex: 'staffType',
+                                dataIndex: 'lecturerType',
                                 type: 'select',
                                 width: 170,
-                                render: (__, record) => record?.staffType?.name || '',
+                                render: (__, record) => record?.lecturerType?.name || '',
                             },
                             // {
                             //     title: 'Năm CV',
@@ -584,12 +626,6 @@ export default function StaffManagement() {
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <PrinterIcon
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                onOpenModalTomTatLyLich({ id })
-                                            }}
-                                        />
                                         <EditIcon
                                             onClick={onOpen.bind(id, {
                                                 id: id,
@@ -634,6 +670,6 @@ export default function StaffManagement() {
     )
 }
 
-StaffManagement.getLayout = function getLayout(page: React.ReactElement) {
+UserProfilePageLecture.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
