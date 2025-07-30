@@ -4,6 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
 import { useQuestionTypeOptions } from '@hooks/question-type'
+import { renderWithMath } from '@hooks/renderWithMath'
 import useSpinner from '@hooks/spinner'
 import { type Question, QuestionType } from '@workspace/db'
 import {
@@ -240,9 +241,9 @@ const PutQuestionModal = () => {
                                             <div
                                                 className="prose max-w-none text-sm text-gray-800"
                                                 dangerouslySetInnerHTML={{
-                                                    __html:
-                                                        fixedHtmlContent ||
-                                                        '<i>Chưa có nội dung</i>',
+                                                    __html: fixedHtmlContent
+                                                        ? renderWithMath(fixedHtmlContent)
+                                                        : '<i>Chưa có nội dung</i>',
                                                 }}
                                             />
                                         </div>
@@ -257,9 +258,9 @@ const PutQuestionModal = () => {
                                                 <div
                                                     className="prose max-w-none text-sm text-gray-800"
                                                     dangerouslySetInnerHTML={{
-                                                        __html:
-                                                            fixedHtmlExplanation ||
-                                                            '<i>Chưa có giải thích</i>',
+                                                        __html: fixedHtmlExplanation
+                                                            ? renderWithMath(fixedHtmlExplanation)
+                                                            : '<i>Chưa có giải thích</i>',
                                                     }}
                                                 />
                                             </div>

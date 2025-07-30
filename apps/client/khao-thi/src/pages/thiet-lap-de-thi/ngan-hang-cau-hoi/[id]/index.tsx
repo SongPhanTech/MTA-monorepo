@@ -7,6 +7,7 @@ import { PutQuestionModal } from '@components/modal'
 import { WordImportModal } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
+import { renderWithMath } from '@hooks/renderWithMath'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
@@ -278,7 +279,7 @@ export default function QuestionPage() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 30,
+                                width: 60,
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
@@ -290,13 +291,19 @@ export default function QuestionPage() {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (html: string) => (
-                                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: html
+                                                ? renderWithMath(html)
+                                                : '<i>Chưa có nội dung</i>',
+                                        }}
+                                    />
                                 ),
                             },
                             {
                                 title: 'Loại câu hỏi',
                                 dataIndex: 'questionType',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 type: 'select',
                                 options: questionTypeOptions,
@@ -306,7 +313,7 @@ export default function QuestionPage() {
                             {
                                 title: 'Chương mục',
                                 dataIndex: 'knowledgeBlockId',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 type: 'select',
                                 options: knowledgeBlockData?.map(({ id, name }) => ({
@@ -320,7 +327,7 @@ export default function QuestionPage() {
                             {
                                 title: 'Độ khó',
                                 dataIndex: 'difficultyId',
-                                width: 80,
+                                width: 100,
                                 align: 'center',
                                 type: 'select',
                                 options: difficultyData?.map(({ id, name, level }) => ({
@@ -359,7 +366,13 @@ export default function QuestionPage() {
                                 width: 300,
                                 type: 'input',
                                 render: (html: string) => (
-                                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: html
+                                                ? renderWithMath(html)
+                                                : '<i>Chưa có nội dung</i>',
+                                        }}
+                                    />
                                 ),
                             },
                             // {
@@ -377,7 +390,7 @@ export default function QuestionPage() {
                             // },
                             {
                                 title: 'Thao tác',
-                                width: 60,
+                                width: 80,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (__, record) => {

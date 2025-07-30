@@ -26,6 +26,7 @@ catalog:
   '@scalar/hono-api-reference': ^0.5.175
   '@t3-oss/env-nextjs': 0.12.0
   '@tiptap/extension-highlight': ^2.26.1
+  '@tiptap/extension-mathematics': ^2.26.1
   '@tiptap/extension-mention': ^2.26.1
   '@tiptap/extension-text-align': ^2.26.1
   '@tiptap/extension-underline': ^2.26.1
@@ -71,6 +72,7 @@ catalog:
   husky: ^9.1.7
   jose: ^6.0.11
   jwt-decode: ^4.0.0
+  katex: ^0.16.22
   lint-staged: ^16.1.0
   lodash: ^4.17.21
   lucide-react: ^0.468.0

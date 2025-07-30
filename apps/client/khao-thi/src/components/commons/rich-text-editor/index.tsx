@@ -14,11 +14,13 @@ import StarterKit from '@tiptap/starter-kit'
 import { useEffect } from 'react'
 import './index.css'
 import Image from '@tiptap/extension-image'
+import { Mathematics } from '@tiptap/extension-mathematics'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { message } from 'antd'
 import { env } from '@/env'
 import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
+import 'katex/dist/katex.min.css'
 
 // import Mention from '@tiptap/extension-mention'
 // import Link from '@tiptap/extension-link'
@@ -92,6 +94,15 @@ export function RichTextEditor({
                     ]
                 },
                 suggestion: suggestion(mentions),
+            }),
+            Mathematics.configure({
+                shouldRender: (state, pos, node) => {
+                    const $pos = state.doc.resolve(pos)
+                    return node.type.name === 'text' && $pos.parent.type.name !== 'codeBlock'
+                },
+                katexOptions: {
+                    output: 'html',
+                },
             }),
             // TextStyle.configure({ mergeNestedSpanStyles: true }),
             //   ImportDocx.configure({
