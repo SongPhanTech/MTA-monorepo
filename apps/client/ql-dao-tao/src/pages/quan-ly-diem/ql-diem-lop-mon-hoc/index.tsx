@@ -116,6 +116,7 @@ export default function SubjectClassScore() {
     const [filterTable, setFilterTable] = useState<FilterTable>({
         fullname: '',
         fixedClassName: '',
+        dateOfBirth: undefined,
         attendanceScore: undefined,
         midtermScore: undefined,
         examScore: undefined,
@@ -260,6 +261,24 @@ export default function SubjectClassScore() {
                                   name: {
                                       contains: filterTable.fixedClassName,
                                       mode: 'insensitive',
+                                  },
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filterTable.dateOfBirth?.length === 2
+                    ? {
+                          student: {
+                              userProfile: {
+                                  dateOfBirth: {
+                                      gte: dayjs(
+                                          filterTable.dateOfBirth?.[0],
+                                          'DD/MM/YYYY'
+                                      ).toDate(),
+                                      lte: dayjs(
+                                          filterTable.dateOfBirth?.[1],
+                                          'DD/MM/YYYY'
+                                      ).toDate(),
                                   },
                               },
                           },
@@ -864,10 +883,15 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Ngày sinh',
-                                dataIndex: ['student', 'userProfile', 'dateOfBirth'],
+                                dataIndex: 'dateOfBirth',
                                 width: 150,
-                                render: (record: string) =>
-                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
+                                type: 'date',
+                                render: (_, record) =>
+                                    record
+                                        ? dayjs(record?.student?.userProfile.dateOfBirth).format(
+                                              'DD/MM/YYYY'
+                                          )
+                                        : '',
                             },
                             {
                                 title: 'Tên lớp',

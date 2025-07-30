@@ -11,7 +11,7 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { ApplicationStatus, Gender, type Prisma } from '@workspace/db'
+import { ApplicationStatus, type Prisma } from '@workspace/db'
 import {
     useCountStudentGraduationApplication,
     useFindManyStudentGraduationApplication,
@@ -459,16 +459,16 @@ export default function StudentGraduationApplication() {
                                                     dataIndex: ['student', 'userProfile', 'gender'],
                                                     align: 'center',
                                                     width: 90,
-                                                    render: (value: Gender) => {
-                                                        switch (value) {
-                                                            case Gender.Male:
-                                                                return 'Nam'
-                                                            case Gender.Female:
-                                                                return 'Nữ'
-                                                            default:
-                                                                return ''
-                                                        }
-                                                    },
+                                                    // render: (value: Gender) => {
+                                                    //     switch (value) {
+                                                    //         case Gender.Male:
+                                                    //             return 'Nam'
+                                                    //         case Gender.Female:
+                                                    //             return 'Nữ'
+                                                    //         default:
+                                                    //             return ''
+                                                    //     }
+                                                    // },
                                                 },
                                                 {
                                                     title: 'Nơi sinh',
