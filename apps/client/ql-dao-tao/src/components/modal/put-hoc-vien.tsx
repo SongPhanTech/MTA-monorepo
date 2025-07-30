@@ -14,20 +14,15 @@ import {
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import type { UploadFile } from 'antd'
-import { Col, Form, message, Row, Tabs } from 'antd'
+import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { $Enums } from '@workspace/db'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import KhenThuongKyLuatTab from './quan-ly-ho-so/tabs/khen-thuong-ky-luat'
-import ThanNhanTab from './quan-ly-ho-so/tabs/tab-danh-sach-than-nhan'
-import DoiTuongChinhSachTab from './quan-ly-ho-so/tabs/tab-doi-tuong-chinh-sach'
-import QuaTrinhDaoTaoTab from './quan-ly-ho-so/tabs/tab-qua-trinh-dao-tao'
-import ThongTinCaNhanTab from './quan-ly-ho-so/tabs/tab-thong-tin-ca-nhan'
-import TrinhDoChungChiTab from './quan-ly-ho-so/tabs/tab-trinh-do-chung-chi'
-// import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
 import type { PutStudentProfile, UserProfileType } from './quan-ly-ho-so/type'
+
+// import TabQuanLyHoSo from './quan-ly-ho-so/tabs'
 
 dayjs.locale('vi')
 
@@ -48,12 +43,13 @@ type PreFillFormFields = {
     curriculumVersionId?: string
 }
 
-const PutStudentModal = () => {
+const PutHocvienModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
-    const [userSelected, setUserSelected] = useState<UserProfileType>()
+
     const [avatar, setAvatar] = useState<UploadFile[]>([])
+    const [userSelected, setUserSelected] = useState<UserProfileType | undefined>(undefined)
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
-        tag: PutStudentModal.name,
+        tag: PutHocvienModal.name,
         onClose: form.resetFields,
     })
     const { id, preSelectedValues } = input ?? {}
@@ -105,7 +101,9 @@ const PutStudentModal = () => {
     const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
     const { data = [] } = useFindManyUserProfile({
         where: {
-            userType: $Enums.UserType.CIVILIAN_STUDENT,
+            userType: {
+                in: [$Enums.UserType.MILITARY_STUDENT],
+            },
             educationAndTraining: {
                 some: {
                     deletedAt: null, // Chỉ lấy Student chưa bị xóa mềm
@@ -140,7 +138,7 @@ const PutStudentModal = () => {
         idCardNumber: output.idCardNumber,
         idCardDate: output.idCardDate,
         officerNumber: output.officerNumber,
-        gender: output.gender,
+        // gender: output.gender,
         permanentAddress: output.permanentAddress,
         temporaryAddress: output.temporaryAddress,
         contactAddress: output.contactAddress,
@@ -227,7 +225,7 @@ const PutStudentModal = () => {
 
                 await Promise.all(promises)
 
-                message.success('Cập nhật sinh viên thành công')
+                message.success('Cập nhật học viên thành công')
             } else {
                 // CREATE MODE
                 if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
@@ -246,7 +244,7 @@ const PutStudentModal = () => {
                         },
                     })
 
-                    message.success('Cập nhật sinh viên thành công')
+                    message.success('Cập nhật học viên thành công')
                 } else {
                     const userProfile = await createUserProfile({
                         data: userProfileData,
@@ -259,7 +257,7 @@ const PutStudentModal = () => {
                     const studentCreateData = buildStudentCreateData(output, userProfile.id)
                     await createStudent({ data: studentCreateData })
 
-                    message.success('Thêm sinh viên thành công')
+                    message.success('Thêm học viên thành công')
                 }
             }
 
@@ -274,58 +272,6 @@ const PutStudentModal = () => {
         }
         hideSpinner()
     }
-
-    const tabsData = useMemo(() => {
-        return [
-            {
-                key: '1',
-                label: 'Thông tin sinh viên',
-                children: (
-                    <Row gutter={[16, 16]}>
-                        <Col span={24}>
-                            <ThongTinCaNhanTab
-                                avatar={avatar}
-                                setAvatar={setAvatar}
-                                id={id}
-                                type={'CIVILIAN_STUDENT'}
-                                setUserSelected={setUserSelected}
-                            />
-                        </Col>
-                    </Row>
-                ),
-            },
-            {
-                key: '3',
-                label: 'Trình độ, chứng chỉ',
-                children: <TrinhDoChungChiTab userSelected={userSelected} />,
-                forceRender: true,
-            },
-            {
-                key: '5',
-                label: 'Quá trình đào tạo',
-                children: <QuaTrinhDaoTaoTab />,
-                forceRender: true,
-            },
-            {
-                key: '6',
-                label: 'Khen thưởng - kỷ luật',
-                children: <KhenThuongKyLuatTab />,
-                forceRender: true,
-            },
-            {
-                key: '7',
-                label: 'Đối tượng chính sách',
-                children: <DoiTuongChinhSachTab />,
-                forceRender: true,
-            },
-            {
-                key: '9',
-                label: 'Thân nhân',
-                children: <ThanNhanTab />,
-                forceRender: true,
-            },
-        ]
-    }, [id, avatar, userSelected])
 
     useEffect(() => {
         if (studentData) {
@@ -356,7 +302,7 @@ const PutStudentModal = () => {
                 idCardDate: studentData.userProfile?.idCardDate
                     ? dayjs(studentData.userProfile.idCardDate)
                     : null,
-                gender: studentData.userProfile?.gender,
+                // gender: studentData.userProfile?.gender,
                 permanentAddress: studentData.userProfile?.permanentAddress,
                 temporaryAddress: studentData.userProfile?.temporaryAddress,
                 contactAddress: studentData.userProfile?.contactAddress,
@@ -393,7 +339,6 @@ const PutStudentModal = () => {
                 academicRankTypeId: studentData.userProfile?.academicRankTypeId ?? undefined,
                 positionCPVId: studentData.userProfile?.positionCPVId,
             })
-            // setUserSelected(studentData.userProfile)
 
             if (studentData.userProfile?.avatar) {
                 setAvatar([
@@ -449,17 +394,15 @@ const PutStudentModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa sinh viên' : 'Thêm sinh viên'}
+            title={id ? 'Chỉnh sửa học viên' : 'Thêm học viên'}
             className="w-[90vw]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
-            <Col span={24}>
-                <Tabs className="w-full" items={tabsData} />
-            </Col>
+            <Col span={24} />
         </PutFormModal>
     )
 }
 
-export default PutStudentModal
+export default PutHocvienModal

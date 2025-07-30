@@ -1,7 +1,7 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GridBlock } from '@components/commons/grid-block'
 import { useGenderOptions } from '@hooks/gender'
-import { Gender } from '@workspace/db'
+// import { Gender } from '@workspace/db'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
 import { Button, Input, Modal } from 'antd'
 import dayjs from 'dayjs'
@@ -91,9 +91,9 @@ const ModalTomTatLyLich = () => {
                             <span className="font-bold uppercase">
                                 {initialData?.userProfile?.fullname}
                             </span>
-                            <span className="ml-4">
+                            {/* <span className="ml-4">
                                 (Giới tính: {getGenderLabel(initialData?.userProfile?.gender)})
-                            </span>
+                            </span> */}
                         </div>
                         <div className="mb-1">
                             <span className="font-bold">Họ tên khác: </span>
@@ -516,7 +516,7 @@ const ModalTomTatLyLich = () => {
             <div className="flex flex-col">
                 <div className="uppercase text-lg font-bold flex w-full justify-center">
                     III. Tình hình KT-CT của gia đình{' '}
-                    {initialData?.userProfile?.gender === Gender.Male ? (
+                    {/* {initialData?.userProfile?.gender === Gender.Male ? (
                         <>
                             vợ, (<span style={{ textDecoration: 'line-through' }}>(chồng)</span>)
                         </>
@@ -526,7 +526,7 @@ const ModalTomTatLyLich = () => {
                         </>
                     ) : (
                         'vợ, chồng'
-                    )}
+                    )} */}
                 </div>
                 <div className="flex flex-col">
                     <GridBlock
@@ -604,7 +604,7 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Họ tên{' '}
-                                        {initialData?.userProfile?.gender === Gender.Male ? (
+                                        {/* {initialData?.userProfile?.gender === Gender.Male ? (
                                             <>
                                                 vợ, (
                                                 <span style={{ textDecoration: 'line-through' }}>
@@ -622,7 +622,7 @@ const ModalTomTatLyLich = () => {
                                         ) : (
                                             'vợ, chồng'
                                         )}
-                                        :{' '}
+                                        :{' '} */}
                                         <span className="font-bold capitalize">Vương Văn Mạnh</span>
                                     </>
                                 ),
