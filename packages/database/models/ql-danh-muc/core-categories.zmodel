@@ -56,7 +56,6 @@ model DM_ChucVu extends CoreBase {
   userProfile         UserProfile[]
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
-  cheDoCu             CheDoCu[]
 
   @@schema("mta")
 }

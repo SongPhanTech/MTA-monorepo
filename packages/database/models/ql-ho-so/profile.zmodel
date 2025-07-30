@@ -49,13 +49,28 @@ model UserProfile extends Base {
   healthInsuranceNumber      String?   // số bảo hiểm y tế
   bankAccountNumber          String?   // số tài khoản ngân hàng
   bankName                   String?   // tên ngân hàng
-  currentAddress             String? // địa chỉ hiện tại
+  currentAddress             String?   // địa chỉ hiện tại
+
   benh                       String?
-  tinhHinhNhaOi              String?
+  tinhHinhNhaO               String?
   truocKhiNhapNgu            String?
   thanhPhanGiaDinh           String?
   soTruong                   String?
   hoTenThuongDung            String?
+  lichSuBanThan              String?
+  conThuMay                  Int?      // con thứ mấy
+
+  // gia đình
+  soACE                      Int?      // số anh chị em
+  kinhTeGiaDinh              String?
+  chinhTriGiaDinh            String?
+
+  // gia đình vợ/chồng
+  fSoACE                     Int?      // số anh chị em
+  fKinhTeGiaDinh             String?
+  fChinhTriGiaDinh           String?
+  fBanThan                   String?
+
   nationalId                 String?                   @db.Uuid
   provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?                   @db.Uuid
@@ -135,11 +150,11 @@ model UserProfile extends Base {
   positionCPVId              String?                   @db.Uuid
   tenureDate                 DateTime? // ngày vào niên chế
   enlistmentDate             DateTime? // ngày nhập ngũ
-  reenlistmentDate           DateTime? // ngày tái nhập ngũ
+  reEnlistmentDate           DateTime? // ngày tái nhập ngũ
   dischargeDate              DateTime? // ngày xuất ngũ
 
   recruitmentDate            DateTime? // ngày tuyển dụng
-  recruimentAgency           String? // cơ quan tuyển dụng
+  recruitmentAgency          String? // cơ quan tuyển dụng
   mainJobAssigned            String? // công việc chính được giao
   revolutionaryDate          DateTime? // ngày tham gia cách mạng
 
@@ -176,11 +191,6 @@ model UserProfile extends Base {
   quaTrinhHocTap             QuaTrinhHocTap[]
   ToChucXaHoi                ToChucXaHoi[]
   QuaTrinhLuong              QuaTrinhLuong[]
-  ToChucNuocNgoai            ToChucNuocNgoai[]
-  thanNhanNuocNgoai          ThanNhanNuocNgoai[]
-  tuToi                      TuToi[]
-  CheDoCu                    CheDoCu[]
-
 
   trinhDoHocVan              DM_TrinhDoHocVan?         @relation(fields: [trinhDoHocVanId], references: [id])
   trinhDoHocVanId            String?
@@ -230,18 +240,36 @@ model HocVi extends Base {
   @@schema("ql-ho-so")
 }
 
+enum RelativeType {
+  FATHER
+  MOTHER
+  OLDER_BROTHER
+  OLDER_SISTER
+  YOUNGER_BROTHER
+  YOUNGER_SISTER
+
+  MARRIER
+  FATHER_IN_LOW
+  MOTHER_IN_LOW
+
+  SON
+  DAUGHTER
+
+  @@schema("ql-ho-so")
+}
+
 //Thân nhân
 model Relative extends Base {
-  name           String        @unique
-  birthYear      Int?
-  job            String?
-  information    String?
+  name          String
+  type          RelativeType
+  birthYear     Int?
+  queQuan       String?
+  noiOHienTai   String?
+  job           String?
+  information   String?
 
-  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId  String
-
-  dM_MoiQuanHe   DM_MoiQuanHe? @relation(fields: [dM_MoiQuanHeId], references: [id])
-  dM_MoiQuanHeId String?
+  userProfile   UserProfile  @relation(fields: [userProfileId], references: [id])
+  userProfileId String
 
   @@schema("ql-ho-so")
 }
@@ -497,11 +525,11 @@ model DanhHieu extends Base {
 }
 
 model QuaTrinhHocTap extends Base {
-  tenTruong      DM_TruongDaoTaoBacDH?      @relation(fields: [tenTruongId], references: [id])
-  tenTruongId    String?
+  tenTruong      DM_TruongDaoTaoBacDH       @relation(fields: [tenTruongId], references: [id])
+  tenTruongId    String
 
-  nganhHoc       DM_NganhHoc?               @relation(fields: [nganhHocId], references: [id])
-  nganhHocId     String?
+  nganhHoc       DM_NganhHoc                @relation(fields: [nganhHocId], references: [id])
+  nganhHocId     String
 
   chuyenNganh    DM_ChuyenNganhDaoTaoBacDH? @relation(fields: [chuyenNganhId], references: [id])
   chuyenNganhId  String?
@@ -548,55 +576,3 @@ model QuaTrinhLuong extends Base {
   @@schema("ql-ho-so")
 }
 
-model ToChucNuocNgoai extends Base {
-  ten           String?
-  diaDiem       String?
-  lamGi         String?
-
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
-
-  @@schema("ql-ho-so")
-}
-
-model ThanNhanNuocNgoai extends Base {
-  ten           String?
-  quanHe        DM_MoiQuanHe? @relation(fields: [quanHeId], references: [id])
-  quanHeId      String?
-  diaChi        String?
-  lamGi         String?
-
-  userProfile   UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId String
-
-  @@schema("ql-ho-so")
-}
-
-model TuToi extends Base {
-  tuNgay         DateTime?
-  denNgay        DateTime?
-  oDau           String?
-  daKhaiBaoChoAi String?
-  vanDe          String?
-
-  userProfile    UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId  String
-
-  @@schema("ql-ho-so")
-}
-
-model CheDoCu extends Base {
-  tuNgay        DateTime?
-  denNgay       DateTime?
-
-  coQuan        String?
-  donVi         String?
-  diaDiem       String?
-  chucVu        DM_ChucVu?  @relation(fields: [chucVuId], references: [Id])
-  chucVuId      String?     @db.Uuid
-
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
-
-  @@schema("ql-ho-so")
-}

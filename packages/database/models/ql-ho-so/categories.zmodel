@@ -1,16 +1,6 @@
 import '../base'
 import '../ql-ho-so/profile'
 
-// Mối quan hệ
-model DM_MoiQuanHe extends Base {
-  name              String              @unique
-
-  relatives         Relative[]
-  thanNhanNuocNgoai ThanNhanNuocNgoai[]
-  @@schema("ql-ho-so")
-}
-
-
 model DM_TrinhDoHocVan extends Base {
   userProfile UserProfile[]
   @@schema("mta")
@@ -169,7 +159,7 @@ model DM_ThuongBinh extends Base {
 
 model DM_ToChucXaHoi extends Base {
   name        String        @unique
-  toChucXaHOi ToChucXaHoi[]
+  toChucXaHoi ToChucXaHoi[]
 
   @@schema("ql-ho-so")
 }
