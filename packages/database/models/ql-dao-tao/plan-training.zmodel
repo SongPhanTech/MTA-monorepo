@@ -152,6 +152,7 @@ model Semester extends Base {
   academicWarning         AcademicWarning[]
   disciplinaryWarning     DisciplinaryWarning[]
   studentAcademicDecision StudentAcademicDecision[]
+  studentTrainingScoreSemester StudentTrainingScoreSemester[]
 
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")

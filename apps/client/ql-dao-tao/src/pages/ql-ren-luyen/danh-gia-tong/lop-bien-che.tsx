@@ -55,12 +55,16 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     // Lấy danh sách Fixed Classes
     const { data: fixedClasses = [] } = useFindManyFixedClass({
         where: {
-            trainingCourseId: {
-                in: trainingCourses.map((course) => course.id),
-            },
-            curriculumVersion: {
+            // trainingCourseId: {
+            //     in: trainingCourses.map((course) => course.id),
+            // },
+            trainingCourse: {
+                id: { in: trainingCourses.map((course) => course.id) },
                 trainingObjectTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
             },
+            // curriculumVersion: {
+            //     trainingObjectTypeId: objectTrainingTypeId ? objectTrainingTypeId : undefined,
+            // },
             name: className ? { contains: className } : undefined,
         },
     })

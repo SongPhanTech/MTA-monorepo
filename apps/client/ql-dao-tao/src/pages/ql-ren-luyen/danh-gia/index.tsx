@@ -17,7 +17,7 @@ import {
     useFindManyTrainingScoreSession,
     useUpdateStudentTrainingScore,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Flex, Form, Input, InputNumber, message, Row, Tag } from 'antd'
+import { Button, Col, DatePicker, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { Save, Search } from 'lucide-react'
 import type React from 'react'
@@ -53,6 +53,18 @@ export default function SubjectClassScore() {
         timeFilter: undefined,
         fixedClassIds: [],
     })
+
+    // TODO: Chưa biết cách tính rèn luyện DS nên tạm thời quy đổi rèn luyện thành điểm 0-10
+    const optionsRank = [
+        { value: 7, label: 'Xuất sắc' },
+        { value: 6, label: 'Tốt' },
+        { value: 5, label: 'Khá' },
+        { value: 4, label: 'Trung bình khá' },
+        { value: 3, label: 'Trung bình' },
+        { value: 2, label: 'Yếu' },
+        { value: 1, label: 'Kém' },
+        { value: 0, label: 'Chưa xếp loại' },
+    ]
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -231,6 +243,7 @@ export default function SubjectClassScore() {
                     })
                 } else {
                     // Tạo mới điểm rèn luyện
+                    console.log('Creating new score for student:', score.studentId)
                     await createStudentTrainingScore({
                         data: {
                             studentId: score.studentId,
@@ -278,6 +291,7 @@ export default function SubjectClassScore() {
                         }))}
                         onChangeSelected={handleChangeFixedClass}
                         selectedItem={selectedFixedClass}
+                        objectTrainingTypeId={filters.trainingObjectTypeId || undefined}
                     />
                 </Col>
                 <Col span={20} className="flex justify-end">
@@ -458,46 +472,98 @@ export default function SubjectClassScore() {
                                             </>
                                         ),
                                     },
+                                    // {
+                                    //     title: 'Điểm rèn luyện',
+                                    //     dataIndex: 'trainingScore',
+                                    //     width: 80,
+                                    //     align: 'center',
+                                    //     render: (text, record) => {
+                                    //         // console.log('Record:', scoreList)
+                                    //         const existingScore = scoreList.find(
+                                    //             (s) => s.studentId === record.id
+                                    //         )
+                                    //         return (
+                                    //             <InputNumber
+                                    //                 value={existingScore?.trainingScore || 0}
+                                    //                 style={{ width: 80 }}
+                                    //                 min={0}
+                                    //                 max={10}
+                                    //                 onKeyDown={(event) => {
+                                    //                     if (!/[0-9]/.test(event.key)) {
+                                    //                         event.preventDefault()
+                                    //                     }
+                                    //                 }}
+                                    //                 // onChange={(value) => {
+                                    //                 //     // Update the scoreList array for trainingScore
+                                    //                 //     setScoreList((prev) => {
+                                    //                 //         const newList = [...prev];
+                                    //                 //         const index = newList.findIndex(
+                                    //                 //             (item) => item.studentId === record.id
+                                    //                 //         );
+                                    //                 //         if (index !== -1) {
+                                    //                 //             newList[index].trainingScore = value as number;
+                                    //                 //         } else {
+                                    //                 //             newList.push({
+                                    //                 //                 studentId: record.id,
+                                    //                 //                 trainingScore: value as number,
+                                    //                 //             });
+                                    //                 //         }
+                                    //                 //         return newList;
+                                    //                 //     });
+                                    //                 onChange={(value) => {
+                                    //                     // Update the scoreList array for trainingScore
+                                    //                     setScoreList((prev) => {
+                                    //                         const newList = [...prev]
+                                    //                         const index = newList.findIndex(
+                                    //                             (item) =>
+                                    //                                 item.studentId === record.id
+                                    //                         )
+                                    //                         if (index !== -1) {
+                                    //                             newList[index].trainingScore =
+                                    //                                 value as number
+                                    //                         } else {
+                                    //                             newList.push({
+                                    //                                 studentId: record.id,
+                                    //                                 trainingScore: value as number,
+                                    //                             })
+                                    //                         }
+                                    //                         return newList
+                                    //                     })
+
+                                    //                     // Update the studentTrainingScoreData array locally
+                                    //                     // const existingScore = studentTrainingScoreData.find(
+                                    //                     //     (s: any) =>
+                                    //                     //         s.studentId === record.id &&
+                                    //                     //         s.trainingScoreSessionId === selectedTrainingScoreSessionId
+                                    //                     // );
+                                    //                     // if (existingScore) {
+                                    //                     //     existingScore.score = value as number;
+                                    //                     // }
+                                    //                     // }}
+                                    //                 }}
+                                    //             />
+                                    //         )
+                                    //     },
+                                    // },
                                     {
-                                        title: 'Điểm rèn luyện',
-                                        dataIndex: 'trainingScore',
-                                        width: 80,
+                                        title: 'Xếp loại',
+                                        dataIndex: 'ranking',
+                                        width: 150,
                                         align: 'center',
                                         render: (text, record) => {
-                                            // console.log('Record:', scoreList)
-                                            const existingScore = scoreList.find(
-                                                (s) => s.studentId === record.id
-                                            )
                                             return (
-                                                <InputNumber
-                                                    value={existingScore?.trainingScore || 0}
-                                                    style={{ width: 80 }}
-                                                    min={0}
-                                                    max={10}
-                                                    onKeyDown={(event) => {
-                                                        if (!/[0-9]/.test(event.key)) {
-                                                            event.preventDefault()
-                                                        }
-                                                    }}
-                                                    // onChange={(value) => {
-                                                    //     // Update the scoreList array for trainingScore
-                                                    //     setScoreList((prev) => {
-                                                    //         const newList = [...prev];
-                                                    //         const index = newList.findIndex(
-                                                    //             (item) => item.studentId === record.id
-                                                    //         );
-                                                    //         if (index !== -1) {
-                                                    //             newList[index].trainingScore = value as number;
-                                                    //         } else {
-                                                    //             newList.push({
-                                                    //                 studentId: record.id,
-                                                    //                 trainingScore: value as number,
-                                                    //             });
-                                                    //         }
-                                                    //         return newList;
-                                                    //     });
+                                                <Select
+                                                    placeholder="Chọn xếp loại"
+                                                    style={{ width: '100%' }}
+                                                    options={optionsRank}
+                                                    defaultValue={
+                                                        scoreList.find(
+                                                            (s) => s.studentId === record.id
+                                                        )?.trainingScore || 0 // Mặc định là 0
+                                                    }
+                                                    allowClear
                                                     onChange={(value) => {
-                                                        // Update the scoreList array for trainingScore
+                                                        // Cập nhật điểm rèn luyện trong scoreList
                                                         setScoreList((prev) => {
                                                             const newList = [...prev]
                                                             const index = newList.findIndex(
@@ -515,64 +581,8 @@ export default function SubjectClassScore() {
                                                             }
                                                             return newList
                                                         })
-
-                                                        // Update the studentTrainingScoreData array locally
-                                                        // const existingScore = studentTrainingScoreData.find(
-                                                        //     (s: any) =>
-                                                        //         s.studentId === record.id &&
-                                                        //         s.trainingScoreSessionId === selectedTrainingScoreSessionId
-                                                        // );
-                                                        // if (existingScore) {
-                                                        //     existingScore.score = value as number;
-                                                        // }
-                                                        // }}
                                                     }}
                                                 />
-                                            )
-                                        },
-                                    },
-                                    {
-                                        title: 'Xếp loại',
-                                        dataIndex: 'ranking',
-                                        width: 150,
-                                        align: 'center',
-                                        render: (text, record) => {
-                                            const existingScore = scoreList.find(
-                                                (s) => s.studentId === record.id
-                                            )
-                                            const score = existingScore
-                                                ? existingScore.trainingScore
-                                                : 0
-                                            let ranking = ''
-                                            if (score >= 9) {
-                                                ranking = 'Xuất sắc'
-                                            } else if (score >= 8) {
-                                                ranking = 'Tốt'
-                                            } else if (score >= 7) {
-                                                ranking = 'Khá'
-                                            } else if (score >= 6) {
-                                                ranking = 'Trung bình'
-                                            } else if (score === 0) {
-                                                ranking = ''
-                                            } else {
-                                                ranking = 'Yếu'
-                                            }
-                                            return (
-                                                <Tag
-                                                    color={
-                                                        ranking === 'Xuất sắc'
-                                                            ? 'green'
-                                                            : ranking === 'Tốt'
-                                                              ? 'blue'
-                                                              : ranking === 'Khá'
-                                                                ? 'orange'
-                                                                : ranking === 'Trung bình'
-                                                                  ? 'yellow'
-                                                                  : 'red'
-                                                    }
-                                                >
-                                                    {ranking}
-                                                </Tag>
                                             )
                                         },
                                     },
