@@ -454,22 +454,14 @@ export default function StudentGraduationApplication() {
                                                               ).format('DD/MM/YYYY')
                                                             : '',
                                                 },
-                                                // {
-                                                //     title: 'Giới tính',
-                                                //     dataIndex: ['student', 'userProfile', 'gender'],
-                                                //     align: 'center',
-                                                //     width: 90,
-                                                //     render: (value: Gender) => {
-                                                //         switch (value) {
-                                                //             case Gender.Male:
-                                                //                 return 'Nam'
-                                                //             case Gender.Female:
-                                                //                 return 'Nữ'
-                                                //             default:
-                                                //                 return ''
-                                                //         }
-                                                //     },
-                                                // },
+                                                {
+                                                    title: 'Giới tính',
+                                                    dataIndex: ['student', 'userProfile', 'gender'],
+                                                    align: 'center',
+                                                    width: 90,
+                                                    render: (record) =>
+                                                        record?.userProfile?.gender?.sTen,
+                                                },
                                                 {
                                                     title: 'Nơi sinh',
                                                     dataIndex: [
