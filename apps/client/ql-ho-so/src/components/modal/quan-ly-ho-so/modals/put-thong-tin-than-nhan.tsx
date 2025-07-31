@@ -59,12 +59,12 @@ export default function PutThongTinThanNhan() {
             layout="vertical"
             className="w-[40vw]"
         >
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Tên thân nhân" name="name" required form={form}>
                     <Input placeholder="Nhập tên nhân thân" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Tên mối quan hệ" name="type" required form={form}>
                     <Select
                         placeholder="Chọn mối quan hệ"
@@ -77,7 +77,7 @@ export default function PutThongTinThanNhan() {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Năm sinh" name="birthYear" form={form}>
                     <InputNumber
                         precision={0}
@@ -88,12 +88,22 @@ export default function PutThongTinThanNhan() {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Nhập nghề nghiệp" name="job" form={form}>
                     <Input placeholder="Nhập tên nghề nghiệp" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
+                <FormItem label="Nhập quê quán" name="queQuan" form={form}>
+                    <Input placeholder="Nhập quê quán" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem label="Nhập nơi ở hiện nay" name="noiOHienTai" form={form}>
+                    <Input placeholder="Nhập nơi ở hiện nay" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem label="Tên thông tin khác" name="information" form={form}>
                     <Input placeholder="Nhập tên thông tin khác" />
                 </FormItem>

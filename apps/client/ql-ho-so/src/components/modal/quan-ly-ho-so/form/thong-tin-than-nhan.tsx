@@ -123,6 +123,18 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
                             render: (_, record) => record?.job || '',
                         },
                         {
+                            title: 'Quê quán',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.queQuan || '',
+                        },
+                        {
+                            title: 'Nơi ở hiện nay',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.noiOHienTai || '',
+                        },
+                        {
                             title: 'Thông tin khác',
                             align: 'center',
                             width: 140,
