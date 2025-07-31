@@ -108,7 +108,7 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
                             width: 160,
                             render: (_, record) =>
                                 RELATIONSHIP_TYPE[record?.type as keyof typeof RELATIONSHIP_TYPE] ||
-                                record?.type,
+                                '',
                         },
                         {
                             title: 'Năm sinh',

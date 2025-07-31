@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { RELATIONSHIP_OPTIONS } from '@constants/constants'
+import { RELATIONSHIP_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { Relative } from '@workspace/db'
 import { Col, Form, Input, InputNumber, message } from 'antd'
@@ -68,10 +68,12 @@ export default function PutThongTinThanNhan() {
                 <FormItem label="Tên mối quan hệ" name="type" required form={form}>
                     <Select
                         placeholder="Chọn mối quan hệ"
-                        options={RELATIONSHIP_OPTIONS.map((i) => ({
-                            label: i.label,
-                            value: i.value,
-                        }))}
+                        options={Object.entries(RELATIONSHIP_TYPE).map(([key, value_]) => {
+                            return {
+                                value: key,
+                                label: value_,
+                            }
+                        })}
                     />
                 </FormItem>
             </Col>
