@@ -72,8 +72,6 @@ export default {
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep",
     "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
     "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
-    "QUAN_LY_HO_SO_QL_HOC_VIEN_ID": "/quan-ly-ho-so/ql-hoc-vien/[id]",
-    "QUAN_LY_HO_SO_QL_HOC_VIEN": "/quan-ly-ho-so/ql-hoc-vien",
   },
   "QL_NGUOI_DUNG": {
     "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",

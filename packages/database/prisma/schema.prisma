@@ -1507,6 +1507,7 @@ model Student {
   createdAt                DateTime                       @default(now())
   updatedAt                DateTime                       @default(now()) @updatedAt()
   entryScore               Float?
+  note                     String?
   from                     DateTime?
   to                       DateTime?
   trainingLocation         TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
@@ -2439,7 +2440,6 @@ model UserProfile {
   deletedAt                  DateTime?
   createdAt                  DateTime                  @default(now())
   updatedAt                  DateTime                  @default(now()) @updatedAt()
-  userType                   UserType                  @default(OTHER)
   bLaNguoiDung               Boolean?
   bLaCanBoNhanVien           Boolean?
   bLaHocVien                 Boolean?

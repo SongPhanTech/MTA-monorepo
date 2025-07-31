@@ -3,7 +3,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS, USER_TYPE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -317,16 +317,7 @@ export default function UserProfilePageDs() {
                                 dataIndex: 'email',
                                 render: (__, record) => (record.email ? record?.email : ''),
                             },
-                            {
-                                title: 'Vị trí công việc',
-                                align: 'center',
-                                width: 150,
-                                render: (__, record) =>
-                                    record?.userType
-                                        ? USER_TYPE.find((item) => item.value === record?.userType)
-                                              ?.label
-                                        : '',
-                            },
+
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
