@@ -235,6 +235,22 @@ enum UserType {
   @@schema("ql-nguoi-dung")
 }
 
+enum RelativeType {
+  FATHER
+  MOTHER
+  OLDER_BROTHER
+  OLDER_SISTER
+  YOUNGER_BROTHER
+  YOUNGER_SISTER
+  MARRIER
+  FATHER_IN_LOW
+  MOTHER_IN_LOW
+  SON
+  DAUGHTER
+
+  @@schema("ql-ho-so")
+}
+
 enum ResearchProjectStatus {
   OPEN
   FULL
@@ -451,7 +467,7 @@ model Config {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   key         ConfigKey @unique()
   value       String
 
@@ -466,7 +482,7 @@ model QuestionBank {
   description      String?        @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt()
+  updatedAt        DateTime       @default(now()) @updatedAt()
   name             String
   subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
@@ -485,7 +501,7 @@ model Difficulty {
   description String?    @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt()
+  updatedAt   DateTime   @default(now()) @updatedAt()
   name        String     @unique()
   level       Int?       @unique()
   questions   Question[]
@@ -501,7 +517,7 @@ model KnowledgeBlock {
   description      String?             @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt()
+  updatedAt        DateTime            @default(now()) @updatedAt()
   subjectVersion   SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
   name             String
@@ -520,7 +536,7 @@ model Question {
   description      String?            @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt()
+  updatedAt        DateTime           @default(now()) @updatedAt()
   content          String
   type             QuestionType       @default(ESSAY)
   point            Float              @default(1)
@@ -547,7 +563,7 @@ model Answer {
   description String?     @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt()
+  updatedAt   DateTime    @default(now()) @updatedAt()
   sessionId   String
   session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   questionId  String
@@ -569,7 +585,7 @@ model Exam {
   description        String?             @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt()
+  updatedAt          DateTime            @default(now()) @updatedAt()
   title              String
   status             ExamStatus          @default(DRAFT)
   questionBank       QuestionBank        @relation(fields: [questionBankId], references: [id])
@@ -597,7 +613,7 @@ model TestStructureRule {
   description      String?        @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt()
+  updatedAt        DateTime       @default(now()) @updatedAt()
   exam             Exam           @relation(fields: [examId], references: [id])
   examId           String
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
@@ -618,7 +634,7 @@ model ExamBank {
   description String?            @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt()
+  updatedAt   DateTime           @default(now()) @updatedAt()
   exam        Exam               @relation(fields: [examId], references: [id])
   examId      String
   examSession ExamSession[]
@@ -635,7 +651,7 @@ model ExamBankQuestion {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   examBankId  String
   examBank    ExamBank  @relation(fields: [examBankId], references: [id], onDelete: Cascade)
   questionId  String
@@ -655,7 +671,7 @@ model ExamSession {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   startTime   DateTime  @default(now())
   endTime     DateTime?
   score       Decimal?  @db.Decimal(5, 2)
@@ -682,7 +698,7 @@ model StudentSubjectScore {
   description      String?                                    @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime                                   @default(now())
-  updatedAt        DateTime                                   @updatedAt()
+  updatedAt        DateTime                                   @default(now()) @updatedAt()
   subjectClass     SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
   subjectClassId   String?
   subjectVersion   SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
@@ -713,7 +729,7 @@ model ArchivedCertificateOnStudentSubjectScore {
   description           String?             @db.Text()
   deletedAt             DateTime?
   createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt()
+  updatedAt             DateTime            @default(now()) @updatedAt()
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
   archivedCertificate   ArchivedCertificate @relation(fields: [archivedCertificateId], references: [id])
@@ -730,7 +746,7 @@ model ArchivedCertificate {
   description         String?                                    @db.Text()
   deletedAt           DateTime?
   createdAt           DateTime                                   @default(now())
-  updatedAt           DateTime                                   @updatedAt()
+  updatedAt           DateTime                                   @default(now()) @updatedAt()
   name                String
   englishName         String?
   finalScore          Float
@@ -747,7 +763,7 @@ model ArchivedAwardOnStudentSubjectScore {
   description           String?             @db.Text()
   deletedAt             DateTime?
   createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt()
+  updatedAt             DateTime            @default(now()) @updatedAt()
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
   archivedAward         ArchivedAward       @relation(fields: [archivedAwardId], references: [id])
@@ -764,7 +780,7 @@ model ArchivedAward {
   description         String?                              @db.Text()
   deletedAt           DateTime?
   createdAt           DateTime                             @default(now())
-  updatedAt           DateTime                             @updatedAt()
+  updatedAt           DateTime                             @default(now()) @updatedAt()
   name                String
   englishName         String?
   bonusScore          Float
@@ -782,7 +798,7 @@ model SchoolYear {
   description             String?                   @db.Text()
   deletedAt               DateTime?
   createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @updatedAt()
+  updatedAt               DateTime                  @default(now()) @updatedAt()
   name                    String
   startDate               DateTime
   endDate                 DateTime?
@@ -802,7 +818,7 @@ model Semester {
   description             String?                   @db.Text()
   deletedAt               DateTime?
   createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @updatedAt()
+  updatedAt               DateTime                  @default(now()) @updatedAt()
   name                    String
   shortName               String?
   semesterType            SemesterType?
@@ -832,7 +848,7 @@ model Milestone {
   description  String?    @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt()
+  updatedAt    DateTime   @default(now()) @updatedAt()
   name         String
   period       String?
   startDate    DateTime
@@ -851,7 +867,7 @@ model TrainingCourse {
   description            String?                  @db.Text()
   deletedAt              DateTime?
   createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @updatedAt()
+  updatedAt              DateTime                 @default(now()) @updatedAt()
   name                   String
   semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id])
   semesterStartId        String
@@ -889,7 +905,7 @@ model FixedClass {
   description              String?            @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @updatedAt()
+  updatedAt                DateTime           @default(now()) @updatedAt()
   name                     String
   summary                  String?
   startYear                Int?
@@ -925,7 +941,7 @@ model Curriculum {
   description              String?             @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime            @default(now())
-  updatedAt                DateTime            @updatedAt()
+  updatedAt                DateTime            @default(now()) @updatedAt()
   name                     String
   englishName              String?
   managementOrganization   DM_DonVi            @relation(fields: [managementOrganizationId], references: [Id])
@@ -948,7 +964,7 @@ model CurriculumVersion {
   description           String?                            @db.Text()
   deletedAt             DateTime?
   createdAt             DateTime                           @default(now())
-  updatedAt             DateTime                           @updatedAt()
+  updatedAt             DateTime                           @default(now()) @updatedAt()
   name                  String
   shortName             String?
   englishName           String?
@@ -995,7 +1011,7 @@ model Subject {
   description              String?          @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime         @default(now())
-  updatedAt                DateTime         @updatedAt()
+  updatedAt                DateTime         @default(now()) @updatedAt()
   name                     String           @unique()
   englishName              String?          @unique()
   managementOrganization   DM_DonVi?        @relation(fields: [managementOrganizationId], references: [Id])
@@ -1014,7 +1030,7 @@ model SubjectVersion {
   description              String?                @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime               @default(now())
-  updatedAt                DateTime               @updatedAt()
+  updatedAt                DateTime               @default(now()) @updatedAt()
   name                     String
   examType                 ExamType
   type                     SubjectVersionType     @default(Normal)
@@ -1064,7 +1080,7 @@ model TrainingBlockSubject {
   description                        String?                          @db.Text()
   deletedAt                          DateTime?
   createdAt                          DateTime                         @default(now())
-  updatedAt                          DateTime                         @updatedAt()
+  updatedAt                          DateTime                         @default(now()) @updatedAt()
   subject                            SubjectVersion                   @relation(fields: [subjectId], references: [id])
   subjectId                          String
   trainingBlockOnCurriculumVersion   TrainingBlockOnCurriculumVersion @relation(fields: [trainingBlockOnCurriculumVersionId], references: [id])
@@ -1087,7 +1103,7 @@ model SubjectClass {
   description                String?               @db.Text()
   deletedAt                  DateTime?
   createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @updatedAt()
+  updatedAt                  DateTime              @default(now()) @updatedAt()
   name                       String
   startDate                  DateTime
   endDate                    DateTime?
@@ -1129,7 +1145,7 @@ model ClassSchedule {
   description         String?        @db.Text()
   deletedAt           DateTime?
   createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt()
+  updatedAt           DateTime       @default(now()) @updatedAt()
   subjectClass        SubjectClass   @relation(fields: [subjectClassId], references: [id])
   subjectClassId      String
   periodType          PeriodType     @default(THEORY)
@@ -1158,7 +1174,7 @@ model TrainingObjectType {
   description          String?                             @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime                            @default(now())
-  updatedAt            DateTime                            @updatedAt()
+  updatedAt            DateTime                            @default(now()) @updatedAt()
   name                 String                              @unique()
   type                 TrainingObjectTypes
   baseScore            AcademicRankingBaseType
@@ -1180,7 +1196,7 @@ model PriorityObject {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
   students    Student[]
 
@@ -1195,7 +1211,7 @@ model TrainingType {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
   students    Student[]
 
@@ -1210,7 +1226,7 @@ model TrainingLevel {
   description       String?             @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt()
+  updatedAt         DateTime            @default(now()) @updatedAt()
   name              String              @unique()
   curriculumVersion CurriculumVersion[]
   students          Student[]
@@ -1226,7 +1242,7 @@ model TrainingForm {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
   students    Student[]
 
@@ -1241,7 +1257,7 @@ model TrainingLocation {
   description String?    @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt()
+  updatedAt   DateTime   @default(now()) @updatedAt()
   name        String     @unique()
   students    Student[]
   buildings   Building[]
@@ -1256,7 +1272,7 @@ model Building {
   description        String?           @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt()
+  updatedAt          DateTime          @default(now()) @updatedAt()
   name               String
   floor              Int?
   trainingLocation   TrainingLocation? @relation(fields: [trainingLocationId], references: [id])
@@ -1274,7 +1290,7 @@ model Room {
   description    String?         @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt()
+  updatedAt      DateTime        @default(now()) @updatedAt()
   name           String
   trainingRoom   Boolean         @default(true)
   computerRoom   Boolean         @default(false)
@@ -1300,7 +1316,7 @@ model TrainingField {
   description         String?                             @db.Text()
   deletedAt           DateTime?
   createdAt           DateTime                            @default(now())
-  updatedAt           DateTime                            @updatedAt()
+  updatedAt           DateTime                            @default(now()) @updatedAt()
   name                String                              @unique()
   englishName         String
   publishDate         DateTime
@@ -1319,7 +1335,7 @@ model TrainingFieldOnTrainingObjectType {
   description          String?            @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt()
+  updatedAt            DateTime           @default(now()) @updatedAt()
   trainingField        TrainingField      @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId      String
   trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
@@ -1337,7 +1353,7 @@ model TrainingMajor {
   description           String?                             @db.Text()
   deletedAt             DateTime?
   createdAt             DateTime                            @default(now())
-  updatedAt             DateTime                            @updatedAt()
+  updatedAt             DateTime                            @default(now()) @updatedAt()
   name                  String
   englishName           String?
   summary               String
@@ -1365,7 +1381,7 @@ model TrainingMajorOnTrainingObjectType {
   description          String?            @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt()
+  updatedAt            DateTime           @default(now()) @updatedAt()
   trainingMajor        TrainingMajor      @relation(fields: [trainingMajorId], references: [id])
   trainingMajorId      String
   trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
@@ -1383,7 +1399,7 @@ model TrainingBlock {
   description        String?                            @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime                           @default(now())
-  updatedAt          DateTime                           @updatedAt()
+  updatedAt          DateTime                           @default(now()) @updatedAt()
   name               String                             @unique()
   /// ưu tiên sắp xếp
   priority           Int                                @default(0)
@@ -1399,7 +1415,7 @@ model TrainingBlockOnCurriculumVersion {
   description             String?                @db.Text()
   deletedAt               DateTime?
   createdAt               DateTime               @default(now())
-  updatedAt               DateTime               @updatedAt()
+  updatedAt               DateTime               @default(now()) @updatedAt()
   trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
   curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
@@ -1421,7 +1437,7 @@ model TrainingTime {
   description       String?             @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt()
+  updatedAt         DateTime            @default(now()) @updatedAt()
   name              String
   curriculumVersion CurriculumVersion[]
 
@@ -1435,7 +1451,7 @@ model DiplomaType {
   description        String?              @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt()
+  updatedAt          DateTime             @default(now()) @updatedAt()
   name               String               @unique()
   englishName        String?
   curriculumVersion  CurriculumVersion[]
@@ -1452,7 +1468,7 @@ model ScoreConvert {
   description         String?        @db.Text()
   deletedAt           DateTime?
   createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt()
+  updatedAt           DateTime       @default(now()) @updatedAt()
   classification      String
   base10Min           Float
   base10Max           Float
@@ -1474,7 +1490,7 @@ model TrainingKPI {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String
 
   @@schema("ql-dao-tao")
@@ -1488,7 +1504,7 @@ model Student {
   description              String?                        @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                       @default(now())
-  updatedAt                DateTime                       @updatedAt()
+  updatedAt                DateTime                       @default(now()) @updatedAt()
   entryScore               Float?
   from                     DateTime?
   to                       DateTime?
@@ -1551,7 +1567,7 @@ model StudentSemesterResult {
   description              String?                 @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                @default(now())
-  updatedAt                DateTime                @updatedAt()
+  updatedAt                DateTime                @default(now()) @updatedAt()
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
   semester                 Semester                @relation(fields: [semesterId], references: [id])
@@ -1598,7 +1614,7 @@ model StudentYearResult {
   description              String?                 @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                @default(now())
-  updatedAt                DateTime                @updatedAt()
+  updatedAt                DateTime                @default(now()) @updatedAt()
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
   schoolYear               SchoolYear              @relation(fields: [schoolYearId], references: [id])
@@ -1632,7 +1648,7 @@ model Notification {
   description    String?              @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt()
+  updatedAt      DateTime             @default(now()) @updatedAt()
   title          String
   content        String
   type           NotificationType     @default(GENERAL)
@@ -1657,7 +1673,7 @@ model Group {
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
+  updatedAt   DateTime      @default(now()) @updatedAt()
   name        String
   users       DM_NhanVien[]
   roles       Role[]
@@ -1673,7 +1689,7 @@ model Role {
   description String?      @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt()
+  updatedAt   DateTime     @default(now()) @updatedAt()
   name        String
   groups      Group[]
   permissions Permission[]
@@ -1688,7 +1704,7 @@ model Permission {
   description    String?        @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt()
+  updatedAt      DateTime       @default(now()) @updatedAt()
   name           String
   permissionType PermissionType
   disabled       Boolean        @default(false)
@@ -1705,7 +1721,7 @@ model ChatBotConfig {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
   value       String    @db.Text()
 
@@ -1719,7 +1735,7 @@ model Document {
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt()
+  updatedAt    DateTime       @default(now()) @updatedAt()
   title        String?
   body         String?        @db.Text()
   status       DocumentStatus @default(PENDING)
@@ -1743,7 +1759,7 @@ model FAQ {
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt()
+  updatedAt    DateTime       @default(now()) @updatedAt()
   question     String?
   answer       String?
   status       DocumentStatus @default(PENDING)
@@ -1764,7 +1780,7 @@ model Prompt {
   description String?        @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt()
+  updatedAt   DateTime       @default(now()) @updatedAt()
   prompt      String?
   status      DocumentStatus @default(PENDING)
   type        DocumentType
@@ -1780,7 +1796,7 @@ model Conversation {
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
+  updatedAt   DateTime      @default(now()) @updatedAt()
   name        String?
   user        DM_NhanVien?  @relation(fields: [userId], references: [Id])
   userId      String?       @db.Uuid()
@@ -1797,7 +1813,7 @@ model Message {
   description    String?       @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt()
+  updatedAt      DateTime      @default(now()) @updatedAt()
   conversationId String?
   content        String?
   sender         MessageSender
@@ -1961,6 +1977,7 @@ model DM_DanToc {
   sTenKhac       String?
   sDiaChiCuTru   String?
   userProfile    UserProfile[]
+  tiengDanToc    TiengDanToc[]
 
   @@schema("mta")
 }
@@ -2305,6 +2322,7 @@ model DM_QuocGia {
   sLanguage      String?
   hocVi          HocVi[]
   userProfile    UserProfile[]
+  nuocNgoai      NuocNgoai[]
 
   @@schema("mta")
 }
@@ -2419,7 +2437,7 @@ model UserProfile {
   description                String?                   @db.Text()
   deletedAt                  DateTime?
   createdAt                  DateTime                  @default(now())
-  updatedAt                  DateTime                  @updatedAt()
+  updatedAt                  DateTime                  @default(now()) @updatedAt()
   userType                   UserType                  @default(OTHER)
   bLaNguoiDung               Boolean?
   bLaCanBoNhanVien           Boolean?
@@ -2445,6 +2463,21 @@ model UserProfile {
   bankAccountNumber          String?
   bankName                   String?
   currentAddress             String?
+  benh                       String?
+  tinhHinhNhaO               String?
+  truocKhiNhapNgu            String?
+  thanhPhanGiaDinh           String?
+  soTruong                   String?
+  hoTenThuongDung            String?
+  lichSuBanThan              String?
+  conThuMay                  Int?
+  soACE                      Int?
+  kinhTeGiaDinh              String?
+  chinhTriGiaDinh            String?
+  fSoACE                     Int?
+  fKinhTeGiaDinh             String?
+  fChinhTriGiaDinh           String?
+  fBanThan                   String?
   nationalId                 String?                   @db.Uuid()
   provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?                   @db.Uuid()
@@ -2492,6 +2525,16 @@ model UserProfile {
   academicRankDate           DateTime?
   level                      DM_ChucDanh?              @relation(fields: [levelId], references: [Id])
   levelId                    String?                   @db.Uuid()
+  chiHuyQuanLy               DM_ChiHuyQuanLy?          @relation(fields: [chiHuyQuanLyId], references: [id])
+  chiHuyQuanLyId             String?
+  chuyenMonKyThuat           DM_ChuyenMonKyThuat?      @relation(fields: [chuyenMonKyThuatId], references: [id])
+  chuyenMonKyThuatId         String?
+  sucKhoe                    DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
+  sucKhoeId                  String?
+  thuongBinh                 DM_ThuongBinh?            @relation(fields: [thuongBinhId], references: [id])
+  thuongBinhId               String?
+  nhomMau                    DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
+  nhomMauId                  String?
   unionDate                  DateTime?
   unionPlace                 String?
   CPVJoinDate                DateTime?
@@ -2501,7 +2544,12 @@ model UserProfile {
   positionCPVId              String?                   @db.Uuid()
   tenureDate                 DateTime?
   enlistmentDate             DateTime?
+  reEnlistmentDate           DateTime?
   dischargeDate              DateTime?
+  recruitmentDate            DateTime?
+  recruitmentAgency          String?
+  mainJobAssigned            String?
+  revolutionaryDate          DateTime?
   originalPlace              String?
   familyPhone                String?
   familyName                 String?
@@ -2521,6 +2569,14 @@ model UserProfile {
   keKhaiTaiSan               KeKhaiTaiSan[]
   hocVi                      HocVi[]
   hocHam                     HocHam[]
+  tiengDanToc                TiengDanToc[]
+  chienDau                   ChienDau[]
+  diNuocNgoai                NuocNgoai[]
+  thuongTat                  ThuongTat[]
+  danhHieu                   DanhHieu[]
+  quaTrinhHocTap             QuaTrinhHocTap[]
+  ToChucXaHoi                ToChucXaHoi[]
+  QuaTrinhLuong              QuaTrinhLuong[]
   trinhDoHocVan              DM_TrinhDoHocVan?         @relation(fields: [trinhDoHocVanId], references: [id])
   trinhDoHocVanId            String?
   /// hồ sơ đào tạo
@@ -2542,7 +2598,7 @@ model HocHam {
   description        String?     @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt()
+  updatedAt          DateTime    @default(now()) @updatedAt()
   academicRankType   DM_HocHam?  @relation(fields: [academicRankTypeId], references: [Id])
   academicRankTypeId String?     @db.Uuid()
   noiCap             String?
@@ -2562,7 +2618,7 @@ model HocVi {
   description          String?               @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt()
+  updatedAt            DateTime              @default(now()) @updatedAt()
   academicDegreeType   DM_HocVi?             @relation(fields: [academicDegreeTypeId], references: [Id])
   academicDegreeTypeId String?               @db.Uuid()
   nationality          DM_QuocGia?           @relation(fields: [nationalityId], references: [Id])
@@ -2578,21 +2634,22 @@ model HocVi {
 }
 
 model Relative {
-  id             String        @id() @default(cuid())
-  code           String?       @unique()
-  active         Boolean       @default(true)
-  description    String?       @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt()
-  name           String        @unique()
-  birthYear      Int?
-  job            String?
-  information    String?
-  userProfile    UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId  String
-  dM_MoiQuanHe   DM_MoiQuanHe? @relation(fields: [dM_MoiQuanHeId], references: [id])
-  dM_MoiQuanHeId String?
+  id            String       @id() @default(cuid())
+  code          String?      @unique()
+  active        Boolean      @default(true)
+  description   String?      @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt()
+  name          String
+  type          RelativeType
+  birthYear     Int?
+  queQuan       String?
+  noiOHienTai   String?
+  job           String?
+  information   String?
+  userProfile   UserProfile  @relation(fields: [userProfileId], references: [id])
+  userProfileId String
 
   @@schema("ql-ho-so")
 }
@@ -2604,7 +2661,7 @@ model TrinhDoLyLuanChinhTri {
   description     String?                   @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime                  @default(now())
-  updatedAt       DateTime                  @updatedAt()
+  updatedAt       DateTime                  @default(now()) @updatedAt()
   hinhThucDaoTao  String?
   noiDaoTao       String?
   thoiGianBatDau  DateTime?
@@ -2624,7 +2681,7 @@ model TrinhDoQuanLyNhaNuoc {
   description     String?                  @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime                 @default(now())
-  updatedAt       DateTime                 @updatedAt()
+  updatedAt       DateTime                 @default(now()) @updatedAt()
   hinhThucDaoTao  String?
   noiDaoTao       String?
   thoiGianBatDau  DateTime?
@@ -2644,7 +2701,7 @@ model NgoaiNgu {
   description     String?            @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt()
+  updatedAt       DateTime           @default(now()) @updatedAt()
   hinhThucDaoTao  String?
   noiDaoTao       String?
   thoiGianBatDau  DateTime?
@@ -2664,7 +2721,7 @@ model TinHoc {
   description        String?          @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt()
+  updatedAt          DateTime         @default(now()) @updatedAt()
   hinhThucDaoTao     String?
   noiDaoTao          String?
   thoiGianBatDau     DateTime?
@@ -2684,7 +2741,7 @@ model BoiDuongQuocPhongAnNinh {
   description     String?     @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt()
+  updatedAt       DateTime    @default(now()) @updatedAt()
   name            String?
   thoiGianBatDau  DateTime?
   thoiGianKetThuc DateTime?
@@ -2701,7 +2758,7 @@ model CapBac {
   description       String?     @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt()
+  updatedAt         DateTime    @default(now()) @updatedAt()
   noiRaQuyetDinh    String?
   capRaQuyetDinh    String?
   ngayNhanQuyetDinh DateTime?
@@ -2720,7 +2777,7 @@ model QuaTrinhCongTac {
   description       String?            @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt()
+  updatedAt         DateTime           @default(now()) @updatedAt()
   tuThangNam        DateTime?
   denThangNam       DateTime?
   donVi             String?
@@ -2741,7 +2798,7 @@ model QuaTrinhCuDiCongTac {
   description   String?     @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt()
+  updatedAt     DateTime    @default(now()) @updatedAt()
   tuThangNam    DateTime?
   denThangNam   DateTime?
   donVi         String
@@ -2760,11 +2817,12 @@ model QuaTrinhCuDiDaoTao {
   description   String?             @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt()
+  updatedAt     DateTime            @default(now()) @updatedAt()
   ten           String?
   donViToChuc   String?
   tuNgay        DateTime?
   denNgay       DateTime?
+  vanBang       String?
   loai          DM_LoaiHinhDiHocTap @relation(fields: [loaiId], references: [id])
   loaiId        String
   userProfile   UserProfile         @relation(fields: [userProfileId], references: [id])
@@ -2780,7 +2838,7 @@ model KhenThuong {
   description        String?     @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt()
+  updatedAt          DateTime    @default(now()) @updatedAt()
   hinhThucKhenThuong String?
   capKhenThuong      String?
   soQuyetDinh        String?
@@ -2799,7 +2857,7 @@ model KyLuat {
   description       String?     @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt()
+  updatedAt         DateTime    @default(now()) @updatedAt()
   hinhThucKyLuat    String?
   capKyLuat         String?
   soQuyetDinh       String?
@@ -2818,7 +2876,7 @@ model DoiTuongChinhSach {
   description   String?     @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt()
+  updatedAt     DateTime    @default(now()) @updatedAt()
   tenDoiTuong   String?
   ngayBatDau    DateTime?
   ngayKetThuc   DateTime?
@@ -2836,12 +2894,174 @@ model KeKhaiTaiSan {
   description    String?     @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt()
+  updatedAt      DateTime    @default(now()) @updatedAt()
   loai           String?
   tenDot         String?
   thoiGianKeKhai DateTime?
   userProfile    UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId  String
+
+  @@schema("ql-ho-so")
+}
+
+model TiengDanToc {
+  id            String      @id() @default(cuid())
+  code          String?     @unique()
+  active        Boolean     @default(true)
+  description   String?     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt()
+  danToc        DM_DanToc?  @relation(fields: [danTocId], references: [Id])
+  danTocId      String?     @db.Uuid()
+  nghe          String?
+  noi           String?
+  viet          String?
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model ChienDau {
+  id              String      @id() @default(cuid())
+  code            String?     @unique()
+  active          Boolean     @default(true)
+  description     String?     @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @default(now()) @updatedAt()
+  cuongVi         String?
+  donVi           String?
+  diaDiem         String?
+  vaiTro          String?
+  doiTuong        String?
+  thoiGianBatDau  DateTime?
+  thoiGianKetThuc DateTime?
+  userProfile     UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId   String
+
+  @@schema("ql-ho-so")
+}
+
+model NuocNgoai {
+  id            String      @id() @default(cuid())
+  code          String?     @unique()
+  active        Boolean     @default(true)
+  description   String?     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt()
+  tenNuoc       DM_QuocGia  @relation(fields: [tenNuocId], references: [Id])
+  tenNuocId     String      @db.Uuid()
+  tuNgay        DateTime?
+  denNgay       DateTime?
+  lyDo          String?
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model ThuongTat {
+  id               String           @id() @default(cuid())
+  code             String?          @unique()
+  active           Boolean          @default(true)
+  description      String?          @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt()
+  loai             DM_LoaiThuongTat @relation(fields: [loaiId], references: [id])
+  loaiId           String
+  tiLe             Int?
+  nguyenNhan       String?
+  thoiGian         DateTime?
+  noiBiThuong      String?
+  thoiGianGiamDinh DateTime?
+  userProfile      UserProfile      @relation(fields: [userProfileId], references: [id])
+  userProfileId    String
+
+  @@schema("ql-ho-so")
+}
+
+model DanhHieu {
+  id            String      @id() @default(cuid())
+  code          String?     @unique()
+  active        Boolean     @default(true)
+  description   String?     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt()
+  ten           String?
+  thoiGian      DateTime?
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model QuaTrinhHocTap {
+  id             String                     @id() @default(cuid())
+  code           String?                    @unique()
+  active         Boolean                    @default(true)
+  description    String?                    @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime                   @default(now())
+  updatedAt      DateTime                   @default(now()) @updatedAt()
+  tenTruong      DM_TruongDaoTaoBacDH       @relation(fields: [tenTruongId], references: [id])
+  tenTruongId    String
+  nganhHoc       DM_NganhHoc                @relation(fields: [nganhHocId], references: [id])
+  nganhHocId     String
+  chuyenNganh    DM_ChuyenNganhDaoTaoBacDH? @relation(fields: [chuyenNganhId], references: [id])
+  chuyenNganhId  String?
+  tuNgay         DateTime?
+  denNgay        DateTime?
+  ketQua         String?
+  loaiHinhDaoTao String?
+  userProfile    UserProfile                @relation(fields: [userProfileId], references: [id])
+  userProfileId  String
+
+  @@schema("ql-ho-so")
+}
+
+model ToChucXaHoi {
+  id            String         @id() @default(cuid())
+  code          String?        @unique()
+  active        Boolean        @default(true)
+  description   String?        @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt()
+  ten           DM_ToChucXaHoi @relation(fields: [tenId], references: [id])
+  tenId         String
+  tuNgay        DateTime?
+  denNgay       DateTime?
+  congViec      String?
+  userProfile   UserProfile    @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("ql-ho-so")
+}
+
+model QuaTrinhLuong {
+  id            String      @id() @default(cuid())
+  code          String?     @unique()
+  active        Boolean     @default(true)
+  description   String?     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt()
+  tuNgay        DateTime?
+  denNgay       DateTime?
+  ngach         DM_Ngach    @relation(fields: [ngachId], references: [id])
+  ngachId       String
+  bacLuong      DM_BacLuong @relation(fields: [bacLuongId], references: [id])
+  bacLuongId    String
+  maNgach       String
+  phuCapChucVu  String?
+  phuCapKhac    String?
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
 
   @@schema("ql-ho-so")
 }
@@ -2854,7 +3074,7 @@ model LecturerType {
   description     String?           @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt()
+  updatedAt       DateTime          @default(now()) @updatedAt()
   name            String            @unique()
   lecturers       Lecturer[]
   lecturerHistory LecturerHistory[]
@@ -2870,7 +3090,7 @@ model StaffType {
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt()
+  updatedAt    DateTime       @default(now()) @updatedAt()
   name         String         @unique()
   staffs       Staff[]
   staffHistory StaffHistory[]
@@ -2886,7 +3106,7 @@ model StaffPosition {
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt()
+  updatedAt    DateTime       @default(now()) @updatedAt()
   name         String
   staffs       Staff[]
   staffHistory StaffHistory[]
@@ -2901,7 +3121,7 @@ model Lecturer {
   description                 String?                       @db.Text()
   deletedAt                   DateTime?
   createdAt                   DateTime                      @default(now())
-  updatedAt                   DateTime                      @updatedAt()
+  updatedAt                   DateTime                      @default(now()) @updatedAt()
   from                        DateTime?
   lectureID                   String?                       @unique()
   serviceDate                 DateTime?
@@ -2931,7 +3151,7 @@ model LecturerHistory {
   description    String?      @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt()
+  updatedAt      DateTime     @default(now()) @updatedAt()
   from           DateTime?
   to             DateTime?
   lectureID      String?
@@ -2954,7 +3174,7 @@ model ResearchProject {
   description       String?                       @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime                      @default(now())
-  updatedAt         DateTime                      @updatedAt()
+  updatedAt         DateTime                      @default(now()) @updatedAt()
   title             String
   summary           String                        @db.Text()
   objectives        String?                       @db.Text()
@@ -2984,7 +3204,7 @@ model StudentResearchRegistration {
   description       String?            @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt()
+  updatedAt         DateTime           @default(now()) @updatedAt()
   student           Student            @relation(fields: [studentId], references: [id])
   studentId         String
   researchProject   ResearchProject    @relation(fields: [researchProjectId], references: [id])
@@ -3009,7 +3229,7 @@ model ThesisProject {
   description       String?                     @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime                    @default(now())
-  updatedAt         DateTime                    @updatedAt()
+  updatedAt         DateTime                    @default(now()) @updatedAt()
   title             String
   titleEN           String?
   summary           String                      @db.Text()
@@ -3048,7 +3268,7 @@ model StudentThesisRegistration {
   description     String?                         @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime                        @default(now())
-  updatedAt       DateTime                        @updatedAt()
+  updatedAt       DateTime                        @default(now()) @updatedAt()
   student         Student                         @relation(fields: [studentId], references: [id])
   studentId       String
   thesisProject   ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
@@ -3076,7 +3296,7 @@ model ExpertProfile {
   description        String?         @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt()
+  updatedAt          DateTime        @default(now()) @updatedAt()
   lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
   lecturerId         String?         @unique()
   name               String?
@@ -3100,7 +3320,7 @@ model Decision {
   description     String?        @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt()
+  updatedAt       DateTime       @default(now()) @updatedAt()
   issueDate       DateTime
   type            DecisionType
   documentFile    DocumentFile[]
@@ -3119,7 +3339,7 @@ model Invitation {
   description    String?   @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt()
+  updatedAt      DateTime  @default(now()) @updatedAt()
   sentDate       DateTime  @default(now())
   isConfirmed    Boolean   @default(false)
   decisionId     String
@@ -3138,7 +3358,7 @@ model Council {
   description                 String?                    @db.Text()
   deletedAt                   DateTime?
   createdAt                   DateTime                   @default(now())
-  updatedAt                   DateTime                   @updatedAt()
+  updatedAt                   DateTime                   @default(now()) @updatedAt()
   proposedDate                DateTime                   @default(now())
   proposedDefenseDate         DateTime?
   status                      CouncilProposalStatus      @default(PENDING)
@@ -3161,7 +3381,7 @@ model CouncilMember {
   description String?        @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt()
+  updatedAt   DateTime       @default(now()) @updatedAt()
   role        CouncilRole
   councilId   String
   council     Council        @relation(fields: [councilId], references: [id])
@@ -3181,7 +3401,7 @@ model DefenseRecord {
   description       String?        @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt()
+  updatedAt         DateTime       @default(now()) @updatedAt()
   finalScore        Decimal?       @db.Decimal(5, 2)
   comments          String?        @db.Text()
   isProfileComplete Boolean        @default(false)
@@ -3200,7 +3420,7 @@ model LibrarySubmission {
   description    String?       @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt()
+  updatedAt      DateTime      @default(now()) @updatedAt()
   submissionDate DateTime      @default(now())
   isHardcopy     Boolean       @default(false)
   isSoftcopy     Boolean       @default(false)
@@ -3220,7 +3440,7 @@ model PaymentRecord {
   description     String?        @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt()
+  updatedAt       DateTime       @default(now()) @updatedAt()
   amount          Decimal
   status          PaymentStatus  @default(PENDING)
   paymentDate     DateTime?
@@ -3240,7 +3460,7 @@ model DocumentFile {
   description               String?                  @db.Text()
   deletedAt                 DateTime?
   createdAt                 DateTime                 @default(now())
-  updatedAt                 DateTime                 @updatedAt()
+  updatedAt                 DateTime                 @default(now()) @updatedAt()
   name                      String
   path                      String
   size                      BigInt
@@ -3275,7 +3495,7 @@ model AcademicActionConfig {
   description      String?                   @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime                  @default(now())
-  updatedAt        DateTime                  @updatedAt()
+  updatedAt        DateTime                  @default(now()) @updatedAt()
   name             String
   actionType       AcademicActionType
   trainingCourse   TrainingCourse            @relation(fields: [trainingCourseId], references: [id])
@@ -3297,7 +3517,7 @@ model AcademicActionRuleSet {
   description String?                   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime                  @default(now())
-  updatedAt   DateTime                  @updatedAt()
+  updatedAt   DateTime                  @default(now()) @updatedAt()
   config      AcademicActionConfig      @relation(fields: [configId], references: [id])
   configId    String
   conditions  AcademicActionCondition[]
@@ -3313,7 +3533,7 @@ model AcademicActionCondition {
   description       String?               @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime              @default(now())
-  updatedAt         DateTime              @updatedAt()
+  updatedAt         DateTime              @default(now()) @updatedAt()
   ruleSet           AcademicActionRuleSet @relation(fields: [ruleSetId], references: [id])
   ruleSetId         String
   field             CriteriaField
@@ -3335,7 +3555,7 @@ model StudentAcademicDecision {
   description      String?               @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt()
+  updatedAt        DateTime              @default(now()) @updatedAt()
   student          Student               @relation(fields: [studentId], references: [id])
   studentId        String
   semester         Semester?             @relation(fields: [semesterId], references: [id])
@@ -3362,7 +3582,7 @@ model TrainingScoreSession {
   description          String?                @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt()
+  updatedAt            DateTime               @default(now()) @updatedAt()
   name                 String
   time                 DateTime               @default(now())
   semester             Semester               @relation(fields: [semesterId], references: [id])
@@ -3381,7 +3601,7 @@ model StudentTrainingScore {
   description            String?              @db.Text()
   deletedAt              DateTime?
   createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @updatedAt()
+  updatedAt              DateTime             @default(now()) @updatedAt()
   trainingScoreSession   TrainingScoreSession @relation(fields: [trainingScoreSessionId], references: [id])
   trainingScoreSessionId String
   student                Student              @relation(fields: [studentId], references: [id])
@@ -3399,7 +3619,7 @@ model StudentTrainingSemester {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   semester    Semester  @relation(fields: [semesterId], references: [id])
   semesterId  String
   student     Student   @relation(fields: [studentId], references: [id])
@@ -3417,7 +3637,7 @@ model Scholarship {
   description      String?               @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt()
+  updatedAt        DateTime              @default(now()) @updatedAt()
   name             String
   rankOrder        Int
   baseAmount       Decimal
@@ -3440,7 +3660,7 @@ model ScholarshipCriteria {
   description   String?          @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt()
+  updatedAt     DateTime         @default(now()) @updatedAt()
   scholarshipId String
   scholarship   Scholarship      @relation(fields: [scholarshipId], references: [id])
   field         CriteriaField
@@ -3460,7 +3680,7 @@ model ScholarshipAward {
   description   String?     @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt()
+  updatedAt     DateTime    @default(now()) @updatedAt()
   student       Student     @relation(fields: [studentId], references: [id])
   studentId     String
   semester      Semester    @relation(fields: [semesterId], references: [id])
@@ -3482,7 +3702,7 @@ model Staff {
   description     String?       @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt()
+  updatedAt       DateTime      @default(now()) @updatedAt()
   from            DateTime?
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
   userProfileId   String        @unique()
@@ -3504,7 +3724,7 @@ model StaffHistory {
   description     String?       @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt()
+  updatedAt       DateTime      @default(now()) @updatedAt()
   from            DateTime?
   to              DateTime?
   userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
@@ -3526,7 +3746,7 @@ model SurveyObjectType {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String
   survey      Survey[]
 
@@ -3540,7 +3760,7 @@ model SurveyTopic {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String
   survey      Survey[]
 
@@ -3554,7 +3774,7 @@ model SurveyQuestionGroup {
   description    String?          @db.Text()
   deletedAt      DateTime?
   createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt()
+  updatedAt      DateTime         @default(now()) @updatedAt()
   name           String
   surveyQuestion SurveyQuestion[]
 
@@ -3568,7 +3788,7 @@ model Survey {
   description          String?          @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt()
+  updatedAt            DateTime         @default(now()) @updatedAt()
   name                 String
   startDate            DateTime
   endDate              DateTime?
@@ -3591,7 +3811,7 @@ model SurveyQuestion {
   description           String?              @db.Text()
   deletedAt             DateTime?
   createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt()
+  updatedAt             DateTime             @default(now()) @updatedAt()
   name                  String
   type                  SurveyQuestionType
   surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
@@ -3611,7 +3831,7 @@ model SurveyChoice {
   description     String?          @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt()
+  updatedAt       DateTime         @default(now()) @updatedAt()
   answer          String?
   survey          Survey           @relation(fields: [surveyId], references: [id])
   surveyId        String
@@ -3628,7 +3848,7 @@ model SurveySession {
   description          String?          @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt()
+  updatedAt            DateTime         @default(now()) @updatedAt()
   survey               Survey           @relation(fields: [surveyId], references: [id])
   surveyId             String
   additionalSuggestion String?
@@ -3651,7 +3871,7 @@ model SurveyResponse {
   description      String?        @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt()
+  updatedAt        DateTime       @default(now()) @updatedAt()
   surveySession    SurveySession  @relation(fields: [surveySessionId], references: [id])
   surveySessionId  String
   surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
@@ -3665,20 +3885,6 @@ model SurveyResponse {
   @@schema("khao-thi")
 }
 
-model DM_MoiQuanHe {
-  id          String     @id() @default(cuid())
-  code        String?    @unique()
-  active      Boolean    @default(true)
-  description String?    @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt()
-  name        String     @unique()
-  relatives   Relative[]
-
-  @@schema("ql-ho-so")
-}
-
 model DM_TrinhDoHocVan {
   id          String        @id() @default(cuid())
   code        String?       @unique()
@@ -3686,7 +3892,7 @@ model DM_TrinhDoHocVan {
   description String?       @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt()
+  updatedAt   DateTime      @default(now()) @updatedAt()
   userProfile UserProfile[]
 
   @@schema("mta")
@@ -3699,7 +3905,7 @@ model DM_TrinhDoLyLuanChinhTri {
   description           String?                 @db.Text()
   deletedAt             DateTime?
   createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt()
+  updatedAt             DateTime                @default(now()) @updatedAt()
   name                  String                  @unique()
   trinhDoLyLuanChinhTri TrinhDoLyLuanChinhTri[]
 
@@ -3713,7 +3919,7 @@ model DM_TrinhDoQuanLyNhaNuoc {
   description          String?                @db.Text()
   deletedAt            DateTime?
   createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt()
+  updatedAt            DateTime               @default(now()) @updatedAt()
   name                 String                 @unique()
   trinhDoQuanLyNhaNuoc TrinhDoQuanLyNhaNuoc[]
 
@@ -3727,7 +3933,7 @@ model DM_TinhTrangHonNhan {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3740,7 +3946,7 @@ model DM_TrangThaiLamViec {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3753,7 +3959,7 @@ model DM_HinhThucKhenThuongChinhQuyen {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3766,7 +3972,7 @@ model DM_HinhThucKhenThuongDang {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3779,7 +3985,7 @@ model DM_XepLoaiDanhGiaCanBo {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3792,7 +3998,7 @@ model DM_XepLoaiDanhGiaChatLuongDangVien {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3805,7 +4011,7 @@ model DM_LoaiHinhCongTac {
   description     String?           @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt()
+  updatedAt       DateTime          @default(now()) @updatedAt()
   name            String            @unique()
   quaTrinhCongTac QuaTrinhCongTac[]
 
@@ -3819,7 +4025,7 @@ model DM_TinhTrangCongTac {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3832,7 +4038,7 @@ model DM_LoaiHinhDiHocTap {
   description        String?              @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt()
+  updatedAt          DateTime             @default(now()) @updatedAt()
   name               String               @unique()
   quaTrinhCuDiDaoTao QuaTrinhCuDiDaoTao[]
 
@@ -3846,7 +4052,7 @@ model DM_TinhTrangDiHocTap {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3859,7 +4065,7 @@ model DM_NuocCuDiHocTap {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3872,7 +4078,7 @@ model DM_ChucDanhCMNVGiangVien {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3885,7 +4091,7 @@ model DM_ChucDanhCMNVNghienCuuVien {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
@@ -3898,35 +4104,177 @@ model DM_ChucDanhCMNVKySu {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   name        String    @unique()
 
   @@schema("ql-ho-so")
 }
 
 model DM_TruongDaoTaoBacDH {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String    @unique()
-  hocVi       HocVi[]
+  id             String           @id() @default(cuid())
+  code           String?          @unique()
+  active         Boolean          @default(true)
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt()
+  name           String           @unique()
+  hocVi          HocVi[]
+  quaTrinhHocTap QuaTrinhHocTap[]
 
   @@schema("ql-ho-so")
 }
 
 model DM_ChuyenNganhDaoTaoBacDH {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+  id             String           @id() @default(cuid())
+  code           String?          @unique()
+  active         Boolean          @default(true)
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt()
+  name           String           @unique()
+  quaTrinhHocTap QuaTrinhHocTap[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChiHuyQuanLy {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
-  name        String    @unique()
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ChuyenMonKyThuat {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_SucKhoe {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_NhomMau {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_LoaiThuongTat {
+  id          String      @id() @default(cuid())
+  code        String?     @unique()
+  active      Boolean     @default(true)
+  description String?     @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt()
+  name        String      @unique()
+  thuongTat   ThuongTat[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_NganhHoc {
+  id             String           @id() @default(cuid())
+  code           String?          @unique()
+  active         Boolean          @default(true)
+  description    String?          @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt()
+  name           String           @unique()
+  quaTrinhHocTap QuaTrinhHocTap[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ThuongBinh {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
+  userProfile UserProfile[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_ToChucXaHoi {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
+  toChucXaHoi ToChucXaHoi[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_Ngach {
+  id            String          @id() @default(cuid())
+  code          String?         @unique()
+  active        Boolean         @default(true)
+  description   String?         @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt()
+  name          String          @unique()
+  quaTrinhLuong QuaTrinhLuong[]
+
+  @@schema("ql-ho-so")
+}
+
+model DM_BacLuong {
+  id            String          @id() @default(cuid())
+  code          String?         @unique()
+  active        Boolean         @default(true)
+  description   String?         @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt()
+  name          String          @unique()
+  quaTrinhLuong QuaTrinhLuong[]
 
   @@schema("ql-ho-so")
 }
@@ -3938,7 +4286,7 @@ model Feedback {
   description  String?        @db.Text()
   deletedAt    DateTime?
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt()
+  updatedAt    DateTime       @default(now()) @updatedAt()
   content      String
   status       FeedbackStatus
   satisfaction Satisfaction
@@ -3956,7 +4304,7 @@ model AcademicWarningRule {
   description       String?           @db.Text()
   deletedAt         DateTime?
   createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt()
+  updatedAt         DateTime          @default(now()) @updatedAt()
   field             CriteriaField
   operator          CriteriaOperator
   invert            Boolean           @default(false)
@@ -3980,7 +4328,7 @@ model AcademicWarning {
   description   String?               @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt()
+  updatedAt     DateTime              @default(now()) @updatedAt()
   student       Student               @relation(fields: [studentId], references: [id])
   studentId     String
   semester      Semester              @relation(fields: [semesterId], references: [id])
@@ -4001,7 +4349,7 @@ model DisciplinaryWarning {
   description   String?                     @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime                    @default(now())
-  updatedAt     DateTime                    @updatedAt()
+  updatedAt     DateTime                    @default(now()) @updatedAt()
   student       Student                     @relation(fields: [studentId], references: [id])
   studentId     String
   semester      Semester?                   @relation(fields: [semesterId], references: [id])
@@ -4020,7 +4368,7 @@ model DisciplinaryWarningReason {
   description   String?               @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt()
+  updatedAt     DateTime              @default(now()) @updatedAt()
   name          String                @unique()
   warning       DisciplinaryWarning[]
   severityLevel Int
@@ -4036,7 +4384,7 @@ model GraduationSession {
   description      String?                        @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime                       @default(now())
-  updatedAt        DateTime                       @updatedAt()
+  updatedAt        DateTime                       @default(now()) @updatedAt()
   name             String
   sessionDate      DateTime
   applicationStart DateTime
@@ -4055,7 +4403,7 @@ model StudentGraduationApplication {
   description            String?                  @db.Text()
   deletedAt              DateTime?
   createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @updatedAt()
+  updatedAt              DateTime                 @default(now()) @updatedAt()
   student                Student                  @relation(fields: [studentId], references: [id])
   studentId              String
   session                GraduationSession        @relation(fields: [sessionId], references: [id])
@@ -4077,7 +4425,7 @@ model ApplicationCheckResult {
   description                    String?                      @db.Text()
   deletedAt                      DateTime?
   createdAt                      DateTime                     @default(now())
-  updatedAt                      DateTime                     @updatedAt()
+  updatedAt                      DateTime                     @default(now()) @updatedAt()
   studentGraduationApplication   StudentGraduationApplication @relation(fields: [studentGraduationApplicationId], references: [id])
   studentGraduationApplicationId String                       @unique()
   rankingCondition               RankingCondition             @relation(fields: [rankingConditionId], references: [id])
@@ -4097,7 +4445,7 @@ model GraduationDecision {
   description      String?                      @db.Text()
   deletedAt        DateTime?
   createdAt        DateTime                     @default(now())
-  updatedAt        DateTime                     @updatedAt()
+  updatedAt        DateTime                     @default(now()) @updatedAt()
   application      StudentGraduationApplication @relation(fields: [applicationId], references: [id])
   applicationId    String                       @unique()
   student          Student                      @relation(fields: [studentId], references: [id])
@@ -4123,7 +4471,7 @@ model AcademicRankingConvert {
   description        String?                       @db.Text()
   deletedAt          DateTime?
   createdAt          DateTime                      @default(now())
-  updatedAt          DateTime                      @updatedAt()
+  updatedAt          DateTime                      @default(now()) @updatedAt()
   classification     String
   context            RankingContext
   rankOrder          Int
@@ -4151,7 +4499,7 @@ model GraduationRankDowngradeRule {
   description   String?                            @db.Text()
   deletedAt     DateTime?
   createdAt     DateTime                           @default(now())
-  updatedAt     DateTime                           @updatedAt()
+  updatedAt     DateTime                           @default(now()) @updatedAt()
   initialRank   AcademicRankingConvert             @relation(fields: [initialRankId], references: [id])
   initialRankId String                             @unique()
   conditions    GraduationRankDowngradeCondition[]
@@ -4167,7 +4515,7 @@ model GraduationRankDowngradeCondition {
   description     String?                     @db.Text()
   deletedAt       DateTime?
   createdAt       DateTime                    @default(now())
-  updatedAt       DateTime                    @updatedAt()
+  updatedAt       DateTime                    @default(now()) @updatedAt()
   downgradeRule   GraduationRankDowngradeRule @relation(fields: [downgradeRuleId], references: [id])
   downgradeRuleId String
   field           CriteriaField
@@ -4187,7 +4535,7 @@ model RankingCondition {
   description            String?                  @db.Text()
   deletedAt              DateTime?
   createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @updatedAt()
+  updatedAt              DateTime                 @default(now()) @updatedAt()
   ranking                AcademicRankingConvert   @relation(fields: [rankingId], references: [id])
   rankingId              String
   field                  CriteriaField
@@ -4207,7 +4555,7 @@ model TemplateFile {
   description String?           @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt()
+  updatedAt   DateTime          @default(now()) @updatedAt()
   name        String
   path        String            @unique()
   fileType    TemplateFileType?
@@ -4224,7 +4572,7 @@ model BlockedIp {
   description String?   @db.Text()
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
+  updatedAt   DateTime  @default(now()) @updatedAt()
   ipAddress   String    @unique()
   reason      String?   @db.Text()
   expiresAt   DateTime?
