@@ -23,7 +23,6 @@ enum UserType {
 }
 
 model UserProfile extends Base {
-  userType                   UserType                  @default(OTHER)
   bLaNguoiDung               Boolean?
   bLaCanBoNhanVien           Boolean?
   bLaHocVien                 Boolean?

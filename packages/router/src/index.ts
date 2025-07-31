@@ -587,17 +587,10 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: 'ql-sinh-vien',
-                        label: 'QL sinh viên',
+                        label: 'QL sinh viên, học viên',
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
-                        description: 'QL sinh viên',
-                    },
-                    {
-                        id: 'ql-hoc-vien',
-                        label: 'QL học viên',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_HOC_VIEN,
-                        description: 'QL học viên',
+                        description: 'QL sinh viên, học viên',
                     },
                 ],
             },

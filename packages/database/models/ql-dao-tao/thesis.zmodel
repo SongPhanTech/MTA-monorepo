@@ -70,6 +70,7 @@ enum StudentThesisRegistrationStatus {
   PENDING
   ACCEPTED
   REJECTED
+  CANCELED
   @@schema("ql-dao-tao")
 }
 

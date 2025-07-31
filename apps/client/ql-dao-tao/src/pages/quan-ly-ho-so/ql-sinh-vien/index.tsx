@@ -2,7 +2,7 @@ import { UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import ViewIcon from '@components/icons/view'
+// import ViewIcon from '@components/icons/view'
 import { PutStudentModal } from '@components/modal'
 import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
@@ -16,19 +16,20 @@ import {
     type TrainingCourse,
     type TrainingField,
     type TrainingMajor,
+    type TrainingObjectType,
 } from '@workspace/db'
 import {
     useCountStudent,
     useFindManyCurriculumVersion,
-    useFindManyDM_GioiTinh,
     useFindManyFixedClass,
     useFindManyStudent,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+// import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -51,13 +52,13 @@ export default function UserProfilePageDs() {
         trainingCourse: undefined,
         trainingMajors: undefined,
         curriculumVersion: undefined,
+        trainingObjectTypes: undefined,
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
 
     const router = useRouter()
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
     const { data = [], refetch } = useFindManyStudent({
         where: {
             trainingObjectType: {
@@ -78,27 +79,19 @@ export default function UserProfilePageDs() {
                         },
                     },
                 ],
-                ...(filters.gender
-                    ? {
-                          genderId: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
             },
             ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
                           mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
                       },
                   }
                 : {}),
@@ -181,8 +174,6 @@ export default function UserProfilePageDs() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: genderData = [] } = useFindManyDM_GioiTinh()
-
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         include: {
             trainingCourse: true,
@@ -219,27 +210,19 @@ export default function UserProfilePageDs() {
                         },
                     },
                 ],
-                ...(filters.gender
-                    ? {
-                          genderId: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
             },
             ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
                           mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
                       },
                   }
                 : {}),
@@ -306,11 +289,6 @@ export default function UserProfilePageDs() {
 
     const { onOpen: onOpenUpdate } = useDisclosure<{
         tag?: string
-        preSelectedValues?: {
-            trainingObjectTypeId?: string
-            trainingCourseId?: string
-            fixedClassId?: string
-        }
         id: string | null
     }>({
         tag: PutStudentModal.name,
@@ -377,7 +355,7 @@ export default function UserProfilePageDs() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 50,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
@@ -386,7 +364,7 @@ export default function UserProfilePageDs() {
                             {
                                 title: 'Mã sinh viên',
                                 dataIndex: 'code',
-                                width: 150,
+                                width: 130,
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
@@ -403,36 +381,42 @@ export default function UserProfilePageDs() {
                                 type: 'input',
                                 dataIndex: 'name',
                             },
-                            {
-                                title: 'Ngày sinh',
-                                align: 'center',
-                                width: 150,
-                                dataIndex: 'dateOfBirth',
-                                type: 'date',
-                                render: (__, record) =>
-                                    record.userProfile?.dateOfBirth
-                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Giới tính',
-                                align: 'center',
-                                width: 100,
-                                type: 'select',
-                                dataIndex: 'gender',
-                                options: genderData.map((i) => ({
-                                    label: i.sTen,
-                                    value: i.Id,
-                                })),
-                                render: (__, record) =>
-                                    record?.userProfile?.gender
-                                        ? record?.userProfile?.gender?.sTen
-                                        : '',
-                            },
+                            // {
+                            //     title: 'Ngày sinh',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     dataIndex: 'dateOfBirth',
+                            //     type: 'date',
+                            //     render: (__, record) =>
+                            //         record.userProfile?.dateOfBirth
+                            //             ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                            //             : '',
+                            // },
+                            // {
+                            //     title: 'Giới tính',
+                            //     align: 'center',
+                            //     width: 100,
+                            //     type: 'select',
+                            //     dataIndex: 'gender',
+                            //     options: genderData.map((i) => ({
+                            //         label: i.sTen,
+                            //         value: i.Id,
+                            //     })),
+                            //     render: (__, record) =>
+                            //         record?.userProfile?.gender
+                            //             ? record?.userProfile?.gender?.sTen
+                            //             : '',
+                            // },
                             {
                                 title: 'ĐTĐT',
                                 align: 'center',
                                 width: 150,
+                                type: 'select',
+                                dataIndex: 'trainingObjectTypes',
+                                options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
                                 render: (__, record) =>
                                     record.trainingObjectType ? record.trainingObjectType.name : '',
                             },
@@ -533,7 +517,7 @@ export default function UserProfilePageDs() {
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <ViewIcon
+                                        {/* <ViewIcon
                                             onClick={() =>
                                                 router.push(
                                                     ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
@@ -542,7 +526,7 @@ export default function UserProfilePageDs() {
                                                     )
                                                 )
                                             }
-                                        />
+                                        /> */}
                                         <EditIcon
                                             onClick={onOpenUpdate.bind(null, {
                                                 id: id,

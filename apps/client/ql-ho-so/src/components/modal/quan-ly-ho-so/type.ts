@@ -249,4 +249,5 @@ export type PutModalType = StudentType &
     FixedClassType &
     StaffProfileType & {
         file: UploadProps | null
+        userProfileId: string
     }

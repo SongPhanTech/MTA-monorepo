@@ -287,6 +287,7 @@ enum StudentThesisRegistrationStatus {
   PENDING
   ACCEPTED
   REJECTED
+  CANCELED
 
   @@schema("ql-dao-tao")
 }
@@ -1506,6 +1507,7 @@ model Student {
   createdAt                DateTime                       @default(now())
   updatedAt                DateTime                       @default(now()) @updatedAt()
   entryScore               Float?
+  note                     String?
   from                     DateTime?
   to                       DateTime?
   trainingLocation         TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
@@ -2438,7 +2440,6 @@ model UserProfile {
   deletedAt                  DateTime?
   createdAt                  DateTime                  @default(now())
   updatedAt                  DateTime                  @default(now()) @updatedAt()
-  userType                   UserType                  @default(OTHER)
   bLaNguoiDung               Boolean?
   bLaCanBoNhanVien           Boolean?
   bLaHocVien                 Boolean?
@@ -3893,9 +3894,10 @@ model DM_TrinhDoHocVan {
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
   userProfile UserProfile[]
 
-  @@schema("mta")
+  @@schema("ql-ho-so")
 }
 
 model DM_TrinhDoLyLuanChinhTri {

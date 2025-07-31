@@ -1,55 +1,40 @@
 import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { getMinioUrl } from '@workspace/constant'
 import {
     useCreateStudent,
-    useCreateUserProfile,
+    useFindManyCurriculumVersion,
     useFindManyFixedClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingObjectType,
     useFindManyUserProfile,
     useFindUniqueStudent,
+    useFindUniqueUserProfile,
     useUpdateStudent,
-    useUpdateUserProfile,
-    useUpsertUserProfile,
 } from '@workspace/db/hooks'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
-import type { UploadFile } from 'antd'
-import { Col, Form, message } from 'antd'
+import { Col, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import { $Enums } from '@workspace/db'
-import { useEffect, useState } from 'react'
+import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
+import { STUDENT_STATUS_OPTIONS } from '@constants/constants'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { PutStudentProfile, UserProfileType } from './quan-ly-ho-so/type'
+import type { PutStudentProfile } from './quan-ly-ho-so/type'
 
 dayjs.locale('vi')
 
 export type StudentModalProps = {
-    preSelectedValues?: {
-        trainingObjectTypeId?: string
-        trainingCourseId?: string
-        fixedClassId?: string
-        curriculumVersionId?: string
-    }
     id: string
-}
-
-type PreFillFormFields = {
-    trainingObjectTypeId?: string
-    fixedClassId?: string
-    trainingCourseId?: string
-    curriculumVersionId?: string
 }
 
 const PutStudentModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
-    const [userSelected, setUserSelected] = useState<UserProfileType>()
-    const [avatar, setAvatar] = useState<UploadFile[]>([])
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
         tag: PutStudentModal.name,
         onClose: form.resetFields,
     })
-    const { id, preSelectedValues } = input ?? {}
+    const { id } = input ?? {}
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
@@ -63,17 +48,7 @@ const PutStudentModal = () => {
         {
             where: { id: id },
             include: {
-                userProfile: {
-                    include: {
-                        nationality: true,
-                        religion: true,
-                        ethnicity: true,
-                        rank: true,
-                        academicRankType: true,
-                        academicDegreeType: true,
-                        positionCPV: true,
-                    },
-                },
+                userProfile: true,
                 trainingObjectType: true,
                 fixedClass: {
                     include: {
@@ -81,24 +56,76 @@ const PutStudentModal = () => {
                     },
                 },
                 trainingType: true,
-                registrationArea: true,
                 trainingLevel: true,
-                priorityObject: true,
             },
         },
         {
             enabled: !!id,
         }
     )
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse()
 
-    const { mutateAsync: createUserProfile } = useCreateUserProfile()
-    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
+    const selectedTrainingCourseId = Form.useWatch('trainingCourseId', form)
+    const selectedCurriculumVersionId = Form.useWatch('curriculumVersionId', form)
+
+    const filteredFixedClasses = useMemo(() => {
+        if (!selectedTrainingCourseId && !selectedCurriculumVersionId) {
+            return fixedClassData
+        }
+
+        return fixedClassData.filter((cls) => {
+            const matchesCourse =
+                !selectedTrainingCourseId || cls.trainingCourseId === selectedTrainingCourseId
+            const matchesCurriculum =
+                !selectedCurriculumVersionId ||
+                cls.curriculumVersionId === selectedCurriculumVersionId
+            return matchesCourse && matchesCurriculum
+        })
+    }, [fixedClassData, selectedTrainingCourseId, selectedCurriculumVersionId])
+
+    // Lọc khóa học dựa trên chương trình đào tạo đã chọn
+    const filteredTrainingCourses = useMemo(() => {
+        if (!selectedCurriculumVersionId) {
+            return trainingCourseData
+        }
+
+        // Lấy danh sách khóa học có chứa chương trình đào tạo đã chọn
+        const coursesWithCurriculum = fixedClassData
+            .filter((cls) => cls.curriculumVersionId === selectedCurriculumVersionId)
+            .map((cls) => cls.trainingCourseId)
+            .filter((courseId, index, array) => array.indexOf(courseId) === index) // Remove duplicates
+
+        return trainingCourseData.filter((course) => coursesWithCurriculum.includes(course.id))
+    }, [trainingCourseData, fixedClassData, selectedCurriculumVersionId])
+
+    // Cập nhật handleFixedClassChange hoàn chỉnh
+    const handleFixedClassChange = (classId: string) => {
+        const selectedClass = fixedClassData.find((cls) => cls.id === classId)
+
+        if (selectedClass?.trainingCourseId) {
+            const newCourse = selectedClass.trainingCourseId
+
+            // Tự động set khóa học tương ứng với lớp
+            form.setFieldValue('trainingCourseId', newCourse)
+        }
+
+        // SỬA: Tự động set phiên bản chương trình đào tạo
+        if (selectedClass?.curriculumVersionId) {
+            const newCurriculum = selectedClass.curriculumVersionId
+
+            form.setFieldValue('curriculumVersionId', newCurriculum)
+        }
+    }
+
     const { mutateAsync: createStudent } = useCreateStudent()
     const { mutateAsync: updateStudent } = useUpdateStudent()
-    const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
     const { data = [] } = useFindManyUserProfile({
         where: {
-            userType: $Enums.UserType.CIVILIAN_STUDENT,
+            bLaHocVien: true,
             educationAndTraining: {
                 some: {
                     deletedAt: null, // Chỉ lấy Student chưa bị xóa mềm
@@ -106,154 +133,87 @@ const PutStudentModal = () => {
             },
         },
         select: {
+            firstName: true,
+            lastName: true,
             idCardNumber: true,
         },
     })
-
-    const buildUserProfileUpdateData = (output: UserProfileType, fileName?: string) => ({
-        avatar: fileName || undefined,
-        userType: output.userType,
-        firstName: output.firstName,
-        healthInsuranceNumber: output.healthInsuranceNumber,
-        bankAccountNumber: output.bankAccountNumber,
-        bankName: output.bankName,
-        lastName: output.lastName,
-        currentAddress: output.currentAddress,
-        provinceCurrentAddressId: output.provinceCurrentAddressId,
-        communeCurrentAddressId: output.communeCurrentAddressId,
-        provinceOfBirthId: output.provinceOfBirthId,
-        communeOfBirthId: output.communeOfBirthId,
-        provincePermanentAddressId: output.provincePermanentAddressId,
-        communePermanentAddressId: output.communePermanentAddressId,
-        provinceHometownId: output.provinceHometownId,
-        communeHometownId: output.communeHometownId,
-        dateOfBirth: output.dateOfBirth,
-        placeOfBirth: output.placeOfBirth,
-        homeTown: output.homeTown,
-        idCardNumber: output.idCardNumber,
-        idCardDate: output.idCardDate,
-        officerNumber: output.officerNumber,
-        genderId: output.genderId,
-        permanentAddress: output.permanentAddress,
-        temporaryAddress: output.temporaryAddress,
-        contactAddress: output.contactAddress,
-        phoneNumber: output.phoneNumber,
-        email: output.email,
-        nationalityId: output.nationalityId,
-        religionId: output.religionId,
-        ethnicityId: output.ethnicityId,
-        unionDate: output.unionDate,
-        unionPlace: output.unionPlace,
-        CPVJoinDate: output.CPVJoinDate,
-        officialCPVDate: output.officialCPVDate,
-        CPVJoinPlace: output.CPVJoinPlace,
-        tenureDate: output.tenureDate,
-        enlistmentDate: output.enlistmentDate,
-        dischargeDate: output.dischargeDate,
-        familyName: output.familyName,
-        familyPhone: output.familyPhone,
-        rankId: output.rankId,
-        levelId: output.levelId,
-        academicDegreeTypeId: output.academicDegreeTypeId,
-        academicRankTypeId: output.academicRankTypeId,
-    })
-
-    const buildStudentUpdateData = (output: PutStudentProfile) => ({
-        code: output.code,
-        trainingObjectTypeId: output.trainingObjectTypeId,
-        fixedClassId: output.fixedClassId,
-        registrationAreaId: output.registrationAreaId,
-        status: output.status,
-        userProfileId: output.userProfileId,
-        curriculumVersionId: output.curriculumVersionId,
-    })
-
-    const buildStudentCreateData = (output: PutStudentProfile, userProfileId: string) => ({
-        ...buildStudentUpdateData(output),
-        userProfileId,
-    })
-
-    async function onOk(output?: PutStudentProfile) {
-        if (!output) return
-        let fileName = output.avatar
-        if (output.file) {
-            const resPresignedUrl = await generatePresignedUrl({
-                path: 'avatar',
-                extension: output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
-            })
-
-            await fetch(resPresignedUrl.data.url, {
-                method: 'PUT',
-                body: output.file.fileList?.[0]?.originFileObj,
-            })
-
-            fileName = resPresignedUrl.data.fileName
+    const idCardNumber = Form.useWatch('idCardNumber', form)
+    const { data: cccdUserProfileData } = useFindUniqueUserProfile(
+        {
+            where: {
+                idCardNumber: idCardNumber,
+            },
+            include: {
+                educationAndTraining: {
+                    include: {
+                        fixedClass: {
+                            include: {
+                                trainingCourse: true,
+                                curriculumVersion: {
+                                    include: {
+                                        curriculum: {
+                                            include: {
+                                                trainingMajor: true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!idCardNumber,
         }
+    )
+
+    const idCardOptions = useMemo(() => {
+        return data.map((profile) => ({
+            value: profile.idCardNumber,
+            label: `${profile.idCardNumber} - ${profile.lastName} ${profile.firstName}`,
+        }))
+    }, [data])
+
+    async function onOk(output: PutStudentProfile) {
+        if (!output || !cccdUserProfileData?.id) return
         try {
             showSpinner()
 
-            const userProfileData = buildUserProfileUpdateData(output, fileName ?? undefined)
-
-            const studentDataUpdate = buildStudentUpdateData(output)
-
             if (id) {
-                // UPDATE MODE
-                const promises = []
+                await updateStudent({
+                    data: {
+                        userProfileId: cccdUserProfileData?.id,
+                        fixedClassId: output.fixedClassId,
+                        trainingObjectTypeId: output.trainingObjectTypeId,
+                        registrationAreaId: output.registrationAreaId,
+                        status: output.status,
+                        curriculumVersionId: output.curriculumVersionId,
+                        note: output.note,
+                        code: output.code,
+                    },
+                    where: {
+                        id: id,
+                    },
+                })
 
-                // Cập nhật UserProfile nếu có
-                if (studentData?.userProfile?.id) {
-                    promises.push(
-                        updateUserProfile({
-                            data: userProfileData,
-                            where: { id: studentData?.userProfile?.id },
-                        })
-                    )
-                }
-
-                // Cập nhật Student
-                promises.push(
-                    updateStudent({
-                        data: studentDataUpdate,
-                        where: { id: id },
-                    })
-                )
-
-                await Promise.all(promises)
-
-                message.success('Cập nhật sinh viên thành công')
+                message.success('Cập nhật sinh viên, học viên thành công')
             } else {
-                // CREATE MODE
-                if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
-                    const userProfile = await upsertUserProfile({
-                        where: {
-                            idCardNumber: output.idCardNumber,
-                        },
-                        create: userProfileData,
-                        update: userProfileData,
-                    })
-
-                    await updateStudent({
-                        data: studentDataUpdate,
-                        where: {
-                            id: id,
-                        },
-                    })
-
-                    message.success('Cập nhật sinh viên thành công')
-                } else {
-                    const userProfile = await createUserProfile({
-                        data: userProfileData,
-                    })
-
-                    if (!userProfile?.id) {
-                        throw new Error('Tạo userProfile thất bại: Không có ID trả về')
-                    }
-
-                    const studentCreateData = buildStudentCreateData(output, userProfile.id)
-                    await createStudent({ data: studentCreateData })
-
-                    message.success('Thêm sinh viên thành công')
-                }
+                await createStudent({
+                    data: {
+                        userProfileId: cccdUserProfileData?.id,
+                        fixedClassId: output.fixedClassId,
+                        trainingObjectTypeId: output.trainingObjectTypeId,
+                        registrationAreaId: output.registrationAreaId,
+                        status: output.status,
+                        curriculumVersionId: output.curriculumVersionId,
+                        note: output.note,
+                        code: output.code,
+                    },
+                })
+                message.success('Thêm mới sinh viên, học viên thành công')
             }
 
             // refetch() lại danh sách level
@@ -267,7 +227,20 @@ const PutStudentModal = () => {
         }
         hideSpinner()
     }
+    // Hàm fill thông tin từ dữ liệu cccdUserProfileData
+    const fillUserInfo = useCallback(
+        (userData: any) => {
+            if (!userData) return
 
+            // Fill thông tin cơ bản từ UserProfile
+            form.setFieldsValue({
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                userProfileId: userData.id,
+            })
+        },
+        [form]
+    )
     useEffect(() => {
         if (studentData) {
             form.setFieldsValue({
@@ -275,113 +248,25 @@ const PutStudentModal = () => {
                 code: studentData.code,
                 trainingObjectTypeId: studentData.trainingObjectTypeId ?? undefined,
                 fixedClassId: studentData.fixedClassId ?? undefined,
-                registrationAreaId: studentData.registrationAreaId ?? undefined,
                 trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
                 status: studentData.status,
                 curriculumVersionId: studentData.curriculumVersionId ?? undefined,
-                healthInsuranceNumber: studentData.userProfile?.healthInsuranceNumber,
-                bankAccountNumber: studentData.userProfile?.bankAccountNumber,
-                bankName: studentData.userProfile?.bankName,
-                avatar: getMinioUrl(studentData.userProfile?.avatar),
 
                 // UserProfile fields với ID
                 firstName: studentData.userProfile?.firstName,
                 lastName: studentData.userProfile?.lastName,
-                dateOfBirth: studentData.userProfile?.dateOfBirth
-                    ? dayjs(studentData.userProfile.dateOfBirth)
-                    : null,
-                placeOfBirth: studentData.userProfile?.placeOfBirth,
-                homeTown: studentData.userProfile?.homeTown,
-                officerNumber: studentData.userProfile?.officerNumber,
-                idCardNumber: studentData.userProfile?.idCardNumber,
-                idCardDate: studentData.userProfile?.idCardDate
-                    ? dayjs(studentData.userProfile.idCardDate)
-                    : null,
-                genderId: studentData.userProfile?.genderId ?? undefined,
-                permanentAddress: studentData.userProfile?.permanentAddress,
-                temporaryAddress: studentData.userProfile?.temporaryAddress,
-                contactAddress: studentData.userProfile?.contactAddress,
-                phoneNumber: studentData.userProfile?.phoneNumber,
-                email: studentData.userProfile?.email,
-                nationalityId: studentData.userProfile?.nationalityId ?? undefined,
-                religionId: studentData.userProfile?.religionId ?? undefined,
-                ethnicityId: studentData.userProfile?.ethnicityId ?? undefined,
-                unionDate: studentData.userProfile?.unionDate
-                    ? dayjs(studentData.userProfile.unionDate)
-                    : null,
-                unionPlace: studentData.userProfile?.unionPlace,
-                CPVJoinDate: studentData.userProfile?.CPVJoinDate
-                    ? dayjs(studentData.userProfile.CPVJoinDate)
-                    : null,
-                officialCPVDate: studentData.userProfile?.officialCPVDate
-                    ? dayjs(studentData.userProfile.officialCPVDate)
-                    : null,
-                CPVJoinPlace: studentData.userProfile?.CPVJoinPlace,
-                tenureDate: studentData.userProfile?.tenureDate
-                    ? dayjs(studentData.userProfile.tenureDate)
-                    : null,
-                enlistmentDate: studentData.userProfile?.enlistmentDate
-                    ? dayjs(studentData.userProfile.enlistmentDate)
-                    : null,
-                dischargeDate: studentData.userProfile?.dischargeDate
-                    ? dayjs(studentData.userProfile.dischargeDate)
-                    : null,
-                familyName: studentData.userProfile?.familyName,
-                familyPhone: studentData.userProfile?.familyPhone,
-                rankId: studentData.userProfile?.rankId ?? undefined,
-                levelId: studentData.userProfile?.levelId,
-                academicDegreeTypeId: studentData.userProfile?.academicDegreeTypeId ?? undefined,
-                academicRankTypeId: studentData.userProfile?.academicRankTypeId ?? undefined,
-                positionCPVId: studentData.userProfile?.positionCPVId,
-            })
-            // setUserSelected(studentData.userProfile)
 
-            if (studentData.userProfile?.avatar) {
-                setAvatar([
-                    {
-                        uid: '-1',
-                        name: 'avatar.png',
-                        status: 'done',
-                        url: getMinioUrl(studentData.userProfile.avatar),
-                    },
-                ])
-            }
+                idCardNumber: studentData.userProfile?.idCardNumber,
+            })
         }
     }, [studentData, form])
 
+    // Effect để fill thông tin khi có dữ liệu từ API
     useEffect(() => {
-        if (isOpen && preSelectedValues) {
-            const fieldsToSet: PreFillFormFields = {}
-
-            if (preSelectedValues.trainingObjectTypeId) {
-                fieldsToSet.trainingObjectTypeId = preSelectedValues.trainingObjectTypeId
-            }
-
-            if (preSelectedValues.curriculumVersionId) {
-                fieldsToSet.curriculumVersionId = preSelectedValues.curriculumVersionId
-            }
-
-            if (preSelectedValues.fixedClassId) {
-                fieldsToSet.fixedClassId = preSelectedValues.fixedClassId
-
-                const selectedClass = fixedClassData.find(
-                    (cls) => cls.id === preSelectedValues.fixedClassId
-                )
-                if (selectedClass?.trainingCourseId) {
-                    fieldsToSet.trainingCourseId = selectedClass.trainingCourseId
-                }
-                if (selectedClass?.curriculumVersionId && !preSelectedValues.curriculumVersionId) {
-                    fieldsToSet.curriculumVersionId = selectedClass.curriculumVersionId
-                }
-            } else if (preSelectedValues.trainingCourseId) {
-                fieldsToSet.trainingCourseId = preSelectedValues.trainingCourseId
-            }
-
-            if (Object.keys(fieldsToSet).length > 0) {
-                form.setFieldsValue(fieldsToSet)
-            }
+        if (cccdUserProfileData && !id) {
+            fillUserInfo(cccdUserProfileData)
         }
-    }, [isOpen, preSelectedValues, form, fixedClassData])
+    }, [cccdUserProfileData, id, fillUserInfo])
 
     return (
         <PutFormModal
@@ -390,13 +275,116 @@ const PutStudentModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa sinh viên' : 'Thêm sinh viên'}
+            title={id ? 'Chỉnh sửa sinh viên, học viên' : 'Thêm sinh viên, học viên'}
             className="w-[1000px]"
             layout="vertical"
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
-            <Col span={24} />
+            <Col span={24}>
+                <Row gutter={16}>
+                    <Col sm={12} lg={12}>
+                        <FormItem form={form} name="idCardNumber" label="Số CCCD" required>
+                            <Select
+                                maxTagCount={'responsive'}
+                                placeholder="Chọn phiên bản ngân hàng câu hỏi"
+                                options={idCardOptions}
+                                disabled={!!id}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="code" label="Mã sinh viên, học viên" required>
+                            <Input placeholder="Nhập mã sinh viên, học viên" />
+                        </FormItem>
+                    </Col>
+                    <Col sm={12} lg={12}>
+                        <FormItem form={form} name="lastName" label="Họ và tên đệm" required>
+                            <Input disabled placeholder="Nhập họ và tên đệm" />
+                        </FormItem>
+                    </Col>
+                    <Col sm={12} lg={12}>
+                        <FormItem form={form} name="firstName" label="Tên" required>
+                            <Input disabled placeholder="Nhập tên" />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="trainingObjectTypeId"
+                            label="Đối tượng đào tạo"
+                            required
+                        >
+                            <Select
+                                placeholder="Chọn đối tượng đào tạo"
+                                options={trainingObjectTypeData.map((value) => ({
+                                    value: value.id,
+                                    label: value.name,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="fixedClassId" label="Lớp">
+                            <Select
+                                placeholder="Chọn lớp"
+                                optionFilterProp="label"
+                                onChange={handleFixedClassChange}
+                                options={filteredFixedClasses.map((value) => ({
+                                    value: value.id,
+                                    label: `${value.code}-${value.name}`,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="trainingCourseId" label="Khóa">
+                            <Select
+                                placeholder="Chọn khóa"
+                                options={filteredTrainingCourses.map((value) => ({
+                                    value: value.id,
+                                    label: value.name,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="curriculumVersionId"
+                            label="Chương trình đào tạo"
+                        >
+                            <Select
+                                placeholder={'Chọn chương trình đào tạo'}
+                                showSearch
+                                optionFilterProp="label"
+                                options={curriculumVersionData.map((value) => ({
+                                    value: value.id,
+                                    label: value.name,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="status" label="Trạng thái" required>
+                            <Select
+                                placeholder="Chọn trạng thái"
+                                options={STUDENT_STATUS_OPTIONS.map((v) => {
+                                    return {
+                                        value: v.value,
+                                        label: v.label,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="note" label="Ghi chú">
+                            <Input placeholder="Nhập ghi chú" />
+                        </FormItem>
+                    </Col>
+                </Row>
+            </Col>
         </PutFormModal>
     )
 }
