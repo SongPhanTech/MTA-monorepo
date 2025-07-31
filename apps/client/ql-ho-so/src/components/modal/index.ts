@@ -8,7 +8,6 @@ import HinhThucKhenThuongChinhQuyenModal from './danh-muc-chung/put-hinh-thuc-kh
 import HinhThucKhenThuongCuaDangModal from './danh-muc-chung/put-hinh-thuc-khen-thuong-cua-dang'
 import LoaiHinhCongTacModal from './danh-muc-chung/put-loai-hinh-cong-tac'
 import LoaiHinhDiHocTapModal from './danh-muc-chung/put-loai-hinh-di-hoc-tap'
-import MoiQuanHeModal from './danh-muc-chung/put-quan-he-than-nhan'
 import TinhTrangCongTacModal from './danh-muc-chung/put-tinh-trang-cong-viec'
 import TinhTrangDiHocTapModal from './danh-muc-chung/put-tinh-trang-di-hoc-tap'
 import TinhTrangHonNhanModal from './danh-muc-chung/put-tinh-trang-hon-nhan'
@@ -56,7 +55,6 @@ export {
     HinhThucKhenThuongCuaDangModal,
     LoaiHinhCongTacModal,
     LoaiHinhDiHocTapModal,
-    MoiQuanHeModal,
     TinhTrangCongTacModal,
     TinhTrangDiHocTapModal,
     TinhTrangHonNhanModal,
