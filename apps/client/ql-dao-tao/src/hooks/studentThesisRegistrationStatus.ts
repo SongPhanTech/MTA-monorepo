@@ -11,6 +11,7 @@ export const useStudentThesisRegistrationStatusOptions = () => {
         { value: StudentThesisRegistrationStatus.PENDING, label: 'Chờ duyệt', color: 'blue' },
         { value: StudentThesisRegistrationStatus.ACCEPTED, label: 'Đã chấp nhận', color: 'green' },
         { value: StudentThesisRegistrationStatus.REJECTED, label: 'Đã từ chối', color: 'red' },
+        { value: StudentThesisRegistrationStatus.CANCELED, label: 'Đã hủy', color: 'volcano' },
     ]
 
     const getStudentThesisRegistrationStatusLabel = (

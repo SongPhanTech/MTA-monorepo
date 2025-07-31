@@ -2,8 +2,9 @@ import '../base'
 import '../ql-ho-so/profile'
 
 model DM_TrinhDoHocVan extends Base {
+  name        String        @unique
   userProfile UserProfile[]
-  @@schema("mta")
+  @@schema("ql-ho-so")
 }
 
 model DM_TrinhDoLyLuanChinhTri extends Base {
