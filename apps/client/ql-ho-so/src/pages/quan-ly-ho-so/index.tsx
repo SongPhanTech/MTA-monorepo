@@ -6,7 +6,12 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS, USER_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useCountUserProfile, useFindManyUserProfile, useUpdateStudent } from '@workspace/db/hooks'
+import {
+    useCountUserProfile,
+    useFindManyDM_GioiTinh,
+    useFindManyUserProfile,
+    useUpdateStudent,
+} from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -76,13 +81,13 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            // ...(filters.gender
-            //     ? {
-            //           gender: {
-            //               in: filters.gender,
-            //           },
-            //       }
-            //     : {}),
+            ...(filters.gender
+                ? {
+                      genderId: {
+                          in: filters.gender,
+                      },
+                  }
+                : {}),
             ...(filters.phoneNumber
                 ? {
                       phoneNumber: {
@@ -99,6 +104,9 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
+        },
+        include: {
+            gender: true,
         },
     })
 
@@ -136,13 +144,13 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            // ...(filters.gender
-            //     ? {
-            //           gender: {
-            //               in: filters.gender,
-            //           },
-            //       }
-            //     : {}),
+            ...(filters.gender
+                ? {
+                      genderId: {
+                          in: filters.gender,
+                      },
+                  }
+                : {}),
             ...(filters.phoneNumber
                 ? {
                       phoneNumber: {
@@ -164,6 +172,8 @@ export default function UserProfilePageDs() {
             fullname: 'asc',
         },
     })
+
+    const { data: genderData = [] } = useFindManyDM_GioiTinh()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -276,22 +286,20 @@ export default function UserProfilePageDs() {
                                         ? dayjs(record.dateOfBirth).format('DD/MM/YYYY')
                                         : '',
                             },
-                            // {
-                            //     title: 'Giới tính',
-                            //     align: 'center',
-                            //     width: 100,
-                            //     type: 'select',
-                            //     dataIndex: 'gender',
-                            //     options: [
-                            //         { label: 'Nam', value: 'Male' },
-                            //         { label: 'Nữ', value: 'Female' },
-                            //     ],
+                            {
+                                title: 'Giới tính',
+                                align: 'center',
+                                width: 100,
+                                type: 'select',
+                                dataIndex: 'gender',
+                                options: genderData.map((i) => ({
+                                    label: i.sTen,
+                                    value: i.Id,
+                                })),
 
-                            //     render: (__, record) =>
-                            //         record?.gender
-                            //             ? GENDER_MEAN[record?.gender as keyof typeof GENDER_MEAN]
-                            //             : '',
-                            // },
+                                render: (__, record) =>
+                                    record?.gender ? record?.gender?.sTen : '',
+                            },
                             {
                                 title: 'SĐT',
                                 align: 'center',

@@ -7,11 +7,7 @@ import { PutHocvienModal, PutUpdateProfileModal, PutUploadProfileModal } from '@
 import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    FIXED_CLASS_STUDENT_STATUS,
-    GENDER_MEAN,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
@@ -24,6 +20,7 @@ import {
 import {
     useCountStudent,
     useFindManyCurriculumVersion,
+    useFindManyDM_GioiTinh,
     useFindManyFixedClass,
     useFindManyStudent,
     useFindManyTemplateFile,
@@ -91,13 +88,13 @@ export default function UserProfilePageDs() {
                         },
                     },
                 ],
-                // ...(filters.gender
-                //     ? {
-                //           gender: {
-                //               in: filters.gender,
-                //           },
-                //       }
-                //     : {}),
+                ...(filters.gender
+                    ? {
+                          genderId: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -201,6 +198,8 @@ export default function UserProfilePageDs() {
         },
     })
 
+    const { data: genderData = [] } = useFindManyDM_GioiTinh()
+
     const { data: trainingFieldData = [] } = useFindManyTrainingField()
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
@@ -231,13 +230,13 @@ export default function UserProfilePageDs() {
                         },
                     },
                 ],
-                // ...(filters.gender
-                //     ? {
-                //           gender: {
-                //               in: filters.gender,
-                //           },
-                //       }
-                //     : {}),
+                ...(filters.gender
+                    ? {
+                          genderId: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -575,16 +574,14 @@ export default function UserProfilePageDs() {
                                 width: 100,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                options: [
-                                    { label: 'Nam', value: 'Male' },
-                                    { label: 'Nữ', value: 'Female' },
-                                ],
+                                options: genderData.map((i) => ({
+                                    label: i.sTen,
+                                    value: i.Id,
+                                })),
 
                                 render: (__, record) =>
                                     record?.userProfile?.gender
-                                        ? GENDER_MEAN[
-                                              record.userProfile.gender as keyof typeof GENDER_MEAN
-                                          ]
+                                        ? record?.userProfile?.gender?.sTen
                                         : '',
                             },
                             {

@@ -5,6 +5,7 @@ import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import {
     useFindManyDM_DanToc,
+    useFindManyDM_GioiTinh,
     useFindManyDM_QuocGia,
     useFindManyDM_TonGiao,
 } from '@workspace/db/hooks'
@@ -19,6 +20,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: nationalityData = [] } = useFindManyDM_QuocGia()
     const { data: religionData = [] } = useFindManyDM_TonGiao()
     const { data: ethnicityData = [] } = useFindManyDM_DanToc()
+    const { data: genderData = [] } = useFindManyDM_GioiTinh()
 
     const renderContent = () => {
         return (
@@ -167,19 +169,19 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        {/* <FormItem form={form} name="gender" label="Giới tính" className="mb-0">
+                        <FormItem form={form} name="genderId" label="Giới tính" className="mb-0">
                             <Select
                                 allowClear
                                 placeholder="Chọn giới tính"
                                 className="h-9"
-                                options={GENDER_LIST.map((i) => {
+                                options={genderData.map((i) => {
                                     return {
-                                        value: i.id,
-                                        label: i.name,
+                                        value: i.Id,
+                                        label: i.sTen,
                                     }
                                 })}
                             />
-                        </FormItem> */}
+                        </FormItem>
                     </Col>
                 </Row>
                 <div className="mb-6 font-semibold text-base">CCCD/CMND</div>

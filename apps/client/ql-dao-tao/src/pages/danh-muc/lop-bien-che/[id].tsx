@@ -1,17 +1,14 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { AddStudentToFixedClassModal, ModalPrintToDSHV } from '@components/modal'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    FIXED_CLASS_STUDENT_STATUS,
-    GENDER_MEAN,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Student } from '@workspace/db'
 import {
     useFindManyCurriculumVersion,
+    useFindManyDM_GioiTinh,
     useFindManyStudent,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
@@ -58,6 +55,8 @@ export default function StudentFixedClassPage() {
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
         orderBy: { name: 'asc' },
     })
+
+    const { data: genderData = [] } = useFindManyDM_GioiTinh()
 
     const { data: fixedClass } = useFindUniqueFixedClass(
         {
@@ -107,13 +106,13 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
-                // ...(filters.gender
-                //     ? {
-                //           gender: {
-                //               in: filters.gender,
-                //           },
-                //       }
-                //     : {}),
+                ...(filters.gender
+                    ? {
+                          genderId: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -416,16 +415,18 @@ export default function StudentFixedClassPage() {
                                 width: 120,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                options: [
-                                    { label: 'Nam', value: 'Male' },
-                                    { label: 'Nữ', value: 'Female' },
-                                ],
+                                // options: [
+                                //     { label: 'Nam', value: 'Male' },
+                                //     { label: 'Nữ', value: 'Female' },
+                                // ],
+                                options: genderData.map((i) => ({
+                                    label: i.sTen,
+                                    value: i.Id,
+                                })),
 
                                 render: (__, record) =>
                                     record?.userProfile?.gender
-                                        ? GENDER_MEAN[
-                                              record.userProfile.gender as keyof typeof GENDER_MEAN
-                                          ]
+                                        ? record?.userProfile?.gender?.sTen
                                         : '',
                             },
                             {
