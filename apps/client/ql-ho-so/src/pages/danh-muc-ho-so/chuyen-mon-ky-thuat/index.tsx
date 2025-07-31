@@ -1,40 +1,41 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { MoiQuanHeModal } from '@components/modal'
+import { ChuyenMonKyThuatModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { DM_MoiQuanHe } from '@workspace/db'
+import type { DM_ChuyenMonKyThuat } from '@workspace/db'
 import {
-    useCountDM_MoiQuanHe,
-    useFindManyDM_MoiQuanHe,
-    useUpdateDM_MoiQuanHe,
+    useCountDM_ChuyenMonKyThuat,
+    useFindManyDM_ChuyenMonKyThuat,
+    useUpdateDM_ChuyenMonKyThuat,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export default function FamilyRelationship() {
+
+export default function TechnicalExpertise() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const { onOpen } = useDisclosure<Partial<DM_MoiQuanHe>>({
-        tag: MoiQuanHeModal.name,
+    const { onOpen } = useDisclosure<Partial<DM_ChuyenMonKyThuat>>({
+        tag: ChuyenMonKyThuatModal.name,
     })
 
-    const { data = [], refetch } = useFindManyDM_MoiQuanHe()
-    const { data: count } = useCountDM_MoiQuanHe()
-    const { mutateAsync: updateMoiQuanHe } = useUpdateDM_MoiQuanHe()
+    const { data = [], refetch } = useFindManyDM_ChuyenMonKyThuat()
+    const { data: count } = useCountDM_ChuyenMonKyThuat()
+    const { mutateAsync: updateChuyenMonKyThuat } = useUpdateDM_ChuyenMonKyThuat()
 
     const handleModal = () => {
         onOpen()
     }
 
-    const handleDeleteTruongDaoTao = async (id: string) => {
+    const handleDeleteChuyenMonKyThuat = async (id: string) => {
         try {
             showSpinner()
-            await updateMoiQuanHe({
+            await updateChuyenMonKyThuat({
                 where: {
                     id,
                 },
@@ -79,7 +80,7 @@ export default function FamilyRelationship() {
                                     index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
                             {
-                                title: 'Tên mối quan hệ',
+                                title: 'Trình độ chuyên môn kỹ thuật',
                                 width: 150,
                                 align: 'center',
                                 render: (_, record) => record.name || '',
@@ -105,7 +106,7 @@ export default function FamilyRelationship() {
                                             <DeleteIcon
                                                 popConfirm={{
                                                     onConfirm: () =>
-                                                        handleDeleteTruongDaoTao(record.id),
+                                                        handleDeleteChuyenMonKyThuat(record.id),
                                                 }}
                                                 onClick={(e) => e.stopPropagation()}
                                             />
@@ -136,6 +137,6 @@ export default function FamilyRelationship() {
     )
 }
 
-FamilyRelationship.getLayout = function getLayout(page: React.ReactElement) {
+TechnicalExpertise.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
