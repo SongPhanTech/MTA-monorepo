@@ -22,9 +22,7 @@ export default function TabQuanLyHoSo({
         {
             key: '1',
             label: 'Thông tin cá nhân',
-            children: (
-                <ThongTinCaNhanTab avatar={avatar} setAvatar={setAvatar} id={id} type={type} />
-            ),
+            children: <ThongTinCaNhanTab id={id} type={type} />,
             forceRender: true,
         },
         {

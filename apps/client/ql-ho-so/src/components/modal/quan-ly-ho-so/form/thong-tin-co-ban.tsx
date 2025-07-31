@@ -1,7 +1,6 @@
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
-import { GENDER_LIST } from '@constants/constants'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import {
@@ -20,6 +19,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: nationalityData = [] } = useFindManyDM_QuocGia()
     const { data: religionData = [] } = useFindManyDM_TonGiao()
     const { data: ethnicityData = [] } = useFindManyDM_DanToc()
+
     const renderContent = () => {
         return (
             <div className="px-6">
@@ -167,7 +167,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="gender" label="Giới tính" className="mb-0">
+                        {/* <FormItem form={form} name="gender" label="Giới tính" className="mb-0">
                             <Select
                                 allowClear
                                 placeholder="Chọn giới tính"
@@ -179,7 +179,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                     }
                                 })}
                             />
-                        </FormItem>
+                        </FormItem> */}
                     </Col>
                 </Row>
                 <div className="mb-6 font-semibold text-base">CCCD/CMND</div>

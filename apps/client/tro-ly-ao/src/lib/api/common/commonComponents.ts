@@ -331,6 +331,229 @@ export const usePresignedGetObject = <TData = Schemas.UrlDto,>(
   });
 };
 
+export type SqlTransactionError = Fetcher.ErrorWrapper<undefined>;
+
+export type SqlTransactionResponse = (void | null)[];
+
+export type SqlTransactionRequestBody = {
+  model:
+    | "Config"
+    | "QuestionBank"
+    | "Difficulty"
+    | "KnowledgeBlock"
+    | "Question"
+    | "Answer"
+    | "Exam"
+    | "TestStructureRule"
+    | "ExamBank"
+    | "ExamBankQuestion"
+    | "ExamSession"
+    | "StudentSubjectScore"
+    | "ArchivedCertificateOnStudentSubjectScore"
+    | "ArchivedCertificate"
+    | "ArchivedAwardOnStudentSubjectScore"
+    | "ArchivedAward"
+    | "SchoolYear"
+    | "Semester"
+    | "Milestone"
+    | "TrainingCourse"
+    | "FixedClass"
+    | "Curriculum"
+    | "CurriculumVersion"
+    | "Subject"
+    | "SubjectVersion"
+    | "TrainingBlockSubject"
+    | "SubjectClass"
+    | "ClassSchedule"
+    | "TrainingObjectType"
+    | "PriorityObject"
+    | "TrainingType"
+    | "TrainingLevel"
+    | "TrainingForm"
+    | "TrainingLocation"
+    | "Building"
+    | "Room"
+    | "TrainingField"
+    | "TrainingFieldOnTrainingObjectType"
+    | "TrainingMajor"
+    | "TrainingMajorOnTrainingObjectType"
+    | "TrainingBlock"
+    | "TrainingBlockOnCurriculumVersion"
+    | "TrainingTime"
+    | "DiplomaType"
+    | "ScoreConvert"
+    | "TrainingKPI"
+    | "Student"
+    | "StudentSemesterResult"
+    | "StudentYearResult"
+    | "Notification"
+    | "Group"
+    | "Role"
+    | "Permission"
+    | "ChatBotConfig"
+    | "Document"
+    | "FAQ"
+    | "Prompt"
+    | "Conversation"
+    | "Message"
+    | "DM_CapBac"
+    | "DM_ChucDanh"
+    | "DM_ChucVu"
+    | "DM_HocHam"
+    | "DM_HocVi"
+    | "DM_ChungChiTinHoc"
+    | "DM_DanToc"
+    | "DM_DonVi"
+    | "DM_DonViHanhChinh"
+    | "DM_KhuVuc_DiaLy"
+    | "DM_NgoaiNgu"
+    | "DM_TonGiao"
+    | "DM_TrinhDoNgoaiNgu"
+    | "DM_TrinhDoTinHoc"
+    | "DM_GioiTinh"
+    | "DM_NhanVien"
+    | "DM_PhanCap_ChatLuong_TrangThietBi"
+    | "DM_PhanLoai_CSKT"
+    | "DM_NhomNguoiDung"
+    | "DM_NhomUngDung"
+    | "DM_QuocGia"
+    | "DM_Tinh"
+    | "DM_QuanHuyen"
+    | "DM_XaPhuong"
+    | "DM_ViTriCongViec"
+    | "UserProfile"
+    | "HocHam"
+    | "HocVi"
+    | "Relative"
+    | "TrinhDoLyLuanChinhTri"
+    | "TrinhDoQuanLyNhaNuoc"
+    | "NgoaiNgu"
+    | "TinHoc"
+    | "BoiDuongQuocPhongAnNinh"
+    | "CapBac"
+    | "QuaTrinhCongTac"
+    | "QuaTrinhCuDiCongTac"
+    | "QuaTrinhCuDiDaoTao"
+    | "KhenThuong"
+    | "KyLuat"
+    | "DoiTuongChinhSach"
+    | "KeKhaiTaiSan"
+    | "LecturerType"
+    | "StaffType"
+    | "StaffPosition"
+    | "Lecturer"
+    | "LecturerHistory"
+    | "ResearchProject"
+    | "StudentResearchRegistration"
+    | "ThesisProject"
+    | "StudentThesisRegistration"
+    | "ExpertProfile"
+    | "Decision"
+    | "Invitation"
+    | "Council"
+    | "CouncilMember"
+    | "DefenseRecord"
+    | "LibrarySubmission"
+    | "PaymentRecord"
+    | "DocumentFile"
+    | "AcademicActionConfig"
+    | "AcademicActionRuleSet"
+    | "AcademicActionCondition"
+    | "StudentAcademicDecision"
+    | "TrainingScoreSession"
+    | "StudentTrainingScore"
+    | "StudentTrainingSemester"
+    | "Scholarship"
+    | "ScholarshipCriteria"
+    | "ScholarshipAward"
+    | "Staff"
+    | "StaffHistory"
+    | "SurveyObjectType"
+    | "SurveyTopic"
+    | "SurveyQuestionGroup"
+    | "Survey"
+    | "SurveyQuestion"
+    | "SurveyChoice"
+    | "SurveySession"
+    | "SurveyResponse"
+    | "DM_MoiQuanHe"
+    | "DM_TrinhDoHocVan"
+    | "DM_TrinhDoLyLuanChinhTri"
+    | "DM_TrinhDoQuanLyNhaNuoc"
+    | "DM_TinhTrangHonNhan"
+    | "DM_TrangThaiLamViec"
+    | "DM_HinhThucKhenThuongChinhQuyen"
+    | "DM_HinhThucKhenThuongDang"
+    | "DM_XepLoaiDanhGiaCanBo"
+    | "DM_XepLoaiDanhGiaChatLuongDangVien"
+    | "DM_LoaiHinhCongTac"
+    | "DM_TinhTrangCongTac"
+    | "DM_LoaiHinhDiHocTap"
+    | "DM_TinhTrangDiHocTap"
+    | "DM_NuocCuDiHocTap"
+    | "DM_ChucDanhCMNVGiangVien"
+    | "DM_ChucDanhCMNVNghienCuuVien"
+    | "DM_ChucDanhCMNVKySu"
+    | "DM_TruongDaoTaoBacDH"
+    | "DM_ChuyenNganhDaoTaoBacDH"
+    | "Feedback"
+    | "AcademicWarningRule"
+    | "AcademicWarning"
+    | "DisciplinaryWarning"
+    | "DisciplinaryWarningReason"
+    | "GraduationSession"
+    | "StudentGraduationApplication"
+    | "ApplicationCheckResult"
+    | "GraduationDecision"
+    | "AcademicRankingConvert"
+    | "GraduationRankDowngradeRule"
+    | "GraduationRankDowngradeCondition"
+    | "RankingCondition"
+    | "TemplateFile"
+    | "BlockedIp";
+  operation: string;
+  data?: void | null;
+}[];
+
+export type SqlTransactionVariables = {
+  body?: SqlTransactionRequestBody;
+} & CommonContext["fetcherOptions"];
+
+export const fetchSqlTransaction = (
+  variables: SqlTransactionVariables,
+  signal?: AbortSignal,
+) =>
+  commonFetch<
+    SqlTransactionResponse,
+    SqlTransactionError,
+    SqlTransactionRequestBody,
+    {},
+    {},
+    {}
+  >({ url: "/api/sql/transaction", method: "post", ...variables, signal });
+
+export const useSqlTransaction = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      SqlTransactionResponse,
+      SqlTransactionError,
+      SqlTransactionVariables
+    >,
+    "mutationFn"
+  >,
+) => {
+  const { fetcherOptions } = useCommonContext();
+  return reactQuery.useMutation<
+    SqlTransactionResponse,
+    SqlTransactionError,
+    SqlTransactionVariables
+  >({
+    mutationFn: (variables: SqlTransactionVariables) =>
+      fetchSqlTransaction(deepMerge(fetcherOptions, variables)),
+    ...options,
+  });
+};
+
 export type QueryOperation =
   | {
       path: "/api/auth/get-session";

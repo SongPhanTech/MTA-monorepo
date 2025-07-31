@@ -57,7 +57,6 @@ model DM_ChucVu extends CoreBase {
   quaTrinhCongTac     QuaTrinhCongTac[]
   quaTrinhCuDiCongTac QuaTrinhCuDiCongTac[]
 
-
   @@schema("mta")
 }
 
@@ -86,7 +85,7 @@ model DM_DanToc extends CoreBase {
   sDiaChiCuTru String?
 
   userProfile  UserProfile[]
-
+  tiengDanToc  TiengDanToc[]
   @@schema("mta")
 }
 
@@ -221,6 +220,7 @@ model DM_QuocGia extends CoreBase {
   sLanguage   String?
   hocVi       HocVi[]
   userProfile UserProfile[]
+  nuocNgoai   NuocNgoai[]
   @@schema("mta")
 }
 

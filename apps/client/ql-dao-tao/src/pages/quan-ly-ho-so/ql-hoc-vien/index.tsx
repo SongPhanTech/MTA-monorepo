@@ -3,7 +3,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { PutStudentModal } from '@components/modal'
+import { PutHocvienModal, PutUpdateProfileModal, PutUploadProfileModal } from '@components/modal'
 import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
@@ -26,13 +26,14 @@ import {
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
     useFindManyStudent,
+    useFindManyTemplateFile,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Menu, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -57,15 +58,24 @@ export default function UserProfilePageDs() {
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
+    const [open, setOpen] = useState(false)
+
+    const handleOpenChange = (newOpen: boolean) => {
+        setOpen(newOpen)
+    }
 
     const router = useRouter()
+
+    // const [selectedTrainingObjectType, setSelectedTrainingObjectType] = useState<string>()
+    const [selectedTrainingCourse, setSelectedTrainingCourse] = useState<string>()
+    const [selectedFixedClass, setSelectedFixedClass] = useState<string>()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const { data = [], refetch } = useFindManyStudent({
         where: {
             trainingObjectType: {
                 type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
+                    not: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
             },
             userProfile: {
@@ -81,13 +91,13 @@ export default function UserProfilePageDs() {
                         },
                     },
                 ],
-                ...(filters.gender
-                    ? {
-                          gender: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
+                // ...(filters.gender
+                //     ? {
+                //           gender: {
+                //               in: filters.gender,
+                //           },
+                //       }
+                //     : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -177,12 +187,13 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
-        include: {
-            fixedClass: true,
-        },
-        orderBy: { name: 'asc' },
-    })
+    const { data: TrainingCourseData = [], refetch: refetchTrainingCourse } =
+        useFindManyTrainingCourse({
+            include: {
+                fixedClass: true,
+            },
+            orderBy: { name: 'asc' },
+        })
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         include: {
@@ -204,7 +215,7 @@ export default function UserProfilePageDs() {
         where: {
             trainingObjectType: {
                 type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
+                    not: $Enums.TrainingObjectTypes.CIVILIAN,
                 },
             },
             userProfile: {
@@ -220,13 +231,13 @@ export default function UserProfilePageDs() {
                         },
                     },
                 ],
-                ...(filters.gender
-                    ? {
-                          gender: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
+                // ...(filters.gender
+                //     ? {
+                //           gender: {
+                //               in: filters.gender,
+                //           },
+                //       }
+                //     : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -302,10 +313,16 @@ export default function UserProfilePageDs() {
         }
         id?: string | null
     }>({
-        tag: PutStudentModal.name,
+        tag: PutHocvienModal.name,
     })
 
-    const { onOpen: onOpenUpdate } = useDisclosure<{
+    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
+        tag: PutUploadProfileModal.name,
+    })
+    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
+        tag: PutUpdateProfileModal.name,
+    })
+    const { onOpen: onOpenUpdate, onClose: onCloseUpdate } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
             trainingObjectTypeId?: string
@@ -314,15 +331,25 @@ export default function UserProfilePageDs() {
         }
         id: string | null
     }>({
-        tag: PutStudentModal.name,
+        tag: PutHocvienModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen({
-            preSelectedValues: {},
+            preSelectedValues: {
+                trainingCourseId: selectedTrainingCourse,
+                fixedClassId: selectedFixedClass,
+            },
         })
+    }
+    const handleModalUpload = (type: string) => {
+        if (type === 'upload') {
+            onOpenUpload('SV')
+        } else {
+            onOpenUpdateFile('SV')
+        }
     }
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
     async function handleDelete(id: string) {
@@ -342,6 +369,123 @@ export default function UserProfilePageDs() {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
+    }
+
+    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
+
+    const handleFilterChange = (
+        key: string,
+        value: string | { startDate?: string; endDate?: string }
+    ) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const handleDownloadTemplate = (type: string) => {
+        const fileRecord = templateFile?.find((item) => item.code === type)
+        const fileLink = fileRecord ? fileRecord.path : null
+        if (fileLink) {
+            const link = document.createElement('a')
+            link.href = fileLink
+            link.setAttribute('download', '')
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        }
+    }
+
+    const itemsDownload = [
+        {
+            key: 'import',
+            label: 'Tải file nhập thông tin sinh viên',
+            onClick: () => handleDownloadTemplate('IMPORT_USERPROFILE'),
+        },
+        {
+            key: 'update',
+            label: 'Tải file cập nhật thông tin sinh viên',
+            onClick: () => handleDownloadTemplate('UPDATE_USERPROFILE'),
+        },
+    ]
+
+    const itemsUpload = [
+        {
+            key: 'upload',
+            label: 'Nhập file nhập thông tin sinh viên',
+            onClick: () => () => setImportModalVisible(true),
+        },
+        {
+            key: 'update',
+            label: 'Nhập file cập nhật thông tin sinh viên',
+            onClick: () => handleModalUpload('update'),
+        },
+    ]
+    const menuDownload = (
+        <Menu>
+            {itemsDownload.map((item) => (
+                <Menu.Item key={item.key} onClick={item.onClick}>
+                    {item.label}
+                </Menu.Item>
+            ))}
+        </Menu>
+    )
+
+    const menuUpload = (
+        <Menu>
+            {itemsUpload.map((item) => (
+                <Menu.Item key={item.key} onClick={item.onClick}>
+                    {item.label}
+                </Menu.Item>
+            ))}
+        </Menu>
+    )
+
+    const handleImportConfirm = (importedData: any) => {
+        showSpinner()
+
+        try {
+            // const updatedScores = dataTable.map((record) => {
+            //     const importedScore = importedData.find(
+            //         (item) => item.studentCode === record.student?.code
+            //     )
+
+            //     if (importedScore) {
+            //         return {
+            //             id: record.id,
+            //             attendanceScore: importedScore.attendanceScore,
+            //             midtermScore: importedScore.midtermScore,
+            //             examScore: importedScore.examScore,
+            //         }
+            //     }
+            //     return record
+            // })
+
+            // // Cập nhật state
+            // const newScoreCC = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.attendanceScore || 0,
+            // }))
+            // const newScoreTX = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.midtermScore || 0,
+            // }))
+            // const newScoreThi = updatedScores.map((item) => ({
+            //     id: item.id,
+            //     value: item.examScore || 0,
+            // }))
+
+            // setScoreCC(newScoreCC)
+            // setScoreTX(newScoreTX)
+            // setScoreThi(newScoreThi)
+
+            message.success('Nhập dữ liệu từ file thành công!')
+        } catch (_error) {
+            message.error('Có lỗi xảy ra khi nhập dữ liệu từ file')
+        } finally {
+            hideSpinner()
+        }
     }
 
     return (
@@ -367,6 +511,16 @@ export default function UserProfilePageDs() {
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
+                                {/* <Dropdown overlay={menuDownload} trigger={['hover']}>
+                                    <Button type="primary" icon={<DownloadOutlined />}>
+                                        Tải file mẫu
+                                    </Button>
+                                </Dropdown> */}
+                                {/* <Dropdown overlay={menuUpload} trigger={['hover']}>
+                                    <Button type="primary" icon={<UploadOutlined />}>
+                                        Nhập file
+                                    </Button>
+                                </Dropdown> */}
                             </Flex>
                         </Col>
                     </Row>
@@ -508,8 +662,9 @@ export default function UserProfilePageDs() {
                                 width: 180,
                                 options: TrainingCurriculumVersionData.map((item) => ({
                                     label: item.name,
-                                    value: item.name,
+                                    value: item.id,
                                 })),
+                                type: 'select',
                                 render: (__, record) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum?.name
                                 },
@@ -540,7 +695,7 @@ export default function UserProfilePageDs() {
                                         <ViewIcon
                                             onClick={() =>
                                                 router.push(
-                                                    ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
+                                                    ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
                                                         '[id]',
                                                         id
                                                     )

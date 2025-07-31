@@ -69,7 +69,11 @@ export default {
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA": "/ql-ren-luyen/dot-danh-gia",
     "QUAN_LY_HO_SO_QL_REN_LUYEN_DOT_DANH_GIA_MODAL_DOT_DANH_GIA": "/ql-ren-luyen/dot-danh-gia/modal-dot-danh-gia",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
-    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
+    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep",
+    "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
+    "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
+    "QUAN_LY_HO_SO_QL_HOC_VIEN_ID": "/quan-ly-ho-so/ql-hoc-vien/[id]",
+    "QUAN_LY_HO_SO_QL_HOC_VIEN": "/quan-ly-ho-so/ql-hoc-vien",
   },
   "QL_NGUOI_DUNG": {
     "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",
@@ -94,12 +98,8 @@ export default {
     "XU_LY_VAN_BAN": "/xu-ly-van-ban"
   },
   "QL_HO_SO":{
-    "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
-    "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
-    "QUAN_LY_HO_SO_QL_HOC_VIEN_ID": "/quan-ly-ho-so/ql-hoc-vien/[id]",
-    "QUAN_LY_HO_SO_QL_HOC_VIEN": "/quan-ly-ho-so/ql-hoc-vien",
-    "QUAN_LY_HO_SO_QL_CAN_BO": "/quan-ly-ho-so/ql-can-bo",
-    "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/quan-ly-ho-so/ql-giang-vien",
+    "QUAN_LY_HO_SO_QL_CAN_BO": "/ql-can-bo",
+    "QUAN_LY_HO_SO_QL_GIANG_VIEN": "/ql-giang-vien",
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi",
     "DANH_MUC_HO_SO_CAC_CHUYEN_NGANH_DAO_TAO_BAC_DAI_HOC": "/danh-muc-ho-so/cac-chuyen-nganh-dao-tao-bac-dai-hoc",

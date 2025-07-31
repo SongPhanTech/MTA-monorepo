@@ -107,13 +107,13 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ],
-                ...(filters.gender
-                    ? {
-                          gender: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
+                // ...(filters.gender
+                //     ? {
+                //           gender: {
+                //               in: filters.gender,
+                //           },
+                //       }
+                //     : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
