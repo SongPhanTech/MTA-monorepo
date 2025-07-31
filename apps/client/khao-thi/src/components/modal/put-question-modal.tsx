@@ -107,7 +107,7 @@ const PutQuestionModal = () => {
         } else {
             form.setFieldsValue({
                 isAutoGraded: false,
-                type: QuestionType.ESSAY, // TODO: clear after add many QuestionType
+                // type: QuestionType.ESSAY, // TODO: clear after add many QuestionType
                 point: 1,
             })
         }
@@ -141,7 +141,7 @@ const PutQuestionModal = () => {
                                         maxTagCount={'responsive'}
                                         placeholder="Chọn loại câu hỏi"
                                         options={questionTypeOptions}
-                                        defaultValue={QuestionType.ESSAY} // TODO: clear after add many QuestionType
+                                        // defaultValue={QuestionType.ESSAY} // TODO: clear after add many QuestionType
                                     />
                                 </FormItem>
                             </Col>
@@ -214,7 +214,8 @@ const PutQuestionModal = () => {
                             </Col>
                             {/* Tự luận */}
                             <Col span={24}>
-                                {typeQuestion === QuestionType.ESSAY && (
+                                {(typeQuestion === QuestionType.ESSAY ||
+                                    typeQuestion === QuestionType.ORAL) && (
                                     <FormItem
                                         form={form}
                                         label="Giải thích đáp án"
@@ -249,7 +250,8 @@ const PutQuestionModal = () => {
                                         </div>
                                     </div>
                                     {/* Tự luận */}
-                                    {typeQuestion === QuestionType.ESSAY && (
+                                    {(typeQuestion === QuestionType.ESSAY ||
+                                        typeQuestion === QuestionType.ORAL) && (
                                         <div className="flex gap-2 flex-col">
                                             <p className="font-medium text-sm text-[#111827]">
                                                 Giải thích đáp án
