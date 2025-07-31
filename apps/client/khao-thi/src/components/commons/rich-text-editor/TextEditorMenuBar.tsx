@@ -1,6 +1,16 @@
 import type { Editor } from '@tiptap/react'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Button as AntdButton, Col, Input, List, Modal, message, Row, Typography } from 'antd'
+import {
+    Button as AntdButton,
+    Col,
+    Input,
+    List,
+    Modal,
+    message,
+    Row,
+    Tooltip,
+    Typography,
+} from 'antd'
 import katex from 'katex'
 import { useCallback, useRef, useState } from 'react'
 import { BsTypeUnderline } from 'react-icons/bs'
@@ -16,6 +26,8 @@ import {
     RiItalic,
     RiListOrdered2,
     RiMarkPenFill,
+    RiMoneyDollarBoxLine,
+    RiMoneyDollarCircleLine,
     RiStrikethrough,
 } from 'react-icons/ri'
 import { env } from '@/env'
@@ -23,25 +35,37 @@ import 'katex/dist/katex.min.css'
 
 const { Title } = Typography
 
+type MenuButton = {
+    icon: React.ReactNode
+    onClick: () => void
+    isActive: boolean
+    disabled?: boolean
+    description?: string
+}
+
 const Button = ({
     onClick,
     isActive,
     disabled,
     children,
+    description,
 }: {
     onClick: () => void
     isActive: boolean
     disabled?: boolean
     children: React.ReactNode
+    description?: string
 }) => (
-    <button
-        type="button"
-        onClick={onClick}
-        disabled={disabled}
-        className={`p-2 ${isActive ? 'bg-primary text-white rounded-md' : ''}`}
-    >
-        {children}
-    </button>
+    <Tooltip title={description}>
+        <button
+            type="button"
+            onClick={onClick}
+            disabled={disabled}
+            className={`p-2 ${isActive ? 'bg-primary text-white rounded-md' : ''}`}
+        >
+            {children}
+        </button>
+    </Tooltip>
 )
 
 export default function TextEditorMenuBar({ editor }: { editor: Editor | null }) {
@@ -173,9 +197,45 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         setMathModalVisible(true)
     }, [editor, deleteMath])
 
+    const wrapSelectionWith = useCallback(
+        (prefix: string, suffix: string) => {
+            if (!editor) return
+
+            const { from, to, empty } = editor.state.selection
+            const selectedText = editor.state.doc.textBetween(from, to, '')
+
+            if (empty) {
+                editor
+                    .chain()
+                    .focus()
+                    .insertContent(prefix + suffix)
+                    .setTextSelection(from + prefix.length)
+                    .run()
+            } else {
+                editor
+                    .chain()
+                    .focus()
+                    .insertContent({
+                        type: 'text',
+                        text: prefix + selectedText + suffix,
+                        marks: [
+                            {
+                                type: 'math',
+                                attrs: {
+                                    latex: selectedText,
+                                },
+                            },
+                        ],
+                    })
+                    .run()
+            }
+        },
+        [editor]
+    )
+
     if (!editor) return null
 
-    const groupedButtons = [
+    const groupedButtons: MenuButton[][] = [
         [
             {
                 icon: <RiBold className="size-5" />,
@@ -276,6 +336,20 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 isActive: editor.isActive('math'),
                 disabled: false,
             },
+            {
+                icon: <RiMoneyDollarCircleLine className="size-5" />,
+                onClick: () => wrapSelectionWith('$', '$'),
+                isActive: false,
+                disabled: false,
+                description: 'Math latex span',
+            },
+            {
+                icon: <RiMoneyDollarBoxLine className="size-5" />,
+                onClick: () => wrapSelectionWith('$$', '$$'),
+                isActive: false,
+                disabled: false,
+                description: 'Math latex div',
+            },
         ],
         // [
         //     { icon: <AiOutlineUndo className="size-5" />, onClick: () => editor.chain().focus().undo().run(), isActive: false, disabled: !editor.can().chain().focus().undo().run() },
@@ -288,22 +362,25 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
             <div className="flex space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap">
                 {groupedButtons.map((group, index) => (
                     <div
-                        key={`group-${group.map((btn) => btn.icon?.type?.name).join('-')}`}
+                        key={`group-${group.map((btn) => btn.icon).join('-')}`}
                         className="flex items-center space-x-2"
                     >
-                        {group.map(({ icon, onClick, isActive, disabled }, btnIndex) => {
-                            const uniqueKey = `${icon?.type?.name || 'button'}-${btnIndex}`
-                            return (
-                                <Button
-                                    key={uniqueKey}
-                                    onClick={onClick}
-                                    isActive={isActive}
-                                    disabled={disabled}
-                                >
-                                    {icon}
-                                </Button>
-                            )
-                        })}
+                        {group.map(
+                            ({ icon, onClick, isActive, disabled, description }, btnIndex) => {
+                                const uniqueKey = `${icon || 'button'}-${btnIndex}`
+                                return (
+                                    <Button
+                                        key={uniqueKey}
+                                        onClick={onClick}
+                                        isActive={isActive}
+                                        disabled={disabled}
+                                        description={description}
+                                    >
+                                        {icon}
+                                    </Button>
+                                )
+                            }
+                        )}
                         {index < groupedButtons.length - 1 && (
                             <div className="w-px bg-gray-300 h-6 mx-2" />
                         )}

@@ -138,6 +138,68 @@ export function RichTextEditor({
                 const items = event.clipboardData?.items
                 if (!items) return false
 
+                const clipboardText = event.clipboardData?.getData('text/plain')
+                if (clipboardText) {
+                    const inlineMathRegex = /^\$(.+)\$$/
+                    const blockMathRegex = /^\$\$(.+)\$\$$/
+
+                    const inlineMathMatch = clipboardText.match(inlineMathRegex)
+                    const blockMathMatch = clipboardText.match(blockMathRegex)
+
+                    if (inlineMathMatch || blockMathMatch) {
+                        const isBlockMath = !!blockMathMatch
+                        const mathContent = isBlockMath ? blockMathMatch?.[1] : inlineMathMatch?.[1]
+
+                        try {
+                            editor
+                                ?.chain()
+                                .focus()
+                                .insertContent({
+                                    type: 'text',
+                                    text: isBlockMath ? `$$${mathContent}$$` : `$${mathContent}$`,
+                                    marks: [
+                                        {
+                                            type: 'math',
+                                            attrs: {
+                                                latex: mathContent,
+                                            },
+                                        },
+                                    ],
+                                })
+                                .run()
+                            return true
+                        } catch (error) {
+                            console.error('Failed to paste math content:', error)
+                        }
+                    }
+
+                    if (/\\[a-zA-Z]+\{.*\}|_[a-zA-Z0-9]|\^[a-zA-Z0-9]/.test(clipboardText)) {
+                        const shouldFormatAsMath = confirm(
+                            'This looks like math content. Format as math formula?'
+                        )
+                        if (shouldFormatAsMath) {
+                            const isBlock = confirm('Use block format ($$...$$)?')
+                            editor
+                                ?.chain()
+                                .focus()
+                                .insertContent({
+                                    type: 'text',
+                                    text: isBlock ? `$$${clipboardText}$$` : `$${clipboardText}$`,
+                                    marks: [
+                                        {
+                                            type: 'math',
+                                            attrs: {
+                                                latex: clipboardText,
+                                            },
+                                        },
+                                    ],
+                                })
+                                .run()
+                            return true
+                        }
+                    }
+                }
+
                 for (let i = 0; i < items.length; i++) {
                     const item = items[i]
                     if (item.type.indexOf('image') === 0) {
