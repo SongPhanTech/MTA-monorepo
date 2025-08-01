@@ -19,24 +19,20 @@ import {
     useFindManyDM_GioiTinh,
     useFindManyLecturer,
     useFindManyLecturerType,
-    useFindManyTemplateFile,
     useUpdateLecturer,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Menu, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import type { TreeNodeOrganization } from '@/utils/convertOrganizationToTree'
 
 dayjs.locale('vi')
 
 export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [_organizationIds, setOrganizationIds] = useState<string[]>([])
-    const [selectedRowId, setSelectedRowId] = useState<string | null>(null)
 
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
@@ -320,89 +316,6 @@ export default function UserProfilePageLecture() {
         hideSpinner()
     }
 
-    const { data: templateFile = [], refetch: refetchTemplateFile } = useFindManyTemplateFile()
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const handleDownloadTemplate = (type: string) => {
-        const fileRecord = templateFile?.find((item) => item.code === type)
-        const fileLink = fileRecord ? fileRecord.path : null
-        if (fileLink) {
-            const link = document.createElement('a')
-            link.href = fileLink
-            link.setAttribute('download', '')
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-        }
-    }
-
-    const itemsDownload = [
-        {
-            key: 'import',
-            label: 'Tải file nhập thông tin giảng viên',
-            onClick: () => handleDownloadTemplate('IMPORT_USERPROFILE'),
-        },
-        {
-            key: 'update',
-            label: 'Tải file cập nhật thông tin giảng viên',
-            onClick: () => handleDownloadTemplate('UPDATE_USERPROFILE'),
-        },
-    ]
-
-    const itemsUpload = [
-        {
-            key: 'upload',
-            label: 'Nhập file nhập thông tin giảng viên',
-            onClick: () => handleModalUpload('upload'),
-        },
-        {
-            key: 'update',
-            label: 'Nhập file cập nhật thông tin giảng viên',
-            onClick: () => handleModalUpload('update'),
-        },
-    ]
-    const menuDownload = (
-        <Menu>
-            {itemsDownload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
-    const menuUpload = (
-        <Menu>
-            {itemsUpload.map((item) => (
-                <Menu.Item key={item.key} onClick={item.onClick}>
-                    {item.label}
-                </Menu.Item>
-            ))}
-        </Menu>
-    )
-
-    const handleAdvancedFilter = (values: FilterProps) => {
-        const newFilters = { ...filters, ...values }
-        setFilters(newFilters)
-    }
-
-    const _handleRowOrganizationClick = (record: TreeNodeOrganization) => {
-        if (selectedRowId === record.id) {
-            setSelectedRowId(null)
-            setOrganizationIds([])
-        } else {
-            setSelectedRowId(record.id)
-            // handleSelectOrganization(record.id)
-        }
-    }
-
     return (
         <div>
             <Row gutter={[16, 16]}>
@@ -430,28 +343,6 @@ export default function UserProfilePageLecture() {
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                            // {
-                            //     title: 'Ảnh',
-                            //     align: 'center',
-                            //     width: 120,
-                            //     className: 'flex justify-center',
-                            //     render: (_, record) => {
-                            //         const avatar = record.userProfile?.avatar
-
-                            //         return avatar ? (
-                            //             <Image src={getMinioUrl(avatar)} width={100} height={80} />
-                            //         ) : (
-                            //             <div className="flex justify-center items-center ml-[10px] w-20 h-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                            //                 <UserOutlined
-                            //                     style={{
-                            //                         fontSize: 32,
-                            //                         color: '#bfbfbf',
-                            //                     }}
-                            //                 />
-                            //             </div>
-                            //         )
-                            //     },
-                            // },
                             {
                                 title: 'Mã giảng viên',
                                 dataIndex: 'code',

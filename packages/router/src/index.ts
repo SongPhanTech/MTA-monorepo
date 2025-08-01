@@ -591,6 +591,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN,
                         description: 'QL sinh viên, học viên',
                     },
+                    {
+                        id: 'danh-sach-giang-vien',
+                        label: 'Danh sách giảng viên',
+                        icon: ReadOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_SACH_GIANG_VIEN,
+                        description: 'Danh sách giảng viên',
+                    },
                 ],
             },
         ],
