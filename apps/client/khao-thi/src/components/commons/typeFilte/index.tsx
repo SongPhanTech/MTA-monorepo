@@ -6,7 +6,6 @@ import type {
     DecisionStatus,
     ExamStatus,
     ExamType,
-    Gender,
     GraduationSessionStatus,
     QuestionType,
     SemesterType,
@@ -50,7 +49,7 @@ export type FilterProps = {
     graduated?: boolean
     trainingLevel?: string[]
     startYear?: 'asc' | 'desc'
-    gender?: Gender[]
+    gender?: string[]
     trainingField?: string[]
     dateOfBirth?: Date[]
     academicRankType?: string[]
