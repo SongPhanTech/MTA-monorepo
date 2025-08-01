@@ -14,6 +14,7 @@ import { emptyObjectIf } from '@workspace/constant'
 import { SubjectVersionType } from '@workspace/db'
 import {
     useCountSubjectClass,
+    useCreateManyInvitation,
     useFindManyDM_DonVi,
     useFindManySemester,
     useFindManySubjectClass,
@@ -55,6 +56,7 @@ export default function ThesisProject() {
     })
     const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
 
@@ -254,27 +256,52 @@ export default function ThesisProject() {
         }
     }
 
-    console.log(selectedRowKeys)
-    const { data: selectedThesisProjects } = useFindManyThesisProject({
-        where: {
-            id: {
-                in: selectedRowKeys.map(String),
+    const { data: selectedThesisProjects } = useFindManyThesisProject(
+        {
+            where: {
+                id: {
+                    in: selectedRowKeys.map(String),
+                },
             },
-        },
-        include: {
-            council: {
-                include: {
-                    members: {
-                        include: {
-                            expert: true,
-                        },
+            include: {
+                council: {
+                    include: {
+                        members: true,
                     },
                 },
             },
         },
-    })
+        { enabled: !!selectedRowKeys.length }
+    )
 
-    console.log(selectedThesisProjects)
+    const councilMemberIds = selectedThesisProjects
+        ?.flatMap((project) => project.council?.flatMap((council) => council.members || []) || [])
+        .map((member) => member.id)
+        .filter((id): id is string => Boolean(id))
+
+    const createInvitations = async () => {
+        if (!councilMemberIds || councilMemberIds.length === 0) {
+            message.info('Hiện chưa có thành viên hội đồng để tạo thư mời')
+            return
+        }
+
+        try {
+            showSpinner()
+
+            await createManyInvitation({
+                data: councilMemberIds.map((councilMemberId) => ({
+                    councilMemberId: councilMemberId,
+                })),
+                skipDuplicates: true,
+            })
+
+            message.success('Tạo thư mời thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi khi tạo thư mời')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     return (
         <div>
@@ -318,7 +345,7 @@ export default function ThesisProject() {
                         </Col>
                         <Col>
                             <Flex justify="end">
-                                <Button type="primary">
+                                <Button onClick={createInvitations} type="primary">
                                     <BookPlus />
                                     Tạo thư mời
                                 </Button>
