@@ -2,13 +2,8 @@
 import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { $Enums, type UserProfile } from '@workspace/db'
-import {
-    useCreateLecturer,
-    useFindManyUserProfile,
-    useFindUniqueLecturer,
-    useUpdateLecturer,
-} from '@workspace/db/hooks'
+import type { UserProfile } from '@workspace/db'
+import { useCreateLecturer, useFindUniqueLecturer, useUpdateLecturer } from '@workspace/db/hooks'
 import type { GetProp, UploadProps } from 'antd'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
@@ -71,17 +66,16 @@ const PutUserProfileLectureModal = () => {
     const { mutateAsync: updateLecturer } = useUpdateLecturer()
     const { mutateAsync: createLecturer } = useCreateLecturer()
 
-    const { data = [] } = useFindManyUserProfile({
-        where: {
-            userType: $Enums.UserType.LECTURER,
-            lecturer: {
-                deletedAt: null, // Lecturer chưa bị xóa
-            },
-        },
-        select: {
-            idCardNumber: true,
-        },
-    })
+    // const { data = [] } = useFindManyUserProfile({
+    //     where: {
+    //         lecturer: {
+    //             deletedAt: null, // Lecturer chưa bị xóa
+    //         },
+    //     },
+    //     select: {
+    //         idCardNumber: true,
+    //     },
+    // })
 
     const buildLecturerCreateData = (
         output: LecturerProfileType,

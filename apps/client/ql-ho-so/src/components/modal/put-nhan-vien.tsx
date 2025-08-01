@@ -1,13 +1,7 @@
 import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { $Enums } from '@workspace/db'
-import {
-    useCreateStaff,
-    useFindManyUserProfile,
-    useFindUniqueStaff,
-    useUpdateStaff,
-} from '@workspace/db/hooks'
+import { useCreateStaff, useFindUniqueStaff, useUpdateStaff } from '@workspace/db/hooks'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -66,17 +60,16 @@ const PutUserProfileStaffModal = () => {
     const { mutateAsync: updateStaff } = useUpdateStaff()
     const { mutateAsync: createStaff } = useCreateStaff()
 
-    const { data = [] } = useFindManyUserProfile({
-        where: {
-            userType: $Enums.UserType.STAFF,
-            staffs: {
-                deletedAt: null, // Staff chưa bị xóa
-            },
-        },
-        select: {
-            idCardNumber: true,
-        },
-    })
+    // const { data = [] } = useFindManyUserProfile({
+    //     where: {
+    //         staffs: {
+    //             deletedAt: null, // Staff chưa bị xóa
+    //         },
+    //     },
+    //     select: {
+    //         idCardNumber: true,
+    //     },
+    // })
 
     async function onOk(output?: PutStaffProfile) {
         if (!output) return
