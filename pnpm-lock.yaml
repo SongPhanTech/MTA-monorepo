@@ -954,6 +954,36 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.62.3
         version: 5.81.5(react@18.3.1)
+      '@tiptap/extension-highlight':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))
+      '@tiptap/extension-image':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))
+      '@tiptap/extension-mathematics':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))(@tiptap/pm@2.26.1)(katex@0.16.22)
+      '@tiptap/extension-mention':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))(@tiptap/pm@2.26.1)(@tiptap/suggestion@2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))(@tiptap/pm@2.26.1))
+      '@tiptap/extension-text-align':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))
+      '@tiptap/extension-underline':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))
+      '@tiptap/pm':
+        specifier: 'catalog:'
+        version: 2.26.1
+      '@tiptap/react':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))(@tiptap/pm@2.26.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/starter-kit':
+        specifier: 'catalog:'
+        version: 2.26.1
+      '@tiptap/suggestion':
+        specifier: 'catalog:'
+        version: 2.26.1(@tiptap/core@2.26.1(@tiptap/pm@2.26.1))(@tiptap/pm@2.26.1)
       '@workspace/auth':
         specifier: workspace:*
         version: link:../../../packages/auth
@@ -999,6 +1029,9 @@ importers:
       file-saver:
         specifier: 'catalog:'
         version: 2.0.5
+      katex:
+        specifier: 'catalog:'
+        version: 0.16.22
       lodash:
         specifier: 'catalog:'
         version: 4.17.21
@@ -1056,6 +1089,9 @@ importers:
       tailwind-merge:
         specifier: 'catalog:'
         version: 2.6.0
+      tippy.js:
+        specifier: 'catalog:'
+        version: 6.3.7
       xlsx:
         specifier: 'catalog:'
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
