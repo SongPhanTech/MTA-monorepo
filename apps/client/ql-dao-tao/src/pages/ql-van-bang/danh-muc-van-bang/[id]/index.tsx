@@ -226,7 +226,7 @@ Diploma.getLayout = function getLayout(page: React.ReactElement) {
                     title: 'Danh mục văn bằng',
                     href: ROUTER_PATH.QL_DAO_TAO.QL_VAN_BANG_DANH_MUC_VAN_BANG,
                 },
-                { title: 'quản lý phôi văn bằng' },
+                { title: 'Quản lý phôi văn bằng' },
             ]}
         >
             {page}
