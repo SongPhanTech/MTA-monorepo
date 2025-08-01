@@ -239,17 +239,20 @@ enum TextAlign {
 
 // should have css fixed, text-center, font-family, font-size
 model DiplomaPlaceHolder extends Base {
-  field     DiplomaFields
-  value     String? // require if field is OTHER
+  field         DiplomaFields
+  value         String? // require if field is OTHER
 
-  side      DocumentSide
-  top       Int
-  left      Int
-  width     Int
-  height    Int
-  textAlign TextAlign     @default(CENTER)
-  font      String? // TODO: we will need to have fonts management features
-  fontSize  Int
+  side          DocumentSide
+  top           Decimal
+  left          Decimal
+  width         Decimal
+  height        Decimal
+  textAlign     TextAlign     @default(CENTER)
+  font          String? // TODO: we will need to have fonts management features
+  fontSize      Decimal
+
+  diplomaType   DiplomaType   @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId String
 
   @@schema("ql-dao-tao")
 }
@@ -261,6 +264,7 @@ model DiplomaType extends Base {
   front              DocumentFile?        @relation("DiplomaTypeFront")
   back               DocumentFile?        @relation("DiplomaTypeBack")
 
+  diplomaPlaceHolder DiplomaPlaceHolder[]
   curriculumVersion  CurriculumVersion[]
   graduationDecision GraduationDecision[]
 

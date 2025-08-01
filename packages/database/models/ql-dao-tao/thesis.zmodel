@@ -145,7 +145,6 @@ model Invitation extends Base {
   sentDate       DateTime @default(now())
   isConfirmed    Boolean  @default(false)
 
-  // Quan hệ
   decisionId     String
   decision       Decision @relation(fields: [decisionId], references: [id])
   

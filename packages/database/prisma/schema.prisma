@@ -1480,23 +1480,25 @@ model TrainingTime {
 }
 
 model DiplomaPlaceHolder {
-  id          String        @id() @default(cuid())
-  code        String?       @unique()
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt()
-  field       DiplomaFields
-  value       String?
-  side        DocumentSide
-  top         Int
-  left        Int
-  width       Int
-  height      Int
-  textAlign   TextAlign     @default(CENTER)
-  font        String?
-  fontSize    Int
+  id            String        @id() @default(cuid())
+  code          String?       @unique()
+  active        Boolean       @default(true)
+  description   String?       @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt()
+  field         DiplomaFields
+  value         String?
+  side          DocumentSide
+  top           Decimal
+  left          Decimal
+  width         Decimal
+  height        Decimal
+  textAlign     TextAlign     @default(CENTER)
+  font          String?
+  fontSize      Decimal
+  diplomaType   DiplomaType   @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId String
 
   @@schema("ql-dao-tao")
 }
@@ -1513,6 +1515,7 @@ model DiplomaType {
   englishName        String?
   front              DocumentFile?        @relation("DiplomaTypeFront")
   back               DocumentFile?        @relation("DiplomaTypeBack")
+  diplomaPlaceHolder DiplomaPlaceHolder[]
   curriculumVersion  CurriculumVersion[]
   graduationDecision GraduationDecision[]
 
