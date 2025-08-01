@@ -3388,7 +3388,6 @@ model Decision {
   documentFile    DocumentFile[]
   thesisProject   ThesisProject  @relation(fields: [thesisProjectId], references: [id])
   thesisProjectId String
-  invitations     Invitation[]
 
   @@schema("ql-dao-tao")
 }
@@ -3404,10 +3403,8 @@ model Invitation {
   updatedAt       DateTime      @default(now()) @updatedAt()
   sentDate        DateTime      @default(now())
   isConfirmed     Boolean       @default(false)
-  decisionId      String
-  decision        Decision      @relation(fields: [decisionId], references: [id])
   councilMember   CouncilMember @relation(fields: [councilMemberId], references: [id])
-  councilMemberId String
+  councilMemberId String        @unique()
 
   @@schema("ql-dao-tao")
 }
@@ -3450,7 +3447,7 @@ model CouncilMember {
   expertId    String
   expert      ExpertProfile  @relation(fields: [expertId], references: [id])
   payment     PaymentRecord?
-  invitations Invitation[]
+  invitations Invitation?
 
   @@unique([councilId, expertId])
   @@schema("ql-dao-tao")
