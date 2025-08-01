@@ -26,7 +26,6 @@ const PutThesisProject = () => {
     const { thesisProjectStatusOptions } = useThesisProjectStatusOptions()
     const [searchExpert, setSearchExpert] = useState('')
     const [searchOrganization, setSearchOrganization] = useState('')
-    const [searchSubjectClass, setSearchSubjectClass] = useState('')
     const [form] = Form.useForm<PutThesisProject>()
     const { isOpen, onClose, input } = useDisclosure<{
         subjectClassId: string

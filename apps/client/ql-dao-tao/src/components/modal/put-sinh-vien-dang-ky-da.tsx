@@ -90,11 +90,18 @@ const PutStudentThesisRegistration = () => {
                                 ],
                             },
                             {
-                                thesisRegistrations: {
-                                    none: {
-                                        thesisProjectId: input?.thesisProjectId,
+                                OR: [
+                                    {
+                                        thesisRegistrations: {
+                                            none: {
+                                                thesisProjectId: input?.thesisProjectId,
+                                            },
+                                        },
                                     },
-                                },
+                                    ...(input?.studentThesisId
+                                        ? [{ id: studentThesisRegistration?.studentId }]
+                                        : []),
+                                ],
                             },
                         ],
                     },

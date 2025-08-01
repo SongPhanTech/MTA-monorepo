@@ -8,11 +8,10 @@ import { Checkbox, Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
-    semesterId: string | null
 }
 
 interface RegisterClassProps {
@@ -35,11 +34,10 @@ export default function RegisterClassManager({
         },
     })
 
-    const latestSemester = useMemo(() => semesters?.[0]?.id || null, [semesters])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        semesterId: latestSemester,
     })
+    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
@@ -51,9 +49,9 @@ export default function RegisterClassManager({
                       },
                   }
                 : {}),
-            ...(filters.semesterId
+            ...(selectedSemesterId
                 ? {
-                      semesterId: filters.semesterId,
+                      semesterId: selectedSemesterId,
                   }
                 : {}),
         },
@@ -89,13 +87,10 @@ export default function RegisterClassManager({
     )
 
     useEffect(() => {
-        if (latestSemester && !filters.semesterId) {
-            setFilters((prev) => ({
-                ...prev,
-                semesterId: latestSemester,
-            }))
+        if (semesters && semesters.length > 0) {
+            setSelectedSemesterId((prev) => prev || semesters[0].id)
         }
-    }, [latestSemester, filters.semesterId])
+    }, [semesters])
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -138,20 +133,10 @@ export default function RegisterClassManager({
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item
-                                className="mb-0"
-                                name="semesterId"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                                labelAlign="left"
-                            >
-                                <TreeSelectSemester
-                                    style={{ width: '250px' }}
-                                    defaultValue={latestSemester || ''}
-                                    value={filters.semesterId || ''}
-                                    onChange={(val) => handleFilterChange('semesterId', val)}
-                                />
-                            </Form.Item>
+                            <TreeSelectSemester
+                                value={selectedSemesterId}
+                                onChange={(val) => setSelectedSemesterId(val)}
+                            />
                         </Col>
                     </Flex>
                 </Col>

@@ -238,11 +238,11 @@ export default function ThesisProjectDetail() {
                         },
                         {
                             title: 'Mã sinh viên',
-                            // dataIndex: 'code',
+                            dataIndex: 'code',
                             width: 120,
                             fixed: 'left',
                             type: 'input',
-                            render: (record) => record?.student.code,
+                            render: (_, record) => record?.student?.userProfile?.code,
                         },
                         {
                             title: 'Họ và tên',
