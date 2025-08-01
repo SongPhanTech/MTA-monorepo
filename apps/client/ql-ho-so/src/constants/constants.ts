@@ -186,16 +186,6 @@ const CUSTOM_VI_LOCALE = {
     },
 }
 
-const USER_TYPE = [
-    { label: 'Học viện quân sự', value: $Enums.UserType.MILITARY_STUDENT },
-    { label: 'Sinh viên dân sự', value: $Enums.UserType.CIVILIAN_STUDENT },
-    { label: 'Giảng viên', value: $Enums.UserType.LECTURER },
-    { label: 'Cán bộ nhân viên', value: $Enums.UserType.STAFF },
-    // {label:'Chuyên nghiệp', value: $Enums.UserType.PROFESSIONAL},
-    // {label:'Hợp đồng', value: $Enums.UserType.CONTRACT},
-    // {label:'Khác', value: $Enums.UserType.OTHER},
-]
-
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -214,6 +204,5 @@ export {
     STUDENT_STATUS_OPTIONS,
     SUBJECT_CLASS_SCHEDULE_TYPE,
     CUSTOM_VI_LOCALE,
-    USER_TYPE,
     GENDER_MEAN_NEW,
 }
