@@ -11,13 +11,16 @@ import {
     useFindManyDiplomaType,
     useUpdateDiplomaType,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
+import { useRouter } from 'next/router'
 import type React from 'react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function DiplomaType() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -131,6 +134,14 @@ export default function DiplomaType() {
                         rowKey="id"
                         filters={filters}
                         setFilters={setFilters}
+                        onRowClick={(record) => {
+                            router.push(
+                                ROUTER_PATH.QL_DAO_TAO.QL_VAN_BANG_DANH_MUC_VAN_BANG_ID.replace(
+                                    '[id]',
+                                    String(record.id)
+                                )
+                            )
+                        }}
                         columns={[
                             {
                                 title: 'STT',

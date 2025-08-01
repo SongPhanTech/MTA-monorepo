@@ -1,21 +1,21 @@
 import Table from '@components/commons/table'
-import FilterSurveyQuestion, {
-    type FilterSurveyQuestionProps,
-} from '@components/filter/filter-survey-question'
+import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterSurveyQuestionProps } from '@components/filter/filter-survey-question'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSurveyQuestionModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountSurveyQuestion,
+    useFindManySurvey,
     useFindManySurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
-import _ from 'lodash'
-import { useCallback, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type Filter = FilterSurveyQuestionProps & {
@@ -24,51 +24,64 @@ type Filter = FilterSurveyQuestionProps & {
 function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [_searchText, setSearchText] = useState<string>('')
+    const { options: surveyQuestionTypeOptions, getSurveyQuestionTypeLabel } =
+        useSurveyQuestionTypeOptions()
 
-    const [filters, setFilters] = useState<Filter>({
-        searchText: '',
-        surveyQuestionTypeId: null,
-        surveyId: null,
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        surveyQuestionType: undefined,
+        surveyId: undefined,
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
+    const commonWhere = useMemo(
+        () => ({
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.surveyId
+                ? Array.isArray(filters.surveyId)
+                    ? { surveyId: { in: filters.surveyId } }
+                    : { surveyId: filters.surveyId }
+                : {}),
+            ...(filters.surveyQuestionType && filters.surveyQuestionType.length > 0
+                ? {
+                      type: { in: filters.surveyQuestionType },
+                  }
+                : {}),
+        }),
+        [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType]
     )
-    const handleAdvancedFilter = (values: FilterSurveyQuestionProps) => {
-        const newFilters = { ...filters, ...values }
-        setFilters(newFilters)
-    }
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
 
     const { data = [], refetch } = useFindManySurveyQuestion({
-        where: {
-            name: {
-                contains: filters.searchText,
-            },
-            ...(filters.surveyId ? { surveyId: filters.surveyId } : {}),
-            ...(filters.surveyQuestionTypeId
-                ? { surveyQuestionTypeId: filters.surveyQuestionTypeId }
-                : {}),
-        },
+        where: commonWhere,
         include: { survey: true },
+        orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSurveyQuestion()
+    const { data: count } = useCountSurveyQuestion({
+        where: {
+            ...commonWhere,
+            deletedAt: null,
+        },
+    })
+    const { data: surveyData } = useFindManySurvey({ orderBy: { createdAt: 'desc' } })
 
-    const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure<string>({
         tag: PutSurveyQuestionModal.name,
     })
@@ -78,12 +91,12 @@ function Page() {
     const handleModal = () => {
         onOpen()
     }
-    const { mutateAsync: updateSurveyObjectType } = useUpdateSurveyQuestion()
+    const { mutateAsync: updateSurveyQuestion } = useUpdateSurveyQuestion()
 
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateSurveyObjectType({
+            await updateSurveyQuestion({
                 where: {
                     id,
                 },
@@ -101,49 +114,16 @@ function Page() {
         <div>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={10}>
-                            <FilterSurveyQuestion
-                                onSearchChange={handleFilterChange}
-                                onFilterChange={handleAdvancedFilter}
-                            />
-                        </Col>
-                        <Col span={14}>
-                            <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
-                    {/* <Flex
-                        justify="space-between"
-                        align="center"
-                        wrap="wrap"
-                        gap="16px"
-                    >
-                        <Form.Item
-                            label="Tìm kiếm"
-                            name="search"
-                            style={{ marginBottom: 0 }}
-                        >
-                            <Input
-                                id="search"
-                                style={{ width: 300 }}
-                                onChange={(e) =>
-                                    debouncedSearchText(e.target.value)
-                                }
-                                placeholder="Tìm kiếm ..."
-                            />
-                        </Form.Item>
-
+                    <Flex justify="end">
                         <Button onClick={handleModal} type="primary">
                             Thêm mới
                         </Button>
-                    </Flex> */}
+                    </Flex>
                 </Col>
                 <Col span={24}>
                     <Table
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -155,20 +135,30 @@ function Page() {
                             {
                                 title: 'Mã câu hỏi khảo sát',
                                 dataIndex: 'code',
+                                type: 'input',
                             },
                             {
                                 title: 'Tên câu hỏi khảo sát',
                                 dataIndex: 'name',
+                                type: 'input',
                             },
 
                             {
                                 title: 'Loại câu hỏi khảo sát',
-                                render: ({ surveyQuestionType }) =>
-                                    surveyQuestionType ? surveyQuestionType.name : '',
+                                dataIndex: 'surveyQuestionType',
+                                type: 'select',
+                                options: surveyQuestionTypeOptions,
+                                render: (_, record) => getSurveyQuestionTypeLabel(record?.type),
                             },
                             {
                                 title: 'Tên khảo sát',
-                                render: ({ survey }) => (survey ? survey.name : ''),
+                                dataIndex: 'surveyId',
+                                type: 'select',
+                                options: surveyData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) => (record?.survey ? record.survey.name : ''),
                             },
 
                             {

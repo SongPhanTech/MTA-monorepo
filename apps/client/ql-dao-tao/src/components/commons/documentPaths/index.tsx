@@ -16,6 +16,8 @@ interface DocumentPathsComponentProps {
     relationId: string
     relationType: Extract<Prisma.DocumentFileScalarFieldEnum, `${string}Id`>
     titleForm?: string
+    multiple?: boolean
+    accept?: string
 }
 
 interface UploadedFileItem {
@@ -33,6 +35,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     relationId,
     relationType,
     titleForm = 'documentFiles',
+    multiple = true,
+    accept = '.doc,.docx,.xls,.xlsx',
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
 
@@ -108,28 +112,27 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 },
             })
 
-            setFileList((prev: UploadedFileItem[]) => {
-                const newItem: UploadedFileItem = {
-                    file,
-                    name: file.name,
-                    path: resPresignedUrl.data.fileName,
-                    size: BigInt(file.size || 0),
-                    mimeType: file.type,
-                    [relationType]: relationId,
-                }
-                const newList = [...prev, newItem]
+            const newItem: UploadedFileItem = {
+                file,
+                name: file.name,
+                path: resPresignedUrl.data.fileName,
+                size: BigInt(file.size || 0),
+                mimeType: file.type,
+                [relationType]: relationId,
+            }
 
-                const documentFiles = newList.map((item) => ({
-                    name: item.name,
-                    path: item.path,
-                    size: item.size,
-                    mimeType: item.mimeType,
-                    [relationType]: relationId,
-                }))
+            const newList = multiple ? [...fileList, newItem] : [newItem]
 
-                form.setFieldValue(titleForm, documentFiles)
-                return newList
-            })
+            const documentFiles = newList.map((item) => ({
+                name: item.name,
+                path: item.path,
+                size: item.size,
+                mimeType: item.mimeType,
+                [relationType]: relationId,
+            }))
+
+            setFileList(newList)
+            form.setFieldValue(titleForm, documentFiles)
         } catch (err) {
             console.error(err)
             message.error(`Không thể upload ${file.name}.`)
@@ -165,8 +168,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     return (
         <>
             <Dragger
-                multiple
-                accept=".doc,.docx,.xls,.xlsx"
+                multiple={multiple}
+                accept={accept}
                 beforeUpload={(file: File) => {
                     const isLt5M = file.size / 1024 / 1024 < 5
                     if (!isLt5M) {
