@@ -126,6 +126,40 @@ enum TrainingObjectTypes {
   @@schema("ql-dao-tao")
 }
 
+enum DiplomaFields {
+  VI_FULLNAME
+  EN_FULLNAME
+  VI_FULLNAME_UPPERCASE
+  EN_FULLNAME_UPPERCASE
+  DATE_OF_BIRTH
+  TRAINING_MAJOR
+  GPA
+  YEAR_OF_GRADUATION
+  CLASSIFICATION
+  TRAINING_FORM
+  DD
+  MM
+  YYYY
+  OTHER
+
+  @@schema("ql-dao-tao")
+}
+
+enum DocumentSide {
+  FRONT
+  BACK
+
+  @@schema("ql-dao-tao")
+}
+
+enum TextAlign {
+  LEFT
+  CENTER
+  RIGHT
+
+  @@schema("ql-dao-tao")
+}
+
 enum AcademicRankingBaseType {
   Base10
   Base4
@@ -1445,6 +1479,28 @@ model TrainingTime {
   @@schema("ql-dao-tao")
 }
 
+model DiplomaPlaceHolder {
+  id          String        @id() @default(cuid())
+  code        String?       @unique()
+  active      Boolean       @default(true)
+  description String?       @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  field       DiplomaFields
+  value       String?
+  side        DocumentSide
+  top         Int
+  left        Int
+  width       Int
+  height      Int
+  textAlign   TextAlign     @default(CENTER)
+  font        String?
+  fontSize    Int
+
+  @@schema("ql-dao-tao")
+}
+
 model DiplomaType {
   id                 String               @id() @default(cuid())
   code               String?              @unique()
@@ -1455,6 +1511,8 @@ model DiplomaType {
   updatedAt          DateTime             @default(now()) @updatedAt()
   name               String               @unique()
   englishName        String?
+  front              DocumentFile?        @relation("DiplomaTypeFront")
+  back               DocumentFile?        @relation("DiplomaTypeBack")
   curriculumVersion  CurriculumVersion[]
   graduationDecision GraduationDecision[]
 
@@ -3484,6 +3542,10 @@ model DocumentFile {
   decisionId                String?
   defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId           String?
+  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeIdFront], references: [id])
+  diplomaTypeIdFront        String?                  @unique()
+  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeIdBack], references: [id])
+  diplomaTypeIdBack         String?                  @unique()
 
   @@schema("ql-danh-muc")
 }

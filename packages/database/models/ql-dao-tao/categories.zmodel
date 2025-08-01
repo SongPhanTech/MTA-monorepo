@@ -7,6 +7,7 @@ import '../ql-danh-muc/core-categories'
 import 'training-score'
 import 'ranking'
 import '../khao-thi/exam'
+import '../ql-danh-muc/document'
 
 enum TrainingObjectTypes {
   MILITARY // Học viên quân sự
@@ -198,12 +199,71 @@ model TrainingTime extends Base {
   @@schema("ql-dao-tao")
 }
 
+enum DiplomaFields {
+  VI_FULLNAME
+  EN_FULLNAME
+  VI_FULLNAME_UPPERCASE
+  EN_FULLNAME_UPPERCASE
+  DATE_OF_BIRTH // DD/MM/YYYY
+  TRAINING_MAJOR // chuyên ngành
+  GPA
+  YEAR_OF_GRADUATION // YYYY
+  CLASSIFICATION // xếp loại
+  TRAINING_FORM // Mode of study | Hình thức đào tạo
+  DD // current day
+  MM // current month
+  YYYY // current year
+  OTHER
+
+  @@schema("ql-dao-tao")
+}
+
+/**
+ * An enumeration representing the physical sides of a document, such as a diploma.
+ * This is useful for organizing and referencing images or data related to each side.
+ */
+enum DocumentSide {
+  FRONT
+  BACK
+
+  @@schema("ql-dao-tao")
+}
+
+enum TextAlign {
+  LEFT
+  CENTER
+  RIGHT
+
+  @@schema("ql-dao-tao")
+}
+
+// should have css fixed, text-center, font-family, font-size
+model DiplomaPlaceHolder extends Base {
+  field     DiplomaFields
+  value     String? // require if field is OTHER
+
+  side      DocumentSide
+  top       Int
+  left      Int
+  width     Int
+  height    Int
+  textAlign TextAlign     @default(CENTER)
+  font      String? // TODO: we will need to have fonts management features
+  fontSize  Int
+
+  @@schema("ql-dao-tao")
+}
+
 model DiplomaType extends Base {
   name               String               @unique
   englishName        String?
 
+  front              DocumentFile?        @relation("DiplomaTypeFront")
+  back               DocumentFile?        @relation("DiplomaTypeBack")
+
   curriculumVersion  CurriculumVersion[]
   graduationDecision GraduationDecision[]
+
   @@schema("ql-dao-tao")
 }
 

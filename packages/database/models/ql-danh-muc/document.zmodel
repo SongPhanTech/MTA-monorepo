@@ -2,6 +2,7 @@ import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/training-action'
 import '../ql-dao-tao/thesis'
+import '../ql-dao-tao/categories'
 import 'notification'
 
 model DocumentFile extends Base {
@@ -37,6 +38,12 @@ model DocumentFile extends Base {
 
   defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId           String?
+
+  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeIdFront], references: [id])
+  diplomaTypeIdFront        String?                  @unique
+
+  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeIdBack], references: [id])
+  diplomaTypeIdBack         String?                  @unique
 
   @@schema("ql-danh-muc")
 }
