@@ -28,6 +28,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
+import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Tabs from '@components/commons/tabar'
 import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 export type PutCurriculumVersion = CurriculumVersion & {
@@ -448,7 +449,8 @@ const PutCurriculumVersion = () => {
                         label: 'Vị trí công việc',
                         children: (
                             <FormItem form={form} name="jobPosition" label="Vị trí công việc">
-                                <Input.TextArea placeholder="Nhập vị trí công việc" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập vị trí công việc" /> */}
                             </FormItem>
                         ),
                     },
@@ -457,7 +459,8 @@ const PutCurriculumVersion = () => {
                         label: 'Mục tiêu',
                         children: (
                             <FormItem form={form} name="objectives" label="Mục tiêu">
-                                <Input.TextArea placeholder="Nhập mục tiêu" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập mục tiêu" /> */}
                             </FormItem>
                         ),
                     },
@@ -466,7 +469,8 @@ const PutCurriculumVersion = () => {
                         label: 'Chuẩn đầu ra',
                         children: (
                             <FormItem form={form} name="learningOutcome" label="Chuẩn đầu ra">
-                                <Input.TextArea placeholder="Nhập chuẩn đầu ra" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập chuẩn đầu ra" /> */}
                             </FormItem>
                         ),
                     },
@@ -475,7 +479,8 @@ const PutCurriculumVersion = () => {
                         label: 'Chuẩn đầu vào',
                         children: (
                             <FormItem form={form} name="inputStandard" label="Chuẩn đầu vào">
-                                <Input.TextArea placeholder="Nhập chuẩn đầu vào" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập chuẩn đầu vào" /> */}
                             </FormItem>
                         ),
                     },
@@ -484,7 +489,8 @@ const PutCurriculumVersion = () => {
                         label: 'Thời gian toàn khóa',
                         children: (
                             <FormItem form={form} name="time" label="Thời gian toàn khóa">
-                                <Input.TextArea placeholder="Nhập thời gian toàn khóa" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập thời gian toàn khóa" /> */}
                             </FormItem>
                         ),
                     },
@@ -497,7 +503,8 @@ const PutCurriculumVersion = () => {
                                 name="structure"
                                 label="Cấu trúc chương trình đào tạo"
                             >
-                                <Input.TextArea placeholder="Nhập cấu trúc chương trình đào tạo" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập cấu trúc chương trình đào tạo" /> */}
                             </FormItem>
                         ),
                     },
@@ -510,7 +517,8 @@ const PutCurriculumVersion = () => {
                                 name="matrixLearningOutcome"
                                 label="Ma trận chuẩn đầu ra"
                             >
-                                <Input.TextArea placeholder="Nhập ma trận chuẩn đầu ra" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập ma trận chuẩn đầu ra" /> */}
                             </FormItem>
                         ),
                     },
@@ -523,7 +531,8 @@ const PutCurriculumVersion = () => {
                                 name="summary"
                                 label="Mô tả tóm tắt nội dung các học phần"
                             >
-                                <Input.TextArea placeholder="Nhập mô tả tóm tắt nội dung các học phần" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập mô tả tóm tắt nội dung các học phần" /> */}
                             </FormItem>
                         ),
                     },
@@ -532,7 +541,8 @@ const PutCurriculumVersion = () => {
                         label: 'Sơ đồ liên hệ',
                         children: (
                             <FormItem form={form} name="learningDiagram" label="Sơ đồ liên hệ">
-                                <Input.TextArea placeholder="Nhập sơ đồ liên hệ" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập sơ đồ liên hệ" /> */}
                             </FormItem>
                         ),
                     },
@@ -541,7 +551,8 @@ const PutCurriculumVersion = () => {
                         label: 'Hướng dẫn thực hiện',
                         children: (
                             <FormItem form={form} name="guide" label="Hướng dẫn thực hiện">
-                                <Input.TextArea placeholder="Nhập hướng dẫn thực hiện" />
+                                <RichTextEditor />
+                                {/* <Input.TextArea placeholder="Nhập hướng dẫn thực hiện" /> */}
                             </FormItem>
                         ),
                     },

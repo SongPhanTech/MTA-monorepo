@@ -2,9 +2,9 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Select from '@components/commons/select'
 import { useQuestionTypeOptions } from '@hooks/question-type'
-import { renderWithMath } from '@hooks/renderWithMath'
 import useSpinner from '@hooks/spinner'
 import { type Question, QuestionType } from '@workspace/db'
 import {
@@ -107,7 +107,7 @@ const PutQuestionModal = () => {
         } else {
             form.setFieldsValue({
                 isAutoGraded: false,
-                type: QuestionType.ESSAY, // TODO: clear after add many QuestionType
+                // type: QuestionType.ESSAY, // TODO: clear after add many QuestionType
                 point: 1,
             })
         }
@@ -141,7 +141,7 @@ const PutQuestionModal = () => {
                                         maxTagCount={'responsive'}
                                         placeholder="Chọn loại câu hỏi"
                                         options={questionTypeOptions}
-                                        defaultValue={QuestionType.ESSAY} // TODO: clear after add many QuestionType
+                                        // defaultValue={QuestionType.ESSAY} // TODO: clear after add many QuestionType
                                     />
                                 </FormItem>
                             </Col>
@@ -214,7 +214,8 @@ const PutQuestionModal = () => {
                             </Col>
                             {/* Tự luận */}
                             <Col span={24}>
-                                {typeQuestion === QuestionType.ESSAY && (
+                                {(typeQuestion === QuestionType.ESSAY ||
+                                    typeQuestion === QuestionType.ORAL) && (
                                     <FormItem
                                         form={form}
                                         label="Giải thích đáp án"
@@ -249,7 +250,8 @@ const PutQuestionModal = () => {
                                         </div>
                                     </div>
                                     {/* Tự luận */}
-                                    {typeQuestion === QuestionType.ESSAY && (
+                                    {(typeQuestion === QuestionType.ESSAY ||
+                                        typeQuestion === QuestionType.ORAL) && (
                                         <div className="flex gap-2 flex-col">
                                             <p className="font-medium text-sm text-[#111827]">
                                                 Giải thích đáp án
