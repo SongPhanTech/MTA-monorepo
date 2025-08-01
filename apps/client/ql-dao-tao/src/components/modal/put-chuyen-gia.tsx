@@ -46,7 +46,12 @@ const PutExpertProfile = () => {
                 id: selectedLecturerId,
             },
             include: {
-                userProfile: true,
+                userProfile: {
+                    include: {
+                        hocHam: true,
+                        hocVi: true,
+                    },
+                },
             },
         },
         {
