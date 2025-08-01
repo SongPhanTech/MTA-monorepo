@@ -39,11 +39,11 @@ model DocumentFile extends Base {
   defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId           String?
 
-  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeIdFront], references: [id])
-  diplomaTypeIdFront        String?                  @unique
+  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeFrontId], references: [id])
+  diplomaTypeFrontId        String?                  @unique
 
-  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeIdBack], references: [id])
-  diplomaTypeIdBack         String?                  @unique
+  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeBackId], references: [id])
+  diplomaTypeBackId         String?                  @unique
 
   @@schema("ql-danh-muc")
 }

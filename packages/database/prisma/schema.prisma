@@ -3395,19 +3395,19 @@ model Decision {
 
 /// Quản lý Giấy mời
 model Invitation {
-  id             String    @id() @default(cuid())
-  code           String?   @unique()
-  active         Boolean   @default(true)
-  description    String?   @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @default(now()) @updatedAt()
-  sentDate       DateTime  @default(now())
-  isConfirmed    Boolean   @default(false)
-  decisionId     String
-  decision       Decision  @relation(fields: [decisionId], references: [id])
-  recipientEmail String
-  recipientName  String
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt()
+  sentDate        DateTime      @default(now())
+  isConfirmed     Boolean       @default(false)
+  decisionId      String
+  decision        Decision      @relation(fields: [decisionId], references: [id])
+  councilMember   CouncilMember @relation(fields: [councilMemberId], references: [id])
+  councilMemberId String
 
   @@schema("ql-dao-tao")
 }
@@ -3450,6 +3450,7 @@ model CouncilMember {
   expertId    String
   expert      ExpertProfile  @relation(fields: [expertId], references: [id])
   payment     PaymentRecord?
+  invitations Invitation[]
 
   @@unique([councilId, expertId])
   @@schema("ql-dao-tao")
@@ -3545,10 +3546,10 @@ model DocumentFile {
   decisionId                String?
   defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId           String?
-  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeIdFront], references: [id])
-  diplomaTypeIdFront        String?                  @unique()
-  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeIdBack], references: [id])
-  diplomaTypeIdBack         String?                  @unique()
+  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeFrontId], references: [id])
+  diplomaTypeFrontId        String?                  @unique()
+  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeBackId], references: [id])
+  diplomaTypeBackId         String?                  @unique()
 
   @@schema("ql-danh-muc")
 }

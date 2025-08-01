@@ -142,15 +142,14 @@ model Decision extends Base {
 
 /// Quản lý Giấy mời
 model Invitation extends Base {
-  sentDate       DateTime @default(now())
-  isConfirmed    Boolean  @default(false)
+  sentDate        DateTime      @default(now())
+  isConfirmed     Boolean       @default(false)
 
-  decisionId     String
-  decision       Decision @relation(fields: [decisionId], references: [id])
-  
-  // Thông tin người nhận mời
-  recipientEmail String
-  recipientName  String
+  decisionId      String
+  decision        Decision      @relation(fields: [decisionId], references: [id])
+
+  councilMember   CouncilMember @relation(fields: [councilMemberId], references: [id])
+  councilMemberId String
 
   @@schema("ql-dao-tao")
 }
@@ -197,13 +196,15 @@ enum CouncilRole {
 
 /// Thành viên trong một Hội đồng
 model CouncilMember extends Base {
-  role      CouncilRole
+  role        CouncilRole
 
-  councilId String
-  council   Council        @relation(fields: [councilId], references: [id])
-  expertId  String
-  expert    ExpertProfile  @relation(fields: [expertId], references: [id])
-  payment   PaymentRecord?
+  councilId   String
+  council     Council        @relation(fields: [councilId], references: [id])
+  expertId    String
+  expert      ExpertProfile  @relation(fields: [expertId], references: [id])
+  payment     PaymentRecord?
+
+  invitations Invitation[]
 
   @@unique([councilId, expertId])
 
