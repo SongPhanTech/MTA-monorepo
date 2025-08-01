@@ -6,14 +6,18 @@ import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import {
     useFindManyDM_DanToc,
     useFindManyDM_GioiTinh,
+    useFindManyDM_NhomMau,
     useFindManyDM_QuocGia,
     useFindManyDM_TonGiao,
+    useFindManyDM_TrinhDoHocVan,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, Row, Typography } from 'antd'
+import { Col, Collapse, Form, Input, InputNumber, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
 
 dayjs.locale('vi')
 const { Title, Text } = Typography
+const { TextArea } = Input
+
 export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
 
@@ -21,6 +25,8 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: religionData = [] } = useFindManyDM_TonGiao()
     const { data: ethnicityData = [] } = useFindManyDM_DanToc()
     const { data: genderData = [] } = useFindManyDM_GioiTinh()
+    const { data: bloodType = [] } = useFindManyDM_NhomMau()
+    const { data: trinhDoHocVan = [] } = useFindManyDM_TrinhDoHocVan()
 
     const renderContent = () => {
         return (
@@ -75,6 +81,50 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             className="mb-0"
                         >
                             <Input placeholder="Nhập họ và tên đệm" className="h-9" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="genderId"
+                            label="Giới tính"
+                            className="mb-0"
+                            required
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn giới tính"
+                                className="h-9"
+                                options={genderData.map((i) => {
+                                    return {
+                                        value: i.Id,
+                                        label: i.sTen,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="officerNumber"
+                            label="Số hiệu sĩ quan"
+                            className="mb-0"
+                        >
+                            <Input placeholder="Nhập số hiệu sĩ quan" className="h-9" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="hoTenThuongDung"
+                            label="Họ tên khác"
+                            className="mb-0"
+                        >
+                            <Input placeholder="Nhập họ tên khác" className="h-9" />
                         </FormItem>
                     </Col>
 
@@ -168,16 +218,44 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             <Input placeholder="Nhập nơi sinh" className="h-9" />
                         </FormItem>
                     </Col>
+
                     <Col span={12}>
-                        <FormItem form={form} name="genderId" label="Giới tính" className="mb-0">
+                        <FormItem form={form} name="soTruong" label="Sở trường" className="mb-0">
+                            <Input placeholder="Nhập số trường" className="h-9" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem form={form} name="nhomMauId" label="Nhóm máu" className="mb-0">
                             <Select
                                 allowClear
-                                placeholder="Chọn giới tính"
+                                placeholder="Chọn nhóm máu"
                                 className="h-9"
-                                options={genderData.map((i) => {
+                                options={bloodType.map((i) => {
                                     return {
-                                        value: i.Id,
-                                        label: i.sTen,
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="trinhDoHocVanId"
+                            label="Trình độ học vấn"
+                            className="mb-0"
+                        >
+                            <Select
+                                allowClear
+                                placeholder="Chọn trình độ học vấn"
+                                className="h-9"
+                                options={trinhDoHocVan.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
                                     }
                                 })}
                             />
@@ -243,6 +321,166 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                 }}
                                 className="w-full h-9"
                                 disabledDate={(date) => date && date > dayjs().endOf('day')}
+                            />
+                        </FormItem>
+                    </Col>
+                </Row>
+                {/* Thông tin bản thân */}
+                <div className="mb-6 font-semibold text-base">Thông tin bản thân</div>
+                <Row className="mb-8" gutter={[16, 16]}>
+                    <Col span={12}>
+                        <FormItem form={form} name="conThuMay" label="Con thứ mấy" className="mb-0">
+                            <InputNumber
+                                placeholder="Nhập số thứ tự"
+                                className="w-full h-9"
+                                min={1}
+                                max={20}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={12}>
+                        <FormItem form={form} name="soACE" label="Số anh chị em" className="mb-0">
+                            <InputNumber
+                                placeholder="Nhập số anh chị em"
+                                className="w-full h-9"
+                                min={0}
+                                max={20}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="lichSuBanThan"
+                            label="Lịch sử bản thân"
+                            className="mb-0"
+                        >
+                            <TextArea rows={3} placeholder="Nhập lịch sử bản thân" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="truocKhiNhapNgu"
+                            label="Trước khi nhập ngũ"
+                            className="mb-0"
+                        >
+                            <TextArea rows={2} placeholder="Nhập thông tin trước khi nhập ngũ" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem form={form} name="benh" label="Bệnh tật" className="mb-0">
+                            <TextArea rows={2} placeholder="Nhập thông tin về bệnh tật (nếu có)" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="tinhHinhNhaO"
+                            label="Tình hình nhà ở"
+                            className="mb-0"
+                        >
+                            <TextArea rows={2} placeholder="Mô tả tình hình nhà ở" />
+                        </FormItem>
+                    </Col>
+                </Row>
+
+                {/* Thông tin gia đình */}
+                <div className="mb-6 font-semibold text-base">Thông tin gia đình</div>
+                <Row className="mb-8" gutter={[16, 16]}>
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="thanhPhanGiaDinh"
+                            label="Thành phần gia đình"
+                            className="mb-0"
+                        >
+                            <TextArea rows={3} placeholder="Mô tả thành phần gia đình" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="kinhTeGiaDinh"
+                            label="Kinh tế gia đình"
+                            className="mb-0"
+                        >
+                            <TextArea rows={2} placeholder="Mô tả tình hình kinh tế gia đình" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="chinhTriGiaDinh"
+                            label="Chính trị gia đình"
+                            className="mb-0"
+                        >
+                            <TextArea rows={2} placeholder="Mô tả tình hình chính trị gia đình" />
+                        </FormItem>
+                    </Col>
+                </Row>
+
+                {/* Thông tin gia đình vợ/chồng */}
+                <div className="mb-6 font-semibold text-base">Thông tin gia đình vợ/chồng</div>
+                <Row className="mb-8" gutter={[16, 16]}>
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="fSoACE"
+                            label="Số anh chị em (vợ/chồng)"
+                            className="mb-0"
+                        >
+                            <InputNumber
+                                placeholder="Nhập số anh chị em"
+                                className="w-full h-9"
+                                min={0}
+                                max={20}
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="fBanThan"
+                            label="Bản thân (vợ/chồng)"
+                            className="mb-0"
+                        >
+                            <Input placeholder="Nhập thông tin bản thân vợ/chồng" className="h-9" />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="fKinhTeGiaDinh"
+                            label="Kinh tế gia đình (vợ/chồng)"
+                            className="mb-0"
+                        >
+                            <TextArea
+                                rows={2}
+                                placeholder="Mô tả tình hình kinh tế gia đình vợ/chồng"
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={24}>
+                        <FormItem
+                            form={form}
+                            name="fChinhTriGiaDinh"
+                            label="Chính trị gia đình (vợ/chồng)"
+                            className="mb-0"
+                        >
+                            <TextArea
+                                rows={2}
+                                placeholder="Mô tả tình hình chính trị gia đình vợ/chồng"
                             />
                         </FormItem>
                     </Col>

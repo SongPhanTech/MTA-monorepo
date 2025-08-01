@@ -23,22 +23,30 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
 import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
+import DanhHieuForm from '@components/modal/quan-ly-ho-so/form/danh-hieu'
+import NuocNgoaiForm from '@components/modal/quan-ly-ho-so/form/di-nuoc-ngoai'
 import DoanDang from '@components/modal/quan-ly-ho-so/form/doan-dang'
 import DoiTuongChinhSachForm from '@components/modal/quan-ly-ho-so/form/doi-tuong-chinh-sach'
 import KeKhaiTaiSanForm from '@components/modal/quan-ly-ho-so/form/ke-khai-taI-san'
 import NgoaiNguForm from '@components/modal/quan-ly-ho-so/form/ngoai-ngu'
+import ChienDauForm from '@components/modal/quan-ly-ho-so/form/phuc-vu-chien-dau'
 import QuaTrinhCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cong-tac'
 import QuaTrinhCuDiCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cu-di-cong-tac'
 import QuaTrinhDiDaoTaoBoiDuongForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-di-dao-tao-boi-duong'
+import QuaTrinhHocTapForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-hoc-tap'
+import QuaTrinhLuongForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-luong'
 import ThongTinKhenThuongForm from '@components/modal/quan-ly-ho-so/form/thong-tin-khen-thuong'
 import ThongTinKyLuatForm from '@components/modal/quan-ly-ho-so/form/thong-tin-ky-luat'
 import ThongTinLienHe from '@components/modal/quan-ly-ho-so/form/thong-tin-lien-he'
+import ThuongTatForm from '@components/modal/quan-ly-ho-so/form/thuong-tat'
+import TiengDanTocForm from '@components/modal/quan-ly-ho-so/form/tieng-dan-toc'
 import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
+import ToChucXaHoiForm from '@components/modal/quan-ly-ho-so/form/to-chuc-xa-hoi'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
 import CreateLayout from '@layouts/create-layout'
+import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import { getMinioUrl } from '@workspace/constant'
-import type { Prisma } from '@workspace/db'
 import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
 import ImgCrop from 'antd-img-crop'
@@ -53,30 +61,6 @@ interface itemType {
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-export type SubmitForm = Prisma.UserProfileGetPayload<{
-    include: {
-        tinHoc: true
-        hocVi: true
-        hocHam: true
-        trinhDoLyLuanChinhTri: true
-        trinhDoQuanLyHanhChinh: true
-        trinhDoQuanLyNhaNuoc: true
-        ngoaiNgu: true
-        boiDuongQuocPhongAnNinh: true
-        capBac: true
-        doanDang: true
-        doiTuongChinhSach: true
-        keKhaiTaiSan: true
-        quaTrinhCongTac: true
-        quaTrinhCuDiCongTac: true
-        quaTrinhCuDiDaoTao: true
-        khenThuong: true
-        kyLuat: true
-        relatives: true
-    }
-}> & {
-    file?: FileType
-}
 export default function UpdateUserPage() {
     const router = useRouter()
     const cccd = router.query.id as string
@@ -163,6 +147,87 @@ export default function UpdateUserPage() {
                 render: (
                     <Form.Item name="trinhDoQuanLyNhaNuoc" className="mb-0">
                         <TrinhDoQuanLyNhaNuocForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Tiếng dân tôc',
+                id: 'tiengDanToc',
+                render: (
+                    <Form.Item name="tiengDanToc" className="mb-0">
+                        <TiengDanTocForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Phục vụ chiến đấu',
+                id: 'phucVuChienDau',
+                render: (
+                    <Form.Item name="chienDau" className="mb-0">
+                        <ChienDauForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Đi nước ngoài',
+                id: 'diNuocNgoai',
+                render: (
+                    <Form.Item name="diNuocNgoai" className="mb-0">
+                        <NuocNgoaiForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Thương tật',
+                id: 'thuongTat',
+                render: (
+                    <Form.Item name="thuongTat" className="mb-0">
+                        <ThuongTatForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Danh hiệu',
+                id: 'danhHieu',
+                render: (
+                    <Form.Item name="danhHieu" className="mb-0">
+                        <DanhHieuForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Tổ chức xã hội',
+                id: 'toChucXaHoi',
+                render: (
+                    <Form.Item name="ToChucXaHoi" className="mb-0">
+                        <ToChucXaHoiForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Quá trình học tập',
+                id: 'quaTrinhHocTap',
+                render: (
+                    <Form.Item name="quaTrinhHocTap" className="mb-0">
+                        <QuaTrinhHocTapForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Quá trình lương',
+                id: 'QuaTrinhLuong',
+                render: (
+                    <Form.Item name="QuaTrinhLuong" className="mb-0">
+                        <QuaTrinhLuongForm expland={expland} setExpland={setExpland} />
+                    </Form.Item>
+                ),
+            },
+            {
+                title: 'Trình độ tin học',
+                id: 'tinHoc',
+                render: (
+                    <Form.Item name="tinHoc" className="mb-0">
+                        <TinHocForm expland={expland} setExpland={setExpland} />
                     </Form.Item>
                 ),
             },
@@ -333,6 +398,14 @@ export default function UpdateUserPage() {
                             kyLuat: { deleteMany: {} },
                             doiTuongChinhSach: { deleteMany: {} },
                             keKhaiTaiSan: { deleteMany: {} },
+                            chienDau: { deleteMany: {} },
+                            diNuocNgoai: { deleteMany: {} },
+                            thuongTat: { deleteMany: {} },
+                            danhHieu: { deleteMany: {} },
+                            tiengDanToc: { deleteMany: {} },
+                            ToChucXaHoi: { deleteMany: {} },
+                            QuaTrinhLuong: { deleteMany: {} },
+                            quaTrinhHocTap: { deleteMany: {} },
                         },
                     },
                 },
@@ -590,6 +663,118 @@ export default function UpdateUserPage() {
                                           },
                                       }
                                     : undefined,
+
+                            chienDau:
+                                values.chienDau && values.chienDau.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.chienDau.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            diNuocNgoai:
+                                values.diNuocNgoai && values.diNuocNgoai.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.diNuocNgoai.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            thuongTat:
+                                values.thuongTat && values.thuongTat.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.thuongTat.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            danhHieu:
+                                values.danhHieu && values.danhHieu.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.danhHieu.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            tiengDanToc:
+                                values.tiengDanToc && values.tiengDanToc.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.tiengDanToc.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            ToChucXaHoi:
+                                values.ToChucXaHoi && values.ToChucXaHoi.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.ToChucXaHoi.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            QuaTrinhLuong:
+                                values.QuaTrinhLuong && values.QuaTrinhLuong.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.QuaTrinhLuong.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
+
+                            quaTrinhHocTap:
+                                values.quaTrinhHocTap && values.quaTrinhHocTap.length > 0
+                                    ? {
+                                          createMany: {
+                                              data: values.quaTrinhHocTap.map((item) => {
+                                                  const { id, userProfileId, ...itemWithoutId } =
+                                                      item
+                                                  return itemWithoutId
+                                              }),
+                                              skipDuplicates: true,
+                                          },
+                                      }
+                                    : undefined,
                         },
                     },
                 },
@@ -636,6 +821,16 @@ export default function UpdateUserPage() {
                 quaTrinhCuDiCongTac: true,
                 quaTrinhCuDiDaoTao: true,
                 relatives: true,
+                chienDau: true,
+                diNuocNgoai: true,
+                thuongTat: true,
+                danhHieu: true,
+                tiengDanToc: true,
+                ToChucXaHoi: true,
+                QuaTrinhLuong: true,
+                quaTrinhHocTap: true,
+                nhomMau: true,
+                trinhDoHocVan: true,
             },
         },
         {

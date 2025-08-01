@@ -31,7 +31,7 @@ export default function TrinhDoHocVanModal() {
                         id: input.id,
                     },
                     data: {
-                        code: output.code,
+                        name: output.name,
                         description: output.description,
                     },
                 })
@@ -39,7 +39,7 @@ export default function TrinhDoHocVanModal() {
             } else {
                 await createDM_TrinhDoHocVan({
                     data: {
-                        code: output.code,
+                        name: output.name,
                         description: output.description,
                     },
                 })
@@ -55,7 +55,7 @@ export default function TrinhDoHocVanModal() {
     useEffect(() => {
         if (input && isOpen) {
             form.setFieldsValue({
-                code: input.code,
+                name: input.name,
                 description: input.description,
             })
         }
@@ -72,7 +72,7 @@ export default function TrinhDoHocVanModal() {
             layout="vertical"
         >
             <Col span={24}>
-                <FormItem label="Tên trình độ" name="code" required form={form}>
+                <FormItem label="Tên trình độ" name="name" required form={form}>
                     <Input placeholder="Nhập tên trình độ" />
                 </FormItem>
             </Col>

@@ -404,7 +404,6 @@ export default function CreateUserPage() {
         }
         try {
             showSpinner()
-            console.log('Submitting form with values:', form.getFieldsValue())
 
             await createUserProfile({
                 data: {
@@ -622,6 +621,114 @@ export default function CreateUserPage() {
                             },
                         },
                         !!values.tinHoc
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            chienDau: {
+                                createMany: {
+                                    data: values.chienDau?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.chienDau
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            diNuocNgoai: {
+                                createMany: {
+                                    data: values.diNuocNgoai?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.diNuocNgoai
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            thuongTat: {
+                                createMany: {
+                                    data: values.thuongTat?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.thuongTat
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            danhHieu: {
+                                createMany: {
+                                    data: values.danhHieu?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.danhHieu
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            tiengDanToc: {
+                                createMany: {
+                                    data: values.tiengDanToc?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.tiengDanToc
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            ToChucXaHoi: {
+                                createMany: {
+                                    data: values.ToChucXaHoi?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.ToChucXaHoi
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            danhHieu: {
+                                createMany: {
+                                    data: values.danhHieu?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.danhHieu
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            QuaTrinhLuong: {
+                                createMany: {
+                                    data: values.QuaTrinhLuong?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.QuaTrinhLuong
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            quaTrinhHocTap: {
+                                createMany: {
+                                    data: values.quaTrinhHocTap?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.quaTrinhHocTap
                     ),
                 },
             })
