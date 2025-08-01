@@ -64,7 +64,6 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
-                // Giải phóng bộ nhớ sau khi sử dụng
                 setTimeout(() => URL.revokeObjectURL(fileUrl), 100)
             } else {
                 // Nếu là file từ server
