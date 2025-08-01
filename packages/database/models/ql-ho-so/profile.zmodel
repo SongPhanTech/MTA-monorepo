@@ -67,6 +67,7 @@ model UserProfile extends Base {
   // gia đình vợ/chồng
   fSoACE                     Int?      // số anh chị em
   fKinhTeGiaDinh             String?
+  fThanhPhanGiaDinh          String?
   fChinhTriGiaDinh           String?
   fBanThan                   String?
 
@@ -304,6 +305,8 @@ model TrinhDoQuanLyNhaNuoc extends Base {
 }
 
 model NgoaiNgu extends Base {
+  ngonNgu         DM_NgoaiNgu?       @relation(fields: [ngonNguId], references: [Id])
+  ngonNguId       String?            @db.Uuid
   hinhThucDaoTao  String?
   noiDaoTao       String?
   thoiGianBatDau  DateTime?
@@ -363,6 +366,10 @@ model QuaTrinhCongTac extends Base {
   denThangNam       DateTime?
 
   donVi             String?
+  chucDanh          String?
+  chucVuDangDoan    String?
+  soQuyetDinh       String?
+  ngayNhanQuyetDinh DateTime?
 
   chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
   chucVuId          String             @db.Uuid
@@ -413,6 +420,7 @@ model KhenThuong extends Base {
   soQuyetDinh        String?
   nguoiKy            String?
   ngayNhanQuyetDinh  DateTime?
+  lyDo               String?
 
   userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId      String
@@ -426,6 +434,7 @@ model KyLuat extends Base {
   soQuyetDinh       String?
   nguoiKy           String?
   ngayNhanQuyetDinh DateTime?
+  lyDo              String?
 
   userProfile       UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId     String
