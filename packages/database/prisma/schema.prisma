@@ -126,6 +126,40 @@ enum TrainingObjectTypes {
   @@schema("ql-dao-tao")
 }
 
+enum DiplomaFields {
+  VI_FULLNAME
+  EN_FULLNAME
+  VI_FULLNAME_UPPERCASE
+  EN_FULLNAME_UPPERCASE
+  DATE_OF_BIRTH
+  TRAINING_MAJOR
+  GPA
+  YEAR_OF_GRADUATION
+  CLASSIFICATION
+  TRAINING_FORM
+  DD
+  MM
+  YYYY
+  OTHER
+
+  @@schema("ql-dao-tao")
+}
+
+enum DocumentSide {
+  FRONT
+  BACK
+
+  @@schema("ql-dao-tao")
+}
+
+enum TextAlign {
+  LEFT
+  CENTER
+  RIGHT
+
+  @@schema("ql-dao-tao")
+}
+
 enum AcademicRankingBaseType {
   Base10
   Base4
@@ -287,6 +321,7 @@ enum StudentThesisRegistrationStatus {
   PENDING
   ACCEPTED
   REJECTED
+  CANCELED
 
   @@schema("ql-dao-tao")
 }
@@ -1444,6 +1479,30 @@ model TrainingTime {
   @@schema("ql-dao-tao")
 }
 
+model DiplomaPlaceHolder {
+  id            String        @id() @default(cuid())
+  code          String?       @unique()
+  active        Boolean       @default(true)
+  description   String?       @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt()
+  field         DiplomaFields
+  value         String?
+  side          DocumentSide
+  top           Decimal
+  left          Decimal
+  width         Decimal
+  height        Decimal
+  textAlign     TextAlign     @default(CENTER)
+  font          String?
+  fontSize      Decimal
+  diplomaType   DiplomaType   @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId String
+
+  @@schema("ql-dao-tao")
+}
+
 model DiplomaType {
   id                 String               @id() @default(cuid())
   code               String?              @unique()
@@ -1454,6 +1513,9 @@ model DiplomaType {
   updatedAt          DateTime             @default(now()) @updatedAt()
   name               String               @unique()
   englishName        String?
+  front              DocumentFile?        @relation("DiplomaTypeFront")
+  back               DocumentFile?        @relation("DiplomaTypeBack")
+  diplomaPlaceHolder DiplomaPlaceHolder[]
   curriculumVersion  CurriculumVersion[]
   graduationDecision GraduationDecision[]
 
@@ -1506,6 +1568,7 @@ model Student {
   createdAt                DateTime                       @default(now())
   updatedAt                DateTime                       @default(now()) @updatedAt()
   entryScore               Float?
+  note                     String?
   from                     DateTime?
   to                       DateTime?
   trainingLocation         TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
@@ -2438,7 +2501,6 @@ model UserProfile {
   deletedAt                  DateTime?
   createdAt                  DateTime                  @default(now())
   updatedAt                  DateTime                  @default(now()) @updatedAt()
-  userType                   UserType                  @default(OTHER)
   bLaNguoiDung               Boolean?
   bLaCanBoNhanVien           Boolean?
   bLaHocVien                 Boolean?
@@ -3333,19 +3395,19 @@ model Decision {
 
 /// Quản lý Giấy mời
 model Invitation {
-  id             String    @id() @default(cuid())
-  code           String?   @unique()
-  active         Boolean   @default(true)
-  description    String?   @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @default(now()) @updatedAt()
-  sentDate       DateTime  @default(now())
-  isConfirmed    Boolean   @default(false)
-  decisionId     String
-  decision       Decision  @relation(fields: [decisionId], references: [id])
-  recipientEmail String
-  recipientName  String
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt()
+  sentDate        DateTime      @default(now())
+  isConfirmed     Boolean       @default(false)
+  decisionId      String
+  decision        Decision      @relation(fields: [decisionId], references: [id])
+  councilMember   CouncilMember @relation(fields: [councilMemberId], references: [id])
+  councilMemberId String
 
   @@schema("ql-dao-tao")
 }
@@ -3388,6 +3450,7 @@ model CouncilMember {
   expertId    String
   expert      ExpertProfile  @relation(fields: [expertId], references: [id])
   payment     PaymentRecord?
+  invitations Invitation[]
 
   @@unique([councilId, expertId])
   @@schema("ql-dao-tao")
@@ -3483,6 +3546,10 @@ model DocumentFile {
   decisionId                String?
   defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId           String?
+  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeFrontId], references: [id])
+  diplomaTypeFrontId        String?                  @unique()
+  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeBackId], references: [id])
+  diplomaTypeBackId         String?                  @unique()
 
   @@schema("ql-danh-muc")
 }
@@ -3893,9 +3960,10 @@ model DM_TrinhDoHocVan {
   deletedAt   DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @default(now()) @updatedAt()
+  name        String        @unique()
   userProfile UserProfile[]
 
-  @@schema("mta")
+  @@schema("ql-ho-so")
 }
 
 model DM_TrinhDoLyLuanChinhTri {

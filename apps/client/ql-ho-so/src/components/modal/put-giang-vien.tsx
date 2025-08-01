@@ -2,17 +2,8 @@
 import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { $Enums, type UserProfile } from '@workspace/db'
-import {
-    useCreateLecturer,
-    useCreateUserProfile,
-    useFindManyUserProfile,
-    useFindUniqueLecturer,
-    useUpdateLecturer,
-    useUpdateUserProfile,
-    useUpsertUserProfile,
-} from '@workspace/db/hooks'
-import { generatePresignedUrl } from '@workspace/libs/api/model'
+import type { UserProfile } from '@workspace/db'
+import { useCreateLecturer, useFindUniqueLecturer, useUpdateLecturer } from '@workspace/db/hooks'
 import type { GetProp, UploadProps } from 'antd'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
@@ -36,7 +27,7 @@ export interface PutUserProfileLectureProps {
 }
 
 const PutUserProfileLectureModal = () => {
-    const [form] = Form.useForm<PutLecturerProfile>()
+    const [form] = Form.useForm<PutLecturerProfile & { userProfileId: string }>()
 
     const { isOpen, onClose, input } = useDisclosure<PutUserProfileLectureProps>({
         tag: PutUserProfileLectureModal.name,
@@ -74,158 +65,17 @@ const PutUserProfileLectureModal = () => {
 
     const { mutateAsync: updateLecturer } = useUpdateLecturer()
     const { mutateAsync: createLecturer } = useCreateLecturer()
-    const { mutateAsync: updateUserProfile } = useUpdateUserProfile()
-    const { mutateAsync: createUserProfile } = useCreateUserProfile()
-    const { mutateAsync: upsertUserProfile } = useUpsertUserProfile()
-    const { data = [] } = useFindManyUserProfile({
-        where: {
-            userType: $Enums.UserType.LECTURER,
-            lecturer: {
-                deletedAt: null, // Lecturer chưa bị xóa
-            },
-        },
-        select: {
-            idCardNumber: true,
-        },
-    })
 
-    const buildUserProfileUpdateData = (
-        output: UserProfileType,
-        fileName?: string
-    ): Prisma.UserProfileUpdateInput => ({
-        code: output.code,
-        avatar: fileName || undefined,
-        firstName: output.firstName,
-        lastName: output.lastName,
-        dateOfBirth: output.dateOfBirth,
-        placeOfBirth: output.placeOfBirth,
-        homeTown: output.homeTown,
-        idCardNumber: output.idCardNumber,
-        idCardDate: output.idCardDate,
-        officerNumber: output.officerNumber,
-        gender: output.gender,
-        permanentAddress: output.permanentAddress,
-        temporaryAddress: output.temporaryAddress,
-        contactAddress: output.contactAddress,
-        phoneNumber: output.phoneNumber,
-        email: output.email,
-        familyPhone: output.familyPhone,
-        familyName: output.familyName,
-        unionDate: output.unionDate,
-        unionPlace: output.unionPlace,
-        CPVJoinDate: output.CPVJoinDate,
-        officialCPVDate: output.officialCPVDate,
-        CPVJoinPlace: output.CPVJoinPlace,
-        tenureDate: output.tenureDate,
-        enlistmentDate: output.enlistmentDate,
-        dischargeDate: output.dischargeDate,
-        rankDate: output.rankDate,
-        academicRankDate: output.academicRankDate,
-        academicDegreeDate: output.academicDegreeDate,
-        bankAccountNumber: output.bankAccountNumber,
-        bankName: output.bankName,
-        healthInsuranceNumber: output.healthInsuranceNumber,
-        userType: $Enums.UserType.LECTURER,
-
-        // Quan hệ dạng connect
-        ...(output.nationalityId && {
-            nationality: { connect: { Id: output.nationalityId } },
-        }),
-        ...(output.religionId && {
-            religion: { connect: { Id: output.religionId } },
-        }),
-        ...(output.ethnicityId && {
-            ethnicity: { connect: { Id: output.ethnicityId } },
-        }),
-        ...(output.rankId && {
-            rank: { connect: { Id: output.rankId } },
-        }),
-        ...(output.levelId && {
-            level: { connect: { Id: output.levelId } },
-        }),
-        ...(output.academicDegreeTypeId && {
-            academicDegreeType: {
-                connect: { Id: output.academicDegreeTypeId },
-            },
-        }),
-        ...(output.academicRankTypeId && {
-            academicRankType: { connect: { Id: output.academicRankTypeId } },
-        }),
-    })
-
-    const buildUserProfileCreateData = (
-        output: UserProfileType,
-        fileName?: string
-    ): Prisma.UserProfileCreateInput => ({
-        code: output.code,
-        avatar: fileName || undefined,
-        firstName: output.firstName,
-        lastName: output.lastName,
-        dateOfBirth: output.dateOfBirth,
-        placeOfBirth: output.placeOfBirth,
-        homeTown: output.homeTown,
-        idCardNumber: output.idCardNumber,
-        idCardDate: output.idCardDate,
-        officerNumber: output.officerNumber,
-        gender: output.gender,
-        permanentAddress: output.permanentAddress,
-        temporaryAddress: output.temporaryAddress,
-        contactAddress: output.contactAddress,
-        phoneNumber: output.phoneNumber,
-        email: output.email,
-        familyPhone: output.familyPhone,
-        familyName: output.familyName,
-        unionDate: output.unionDate,
-        unionPlace: output.unionPlace,
-        CPVJoinDate: output.CPVJoinDate,
-        officialCPVDate: output.officialCPVDate,
-        CPVJoinPlace: output.CPVJoinPlace,
-        tenureDate: output.tenureDate,
-        enlistmentDate: output.enlistmentDate,
-        dischargeDate: output.dischargeDate,
-        rankDate: output.rankDate,
-        academicRankDate: output.academicRankDate,
-        academicDegreeDate: output.academicDegreeDate,
-        bankAccountNumber: output.bankAccountNumber,
-        bankName: output.bankName,
-        healthInsuranceNumber: output.healthInsuranceNumber,
-        userType: $Enums.UserType.LECTURER,
-
-        // Quan hệ dạng connect
-        ...(output.nationalityId && {
-            nationality: { connect: { Id: output.nationalityId } },
-        }),
-        ...(output.religionId && {
-            religion: { connect: { Id: output.religionId } },
-        }),
-        ...(output.ethnicityId && {
-            ethnicity: { connect: { Id: output.ethnicityId } },
-        }),
-        ...(output.rankId && {
-            rank: { connect: { Id: output.rankId } },
-        }),
-        ...(output.levelId && {
-            level: { connect: { Id: output.levelId } },
-        }),
-        ...(output.academicDegreeTypeId && {
-            academicDegreeType: {
-                connect: { Id: output.academicDegreeTypeId },
-            },
-        }),
-        ...(output.academicRankTypeId && {
-            academicRankType: { connect: { Id: output.academicRankTypeId } },
-        }),
-    })
-
-    const buildLecturerUpdateData = (output: LecturerProfileType): Prisma.LecturerUpdateInput => ({
-        code: output.code,
-        ...(output.organizationId && {
-            organization: { connect: { Id: output.organizationId } },
-        }),
-        ...(output.lecturerTypeId && {
-            lecturerType: { connect: { id: output.lecturerTypeId } },
-        }),
-    })
+    // const { data = [] } = useFindManyUserProfile({
+    //     where: {
+    //         lecturer: {
+    //             deletedAt: null, // Lecturer chưa bị xóa
+    //         },
+    //     },
+    //     select: {
+    //         idCardNumber: true,
+    //     },
+    // })
 
     const buildLecturerCreateData = (
         output: LecturerProfileType,
@@ -239,92 +89,36 @@ const PutUserProfileLectureModal = () => {
 
     async function onOk(output?: PutLecturerProfile) {
         if (!output) return
-        let fileName = output.avatar
-        if (output.file) {
-            const resPresignedUrl = await generatePresignedUrl({
-                path: 'avatar',
-                extension: output.file.fileList?.[0]?.name?.split('.').pop() ?? '',
-            })
 
-            await fetch(resPresignedUrl.data.url, {
-                method: 'PUT',
-                body: output.file.fileList?.[0]?.originFileObj,
-            })
-
-            fileName = resPresignedUrl.data.fileName
-        }
+        console.log(output)
 
         try {
             showSpinner()
 
-            const userProfileData = buildUserProfileUpdateData(output, fileName ?? undefined)
-
-            const userProfileCreateData = buildUserProfileCreateData(output, fileName ?? undefined)
-
-            const lecturerDataUpdate = buildLecturerUpdateData(output)
-
             if (id) {
-                // UPDATE MODE
-                const promises = []
+                await updateLecturer({
+                    data: {
+                        userProfileId: output?.userProfileId,
+                        lecturerTypeId: output.lecturerTypeId,
+                        code: output.code,
+                        organizationId: output.organizationId,
+                    },
+                    where: {
+                        id: id,
+                    },
+                })
 
-                if (lecturerData?.userProfile?.id) {
-                    promises.push(
-                        updateUserProfile({
-                            data: userProfileData,
-                            where: {
-                                id: lecturerData.userProfile.id,
-                            },
-                        })
-                    )
-                }
-
-                promises.push(
-                    updateLecturer({
-                        data: lecturerDataUpdate,
-                        where: { id },
-                    })
-                )
-
-                await Promise.all(promises)
-                message.success('Cập nhật giảng viên thành công')
+                message.success('Cập nhật sinh viên, học viên thành công')
             } else {
-                // CREATE MODE - sử dụng upsert
-                if (data.some((item) => item.idCardNumber === output.idCardNumber)) {
-                    // Sử dụng upsert để create hoặc update UserProfile
-                    const userProfile = await upsertUserProfile({
-                        where: {
-                            idCardNumber: output.idCardNumber,
-                        },
-                        create: userProfileCreateData,
-                        update: userProfileData,
-                    })
-
-                    const lecturerUpdateData = buildLecturerUpdateData(output)
-
-                    await updateLecturer({
-                        data: lecturerUpdateData,
-                        where: {
-                            userProfileId: userProfile?.id,
-                        },
-                    })
-
-                    message.success('Cập nhật giảng viên thành công')
-                } else {
-                    // Nếu không có CCCD thì tạo mới
-                    const userProfile = await createUserProfile({
-                        data: userProfileCreateData,
-                    })
-
-                    if (!userProfile?.id) {
-                        throw new Error('Tạo hồ sơ người dùng thất bại')
-                    }
-
-                    const lecturerCreateData = buildLecturerCreateData(output, userProfile.id)
-
-                    await createLecturer({ data: lecturerCreateData })
-
-                    message.success('Thêm mới giảng viên thành công')
-                }
+                await createLecturer({
+                    data: {
+                        userProfileId: output?.userProfileId,
+                        lecturerTypeId: output.lecturerTypeId,
+                        code: output.code,
+                        organizationId: output.organizationId,
+                    },
+                })
+                message.success('Thêm mới sinh viên, học viên thành công')
             }
 
             // refetch() lại danh sách level
@@ -353,55 +147,8 @@ const PutUserProfileLectureModal = () => {
                 // Thông tin cơ bản từ UserProfile
                 firstName: userProfile.firstName,
                 lastName: userProfile.lastName,
-                dateOfBirth: userProfile.dateOfBirth ? dayjs(userProfile.dateOfBirth) : null,
-                placeOfBirth: userProfile.placeOfBirth,
-                homeTown: userProfile.homeTown,
                 idCardNumber: userProfile.idCardNumber,
-                idCardDate: userProfile.idCardDate ? dayjs(userProfile.idCardDate) : null,
-                officerNumber: userProfile.officerNumber,
-                healthInsuranceNumber: userProfile.healthInsuranceNumber,
-                bankAccountNumber: userProfile.bankAccountNumber,
-                bankName: userProfile.bankName,
-                gender: userProfile.gender,
-                permanentAddress: userProfile.permanentAddress,
-                temporaryAddress: userProfile.temporaryAddress,
-                contactAddress: userProfile.contactAddress,
-                phoneNumber: userProfile.phoneNumber,
-                email: userProfile.email,
-                familyPhone: userProfile.familyPhone,
-                familyName: userProfile.familyName,
-
-                // Thông tin Đoàn/Đảng/Nhập ngũ
-                unionDate: userProfile.unionDate ? dayjs(userProfile.unionDate) : null,
-                unionPlace: userProfile.unionPlace,
-                CPVJoinDate: userProfile.CPVJoinDate ? dayjs(userProfile.CPVJoinDate) : null,
-                officialCPVDate: userProfile.officialCPVDate
-                    ? dayjs(userProfile.officialCPVDate)
-                    : null,
-                CPVJoinPlace: userProfile.CPVJoinPlace,
-                tenureDate: userProfile.tenureDate ? dayjs(userProfile.tenureDate) : null,
-                enlistmentDate: userProfile.enlistmentDate
-                    ? dayjs(userProfile.enlistmentDate)
-                    : null,
-                dischargeDate: userProfile.dischargeDate ? dayjs(userProfile.dischargeDate) : null,
-
-                // Relations IDs
-                nationalityId: userProfile.nationalityId,
-                religionId: userProfile.religionId,
-                ethnicityId: userProfile.ethnicityId,
-                rankId: userProfile.rankId,
-                levelId: userProfile.levelId,
-                academicDegreeTypeId: userProfile.academicDegreeTypeId,
-                academicRankTypeId: userProfile.academicRankTypeId,
-
-                // Lịch sử - Dates
-                rankDate: userProfile.rankDate ? dayjs(userProfile.rankDate) : null,
-                academicRankDate: userProfile.academicRankDate
-                    ? dayjs(userProfile.academicRankDate)
-                    : null,
-                academicDegreeDate: userProfile.academicDegreeDate
-                    ? dayjs(userProfile.academicDegreeDate)
-                    : null,
+                userProfileId: userProfile.id,
             }
 
             form.setFieldsValue(formData)

@@ -9,7 +9,7 @@ import {
     PutUserProfileStaffModal,
 } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
@@ -17,6 +17,7 @@ import {
     useCountStaff,
     useFindManyDM_CapBac,
     useFindManyDM_DonVi,
+    useFindManyDM_GioiTinh,
     useFindManyStaff,
     useFindManyStaffType,
     useFindManyTemplateFile,
@@ -67,13 +68,13 @@ export default function StaffManagement() {
                           },
                       }
                     : {}),
-                // ...(filters.gender
-                //     ? {
-                //           gender: {
-                //               in: filters.gender,
-                //           },
-                //       }
-                //     : {}),
+                ...(filters.gender
+                    ? {
+                          genderId: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -178,13 +179,13 @@ export default function StaffManagement() {
                           },
                       }
                     : {}),
-                // ...(filters.gender
-                //     ? {
-                //           gender: {
-                //               in: filters.gender,
-                //           },
-                //       }
-                //     : {}),
+                ...(filters.gender
+                    ? {
+                          genderId: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -253,6 +254,8 @@ export default function StaffManagement() {
     const treeData = buildOrgTree(manageOrgData)
 
     const { data: rankTypeData = [] } = useFindManyDM_CapBac()
+
+    const { data: genderTypeData = [] } = useFindManyDM_GioiTinh()
 
     const { mutateAsync: updateStaff } = useUpdateStaff()
 
@@ -476,15 +479,13 @@ export default function StaffManagement() {
                                 width: 100,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                options: [
-                                    { label: 'Nam', value: 'Male' },
-                                    { label: 'Nữ', value: 'Female' },
-                                ],
+                                options: genderTypeData.map((i) => ({
+                                    label: i.sTen,
+                                    value: i.Id,
+                                })),
                                 render: (record) =>
                                     record?.userProfile?.gender
-                                        ? GENDER_MEAN[
-                                              record.userProfile.gender as keyof typeof GENDER_MEAN
-                                          ]
+                                        ? record?.userProfile?.gender?.sTen
                                         : '',
                             },
 

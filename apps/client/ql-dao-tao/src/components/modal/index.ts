@@ -27,7 +27,6 @@ import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
 import PutHocBong from './put-hoc-bong'
-import PutHocvienModal from './put-hoc-vien'
 import PutCouncil from './put-hoi-dong-danh-gia'
 import PutTrainingCourseModal from './put-khoa-huan-luyen'
 import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
@@ -135,6 +134,5 @@ export {
     PutStudentThesisRegistration,
     PutCouncil,
     PutCouncilMember,
-    PutHocvienModal,
     PutStudentModal,
 }

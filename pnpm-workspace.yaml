@@ -4,7 +4,6 @@ packages:
   - packages/*
 
 catalog:
-  fast-xml-parser: ^5.2.5
   '@ant-design/cssinjs': ^1.22.1
   '@ant-design/icons': ^5.5.2
   '@ant-design/nextjs-registry': ^1.0.2
@@ -26,6 +25,16 @@ catalog:
   '@prisma/client': 6.10.1
   '@scalar/hono-api-reference': ^0.5.175
   '@t3-oss/env-nextjs': 0.12.0
+  '@tiptap/extension-highlight': ^2.26.1
+  '@tiptap/extension-mathematics': ^2.26.1
+  '@tiptap/extension-mention': ^2.26.1
+  '@tiptap/extension-text-align': ^2.26.1
+  '@tiptap/extension-underline': ^2.26.1
+  '@tiptap/extension-image': ^2.26.1
+  '@tiptap/pm': ^2.26.1
+  '@tiptap/react': ^2.26.1
+  '@tiptap/starter-kit': ^2.26.1
+  '@tiptap/suggestion': ^2.26.1
   '@turbo/gen': ^1.12.4
   '@types/axios': ^0.14.4
   '@types/bun': ^1.2.2
@@ -56,12 +65,14 @@ catalog:
   easy-peasy: 6.0.5
   esbuild: 0.24.2
   exceljs: ^4.4.0
+  fast-xml-parser: ^5.2.5
   file-saver: ^2.0.5
   glob: ^11.0.0
   hono: ^4.7.2
   husky: ^9.1.7
   jose: ^6.0.11
   jwt-decode: ^4.0.0
+  katex: ^0.16.22
   lint-staged: ^16.1.0
   lodash: ^4.17.21
   lucide-react: ^0.468.0
@@ -101,6 +112,7 @@ catalog:
   terser-webpack-plugin: ^5.3.14
   ts-node: ^10.9.2
   ts-to-zod: ^3.15.0
+  tippy.js: ^6.3.7
   turbo: ^2.5.4
   typescript: ^5.8.3
   xlsx: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz

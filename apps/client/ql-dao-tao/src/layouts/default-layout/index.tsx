@@ -34,7 +34,7 @@ const DefaultLayout = ({
 }) => {
     const router = useRouter()
     const currentPath = router.pathname
-    const breadcrumb = getDynamicBreadcrum('QL_HO_SO', currentPath)
+    const breadcrumb = getDynamicBreadcrum('QL_DAO_TAO', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })

@@ -3,10 +3,10 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import PutThongTinThanNhan from '@components/modal/quan-ly-ho-so/modals/put-thong-tin-than-nhan'
+import { RELATIONSHIP_TYPE } from '@constants/constants'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { Relative } from '@workspace/db'
-import { useFindManyDM_MoiQuanHe } from '@workspace/db/hooks'
 import { Button, Col, Collapse, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -19,13 +19,6 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
     const { onOpen } = useDisclosure<Partial<Relative> & { onSave: (val: Relative) => void }>({
         tag: PutThongTinThanNhan.name,
     })
-
-    const { data: quanHeData = [] } = useFindManyDM_MoiQuanHe(
-        {},
-        {
-            enabled: expland.includes('thongTinThanNhan'),
-        }
-    )
 
     const handleSave = (data: Relative) => {
         const currentList = form.getFieldValue('relatives') || []
@@ -113,12 +106,9 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
                             title: 'Tên mối quan hệ',
                             align: 'center',
                             width: 160,
-                            render: (_, record) => {
-                                const relation = quanHeData.find(
-                                    (item) => item.id === record?.dM_MoiQuanHeId
-                                )
-                                return relation ? relation.name : ''
-                            },
+                            render: (_, record) =>
+                                RELATIONSHIP_TYPE[record?.type as keyof typeof RELATIONSHIP_TYPE] ||
+                                '',
                         },
                         {
                             title: 'Năm sinh',
@@ -131,6 +121,18 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
                             align: 'center',
                             width: 140,
                             render: (_, record) => record?.job || '',
+                        },
+                        {
+                            title: 'Quê quán',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.queQuan || '',
+                        },
+                        {
+                            title: 'Nơi ở hiện nay',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.noiOHienTai || '',
                         },
                         {
                             title: 'Thông tin khác',

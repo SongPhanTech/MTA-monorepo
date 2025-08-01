@@ -10,6 +10,7 @@ ARG PACKAGE
 ENV PACKAGE="${PACKAGE}"
 WORKDIR /app
 RUN pnpm add -g turbo
+RUN turbo telemetry disable
 COPY . .
 RUN turbo prune @backend/${PACKAGE} --docker
 

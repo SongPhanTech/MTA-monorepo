@@ -5,6 +5,7 @@ import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { env } from '@/env'
 
 const { Dragger } = Upload
 const { Link } = Typography
@@ -49,6 +50,36 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
         }))
 
         form.setFieldValue(titleForm, updatedFiles)
+    }
+
+    const handlePreviewFile = async (file: UploadedFileItem) => {
+        try {
+            if (file.file) {
+                // Nếu là file mới upload
+                const fileUrl = URL.createObjectURL(file.file)
+                const a = document.createElement('a')
+                a.href = fileUrl
+                a.download = file.name
+                a.target = '_blank'
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+                setTimeout(() => URL.revokeObjectURL(fileUrl), 100)
+            } else {
+                // Nếu là file từ server
+                const fileUrl = `${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${file.path}`
+                const a = document.createElement('a')
+                a.href = fileUrl
+                a.download = file.name
+                a.target = '_blank'
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+            }
+        } catch (error) {
+            console.error('Error opening file:', error)
+            message.error('Không thể mở file')
+        }
     }
 
     const handleCustomUpload = async (file: File) => {
@@ -168,7 +199,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     return (
                         <div
                             key={item.path}
-                            className="flex items-center border border-solid border-[#D1D5DB] rounded p-2"
+                            className="flex items-center border border-solid border-[#D1D5DB] rounded p-2 hover:bg-gray-50 cursor-pointer"
+                            onClick={() => handlePreviewFile(item)}
                         >
                             <PaperClipOutlined
                                 style={{
@@ -196,7 +228,10 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                                     color: '#595959',
                                     fontSize: 14,
                                 }}
-                                onClick={() => handleRemoveFile(index)}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleRemoveFile(index)
+                                }}
                             />
                         </div>
                     )

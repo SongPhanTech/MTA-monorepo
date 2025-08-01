@@ -1,9 +1,9 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import { RELATIONSHIP_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { Relative } from '@workspace/db'
-import { useFindManyDM_MoiQuanHe } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -18,7 +18,6 @@ export default function PutThongTinThanNhan() {
         onClose: form.resetFields,
     })
 
-    const { data: quanHeData = [] } = useFindManyDM_MoiQuanHe()
     const { showSpinner, hideSpinner } = useSpinner()
 
     async function onOk(output: Relative) {
@@ -60,23 +59,25 @@ export default function PutThongTinThanNhan() {
             layout="vertical"
             className="w-[40vw]"
         >
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Tên thân nhân" name="name" required form={form}>
                     <Input placeholder="Nhập tên nhân thân" />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <FormItem label="Tên mối quan hệ" name="dM_MoiQuanHeId" required form={form}>
+            <Col span={12}>
+                <FormItem label="Tên mối quan hệ" name="type" required form={form}>
                     <Select
                         placeholder="Chọn mối quan hệ"
-                        options={quanHeData.map((i) => ({
-                            label: i.name,
-                            value: i.id,
-                        }))}
+                        options={Object.entries(RELATIONSHIP_TYPE).map(([key, value_]) => {
+                            return {
+                                value: key,
+                                label: value_,
+                            }
+                        })}
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Năm sinh" name="birthYear" form={form}>
                     <InputNumber
                         precision={0}
@@ -87,12 +88,22 @@ export default function PutThongTinThanNhan() {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Nhập nghề nghiệp" name="job" form={form}>
                     <Input placeholder="Nhập tên nghề nghiệp" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
+                <FormItem label="Nhập quê quán" name="queQuan" form={form}>
+                    <Input placeholder="Nhập quê quán" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem label="Nhập nơi ở hiện nay" name="noiOHienTai" form={form}>
+                    <Input placeholder="Nhập nơi ở hiện nay" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem label="Tên thông tin khác" name="information" form={form}>
                     <Input placeholder="Nhập tên thông tin khác" />
                 </FormItem>

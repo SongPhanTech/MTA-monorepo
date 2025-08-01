@@ -11,7 +11,6 @@ import {
     useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
 import { Col, Collapse, Form, Input, Row, TreeSelect } from 'antd'
-import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo } from 'react'
 import type { PutModalType } from '../type'
 
@@ -25,41 +24,17 @@ export default function ThongTinCaNhanTab({
     type: $Enums.UserType
 }) {
     const form = Form.useFormInstance<PutModalType>()
-
     // Hook để lấy danh sách UserProfile để làm options cho AutoComplete
     const { data: userProfileOptions = [] } = useFindManyUserProfile({
         where: {
-            educationAndTraining: type.includes('STUDENT')
-                ? {
-                      some: {
-                          deletedAt: null, // Thêm điều kiện không bị xóa
-                          trainingObjectType: {
-                              type: type.includes('CIVILIAN')
-                                  ? {
-                                        in: ['CIVILIAN'],
-                                    }
-                                  : {
-                                        notIn: ['CIVILIAN'],
-                                    },
-                          },
-                      },
-                  }
-                : undefined,
-            // LECTURER type - kiểm tra lecturer không bị xóa
-            lecturer:
-                type === 'LECTURER'
-                    ? {
-                          deletedAt: null, // Thêm điều kiện không bị xóa
-                      }
-                    : undefined,
-
-            // STAFF type - kiểm tra staffs không bị xóa
-            staffs:
-                type === 'STAFF'
-                    ? {
-                          deletedAt: null, // Thêm điều kiện không bị xóa
-                      }
-                    : undefined,
+            OR: [
+                {
+                    bLaNguoiDung: true,
+                },
+                {
+                    bLaCanBoNhanVien: true,
+                },
+            ],
         },
         select: {
             firstName: true,
@@ -76,13 +51,19 @@ export default function ThongTinCaNhanTab({
         }))
     }, [userProfileOptions])
 
-    const { data: staffPositionData = [] } = useFindManyStaffPosition()
+    const { data: staffPositionData = [] } = useFindManyStaffPosition(
+        {},
+        { enabled: type === 'STAFF' }
+    )
 
-    const { data: staffTypeData = [] } = useFindManyStaffType()
+    const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: type === 'STAFF' })
 
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi({}, { enabled: type === 'LECTURER' })
 
-    const { data: lecturerTypeData = [] } = useFindManyLecturerType()
+    const { data: lecturerTypeData = [] } = useFindManyLecturerType(
+        {},
+        { enabled: type === 'LECTURER' }
+    )
 
     const treeData = buildOrgTree(manageOrgData)
     // Thêm useMemo và watch fields
@@ -94,39 +75,6 @@ export default function ThongTinCaNhanTab({
                 idCardNumber: idCardNumber,
             },
             include: {
-                provinceCurrentAddress: true,
-                communeCurrentAddress: true,
-                provinceOfBirth: true,
-                communeOfBirth: true,
-                provinceHometown: true,
-                communeHometown: true,
-                nationality: true,
-                religion: true,
-                ethnicity: true,
-                rank: true,
-                academicDegreeType: true,
-                academicRankType: true,
-                level: true,
-                educationAndTraining: type.includes('STUDENT')
-                    ? {
-                          include: {
-                              fixedClass: {
-                                  include: {
-                                      trainingCourse: true,
-                                      curriculumVersion: {
-                                          include: {
-                                              curriculum: {
-                                                  include: {
-                                                      trainingMajor: true,
-                                                  },
-                                              },
-                                          },
-                                      },
-                                  },
-                              },
-                          },
-                      }
-                    : false,
                 staffs:
                     type === 'STAFF'
                         ? {
@@ -162,37 +110,7 @@ export default function ThongTinCaNhanTab({
             form.setFieldsValue({
                 firstName: userData.firstName,
                 lastName: userData.lastName,
-                dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth) : null,
-                // gender: userData.gender,
-                phoneNumber: userData.phoneNumber,
-                email: userData.email,
-                idCardDate: userData.idCardDate ? dayjs(userData.idCardDate) : null,
-                officerNumber: userData.officerNumber,
-                healthInsuranceNumber: userData.healthInsuranceNumber,
-                bankAccountNumber: userData.bankAccountNumber,
-                bankName: userData.bankName,
-                currentAddress: userData.currentAddress,
-
-                // Địa chỉ
-                provinceCurrentAddressId: userData.provinceCurrentAddressId,
-                communeCurrentAddressId: userData.communeCurrentAddressId,
-                provinceOfBirthId: userData.provinceOfBirthId,
-                communeOfBirthId: userData.communeOfBirthId,
-                provincePermanentAddressId: userData.provincePermanentAddressId,
-                communePermanentAddressId: userData.communePermanentAddressId,
-                provinceHometownId: userData.provinceHometownId,
-                communeHometownId: userData.communeHometownId,
-
-                // Thông tin cá nhân khác
-                nationalityId: userData.nationalityId,
-                religionId: userData.religionId,
-                ethnicityId: userData.ethnicityId,
-                unionDate: userData.unionDate ? dayjs(userData.unionDate) : null,
-                unionPlace: userData.unionPlace,
-                CPVJoinDate: userData.CPVJoinDate ? dayjs(userData.CPVJoinDate) : null,
-                officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
-                CPVJoinPlace: userData.CPVJoinPlace,
-                tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
+                userProfileId: userData.id,
             })
 
             // Fill thông tin Lecturer
@@ -210,6 +128,7 @@ export default function ThongTinCaNhanTab({
                     organizationId: staff.organizationId,
                 })
             }
+            console.log(form.getFieldsValue())
         },
         [form, type]
     )
@@ -226,6 +145,7 @@ export default function ThongTinCaNhanTab({
         <Row gutter={[16, 16]}>
             <Col span={24}>
                 <Row gutter={[10, 10]}>
+                    <FormItem form={form} name="userProfileId" label="" required className="mb-0" />
                     <Col sm={12} lg={12}>
                         <FormItem
                             form={form}
@@ -238,6 +158,7 @@ export default function ThongTinCaNhanTab({
                                 maxTagCount={'responsive'}
                                 placeholder="Chọn phiên bản ngân hàng câu hỏi"
                                 options={idCardOptions}
+                                disabled={!!id}
                             />
                         </FormItem>
                     </Col>

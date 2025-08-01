@@ -88,7 +88,7 @@ export default function EducationalLevel() {
                                 title: 'Tên trình độ học vấn',
                                 width: 150,
                                 align: 'center',
-                                render: (_, record) => record.code || '',
+                                render: (_, record) => record.name || '',
                             },
                             {
                                 title: 'Mô tả',

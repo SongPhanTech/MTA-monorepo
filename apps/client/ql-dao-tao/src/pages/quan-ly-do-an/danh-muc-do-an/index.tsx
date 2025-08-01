@@ -17,12 +17,13 @@ import {
     useFindManyDM_DonVi,
     useFindManySemester,
     useFindManySubjectClass,
+    useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
-import { Search } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -53,6 +54,7 @@ export default function ThesisProject() {
         maxStudents: undefined,
     })
     const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
 
@@ -252,6 +254,28 @@ export default function ThesisProject() {
         }
     }
 
+    console.log(selectedRowKeys)
+    const { data: selectedThesisProjects } = useFindManyThesisProject({
+        where: {
+            id: {
+                in: selectedRowKeys.map(String),
+            },
+        },
+        include: {
+            council: {
+                include: {
+                    members: {
+                        include: {
+                            expert: true,
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    console.log(selectedThesisProjects)
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -292,6 +316,14 @@ export default function ThesisProject() {
                                 </Col>
                             </Flex>
                         </Col>
+                        <Col>
+                            <Flex justify="end">
+                                <Button type="primary">
+                                    <BookPlus />
+                                    Tạo thư mời
+                                </Button>
+                            </Flex>
+                        </Col>
                     </Row>
                 </Col>
 
@@ -307,6 +339,16 @@ export default function ThesisProject() {
                         data={subjectClass}
                         childrenFieldName="thesisProjects"
                         onRowClick={(record) => handleNavigate(record)}
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: setSelectedRowKeys,
+                            getCheckboxProps: (record) => {
+                                if (record.thesisProjects) {
+                                    return { style: { display: 'none' } }
+                                }
+                                return {}
+                            },
+                        }}
                         headerRight={({ id }) => (
                             <div className="flex gap-2.5 w-[85px] items-center justify-center">
                                 <CreateIcon

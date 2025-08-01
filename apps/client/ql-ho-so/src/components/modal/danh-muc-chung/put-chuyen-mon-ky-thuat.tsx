@@ -1,32 +1,32 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { DM_MoiQuanHe } from '@workspace/db'
-import { useCreateDM_MoiQuanHe, useUpdateDM_MoiQuanHe } from '@workspace/db/hooks'
+import type { DM_ChuyenMonKyThuat } from '@workspace/db'
+import { useCreateDM_ChuyenMonKyThuat, useUpdateDM_ChuyenMonKyThuat } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function MoiQuanHeModal() {
-    const [form] = Form.useForm<DM_MoiQuanHe>()
+export default function ChuyenMonKyThuatModal() {
+    const [form] = Form.useForm<DM_ChuyenMonKyThuat>()
 
-    const { isOpen, onClose, input } = useDisclosure<Partial<DM_MoiQuanHe>>({
-        tag: MoiQuanHeModal.name,
+    const { isOpen, onClose, input } = useDisclosure<Partial<DM_ChuyenMonKyThuat>>({
+        tag: ChuyenMonKyThuatModal.name,
         onClose: form.resetFields,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createDM_MoiQuanHe } = useCreateDM_MoiQuanHe()
-    const { mutateAsync: updateDM_MoiQuanHe } = useUpdateDM_MoiQuanHe()
+    const { mutateAsync: createDM_ChuyenMonKyThuat } = useCreateDM_ChuyenMonKyThuat()
+    const { mutateAsync: updateDM_ChuyenMonKyThuat } = useUpdateDM_ChuyenMonKyThuat()
 
-    async function onOk(output: DM_MoiQuanHe) {
+    async function onOk(output: DM_ChuyenMonKyThuat) {
         console.log(output)
         if (!output) return
         try {
             showSpinner()
             if (input?.id) {
-                await updateDM_MoiQuanHe({
+                await updateDM_ChuyenMonKyThuat({
                     where: {
                         id: input.id,
                     },
@@ -37,7 +37,7 @@ export default function MoiQuanHeModal() {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createDM_MoiQuanHe({
+                await createDM_ChuyenMonKyThuat({
                     data: {
                         name: output.name,
                         description: output.description,
@@ -67,13 +67,17 @@ export default function MoiQuanHeModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={input?.id ? 'Cập nhật mối quan hệ thân nhân' : 'Thêm mới mối quan hệ thân nhân'}
+            title={
+                input?.id
+                    ? 'Cập nhật trình độ chuyên môn kỹ thuật'
+                    : 'Thêm mới trình độ chuyên môn kỹ thuật'
+            }
             className="w-[40vw]"
             layout="vertical"
         >
             <Col span={24}>
-                <FormItem label="Tên mối quan hệ" name="name" required form={form}>
-                    <Input placeholder="Nhập tên mối quan hệ" />
+                <FormItem label="Tên trình độ chuyên môn kỹ thuật" name="name" required form={form}>
+                    <Input placeholder="Nhập tên trình độ chuyên môn kỹ thuật" />
                 </FormItem>
             </Col>
             <Col span={24}>

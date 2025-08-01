@@ -8,7 +8,7 @@ import {
 } from '@components/modal'
 import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import { DEFAULT_PAGINATE_SIZE, GENDER_MEAN } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
@@ -16,6 +16,7 @@ import {
     useCountLecturer,
     useFindManyDM_CapBac,
     useFindManyDM_DonVi,
+    useFindManyDM_GioiTinh,
     useFindManyLecturer,
     useFindManyLecturerType,
     useFindManyTemplateFile,
@@ -74,13 +75,13 @@ export default function UserProfilePageLecture() {
                           },
                       }
                     : {}),
-                // ...(filters.gender
-                //     ? {
-                //           gender: {
-                //               in: filters.gender,
-                //           },
-                //       }
-                //     : {}),
+                ...(filters.gender
+                    ? {
+                          genderId: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -222,13 +223,13 @@ export default function UserProfilePageLecture() {
                           },
                       }
                     : {}),
-                // ...(filters.gender
-                //     ? {
-                //           gender: {
-                //               in: filters.gender,
-                //           },
-                //       }
-                //     : {}),
+                ...(filters.gender
+                    ? {
+                          genderId: {
+                              in: filters.gender,
+                          },
+                      }
+                    : {}),
                 ...(filters.dateOfBirth?.length === 2
                     ? {
                           dateOfBirth: {
@@ -293,6 +294,8 @@ export default function UserProfilePageLecture() {
     })
 
     const { mutateAsync: updateLecturer } = useUpdateLecturer()
+
+    const { data: genderTypeData = [] } = useFindManyDM_GioiTinh()
 
     async function handleDelete(id: string) {
         try {
@@ -504,15 +507,13 @@ export default function UserProfilePageLecture() {
                                 width: 100,
                                 type: 'select',
                                 dataIndex: 'gender',
-                                options: [
-                                    { label: 'Nam', value: 'Male' },
-                                    { label: 'Nữ', value: 'Female' },
-                                ],
+                                options: genderTypeData.map((i) => ({
+                                    label: i.sTen,
+                                    value: i.Id,
+                                })),
                                 render: (record) =>
                                     record?.userProfile?.gender
-                                        ? GENDER_MEAN[
-                                              record.userProfile.gender as keyof typeof GENDER_MEAN
-                                          ]
+                                        ? record?.userProfile?.gender.sTen
                                         : '',
                             },
 

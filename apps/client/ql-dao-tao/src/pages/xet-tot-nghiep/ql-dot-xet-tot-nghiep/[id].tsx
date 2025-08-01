@@ -459,16 +459,8 @@ export default function StudentGraduationApplication() {
                                                     dataIndex: ['student', 'userProfile', 'gender'],
                                                     align: 'center',
                                                     width: 90,
-                                                    // render: (value: Gender) => {
-                                                    //     switch (value) {
-                                                    //         case Gender.Male:
-                                                    //             return 'Nam'
-                                                    //         case Gender.Female:
-                                                    //             return 'Nữ'
-                                                    //         default:
-                                                    //             return ''
-                                                    //     }
-                                                    // },
+                                                    render: (record) =>
+                                                        record?.userProfile?.gender?.sTen,
                                                 },
                                                 {
                                                     title: 'Nơi sinh',

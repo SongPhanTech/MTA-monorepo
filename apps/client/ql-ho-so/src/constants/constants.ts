@@ -44,6 +44,20 @@ const GENDER_LIST = [
     },
 ]
 
+export const RELATIONSHIP_TYPE = {
+    FATHER: 'Cha',
+    MOTHER: 'Mẹ',
+    OLDER_BROTHER: 'Anh trai',
+    OLDER_SISTER: 'Chị gái',
+    YOUNGER_BROTHER: 'Em trai',
+    YOUNGER_SISTER: 'Em gái',
+    MARRIER: 'Vợ/Chồng',
+    FATHER_IN_LOW: 'Bố vợ/chồng',
+    MOTHER_IN_LOW: 'Mẹ vợ/chồng',
+    SON: 'Con trai',
+    DAUGHTER: 'Con gái',
+} as const
+
 const CTDT_STATUS = {
     ACTIVE: { label: 'Đang hoạt động', color: 'green' },
     INACTIVATED: { label: 'Không hoạt động', color: 'red' },
@@ -172,16 +186,6 @@ const CUSTOM_VI_LOCALE = {
     },
 }
 
-const USER_TYPE = [
-    { label: 'Học viện quân sự', value: $Enums.UserType.MILITARY_STUDENT },
-    { label: 'Sinh viên dân sự', value: $Enums.UserType.CIVILIAN_STUDENT },
-    { label: 'Giảng viên', value: $Enums.UserType.LECTURER },
-    { label: 'Cán bộ nhân viên', value: $Enums.UserType.STAFF },
-    // {label:'Chuyên nghiệp', value: $Enums.UserType.PROFESSIONAL},
-    // {label:'Hợp đồng', value: $Enums.UserType.CONTRACT},
-    // {label:'Khác', value: $Enums.UserType.OTHER},
-]
-
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -200,6 +204,5 @@ export {
     STUDENT_STATUS_OPTIONS,
     SUBJECT_CLASS_SCHEDULE_TYPE,
     CUSTOM_VI_LOCALE,
-    USER_TYPE,
     GENDER_MEAN_NEW,
 }

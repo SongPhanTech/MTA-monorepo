@@ -32,6 +32,12 @@ const PutCouncilMember = () => {
         tag: PutCouncilMember.name,
         onClose: form.resetFields,
     })
+    const { data: council } = useFindUniqueCouncilMember(
+        {
+            where: { id: input?.councilMemberId },
+        },
+        { enabled: !!input?.councilMemberId }
+    )
 
     const { data: expert = [] } = useFindManyExpertProfile({
         where: {
@@ -49,6 +55,26 @@ const PutCouncilMember = () => {
                       ],
                   }
                 : {}),
+            AND: [
+                {
+                    OR: [
+                        {
+                            councilMemberships: {
+                                none: {
+                                    councilId: input?.councilId,
+                                },
+                            },
+                        },
+                        ...(council?.expertId
+                            ? [
+                                  {
+                                      id: council.expertId,
+                                  },
+                              ]
+                            : []),
+                    ],
+                },
+            ],
         },
         include: {
             lecturer: {
@@ -106,13 +132,6 @@ const PutCouncilMember = () => {
         }
         hideSpinner()
     }
-
-    const { data: council } = useFindUniqueCouncilMember(
-        {
-            where: { id: input?.councilMemberId },
-        },
-        { enabled: !!input?.councilMemberId }
-    )
 
     useEffect(() => {
         if (council) {

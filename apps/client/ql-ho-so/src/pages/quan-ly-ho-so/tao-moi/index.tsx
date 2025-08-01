@@ -24,17 +24,25 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
 import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
+import DanhHieuForm from '@components/modal/quan-ly-ho-so/form/danh-hieu'
+import NuocNgoaiForm from '@components/modal/quan-ly-ho-so/form/di-nuoc-ngoai'
 import DoanDang from '@components/modal/quan-ly-ho-so/form/doan-dang'
 import DoiTuongChinhSachForm from '@components/modal/quan-ly-ho-so/form/doi-tuong-chinh-sach'
 import KeKhaiTaiSanForm from '@components/modal/quan-ly-ho-so/form/ke-khai-taI-san'
 import NgoaiNguForm from '@components/modal/quan-ly-ho-so/form/ngoai-ngu'
+import ChienDauForm from '@components/modal/quan-ly-ho-so/form/phuc-vu-chien-dau'
 import QuaTrinhCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cong-tac'
 import QuaTrinhCuDiCongTacForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-cu-di-cong-tac'
 import QuaTrinhDiDaoTaoBoiDuongForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-di-dao-tao-boi-duong'
+import QuaTrinhHocTapForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-hoc-tap'
+import QuaTrinhLuongForm from '@components/modal/quan-ly-ho-so/form/qua-trinh-luong'
 import ThongTinKhenThuongForm from '@components/modal/quan-ly-ho-so/form/thong-tin-khen-thuong'
 import ThongTinKyLuatForm from '@components/modal/quan-ly-ho-so/form/thong-tin-ky-luat'
 import ThongTinLienHe from '@components/modal/quan-ly-ho-so/form/thong-tin-lien-he'
+import ThuongTatForm from '@components/modal/quan-ly-ho-so/form/thuong-tat'
+import TiengDanTocForm from '@components/modal/quan-ly-ho-so/form/tieng-dan-toc'
 import TinHocForm from '@components/modal/quan-ly-ho-so/form/tin-hoc'
+import ToChucXaHoiForm from '@components/modal/quan-ly-ho-so/form/to-chuc-xa-hoi'
 import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh-do-quan-ly-nha-nuoc'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
@@ -73,6 +81,14 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
         khenThuong: true
         kyLuat: true
         relatives: true
+        tiengDanToc: true
+        chienDau: true
+        diNuocNgoai: true
+        thuongTat: true
+        danhHieu: true
+        quaTrinhHocTap: true
+        ToChucXaHoi: true
+        QuaTrinhLuong: true
     }
 }> & {
     file?: FileType
@@ -161,6 +177,87 @@ export default function CreateUserPage() {
             render: (
                 <Form.Item name="trinhDoQuanLyNhaNuoc" className="mb-0">
                     <TrinhDoQuanLyNhaNuocForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Tiếng dân tôc',
+            id: 'tiengDanToc',
+            render: (
+                <Form.Item name="tiengDanToc" className="mb-0">
+                    <TiengDanTocForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Phục vụ chiến đấu',
+            id: 'phucVuChienDau',
+            render: (
+                <Form.Item name="chienDau" className="mb-0">
+                    <ChienDauForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Đi nước ngoài',
+            id: 'diNuocNgoai',
+            render: (
+                <Form.Item name="diNuocNgoai" className="mb-0">
+                    <NuocNgoaiForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Thương tật',
+            id: 'thuongTat',
+            render: (
+                <Form.Item name="thuongTat" className="mb-0">
+                    <ThuongTatForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Danh hiệu',
+            id: 'danhHieu',
+            render: (
+                <Form.Item name="danhHieu" className="mb-0">
+                    <DanhHieuForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Tổ chức xã hội',
+            id: 'toChucXaHoi',
+            render: (
+                <Form.Item name="ToChucXaHoi" className="mb-0">
+                    <ToChucXaHoiForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Quá trình học tập',
+            id: 'quaTrinhHocTap',
+            render: (
+                <Form.Item name="quaTrinhHocTap" className="mb-0">
+                    <QuaTrinhHocTapForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Quá trình lương',
+            id: 'QuaTrinhLuong',
+            render: (
+                <Form.Item name="QuaTrinhLuong" className="mb-0">
+                    <QuaTrinhLuongForm expland={expland} setExpland={setExpland} />
+                </Form.Item>
+            ),
+        },
+        {
+            title: 'Trình độ tin học',
+            id: 'tinHoc',
+            render: (
+                <Form.Item name="tinHoc" className="mb-0">
+                    <TinHocForm expland={expland} setExpland={setExpland} />
                 </Form.Item>
             ),
         },
@@ -307,7 +404,6 @@ export default function CreateUserPage() {
         }
         try {
             showSpinner()
-            console.log('Submitting form with values:', form.getFieldsValue())
 
             await createUserProfile({
                 data: {
@@ -525,6 +621,114 @@ export default function CreateUserPage() {
                             },
                         },
                         !!values.tinHoc
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            chienDau: {
+                                createMany: {
+                                    data: values.chienDau?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.chienDau
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            diNuocNgoai: {
+                                createMany: {
+                                    data: values.diNuocNgoai?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.diNuocNgoai
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            thuongTat: {
+                                createMany: {
+                                    data: values.thuongTat?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.thuongTat
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            danhHieu: {
+                                createMany: {
+                                    data: values.danhHieu?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.danhHieu
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            tiengDanToc: {
+                                createMany: {
+                                    data: values.tiengDanToc?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.tiengDanToc
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            ToChucXaHoi: {
+                                createMany: {
+                                    data: values.ToChucXaHoi?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.ToChucXaHoi
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            danhHieu: {
+                                createMany: {
+                                    data: values.danhHieu?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.danhHieu
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            QuaTrinhLuong: {
+                                createMany: {
+                                    data: values.QuaTrinhLuong?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.QuaTrinhLuong
+                    ),
+                    ...emptyObjectIf(
+                        {
+                            quaTrinhHocTap: {
+                                createMany: {
+                                    data: values.quaTrinhHocTap?.map((item) => ({
+                                        ...item,
+                                    })),
+                                },
+                            },
+                        },
+                        !!values.quaTrinhHocTap
                     ),
                 },
             })
