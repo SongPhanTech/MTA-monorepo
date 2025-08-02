@@ -33,7 +33,7 @@ export default function QuaTrinhCongTacForm({ expland, setExpland }: DomProps) {
     const { data: loaiHinhCongTacList = [] } = useFindManyDM_LoaiHinhCongTac(
         {},
         {
-            enabled: expland.includes('trinhDoQuanLyNhaNuoc'),
+            enabled: expland.includes('quaTrinhCongTac'),
         }
     )
 
@@ -143,6 +143,24 @@ export default function QuaTrinhCongTacForm({ expland, setExpland }: DomProps) {
                             align: 'center',
                             width: 140,
                             render: (_, record) => record?.donVi || '',
+                        },
+                        {
+                            title: 'Chức danh',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.chucDanh || '',
+                        },
+                        {
+                            title: 'Chức vụ đảng đoàn',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.chucVuDangDoan || '',
+                        },
+                        {
+                            title: 'Số quyết định',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.soQuyetDinh || '',
                         },
                         {
                             title: 'Chức vụ',

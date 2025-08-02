@@ -2465,6 +2465,7 @@ model UserProfile {
   bankAccountNumber          String?
   bankName                   String?
   currentAddress             String?
+  thuongBinh                 String?
   benh                       String?
   tinhHinhNhaO               String?
   truocKhiNhapNgu            String?
@@ -2534,8 +2535,6 @@ model UserProfile {
   chuyenMonKyThuatId         String?
   sucKhoe                    DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
   sucKhoeId                  String?
-  thuongBinh                 DM_ThuongBinh?            @relation(fields: [thuongBinhId], references: [id])
-  thuongBinhId               String?
   nhomMau                    DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
   nhomMauId                  String?
   unionDate                  DateTime?
@@ -4231,20 +4230,6 @@ model DM_NganhHoc {
   updatedAt      DateTime         @default(now()) @updatedAt()
   name           String           @unique()
   quaTrinhHocTap QuaTrinhHocTap[]
-
-  @@schema("ql-ho-so")
-}
-
-model DM_ThuongBinh {
-  id          String        @id() @default(cuid())
-  code        String?       @unique()
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt()
-  name        String        @unique()
-  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }

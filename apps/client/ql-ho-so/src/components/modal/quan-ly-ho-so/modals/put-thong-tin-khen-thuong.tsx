@@ -8,6 +8,8 @@ import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+const { TextArea } = Input
+
 export default function PutKhenThuongModal() {
     const [form] = Form.useForm<KhenThuong>()
     const { showSpinner, hideSpinner } = useSpinner()
@@ -102,6 +104,11 @@ export default function PutKhenThuongModal() {
                         }}
                         className="w-full"
                     />
+                </FormItem>
+            </Col>
+            <Col>
+                <FormItem label="Lý do" name="lyDo" required form={form}>
+                    <TextArea placeholder="Nhập lý do" rows={3} />
                 </FormItem>
             </Col>
         </PutFormModal>

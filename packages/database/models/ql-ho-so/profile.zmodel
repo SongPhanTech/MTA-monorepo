@@ -50,6 +50,7 @@ model UserProfile extends Base {
   bankName                   String?   // tên ngân hàng
   currentAddress             String?   // địa chỉ hiện tại
 
+  thuongBinh                 String?
   benh                       String?
   tinhHinhNhaO               String?
   truocKhiNhapNgu            String?
@@ -132,9 +133,6 @@ model UserProfile extends Base {
 
   sucKhoe                    DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
   sucKhoeId                  String?
-
-  thuongBinh                 DM_ThuongBinh?            @relation(fields: [thuongBinhId], references: [id])
-  thuongBinhId               String?
 
   nhomMau                    DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
   nhomMauId                  String?

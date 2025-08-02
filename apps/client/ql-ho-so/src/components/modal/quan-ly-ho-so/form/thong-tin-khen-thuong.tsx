@@ -129,6 +129,12 @@ export default function ThongTinKhenThuongForm({ expland, setExpland }: DomProps
                             render: (_, record) => formatDate(record?.ngayNhanQuyetDinh) || '',
                         },
                         {
+                            title: 'Lý do',
+                            align: 'center',
+                            width: 140,
+                            render: (_, record) => record?.lyDo || '',
+                        },
+                        {
                             title: 'Thao tác',
                             width: 100,
                             align: 'center',
