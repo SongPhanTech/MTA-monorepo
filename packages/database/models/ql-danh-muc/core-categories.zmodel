@@ -132,6 +132,7 @@ model DM_KhuVuc_DiaLy extends CoreBase {
 }
 
 model DM_NgoaiNgu extends CoreBase {
+  ngoaiNgu NgoaiNgu[]
   @@schema("mta")
 }
 

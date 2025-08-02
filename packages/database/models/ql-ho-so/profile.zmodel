@@ -50,6 +50,7 @@ model UserProfile extends Base {
   bankName                   String?   // tên ngân hàng
   currentAddress             String?   // địa chỉ hiện tại
 
+  thuongBinh                 String?
   benh                       String?
   tinhHinhNhaO               String?
   truocKhiNhapNgu            String?
@@ -67,6 +68,7 @@ model UserProfile extends Base {
   // gia đình vợ/chồng
   fSoACE                     Int?      // số anh chị em
   fKinhTeGiaDinh             String?
+  fThanhPhanGiaDinh          String?
   fChinhTriGiaDinh           String?
   fBanThan                   String?
 
@@ -131,9 +133,6 @@ model UserProfile extends Base {
 
   sucKhoe                    DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
   sucKhoeId                  String?
-
-  thuongBinh                 DM_ThuongBinh?            @relation(fields: [thuongBinhId], references: [id])
-  thuongBinhId               String?
 
   nhomMau                    DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
   nhomMauId                  String?
@@ -304,6 +303,8 @@ model TrinhDoQuanLyNhaNuoc extends Base {
 }
 
 model NgoaiNgu extends Base {
+  ngonNgu         DM_NgoaiNgu?       @relation(fields: [ngonNguId], references: [Id])
+  ngonNguId       String?            @db.Uuid
   hinhThucDaoTao  String?
   noiDaoTao       String?
   thoiGianBatDau  DateTime?
@@ -363,6 +364,10 @@ model QuaTrinhCongTac extends Base {
   denThangNam       DateTime?
 
   donVi             String?
+  chucDanh          String?
+  chucVuDangDoan    String?
+  soQuyetDinh       String?
+  ngayNhanQuyetDinh DateTime?
 
   chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
   chucVuId          String             @db.Uuid
@@ -413,6 +418,7 @@ model KhenThuong extends Base {
   soQuyetDinh        String?
   nguoiKy            String?
   ngayNhanQuyetDinh  DateTime?
+  lyDo               String?
 
   userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId      String
@@ -426,6 +432,7 @@ model KyLuat extends Base {
   soQuyetDinh       String?
   nguoiKy           String?
   ngayNhanQuyetDinh DateTime?
+  lyDo              String?
 
   userProfile       UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId     String

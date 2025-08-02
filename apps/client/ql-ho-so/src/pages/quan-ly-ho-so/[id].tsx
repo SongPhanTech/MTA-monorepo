@@ -352,7 +352,16 @@ export default function UpdateUserPage() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const handleSubmit = async (values: SubmitForm) => {
+    const handleSubmit = async ({
+        genderId,
+        sucKhoeId,
+        nationalityId,
+        religionId,
+        trinhDoHocVanId,
+        nhomMauId,
+        ethnicityId,
+        ...values
+    }: SubmitForm) => {
         if (!values) return
         const fileName = values.avatar
         if (fileList.length > 0) {
@@ -371,6 +380,7 @@ export default function UpdateUserPage() {
                 avatar: resPresignedUrl.data.fileName,
             })
         }
+
         try {
             showSpinner()
             await sqlTransaction([
@@ -417,7 +427,26 @@ export default function UpdateUserPage() {
                             idCardNumber: cccd,
                         },
                         data: {
+                            genderId,
+                            sucKhoeId,
+                            nationalityId,
+                            religionId,
+                            trinhDoHocVanId,
+                            nhomMauId,
+                            ethnicityId,
+                        },
+                    },
+                },
+                {
+                    model: 'UserProfile',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            idCardNumber: cccd,
+                        },
+                        data: {
                             ...values,
+                            fullname: `${values.lastName || ''} ${values.firstName || ''}`.trim(),
                             dateOfBirth: values.dateOfBirth
                                 ? dayjs(values.dateOfBirth).toISOString()
                                 : null,

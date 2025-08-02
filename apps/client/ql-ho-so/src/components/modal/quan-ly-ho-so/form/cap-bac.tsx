@@ -29,7 +29,7 @@ export default function CapBacForm({ expland, setExpland }: DomProps) {
 
     const handleSave = (data: CapBac) => {
         const currentList = form.getFieldValue('capBac') || []
-        const newList = [...currentList, { ...data }]
+        const newList = [{ ...data }, ...currentList]
         form.setFieldValue('capBac', newList)
     }
 

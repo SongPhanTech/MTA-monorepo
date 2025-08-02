@@ -64,11 +64,11 @@ export default function PutQuaTrinhCongTacModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={isEdit ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
+            title={isEdit ? 'Cập nhật quá trình công tác' : 'Thêm mới quá trình công tác'}
             className="w-[40vw]"
             layout="vertical"
         >
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Từ tháng năm" name="tuThangNam" required form={form}>
                     <DatePicker
                         placeholder="Chọn từ tháng năm"
@@ -81,7 +81,7 @@ export default function PutQuaTrinhCongTacModal() {
                 </FormItem>
             </Col>
 
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Đến tháng năm" name="denThangNam" required form={form}>
                     <DatePicker
                         placeholder="Chọn đến tháng năm"
@@ -93,7 +93,7 @@ export default function PutQuaTrinhCongTacModal() {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Loại hình công tác" name="loaiHinhCongTacId" required form={form}>
                     <Select
                         placeholder="Chọn loại hình công tác"
@@ -104,12 +104,12 @@ export default function PutQuaTrinhCongTacModal() {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Đơn vị" name="donVi" required form={form}>
                     <Input placeholder="Nhập tên đơn vị" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem label="Chức vụ" name="chucVuId" required form={form}>
                     <Select
                         placeholder="Chọn chức vụ"
@@ -118,6 +118,21 @@ export default function PutQuaTrinhCongTacModal() {
                             value: item.Id,
                         }))}
                     />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem label="Chức danh" name="chucDanh" form={form}>
+                    <Input placeholder="Nhập tên chức danh" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem label="Chức vụ đảng đoàn" name="chucVuDangDoan" form={form}>
+                    <Input placeholder="Nhập tên chức vụ đảng đoàn" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem label="Số quyết định" name="soQuyetDinh" form={form}>
+                    <Input placeholder="Nhập số quyết định" />
                 </FormItem>
             </Col>
         </PutFormModal>

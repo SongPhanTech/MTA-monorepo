@@ -2129,21 +2129,22 @@ model DM_KhuVuc_DiaLy {
 }
 
 model DM_NgoaiNgu {
-  Id             String    @id() @default(uuid()) @db.Uuid()
+  Id             String     @id() @default(uuid()) @db.Uuid()
   sMa            String?
   sTen           String?
   sGhiChu        String?
-  iSTT           Int?      @default(0)
-  bActive        Boolean?  @default(true)
-  bDeleted       Boolean?  @default(false)
-  bSystem        Boolean?  @default(false)
-  iDictionaryKey Int?      @default(0)
+  iSTT           Int?       @default(0)
+  bActive        Boolean?   @default(true)
+  bDeleted       Boolean?   @default(false)
+  bSystem        Boolean?   @default(false)
+  iDictionaryKey Int?       @default(0)
   dNgayTao       DateTime?
   dNgaySua       DateTime?
   sNguoiTao      String?
   sNguoiSua      String?
   sThietBiTao    String?
   sThietBiSua    String?
+  ngoaiNgu       NgoaiNgu[]
 
   @@schema("mta")
 }
@@ -2525,6 +2526,7 @@ model UserProfile {
   bankAccountNumber          String?
   bankName                   String?
   currentAddress             String?
+  thuongBinh                 String?
   benh                       String?
   tinhHinhNhaO               String?
   truocKhiNhapNgu            String?
@@ -2538,6 +2540,7 @@ model UserProfile {
   chinhTriGiaDinh            String?
   fSoACE                     Int?
   fKinhTeGiaDinh             String?
+  fThanhPhanGiaDinh          String?
   fChinhTriGiaDinh           String?
   fBanThan                   String?
   nationalId                 String?                   @db.Uuid()
@@ -2593,8 +2596,6 @@ model UserProfile {
   chuyenMonKyThuatId         String?
   sucKhoe                    DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
   sucKhoeId                  String?
-  thuongBinh                 DM_ThuongBinh?            @relation(fields: [thuongBinhId], references: [id])
-  thuongBinhId               String?
   nhomMau                    DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
   nhomMauId                  String?
   unionDate                  DateTime?
@@ -2764,6 +2765,8 @@ model NgoaiNgu {
   deletedAt       DateTime?
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @default(now()) @updatedAt()
+  ngonNgu         DM_NgoaiNgu?       @relation(fields: [ngonNguId], references: [Id])
+  ngonNguId       String?            @db.Uuid()
   hinhThucDaoTao  String?
   noiDaoTao       String?
   thoiGianBatDau  DateTime?
@@ -2843,6 +2846,10 @@ model QuaTrinhCongTac {
   tuThangNam        DateTime?
   denThangNam       DateTime?
   donVi             String?
+  chucDanh          String?
+  chucVuDangDoan    String?
+  soQuyetDinh       String?
+  ngayNhanQuyetDinh DateTime?
   chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
   chucVuId          String             @db.Uuid()
   loaiHinhCongTac   DM_LoaiHinhCongTac @relation(fields: [loaiHinhCongTacId], references: [id])
@@ -2906,6 +2913,7 @@ model KhenThuong {
   soQuyetDinh        String?
   nguoiKy            String?
   ngayNhanQuyetDinh  DateTime?
+  lyDo               String?
   userProfile        UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId      String
 
@@ -2925,6 +2933,7 @@ model KyLuat {
   soQuyetDinh       String?
   nguoiKy           String?
   ngayNhanQuyetDinh DateTime?
+  lyDo              String?
   userProfile       UserProfile @relation(fields: [userProfileId], references: [id])
   userProfileId     String
 
@@ -4284,20 +4293,6 @@ model DM_NganhHoc {
   updatedAt      DateTime         @default(now()) @updatedAt()
   name           String           @unique()
   quaTrinhHocTap QuaTrinhHocTap[]
-
-  @@schema("ql-ho-so")
-}
-
-model DM_ThuongBinh {
-  id          String        @id() @default(cuid())
-  code        String?       @unique()
-  active      Boolean       @default(true)
-  description String?       @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt()
-  name        String        @unique()
-  userProfile UserProfile[]
 
   @@schema("ql-ho-so")
 }

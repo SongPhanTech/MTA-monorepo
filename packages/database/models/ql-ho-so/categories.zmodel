@@ -151,13 +151,6 @@ model DM_NganhHoc extends Base {
   @@schema("ql-ho-so")
 }
 
-model DM_ThuongBinh extends Base {
-  name        String        @unique
-
-  userProfile UserProfile[]
-  @@schema("ql-ho-so")
-}
-
 model DM_ToChucXaHoi extends Base {
   name        String        @unique
   toChucXaHoi ToChucXaHoi[]

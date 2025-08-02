@@ -1,14 +1,14 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GridBlock } from '@components/commons/grid-block'
-import { useGenderOptions } from '@hooks/gender'
+import { getMinioUrl } from '@workspace/constant'
+import type { Relative } from '@workspace/db'
 // import { Gender } from '@workspace/db'
-import { useFindUniqueStudent } from '@workspace/db/hooks'
+import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { Button, Input, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import { workHistoryData } from '@/utils/dataFake'
 
 dayjs.locale('vi')
 
@@ -20,11 +20,75 @@ const ModalTomTatLyLich = () => {
     const formattedDate = `${dayjs().format('DD')}/${dayjs().format('MM')}/${dayjs().format('YYYY')}`
     const printRef = useRef<HTMLDivElement>(null)
     const [signerName, setSignerName] = useState('Đại úy Đào Văn Thắng')
-    const { getGenderLabel } = useGenderOptions()
 
     const { isOpen, onClose, input } = useDisclosure<ModalTomTatLyLichInput>({
         tag: ModalTomTatLyLich.name,
     })
+
+    const GENDER_TO_SPOUSE_MAP = {
+        nam: 'vợ',
+        nữ: 'chồng',
+        Ông: 'vợ',
+        bà: 'chồng',
+    } as const
+
+    const getSpouseTitle = (genderName: string) => {
+        return (
+            Object.entries(GENDER_TO_SPOUSE_MAP).find(([key, value]) => {
+                if (genderName.toLocaleLowerCase().includes(key.toLocaleLowerCase())) return value
+            })?.[1] || 'vợ/chồng'
+        )
+    }
+
+    const getRelativeByType = (relatives: Relative[], type: string) => {
+        return relatives?.find((rel) => rel.type === type)
+    }
+
+    const getCapBacForPeriodBeforeStart = (tuThangNam: Date | null) => {
+        if (!initialData?.capBac || !tuThangNam) return null
+
+        const tuNgay = dayjs(tuThangNam)
+
+        // Lấy cấp bậc gần nhất trước hoặc tại thời điểm bắt đầu công tác
+        const capBacBeforeOrAt = initialData.capBac
+            .filter((cb) => {
+                if (!cb.ngayNhanQuyetDinh) return false
+                return dayjs(cb.ngayNhanQuyetDinh).isSameOrBefore(tuNgay, 'day')
+            })
+            .sort((a, b) => dayjs(b.ngayNhanQuyetDinh).diff(dayjs(a.ngayNhanQuyetDinh)))[0]
+
+        if (capBacBeforeOrAt) {
+            return {
+                ten: capBacBeforeOrAt?.capBac?.sTen || '',
+                thangNam: dayjs(capBacBeforeOrAt.ngayNhanQuyetDinh).format('MM/YYYY'),
+            }
+        }
+
+        return null
+    }
+
+    const getChucVuDangDoanAtTime = (tuThangNam: Date | null, item?: any) => {
+        if (!tuThangNam) return ''
+
+        // Nếu có nhập chucVuDangDoan thì ưu tiên
+        if (item?.chucVuDangDoan) {
+            return item.chucVuDangDoan
+        }
+
+        const tuNgay = dayjs(tuThangNam)
+        const partyJoinDate = initialData?.officialCPVDate
+            ? dayjs(initialData.officialCPVDate)
+            : null
+        const unionJoinDate = initialData?.unionDate ? dayjs(initialData.unionDate) : null
+
+        const wasPartyMember = partyJoinDate?.isSameOrBefore(tuNgay)
+        const wasUnionMember = unionJoinDate?.isSameOrBefore(tuNgay)
+
+        if (wasPartyMember) return 'Đảng viên'
+        if (wasUnionMember) return 'Đoàn viên'
+
+        return ''
+    }
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -55,18 +119,68 @@ const ModalTomTatLyLich = () => {
       `,
     })
 
-    const { data: initialData } = useFindUniqueStudent(
+    const { data: initialData } = useFindUniqueUserProfile(
         {
             where: {
                 id: input?.id,
             },
             include: {
-                userProfile: {
+                religion: true,
+                ethnicity: true,
+                trinhDoHocVan: true,
+                chuyenMonKyThuat: true,
+                chiHuyQuanLy: true,
+                ngoaiNgu: {
                     include: {
-                        religion: true,
-                        ethnicity: true,
+                        ngonNgu: true,
+                        trinhDo: true,
                     },
                 },
+                tiengDanToc: {
+                    include: {
+                        danToc: true,
+                    },
+                },
+                trinhDoLyLuanChinhTri: {
+                    include: {
+                        trinhDo: true,
+                    },
+                },
+                quaTrinhHocTap: {
+                    include: {
+                        tenTruong: true,
+                        nganhHoc: true,
+                        chuyenNganh: true,
+                    },
+                },
+                chienDau: true,
+                diNuocNgoai: {
+                    include: {
+                        tenNuoc: true,
+                    },
+                },
+                sucKhoe: true,
+                nhomMau: true,
+                thuongTat: {
+                    include: {
+                        loai: true,
+                    },
+                },
+                danhHieu: true,
+                khenThuong: true,
+                kyLuat: true,
+                quaTrinhCongTac: {
+                    include: {
+                        chucVu: true,
+                    },
+                },
+                capBac: {
+                    include: {
+                        capBac: true,
+                    },
+                },
+                relatives: true,
+                gender: true,
             },
         },
         { enabled: !!input?.id }
@@ -80,7 +194,7 @@ const ModalTomTatLyLich = () => {
                 </div>
                 <div className="flex justify-between items-center mb-2">
                     <img
-                        src={initialData?.userProfile?.avatar || ''}
+                        src={getMinioUrl(initialData?.avatar) || ''}
                         alt="avatar"
                         className="border border-solid border-black w-[113px] h-[151px]"
                     />
@@ -88,27 +202,29 @@ const ModalTomTatLyLich = () => {
                     <div className="flex-1 pl-4">
                         <div className="mb-1">
                             <span className="font-bold">Họ tên khai sinh: </span>
-                            <span className="font-bold uppercase">
-                                {initialData?.userProfile?.fullname}
-                            </span>
-                            {/* <span className="ml-4">
-                                (Giới tính: {getGenderLabel(initialData?.userProfile?.gender)})
-                            </span> */}
+                            <span className="font-bold uppercase">{initialData?.fullname}</span>
+                            <span className="ml-4">(Giới tính: {initialData?.gender?.sTen})</span>
                         </div>
                         <div className="mb-1">
                             <span className="font-bold">Họ tên khác: </span>
-                            <span>{initialData?.userProfile?.familyName || 'Không'}</span>
+                            <span>{initialData?.hoTenThuongDung || 'Không'}</span>
                         </div>
-                        <div className="mb-1">Cấp bậc, hệ số lương, tháng năm: 1/ (08/2018)</div>
+                        <div className="mb-1">
+                            Cấp bậc, hệ số lương, tháng năm:{' '}
+                            {initialData?.capBac?.[0]?.capBac?.sTen || ''}/(
+                            {initialData?.capBac?.[0]?.ngayNhanQuyetDinh
+                                ? dayjs(initialData?.capBac?.[0]?.ngayNhanQuyetDinh).format(
+                                      'MM/YYYY'
+                                  )
+                                : ''}
+                            )
+                        </div>
                     </div>
                 </div>
 
                 <div className="mt-2 flex">
                     <span className="font-medium">SH:</span>
-                    <span className="ml-2 font-bold">
-                        {initialData?.userProfile?.officerNumber}
-                    </span>
-                    <span className="flex-1 border-b border-dashed border-black" />
+                    <span className="ml-2 font-bold">{initialData?.officerNumber}</span>
                 </div>
             </div>
         )
@@ -129,32 +245,25 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Sinh ngày:{' '}
-                                        {initialData?.userProfile?.dateOfBirth
-                                            ? dayjs(initialData?.userProfile.dateOfBirth).format(
-                                                  'DD/MM/YYYY'
-                                              )
+                                        {initialData?.dateOfBirth
+                                            ? dayjs(initialData?.dateOfBirth).format('DD/MM/YYYY')
                                             : ''}
                                     </>
                                 ),
                             },
                             {
                                 key: 'ethnicity',
-                                content: <>Dân tộc: {initialData?.userProfile?.ethnicity?.sTen}</>,
+                                content: <>Dân tộc: {initialData?.ethnicity?.sTen}</>,
                             },
                             {
                                 key: 'religion',
-                                content: (
-                                    <>
-                                        Tôn giáo:{' '}
-                                        {initialData?.userProfile?.religion?.sTen || 'Không'}
-                                    </>
-                                ),
+                                content: <>Tôn giáo: {initialData?.religion?.sTen || 'Không'}</>,
                             },
                         ]}
                     />
 
-                    <span>Quê quán: </span>
-                    <span>Nơi ở hiện nay: </span>
+                    <span>Quê quán: {initialData?.homeTown}</span>
+                    <span>Nơi ở hiện nay: {initialData?.currentAddress}</span>
                     <GridBlock
                         columns={2}
                         items={[
@@ -163,8 +272,8 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Ngày tham gia cách mạng:{' '}
-                                        {initialData?.userProfile?.dateOfBirth
-                                            ? dayjs(initialData?.userProfile.dateOfBirth).format(
+                                        {initialData?.revolutionaryDate
+                                            ? dayjs(initialData?.revolutionaryDate).format(
                                                   'DD/MM/YYYY'
                                               )
                                             : ''}
@@ -176,8 +285,8 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Ngày tuyển dụng:{' '}
-                                        {initialData?.userProfile?.dateOfBirth
-                                            ? dayjs(initialData?.userProfile.dateOfBirth).format(
+                                        {initialData?.recruitmentDate
+                                            ? dayjs(initialData?.recruitmentDate).format(
                                                   'DD/MM/YYYY'
                                               )
                                             : ''}
@@ -194,8 +303,8 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Ngày nhập ngũ:{' '}
-                                        {initialData?.userProfile?.enlistmentDate
-                                            ? dayjs(initialData?.userProfile.enlistmentDate).format(
+                                        {initialData?.enlistmentDate
+                                            ? dayjs(initialData?.enlistmentDate).format(
                                                   'DD/MM/YYYY'
                                               )
                                             : ''}
@@ -207,10 +316,8 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Xuất ngũ:{' '}
-                                        {initialData?.userProfile?.dischargeDate
-                                            ? dayjs(initialData?.userProfile.dischargeDate).format(
-                                                  'DD/MM/YYYY'
-                                              )
+                                        {initialData?.dischargeDate
+                                            ? dayjs(initialData?.dischargeDate).format('DD/MM/YYYY')
                                             : ''}
                                     </>
                                 ),
@@ -220,8 +327,8 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Tái ngũ:{' '}
-                                        {initialData?.userProfile?.dateOfBirth
-                                            ? dayjs(initialData?.userProfile.dateOfBirth).format(
+                                        {initialData?.reEnlistmentDate
+                                            ? dayjs(initialData?.reEnlistmentDate).format(
                                                   'DD/MM/YYYY'
                                               )
                                             : ''}
@@ -238,10 +345,8 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Ngày vào Đảng:{' '}
-                                        {initialData?.userProfile?.CPVJoinDate
-                                            ? dayjs(initialData?.userProfile.CPVJoinDate).format(
-                                                  'DD/MM/YYYY'
-                                              )
+                                        {initialData?.CPVJoinDate
+                                            ? dayjs(initialData?.CPVJoinDate).format('DD/MM/YYYY')
                                             : ''}
                                     </>
                                 ),
@@ -251,69 +356,168 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Chính thức:{' '}
-                                        {initialData?.userProfile?.officialCPVDate
-                                            ? dayjs(
-                                                  initialData?.userProfile.officialCPVDate
-                                              ).format('DD/MM/YYYY')
+                                        {initialData?.officialCPVDate
+                                            ? dayjs(initialData?.officialCPVDate).format(
+                                                  'DD/MM/YYYY'
+                                              )
                                             : ''}
                                     </>
                                 ),
                             },
                         ]}
                     />
-                    <span>Giáo dục phổ thông: </span>
+                    <span>Giáo dục phổ thông: {initialData?.trinhDoHocVan?.name}</span>
                     <span>Chức danh khoa học, học vị cao nhất, chuyên ngành, thời gian: </span>
                     <span>
                         Chỉ huy quản lý <span className="text-sm">(sơ, trung, cao cấp)</span>:{' '}
+                        {initialData?.chiHuyQuanLy?.name}
                     </span>
                     <span>
                         Lý luận chính trị <span className="text-sm">(sơ, trung, cao cấp)</span>:{' '}
+                        {initialData?.trinhDoLyLuanChinhTri?.[0]?.trinhDo?.name}
                     </span>
                     <span>
                         Chuyên môn kỹ thuật <span className="text-sm">(sơ, trung, cao cấp)</span>:{' '}
+                        {initialData?.chuyenMonKyThuat?.name}
                     </span>
-                    <span>Ngoại ngữ, trình độ, tháng năm: </span>
-                    <span>Tiếng dân tộc, mức độ nghe, nói, viết: </span>
+                    <span>
+                        Ngoại ngữ, trình độ, tháng năm:
+                        <br />
+                        {initialData?.ngoaiNgu?.length
+                            ? initialData.ngoaiNgu
+                                  .map((item) =>
+                                      [
+                                          item.ngonNgu?.sTen,
+                                          item.trinhDo?.sTen,
+                                          item.thoiGianBatDau,
+                                          item.thoiGianKetThuc,
+                                      ]
+                                          .filter(Boolean)
+                                          .join(', ')
+                                  )
+                                  .join('\n')
+                                  .split('\n')
+                                  .map((line, idx) => (
+                                      <span key={line}>
+                                          {line}
+                                          <br />
+                                      </span>
+                                  ))
+                            : ''}
+                    </span>
+                    <span>
+                        Tiếng dân tộc, mức độ nghe, nói, viết:
+                        <br />
+                        {initialData?.tiengDanToc?.length
+                            ? initialData.tiengDanToc
+                                  .map((item) =>
+                                      [item?.danToc?.sTen, item.nghe, item.noi, item.viet]
+                                          .filter(Boolean)
+                                          .join(' , ')
+                                  )
+                                  .join('\n')
+                                  .split('\n')
+                                  .map((line, idx) => (
+                                      <span className="pl-6 font-bold mt-1" key={line}>
+                                          - {line}
+                                          <br />
+                                      </span>
+                                  ))
+                            : ''}
+                    </span>
                     <span>
                         Qua trường{' '}
                         <span className="text-sm">
                             (tên trường, ngành học, chuyên ngành học, cấp học, thời gian, kết quả,
-                            loại hình đào tạo)
+                            loại hình đào tạo):
+                            <br />
+                            {initialData?.quaTrinhHocTap?.length
+                                ? initialData.quaTrinhHocTap
+                                      .map((item) => [
+                                          item?.tenTruong?.name,
+                                          item?.nganhHoc,
+                                          item?.chuyenNganh,
+                                          item?.tuNgay,
+                                          item?.denNgay,
+                                          item?.ketQua,
+                                          item?.loaiHinhDaoTao,
+                                      ])
+                                      .join('\n')
+                                      .split('\n')
+                                      .map((line, idx) => (
+                                          <span className="pl-6 font-bold mt-1" key={line}>
+                                              - {line}
+                                              <br />
+                                          </span>
+                                      ))
+                                : ''}
                         </span>
-                        :{' '}
-                    </span>
-                    <span className="pl-6 font-bold mt-1">
-                        Trường QS Pháo Binh, Đào tạo Sỹ Quan chỉ huy Pháo Binh cấp phân đội, 9/2014
-                        - 8/2018, Đại học, Khá.
                     </span>
                     <span>
                         Chiến đấu, phục vụ chiến đấu{' '}
                         <span className="text-sm">
                             (thời gian; cương vị, đơn vị; địa danh, địa điểm; trực tiếp hoặc phục vụ
-                            chiến đấu; đối tượng)
+                            chiến đấu; đối tượng):
+                            <br />
+                            {initialData?.chienDau?.length
+                                ? initialData.chienDau
+                                      .map((item) => [
+                                          item?.cuongVi,
+                                          item?.donVi,
+                                          item?.diaDiem,
+                                          item?.vaiTro,
+                                          item?.doiTuong,
+                                          item?.thoiGianBatDau,
+                                          item?.thoiGianKetThuc,
+                                      ])
+                                      .join('\n')
+                                      .split('\n')
+                                      .map((line, idx) => (
+                                          <span className="pl-6 font-bold mt-1" key={line}>
+                                              - {line}
+                                              <br />
+                                          </span>
+                                      ))
+                                : ''}
                         </span>
-                        :{' '}
                     </span>
-                    <span className="pl-6 font-bold mt-1">Chưa qua</span>
                     <span>
                         Đã đi nước ngoài
-                        <span className="text-sm">(tên nước, thời gian, lý do)</span>:{' '}
-                        <span className="font-bold">Chưa đi</span>
+                        <span className="text-sm">
+                            (tên nước, thời gian, lý do): <br />
+                            {initialData?.diNuocNgoai?.length
+                                ? initialData.diNuocNgoai
+                                      .map((item) => [
+                                          item?.tenNuoc?.sTen,
+                                          dayjs(item?.tuNgay).format('DD/MM/YYYY'),
+                                          dayjs(item?.denNgay).format('DD/MM/YYYY'),
+                                          item?.lyDo,
+                                      ])
+                                      .join('\n')
+                                      .split('\n')
+                                      .map((line, idx) => (
+                                          <span className="pl-6 font-bold mt-1" key={line}>
+                                              - {line}
+                                              <br />
+                                          </span>
+                                      ))
+                                : ''}
+                        </span>
                     </span>
                     <GridBlock
                         columns={3}
                         items={[
                             {
                                 key: 'suc-khoe',
-                                content: <>Sức khỏe: Loại 1</>,
+                                content: <>Sức khỏe: {initialData?.sucKhoe?.name}</>,
                             },
                             {
                                 key: 'nhom-mau',
-                                content: <>Nhóm máu: B</>,
+                                content: <>Nhóm máu: {initialData?.nhomMau?.name}</>,
                             },
                             {
                                 key: 'benh-chinh',
-                                content: <>Bệnh chính: Không</>,
+                                content: <>Bệnh chính: {initialData?.benh}</>,
                             },
                         ]}
                     />
@@ -321,29 +525,98 @@ const ModalTomTatLyLich = () => {
                         Thương tật{' '}
                         <span className="text-sm">
                             (loại, tỷ lệ, nguyên nhân, thời gian và nơi bị thương, thời gian giám
-                            định)
+                            định):
+                            {initialData?.thuongTat?.length
+                                ? initialData.thuongTat
+                                      .map((item) => [
+                                          item?.loai?.name,
+                                          item?.tiLe,
+                                          item?.nguyenNhan,
+                                          dayjs(item?.thoiGian).format('DD/MM/YYYY'),
+                                          item?.noiBiThuong,
+                                          dayjs(item?.thoiGianGiamDinh).format('DD/MM/YYYY'),
+                                      ])
+                                      .join('\n')
+                                      .split('\n')
+                                      .map((line, idx) => (
+                                          <span className="pl-6 font-bold mt-1" key={line}>
+                                              - {line}
+                                              <br />
+                                          </span>
+                                      ))
+                                : ''}
                         </span>
-                        :{' '}
                     </span>
-                    <span className="pl-6 font-bold mt-1">Không</span>
-                    <span>Danh hiệu được phong tháng năm: </span>
+
                     <span>
-                        Khen thưởng <span className="text-sm">(hình thức, tháng, năm, lý do)</span>:{' '}
+                        Danh hiệu được phong tháng năm:
+                        {initialData?.danhHieu?.length
+                            ? initialData.danhHieu
+                                  .map((item) => [
+                                      item?.ten,
+                                      dayjs(item?.thoiGian).format('DD/MM/YYYY'),
+                                  ])
+                                  .join('\n')
+                                  .split('\n')
+                                  .map((line, idx) => (
+                                      <span className="pl-6 font-bold mt-1" key={line}>
+                                          - {line}
+                                          <br />
+                                      </span>
+                                  ))
+                            : ''}
                     </span>
                     <span>
-                        Kỷ luật <span className="text-sm">(hình thức, tháng, năm, lý do)</span>:{' '}
+                        Khen thưởng{' '}
+                        <span className="text-sm">
+                            (hình thức, tháng, năm, lý do):
+                            {initialData?.khenThuong?.length
+                                ? initialData.khenThuong
+                                      .map((item) => [
+                                          item?.hinhThucKhenThuong,
+                                          dayjs(item?.ngayNhanQuyetDinh).format('DD/MM/YYYY'),
+                                      ])
+                                      .join('\n')
+                                      .split('\n')
+                                      .map((line, idx) => (
+                                          <span className="pl-6 font-bold mt-1" key={line}>
+                                              - {line}
+                                              <br />
+                                          </span>
+                                      ))
+                                : ''}
+                        </span>
+                    </span>
+                    <span>
+                        Kỷ luật{' '}
+                        <span className="text-sm">
+                            (hình thức, tháng, năm, lý do):
+                            {initialData?.kyLuat?.length
+                                ? initialData.kyLuat
+                                      .map((item) => [
+                                          item?.hinhThucKyLuat,
+                                          dayjs(item?.ngayNhanQuyetDinh).format('DD/MM/YYYY'),
+                                      ])
+                                      .join('\n')
+                                      .split('\n')
+                                      .map((line, idx) => (
+                                          <span className="pl-6 font-bold mt-1" key={line}>
+                                              - {line}
+                                              <br />
+                                          </span>
+                                      ))
+                                : ''}
+                        </span>
                     </span>
                     <span>Trước khi nhập ngũ (tuyển dụng) làm gì? Ở đâu? Quan hệ CT-XH: </span>
-                    <span className="pl-6 font-bold mt-1">
-                        Là học sinh trường THPT ở địa phương, có quan hệ chính trị xã hội tốt
-                    </span>
+                    <span className="pl-6 font-bold mt-1">{initialData?.truocKhiNhapNgu}</span>
                     <span>
                         Tình hình nhà ở{' '}
                         <span className="text-sm">(loại nhà, diện tích, hình thức sở hữu)</span>:
-                        Nhà cấp 4, Diện tích 60m<sup>2</sup>, Ở cùng bố mẹ
+                        {initialData?.tinhHinhNhaO}
                     </span>
                 </div>
-                <div className="new-page flex flex-col" style={{ minHeight: '297mm' }}>
+                <div className="new-page flex flex-col" style={{ minHeight: '200mm' }}>
                     <div className="uppercase text-lg font-bold flex w-full justify-center mb-4">
                         Quá trình công tác
                     </div>
@@ -386,46 +659,82 @@ const ModalTomTatLyLich = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {workHistoryData?.map((item, index) => (
-                                    <tr key={`${item.partyPosition}-${index}`}>
-                                        <td className="border-l border-r border-black p-1 text-center">
-                                            {item.from}
-                                        </td>
-                                        <td className="border-l border-r border-black p-1 text-center">
-                                            {item.to}
-                                        </td>
-                                        <td className="border-l border-r border-black p-1">
-                                            {item.position}
-                                        </td>
-                                        <td className="border-l border-r border-black p-1 text-center">
-                                            {item.rank}
-                                        </td>
-                                        <td className="border-l border-r border-black p-1 text-center">
-                                            {item.partyPosition}
-                                        </td>
+                                {initialData?.quaTrinhCongTac?.length
+                                    ? initialData.quaTrinhCongTac
+                                          .sort((a, b) => {
+                                              if (!a.tuThangNam || !b.tuThangNam) return 0
+                                              return dayjs(a.tuThangNam).diff(dayjs(b.tuThangNam))
+                                          })
+                                          .map((item, index) => {
+                                              const capBacInfo = getCapBacForPeriodBeforeStart(
+                                                  item.tuThangNam
+                                              )
+
+                                              return (
+                                                  <tr key={item.id}>
+                                                      <td className="border border-black p-1 text-center">
+                                                          {item.tuThangNam
+                                                              ? dayjs(item.tuThangNam).format(
+                                                                    'MM/YYYY'
+                                                                )
+                                                              : ''}
+                                                      </td>
+                                                      <td className="border border-black p-1 text-center">
+                                                          {item.denThangNam
+                                                              ? dayjs(item.denThangNam).format(
+                                                                    'MM/YYYY'
+                                                                )
+                                                              : 'Hiện tại'}
+                                                      </td>
+                                                      <td className="border border-black p-1">
+                                                          <div>
+                                                              {[
+                                                                  item.chucDanh,
+                                                                  item.chucVu?.sTen,
+                                                                  item.donVi,
+                                                                  item.soQuyetDinh,
+                                                              ]
+                                                                  .filter(Boolean)
+                                                                  .join(', ')}
+                                                          </div>
+                                                      </td>
+                                                      <td className="border border-black p-1 text-center">
+                                                          {capBacInfo ? (
+                                                              <div className="flex flex-col">
+                                                                  <span>{capBacInfo.ten}</span>
+                                                                  <span className="text-xs">
+                                                                      ({capBacInfo.thangNam})
+                                                                  </span>
+                                                              </div>
+                                                          ) : (
+                                                              ''
+                                                          )}
+                                                      </td>
+                                                      <td className="border border-black p-1 text-center">
+                                                          {getChucVuDangDoanAtTime(
+                                                              item.tuThangNam,
+                                                              item
+                                                          )}
+                                                      </td>
+                                                  </tr>
+                                              )
+                                          })
+                                    : null}
+                                {/* Thêm các dòng trống để table có chiều cao đủ */}
+                                {Array.from({
+                                    length: Math.max(
+                                        0,
+                                        15 - (initialData?.quaTrinhCongTac?.length || 0)
+                                    ),
+                                }).map((_, index) => (
+                                    <tr key={`empty-${_}`} style={{ height: '40px' }}>
+                                        <td className="border border-black p-1" />
+                                        <td className="border border-black p-1" />
+                                        <td className="border border-black p-1" />
+                                        <td className="border border-black p-1" />
+                                        <td className="border border-black p-1" />
                                     </tr>
                                 ))}
-                                {Array.from({ length: 20 - workHistoryData.length }).map(
-                                    (_, index) => (
-                                        <tr key={`empty-${index}-${length}`}>
-                                            <td className="border-l border-r border-black p-1">
-                                                &nbsp;
-                                            </td>
-                                            <td className="border-l border-r border-black p-1">
-                                                &nbsp;
-                                            </td>
-                                            <td className="border-l border-r border-black p-1">
-                                                &nbsp;
-                                            </td>
-                                            <td className="border-l border-r border-black p-1">
-                                                &nbsp;
-                                            </td>
-                                            <td className="border-l border-r border-black p-1">
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                    )
-                                )}
                             </tbody>
                         </table>
                     </div>
@@ -435,6 +744,10 @@ const ModalTomTatLyLich = () => {
     }
 
     const Muc2 = () => {
+        const relatives = initialData?.relatives || []
+        const father = getRelativeByType(relatives, 'FATHER')
+        const mother = getRelativeByType(relatives, 'MOTHER')
+
         return (
             <div className="new-page flex flex-col">
                 <div className="uppercase text-lg font-bold flex w-full justify-center">
@@ -449,17 +762,17 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Họ tên cha:{' '}
-                                        <span className="font-bold capitalize">Vương Văn Mạnh</span>
+                                        <span className="font-bold capitalize">{father?.name}</span>
                                     </>
                                 ),
                             },
                             {
                                 key: 'dob-cha',
-                                content: <>Sinh: 1966</>,
+                                content: <>Sinh: {father?.birthYear}</>,
                             },
                             {
                                 key: 'nghe-nghiep-cha',
-                                content: <>Nghề nghiệp: Làm ruộng</>,
+                                content: <>Nghề nghiệp: {father?.job}</>,
                             },
                         ]}
                     />
@@ -471,40 +784,37 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Họ tên mẹ:{' '}
-                                        <span className="font-bold capitalize">Lại Thị Mến</span>
+                                        <span className="font-bold capitalize">{mother?.name}</span>
                                     </>
                                 ),
                             },
                             {
                                 key: 'dob-me',
-                                content: <>Sinh: 1971</>,
+                                content: <>{mother?.birthYear}</>,
                             },
                             {
                                 key: 'nghe-nghiep-me',
-                                content: <>Nghề nghiệp: Làm ruộng</>,
+                                content: <>Nghề nghiệp: {mother?.job}</>,
                             },
                         ]}
                     />
-                    <span>Thành phần gia đình: Nông dân</span>
-                    <span>Quê quán: Ngô Quyền, TP Nam Định, Nam Định</span>
-                    <span>Nơi ở hiện nay: Máy Tơ, Ngô Quyền, TP Nam Định, Nam Định</span>
+                    <span>Thành phần gia đình: {initialData?.thanhPhanGiaDinh}</span>
+                    <span>Quê quán: {father?.queQuan}</span>
+                    <span>Nơi ở hiện nay: {father?.noiOHienTai}</span>
                     <div className="flex justify-between">
-                        <span>Cha mẹ sinh được: 02 người con (02 trai)</span>
-                        <span>Đồng chí: Vương Trung Hiếu</span>
-                        <span>Là thứ: 01</span>
+                        <span>Cha mẹ sinh được: {initialData?.soACE}</span>
+                        <span>Đồng chí: {initialData?.fullname}</span>
+                        <span>Là thứ: {initialData?.conThuMay}</span>
                     </div>
                     <span className="pl-6 font-bold">Tình hình KT-CT của gia đình</span>
                     <p>
-                        <span className="pl-6 font-bold">* Kinh tế:</span> Thu nhập của gia đình là
-                        chính đáng, chủ yếu từ sản xuất nông nghiệp. Kinh tế hàng năm ổn định, đủ
-                        ăn.
+                        <span className="pl-6 font-bold">* Kinh tế:</span>{' '}
+                        {initialData?.kinhTeGiaDinh}
                     </p>
 
                     <p>
-                        <span className="pl-6 font-bold">* Chính trị:</span> Qua các thời kỳ cách
-                        mạng gia đình không có ai làm gì cho đế quốc phong kiến, là người dân làm ăn
-                        lương thiện, luôn chấp hành nghiêm chủ trương đường lối của Đảng, chính sách
-                        và pháp luật của Nhà nước, các quy định của địa phương.
+                        <span className="pl-6 font-bold">* Chính trị:</span>{' '}
+                        {initialData?.chinhTriGiaDinh}
                     </p>
                 </div>
             </div>
@@ -512,21 +822,18 @@ const ModalTomTatLyLich = () => {
     }
 
     const Muc3 = () => {
+        const relatives = initialData?.relatives || []
+
+        const fatherInLaw = getRelativeByType(relatives, 'FATHER_IN_LOW')
+        const motherInLaw = getRelativeByType(relatives, 'MOTHER_IN_LOW')
+        const spouse = getRelativeByType(relatives, 'MARRIER')
+        const children = relatives?.filter((rel) => ['SON', 'DAUGHTER'].includes(rel.type))
+
         return (
             <div className="flex flex-col">
                 <div className="uppercase text-lg font-bold flex w-full justify-center">
                     III. Tình hình KT-CT của gia đình{' '}
-                    {/* {initialData?.userProfile?.gender === Gender.Male ? (
-                        <>
-                            vợ, (<span style={{ textDecoration: 'line-through' }}>(chồng)</span>)
-                        </>
-                    ) : initialData?.userProfile?.gender === Gender.Female ? (
-                        <>
-                            chồng, <span style={{ textDecoration: 'line-through' }}>(vợ)</span>
-                        </>
-                    ) : (
-                        'vợ, chồng'
-                    )} */}
+                    {getSpouseTitle(initialData?.gender?.sTen ?? '')}
                 </div>
                 <div className="flex flex-col">
                     <GridBlock
@@ -537,17 +844,19 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Họ tên cha:{' '}
-                                        <span className="font-bold capitalize">Vương Văn Mạnh</span>
+                                        <span className="font-bold capitalize">
+                                            {fatherInLaw?.name}
+                                        </span>
                                     </>
                                 ),
                             },
                             {
                                 key: 'dob-cha',
-                                content: <>Sinh: 1966</>,
+                                content: <>Sinh: {fatherInLaw?.birthYear}</>,
                             },
                             {
                                 key: 'nghe-nghiep-cha',
-                                content: <>Nghề nghiệp: Làm ruộng</>,
+                                content: <>Nghề nghiệp: {fatherInLaw?.job}</>,
                             },
                         ]}
                     />
@@ -559,40 +868,46 @@ const ModalTomTatLyLich = () => {
                                 content: (
                                     <>
                                         Họ tên mẹ:{' '}
-                                        <span className="font-bold capitalize">Lại Thị Mến</span>
+                                        <span className="font-bold capitalize">
+                                            {motherInLaw?.name}
+                                        </span>
                                     </>
                                 ),
                             },
                             {
                                 key: 'dob-me',
-                                content: <>Sinh: 1971</>,
+                                content: <>Sinh: {motherInLaw?.birthYear}</>,
                             },
                             {
                                 key: 'nghe-nghiep-me',
-                                content: <>Nghề nghiệp: Làm ruộng</>,
+                                content: <>Nghề nghiệp: {motherInLaw?.job}</>,
                             },
                         ]}
                     />
-                    <span>Thành phần gia đình: Nông dân</span>
-                    <span>Quê quán: Ngô Quyền, TP Nam Định, Nam Định</span>
-                    <span>Nơi ở hiện nay: Máy Tơ, Ngô Quyền, TP Nam Định, Nam Định</span>
+                    <span>Thành phần gia đình: {initialData?.fThanhPhanGiaDinh}</span>
+                    <span>Quê quán: {fatherInLaw?.queQuan}</span>
+                    <span>Nơi ở hiện nay: {fatherInLaw?.noiOHienTai}</span>
                     <div className="flex justify-between">
-                        <span>Cha mẹ sinh được: 02 người con (02 trai)</span>
-                        <span>Đồng chí: Vương Trung Hiếu</span>
-                        <span>Là thứ: 01</span>
+                        <span>Cha mẹ sinh được: {initialData?.fSoACE}</span>
                     </div>
-                    <span className="pl-6 font-bold">Tình hình KT-CT của gia đình</span>
+                    <span className="pl-6 font-bold">
+                        Tình hình KT-CT của gia đình{' '}
+                        {getSpouseTitle(initialData?.gender?.sTen ?? '')}
+                    </span>
                     <p>
-                        <span className="pl-6 font-bold">* Kinh tế:</span> Thu nhập của gia đình là
-                        chính đáng, chủ yếu từ sản xuất nông nghiệp. Kinh tế hàng năm ổn định, đủ
-                        ăn.
+                        <span className="pl-6 font-bold">* Kinh tế:</span>{' '}
+                        {initialData?.fKinhTeGiaDinh}
                     </p>
 
                     <p>
-                        <span className="pl-6 font-bold">* Chính trị:</span> Qua các thời kỳ cách
-                        mạng gia đình không có ai làm gì cho đế quốc phong kiến, là người dân làm ăn
-                        lương thiện, luôn chấp hành nghiêm chủ trương đường lối của Đảng, chính sách
-                        và pháp luật của Nhà nước, các quy định của địa phương.
+                        <span className="pl-6 font-bold">* Chính trị:</span>{' '}
+                        {initialData?.fChinhTriGiaDinh}
+                    </p>
+                    <p>
+                        <span className="pl-6 font-bold">
+                            * Bản thân {getSpouseTitle(initialData?.gender?.sTen ?? '')}:
+                        </span>{' '}
+                        {initialData?.fBanThan}
                     </p>
                 </div>
                 <div className="flex flex-col mt-6">
@@ -603,39 +918,30 @@ const ModalTomTatLyLich = () => {
                                 key: 'name-vo',
                                 content: (
                                     <>
-                                        Họ tên{' '}
-                                        {/* {initialData?.userProfile?.gender === Gender.Male ? (
-                                            <>
-                                                vợ, (
-                                                <span style={{ textDecoration: 'line-through' }}>
-                                                    (chồng)
-                                                </span>
-                                                )
-                                            </>
-                                        ) : initialData?.userProfile?.gender === Gender.Female ? (
-                                            <>
-                                                chồng,{' '}
-                                                <span style={{ textDecoration: 'line-through' }}>
-                                                    (vợ)
-                                                </span>
-                                            </>
-                                        ) : (
-                                            'vợ, chồng'
-                                        )}
-                                        :{' '} */}
-                                        <span className="font-bold capitalize">Vương Văn Mạnh</span>
+                                        Họ tên{getSpouseTitle(initialData?.gender?.sTen ?? '')}:{' '}
+                                        <span className="font-bold capitalize">{spouse?.name}</span>
                                     </>
                                 ),
                             },
                             {
                                 key: 'dob-vo',
-                                content: <>Năm sinh: 1966</>,
+                                content: <>Năm sinh: {spouse?.birthYear}</>,
                             },
                         ]}
                     />
-                    <span>Nghề nghiệp: </span>
-                    <span>Chỗ ở hiện nay: </span>
-                    <span>Họ tên, năm sinh, nghề nghiệp các con: </span>
+                    <span>Nghề nghiệp: {spouse?.job}</span>
+                    <span>Chỗ ở hiện nay: {spouse?.noiOHienTai}</span>
+                    <span>
+                        Họ tên, năm sinh, nghề nghiệp các con:{' '}
+                        {children.length > 0
+                            ? children
+                                  .map(
+                                      (child) =>
+                                          `${child.name}, ${child.birthYear || ''}, ${child.job || ''}, ${child.queQuan || ''}, ${child.noiOHienTai || ''}`
+                                  )
+                                  .join('; ')
+                            : 'Chưa có con'}
+                    </span>
                 </div>
             </div>
         )

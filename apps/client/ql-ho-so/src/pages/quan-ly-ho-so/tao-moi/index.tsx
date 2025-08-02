@@ -421,6 +421,7 @@ export default function CreateUserPage() {
                         : null,
                     tenureDate: values.tenureDate ? dayjs(values.tenureDate).toISOString() : null,
                     avatar: fileName,
+                    fullname: `${values.lastName || ''} ${values.firstName || ''}`.trim(),
                     ...emptyObjectIf(
                         {
                             hocVi: {

@@ -1,7 +1,8 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import ViewIcon from '@components/icons/view'
+import PrinterIcon from '@components/icons/print'
+import { ModalTomTatLyLich } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -19,6 +20,7 @@ import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -187,6 +189,13 @@ export default function UserProfilePageDs() {
     const handleModal = () => {
         router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_TAO_MOI)
     }
+
+    const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
+        id: string
+    }>({
+        tag: ModalTomTatLyLich.name,
+    })
+
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
     async function handleDelete(id: string) {
         try {
@@ -341,15 +350,11 @@ export default function UserProfilePageDs() {
                                 fixed: 'right',
                                 render: (_, { id, idCardNumber }) => (
                                     <Row className="justify-center gap-2">
-                                        <ViewIcon
-                                            onClick={() =>
-                                                router.push(
-                                                    ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
-                                                        '[id]',
-                                                        id
-                                                    )
-                                                )
-                                            }
+                                        <PrinterIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenModalTomTatLyLich({ id })
+                                            }}
                                         />
                                         <EditIcon
                                             onClick={() => {
