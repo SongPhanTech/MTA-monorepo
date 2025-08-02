@@ -10,6 +10,7 @@ import type {
     QuestionType,
     SemesterType,
     SubjectClassSchedule,
+    SurveyQuestionType,
 } from '@workspace/db'
 import type { ColumnsType } from 'antd/es/table'
 
@@ -117,6 +118,8 @@ export type FilterProps = {
     examStatus?: ExamStatus[]
     questionBankId?: string | null
     questionPoint?: 'asc' | 'desc'
+    surveyQuestionType?: SurveyQuestionType[]
+    surveyId?: string | null
 }
 
 export type ColumnTypeProps = ColumnsType & {

@@ -123,6 +123,8 @@ export default function QuestionPage() {
                 knowledgeBlock: true,
                 difficulty: true,
             },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
             orderBy: [
                 ...emptyObjectIf(
                     [
@@ -196,20 +198,27 @@ export default function QuestionPage() {
         }
     }
 
-    const handleDownloadTemplate = () => {
+    const handleDownloadTemplate = async () => {
         try {
-            const fileUrl = '/files/file-mau-import-diem.docx'
+            const response = await fetch('/files/file-mau-import-cau-hoi.docx')
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+
             const link = document.createElement('a')
-            link.href = fileUrl
-            link.download = 'file-mau-import-diem.docx'
+            link.href = url
+            link.download = 'file-mau-import-cau-hoi.docx'
             document.body.appendChild(link)
             link.click()
-            document.body.removeChild(link)
+
+            setTimeout(() => {
+                document.body.removeChild(link)
+                window.URL.revokeObjectURL(url)
+            }, 100)
 
             message.success('Đang tải file mẫu...')
         } catch (error) {
-            message.error('Có lỗi xảy ra khi tải file mẫu')
-            console.error(error)
+            message.error('Không thể tải file mẫu')
+            console.error('Lỗi tải file:', error)
         }
     }
 
@@ -279,7 +288,7 @@ export default function QuestionPage() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 40,
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,

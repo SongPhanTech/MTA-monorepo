@@ -22,8 +22,10 @@ import {
     House,
     Landmark,
     Library,
+    ListChecks,
     ListTree,
     LucideProps,
+    ScrollText,
     Settings,
 } from 'lucide-react'
 import ROUTER_PATH from '../generated/router'
@@ -514,12 +516,6 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HINH_THUC_HUAN_LUYEN,
                         description: 'Danh mục hình thức huấn luyện',
                     },
-                    {
-                        id: 'bac-dao-tao',
-                        label: 'Danh mục bậc đào tạo',
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_BAC_DAO_TAO,
-                        description: 'Danh mục bậc đào tạo',
-                    },
                 ],
             },
             {
@@ -557,7 +553,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'ql-ren-luyen',
                 label: 'Quản lý rèn luyện',
-                icon: FolderOpen,
+                icon: ListChecks,
                 children: [
                     {
                         id: 'ql-dot-ren-luyen',
@@ -597,6 +593,20 @@ const NAVIGATION: NavigationType = {
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_SACH_GIANG_VIEN,
                         description: 'Danh sách giảng viên',
+                    },
+                ],
+            },
+            {
+                id: 'quan-ly-van-bang',
+                label: 'Quản lý văn bằng',
+                icon: ScrollText,
+                description: 'Quản lý văn bằng',
+                children: [
+                    {
+                        id: 'danh-muc-van-bang',
+                        label: 'Danh mục văn bằng',
+                        path: ROUTER_PATH.QL_DAO_TAO.QL_VAN_BANG_DANH_MUC_VAN_BANG,
+                        description: 'Danh mục văn bằng',
                     },
                 ],
             },
@@ -769,13 +779,6 @@ const NAVIGATION: NavigationType = {
                         icon: ReadOutlined,
                         path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TINH_TRANG_HON_NHAN,
                         description: 'Tình trạng hôn nhân',
-                    },
-                    {
-                        id: 'family-relationship',
-                        label: 'Quan hệ thân nhân',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_QUAN_HE_THAN_NHAN,
-                        description: 'Quan hệ thân nhân',
                     },
                     {
                         id: 'forms-of-government-commendation',
