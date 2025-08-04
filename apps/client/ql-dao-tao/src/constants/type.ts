@@ -8,6 +8,7 @@ import type {
     GraduationSessionStatus,
     SemesterType,
     SubjectClassSchedule,
+    TrainingObjectTypes,
 } from '@workspace/db'
 import type { ColumnsType } from 'antd/es/table'
 export type FilterProps = {
@@ -102,6 +103,8 @@ export type FilterProps = {
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]
+    type?: TrainingObjectTypes
+    baseScore?: 'Base10' | 'Base4'
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

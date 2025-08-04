@@ -430,6 +430,13 @@ const NAVIGATION: NavigationType = {
                 icon: ListTree,
                 children: [
                     {
+                        id: 'doi-tuong-dao-tao',
+                        label: 'Đối tượng đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DOI_TUONG_DAO_TAO,
+                        description: 'Đối tượng đào tạo',
+                    },
+                    {
                         id: 'danh-muc-nganh',
                         label: 'Danh mục ngành',
                         icon: PieChartOutlined,

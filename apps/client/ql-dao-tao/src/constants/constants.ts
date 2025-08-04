@@ -166,7 +166,11 @@ const CUSTOM_VI_LOCALE = {
         placeholder: 'Chọn giờ',
     },
 }
-
+const TRAINING_OBJECT_TYPE = {
+    MILITARY: 'Học viên quân sự',
+    CIVILIAN: 'Học viên dân sự',
+    INTERNATIONAL_MILITARY: 'Học viên quân sự quốc tế',
+}
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -185,4 +189,5 @@ export {
     STUDENT_STATUS_OPTIONS,
     SUBJECT_CLASS_SCHEDULE_TYPE,
     CUSTOM_VI_LOCALE,
+    TRAINING_OBJECT_TYPE,
 }

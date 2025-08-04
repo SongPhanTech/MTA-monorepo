@@ -22,6 +22,7 @@ import PutOlympicScoreModal from './put-diem-cong'
 import PutRankingCondition from './put-dieu-kien-xep-loai-tn'
 import PutAcademicActionCondition from './put-dieu-kien-xu-ly-hoc-tap'
 import PutThesisProject from './put-do-an'
+import PutTrainingObjectTypeModal from './put-doi-tuong-dao-tao'
 import PutGraduationApplication from './put-don-xet-tot-nghiep'
 import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
@@ -135,4 +136,5 @@ export {
     PutCouncil,
     PutCouncilMember,
     PutStudentModal,
+    PutTrainingObjectTypeModal,
 }
