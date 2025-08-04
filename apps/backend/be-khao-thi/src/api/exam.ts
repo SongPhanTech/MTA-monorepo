@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { QuestionType } from '@workspace/db'
+import { getRandomQuestionIDs } from '@workspace/db/sql'
 import { prisma } from '..'
 
 const app = new OpenAPIHono({ strict: false })
@@ -84,9 +85,8 @@ const getRandomExamQuestionByRule = createRoute({
             examId: z.string().openapi('examId', {
                 description: 'ID của đề thi',
             }),
-            questionType: z.enum(['ESSAY', 'ORAL']).optional().openapi('questionType', {
-                description: 'Loại câu hỏi',
-                default: 'ESSAY', // Default to ESSAY
+            nOfnExamBank: z.coerce.number().default(1).openapi('nOfnExamBank', {
+                description: 'Số lượng đề thi',
             }),
         }),
     },
@@ -113,8 +113,16 @@ const getRandomExamQuestionByRule = createRoute({
 })
 
 app.openapi(getRandomExamQuestionByRule, async (c) => {
-    const { examId, questionType } = c.req.query()
-    const typedQuestionType = questionType as QuestionType
+    const { examId, nOfnExamBank } = c.req.query()
+
+    const examExists = await prisma.exam.findUnique({
+        where: {
+            id: examId,
+        },
+    })
+    if (!examExists) {
+        return c.json({ message: 'Exam not found' }, 404)
+    }
 
     const testStructureRule = await prisma.testStructureRule.findMany({
         where: {
@@ -134,38 +142,73 @@ app.openapi(getRandomExamQuestionByRule, async (c) => {
         return c.json({ message: 'Test structure rule not found' }, 404)
     }
 
-    const selectedQuestionIds = new Set()
-    const listQuestion: any[] = []
+    const listQuestionExam = await prisma.question.findMany({
+        where: {
+            questionBankId: examExists.questionBankId,
+        },
+    })
 
-    for (const rule of testStructureRule) {
-        console.log('Processing rule:', rule)
-        const count = rule.count || 1
-        const questions = await prisma.question.findMany({
-            where: {
-                questionBankId: rule.exam.questionBankId,
-                knowledgeBlockId: rule.knowledgeBlockId,
-                type: typedQuestionType,
+    if (!listQuestionExam || listQuestionExam.length === 0) {
+        return c.json({ message: 'No questions found in the question bank' }, 404)
+    }
 
-                // Exclude questions that have already been selected
-                id: { notIn: Array.from(selectedQuestionIds) as string[] },
-            },
-            take: count,
-        })
+    const examBlock: any[] = []
 
-        // Add a check for insufficient questions
-        if (questions.length < count) {
-            console.warn(
-                `Warning: Rule for knowledge block "${rule.knowledgeBlockId}" requires ${count} questions, but only ${questions.length} were available.`
+    const nExamBanks = Number(nOfnExamBank) || 1
+
+    for (let i = 0; i < nExamBanks; i++) {
+        const selectedQuestionIds = new Set()
+        const listQuestion: any[] = []
+        for (const rule of testStructureRule) {
+            const questionType = rule.questionType
+            const count = rule.count || 1
+            console.log(
+                'Processing rule:',
+                rule.exam.questionBankId,
+                questionType,
+                rule.questionPoint,
+                rule.knowledgeBlockId,
+                count
             )
-        }
+            const questions = await prisma.$queryRawTyped<{ id: string }[]>(
+                getRandomQuestionIDs(
+                    rule.exam.questionBankId,
+                    questionType,
+                    rule.questionPoint,
+                    rule.knowledgeBlockId,
+                    count
+                ) as any
+            )
+            console.log('Fetched questions:', questions)
 
-        // Add new questions to the list and their IDs to the set for tracking
-        questions.forEach((q) => {
-            listQuestion.push(q)
-            selectedQuestionIds.add(q.id)
+            if (questions.length) {
+                for (let i = 0; i < questions.length; i++) {
+                    const question = questions[i]
+                    const questionDetails = question
+                        ? listQuestionExam.find((q) => q.id === question.id)
+                        : undefined
+                    if (question && !selectedQuestionIds.has(question.id)) {
+                        selectedQuestionIds.add(question.id)
+                        listQuestion.push({
+                            ...questionDetails,
+                            questionType: rule.questionType as QuestionType,
+                            knowledgeBlockId: rule.knowledgeBlockId,
+                            examId: examId,
+                        })
+                    }
+                }
+            } else {
+                console.warn(`No questions found for rule: ${rule.id}`)
+            }
+        }
+        examBlock.push({
+            examBank: i + 1,
+            examName: `Đề thi ${i + 1}`,
+            examId: examId,
+            questions: listQuestion,
         })
     }
-    return c.json(listQuestion, 200)
+    return c.json(examBlock, 200)
 })
 
 export default app
