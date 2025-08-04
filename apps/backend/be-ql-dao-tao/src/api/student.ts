@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { Gender, type Prisma } from '@workspace/db'
+import type { Prisma } from '@workspace/db'
 import { parseSheetHeQuanSu, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
@@ -12,6 +12,7 @@ import {
 import {
     buildCurriculumMapOrThrow,
     buildEthnicityMapOrThrow,
+    buildGenderMapOrThrow,
     buildNationalityMapOrThrow,
     buildProvinceMapOrThrow,
 } from '../utils'
@@ -222,6 +223,11 @@ app.openapi(importHeQuanSu, async (c) => {
         return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
     }
 
+    const genderMap = await buildGenderMapOrThrow(
+        prisma,
+        data.students.map((student) => student.gender)
+    )
+
     const ethnicityMap = await buildEthnicityMapOrThrow(
         prisma,
         data.students.map((student) => student.ethnicity)
@@ -291,7 +297,7 @@ app.openapi(importHeQuanSu, async (c) => {
                         // TODO: need to use idCardNumber
                         idCardNumber: student.code,
                         code: student.code,
-                        gender: student.gender === 'Nữ' ? Gender.Female : Gender.Male,
+                        genderId: student.gender ? genderMap.get('Nữ') : null,
                         ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
                         nationalityId: nationalityMap.get(student.nationality ?? '') || null,
                         provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,

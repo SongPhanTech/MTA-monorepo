@@ -112,7 +112,7 @@ export const StudentClassBySubjectClassSemester = z
             lastName: z.string(),
             firstName: z.string(),
             familyName: z.string().nullable(),
-            gender: z.nativeEnum($Enums.Gender),
+            gender: z.string(),
             dateOfBirth: z.coerce.date(),
         }),
         checked: z.boolean(),
@@ -173,7 +173,7 @@ export const EnrollFixedClassOnSubjectClass = z
             lastName: z.string(),
             firstName: z.string(),
             familyName: z.string().nullable(),
-            gender: z.nativeEnum($Enums.Gender),
+            gender: z.string(),
             dateOfBirth: z.coerce.date(),
         }),
 

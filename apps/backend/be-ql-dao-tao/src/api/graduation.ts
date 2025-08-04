@@ -3,6 +3,7 @@ import { AcademicActionType, RankingContext } from '@workspace/db'
 import {
     AcademicRankingConvertScalarSchema,
     GraduationRankDowngradeConditionScalarSchema,
+    TrainingMajorScalarSchema,
 } from '@workspace/db/zod/models'
 import { prisma } from '..'
 import { evaluateCondition } from '../services/student-result.service'
@@ -17,6 +18,7 @@ const GraduationCheckResult = z
         reason: z.string(),
         gpa: z.number().nullish(),
         rank: AcademicRankingConvertScalarSchema.nullish(),
+        trainingMajor: TrainingMajorScalarSchema.nullish(),
         downgraded: z
             .object({
                 from: AcademicRankingConvertScalarSchema,
@@ -100,6 +102,9 @@ app.openapi(graduationCheck, async (c) => {
                         trainingBlocks: {
                             include: { subjects: { include: { subject: true } } },
                         },
+                        curriculum: {
+                            include: { trainingMajor: true },
+                        },
                     },
                 },
                 studentTrainingScore: { take: 1, orderBy: { createdAt: 'desc' } },
@@ -127,6 +132,9 @@ app.openapi(graduationCheck, async (c) => {
                             select: {
                                 trainingBlocks: {
                                     include: { subjects: { include: { subject: true } } },
+                                },
+                                curriculum: {
+                                    include: { trainingMajor: true },
                                 },
                             },
                         },
@@ -381,6 +389,7 @@ app.openapi(graduationCheck, async (c) => {
                 gpa: CUMULATIVE_GPA,
                 rank: null,
                 reason: 'Không thoả mãn xếp loại nào',
+                trainingMajor: curriculumVersion.curriculum.trainingMajor,
             })
         }
     }

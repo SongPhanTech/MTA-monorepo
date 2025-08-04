@@ -33,6 +33,28 @@ export const getCurrentDateForReport = () => {
     return { date, month, year }
 }
 
+export const buildGenderMapOrThrow = async (
+    prisma: PrismaClient,
+    names: (string | undefined)[]
+) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    const existing = await prisma.dM_GioiTinh.findMany({
+        where: { sTen: { in: uniqNames } },
+        select: { sTen: true, Id: true },
+    })
+
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Giới tính không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+
+    return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
+}
+
 export const buildEthnicityMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
