@@ -19,7 +19,7 @@ export type GraduationCheckResultDowngradedFrom = {
   /** @nullable */
   createdAt?: string | null;
   /** @nullable */
-  updatedAt: string | null;
+  updatedAt?: string | null;
   classification: string;
   context: GraduationCheckResultDowngradedFromContext;
   rankOrder: number;

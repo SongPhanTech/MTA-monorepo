@@ -79,6 +79,7 @@ export * from './graduationCheckResultDowngradedFromContext';
 export * from './graduationCheckResultRank';
 export * from './graduationCheckResultRankBaseScore';
 export * from './graduationCheckResultRankContext';
+export * from './graduationCheckResultTrainingMajor';
 export * from './group';
 export * from './groupCreate';
 export * from './groupUpdate';

@@ -50,7 +50,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                           userProfile: {
                                               ...(filters.name
                                                   ? {
-                                                        name: {
+                                                        fullname: {
                                                             contains: filters.name,
                                                             mode: 'insensitive',
                                                         },
