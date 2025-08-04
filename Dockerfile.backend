@@ -20,6 +20,7 @@ COPY --from=pruner /app/out/json/ .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/out/full/ .
+ENV NODE_OPTIONS="--max-old-space-size=6144"
 RUN echo "DATABASE_URL=postgres://root:SwanT3chDB@swantech.luanbt.com:5432/mta" > packages/database/.env
 RUN pnpm generate
 RUN pnpm generate:sql

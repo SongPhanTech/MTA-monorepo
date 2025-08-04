@@ -48,7 +48,7 @@ const PutTrainingMajorModal = () => {
             },
         })
 
-    const { data: organizations = [], refetch: refetchOrganizations } = useFindManyDM_DonVi()
+    const { data: organizations = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
 
     const { mutateAsync: createTrainingMajor } = useCreateTrainingMajor()

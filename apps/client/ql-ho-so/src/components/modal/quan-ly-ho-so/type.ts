@@ -169,6 +169,8 @@ export type FilterProps = {
     email?: string
     phoneNumber?: string
     idCardNumber?: string
+    originalPlace?: string
+    sDM_DonViId?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

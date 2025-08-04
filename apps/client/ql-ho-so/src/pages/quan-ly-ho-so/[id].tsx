@@ -67,7 +67,7 @@ export default function UpdateUserPage() {
     const [form] = Form.useForm<SubmitForm>()
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
-    const [expland, setExpland] = useState<string[]>(['thongTinCoBan', 'thongTinLienHe'])
+    const [expland, setExpland] = useState<string[]>(['thongTinCoBan'])
 
     const [fileList, setFileList] = useState<UploadFile[]>([])
 

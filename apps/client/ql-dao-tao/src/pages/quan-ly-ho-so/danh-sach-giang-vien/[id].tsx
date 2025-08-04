@@ -285,9 +285,9 @@ export default function StudentDetailPage() {
                                     title: 'Giảng viên chính',
                                     width: 300,
                                     align: 'center',
-                                    dataIndex: 'mainSubjectClasses',
+                                    dataIndex: 'mainLecturer',
                                     render: (__, record) =>
-                                        record?.mainSubjectClasses?.userProfile?.fullName || '',
+                                        record?.mainLecturer?.userProfile?.fullName || '',
                                 },
                                 {
                                     title: 'Đơn vị phụ trách',
@@ -300,7 +300,7 @@ export default function StudentDetailPage() {
                                             : '',
                                 },
                             ]}
-                            data={lecturerData?.mainSubjectClasses || []}
+                            data={lecturerData?.extraSubjectClasses || []}
                             pagination={false}
                         />
                     </Col>

@@ -100,7 +100,7 @@ const ModalLyLichCanBo = () => {
         >
             <div
                 ref={printRef}
-                className="mx-auto p-10 page text-sm leading-relaxed font-[Times New Roman] flex flex-col gap-2 page-1"
+                className="mx-auto p-10 page text-sm leading-relaxed font-time-news-roman flex flex-col gap-2 page-1"
             >
                 <span className="italic flex w-full justify-center">
                     Mẫu 2C-BNV/2008 ban hành kèm theo Quyết định số 02/2008/QĐ-BNV ngày 06/10/2008

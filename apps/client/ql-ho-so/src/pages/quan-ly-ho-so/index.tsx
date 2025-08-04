@@ -1,3 +1,4 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -7,14 +8,16 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { DM_DonVi } from '@workspace/db'
 import {
     useCountUserProfile,
+    useFindManyDM_DonVi,
     useFindManyDM_GioiTinh,
     useFindManyUserProfile,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
@@ -34,19 +37,18 @@ export default function UserProfilePageDs() {
         email: '',
         phoneNumber: '',
         idCardNumber: '',
+        originalPlace: '',
+        sDM_DonViId: '',
     })
 
-    const [importModalVisible, setImportModalVisible] = useState(false)
-
     const router = useRouter()
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
     const { data: UserProfileData = [], refetch } = useFindManyUserProfile({
         where: {
-            ...(filters.code
+            ...(filters.originalPlace
                 ? {
-                      code: {
-                          contains: filters.code,
+                      originalPlace: {
+                          contains: filters.originalPlace,
                           mode: 'insensitive',
                       },
                   }
@@ -56,6 +58,13 @@ export default function UserProfilePageDs() {
                       idCardNumber: {
                           contains: filters.idCardNumber,
                           mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.sDM_DonViId
+                ? {
+                      sDM_DonViId: {
+                          equals: filters.sDM_DonViId,
                       },
                   }
                 : {}),
@@ -109,15 +118,25 @@ export default function UserProfilePageDs() {
         },
         include: {
             gender: true,
+            capBac: {
+                include: {
+                    capBac: true,
+                },
+            },
         },
+        orderBy: {
+            createdAt: 'desc',
+        },
+        take: DEFAULT_PAGINATE_SIZE,
+        skip: (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
     })
 
     const { data: count } = useCountUserProfile({
         where: {
-            ...(filters.code
+            ...(filters.originalPlace
                 ? {
-                      code: {
-                          contains: filters.code,
+                      originalPlace: {
+                          contains: filters.originalPlace,
                           mode: 'insensitive',
                       },
                   }
@@ -136,6 +155,13 @@ export default function UserProfilePageDs() {
                               },
                           },
                       ],
+                  }
+                : {}),
+            ...(filters.sDM_DonViId
+                ? {
+                      sDM_DonViId: {
+                          equals: filters.sDM_DonViId,
+                      },
                   }
                 : {}),
             ...(filters.dateOfBirth?.length === 2
@@ -176,16 +202,22 @@ export default function UserProfilePageDs() {
     })
 
     const { data: genderData = [] } = useFindManyDM_GioiTinh()
-
+    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const { showSpinner, hideSpinner } = useSpinner()
+    // const treeData = buildOrgTree(organizations)
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
         }, 500),
         []
     )
-
-    const { showSpinner, hideSpinner } = useSpinner()
-
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
     const handleModal = () => {
         router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO_TAO_MOI)
     }
@@ -221,8 +253,45 @@ export default function UserProfilePageDs() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[8, 8]} align="top" justify="end">
-                        <Col xs={24}>
+                    <Row gutter={[8, 8]} align="top" justify="space-between">
+                        <Col xs={12} md={12}>
+                            <Flex>
+                                <Form.Item
+                                    className="mb-0 mr-3"
+                                    name="sDM_DonViId"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelAlign="left"
+                                >
+                                    <Input
+                                        id="search"
+                                        className="w-[250px]"
+                                        onChange={(e) => handleFilterChange('name', e.target.value)}
+                                        allowClear
+                                        placeholder="Tìm kiếm"
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className="mb-0"
+                                    name="sDM_DonViId"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelAlign="left"
+                                >
+                                    <Select
+                                        placeholder="Chọn đơn vị quản lý"
+                                        options={organizations.map((i: DM_DonVi) => ({
+                                            value: i.Id,
+                                            label: i.sTen,
+                                        }))}
+                                        onChange={(val) => handleFilterChange('sDM_DonViId', val)}
+                                        allowClear
+                                        className="h-8"
+                                    />
+                                </Form.Item>
+                            </Flex>
+                        </Col>
+                        <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 {/* <Button
                                     type="primary"
@@ -250,19 +319,11 @@ export default function UserProfilePageDs() {
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 50,
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã',
-                                dataIndex: 'code',
-                                width: 150,
-                                align: 'center',
-                                fixed: 'left',
-                                type: 'input',
                             },
                             {
                                 title: 'Họ và tên',
@@ -308,6 +369,52 @@ export default function UserProfilePageDs() {
 
                                 render: (__, record) =>
                                     record?.gender ? record?.gender?.sTen : '',
+                            },
+                            {
+                                title: 'Nguyên quán',
+                                align: 'center',
+                                width: 150,
+                                type: 'input',
+                                dataIndex: 'originalPlace',
+                                render: (__, record) =>
+                                    record?.originalPlace ? record?.originalPlace : '',
+                            },
+                            {
+                                title: 'Đơn vị',
+                                align: 'center',
+                                width: 120,
+                                // type: 'tree_select',
+                                // options: treeData,
+                                dataIndex: 'sDM_DonViId',
+                                render: (__, record) => {
+                                    if (record?.sDM_DonViId) {
+                                        const donVi = organizations.find(
+                                            (item: DM_DonVi) => item.Id === record?.sDM_DonViId
+                                        )
+                                        if (donVi) {
+                                            return donVi.sTen
+                                        }
+                                        return ''
+                                    }
+                                    return ''
+                                },
+                            },
+                            {
+                                title: 'Cấp bậc',
+                                align: 'center',
+                                width: 120,
+                                type: 'input',
+                                dataIndex: 'capBac',
+                                render: (__, record) =>
+                                    record?.capBac?.length ? (
+                                        <ul>
+                                            {record?.capBac?.map((item: any) => (
+                                                <li>- {item?.capBac?.sTen}</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        ''
+                                    ),
                             },
                             {
                                 title: 'SĐT',

@@ -36,23 +36,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem
                             form={form}
-                            name="code"
-                            label="Mã"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập mã!',
-                                },
-                            ]}
-                            className="mb-0"
-                        >
-                            <Input placeholder="Nhập mã" className="h-9" />
-                        </FormItem>
-                    </Col>
-
-                    <Col span={12}>
-                        <FormItem
-                            form={form}
                             name="lastName"
                             label="Họ và tên đệm"
                             rules={[
@@ -83,7 +66,22 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             <Input placeholder="Nhập họ và tên đệm" className="h-9" />
                         </FormItem>
                     </Col>
-
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="code"
+                            label="Mã"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập mã!',
+                                },
+                            ]}
+                            className="mb-0"
+                        >
+                            <Input placeholder="Nhập mã" className="h-9" />
+                        </FormItem>
+                    </Col>
                     <Col span={12}>
                         <FormItem
                             form={form}
