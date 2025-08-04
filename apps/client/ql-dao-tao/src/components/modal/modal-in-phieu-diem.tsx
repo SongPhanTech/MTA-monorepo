@@ -310,7 +310,7 @@ const ModalPrintStudentSubjectScore = () => {
         >
             <div
                 ref={printRef}
-                className="mx-auto p-10 page text-sm leading-relaxed font-[Times New Roman]"
+                className="mx-auto p-10 page text-sm leading-relaxed !font-time-news-roman"
             >
                 <div className="text-center font-bold uppercase">
                     <div className="flex items-center justify-between">
@@ -460,9 +460,11 @@ const ModalPrintStudentSubjectScore = () => {
                                         {item?.student?.userProfile?.fullname}
                                     </td>
                                     <td className="border border-black text-center">
-                                        {dayjs(item?.student?.userProfile?.dateOfBirth).format(
-                                            'DD/MM/YYYY'
-                                        )}
+                                        {item?.student?.userProfile?.dateOfBirth
+                                            ? dayjs(item?.student?.userProfile?.dateOfBirth).format(
+                                                  'DD/MM/YYYY'
+                                              )
+                                            : ''}
                                     </td>
                                     <td className="border border-black text-center">
                                         {item?.student?.fixedClass?.name}

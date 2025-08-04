@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { AcademicActionType, RankingContext } from '@workspace/db'
 import {
     AcademicRankingConvertScalarSchema,
+    DiplomaTypeScalarSchema,
     GraduationRankDowngradeConditionScalarSchema,
     TrainingMajorScalarSchema,
 } from '@workspace/db/zod/models'
@@ -18,7 +19,8 @@ const GraduationCheckResult = z
         reason: z.string(),
         gpa: z.number().nullish(),
         rank: AcademicRankingConvertScalarSchema.nullish(),
-        trainingMajor: TrainingMajorScalarSchema.nullish(),
+        trainingMajor: TrainingMajorScalarSchema.nullable(),
+        diplomaType: DiplomaTypeScalarSchema.nullable(),
         downgraded: z
             .object({
                 from: AcademicRankingConvertScalarSchema,
@@ -105,6 +107,7 @@ app.openapi(graduationCheck, async (c) => {
                         curriculum: {
                             include: { trainingMajor: true },
                         },
+                        diplomaType: true,
                     },
                 },
                 studentTrainingScore: { take: 1, orderBy: { createdAt: 'desc' } },
@@ -116,7 +119,7 @@ app.openapi(graduationCheck, async (c) => {
                             include: {
                                 scoreConverts: true,
                                 academicRankingConvert: {
-                                    where: { context: RankingContext.GRADUATION },
+                                    where: { context: RankingContext.GRADUATION, graduated: true },
                                     include: {
                                         rankingCondition: true,
                                         downgradeRules: {
@@ -136,6 +139,7 @@ app.openapi(graduationCheck, async (c) => {
                                 curriculum: {
                                     include: { trainingMajor: true },
                                 },
+                                diplomaType: true,
                             },
                         },
                     },
@@ -148,16 +152,21 @@ app.openapi(graduationCheck, async (c) => {
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Sinh viên không có lớp quản lý',
+                trainingMajor: null,
+                diplomaType: null,
             })
             continue
         }
 
         const curriculumVersion = student.curriculumVersion || student.fixedClass.curriculumVersion
+
         if (!curriculumVersion) {
             results.push({
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Sinh viên không có CTĐT',
+                trainingMajor: null,
+                diplomaType: null,
             })
             continue
         }
@@ -247,6 +256,8 @@ app.openapi(graduationCheck, async (c) => {
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Không có hạng xếp loại',
+                trainingMajor: null,
+                diplomaType: curriculumVersion.diplomaType,
             })
             continue
         }
@@ -364,6 +375,7 @@ app.openapi(graduationCheck, async (c) => {
                         rank: rankDowngrade || null,
                         reason: '',
                         trainingMajor: curriculumVersion.curriculum.trainingMajor,
+                        diplomaType: curriculumVersion.diplomaType,
                         downgraded: {
                             from: rank,
                             conditions: downgrade.conditions,
@@ -379,6 +391,7 @@ app.openapi(graduationCheck, async (c) => {
                     rank,
                     reason: '',
                     trainingMajor: curriculumVersion.curriculum.trainingMajor,
+                    diplomaType: curriculumVersion.diplomaType,
                 })
                 break
             }
@@ -391,6 +404,8 @@ app.openapi(graduationCheck, async (c) => {
                 gpa: CUMULATIVE_GPA,
                 rank: null,
                 reason: 'Không thoả mãn xếp loại nào',
+                trainingMajor: curriculumVersion.curriculum.trainingMajor,
+                diplomaType: curriculumVersion.diplomaType,
             })
         }
     }

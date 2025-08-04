@@ -69,6 +69,7 @@ export * from './graduationCheck200';
 export * from './graduationCheck400';
 export * from './graduationCheckBody';
 export * from './graduationCheckResult';
+export * from './graduationCheckResultDiplomaType';
 export * from './graduationCheckResultDowngraded';
 export * from './graduationCheckResultDowngradedConditionsItem';
 export * from './graduationCheckResultDowngradedConditionsItemField';

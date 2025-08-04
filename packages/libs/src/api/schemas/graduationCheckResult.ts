@@ -6,6 +6,7 @@
  */
 import type { GraduationCheckResultRank } from './graduationCheckResultRank';
 import type { GraduationCheckResultTrainingMajor } from './graduationCheckResultTrainingMajor';
+import type { GraduationCheckResultDiplomaType } from './graduationCheckResultDiplomaType';
 import type { GraduationCheckResultDowngraded } from './graduationCheckResultDowngraded';
 
 export interface GraduationCheckResult {
@@ -17,6 +18,8 @@ export interface GraduationCheckResult {
   /** @nullable */
   rank?: GraduationCheckResultRank;
   /** @nullable */
-  trainingMajor?: GraduationCheckResultTrainingMajor;
+  trainingMajor: GraduationCheckResultTrainingMajor;
+  /** @nullable */
+  diplomaType: GraduationCheckResultDiplomaType;
   downgraded?: GraduationCheckResultDowngraded;
 }
