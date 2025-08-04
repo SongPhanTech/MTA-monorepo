@@ -102,6 +102,7 @@ model Room extends Base {
   building       Building?       @relation(fields: [buildingId], references: [id])
   buildingId     String?
 
+  exam           Exam[]
   subjectClasses SubjectClass[]
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
@@ -149,8 +150,10 @@ model TrainingMajor extends Base {
   organizationId        String                              @db.Uuid
   trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId       String
+
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
   curriculum            Curriculum[]
+  graduationDecision    GraduationDecision[]
 
   @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")

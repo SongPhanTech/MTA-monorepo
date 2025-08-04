@@ -1407,6 +1407,7 @@ model TrainingMajor {
   trainingFieldId       String
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
   curriculum            Curriculum[]
+  graduationDecision    GraduationDecision[]
 
   @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
@@ -4516,6 +4517,8 @@ model GraduationDecision {
   decisionDate     DateTime                     @default(now())
   notes            String?
   finalGpa         Decimal                      @db.Decimal(5, 2)
+  trainingMajor    TrainingMajor                @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId  String
   finalRanking     AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
   finalRankingId   String
   diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])

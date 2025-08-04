@@ -203,7 +203,8 @@ model Exam  extends Base {
   shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
   showResult         Boolean             @default(false) // Hiển thị kết quả ngay
 
-  subjectClass       SubjectClass[]
+  room               Room[] // sum examCapacity >= số thí sinh
+  subjectClass       SubjectClass[] // sum subjectClassStudent (!examBanned) => số thí sinh
   examBank           ExamBank[]
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]
