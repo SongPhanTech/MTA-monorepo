@@ -45,13 +45,6 @@ export default function TrainingObjectTypePage() {
                       },
                   }
                 : {}),
-            ...(filters.type
-                ? {
-                      type: {
-                          equals: filters.type,
-                      },
-                  }
-                : {}),
         },
         orderBy: {
             name: 'asc',
@@ -67,13 +60,6 @@ export default function TrainingObjectTypePage() {
                       name: {
                           contains: filters.name,
                           mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.type
-                ? {
-                      type: {
-                          equals: filters.type,
                       },
                   }
                 : {}),

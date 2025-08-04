@@ -212,28 +212,32 @@ export default function GraduationSession() {
                                 dataIndex: 'name',
                                 width: 180,
                                 type: 'input',
+                                align: 'center',
                             },
                             {
                                 title: 'Ngày họp hội đồng',
                                 dataIndex: 'sessionDate',
-                                width: 120,
+                                width: 140,
                                 type: 'date',
+                                align: 'center',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Ngày bắt đầu nhận đơn',
                                 dataIndex: 'applicationStart',
-                                width: 150,
+                                width: 160,
                                 type: 'date',
+                                align: 'center',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
                                 title: 'Ngày kết thúc nhận đơn',
                                 dataIndex: 'applicationEnd',
-                                width: 150,
+                                width: 170,
                                 type: 'date',
+                                align: 'center',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },

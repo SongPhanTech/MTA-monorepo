@@ -106,31 +106,37 @@ export default function ExpertProfile() {
                                 dataIndex: 'name',
                                 width: 150,
                                 type: 'input',
+                                align: 'center',
                             },
                             {
                                 title: 'Hàm vị, học vị',
                                 dataIndex: 'title',
                                 width: 150,
+                                align: 'center',
                             },
                             {
                                 title: 'Chuyên ngành',
                                 dataIndex: 'specialization',
                                 width: 150,
+                                align: 'center',
                             },
                             {
                                 title: 'Đơn vị công tác',
                                 dataIndex: 'workplace',
                                 width: 150,
+                                align: 'center',
                             },
                             {
                                 title: 'Số điện thoại',
                                 dataIndex: 'phone',
                                 width: 150,
+                                align: 'center',
                             },
                             {
                                 title: 'Email',
                                 dataIndex: 'email',
                                 width: 150,
+                                align: 'center',
                             },
                             {
                                 title: 'Thao tác',
