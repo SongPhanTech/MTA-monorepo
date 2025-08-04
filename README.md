@@ -36,6 +36,7 @@ pnpm i
 ## ✏️Get started
 
 `pnpm generate` (this will run all `generate` scripts in all packages)
+`pnpm generate:sql` in `packages/database`
 Important part: `generate` scripts in `packages/database` is need for zenstack and prisma to work
 
 ## ✏️Sinh lại đường dẫn router:  packages/router/src/index.ts
