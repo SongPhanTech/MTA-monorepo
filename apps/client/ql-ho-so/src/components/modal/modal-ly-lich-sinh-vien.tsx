@@ -190,7 +190,7 @@ const ModalTomTatLyLich = () => {
         return (
             <div className="flex flex-col page-1">
                 <div className="uppercase text-lg font-bold flex w-full justify-center">
-                    Bản tóm tắt lí lịch
+                    Bản tóm tắt lý lịch
                 </div>
                 <div className="flex justify-between items-center mb-2">
                     <img
@@ -1064,7 +1064,7 @@ const ModalTomTatLyLich = () => {
         >
             <div
                 ref={printRef}
-                className="mx-auto p-10 page text-sm leading-relaxed font-[Times New Roman] flex flex-col gap-2"
+                className="mx-auto p-10 page text-sm leading-relaxed !font-time-news-roman flex flex-col gap-2"
             >
                 <Header />
                 <Muc1 />

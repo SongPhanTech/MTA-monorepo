@@ -6,6 +6,9 @@ module.exports = {
             colors: {
                 primary: '#028850',
             },
+            fontFamily: {
+                'time-news-roman': '"Times New Roman", sans-serif',
+            },
         },
     },
     plugins: [],
