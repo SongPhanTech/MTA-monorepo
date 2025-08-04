@@ -5,6 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GraduationCheckResultRank } from './graduationCheckResultRank';
+import type { GraduationCheckResultTrainingMajor } from './graduationCheckResultTrainingMajor';
+import type { GraduationCheckResultDiplomaType } from './graduationCheckResultDiplomaType';
 import type { GraduationCheckResultDowngraded } from './graduationCheckResultDowngraded';
 
 export interface GraduationCheckResult {
@@ -15,5 +17,9 @@ export interface GraduationCheckResult {
   gpa?: number | null;
   /** @nullable */
   rank?: GraduationCheckResultRank;
+  /** @nullable */
+  trainingMajor: GraduationCheckResultTrainingMajor;
+  /** @nullable */
+  diplomaType: GraduationCheckResultDiplomaType;
   downgraded?: GraduationCheckResultDowngraded;
 }

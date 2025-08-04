@@ -19,7 +19,7 @@ export type GraduationCheckResultDowngradedConditionsItem = {
   /** @nullable */
   createdAt?: string | null;
   /** @nullable */
-  updatedAt: string | null;
+  updatedAt?: string | null;
   field: GraduationCheckResultDowngradedConditionsItemField;
   operator: GraduationCheckResultDowngradedConditionsItemOperator;
   invert?: boolean;

@@ -22,7 +22,7 @@ export type GraduationCheckResultRank = {
   /** @nullable */
   createdAt?: string | null;
   /** @nullable */
-  updatedAt: string | null;
+  updatedAt?: string | null;
   classification: string;
   context: GraduationCheckResultRankContext;
   rankOrder: number;

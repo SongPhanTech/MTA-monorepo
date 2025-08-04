@@ -4,7 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { EnrollFixedClassOnSubjectClassUserProfileGender } from './enrollFixedClassOnSubjectClassUserProfileGender';
 
 export type EnrollFixedClassOnSubjectClassUserProfile = {
   id: string;
@@ -14,7 +13,7 @@ export type EnrollFixedClassOnSubjectClassUserProfile = {
   firstName: string;
   /** @nullable */
   familyName: string | null;
-  gender: EnrollFixedClassOnSubjectClassUserProfileGender;
+  gender: string;
   /** @nullable */
   dateOfBirth: string | null;
 };

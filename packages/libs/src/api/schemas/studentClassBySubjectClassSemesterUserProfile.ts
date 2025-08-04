@@ -4,7 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { StudentClassBySubjectClassSemesterUserProfileGender } from './studentClassBySubjectClassSemesterUserProfileGender';
 
 export type StudentClassBySubjectClassSemesterUserProfile = {
   id: string;
@@ -14,7 +13,7 @@ export type StudentClassBySubjectClassSemesterUserProfile = {
   firstName: string;
   /** @nullable */
   familyName: string | null;
-  gender: StudentClassBySubjectClassSemesterUserProfileGender;
+  gender: string;
   /** @nullable */
   dateOfBirth: string | null;
 };

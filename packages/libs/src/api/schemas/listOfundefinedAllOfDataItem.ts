@@ -4,8 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ListOfundefinedAllOfDataItemUserType } from './listOfundefinedAllOfDataItemUserType';
-import type { ListOfundefinedAllOfDataItemGender } from './listOfundefinedAllOfDataItemGender';
 
 export type ListOfundefinedAllOfDataItem = {
   id: string;
@@ -19,13 +17,38 @@ export type ListOfundefinedAllOfDataItem = {
   /** @nullable */
   createdAt?: string | null;
   /** @nullable */
-  updatedAt: string | null;
-  userType: ListOfundefinedAllOfDataItemUserType;
+  updatedAt?: string | null;
+  /** @nullable */
+  bLaNguoiDung?: boolean | null;
+  /** @nullable */
+  bLaCanBoNhanVien?: boolean | null;
+  /** @nullable */
+  bLaHocVien?: boolean | null;
+  /** @nullable */
+  sDM_DonViId?: string | null;
+  /** @nullable */
+  sDM_ViTriCongViecId?: string | null;
+  /** @nullable */
+  sQuanlyTrucTiepId?: string | null;
+  /** @nullable */
+  iDictionaryKey?: number | null;
+  /** @nullable */
+  bSystem?: boolean | null;
+  /** @nullable */
+  sNguoiTao?: string | null;
+  /** @nullable */
+  sNguoiSua?: string | null;
+  /** @nullable */
+  sThietBiTao?: string | null;
+  /** @nullable */
+  sThietBiSua?: string | null;
   /** @nullable */
   avatar?: string | null;
   firstName: string;
   lastName: string;
   idCardNumber: string;
+  /** @nullable */
+  placeOfIdCardNumber?: string | null;
   /** @nullable */
   fullname?: string | null;
   /** @nullable */
@@ -37,6 +60,42 @@ export type ListOfundefinedAllOfDataItem = {
   /** @nullable */
   currentAddress?: string | null;
   /** @nullable */
+  thuongBinh?: string | null;
+  /** @nullable */
+  benh?: string | null;
+  /** @nullable */
+  tinhHinhNhaO?: string | null;
+  /** @nullable */
+  truocKhiNhapNgu?: string | null;
+  /** @nullable */
+  thanhPhanGiaDinh?: string | null;
+  /** @nullable */
+  soTruong?: string | null;
+  /** @nullable */
+  hoTenThuongDung?: string | null;
+  /** @nullable */
+  lichSuBanThan?: string | null;
+  /** @nullable */
+  conThuMay?: number | null;
+  /** @nullable */
+  soACE?: number | null;
+  /** @nullable */
+  kinhTeGiaDinh?: string | null;
+  /** @nullable */
+  chinhTriGiaDinh?: string | null;
+  /** @nullable */
+  fSoACE?: number | null;
+  /** @nullable */
+  fKinhTeGiaDinh?: string | null;
+  /** @nullable */
+  fThanhPhanGiaDinh?: string | null;
+  /** @nullable */
+  fChinhTriGiaDinh?: string | null;
+  /** @nullable */
+  fBanThan?: string | null;
+  /** @nullable */
+  nationalId?: string | null;
+  /** @nullable */
   dateOfBirth?: string | null;
   /** @nullable */
   placeOfBirth?: string | null;
@@ -45,7 +104,7 @@ export type ListOfundefinedAllOfDataItem = {
   /** @nullable */
   idCardDate?: string | null;
   /** @nullable */
-  gender?: ListOfundefinedAllOfDataItemGender;
+  idCardExpirationDate?: string | null;
   /** @nullable */
   permanentAddress?: string | null;
   /** @nullable */
@@ -79,7 +138,19 @@ export type ListOfundefinedAllOfDataItem = {
   /** @nullable */
   enlistmentDate?: string | null;
   /** @nullable */
+  reEnlistmentDate?: string | null;
+  /** @nullable */
   dischargeDate?: string | null;
+  /** @nullable */
+  recruitmentDate?: string | null;
+  /** @nullable */
+  recruitmentAgency?: string | null;
+  /** @nullable */
+  mainJobAssigned?: string | null;
+  /** @nullable */
+  revolutionaryDate?: string | null;
+  /** @nullable */
+  originalPlace?: string | null;
   /** @nullable */
   familyPhone?: string | null;
   /** @nullable */

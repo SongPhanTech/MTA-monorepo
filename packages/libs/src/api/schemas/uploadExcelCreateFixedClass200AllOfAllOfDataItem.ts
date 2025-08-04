@@ -17,7 +17,7 @@ export type UploadExcelCreateFixedClass200AllOfAllOfDataItem = {
   /** @nullable */
   createdAt?: string | null;
   /** @nullable */
-  updatedAt: string | null;
+  updatedAt?: string | null;
   name: string;
   /** @nullable */
   summary?: string | null;
