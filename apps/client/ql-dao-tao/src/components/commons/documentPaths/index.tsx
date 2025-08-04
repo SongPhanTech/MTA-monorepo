@@ -18,6 +18,7 @@ interface DocumentPathsComponentProps {
     titleForm?: string
     multiple?: boolean
     accept?: string
+    text?: string
 }
 
 interface UploadedFileItem {
@@ -37,6 +38,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     titleForm = 'documentFiles',
     multiple = true,
     accept = '.doc,.docx,.xls,.xlsx',
+    text = 'DOC, DOCX, XLSX, XLS',
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
 
@@ -192,7 +194,7 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
                     vào đây
                 </p>
                 <span className="text-[#4B5563] text-base font-normal">
-                    Định dạng DOC, DOCX, XLSX, XLS (tối đa 5MB)
+                    Định dạng {text} (tối đa 5MB)
                 </span>
             </Dragger>
             <div className="flex flex-wrap gap-2 mt-2">

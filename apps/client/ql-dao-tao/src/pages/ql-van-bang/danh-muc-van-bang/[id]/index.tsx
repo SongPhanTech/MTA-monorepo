@@ -1,13 +1,16 @@
+import { PlusOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
+import { useDiplomaFieldOptions } from '@hooks/diplomaFields'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { DiplomaType, DocumentFile } from '@workspace/db'
+import type { DiplomaFields, DiplomaType, DocumentFile } from '@workspace/db'
 import {
     useFindManyDiplomaPlaceHolder,
     useFindUniqueDiplomaType,
     useUpdateDiplomaType,
+    useUpsertDiplomaPlaceHolder,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Form, message, Row } from 'antd'
@@ -26,10 +29,13 @@ dayjs.locale('vi')
 export default function Diploma() {
     const [documentFront, setDocumentFront] = useState<DocumentFile | null>(null)
     const [documentBack, setDocumentBack] = useState<DocumentFile | null>(null)
+    const [selectedFields, setSelectedFields] = useState<DiplomaFields[]>([])
     const [form] = Form.useForm<PutDiplomaType>()
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const diplomaTypeId = router.query.id as string
+    const { options: diplomaFieldsOptions, getDiplomaFieldLabel } = useDiplomaFieldOptions()
+    console.log(selectedFields)
 
     const { data: initialData } = useFindUniqueDiplomaType(
         { where: { id: diplomaTypeId }, include: { front: true, back: true } },
@@ -45,11 +51,10 @@ export default function Diploma() {
         { enabled: !!diplomaTypeId }
     )
 
-    console.log(keyInforData)
-
     const { mutateAsync: updateDiplomaType } = useUpdateDiplomaType()
+    const { mutateAsync: upsertDiplomaPlaceHolder } = useUpsertDiplomaPlaceHolder()
 
-    async function handleFrontBackDiplomaType(output?: PutDiplomaType) {
+    const handleFrontBackDiplomaType = async (output?: PutDiplomaType) => {
         if (!output) return
         try {
             showSpinner()
@@ -103,9 +108,33 @@ export default function Diploma() {
 
             message.success('Cập nhật thành công')
             queryClient.invalidateQueries({ queryKey: ['DiplomaType'] })
-        } catch (_error) {
-            console.error(_error)
+        } catch (error) {
+            console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleClearImage = async (type: 'front' | 'back') => {
+        try {
+            showSpinner()
+            await updateDiplomaType({
+                where: { id: diplomaTypeId },
+                data: {
+                    [type]: { delete: true },
+                },
+            })
+            message.success(`Đã xoá phôi mặt ${type === 'front' ? 'trước' : 'sau'}`)
+            queryClient.invalidateQueries({ queryKey: ['DiplomaType'] })
+            if (type === 'front') {
+                setDocumentFront(null)
+            } else {
+                setDocumentBack(null)
+            }
+        } catch (err) {
+            console.error(err)
+            message.error('Xoá ảnh thất bại, vui lòng thử lại')
         } finally {
             hideSpinner()
         }
@@ -132,11 +161,13 @@ export default function Diploma() {
     ) => {
         return (
             <Col span={24}>
-                <Divider orientation="left">{label}</Divider>
+                <div className="flex items-center justify-between py-2 mx-10">
+                    <span className="font-bold">{label}</span>
+                    {data && <Button onClick={() => handleClearImage(titleForm)}>Xoá ảnh</Button>}
+                </div>
                 {data ? (
                     <div className="overflow-scroll">
                         <div className="w-[297mm] relative">
-                            <p className="absolute top-3 left-3 bg-white">[FULLNAME]</p>
                             <img
                                 src={`${process.env.NEXT_PUBLIC_MINIO_ENDPOINT}/${data.path}`}
                                 alt={data.name}
@@ -171,7 +202,25 @@ export default function Diploma() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <div className="flex">
-                        <Col span={7}>BÊN TRÁI</Col>
+                        <Col span={7}>
+                            <div className="border border-gray-200 p-3 rounded-md">
+                                <h3 className="font-semibold mb-2">Các trường dữ liệu</h3>
+                                <div className="flex flex-col gap-2 max-h-[600px] overflow-auto">
+                                    {diplomaFieldsOptions.map((field) => (
+                                        <div
+                                            key={`${field.value}-${Math.random()}`} // để tránh key trùng nếu click nhiều lần
+                                            className="flex justify-between items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-50 cursor-pointer"
+                                            onClick={() => {
+                                                setSelectedFields((prev) => [...prev, field.value])
+                                            }}
+                                        >
+                                            <span>{field.label}</span>
+                                            <PlusOutlined />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </Col>
 
                         <div className="border-r border-[#D1D5DB] h-auto mx-2" />
 
