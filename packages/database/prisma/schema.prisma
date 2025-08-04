@@ -633,6 +633,7 @@ model Exam {
   shuffleQuestions   Boolean             @default(true)
   shuffleAnswers     Boolean             @default(true)
   showResult         Boolean             @default(false)
+  room               Room[]
   subjectClass       SubjectClass[]
   examBank           ExamBank[]
   testStructureRules TestStructureRule[]
@@ -1338,6 +1339,7 @@ model Room {
   examCapacity   Int?
   building       Building?       @relation(fields: [buildingId], references: [id])
   buildingId     String?
+  exam           Exam[]
   subjectClasses SubjectClass[]
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
@@ -2396,6 +2398,30 @@ model DM_QuocGia {
 }
 
 model DM_Tinh {
+  Id                   String    @id() @default(uuid()) @db.Uuid()
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?      @default(0)
+  bActive              Boolean?  @default(true)
+  bDeleted             Boolean?  @default(false)
+  bSystem              Boolean?  @default(false)
+  iDictionaryKey       Int?      @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  sDM_QuocGiaId        String?   @db.Uuid()
+  iDM_KhuVucDiaLy_Id   Int?
+  iDM_DonViHanhChinhId Int?
+
+  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
+  @@schema("mta")
+}
+
+model DM_Tinh_New {
   Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
   sTen                        String?
@@ -2419,7 +2445,7 @@ model DM_Tinh {
   userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
   userProfileCurrentAddress   UserProfile[] @relation("ProvinceCurrentAddress")
 
-  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
+  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_New_iDM_QuocGiaId")
   @@schema("mta")
 }
 
@@ -2448,6 +2474,31 @@ model DM_QuanHuyen {
 }
 
 model DM_XaPhuong {
+  Id                   String    @id() @default(uuid()) @db.Uuid()
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?      @default(0)
+  bActive              Boolean?  @default(true)
+  bDeleted             Boolean?  @default(false)
+  bSystem              Boolean?  @default(false)
+  iDictionaryKey       Int?      @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  sDM_QuanHuyen_Ma     String?
+  sDM_TinhId           String?   @db.Uuid()
+  sDM_QuanHuyenId      String?   @db.Uuid()
+  iDM_DonViHanhChinhId Int?
+
+  @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
+  @@schema("mta")
+}
+
+model DM_XaPhuong_New {
   Id                          String        @id() @default(uuid()) @db.Uuid()
   sMa                         String?
   sTen                        String?
@@ -2463,16 +2514,14 @@ model DM_XaPhuong {
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sDM_QuanHuyen_Ma            String?
-  sDM_TinhId                  String?       @db.Uuid()
-  sDM_QuanHuyenId             String?       @db.Uuid()
+  sDM_TinhId_New              String?       @db.Uuid()
   iDM_DonViHanhChinhId        Int?
   userProfileHometown         UserProfile[] @relation("CommuneHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("CommunePlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("CommunePermanentAddress")
   userProfileCurrentAddress   UserProfile[] @relation("CommuneCurrentAddress")
 
-  @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
+  @@index([sDM_TinhId_New])
   @@schema("mta")
 }
 
@@ -2548,15 +2597,15 @@ model UserProfile {
   fChinhTriGiaDinh           String?
   fBanThan                   String?
   nationalId                 String?                   @db.Uuid()
-  provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
+  provinceCurrentAddress     DM_Tinh_New?              @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
   provinceCurrentAddressId   String?                   @db.Uuid()
-  communeCurrentAddress      DM_XaPhuong?              @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
+  communeCurrentAddress      DM_XaPhuong_New?          @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
   communeCurrentAddressId    String?                   @db.Uuid()
   dateOfBirth                DateTime?
   placeOfBirth               String?
-  provinceOfBirth            DM_Tinh?                  @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
+  provinceOfBirth            DM_Tinh_New?              @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
   provinceOfBirthId          String?                   @db.Uuid()
-  communeOfBirth             DM_XaPhuong?              @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
+  communeOfBirth             DM_XaPhuong_New?          @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
   communeOfBirthId           String?                   @db.Uuid()
   homeTown                   String?
   idCardDate                 DateTime?
@@ -2564,9 +2613,9 @@ model UserProfile {
   gender                     DM_GioiTinh?              @relation(fields: [genderId], references: [Id])
   genderId                   String?                   @db.Uuid()
   permanentAddress           String?
-  provincePermanentAddress   DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
+  provincePermanentAddress   DM_Tinh_New?              @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
   provincePermanentAddressId String?                   @db.Uuid()
-  communePermanentAddress    DM_XaPhuong?              @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
+  communePermanentAddress    DM_XaPhuong_New?          @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
   communePermanentAddressId  String?                   @db.Uuid()
   temporaryAddress           String?
   contactAddress             String?
@@ -2578,9 +2627,9 @@ model UserProfile {
   religionId                 String?                   @db.Uuid()
   ethnicity                  DM_DanToc?                @relation(fields: [ethnicityId], references: [Id])
   ethnicityId                String?                   @db.Uuid()
-  provinceHometown           DM_Tinh?                  @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
+  provinceHometown           DM_Tinh_New?              @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
   provinceHometownId         String?                   @db.Uuid()
-  communeHometown            DM_XaPhuong?              @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
+  communeHometown            DM_XaPhuong_New?          @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
   communeHometownId          String?                   @db.Uuid()
   officerNumber              String?
   rank                       DM_CapBac?                @relation(fields: [rankId], references: [Id])
