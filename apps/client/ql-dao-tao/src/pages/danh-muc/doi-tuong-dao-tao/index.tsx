@@ -1,5 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
 import { PutTrainingObjectTypeModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, TRAINING_OBJECT_TYPE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -244,10 +245,10 @@ export default function TrainingObjectTypePage() {
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
                                                 </Tooltip> */}
-                                                {/* <EditIcon
+                                                <EditIcon
                                                     onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
-                                                /> */}
+                                                />
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () => handleDelete(id),
