@@ -34,6 +34,7 @@ import PutTrainingBlockOnCurriculumVersion from './put-khoi-kien-thuc'
 import PutTrainingBlock from './put-khoi-kien-thuc-ctdt'
 import PutTrainingLocationModal from './put-khu-vuc'
 import PutSemesterModal from './put-ky-hoc'
+import PutTrainingTypeModal from './put-loai-hinh-dao-tao'
 import PutFixedClassModal from './put-lop-bien-che'
 import PutOpenClassModal from './put-mo-lop'
 import PutMilestoneModal from './put-moc-huan-luyen'
@@ -137,4 +138,5 @@ export {
     PutCouncilMember,
     PutStudentModal,
     PutTrainingObjectTypeModal,
+    PutTrainingTypeModal,
 }

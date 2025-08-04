@@ -437,6 +437,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Đối tượng đào tạo',
                     },
                     {
+                        id: 'loai-hinh-dao-tao',
+                        label: 'Loại hình đào tạo',
+                        icon: PieChartOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.LOAI_HINH_DAO_TAO,
+                        description: 'Loại hình đào tạo',
+                    },
+                    {
                         id: 'danh-muc-nganh',
                         label: 'Danh mục ngành',
                         icon: PieChartOutlined,

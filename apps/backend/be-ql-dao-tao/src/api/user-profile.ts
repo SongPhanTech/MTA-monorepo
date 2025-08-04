@@ -1,5 +1,4 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { Gender } from '@workspace/db'
 import { UserProfileScalarSchema } from '@workspace/db/zod/models'
 import { splitFullName } from '@workspace/libs/utils'
 import { HTTPException } from 'hono/http-exception'

@@ -73,6 +73,7 @@ export default {
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep",
     "DANH_SACH_GIANG_VIEN": "/quan-ly-ho-so/danh-sach-giang-vien",
     "DOI_TUONG_DAO_TAO": "/danh-muc/doi-tuong-dao-tao",
+    "LOAI_HINH_DAO_TAO": "/danh-muc/loai-hinh-dao-tao",
   },
   "QL_HO_SO": {
     "DANH_MUC_HO_SO_BAC_LUONG": "/danh-muc-ho-so/bac-luong",

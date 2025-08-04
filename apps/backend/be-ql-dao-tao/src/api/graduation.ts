@@ -363,6 +363,7 @@ app.openapi(graduationCheck, async (c) => {
                         gpa: CUMULATIVE_GPA,
                         rank: rankDowngrade || null,
                         reason: '',
+                        trainingMajor: curriculumVersion.curriculum.trainingMajor,
                         downgraded: {
                             from: rank,
                             conditions: downgrade.conditions,
@@ -377,6 +378,7 @@ app.openapi(graduationCheck, async (c) => {
                     gpa: CUMULATIVE_GPA,
                     rank,
                     reason: '',
+                    trainingMajor: curriculumVersion.curriculum.trainingMajor,
                 })
                 break
             }
@@ -389,7 +391,6 @@ app.openapi(graduationCheck, async (c) => {
                 gpa: CUMULATIVE_GPA,
                 rank: null,
                 reason: 'Không thoả mãn xếp loại nào',
-                trainingMajor: curriculumVersion.curriculum.trainingMajor,
             })
         }
     }
