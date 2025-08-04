@@ -23,7 +23,7 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
         label: item.children ? (
             item.label
         ) : (
-            <Tooltip title={item.label}>
+            <Tooltip title={item.label} placement="right">
                 <Link href={item.path || '#'}>{item.label}</Link>
             </Tooltip>
         ),
@@ -32,7 +32,7 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
         children: item.children
             ? item.children.map((child) => ({
                   label: (
-                      <Tooltip title={child.label}>
+                      <Tooltip title={child.label} placement="right">
                           <Link href={child.path || '#'}>{child.label}</Link>
                       </Tooltip>
                   ),
