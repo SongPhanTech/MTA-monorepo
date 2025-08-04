@@ -317,7 +317,7 @@ StudentDetailPage.getLayout = function getLayout(page: React.ReactElement) {
                 { title: 'Quản lý hồ sơ' },
                 {
                     title: 'Danh sách giảng viên',
-                    href: ROUTER_PATH.QL_DAO_TAO.DANH_SACH_GIANG_VIEN,
+                    href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
                 },
                 { title: 'Chi tiết giảng viên' },
             ]}

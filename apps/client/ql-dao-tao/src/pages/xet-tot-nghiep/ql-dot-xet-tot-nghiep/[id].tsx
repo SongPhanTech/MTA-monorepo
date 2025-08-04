@@ -122,6 +122,8 @@ export default function StudentGraduationApplication() {
                     graduation: result.graduation,
                     rank: result.rank,
                     reason: result.reason,
+                    trainingMajor: result.trainingMajor,
+                    diplomaType: result.diplomaType,
                 }),
             }
         })
@@ -302,6 +304,8 @@ export default function StudentGraduationApplication() {
                                 finalGpa: record.gpa ?? 0,
                                 decisionDate: new Date(),
                                 finalRanking: { connect: { id: record.rank?.id } },
+                                trainingMajor: { connect: { id: record.trainingMajor?.id } },
+                                diplomaType: { connect: { id: record.diplomaType?.id } },
                             }
 
                             return upsertGraduationDecision({

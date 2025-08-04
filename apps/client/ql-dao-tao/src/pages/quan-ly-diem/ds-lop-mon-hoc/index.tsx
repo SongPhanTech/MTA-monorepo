@@ -128,8 +128,8 @@ export default function ClassSubject() {
             ...(filters.examDateRange
                 ? {
                       examDate: {
-                          gte: filters.examDateRange[0],
-                          lte: filters.examDateRange[1],
+                          gte: dayjs(filters.examDateRange?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.examDateRange?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),

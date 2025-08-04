@@ -260,7 +260,7 @@ export default function UserProfilePageLecture() {
 
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
-            router.push(`${ROUTER_PATH.QL_DAO_TAO.DANH_SACH_GIANG_VIEN}/${record.id}`)
+            router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${record.id}`)
         }
     }
 
