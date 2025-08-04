@@ -488,6 +488,9 @@ model SubjectClass extends Base {
 
   // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học
   examType                   ExamType?
+
+  exam                       Exam?                 @relation(fields: [examId], references: [id])
+  examId                     String?
   
   // cần khoá khi: hạn nhập điểm
   isLockScore                Boolean               @default(false) // khoá điểm CC/TX

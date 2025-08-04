@@ -193,7 +193,7 @@ model Exam  extends Base {
   questionBank       QuestionBank        @relation(fields: [questionBankId], references: [id])
   questionBankId     String
 
-  startTime          DateTime
+  startTime          DateTime // copy from subjectClass.examDate
   endTime            DateTime
   duration           Int
 
@@ -203,6 +203,7 @@ model Exam  extends Base {
   shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
   showResult         Boolean             @default(false) // Hiển thị kết quả ngay
 
+  subjectClass       SubjectClass[]
   examBank           ExamBank[]
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]

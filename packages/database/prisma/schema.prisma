@@ -633,6 +633,7 @@ model Exam {
   shuffleQuestions   Boolean             @default(true)
   shuffleAnswers     Boolean             @default(true)
   showResult         Boolean             @default(false)
+  subjectClass       SubjectClass[]
   examBank           ExamBank[]
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]
@@ -1154,6 +1155,8 @@ model SubjectClass {
   scoreDeadline              DateTime?
   examScoreDeadline          DateTime?
   examType                   ExamType?
+  exam                       Exam?                 @relation(fields: [examId], references: [id])
+  examId                     String?
   isLockScore                Boolean               @default(false)
   isLockExamScore            Boolean               @default(true)
   issuedScoreAt              DateTime?
