@@ -18,7 +18,7 @@ const GraduationCheckResult = z
         reason: z.string(),
         gpa: z.number().nullish(),
         rank: AcademicRankingConvertScalarSchema.nullish(),
-        trainingMajor: TrainingMajorScalarSchema.nullish(),
+        trainingMajor: TrainingMajorScalarSchema.nullable(),
         downgraded: z
             .object({
                 from: AcademicRankingConvertScalarSchema,
@@ -116,7 +116,7 @@ app.openapi(graduationCheck, async (c) => {
                             include: {
                                 scoreConverts: true,
                                 academicRankingConvert: {
-                                    where: { context: RankingContext.GRADUATION },
+                                    where: { context: RankingContext.GRADUATION, graduated: true },
                                     include: {
                                         rankingCondition: true,
                                         downgradeRules: {
@@ -148,16 +148,19 @@ app.openapi(graduationCheck, async (c) => {
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Sinh viên không có lớp quản lý',
+                trainingMajor: null,
             })
             continue
         }
 
         const curriculumVersion = student.curriculumVersion || student.fixedClass.curriculumVersion
+
         if (!curriculumVersion) {
             results.push({
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Sinh viên không có CTĐT',
+                trainingMajor: null,
             })
             continue
         }
@@ -247,6 +250,7 @@ app.openapi(graduationCheck, async (c) => {
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Không có hạng xếp loại',
+                trainingMajor: null,
             })
             continue
         }
@@ -391,6 +395,7 @@ app.openapi(graduationCheck, async (c) => {
                 gpa: CUMULATIVE_GPA,
                 rank: null,
                 reason: 'Không thoả mãn xếp loại nào',
+                trainingMajor: curriculumVersion.curriculum.trainingMajor,
             })
         }
     }
