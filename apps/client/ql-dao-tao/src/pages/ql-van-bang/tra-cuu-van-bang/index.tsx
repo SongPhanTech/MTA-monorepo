@@ -1,17 +1,33 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { Prisma } from '@workspace/db'
+import type {
+    FixedClass,
+    Prisma,
+    TrainingCourse,
+    TrainingField,
+    TrainingMajor,
+    TrainingObjectType,
+} from '@workspace/db'
 import {
     useCountGraduationDecision,
     useFindManyDiplomaType,
+    useFindManyDM_DonVi,
+    useFindManyFixedClass,
     useFindManyGraduationDecision,
+    useFindManyTrainingCourse,
+    useFindManyTrainingField,
+    useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Col, Row } from 'antd'
+import { Col, Flex, Form, Row, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
-import { useMemo, useState } from 'react'
+import _ from 'lodash'
+import { useCallback, useMemo, useState } from 'react'
 
 export default function GraduationDecisionDiploma() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -88,7 +104,7 @@ export default function GraduationDecisionDiploma() {
         [filters, isFiltering]
     )
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
-    const { data = [] } = useFindManyGraduationDecision({
+    const { data = [], refetch } = useFindManyGraduationDecision({
         where,
         include: {
             student: {
@@ -124,9 +140,157 @@ export default function GraduationDecisionDiploma() {
         },
     })
 
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const { data: organization = [] } = useFindManyDM_DonVi({
+        orderBy: { sTen: 'asc' },
+    })
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        orderBy: { name: 'asc' },
+    })
+
+    const treeData = buildOrgTree(organization)
+
     return (
         <div className="bg-white rounded-lg shadow-sm p-4">
             <Row gutter={[16, 0]}>
+                <Col span={24}>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={24}>
+                            <Flex>
+                                <Col span={4}>
+                                    <Form.Item
+                                        className="mb-0"
+                                        name="managementOrganizationId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
+                                    >
+                                        <TreeSelect
+                                            placeholder="Chọn đơn vị quản lý"
+                                            allowClear
+                                            showSearch
+                                            treeDefaultExpandAll
+                                            onChange={(val) =>
+                                                handleFilterChange('managementOrganizationId', val)
+                                            }
+                                            treeData={treeData}
+                                            filterTreeNode={(input, node) =>
+                                                (node.label as string)
+                                                    .toLowerCase()
+                                                    .includes(input.toLowerCase())
+                                            }
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                    <Form.Item className="mb-0" name="trainingCourseId">
+                                        <Select
+                                            placeholder="Khoá đào tạo"
+                                            options={trainingCourseData.map(
+                                                (i: TrainingCourse) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            onChange={(val) =>
+                                                handleFilterChange('trainingCourseId', val)
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                    <Form.Item className="mb-0" name="trainingObjectId">
+                                        <Select
+                                            placeholder="Chọn đối tượng đào tạo"
+                                            options={trainingObjectTypeData.map(
+                                                (i: TrainingObjectType) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                })
+                                            )}
+                                            onChange={(val) =>
+                                                handleFilterChange('trainingObjectId', val)
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                    <Form.Item className="mb-0" name="trainingFieldId">
+                                        <Select
+                                            placeholder="Chọn ngành"
+                                            options={trainingFieldData.map((i: TrainingField) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
+                                            onChange={(val) =>
+                                                handleFilterChange('trainingFieldId', val)
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                    <Form.Item className="mb-0" name="trainingMajorId">
+                                        <Select
+                                            placeholder="Chọn chuyên ngành"
+                                            options={trainingMajorData.map((i: TrainingMajor) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
+                                            onChange={(val) =>
+                                                handleFilterChange('trainingMajorId', val)
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                    <Form.Item className="mb-0" name="fixedClassId">
+                                        <Select
+                                            placeholder="Chọn lớp biên chế"
+                                            options={fixedClassData.map((i: FixedClass) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
+                                            onChange={(val) =>
+                                                handleFilterChange('fixedClassId', val)
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                            </Flex>
+                        </Col>
+                    </Row>
+                </Col>
                 <Col span={24}>
                     <Table
                         rowKey={'key'}
