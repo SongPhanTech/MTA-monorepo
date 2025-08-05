@@ -7,7 +7,7 @@ import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { NgoaiNgu } from '@workspace/db'
-import { useFindManyDM_TrinhDoNgoaiNgu } from '@workspace/db/hooks'
+import { useFindManyDM_NgoaiNgu, useFindManyDM_TrinhDoNgoaiNgu } from '@workspace/db/hooks'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -17,6 +17,13 @@ export default function NgoaiNguForm({ expland, setExpland }: DomProps) {
     const form = Form.useFormInstance<SubmitForm>()
     const ngoaiNguList = Form.useWatch('ngoaiNgu', form) || []
     const { data: trinhDoData = [] } = useFindManyDM_TrinhDoNgoaiNgu(
+        {},
+        {
+            enabled: expland.includes('ngoaiNgu'),
+        }
+    )
+
+    const { data: ngoaiNgu = [] } = useFindManyDM_NgoaiNgu(
         {},
         {
             enabled: expland.includes('ngoaiNgu'),
@@ -110,6 +117,15 @@ export default function NgoaiNguForm({ expland, setExpland }: DomProps) {
                             width: 180,
                             fixed: 'left',
                             render: (_, record) => record?.hinhThucDaoTao || '',
+                        },
+                        {
+                            title: 'Ngôn ngữ',
+                            align: 'center',
+                            width: 160,
+                            render: (_, record) => {
+                                const nn = ngoaiNgu?.find((item) => item.Id === record.ngonNguId)
+                                return nn ? nn.sTen : ''
+                            },
                         },
                         {
                             title: 'Trình độ',

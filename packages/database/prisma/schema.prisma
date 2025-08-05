@@ -2579,6 +2579,7 @@ model UserProfile {
   bankAccountNumber          String?
   bankName                   String?
   currentAddress             String?
+  occupationWhenRecruiting   String?
   thuongBinh                 String?
   benh                       String?
   tinhHinhNhaO               String?
@@ -2588,6 +2589,8 @@ model UserProfile {
   hoTenThuongDung            String?
   lichSuBanThan              String?
   conThuMay                  Int?
+  chieuCao                   String?
+  canNang                    String?
   soACE                      Int?
   kinhTeGiaDinh              String?
   chinhTriGiaDinh            String?
@@ -3181,6 +3184,7 @@ model QuaTrinhLuong {
   ngachId       String
   bacLuong      DM_BacLuong @relation(fields: [bacLuongId], references: [id])
   bacLuongId    String
+  heSo          String?
   maNgach       String
   phuCapChucVu  String?
   phuCapKhac    String?

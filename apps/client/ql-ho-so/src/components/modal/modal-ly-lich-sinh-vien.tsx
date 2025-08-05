@@ -193,11 +193,19 @@ const ModalTomTatLyLich = () => {
                     Bản tóm tắt lý lịch
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                    <img
-                        src={getMinioUrl(initialData?.avatar) || ''}
-                        alt="avatar"
-                        className="border border-solid border-black w-[113px] h-[151px]"
-                    />
+                    <div className="border border-solid border-black min-w-[113px] min-h-[151px] flex items-center justify-center">
+                        {initialData?.avatar ? (
+                            <img
+                                src={getMinioUrl(initialData?.avatar) || ''}
+                                alt="avatar"
+                                className="border border-solid border-black w-[113px] h-[151px]"
+                            />
+                        ) : (
+                            <>
+                                Ảnh màu <br /> (4 x 6 cm)
+                            </>
+                        )}
+                    </div>
 
                     <div className="flex-1 pl-4">
                         <div className="mb-1">
@@ -935,10 +943,17 @@ const ModalTomTatLyLich = () => {
                         Họ tên, năm sinh, nghề nghiệp các con:{' '}
                         {children.length > 0
                             ? children
-                                  .map(
-                                      (child) =>
-                                          `${child.name}, ${child.birthYear || ''}, ${child.job || ''}, ${child.queQuan || ''}, ${child.noiOHienTai || ''}`
-                                  )
+                                  .map((child) => {
+                                      const fields = [
+                                          child.name,
+                                          child.birthYear,
+                                          child.job,
+                                          child.queQuan,
+                                          child.noiOHienTai,
+                                      ].filter(Boolean)
+
+                                      return fields.join(', ')
+                                  })
                                   .join('; ')
                             : 'Chưa có con'}
                     </span>

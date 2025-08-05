@@ -49,6 +49,7 @@ model UserProfile extends Base {
   bankAccountNumber          String?   // số tài khoản ngân hàng
   bankName                   String?   // tên ngân hàng
   currentAddress             String?   // địa chỉ hiện tại
+  occupationWhenRecruiting   String? // nghề nghiệp khi tuyển dụng
 
   thuongBinh                 String?
   benh                       String?
@@ -59,7 +60,9 @@ model UserProfile extends Base {
   hoTenThuongDung            String?
   lichSuBanThan              String?
   conThuMay                  Int?      // con thứ mấy
-
+  chieuCao                   String?    // chiều cao
+  canNang                    String?    // cân nặng 
+  
   // gia đình
   soACE                      Int?      // số anh chị em
   kinhTeGiaDinh              String?
@@ -572,6 +575,7 @@ model QuaTrinhLuong extends Base {
   ngachId       String
   bacLuong      DM_BacLuong @relation(fields: [bacLuongId], references: [id])
   bacLuongId    String
+  heSo          String?
   maNgach       String
   phuCapChucVu  String?
   phuCapKhac    String?
