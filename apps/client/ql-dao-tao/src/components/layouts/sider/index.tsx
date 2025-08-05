@@ -86,9 +86,13 @@ const SiderDefaultLayout = ({
             theme={theme}
             width={230}
         >
-            <div className="flex items-center justify-center my-3">{collapsed ? logo1 : logo2}</div>
+            <div
+                className={`flex items-center bg-white justify-center py-3 fixed z-[100] top-[0px] left-[0px] ${collapsed ? 'w-[60px]' : 'w-[230px]'}`}
+            >
+                {collapsed ? logo1 : logo2}
+            </div>
             <Menu
-                className="pb-20"
+                className="pb-20 pt-[64px]"
                 theme={'light'}
                 mode="inline"
                 selectedKeys={pathname ? [pathname] : []}

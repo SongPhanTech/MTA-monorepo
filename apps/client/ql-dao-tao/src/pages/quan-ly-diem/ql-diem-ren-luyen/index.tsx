@@ -288,7 +288,7 @@ export default function SubjectClassScore() {
                                 <Col span={12}>
                                     <Flex>
                                         <Col span={8}>
-                                            <Form.Item name="searchText">
+                                            <Form.Item name="searchText" className="mb-0">
                                                 <Input
                                                     id="search"
                                                     onChange={(e) =>
@@ -297,13 +297,11 @@ export default function SubjectClassScore() {
                                                             e.target.value
                                                         )
                                                     }
+                                                    className="h-8"
                                                     placeholder="Nhập tên lớp..."
-                                                    style={{
-                                                        height: 40,
-                                                    }}
                                                     prefix={
                                                         <Search
-                                                            size={15}
+                                                            size={12}
                                                             style={{
                                                                 color: 'rgba(0, 0, 0, 0.25)',
                                                             }}
@@ -327,9 +325,6 @@ export default function SubjectClassScore() {
                                                         value: i.id,
                                                         label: i.name,
                                                     }))}
-                                                    style={{
-                                                        height: 40,
-                                                    }}
                                                     allowClear
                                                     onChange={(val) => {
                                                         handleFilterChange('schoolYearId', val)
@@ -352,9 +347,6 @@ export default function SubjectClassScore() {
                                                         value: i.id,
                                                         label: i.name,
                                                     }))}
-                                                    style={{
-                                                        height: 40,
-                                                    }}
                                                     onChange={(val) => handleChangeSemester(val)}
                                                     allowClear
                                                 />
@@ -376,9 +368,6 @@ export default function SubjectClassScore() {
                                                             label: i.name,
                                                         })
                                                     )}
-                                                    style={{
-                                                        height: 40,
-                                                    }}
                                                     onChange={(val) =>
                                                         handleFilterChange(
                                                             'trainingObjectTypeId',
@@ -402,11 +391,11 @@ export default function SubjectClassScore() {
 
                                 <Col span={6}>
                                     <Flex justify="end" gap={4}>
-                                        <Button type="primary" className="h-[40px]">
+                                        <Button type="primary">
                                             <Save stroke="white" />
                                             Lưu
                                         </Button>
-                                        <Button type="primary" className="h-[40px]">
+                                        <Button type="primary">
                                             <EditIcon stroke="white" />
                                             Nhập từ file danh sách
                                         </Button>
@@ -428,14 +417,14 @@ export default function SubjectClassScore() {
                                     <Checkbox
                                         checked={nhapDiemMoi}
                                         onChange={handleChangeNhapDiemMoi}
-                                        className="text-sm"
+                                        className="text-sm items-center"
                                     >
                                         Nhập tháng mới
                                     </Checkbox>
                                     <Checkbox
                                         checked={suaDiemCu}
                                         onChange={handleChangeSuaDiemCu}
-                                        className="text-sm"
+                                        className="text-sm flex items-center"
                                     >
                                         Nhập sửa điểm tháng cũ
                                     </Checkbox>
@@ -443,7 +432,7 @@ export default function SubjectClassScore() {
                                 {/* <Col span={4} className="flex justify-end">
                                     <Button
                                         type="primary"
-                                        className="h-[40px]"
+                                        
                                         onClick={handleModal}
                                     >
                                         <CalendarOutlined />
