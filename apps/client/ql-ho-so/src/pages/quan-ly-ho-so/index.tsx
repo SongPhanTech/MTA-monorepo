@@ -2,8 +2,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PrinterIcon from '@components/icons/print'
-import { ModalTomTatLyLich } from '@components/modal'
+import { ModalLyLichCanBo, ModalSoYeuLyLich, ModalTomTatLyLich } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -17,9 +16,10 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { Printer } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
@@ -228,6 +228,18 @@ export default function UserProfilePageDs() {
         tag: ModalTomTatLyLich.name,
     })
 
+    const { onOpen: onOpenModalLyLichCanBo } = useDisclosure<{
+        id: string
+    }>({
+        tag: ModalLyLichCanBo.name,
+    })
+
+    const { onOpen: onOpenModalSoYeuLyLich } = useDisclosure<{
+        id: string
+    }>({
+        tag: ModalSoYeuLyLich.name,
+    })
+
     const { mutateAsync: updateUserProfile } = useUpdateStudent()
     async function handleDelete(id: string) {
         try {
@@ -247,6 +259,24 @@ export default function UserProfilePageDs() {
         }
         hideSpinner()
     }
+
+    const list = [
+        {
+            key: '1',
+            label: 'Xuất dữ liệu theo mẫu trích yếu 63',
+            onClick: ({ id }: { id: string }) => onOpenModalTomTatLyLich({ id }),
+        },
+        {
+            key: '2',
+            label: 'Xuất dữ liệu theo mẫu C2',
+            onClick: ({ id }: { id: string }) => onOpenModalLyLichCanBo({ id }),
+        },
+        {
+            key: '3',
+            label: 'Xuất dữ liệu theo mẫu sơ yếu lý lịch',
+            onClick: ({ id }: { id: string }) => onOpenModalSoYeuLyLich({ id }),
+        },
+    ]
 
     return (
         <div>
@@ -452,17 +482,33 @@ export default function UserProfilePageDs() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 120,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, { id, idCardNumber }) => (
                                     <Row className="justify-center gap-2">
-                                        <PrinterIcon
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                onOpenModalTomTatLyLich({ id })
-                                            }}
-                                        />
+                                        <Dropdown
+                                            overlay={
+                                                <Menu>
+                                                    {list.map((item) => (
+                                                        <Menu.Item
+                                                            key={item.key}
+                                                            onClick={(e) => item.onClick(id)}
+                                                        >
+                                                            {item.label}
+                                                        </Menu.Item>
+                                                    ))}
+                                                </Menu>
+                                            }
+                                            trigger={['click']}
+                                        >
+                                            <Button
+                                                className="w-fit"
+                                                type="link"
+                                                icon={<Printer className="text-[#212121]" />}
+                                                size="large"
+                                            />
+                                        </Dropdown>
                                         <EditIcon
                                             onClick={() => {
                                                 router.push(`quan-ly-ho-so/${idCardNumber}`)

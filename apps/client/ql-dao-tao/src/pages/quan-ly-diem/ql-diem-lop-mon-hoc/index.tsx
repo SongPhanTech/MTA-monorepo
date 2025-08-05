@@ -887,7 +887,7 @@ export default function SubjectClassScore() {
                                 width: 150,
                                 type: 'date',
                                 render: (_, record) =>
-                                    record
+                                    record?.student?.userProfile.dateOfBirth
                                         ? dayjs(record?.student?.userProfile.dateOfBirth).format(
                                               'DD/MM/YYYY'
                                           )

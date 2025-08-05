@@ -1,9 +1,7 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PrinterIcon from '@components/icons/print'
 import {
-    ModalLyLichCanBo,
     PutUpdateProfileModal,
     PutUploadProfileModal,
     PutUserProfileStaffModal,
@@ -296,11 +294,11 @@ export default function StaffManagement() {
         tag: PutUserProfileStaffModal.name,
     })
 
-    const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
-        id: string
-    }>({
-        tag: ModalLyLichCanBo.name,
-    })
+    // const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
+    //     id: string
+    // }>({
+    //     tag: ModalLyLichCanBo.name,
+    // })
 
     const handleModal = () => {
         onOpenModalAdd()
@@ -599,12 +597,12 @@ export default function StaffManagement() {
                                 fixed: 'right',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <PrinterIcon
+                                        {/* <PrinterIcon
                                             onClick={(e) => {
                                                 e.stopPropagation()
                                                 onOpenModalTomTatLyLich({ id })
                                             }}
-                                        />
+                                        /> */}
                                         <EditIcon
                                             onClick={onOpen.bind(id, {
                                                 id: id,

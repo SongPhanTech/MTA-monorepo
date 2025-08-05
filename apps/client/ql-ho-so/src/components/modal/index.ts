@@ -28,6 +28,7 @@ import XepLoaiDanhGiaCanBoModal from './danh-muc-chung/put-xep-loai-danh-gia-can
 import XepLoaiDanhGiaChatLuongDangVienModal from './danh-muc-chung/put-xep-loai-danh-gia-chat-luong'
 import ModalLyLichCanBo from './modal-ly-lich-can-bo'
 import ModalTomTatLyLich from './modal-ly-lich-sinh-vien'
+import ModalSoYeuLyLich from './modal-so-yeu-ly-lich'
 import PutUserProfileLectureModal from './put-giang-vien'
 import PutUserProfileStaffModal from './put-nhan-vien'
 import PutUpdateProfileModal from './put-update-profile'
@@ -117,4 +118,5 @@ export {
     PutToChucXaHoiModal,
     PutQuaTrinhHocTapModal,
     PutQuaTrinhLuongModal,
+    ModalSoYeuLyLich,
 }
