@@ -7,7 +7,8 @@
     "./api/*": "./src/api/*.ts",
     "./constants": "./src/constants.ts",
     "./parseExcel": "./src/parseExcel.ts",
-    "./utils": "./src/utils.ts"
+    "./utils": "./src/utils.ts",
+    "./docxjs": "./src/docxjs.ts"
   },
   "scripts": {
     "generate": "orval"
@@ -23,6 +24,8 @@
     "@workspace/db": "workspace:*",
     "dayjs": "catalog:",
     "decimal.js": "catalog:",
+    "docxtemplater": "catalog:",
+    "pizzip": "catalog:",
     "xlsx": "catalog:"
   }
 }

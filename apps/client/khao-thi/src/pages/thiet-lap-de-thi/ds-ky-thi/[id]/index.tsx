@@ -127,6 +127,8 @@ export default function TestStructureRule() {
                 ),
                 { questionPoint: 'asc' },
             ],
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
         { enabled: !!examId }
     )
@@ -153,6 +155,8 @@ export default function TestStructureRule() {
                 },
                 _count: { select: { questions: true } },
             },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
         { enabled: !!examId }
     )

@@ -1,5 +1,6 @@
 import AddTaiLieu from './add-tai-lieu'
 import ConfirmModal from './confirm-dialog'
+import ModalPrintExamBank from './modal-print-exam-bank'
 import ModalSinhDeThiTuDong from './modal-sinh-de-thi-tu-dong'
 import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutKnowledgeBlock from './put-chuong-muc'
@@ -29,4 +30,5 @@ export {
     PutQuestionModal,
     ModalSinhDeThiTuDong,
     PutExamBank,
+    ModalPrintExamBank,
 }

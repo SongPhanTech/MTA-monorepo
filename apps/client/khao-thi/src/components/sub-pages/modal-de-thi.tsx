@@ -4,16 +4,17 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutExamBankQuestion } from '@components/modal'
+import { ModalPrintExamBank, PutExamBankQuestion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import type { ExamBankQuestion, Question } from '@workspace/db'
 import {
     useCountExamBankQuestion,
     useFindManyExamBankQuestion,
     useUpdateExamBankQuestion,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Modal, message, Row, Switch, Tooltip } from 'antd'
-import { BookPlus } from 'lucide-react'
+import { BookPlus, Printer } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -48,6 +49,13 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
     }>({
         tag: PutExamBankQuestion.name,
     })
+
+    const { onOpen: onOpenModalPrintExamBank } = useDisclosure<{
+        data?: (ExamBankQuestion & { question: Question })[]
+    }>({
+        tag: ModalPrintExamBank.name,
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data } = useFindManyExamBankQuestion(
@@ -137,6 +145,13 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                         </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
+                                <Button
+                                    type="primary"
+                                    onClick={() => onOpenModalPrintExamBank({ data })}
+                                    icon={<Printer />}
+                                >
+                                    In đề thi
+                                </Button>
                                 <Button
                                     type="primary"
                                     onClick={() =>
