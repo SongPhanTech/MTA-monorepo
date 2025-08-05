@@ -65,3 +65,12 @@ export const customTrainingFetch = async <T>(url: string, options: RequestInit):
 
     return { status: response.status, data, headers: response.headers } as T
 }
+
+export const customExamFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
+    const requestUrl = getUrl('https://api.khaothi.mta.swantech.vn', url)
+
+    const response = await fetchInstance(requestUrl, options)
+    const data = await getBody<T>(response)
+
+    return { status: response.status, data, headers: response.headers } as T
+}

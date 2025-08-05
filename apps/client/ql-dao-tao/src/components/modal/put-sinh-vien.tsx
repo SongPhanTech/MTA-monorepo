@@ -224,8 +224,9 @@ const PutStudentModal = () => {
         } catch (error) {
             console.log('Error updating student:', error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
     // Hàm fill thông tin từ dữ liệu cccdUserProfileData
     const fillUserInfo = useCallback(

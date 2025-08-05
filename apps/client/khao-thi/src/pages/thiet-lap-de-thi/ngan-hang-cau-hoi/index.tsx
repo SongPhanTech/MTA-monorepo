@@ -1,3 +1,4 @@
+import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
@@ -195,18 +196,9 @@ export default function QuestionBank() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
+                                                <Tooltip title="Danh sách câu hỏi" placement="top">
+                                                    <EyeOutlined className="text-sm cursor-pointer" />
+                                                </Tooltip>
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()

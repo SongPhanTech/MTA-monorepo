@@ -3,7 +3,7 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { PutTestStructureRule } from '@components/modal'
+import { ModalSinhDeThiTuDong, PutExamBank, PutTestStructureRule } from '@components/modal'
 import { ModalExamBank } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
@@ -13,7 +13,6 @@ import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountExamBank,
     useCountTestStructureRule,
-    useCreateExamBank,
     useFindManyExamBank,
     useFindManyKnowledgeBlock,
     useFindManyTestStructureRule,
@@ -54,6 +53,10 @@ export default function TestStructureRule() {
         subjectVersionId: string
     }>({
         tag: PutTestStructureRule.name,
+    })
+
+    const { onOpen: onOpenPutExamBank } = useDisclosure<{ examId: string; id: string }>({
+        tag: PutExamBank.name,
     })
 
     const openExamBankModal = (examBankId: string, questionBankId: string) => {
@@ -124,6 +127,8 @@ export default function TestStructureRule() {
                 ),
                 { questionPoint: 'asc' },
             ],
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
         { enabled: !!examId }
     )
@@ -138,10 +143,10 @@ export default function TestStructureRule() {
         { enabled: !!examId }
     )
 
-    const { data: examData = [] } = useFindManyExamBank(
+    const { data: examData = [], refetch } = useFindManyExamBank(
         {
             where: { examId },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { examCode: 'asc' },
             include: {
                 questions: {
                     select: {
@@ -150,10 +155,12 @@ export default function TestStructureRule() {
                 },
                 _count: { select: { questions: true } },
             },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-
         { enabled: !!examId }
     )
+
     const { data: countExam } = useCountExamBank(
         {
             where: {
@@ -182,21 +189,6 @@ export default function TestStructureRule() {
         hideSpinner()
     }
 
-    const { mutateAsync: createExamBank } = useCreateExamBank()
-    async function handleCreateExamBank() {
-        try {
-            showSpinner()
-            await createExamBank({
-                data: {
-                    examId,
-                },
-            })
-        } catch (_error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
-    }
-
     const { mutateAsync: updateExamBank } = useUpdateExamBank()
     async function handleDeleteExamBank(id: string) {
         try {
@@ -210,6 +202,11 @@ export default function TestStructureRule() {
         }
         hideSpinner()
     }
+
+    const { onOpen: onOpenModalSinhDeThiTuDong } = useDisclosure<string>({
+        tag: ModalSinhDeThiTuDong.name,
+        onClose: refetch,
+    })
 
     return (
         <div>
@@ -246,9 +243,12 @@ export default function TestStructureRule() {
                                     <BookPlus />
                                     Thêm mới
                                 </Button>
-                                <Button type="primary">
+                                <Button
+                                    type="primary"
+                                    onClick={() => onOpenModalSinhDeThiTuDong(examId)}
+                                >
                                     <BookPlus />
-                                    Tạo đề
+                                    Tạo đề tự động
                                 </Button>
                             </Flex>
                         </Col>
@@ -367,7 +367,10 @@ export default function TestStructureRule() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
-                                <Button type="primary" onClick={handleCreateExamBank}>
+                                <Button
+                                    type="primary"
+                                    onClick={() => onOpenPutExamBank({ examId, id: '' })}
+                                >
                                     <BookPlus />
                                     Thêm mới
                                 </Button>
@@ -383,24 +386,26 @@ export default function TestStructureRule() {
                         setFilters={setFilters}
                         columns={[
                             {
-                                title: 'Đề',
+                                title: 'STT',
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    `Đề ${index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE}`,
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã đề',
+                                align: 'center',
+                                fixed: 'left',
+                                dataIndex: 'examCode',
                             },
                             {
                                 title: 'Số câu hỏi',
                                 align: 'center',
-                                fixed: 'left',
-                                width: 200,
                                 dataIndex: ['_count', 'questions'],
                             },
                             {
                                 title: 'Tổng điểm',
                                 align: 'center',
-                                fixed: 'left',
-                                width: 200,
                                 render: (__, record) => {
                                     let total = 0
                                     if (!record?.questions) {
@@ -416,7 +421,6 @@ export default function TestStructureRule() {
                                 title: 'Thao tác',
                                 align: 'center',
                                 fixed: 'right',
-                                width: 150,
                                 render: (__, record) => {
                                     if (record?.id) {
                                         return (
@@ -427,6 +431,12 @@ export default function TestStructureRule() {
                                                             record.id,
                                                             initialValue?.questionBankId ?? ''
                                                         )
+                                                    }
+                                                />
+                                                <EditIcon
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                    onClick={() =>
+                                                        onOpenPutExamBank({ examId, id: record.id })
                                                     }
                                                 />
                                                 <DeleteIcon

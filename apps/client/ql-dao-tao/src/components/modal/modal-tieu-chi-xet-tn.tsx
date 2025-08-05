@@ -87,8 +87,9 @@ const ModalGraduationCriteria = () => {
             message.success('Xóa bản ghi thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     async function handleDeleteGraduationRankDowngradeRule(id: string) {
@@ -103,8 +104,9 @@ const ModalGraduationCriteria = () => {
             message.success('Xóa bản ghi thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     async function handleDeleteRankDowngradeCondition(id: string) {
@@ -116,8 +118,9 @@ const ModalGraduationCriteria = () => {
             message.success('Xóa bản ghi thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleOpenRankingCondition = (rankingId: string | undefined) => {
@@ -132,8 +135,9 @@ const ModalGraduationCriteria = () => {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (

@@ -14,7 +14,7 @@ import {
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function ExpertProfile() {
@@ -23,13 +23,40 @@ export default function ExpertProfile() {
     const [filters, setFilters] = useState<FilterProps>({
         code: undefined,
         name: undefined,
+        title: undefined,
+        specialization: undefined,
+        workplace: undefined,
+        phone: undefined,
+        email: undefined,
     })
 
-    const { data: expertProfileData } = useFindManyExpertProfile({
-        where: {
+    const where = useMemo(
+        () => ({
             ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
             ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
-        },
+            ...(filters.title ? { title: { contains: filters.title, mode: 'insensitive' } } : {}),
+            ...(filters.specialization
+                ? { specialization: { contains: filters.specialization, mode: 'insensitive' } }
+                : {}),
+            ...(filters.workplace
+                ? { workplace: { contains: filters.workplace, mode: 'insensitive' } }
+                : {}),
+            ...(filters.phone ? { phone: { contains: filters.phone, mode: 'insensitive' } } : {}),
+            ...(filters.email ? { email: { contains: filters.email, mode: 'insensitive' } } : {}),
+        }),
+        [
+            filters.code,
+            filters.name,
+            filters.title,
+            filters.specialization,
+            filters.workplace,
+            filters.phone,
+            filters.email,
+        ]
+    )
+
+    const { data: expertProfileData } = useFindManyExpertProfile({
+        where,
         include: { lecturer: { include: { userProfile: true } } },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -37,8 +64,8 @@ export default function ExpertProfile() {
 
     const { data: count } = useCountExpertProfile({
         where: {
-            ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
-            ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 
@@ -113,30 +140,35 @@ export default function ExpertProfile() {
                                 dataIndex: 'title',
                                 width: 150,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Chuyên ngành',
                                 dataIndex: 'specialization',
                                 width: 150,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Đơn vị công tác',
                                 dataIndex: 'workplace',
                                 width: 150,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Số điện thoại',
                                 dataIndex: 'phone',
                                 width: 150,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Email',
                                 dataIndex: 'email',
                                 width: 150,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Thao tác',
@@ -167,8 +199,14 @@ export default function ExpertProfile() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-                            onChange: setCurrentPage,
-                            onShowSizeChange: setNumberOfPages,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
                         }}
                         data={expertProfileData}
                     />

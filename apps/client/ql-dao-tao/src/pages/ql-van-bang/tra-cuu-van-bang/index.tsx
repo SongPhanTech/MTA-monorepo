@@ -39,6 +39,12 @@ export default function GraduationDecisionDiploma() {
         finalGpa: undefined,
         diplomaNumber: '',
         diplomaIssueDate: undefined,
+        managementOrganizationId: undefined,
+        trainingCourseId: undefined,
+        trainingObjectId: undefined,
+        trainingFieldId: undefined,
+        trainingMajorId: undefined,
+        fixedClassId: undefined,
     })
 
     const isFiltering = useMemo(() => {
@@ -79,6 +85,24 @@ export default function GraduationDecisionDiploma() {
                                 },
                             }
                           : {}),
+                      ...(filters.trainingMajorId
+                          ? {
+                                trainingMajorId: filters.trainingMajorId,
+                            }
+                          : {}),
+
+                      trainingMajor: {
+                          ...(filters.managementOrganizationId
+                              ? {
+                                    organizationId: filters.managementOrganizationId,
+                                }
+                              : {}),
+                          ...(filters.trainingFieldId
+                              ? {
+                                    trainingFieldId: filters.trainingFieldId,
+                                }
+                              : {}),
+                      },
                       student: {
                           userProfile: {
                               ...(filters.name
@@ -95,6 +119,23 @@ export default function GraduationDecisionDiploma() {
                                             contains: filters.code,
                                             mode: 'insensitive',
                                         },
+                                    }
+                                  : {}),
+                          },
+                          ...(filters.fixedClassId
+                              ? {
+                                    fixedClassId: filters.fixedClassId,
+                                }
+                              : {}),
+                          ...(filters.trainingObjectId
+                              ? {
+                                    trainingObjectTypeId: filters.trainingObjectId,
+                                }
+                              : {}),
+                          fixedClass: {
+                              ...(filters.trainingCourseId
+                                  ? {
+                                        trainingCourseId: filters.trainingCourseId,
                                     }
                                   : {}),
                           },

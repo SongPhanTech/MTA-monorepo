@@ -29,7 +29,7 @@ const PutExpertProfile = () => {
         onClose: form.resetFields,
     })
     const [selectedLecturerId, setSelectedLecturerId] = useState<string | undefined>()
-    const { data: expert } = useFindUniqueExpertProfile({ where: { id: id } }, { enabled: !!id })
+    const { data: expert } = useFindUniqueExpertProfile({ where: { id } }, { enabled: !!id })
 
     const [isInternal, setIsInternal] = useState(true)
 
@@ -92,7 +92,7 @@ const PutExpertProfile = () => {
             showSpinner()
             if (id) {
                 await updateExpertProfile({
-                    where: { id: id },
+                    where: { id },
                     data: payload,
                 })
                 message.success('Cập nhật thành công')

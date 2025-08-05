@@ -25,6 +25,7 @@ import {
     useUpdateDecision,
     useUpdateStudentThesisRegistration,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
@@ -518,5 +519,18 @@ export default function ThesisProjectDetail() {
 }
 
 ThesisProjectDetail.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Quản lý đồ án' },
+                {
+                    title: 'Danh mục đồ án',
+                    href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                },
+                { title: 'Chi tiết danh mục đồ án' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

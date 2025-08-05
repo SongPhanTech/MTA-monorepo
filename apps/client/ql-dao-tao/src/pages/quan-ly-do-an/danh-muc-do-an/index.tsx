@@ -1,3 +1,4 @@
+import { EyeOutlined } from '@ant-design/icons'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
@@ -22,23 +23,13 @@ import {
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
-type FilterPropsThesis = FilterProps & {
-    title?: string
-    status?: string[]
-    titleEN?: string
-    supervisor?: string
-    organization?: string[]
-    currentStudents?: 'asc' | 'desc'
-    maxStudents?: 'asc' | 'desc'
-}
 
 export default function ThesisProject() {
     const router = useRouter()
@@ -46,13 +37,18 @@ export default function ThesisProject() {
         useThesisProjectStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterPropsThesis>({
+    const [filters, setFilters] = useState<FilterProps>({
         code: undefined,
         title: undefined,
         titleEN: undefined,
         supervisor: undefined,
         organization: undefined,
         maxStudents: undefined,
+        startDate: undefined,
+        endDate: undefined,
+        statusGraduationSession: undefined,
+        currentStudents: undefined,
+        summary: undefined,
     })
     const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -60,8 +56,8 @@ export default function ThesisProject() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
 
-    const { data: subjectClass } = useFindManySubjectClass({
-        where: {
+    const where = useMemo(
+        () => ({
             AND: [
                 {
                     subject: {
@@ -109,6 +105,9 @@ export default function ThesisProject() {
                             ...(filters.titleEN
                                 ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
                                 : {}),
+                            ...(filters.summary
+                                ? { summary: { contains: filters.summary, mode: 'insensitive' } }
+                                : {}),
                             ...(filters.supervisor
                                 ? {
                                       supervisor: {
@@ -127,11 +126,57 @@ export default function ThesisProject() {
                                 },
                                 !!filters.organization
                             ),
+                            ...(filters.startDate?.length === 2
+                                ? {
+                                      registrationStart: {
+                                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.endDate?.length === 2
+                                ? {
+                                      registrationEnd: {
+                                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.statusGraduationSession
+                                ? Array.isArray(filters.statusGraduationSession)
+                                    ? {
+                                          status: {
+                                              in: filters.statusGraduationSession,
+                                          },
+                                      }
+                                    : {
+                                          status: {
+                                              equals: filters.statusGraduationSession,
+                                          },
+                                      }
+                                : {}),
                         },
                     },
                 },
             ],
-        },
+        }),
+        [
+            selectedSemesterId,
+            filters.searchText,
+            filters.code,
+            filters.title,
+            filters.titleEN,
+            filters.supervisor,
+            filters.organization,
+            filters.startDate,
+            filters.endDate,
+            filters.statusGraduationSession,
+            filters.summary,
+        ]
+    )
+
+    const { data: subjectClass } = useFindManySubjectClass({
+        where,
         include: {
             subject: true,
             thesisProjects: {
@@ -139,78 +184,82 @@ export default function ThesisProject() {
                     organization: true,
                     supervisor: true,
                 },
+                where: {
+                    ...(filters.code
+                        ? { code: { contains: filters.code, mode: 'insensitive' } }
+                        : {}),
+                    ...(filters.title
+                        ? { title: { contains: filters.title, mode: 'insensitive' } }
+                        : {}),
+                    ...(filters.titleEN
+                        ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
+                        : {}),
+                    ...(filters.summary
+                        ? { summary: { contains: filters.summary, mode: 'insensitive' } }
+                        : {}),
+                    ...(filters.supervisor
+                        ? {
+                              supervisor: {
+                                  name: {
+                                      contains: filters.supervisor,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...emptyObjectIf(
+                        {
+                            organizationId: {
+                                in: filters.organization,
+                            },
+                        },
+                        !!filters.organization
+                    ),
+                    ...(filters.startDate?.length === 2
+                        ? {
+                              registrationStart: {
+                                  gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                                  lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                              },
+                          }
+                        : {}),
+                    ...(filters.endDate?.length === 2
+                        ? {
+                              registrationEnd: {
+                                  gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                                  lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                              },
+                          }
+                        : {}),
+                },
+                orderBy: [
+                    ...emptyObjectIf(
+                        [
+                            {
+                                currentStudents: filters.currentStudents,
+                            },
+                        ],
+                        !!filters.currentStudents
+                    ),
+                    ...emptyObjectIf(
+                        [
+                            {
+                                maxStudents: filters.maxStudents,
+                            },
+                        ],
+                        !!filters.maxStudents
+                    ),
+                    { currentStudents: 'asc' },
+                ],
             },
         },
+        orderBy: { createdAt: 'asc' },
     })
 
     const { data: count } = useCountSubjectClass({
         where: {
-            AND: [
-                {
-                    subject: {
-                        type: SubjectVersionType.Project,
-                    },
-                },
-                {
-                    OR: [
-                        {
-                            ...(filters.searchText
-                                ? { name: { contains: filters.searchText, mode: 'insensitive' } }
-                                : {}),
-                        },
-                        {
-                            ...(filters.searchText
-                                ? { code: { contains: filters.searchText, mode: 'insensitive' } }
-                                : {}),
-                        },
-                        {
-                            ...(filters.searchText
-                                ? {
-                                      subject: {
-                                          name: {
-                                              contains: filters.searchText,
-                                              mode: 'insensitive',
-                                          },
-                                      },
-                                  }
-                                : {}),
-                        },
-                    ],
-                },
-                {
-                    thesisProjects: {
-                        some: {
-                            ...(filters.code
-                                ? { code: { contains: filters.code, mode: 'insensitive' } }
-                                : {}),
-                            ...(filters.title
-                                ? { title: { contains: filters.title, mode: 'insensitive' } }
-                                : {}),
-                            ...(filters.titleEN
-                                ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
-                                : {}),
-                            ...(filters.supervisor
-                                ? {
-                                      supervisor: {
-                                          name: {
-                                              contains: filters.supervisor,
-                                              mode: 'insensitive',
-                                          },
-                                      },
-                                  }
-                                : {}),
-                            ...emptyObjectIf(
-                                {
-                                    organizationId: {
-                                        in: filters.organization,
-                                    },
-                                },
-                                !!filters.organization
-                            ),
-                        },
-                    },
-                },
-            ],
+            ...where,
+            deletedAt: null,
         },
     })
 
@@ -275,7 +324,9 @@ export default function ThesisProject() {
     )
 
     const councilMemberIds = selectedThesisProjects
-        ?.flatMap((project) => project.council?.flatMap((council) => council.members || []) || [])
+        ?.flatMap(
+            (project) => project.council?.flatMap((council: any) => council.members || []) || []
+        ) //TODO: Add type council
         .map((member) => member.id)
         .filter((id): id is string => Boolean(id))
 
@@ -410,6 +461,7 @@ export default function ThesisProject() {
                                 dataIndex: 'summary',
                                 width: 150,
                                 align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Chuyên gia hướng dẫn',
@@ -444,19 +496,25 @@ export default function ThesisProject() {
                             },
                             {
                                 title: 'Thời gian mở đăng ký',
-                                dataIndex: 'registrationStart',
+                                dataIndex: 'startDate',
                                 align: 'center',
                                 width: 180,
-                                render: (record) =>
-                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
+                                type: 'date',
+                                render: (_, record) =>
+                                    record?.registrationStart
+                                        ? dayjs(record?.registrationStart).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Thời gian đóng đăng ký',
-                                dataIndex: 'registrationEnd',
+                                dataIndex: 'endDate',
                                 align: 'center',
-                                width: 180,
-                                render: (record) =>
-                                    record ? dayjs(record).format('DD/MM/YYYY') : '',
+                                width: 190,
+                                type: 'date',
+                                render: (_, record) =>
+                                    record?.registrationEnd
+                                        ? dayjs(record?.registrationEnd).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Trạng thái',
@@ -481,6 +539,9 @@ export default function ThesisProject() {
                                     if (record.id) {
                                         return (
                                             <Row className="justify-center gap-2">
+                                                <Tooltip title="Xem chi tiết" placement="top">
+                                                    <EyeOutlined className="text-sm cursor-pointer" />
+                                                </Tooltip>
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         onOpen({

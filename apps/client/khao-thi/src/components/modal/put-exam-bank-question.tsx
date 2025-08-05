@@ -1,6 +1,7 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { ExamBankQuestion } from '@workspace/db'
@@ -62,8 +63,9 @@ const PutExamBankQuestion = () => {
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { data: initialValue } = useFindUniqueExamBankQuestion(
@@ -113,7 +115,15 @@ const PutExamBankQuestion = () => {
                         placeholder="Chọn câu hỏi"
                         options={questionData?.map(({ id, content }) => ({
                             value: id,
-                            label: content,
+                            label: (
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: content
+                                            ? renderWithMath(content)
+                                            : '<i>Chưa có nội dung</i>',
+                                    }}
+                                />
+                            ),
                         }))}
                     />
                 </FormItem>

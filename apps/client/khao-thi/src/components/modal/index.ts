@@ -1,7 +1,10 @@
 import AddTaiLieu from './add-tai-lieu'
 import ConfirmModal from './confirm-dialog'
+import ModalPrintExamBank from './modal-print-exam-bank'
+import ModalSinhDeThiTuDong from './modal-sinh-de-thi-tu-dong'
 import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutKnowledgeBlock from './put-chuong-muc'
+import PutExamBank from './put-de-thi'
 import PutExamBankQuestion from './put-exam-bank-question'
 import PutExam from './put-ky-thi'
 import PutSurveyModal from './put-modal-survey'
@@ -25,4 +28,7 @@ export {
     PutTestStructureRule,
     PutExamBankQuestion,
     PutQuestionModal,
+    ModalSinhDeThiTuDong,
+    PutExamBank,
+    ModalPrintExamBank,
 }
