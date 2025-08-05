@@ -1,4 +1,5 @@
-import { QuestionType } from '@workspace/db'
+import type { QuestionType } from '@workspace/db'
+import { questionTypeOptions } from '@workspace/libs/constants'
 
 export type QuestionTypeOption = {
     value: QuestionType
@@ -6,17 +7,12 @@ export type QuestionTypeOption = {
 }
 
 export const useQuestionTypeOptions = () => {
-    const options: QuestionTypeOption[] = [
-        { value: QuestionType.ESSAY, label: 'Tự luận' },
-        { value: QuestionType.ORAL, label: 'Vấn đáp' },
-    ]
-
     const getQuestionTypeLabel = (value: QuestionType | null | undefined): string => {
-        return options.find((opt) => opt.value === value)?.label || ''
+        return questionTypeOptions.find((opt) => opt.value === value)?.label || ''
     }
 
     return {
-        options,
+        options: questionTypeOptions,
         getQuestionTypeLabel,
     }
 }

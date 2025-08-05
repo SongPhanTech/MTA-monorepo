@@ -1,4 +1,4 @@
-import { CriteriaField, CriteriaOperator } from '@workspace/db'
+import { CriteriaField, CriteriaOperator, QuestionType } from '@workspace/db'
 
 export type CriteriaOperatorOption = {
     value: CriteriaOperator
@@ -64,6 +64,23 @@ export const criteriaFieldLabels: Record<CriteriaField, string> = {
 export const criteriaFieldOptions: CriteriaFieldOption[] = Object.entries(criteriaFieldLabels).map(
     ([value, label]) => ({
         value: value as CriteriaField,
+        label,
+    })
+)
+
+export type QuestionTypeOption = {
+    value: QuestionType
+    label: string
+}
+
+export const questionTypeLabels: Record<QuestionType, string> = {
+    [QuestionType.ESSAY]: 'Tự luận',
+    [QuestionType.ORAL]: 'Vấn đáp',
+}
+
+export const questionTypeOptions: QuestionTypeOption[] = Object.entries(questionTypeLabels).map(
+    ([value, label]) => ({
+        value: value as QuestionType,
         label,
     })
 )
