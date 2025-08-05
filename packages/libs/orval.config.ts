@@ -67,4 +67,26 @@ export default defineConfig({
             afterAllFilesWrite: 'biome check --fix --unsafe .',
         },
     },
+    ems_api: {
+        input: 'https://api.khaothi.mta.swantech.vn/openapi',
+        output: {
+            client: 'react-query',
+            httpClient: 'fetch',
+            mode: 'single',
+            target: './src/api/training.ts',
+            schemas: './src/api/schemas',
+            biome: true,
+            packageJson: 'fake',
+            override: {
+                query: { version: 5 },
+                mutator: {
+                    path: './src/api/custom-instance.ts',
+                    name: 'customTrainingFetch',
+                },
+            },
+        },
+        hooks: {
+            afterAllFilesWrite: 'biome check --fix --unsafe .',
+        },
+    },
 })
