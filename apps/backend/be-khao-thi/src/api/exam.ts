@@ -169,10 +169,26 @@ app.openapi(getRandomExamQuestionByRule, async (c) => {
         })
     }
 
-    const examBanks = Array.from({ length: nOfnExamBank }, () => {
+    const existsExamBankCodes = (
+        await prisma.examBank.findMany({
+            where: { examId: examId },
+            select: { examCode: true },
+        })
+    ).map(({ examCode }) => examCode)
+
+    const maxLength = (existsExamBankCodes.length + nOfnExamBank).toString().length
+
+    const examBankCodes = Array.from(
+        { length: existsExamBankCodes.length + nOfnExamBank },
+        (_, i) => {
+            return (i + 1).toString().padStart(maxLength, '0')
+        }
+    ).filter((value) => !existsExamBankCodes.includes(value))
+
+    const examBanks = Array.from({ length: nOfnExamBank }, (_, i) => {
         const id = createId()
         const questions: Prisma.ExamBankQuestionCreateManyInput[] = []
-        return { id, examId, questions }
+        return { id, examId, questions, examCode: examBankCodes[i] || '' }
     })
 
     for (const examBank of examBanks) {
@@ -210,7 +226,7 @@ app.openapi(getRandomExamQuestionByRule, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.examBank.createMany({
-            data: examBanks.map(({ id, examId }) => ({ id, examId })),
+            data: examBanks.map(({ questions, ...examBank }) => examBank),
         })
         await tx.examBankQuestion.createMany({
             data: examBanks.flatMap((examBank) => examBank.questions),

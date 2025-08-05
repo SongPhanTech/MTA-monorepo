@@ -233,8 +233,12 @@ model ExamBank extends Base {
   exam        Exam               @relation(fields: [examId], references: [id])
   examId      String
 
+  examCode    String
+
   examSession ExamSession[]
   questions   ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
+
+  @@unique([examId, examCode])
   @@schema("khao-thi")
 }
 
