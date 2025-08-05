@@ -11,7 +11,7 @@ export function setupOpenApi(app: OpenAPIHono) {
                 description: 'Current environment',
             },
             {
-                url: 'https://api.daotao.mta.swantech.vn',
+                url: 'https://api.khaothi.mta.swantech.vn',
                 description: 'Dev environment',
             },
         ],
