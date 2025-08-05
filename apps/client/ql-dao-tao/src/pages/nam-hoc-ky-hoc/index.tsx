@@ -46,10 +46,7 @@ function YearAndSemester() {
         return {
             ...(filters.schoolYearId && filters.schoolYearId !== ''
                 ? {
-                      id: {
-                          contains: filters.schoolYearId,
-                          mode: 'insensitive',
-                      },
+                      id: filters.schoolYearId,
                   }
                 : {}),
             ...(isFiltering

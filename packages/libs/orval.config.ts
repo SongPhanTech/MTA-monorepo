@@ -81,7 +81,7 @@ export default defineConfig({
                 query: { version: 5 },
                 mutator: {
                     path: './src/api/custom-instance.ts',
-                    name: 'customTrainingFetch',
+                    name: 'customExamFetch',
                 },
             },
         },

@@ -1,67 +1,85 @@
 import Table from '@components/commons/table'
-import FilterSurvey, { type FilterSurveyProps } from '@components/filter/filter-survey'
+import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSurveyModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { useCountSurvey, useFindManySurvey, useUpdateSurvey } from '@workspace/db/hooks'
+import {
+    useCountSurvey,
+    useFindManySurvey,
+    useFindManySurveyObjectType,
+    useFindManySurveyTopic,
+    useUpdateSurvey,
+} from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
-import { useCallback, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type Filter = FilterSurveyProps & {
-    searchText: string
-}
 function TabDotKhaoSat() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [_searchText, setSearchText] = useState<string>('')
-    const [filters, setFilters] = useState<Filter>({
-        searchText: '',
-        surveyObjectTypeId: null,
-        surveyTopicId: null,
-        startDate: null,
-        endDate: null,
+    const [filters, setFilters] = useState<FilterProps>({
+        name: '',
+        surveyObjectTypeId: undefined,
+        surveyTopicId: undefined,
+        startDate: undefined,
+        endDate: undefined,
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-    const handleAdvancedFilter = (values: FilterSurveyProps) => {
-        const newFilters = { ...filters, ...values }
-        setFilters(newFilters)
-    }
-
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
-    const { data = [], refetch } = useFindManySurvey({
-        where: {
-            name: {
-                contains: filters.searchText,
-            },
-            ...(filters.startDate && filters.endDate
+    const where = useMemo(
+        () => ({
+            ...(filters.name && filters.name !== ''
                 ? {
-                      startDate: {
-                          gte: new Date(filters.startDate),
-                          lte: new Date(filters.endDate),
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
-            ...(filters.surveyObjectTypeId ? { surveyObjectId: filters.surveyObjectTypeId } : {}),
-            ...(filters.surveyTopicId ? { surveyTopicId: filters.surveyTopicId } : {}),
-        },
+            ...(filters.surveyObjectTypeId
+                ? Array.isArray(filters.surveyObjectTypeId)
+                    ? filters.surveyObjectTypeId.length > 1
+                        ? { surveyObjectId: { in: filters.surveyObjectTypeId } }
+                        : { surveyObjectId: { equals: filters.surveyObjectTypeId[0] } }
+                    : { surveyObjectId: { equals: filters.surveyObjectTypeId } }
+                : {}),
+            ...(filters.surveyTopicId
+                ? Array.isArray(filters.surveyTopicId)
+                    ? filters.surveyTopicId.length > 1
+                        ? { surveyTopicId: { in: filters.surveyTopicId } }
+                        : { surveyTopicId: { equals: filters.surveyTopicId[0] } }
+                    : { surveyTopicId: { equals: filters.surveyTopicId } }
+                : {}),
+            ...(filters.startDate?.length === 2
+                ? {
+                      startDate: {
+                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endDate?.length === 2
+                ? {
+                      endDate: {
+                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+        }),
+        [
+            filters.name,
+            filters.surveyTopicId,
+            filters.surveyObjectTypeId,
+            filters.startDate,
+            filters.endDate,
+        ]
+    )
+
+    const { data = [], refetch } = useFindManySurvey({
+        where,
         include: {
             surveyObjectType: true,
             surveyTopic: true,
@@ -70,9 +88,8 @@ function TabDotKhaoSat() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountSurvey()
+    const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
 
-    const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutSurveyModal.name,
     })
@@ -100,18 +117,17 @@ function TabDotKhaoSat() {
         }
         hideSpinner()
     }
+
+    const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'asc' } })
+    const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
+        orderBy: { createdAt: 'asc' },
+    })
     return (
         <div>
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={10}>
-                            <FilterSurvey
-                                onSearchChange={handleFilterChange}
-                                onFilterChange={handleAdvancedFilter}
-                            />
-                        </Col>
-                        <Col span={14}>
+                        <Col span={24}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
@@ -119,34 +135,11 @@ function TabDotKhaoSat() {
                             </Flex>
                         </Col>
                     </Row>
-                    {/* <Flex
-                        justify="space-between"
-                        align="center"
-                        wrap="wrap"
-                        gap="16px"
-                    >
-                        <Form.Item
-                            label="Tìm kiếm"
-                            name="search"
-                            style={{ marginBottom: 0 }}
-                        >
-                            <Input
-                                id="search"
-                                style={{ width: 300 }}
-                                onChange={(e) =>
-                                    debouncedSearchText(e.target.value)
-                                }
-                                placeholder="Tìm kiếm ..."
-                            />
-                        </Form.Item>
-
-                        <Button onClick={handleModal} type="primary">
-                            Thêm mới
-                        </Button>
-                    </Flex> */}
                 </Col>
                 <Col span={24}>
                     <Table
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -158,25 +151,47 @@ function TabDotKhaoSat() {
                             {
                                 title: 'Tên đợt khảo sát',
                                 dataIndex: 'name',
+                                type: 'input',
                             },
                             {
                                 title: 'Chủ đề khảo sát',
-                                render: ({ surveyTopic }) => (surveyTopic ? surveyTopic.name : ''),
+                                dataIndex: 'surveyTopicId',
+                                type: 'select',
+                                options: surveyTopicData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) =>
+                                    record?.surveyTopic ? record?.surveyTopic.name : '',
                             },
                             {
                                 title: 'Đối tượng khảo sát',
-                                render: ({ surveyObjectType }) =>
-                                    surveyObjectType ? surveyObjectType.name : '',
+                                dataIndex: 'surveyObjectTypeId',
+                                type: 'select',
+                                options: surveyObjectTypeData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) =>
+                                    record?.surveyObjectType ? record?.surveyObjectType.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
-                                render: ({ startDate }) =>
-                                    startDate ? dayjs(startDate).format('DD/MM/YYYY') : '',
+                                dataIndex: 'startDate',
+                                type: 'date',
+                                render: (_, record) =>
+                                    record?.startDate
+                                        ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
-                                render: ({ endDate }) =>
-                                    endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
+                                dataIndex: 'endDate',
+                                type: 'date',
+                                render: (_, record) =>
+                                    record?.endDate
+                                        ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Thao tác',

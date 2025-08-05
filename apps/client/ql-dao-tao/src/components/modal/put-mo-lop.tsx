@@ -106,8 +106,9 @@ const PutOpenClassModal = () => {
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
     const { data: subjectVersionData } = useFindUniqueSubjectVersion({
         where: { id: dataClass?.subjectVersionId },
@@ -131,8 +132,9 @@ const PutOpenClassModal = () => {
             // setDataSubmit(result)
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleCreateTableForClass = () => {

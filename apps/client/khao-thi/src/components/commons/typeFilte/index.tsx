@@ -119,7 +119,9 @@ export type FilterProps = {
     questionBankId?: string | null
     questionPoint?: 'asc' | 'desc'
     surveyQuestionType?: SurveyQuestionType[]
-    surveyId?: string | null
+    surveyId?: string
+    surveyObjectTypeId?: string[]
+    surveyTopicId?: string[]
 }
 
 export type ColumnTypeProps = ColumnsType & {

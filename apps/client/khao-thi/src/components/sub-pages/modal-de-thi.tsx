@@ -1,3 +1,5 @@
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
@@ -11,7 +13,7 @@ import {
     useUpdateExamBankQuestion,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, Modal, message, Row, Switch, Tooltip } from 'antd'
-import { BookPlus, EyeClosed, EyeIcon } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -79,8 +81,9 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const toggleAllExplanations = (checked: boolean) => {
@@ -172,9 +175,15 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                 width: 200,
                                 fixed: 'left',
                                 type: 'input',
-                                render: (__, record) => {
-                                    return record?.question?.content
-                                },
+                                render: (__, record) => (
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: record?.question?.content
+                                                ? renderWithMath(record?.question?.content)
+                                                : '<i>Chưa có nội dung</i>',
+                                        }}
+                                    />
+                                ),
                             },
                             {
                                 title: 'Điểm số',
@@ -194,7 +203,17 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                 render: (__, record) => {
                                     const isVisible =
                                         showAllExplanations || rowVisibility[record.id]
-                                    return isVisible ? record?.question?.explanation : '***'
+                                    return isVisible ? (
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: record?.question?.explanation
+                                                    ? renderWithMath(record?.question?.explanation)
+                                                    : '<i>Chưa có nội dung</i>',
+                                            }}
+                                        />
+                                    ) : (
+                                        '***'
+                                    )
                                 },
                             },
                             {
@@ -212,11 +231,16 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                                     <Button
                                                         type="text"
                                                         icon={
-                                                            isVisible ? <EyeIcon /> : <EyeClosed />
+                                                            isVisible ? (
+                                                                <EyeOutlined />
+                                                            ) : (
+                                                                <EyeInvisibleOutlined />
+                                                            )
                                                         }
                                                         onClick={() =>
                                                             toggleRowExplanation(record.id)
                                                         }
+                                                        className="-mr-1.5"
                                                     />
                                                 </Tooltip>
                                                 <EditIcon
