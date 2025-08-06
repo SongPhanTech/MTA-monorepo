@@ -698,7 +698,7 @@ export default function TeachingAssignment() {
                                             .map((i) => {
                                                 return {
                                                     value: i?.id,
-                                                    label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                                    label: `${i.userProfile?.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
                                                 }
                                             })}
                                         value={record?.lecturerId}
@@ -731,7 +731,7 @@ export default function TeachingAssignment() {
                                             .map((i) => {
                                                 return {
                                                     value: i?.id,
-                                                    label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                                    label: `${i.userProfile?.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
                                                 }
                                             })}
                                         value={record?.extraLecturerId || undefined}

@@ -159,9 +159,9 @@ export default function MajorInforList({ infor }: any) {
                                     }
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
-                                        (node.label as string)
-                                            .toLowerCase()
-                                            .includes(input.toLowerCase())
+                                        (node?.label as string)
+                                            ?.toLowerCase()
+                                            ?.includes(input?.toLowerCase())
                                     }
                                 />
                             </Form.Item>

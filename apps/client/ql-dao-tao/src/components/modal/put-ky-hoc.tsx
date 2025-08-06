@@ -138,7 +138,7 @@ const PutSemesterModal = () => {
                     </FormItem>
                 </Col>
             )}
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="semesterType" label="Loại học kỳ" required>
                     <Select
                         placeholder="Chọn loại học kỳ"

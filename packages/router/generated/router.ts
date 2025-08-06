@@ -113,7 +113,8 @@ export default {
     "QL_GIANG_VIEN": "/ql-giang-vien",
     "QUAN_LY_HO_SO_ID": "/quan-ly-ho-so/[id]",
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
-    "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
+    "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi",
+    "DANH_MUC_HO_SO": "/danh-muc-ho-so",
   },
   "QL_NGUOI_DUNG": {
     "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",

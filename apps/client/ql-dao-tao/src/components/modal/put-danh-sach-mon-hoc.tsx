@@ -122,7 +122,9 @@ const PutSubjectListModal = () => {
                             const isLeaf = !node.children
                             return (
                                 isLeaf &&
-                                (node.label as string).toLowerCase().includes(input.toLowerCase())
+                                (node?.label as string)
+                                    ?.toLowerCase()
+                                    ?.includes(input?.toLowerCase())
                             )
                         }}
                     />

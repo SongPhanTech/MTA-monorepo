@@ -65,8 +65,16 @@ const PutFixedClassModal = () => {
                   }
                 : {},
             orderBy: { name: 'asc' },
+            include: {
+                semesterStart: {
+                    include: {
+                        schoolYear: true,
+                    },
+                },
+            },
         })
-    // const trainingMajorForm = Form.useWatch('trainingMajorId', form)
+    const trainingCourseForm = Form.useWatch('trainingCourseId', form)
+
     const { data: curriculumData = [], refetch: refetchCurriculum } = useFindManyCurriculum({
         where: {},
         include: {
@@ -356,6 +364,20 @@ const PutFixedClassModal = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa lớp niên chế' : 'Thêm mới lớp niên chế'}
             className="w-[45vw]"
+            formProps={{
+                onValuesChange(changedValues, values) {
+                    if (changedValues.trainingCourseId) {
+                        form.setFieldValue(
+                            'startYear',
+                            trainingCourseData
+                                .find(
+                                    (i: TrainingCourse) => i.id === changedValues?.trainingCourseId
+                                )
+                                ?.semesterStart?.schoolYear?.startDate?.getFullYear?.()
+                        )
+                    }
+                },
+            }}
         >
             <Col span={12}>
                 <FormItem form={form} name="curriculumVersionId" label="Chương trình đào tạo">
@@ -366,7 +388,7 @@ const PutFixedClassModal = () => {
                         treeDefaultExpandAll
                         treeData={curriculumTreeData}
                         filterTreeNode={(input, node) =>
-                            (node.label as string).toLowerCase().includes(input.toLowerCase())
+                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
                     />
                 </FormItem>
@@ -412,7 +434,7 @@ const PutFixedClassModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.label as string).toLowerCase().includes(input.toLowerCase())
+                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
                         onChange={(val) =>
                             handleChangeFieldOrganization(
@@ -445,7 +467,7 @@ const PutFixedClassModal = () => {
                         options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,
-                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
                             }
                         })}
                         // onChange={(val) =>handleMajorChange(val)}
@@ -459,7 +481,7 @@ const PutFixedClassModal = () => {
                         options={staffData.map((i) => {
                             return {
                                 value: i?.id,
-                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                label: `${i.userProfile?.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
                             }
                         })}
                         // onChange={(val) =>handleMajorChange(val)}

@@ -84,7 +84,7 @@ const TreeSelectFixClassMulti: React.FC<CustomTreeSelectProps> = ({
 
     // Hàm lọc tùy chỉnh cho tìm kiếm
     const filterTreeNode = (input: string, treeNode: any) => {
-        return treeNode.title.toLowerCase().includes(input.toLowerCase())
+        return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
     }
 
     return (

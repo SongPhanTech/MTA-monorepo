@@ -183,7 +183,7 @@ const PutTrainingBlockSubject = () => {
                         onChange={(val) => handleFilterChange('managementOrganizationId', val)}
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.label as string).toLowerCase().includes(input.toLowerCase())
+                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
                         defaultValue={input?.managementOrganization || ''}
                         disabled={!!input?.trainingBlockSubjectId}

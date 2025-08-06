@@ -304,7 +304,7 @@ const PutVersionSubjectModal = () => {
                         style={{ width: '100%' }}
                         allowClear
                         filterTreeNode={(input, node) =>
-                            (node.label as string).toLowerCase().includes(input.toLowerCase())
+                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
                     />
                 </Form.Item>
@@ -321,7 +321,7 @@ const PutVersionSubjectModal = () => {
                         style={{ width: '100%' }}
                         allowClear
                         filterTreeNode={(input, node) =>
-                            (node.label as string).toLowerCase().includes(input.toLowerCase())
+                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
                     />
                 </Form.Item>

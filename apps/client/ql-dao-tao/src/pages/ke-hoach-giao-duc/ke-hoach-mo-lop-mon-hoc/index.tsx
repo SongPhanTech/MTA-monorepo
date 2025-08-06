@@ -187,9 +187,9 @@ export default function SubjectOpeningPlan() {
                                                 treeData={treeData}
                                                 style={{ width: '100%' }}
                                                 filterTreeNode={(input, node) =>
-                                                    (node.label as string)
-                                                        .toLowerCase()
-                                                        .includes(input.toLowerCase())
+                                                    (node?.label as string)
+                                                        ?.toLowerCase()
+                                                        ?.includes(input?.toLowerCase())
                                                 }
                                                 onSelect={(value, node) =>
                                                     setSelectedSemester({

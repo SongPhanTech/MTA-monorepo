@@ -9,8 +9,8 @@ const Select = (props: SelectProps) => {
             showSearch
             filterOption={(input, option) =>
                 String(option?.label ?? '')
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
+                    ?.toLowerCase()
+                    ?.includes(input?.toLowerCase())
             }
             notFoundContent="Không có dữ liệu"
             {...props}

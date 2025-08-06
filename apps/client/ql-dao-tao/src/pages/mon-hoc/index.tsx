@@ -151,9 +151,9 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                     treeDefaultExpandAll
                                     treeData={treeData}
                                     filterTreeNode={(input, node) =>
-                                        (node.label as string)
-                                            .toLowerCase()
-                                            .includes(input.toLowerCase())
+                                        (node?.label as string)
+                                            ?.toLowerCase()
+                                            ?.includes(input?.toLowerCase())
                                     }
                                     onChange={(val) =>
                                         handleFilterChange('managementOrganizationId', val)

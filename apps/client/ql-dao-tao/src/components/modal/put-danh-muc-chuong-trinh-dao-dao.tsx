@@ -211,7 +211,7 @@ const PutCurriculum = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
-                            (node.label as string).toLowerCase().includes(input.toLowerCase())
+                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
                     />
                 </FormItem>
