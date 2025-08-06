@@ -32,17 +32,32 @@ export default function ExpertProfile() {
 
     const where = useMemo(
         () => ({
-            ...(filters.code ? { code: { contains: filters.code, mode: 'insensitive' } } : {}),
-            ...(filters.name ? { name: { contains: filters.name, mode: 'insensitive' } } : {}),
-            ...(filters.title ? { title: { contains: filters.title, mode: 'insensitive' } } : {}),
+            ...(filters.code
+                ? { code: { contains: filters.code, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.name
+                ? { name: { contains: filters.name, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.title
+                ? { title: { contains: filters.title, mode: 'insensitive' as const } }
+                : {}),
             ...(filters.specialization
-                ? { specialization: { contains: filters.specialization, mode: 'insensitive' } }
+                ? {
+                      specialization: {
+                          contains: filters.specialization,
+                          mode: 'insensitive' as const,
+                      },
+                  }
                 : {}),
             ...(filters.workplace
-                ? { workplace: { contains: filters.workplace, mode: 'insensitive' } }
+                ? { workplace: { contains: filters.workplace, mode: 'insensitive' as const } }
                 : {}),
-            ...(filters.phone ? { phone: { contains: filters.phone, mode: 'insensitive' } } : {}),
-            ...(filters.email ? { email: { contains: filters.email, mode: 'insensitive' } } : {}),
+            ...(filters.phone
+                ? { phone: { contains: filters.phone, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.email
+                ? { email: { contains: filters.email, mode: 'insensitive' as const } }
+                : {}),
         }),
         [
             filters.code,

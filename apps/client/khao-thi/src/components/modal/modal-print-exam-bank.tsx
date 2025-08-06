@@ -1,4 +1,5 @@
 // import { formatDateVN } from '@lib/utils'
+import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import type { ExamBankQuestion, Question } from '@workspace/db'
 // import { Docxtemplater, exportFile, loadFile } from '@workspace/libs/docxjs'
 import { Button, Modal, Space } from 'antd'
@@ -17,6 +18,8 @@ const tableHeaderClassName =
 export const ModalPrintExamBank = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         data?: (ExamBankQuestion & { question: Question })[]
+        subjectVersionName: string
+        examCode: string
     }>({
         tag: ModalPrintExamBank.name,
     })
@@ -27,12 +30,12 @@ export const ModalPrintExamBank = () => {
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
-        // documentTitle: `Bien_ban_ban_giao_${handoverDetail?.number || ''}.pdf`,
+        documentTitle: `De_thi_mon_${input?.subjectVersionName}_${input?.examCode}.pdf`,
     })
 
     // Xử lý xuất file Word
     const exportToWord = async () => {
-        // if (!handoverDetail) return
+        if (!input?.data) return
         // try {
         //     console.log('Loading template file...')
         //     const res = await loadFile('/templates/BMKT05.docx')
@@ -178,7 +181,7 @@ export const ModalPrintExamBank = () => {
 
                 <div
                     ref={printRef}
-                    className="font-times-new-roman text-black bg-white p-6"
+                    className="!font-time-news-roman text-black bg-white p-6"
                     style={{ fontSize: '12px', lineHeight: '1.3' }}
                 >
                     {/* Header */}
@@ -247,344 +250,22 @@ export const ModalPrintExamBank = () => {
                             style={{ width: '20%' }}
                         />{' '}
                     </div>
-                    {/* Thông tin cơ bản */}
-                    <div className="mb-4 text-xs space-y-1">
-                        {/* <div>
-                            Căn cứ PSX số{' '}
-                            {latestProductionLog?.number || handoverDetail.number || '...'} của Nhà
-                            máy;
-                        </div>
-                        <div>
-                            Hôm nay, ngày{' '}
-                            {handoverDetail.date
-                                ? new Date(handoverDetail.date).getDate()
-                                : '.....'}{' '}
-                            tháng{' '}
-                            {handoverDetail.date
-                                ? new Date(handoverDetail.date).getMonth() + 1
-                                : '.....'}{' '}
-                            năm{' '}
-                            {handoverDetail.date
-                                ? new Date(handoverDetail.date).getFullYear()
-                                : '202....'}{' '}
-                            tại{' '}
-                            {handoverDetail.organizationFrom.name || 'Phòng/Xưởng...../Nhà máy X52'}{' '}
-                            chúng tôi gồm:
-                        </div> */}
-                    </div>
-
-                    {/* Thành phần tham gia */}
-                    <div className="mb-4 text-xs">
-                        {/* Hiển thị thành viên tham gia từ database */}
-                        {/* {handoverDetail.technicalConditionHandoverOfEquipmentBeforeRepair &&
-                            handoverDetail.technicalConditionHandoverOfEquipmentBeforeRepair
-                                .length > 0 && (
-                                <div className="mt-4">
-                                    <div className="font-bold mb-2">I. THÀNH PHẦN THAM GIA</div>
-                                    {handoverDetail.technicalConditionHandoverOfEquipmentBeforeRepair.map(
-                                        (participant, index) => (
-                                            <div key={participant.id}>
-                                                <div className="font-bold">
-                                                    {index + 1}. Đại diện{' '}
-                                                    {participant.role || 'Vai trò'}
-                                                </div>
-                                                - Đ/c:{' '}
-                                                {participant.profile?.fullname ||
-                                                    '............................'}{' '}
-                                                - (
-                                                {participant.role ||
-                                                    getLatestPosition(
-                                                        participant.profile?.workHistory
-                                                    ) ||
-                                                    'Vai trò'}
-                                                )
-                                            </div>
-                                        )
-                                    )}
-                                </div>
-                            )} */}
-
-                        <div className="mt-4">
-                            <div className="font-bold mb-2">II. NỘI DUNG BÀN GIAO</div>
-                            {/* <div>
-                                {handoverDetail.organizationFrom.name || 'Phòng/Xưởng'} (có TTB sửa
-                                chữa) bàn giao cho{' '}
-                                {handoverDetail.organizationTo.name || 'Xưởng Cơ điện'} các TTB,
-                                dụng cụ phục vụ sửa chữa {}
-                                cụ thể:
-                            </div> */}
-                        </div>
-                    </div>
-
-                    {/* Bảng thiết bị và vật tư */}
-                    <div className="mb-4">
-                        <table className="w-full border-collapse border border-black">
-                            <thead>
-                                <tr>
-                                    <th className={tableHeaderClassName} style={{ width: '5%' }}>
-                                        TT
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '35%' }}>
-                                        Tên thiết bị, dụng cụ
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '8%' }}>
-                                        DVT
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '8%' }}>
-                                        SL
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '12%' }}>
-                                        Kí hiệu, S/N
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '12%' }}>
-                                        Nước SX
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '12%' }}>
-                                        Năm SX
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '15%' }}>
-                                        Tình trạng kỹ thuật
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '8%' }}>
-                                        Ghi chú
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* Thiết bị chính */}
-                                {/* <tr>
-                                    <td className={tableCellClassName}>1</td>
-                                    <td
-                                        className={`${tableCellClassName} text-left px-2`}
-                                    >
-                                        {equipmentName}
-                                        <div className="text-xs italic">
-                                            (các dụng cụ, phụ kiện đi kèm)
-                                        </div>
-                                    </td>
-                                    <td className={tableCellClassName}>
-                                        {equipmentInfo?.realEquipment?.equipment
-                                            ?.unit || ''}
-                                    </td>
-                                    <td className={tableCellClassName}>1</td>
-                                    <td className={tableCellClassName}>
-                                        {serial}
-                                    </td>
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                </tr> */}
-
-                                {/* Vật tư bàn giao */}
-                                {/* {handoverDetail.handoverOfEquipmentBeforeRepairContent?.map(
-                                    (content, index) => (
-                                        <tr key={content.id}>
-                                            <td className={tableCellClassName}>{index + 2}</td>
-                                            <td className={`${tableCellClassName} text-left px-2`}>
-                                                {content.equipmentLocation?.realEquipment?.equipment
-                                                    ?.equipmentName || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment?.equipment
-                                                    ?.unit || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.quantity?.toString() || '0'}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment?.serial ||
-                                                    ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment
-                                                    ?.manufacturer?.name || ''}
-                                            </td>
-
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment
-                                                    ?.mgfYear || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.technicalCondition || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {handoverDetail.description || ''}
-                                            </td>
-                                        </tr>
-                                    )
-                                )} */}
-
-                                {/* Phụ kiện kèm theo nếu cần */}
-                                <tr>
-                                    <td className={tableCellClassName} />
-                                    <td className={`${tableCellClassName} text-left px-2 italic`}>
-                                        Phụ kiện kèm theo:
-                                        <br />
-                                        (các dụng cụ, phụ kiện đi kèm)
-                                    </td>
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="text-xs italic mt-1">
-                            * Ghi chú: Nếu số lượng TTB lớn có thể làm Phụ lục kèm theo.
-                        </div>
-                    </div>
-
-                    {/* Kết luận */}
-                    <div className="mb-6 text-xs">
-                        <div className="font-bold mb-2">III. KẾT LUẬN</div>
-                        <div>
-                            Bên nhận có trách nhiệm quản lý và sửa chữa{' '}
-                            {/* {equipmentName || 'thiết bị này'} kể từ ngày bàn giao. */}
-                        </div>
-                        <div>
-                            Biên bản lập thành 03 bản: bên giao 01 bản, bên nhận 01 bản, lưu Phòng
-                            KT-CN./.
-                        </div>
-                        {/* {handoverDetail.conclusion && (
-                            <div className="mt-2">{handoverDetail.conclusion}</div>
-                        )} */}
-                    </div>
-
-                    {/* Phụ lục - Danh mục các trang thiết bị, vật tư bàn giao phục vụ sửa chữa */}
-                    <div className="mt-8 page-break-before">
-                        <div className="text-center mb-4">
-                            <div className="font-bold">Phụ lục</div>
-                            <div className="font-bold">
-                                DANH MỤC CÁC TRANG THIẾT BỊ, VẬT TƯ BÀN GIAO PHỤC VỤ SỬA CHỮA
+                    <div className="mb-4 space-y-4">
+                        {input?.data?.map((item, index) => (
+                            <div key={item.id}>
+                                <span className="font-bold text-base">
+                                    Câu hỏi {index + 1}:{' '}
+                                    <span
+                                        className="prose max-w-none  text-gray-800"
+                                        dangerouslySetInnerHTML={{
+                                            __html: item.question.content
+                                                ? renderWithMath(item.question.content)
+                                                : '<i>Chưa có nội dung</i>',
+                                        }}
+                                    />
+                                </span>
                             </div>
-                            {/* <div className="text-xs italic">
-                                (Kèm theo Biên bản bàn giao số {handoverDetail.number} ngày{' '}
-                                {handoverDetail.date
-                                    ? `${new Date(handoverDetail.date).getDate()}/${new Date(handoverDetail.date).getMonth() + 1}/${new Date(handoverDetail.date).getFullYear().toString().slice(-2)}`
-                                    : '../../202..'}{' '}
-                                của Nhà máy X52)
-                            </div> */}
-                        </div>
-
-                        <table className="w-full border-collapse border border-black">
-                            <thead>
-                                <tr>
-                                    <th className={tableHeaderClassName} style={{ width: '5%' }}>
-                                        TT
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '35%' }}>
-                                        Tên thiết bị, dụng cụ
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '8%' }}>
-                                        DVT
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '8%' }}>
-                                        SL
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '12%' }}>
-                                        Kí hiệu, S/N
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '12%' }}>
-                                        Nước SX
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '12%' }}>
-                                        Năm SX
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '15%' }}>
-                                        Tình trạng kỹ thuật
-                                    </th>
-                                    <th className={tableHeaderClassName} style={{ width: '8%' }}>
-                                        Ghi chú
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* Thiết bị chính */}
-                                {/* <tr>
-                                    <td className={tableCellClassName}>1</td>
-                                    <td
-                                        className={`${tableCellClassName} text-left px-2`}
-                                    >
-                                        {equipmentName}
-                                        <div className="text-xs italic">
-                                            (các dụng cụ, phụ kiện đi kèm)
-                                        </div>
-                                    </td>
-                                    <td className={tableCellClassName}>
-                                        {equipmentInfo?.realEquipment?.equipment
-                                            ?.unit || ''}
-                                    </td>
-                                    <td className={tableCellClassName}>1</td>
-                                    <td className={tableCellClassName}>
-                                        {serial}
-                                    </td>
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                    <td className={tableCellClassName} />
-                                </tr> */}
-
-                                {/* Vật tư bàn giao */}
-                                {/* {handoverDetail.handoverOfEquipmentBeforeRepairContent?.map(
-                                    (content, index) => (
-                                        <tr key={content.id}>
-                                            <td className={tableCellClassName}>{index + 2}</td>
-                                            <td className={`${tableCellClassName} text-left px-2`}>
-                                                {content.equipmentLocation?.realEquipment?.equipment
-                                                    ?.equipmentName || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment?.equipment
-                                                    ?.unit || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.quantity?.toString() || '0'}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment?.serial ||
-                                                    ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment
-                                                    ?.manufacturer?.name || ''}
-                                            </td>
-
-                                            <td className={tableCellClassName}>
-                                                {content.equipmentLocation?.realEquipment
-                                                    ?.mgfYear || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {content.technicalCondition || ''}
-                                            </td>
-                                            <td className={tableCellClassName}>
-                                                {handoverDetail.description || ''}
-                                            </td>
-                                        </tr>
-                                    )
-                                )} */}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {/* Chữ ký */}
-                    <div className="mt-8 grid grid-cols-3 gap-8 text-xs text-center">
-                        <div>
-                            <div className="font-bold mb-2">PHÒNG/XƯỞNG ....</div>
-                            <div className="mb-10" />
-                            {/* <div className="font-bold">{handoverDetail.organizationFrom.name}</div> */}
-                        </div>
-                        <div>
-                            <div className="font-bold mb-2">PHÒNG KT-CN</div>
-                            <div className="mb-10" />
-                        </div>
-                        <div>
-                            <div className="font-bold mb-2">PHÒNG KT-CN</div>
-                            <div className="mb-10" />
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>

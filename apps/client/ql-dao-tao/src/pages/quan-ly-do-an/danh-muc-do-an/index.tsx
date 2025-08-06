@@ -46,7 +46,7 @@ export default function ThesisProject() {
         maxStudents: undefined,
         startDate: undefined,
         endDate: undefined,
-        statusGraduationSession: undefined,
+        statusThesisProject: undefined,
         currentStudents: undefined,
         summary: undefined,
     })
@@ -58,107 +58,114 @@ export default function ThesisProject() {
 
     const where = useMemo(
         () => ({
-            AND: [
-                {
-                    subject: {
-                        type: SubjectVersionType.Project,
-                    },
-                },
-                {
-                    ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
-                },
-                {
-                    OR: [
+            subject: {
+                type: SubjectVersionType.Project,
+            },
+            ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
+            ...(filters.searchText
+                ? {
+                      OR: [
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                          {
+                              subject: {
+                                  name: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            thesisProjects: {
+                some: {
+                    ...(filters.code
+                        ? { code: { contains: filters.code, mode: 'insensitive' as const } }
+                        : {}),
+                    ...(filters.title
+                        ? {
+                              title: {
+                                  contains: filters.title,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.titleEN
+                        ? {
+                              titleEN: {
+                                  contains: filters.titleEN,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.summary
+                        ? {
+                              summary: {
+                                  contains: filters.summary,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.supervisor
+                        ? {
+                              supervisor: {
+                                  name: {
+                                      contains: filters.supervisor,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...emptyObjectIf(
                         {
-                            ...(filters.searchText
-                                ? { name: { contains: filters.searchText, mode: 'insensitive' } }
-                                : {}),
+                            organizationId: {
+                                in: filters.organization,
+                            },
                         },
-                        {
-                            ...(filters.searchText
-                                ? { code: { contains: filters.searchText, mode: 'insensitive' } }
-                                : {}),
-                        },
-                        {
-                            ...(filters.searchText
-                                ? {
-                                      subject: {
-                                          name: {
-                                              contains: filters.searchText,
-                                              mode: 'insensitive',
-                                          },
-                                      },
-                                  }
-                                : {}),
-                        },
-                    ],
+                        !!filters.organization
+                    ),
+                    ...(filters.startDate?.length === 2
+                        ? {
+                              registrationStart: {
+                                  gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                                  lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                              },
+                          }
+                        : {}),
+                    ...(filters.endDate?.length === 2
+                        ? {
+                              registrationEnd: {
+                                  gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                                  lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                              },
+                          }
+                        : {}),
+                    ...(filters.statusThesisProject
+                        ? Array.isArray(filters.statusThesisProject)
+                            ? {
+                                  status: {
+                                      in: filters.statusThesisProject,
+                                  },
+                              }
+                            : {
+                                  status: {
+                                      equals: filters.statusThesisProject,
+                                  },
+                              }
+                        : {}),
                 },
-                {
-                    thesisProjects: {
-                        some: {
-                            ...(filters.code
-                                ? { code: { contains: filters.code, mode: 'insensitive' } }
-                                : {}),
-                            ...(filters.title
-                                ? { title: { contains: filters.title, mode: 'insensitive' } }
-                                : {}),
-                            ...(filters.titleEN
-                                ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' } }
-                                : {}),
-                            ...(filters.summary
-                                ? { summary: { contains: filters.summary, mode: 'insensitive' } }
-                                : {}),
-                            ...(filters.supervisor
-                                ? {
-                                      supervisor: {
-                                          name: {
-                                              contains: filters.supervisor,
-                                              mode: 'insensitive',
-                                          },
-                                      },
-                                  }
-                                : {}),
-                            ...emptyObjectIf(
-                                {
-                                    organizationId: {
-                                        in: filters.organization,
-                                    },
-                                },
-                                !!filters.organization
-                            ),
-                            ...(filters.startDate?.length === 2
-                                ? {
-                                      registrationStart: {
-                                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
-                                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
-                                      },
-                                  }
-                                : {}),
-                            ...(filters.endDate?.length === 2
-                                ? {
-                                      registrationEnd: {
-                                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
-                                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
-                                      },
-                                  }
-                                : {}),
-                            ...(filters.statusGraduationSession
-                                ? Array.isArray(filters.statusGraduationSession)
-                                    ? {
-                                          status: {
-                                              in: filters.statusGraduationSession,
-                                          },
-                                      }
-                                    : {
-                                          status: {
-                                              equals: filters.statusGraduationSession,
-                                          },
-                                      }
-                                : {}),
-                        },
-                    },
-                },
-            ],
+            },
         }),
         [
             selectedSemesterId,
@@ -170,7 +177,7 @@ export default function ThesisProject() {
             filters.organization,
             filters.startDate,
             filters.endDate,
-            filters.statusGraduationSession,
+            filters.statusThesisProject,
             filters.summary,
         ]
     )
@@ -518,7 +525,7 @@ export default function ThesisProject() {
                             },
                             {
                                 title: 'Trạng thái',
-                                dataIndex: 'statusGraduationSession',
+                                dataIndex: 'statusThesisProject',
                                 align: 'center',
                                 width: 160,
                                 fixed: 'right',

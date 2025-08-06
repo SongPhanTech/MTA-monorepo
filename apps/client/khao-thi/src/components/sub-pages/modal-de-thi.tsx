@@ -23,6 +23,8 @@ interface ModalExamBankProps {
     onCancel: () => void
     examBankId: string
     questionBankId: string
+    subjectVersionName: string
+    examCode: string
 }
 
 const ModalExamBank: React.FC<ModalExamBankProps> = ({
@@ -30,6 +32,8 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
     onCancel,
     examBankId,
     questionBankId,
+    subjectVersionName,
+    examCode,
 }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -52,6 +56,8 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
 
     const { onOpen: onOpenModalPrintExamBank } = useDisclosure<{
         data?: (ExamBankQuestion & { question: Question })[]
+        subjectVersionName: string
+        examCode: string
     }>({
         tag: ModalPrintExamBank.name,
     })
@@ -147,7 +153,13 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                             <Flex justify="end" gap={4}>
                                 <Button
                                     type="primary"
-                                    onClick={() => onOpenModalPrintExamBank({ data })}
+                                    onClick={() =>
+                                        onOpenModalPrintExamBank({
+                                            data,
+                                            subjectVersionName,
+                                            examCode,
+                                        })
+                                    }
                                     icon={<Printer />}
                                 >
                                     In đề thi
