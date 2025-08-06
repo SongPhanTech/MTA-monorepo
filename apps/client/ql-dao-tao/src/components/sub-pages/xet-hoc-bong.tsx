@@ -11,7 +11,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
-import type { Prisma, ScholarshipAward } from '@workspace/db'
+import type { ScholarshipAward } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useDeleteScholarshipAward,
@@ -59,47 +59,46 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         scholarship: undefined,
     })
 
-    const isFiltering = useMemo(() => {
-        return Object.values(filters).some((value) => !!value)
-    }, [filters])
-
-    const where: Prisma.TrainingCourseWhereInput = useMemo(
-        () =>
-            isFiltering
-                ? {
-                      scholarships: {
-                          some: {
-                              awards: {
-                                  some: {
-                                      semesterId,
-                                      student: {
-                                          userProfile: {
-                                              ...(filters.code && filters.code !== ''
-                                                  ? {
-                                                        code: {
-                                                            contains: filters.code,
-                                                            mode: 'insensitive',
-                                                        },
-                                                    }
-                                                  : {}),
-                                              ...(filters.name && filters.name !== ''
-                                                  ? {
-                                                        fullname: {
-                                                            contains: filters.name,
-                                                            mode: 'insensitive',
-                                                        },
-                                                    }
-                                                  : {}),
-                                          },
-                                      },
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {},
-        [filters, isFiltering, semesterId]
+    const where = useMemo(
+        () => ({
+            scholarships: {
+                some: {
+                    awards: {
+                        some: {
+                            semesterId,
+                            student: {
+                                userProfile: {
+                                    ...(filters.code && filters.code !== ''
+                                        ? {
+                                              code: {
+                                                  contains: filters.code,
+                                                  mode: 'insensitive' as const,
+                                              },
+                                          }
+                                        : {}),
+                                    ...(filters.name && filters.name !== ''
+                                        ? {
+                                              fullname: {
+                                                  contains: filters.name,
+                                                  mode: 'insensitive' as const,
+                                              },
+                                          }
+                                        : {}),
+                                },
+                            },
+                            ...(filters.scholarship
+                                ? {
+                                      scholarshipId: { in: filters.scholarship },
+                                  }
+                                : {}),
+                        },
+                    },
+                },
+            },
+        }),
+        [semesterId, filters.name, filters.code, filters.scholarship]
     )
+
     const [isModalVisible, setIsModalVisible] = useState(false)
     const { onOpen, onClose } = useDisclosure<{
         id: string
@@ -235,6 +234,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     const { data: count } = useCountTrainingCourse({
         where: {
             ...where,
+            deletedAt: null,
         },
     })
 
