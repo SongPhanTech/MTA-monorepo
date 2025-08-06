@@ -7,7 +7,6 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import type {
     FixedClass,
-    Prisma,
     TrainingCourse,
     TrainingField,
     TrainingMajor,
@@ -47,102 +46,101 @@ export default function GraduationDecisionDiploma() {
         fixedClassId: undefined,
     })
 
-    const isFiltering = useMemo(() => {
-        return Object.values(filters).some((value) => !!value)
-    }, [filters])
-
-    const where: Prisma.GraduationDecisionWhereInput = useMemo(
-        () =>
-            isFiltering
+    const where = useMemo(
+        () => ({
+            ...(filters.decisionDate
                 ? {
-                      ...(filters.decisionDate
-                          ? {
-                                decisionDate: {
-                                    gte: dayjs(filters.decisionDate?.[0], 'DD/MM/YYYY').toDate(),
-                                    lte: dayjs(filters.decisionDate?.[1], 'DD/MM/YYYY').toDate(),
-                                },
-                            }
-                          : {}),
-                      ...(filters.diplomaIssueDate
-                          ? {
-                                diplomaIssueDate: {
-                                    gte: dayjs(
-                                        filters.diplomaIssueDate?.[0],
-                                        'DD/MM/YYYY'
-                                    ).toDate(),
-                                    lte: dayjs(
-                                        filters.diplomaIssueDate?.[1],
-                                        'DD/MM/YYYY'
-                                    ).toDate(),
-                                },
-                            }
-                          : {}),
-                      ...(filters.diplomaNumber
-                          ? {
-                                diplomaNumber: {
-                                    contains: filters.diplomaNumber,
-                                    mode: 'insensitive',
-                                },
-                            }
-                          : {}),
-                      ...(filters.trainingMajorId
-                          ? {
-                                trainingMajorId: filters.trainingMajorId,
-                            }
-                          : {}),
-
-                      trainingMajor: {
-                          ...(filters.managementOrganizationId
-                              ? {
-                                    organizationId: filters.managementOrganizationId,
-                                }
-                              : {}),
-                          ...(filters.trainingFieldId
-                              ? {
-                                    trainingFieldId: filters.trainingFieldId,
-                                }
-                              : {}),
-                      },
-                      student: {
-                          userProfile: {
-                              ...(filters.name
-                                  ? {
-                                        fullname: {
-                                            contains: filters.name,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.code
-                                  ? {
-                                        code: {
-                                            contains: filters.code,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                          },
-                          ...(filters.fixedClassId
-                              ? {
-                                    fixedClassId: filters.fixedClassId,
-                                }
-                              : {}),
-                          ...(filters.trainingObjectId
-                              ? {
-                                    trainingObjectTypeId: filters.trainingObjectId,
-                                }
-                              : {}),
-                          fixedClass: {
-                              ...(filters.trainingCourseId
-                                  ? {
-                                        trainingCourseId: filters.trainingCourseId,
-                                    }
-                                  : {}),
-                          },
+                      decisionDate: {
+                          gte: dayjs(filters.decisionDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.decisionDate?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
-                : {},
-        [filters, isFiltering]
+                : {}),
+            ...(filters.diplomaIssueDate
+                ? {
+                      diplomaIssueDate: {
+                          gte: dayjs(filters.diplomaIssueDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.diplomaIssueDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.diplomaNumber
+                ? {
+                      diplomaNumber: {
+                          contains: filters.diplomaNumber,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingMajorId
+                ? {
+                      trainingMajorId: filters.trainingMajorId,
+                  }
+                : {}),
+
+            trainingMajor: {
+                ...(filters.managementOrganizationId
+                    ? {
+                          organizationId: filters.managementOrganizationId,
+                      }
+                    : {}),
+                ...(filters.trainingFieldId
+                    ? {
+                          trainingFieldId: filters.trainingFieldId,
+                      }
+                    : {}),
+            },
+            student: {
+                userProfile: {
+                    ...(filters.name
+                        ? {
+                              fullname: {
+                                  contains: filters.name,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.code
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                },
+                ...(filters.fixedClassId
+                    ? {
+                          fixedClassId: filters.fixedClassId,
+                      }
+                    : {}),
+                ...(filters.trainingObjectId
+                    ? {
+                          trainingObjectTypeId: filters.trainingObjectId,
+                      }
+                    : {}),
+                fixedClass: {
+                    ...(filters.trainingCourseId
+                        ? {
+                              trainingCourseId: filters.trainingCourseId,
+                          }
+                        : {}),
+                },
+            },
+        }),
+        [
+            filters.decisionDate,
+            filters.diplomaIssueDate,
+            filters.diplomaNumber,
+            filters.trainingMajorId,
+            filters.managementOrganizationId,
+            filters.trainingFieldId,
+            filters.name,
+            filters.code,
+            filters.fixedClassId,
+            filters.trainingObjectId,
+            filters.trainingCourseId,
+        ]
     )
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data = [], refetch } = useFindManyGraduationDecision({
