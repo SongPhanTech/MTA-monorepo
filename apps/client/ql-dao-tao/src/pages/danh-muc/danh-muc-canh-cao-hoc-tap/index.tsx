@@ -103,9 +103,7 @@ export default function AcademicWarningRule() {
             academicWarningRule: true,
             trainingObjectType: true,
         },
-        orderBy: {
-            createdAt: 'asc',
-        },
+        orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })

@@ -55,7 +55,7 @@ export default function DisciplinaryWarningReason() {
                 ],
                 !!filters.severityLevel
             ),
-            { createdAt: 'asc' },
+            { name: 'asc' },
         ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

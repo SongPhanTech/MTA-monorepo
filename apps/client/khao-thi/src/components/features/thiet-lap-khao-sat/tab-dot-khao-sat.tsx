@@ -120,7 +120,7 @@ function TabDotKhaoSat() {
 
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
     const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
-        orderBy: { createdAt: 'asc' },
+        orderBy: { name: 'asc' },
     })
     return (
         <div>

@@ -132,16 +132,10 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                         },
                     },
                 },
-                orderBy: [
-                    {
-                        createdAt: 'asc',
-                    },
-                ],
+                orderBy: { rankOrder: 'asc' },
             },
         },
-        orderBy: {
-            createdAt: 'asc',
-        },
+        orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })

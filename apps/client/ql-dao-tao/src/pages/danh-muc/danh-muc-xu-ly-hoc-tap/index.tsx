@@ -119,7 +119,7 @@ export default function AcademicActionConfig() {
             },
         },
         orderBy: {
-            createdAt: 'asc',
+            createdAt: 'desc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

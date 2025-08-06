@@ -249,11 +249,11 @@ export default function ThesisProject() {
                         ],
                         !!filters.maxStudents
                     ),
-                    { currentStudents: 'asc' },
+                    { title: 'asc' },
                 ],
             },
         },
-        orderBy: { createdAt: 'asc' },
+        orderBy: { subject: { name: 'asc' } },
     })
 
     const { data: count } = useCountSubjectClass({
