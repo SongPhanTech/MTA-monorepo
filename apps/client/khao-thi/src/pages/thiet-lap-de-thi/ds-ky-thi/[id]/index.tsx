@@ -13,11 +13,11 @@ import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountExamBank,
     useCountTestStructureRule,
+    useDeleteExamBank,
     useFindManyExamBank,
     useFindManyKnowledgeBlock,
     useFindManyTestStructureRule,
     useFindUniqueExam,
-    useUpdateExamBank,
     useUpdateTestStructureRule,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
@@ -196,13 +196,12 @@ export default function TestStructureRule() {
         hideSpinner()
     }
 
-    const { mutateAsync: updateExamBank } = useUpdateExamBank()
+    const { mutateAsync: deleteExamBank } = useDeleteExamBank()
     async function handleDeleteExamBank(id: string) {
         try {
             showSpinner()
-            await updateExamBank({
+            await deleteExamBank({
                 where: { id },
-                data: { deletedAt: new Date() },
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
