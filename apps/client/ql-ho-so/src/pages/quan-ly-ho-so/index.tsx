@@ -493,7 +493,7 @@ export default function UserProfilePageDs() {
                                                     {list.map((item) => (
                                                         <Menu.Item
                                                             key={item.key}
-                                                            onClick={(e) => item.onClick(id)}
+                                                            onClick={(e) => item.onClick({ id })}
                                                         >
                                                             {item.label}
                                                         </Menu.Item>

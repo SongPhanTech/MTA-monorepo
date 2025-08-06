@@ -1,5 +1,7 @@
 import { PrinterOutlined } from '@ant-design/icons'
-import { useFindUniqueStaff } from '@workspace/db/hooks'
+import { RELATIONSHIP_TYPE } from '@constants/constants'
+import { getMinioUrl } from '@workspace/constant'
+import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
@@ -20,6 +22,32 @@ const ModalSoYeuLyLich = () => {
     const { isOpen, onClose, input } = useDisclosure<ModalSoYeuLyLichInput>({
         tag: ModalSoYeuLyLich.name,
     })
+
+    const getRelationshipText = (relationType: string, userGender?: string) => {
+        const genderBasedRelationships: Record<string, Record<string, string>> = {
+            FATHER_IN_LOW: {
+                Nam: 'Bố vợ',
+                Nữ: 'Bố chồng',
+            },
+            MOTHER_IN_LOW: {
+                Nam: 'Mẹ vợ',
+                Nữ: 'Mẹ chồng',
+            },
+            MARRIER: {
+                Nam: 'Vợ',
+                Nữ: 'Chồng',
+            },
+        }
+
+        if (genderBasedRelationships[relationType] && userGender) {
+            return (
+                genderBasedRelationships[relationType][userGender] ||
+                RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE]
+            )
+        }
+
+        return RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE] || ''
+    }
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -50,22 +78,109 @@ const ModalSoYeuLyLich = () => {
       `,
     })
 
-    const { data: initialData } = useFindUniqueStaff(
+    const { data: initialData } = useFindUniqueUserProfile(
         {
             where: {
                 id: input?.id,
             },
             include: {
-                userProfile: {
+                religion: true,
+                ethnicity: true,
+                trinhDoHocVan: true,
+                chuyenMonKyThuat: true,
+                chiHuyQuanLy: true,
+                ngoaiNgu: {
                     include: {
-                        religion: true,
-                        ethnicity: true,
+                        ngonNgu: true,
+                        trinhDo: true,
+                    },
+                },
+                tiengDanToc: {
+                    include: {
+                        danToc: true,
+                    },
+                },
+                trinhDoLyLuanChinhTri: {
+                    include: {
+                        trinhDo: true,
+                    },
+                },
+                quaTrinhHocTap: {
+                    include: {
+                        tenTruong: true,
+                        nganhHoc: true,
+                        chuyenNganh: true,
+                    },
+                },
+                chienDau: true,
+                diNuocNgoai: {
+                    include: {
+                        tenNuoc: true,
+                    },
+                },
+                sucKhoe: true,
+                nhomMau: true,
+                thuongTat: {
+                    include: {
+                        loai: true,
+                    },
+                },
+                danhHieu: true,
+                khenThuong: true,
+                kyLuat: true,
+                quaTrinhCongTac: {
+                    include: {
+                        chucVu: true,
+                    },
+                },
+                capBac: {
+                    include: {
+                        capBac: true,
+                    },
+                },
+                relatives: true,
+                gender: true,
+                tinHoc: {
+                    include: {
+                        dM_TrinhDoTinHoc: true,
+                    },
+                },
+                positionCPV: true,
+                hocHam: {
+                    include: {
+                        academicRankType: true,
+                    },
+                },
+                hocVi: {
+                    include: {
+                        academicDegreeType: true,
                     },
                 },
             },
         },
         { enabled: !!input?.id }
     )
+
+    const formatAcademicInfo = () => {
+        const academicInfo = []
+
+        const hocVi = initialData?.hocVi?.[0]?.academicDegreeType?.sTen
+        if (hocVi) {
+            academicInfo.push(hocVi)
+        }
+
+        const hocHam = initialData?.hocHam?.[0]?.academicRankType?.sTen
+        if (hocHam) {
+            academicInfo.push(hocHam)
+        }
+
+        const danhHieu = initialData?.danhHieu?.map((item) => item.ten).filter(Boolean)
+        if (danhHieu && danhHieu.length > 0) {
+            academicInfo.push(...danhHieu)
+        }
+
+        return academicInfo.length > 0 ? academicInfo.join(', ') : ''
+    }
 
     const totalRows = Math.max(5, data.length)
     const filledRows = [...data, ...Array(totalRows - data.length).fill({})]
@@ -102,8 +217,18 @@ const ModalSoYeuLyLich = () => {
                 className="mx-auto p-10 page text-sm leading-relaxed !font-time-news-roman flex flex-col gap-2 page-1"
             >
                 <div className="flex gap-2">
-                    <div className="border border-solid border-black min-w-[151.181px] h-[226.771px] flex items-center justify-center">
-                        Ảnh màu <br /> (4 x 6 cm)
+                    <div className="border border-solid border-black min-w-[113px] min-h-[151px] flex items-center justify-center">
+                        {initialData?.avatar ? (
+                            <img
+                                src={getMinioUrl(initialData?.avatar) || ''}
+                                alt="avatar"
+                                className="border border-solid border-black w-[113px] h-[151px]"
+                            />
+                        ) : (
+                            <>
+                                Ảnh màu <br /> (4 x 6 cm)
+                            </>
+                        )}
                     </div>
                     <div className="w-full">
                         <div className="uppercase flex w-full leading-[12px] mb-4 justify-center font-bold text-center">
@@ -127,64 +252,67 @@ const ModalSoYeuLyLich = () => {
                 <div className="flex gap-2">
                     <div className="w-full flex flex-col items-start justify-center">
                         <p className="flex w-full leading-[12px] mb-4">
-                            1. Họ và tên (chữ in hoa): {initialData?.userProfile?.fullname}
-                            <span className="inline-block flex-1 border-b border-dotted  border-black" />
-                            , Giới tính (nam, nữ):
-                            <span className="inline-block w-32 flex-2 border-b border-dotted  border-black" />
+                            1. Họ và tên (chữ in hoa): {initialData?.fullname}
+                            <span className="inline-block flex-1" />, Giới tính (nam, nữ):{' '}
+                            {initialData?.gender?.sTen}
+                            <span className="inline-block w-32 flex-2 " />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            2. Họ tên thường dùng:{' '}
-                            <span className="inline-block flex-1 border-b border-dotted  border-black" />
+                            2. Họ tên thường dùng: {initialData?.hoTenThuongDung}
+                            <span className="inline-block flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            3. Sinh ngày:
-                            <span className="inline-block w-14 flex-1 border-b border-dotted  border-black" />
-                            tháng
-                            <span className="inline-block w-12 flex-1 border-b border-dotted  border-black" />
-                            năm
-                            <span className="inline-block w-16 flex-1 border-b border-dotted  border-black" />
-                        </p>
-
-                        <p className="flex w-full leading-[12px] mb-4">
-                            4. Nơi sinh:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            3. Sinh ngày: {dayjs(initialData?.dateOfBirth).format('DD')}
+                            <span className="inline-block w-14 flex-1 " />
+                            tháng: {dayjs(initialData?.dateOfBirth).format('MM')}
+                            <span className="inline-block w-12 flex-1" />
+                            năm: {dayjs(initialData?.dateOfBirth).format('YYYY')}
+                            <span className="inline-block w-16 flex-1" />
                         </p>
 
                         <p className="flex w-full leading-[12px] mb-4">
-                            5. Nguyên quán:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            4. Nơi sinh: {initialData?.placeOfBirth}
+                            <span className="inline-block w-40 flex-" />
+                        </p>
+
+                        <p className="flex w-full leading-[12px] mb-4">
+                            5. Nguyên quán: {initialData?.originalPlace}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            6. Nơi đăng ký hộ khẩu thường trú:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            6. Nơi đăng ký hộ khẩu thường trú: {initialData?.permanentAddress}
+                            <span className="inline-block w-40 flex-1 " />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            7. Chỗ ở hiện nay:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            7. Chỗ ở hiện nay: {initialData?.currentAddress}
+                            <span className="inline-block w-40 flex-1 " />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            8. Điện thoại liên hệ:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            Email:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            8. Điện thoại liên hệ: {initialData?.phoneNumber}
+                            <span className="inline-block w-40 flex-1 " />
+                            Email: {initialData?.email}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            9. Dân tộc:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            Tôn giáo:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            9. Dân tộc: {initialData?.ethnicity?.sTen}
+                            <span className="inline-block w-40 flex-1 " />
+                            Tôn giáo: {initialData?.religion?.sTen}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            10. Thành phần gia đình:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            10. Thành phần gia đình: {initialData?.thanhPhanGiaDinh}
+                            <span className="inline-block w-40 flex-1 " />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            11. Số CMND/CCCD:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            Ngày cấp
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            Nơi cấp
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            11. Số CMND/CCCD: {initialData?.idCardNumber}
+                            <span className="inline-block w-40 flex-1 " />
+                            Ngày cấp:{' '}
+                            {initialData?.idCardDate
+                                ? dayjs(initialData?.idCardDate).format('DD/MM/YYYY')
+                                : null}
+                            <span className="inline-block w-40 flex-1 " />
+                            Nơi cấp: {initialData?.placeOfIdCardNumber}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
                             12. Trình độ chuyên môn:
@@ -228,47 +356,93 @@ const ModalSoYeuLyLich = () => {
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
                             13. Trình độ ngoại ngữ:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            {initialData?.ngoaiNgu?.length
+                                ? initialData.ngoaiNgu
+                                      .map((item) => {
+                                          const ngonNgu = item.ngonNgu?.sTen || ''
+                                          const trinhDo = item.trinhDo?.sTen || ''
+                                          return ngonNgu && trinhDo
+                                              ? `${ngonNgu} - ${trinhDo}`
+                                              : ngonNgu || trinhDo
+                                      })
+                                      .filter(Boolean)
+                                      .join(', ')
+                                : ''}
+                            <span className="inline-block w-40 flex-" />
                             Tin học:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            {initialData?.tinHoc?.length
+                                ? initialData.tinHoc
+                                      .map((item) => {
+                                          const trinhDo = item.dM_TrinhDoTinHoc?.sTen || ''
+                                          return trinhDo
+                                      })
+                                      .filter(Boolean)
+                                      .join(', ')
+                                : ''}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            14. Trình độ lý luận chính trị:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            14. Trình độ lý luận chính trị:{' '}
+                            {initialData?.trinhDoLyLuanChinhTri?.[0]?.trinhDo?.name || ''}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            15. Ngày vào đoàn TNCS HCM:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            15. Ngày vào đoàn TNCS HCM:{' '}
+                            {initialData?.unionDate
+                                ? dayjs(initialData.unionDate).format('DD/MM/YYYY')
+                                : null}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            16. Ngày vào đảng CSVN:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            Chính thức:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            16. Ngày vào đảng CSVN:{' '}
+                            {initialData?.CPVJoinDate
+                                ? dayjs(initialData.CPVJoinDate).format('DD/MM/YYYY')
+                                : null}
+                            <span className="inline-block w-40 flex-1" />
+                            Chính thức:{' '}
+                            {initialData?.officialCPVDate
+                                ? dayjs(initialData.officialCPVDate).format('DD/MM/YYYY')
+                                : null}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
                             17. Cơ quan công tác hiện nay (nếu có):
                             <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            18. Chức vụ hiện nay (nếu có):
+                            18. Chức vụ hiện nay (nếu có): {initialData?.positionCPV?.sTen || ''}
                             <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            19. Học vị, học hàm, danh hiệu Nhà nước phong tặng:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            19. Học vị, học hàm, danh hiệu Nhà nước phong tặng:{' '}
+                            {formatAcademicInfo()}
+                            <span className="inline-block w-40 flex-1" />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            20. Khen thưởng:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            20. Khen thưởng:{' '}
+                            {initialData?.khenThuong?.[0]
+                                ? `${initialData.khenThuong[0].hinhThucKhenThuong || ''} ${
+                                      initialData.khenThuong[0].ngayNhanQuyetDinh
+                                          ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format('DD/MM/YYYY')})`
+                                          : null
+                                  }`
+                                : ''}
+                            <span className="inline-block w-40 flex-1 " />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            21. Kỷ luật:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            21. Kỷ luật:{' '}
+                            {initialData?.kyLuat?.[0]
+                                ? `${initialData.kyLuat[0].hinhThucKyLuat || ''} ${
+                                      initialData.kyLuat[0].ngayNhanQuyetDinh
+                                          ? `(${dayjs(initialData.kyLuat[0].ngayNhanQuyetDinh).format('DD/MM/YYYY')})`
+                                          : null
+                                  }`
+                                : ''}
+                            <span className="inline-block w-40 flex-1 " />
                         </p>
                         <p className="flex w-full leading-[12px] mb-4">
-                            22. Sở truòng:
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
+                            22. Sở truòng: {initialData?.soTruong || ''}
+                            <span className="inline-block w-40 flex-1 " />
                         </p>
                     </div>
                 </div>
@@ -301,22 +475,25 @@ const ModalSoYeuLyLich = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filledRows3.map((row, index) => (
-                                <tr key={`${row.fullName}-${index}`}>
+                            {initialData?.relatives?.map((relative, index) => (
+                                <tr key={relative.id}>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.relationship || ''}
+                                        {getRelationshipText(
+                                            relative.type,
+                                            initialData?.gender?.sTen ?? undefined
+                                        )}
                                     </td>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.fullName || ''}
+                                        {relative.name || ''}
                                     </td>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.yearOfBirth || ''}
+                                        {relative.birthYear || ''}
                                     </td>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.details || ''}
+                                        {relative.job || ''}
                                     </td>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.details || ''}
+                                        {relative.information || ''}
                                     </td>
                                 </tr>
                             ))}
@@ -377,7 +554,7 @@ const ModalSoYeuLyLich = () => {
                     <table className="min-w-full border border-gray-300">
                         <thead>
                             <tr>
-                                <th className="border border-black p-1 text-center font-semibold w-[20%]">
+                                <th className="border border-black p-1 text-center font-semibold w-[30%]">
                                     Thời gian
                                 </th>
                                 <th className="border border-black p-1 text-center font-semibold w-[50%]">
@@ -389,16 +566,22 @@ const ModalSoYeuLyLich = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filledRows3.map((row, index) => (
-                                <tr key={`${row.fullName}-${index}`}>
+                            {initialData?.quaTrinhCongTac?.map((item, index) => (
+                                <tr key={item.id}>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.relationship || ''}
+                                        {item.tuThangNam
+                                            ? dayjs(item.tuThangNam).format('DD/MM/YYYY')
+                                            : ''}{' '}
+                                        -{' '}
+                                        {item.denThangNam
+                                            ? dayjs(item.denThangNam).format('DD/MM/YYYY')
+                                            : ''}
                                     </td>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.fullName || ''}
+                                        {item.chucVu?.sTen || ''}
                                     </td>
                                     <td className="border border-black p-1 h-[32px]">
-                                        {row.yearOfBirth || ''}
+                                        {item.chucVu?.sTen || ''}
                                     </td>
                                 </tr>
                             ))}

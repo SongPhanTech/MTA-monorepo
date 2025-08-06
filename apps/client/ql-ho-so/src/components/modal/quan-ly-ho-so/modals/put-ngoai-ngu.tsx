@@ -69,7 +69,16 @@ export default function PutNgoaiNguModal() {
         >
             <Col span={24}>
                 <FormItem label="Hình thức đào tạo" name="hinhThucDaoTao" required form={form}>
-                    <Input placeholder="Nhập lĩnh vực" />
+                    <Input placeholder="Nhập hình thức đào tạo" />
+                </FormItem>
+            </Col>
+
+            <Col span={24}>
+                <FormItem label="Ngôn ngữ" name="ngonNguId" required form={form}>
+                    <Select
+                        placeholder="Chọn ngôn ngữ"
+                        options={data.map((i) => ({ label: i.sTen, value: i.Id }))}
+                    />
                 </FormItem>
             </Col>
 

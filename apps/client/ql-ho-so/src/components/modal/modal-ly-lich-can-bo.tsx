@@ -1,12 +1,14 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GridBlock } from '@components/commons/grid-block'
-import { useFindUniqueStaff } from '@workspace/db/hooks'
+import { RELATIONSHIP_TYPE } from '@constants/constants'
+import { getMinioUrl } from '@workspace/constant'
+import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
-import { data, data2, data3 } from '@/utils/dataFake'
+import { data } from '@/utils/dataFake'
 
 dayjs.locale('vi')
 
@@ -51,31 +53,143 @@ const ModalLyLichCanBo = () => {
       `,
     })
 
-    const { data: initialData } = useFindUniqueStaff(
+    const { data: initialData } = useFindUniqueUserProfile(
         {
             where: {
                 id: input?.id,
             },
             include: {
-                userProfile: {
+                religion: true,
+                ethnicity: true,
+                trinhDoHocVan: true,
+                chuyenMonKyThuat: true,
+                chiHuyQuanLy: true,
+                ngoaiNgu: {
                     include: {
-                        religion: true,
-                        ethnicity: true,
+                        ngonNgu: true,
+                        trinhDo: true,
                     },
                 },
+                tiengDanToc: {
+                    include: {
+                        danToc: true,
+                    },
+                },
+                trinhDoLyLuanChinhTri: {
+                    include: {
+                        trinhDo: true,
+                    },
+                },
+                trinhDoQuanLyNhaNuoc: {
+                    include: {
+                        trinhDo: true,
+                    },
+                },
+                quaTrinhHocTap: {
+                    include: {
+                        tenTruong: true,
+                        nganhHoc: true,
+                        chuyenNganh: true,
+                    },
+                },
+                chienDau: true,
+                diNuocNgoai: {
+                    include: {
+                        tenNuoc: true,
+                    },
+                },
+                sucKhoe: true,
+                nhomMau: true,
+                thuongTat: {
+                    include: {
+                        loai: true,
+                    },
+                },
+                danhHieu: true,
+                khenThuong: true,
+                kyLuat: true,
+                quaTrinhCongTac: {
+                    include: {
+                        chucVu: true,
+                    },
+                },
+                capBac: {
+                    include: {
+                        capBac: true,
+                    },
+                },
+                relatives: true,
+                gender: true,
+                QuaTrinhLuong: {
+                    include: {
+                        ngach: true,
+                        bacLuong: true,
+                    },
+                },
+                tinHoc: {
+                    include: {
+                        dM_TrinhDoTinHoc: true,
+                    },
+                },
+                ToChucXaHoi: {
+                    include: {
+                        ten: true,
+                    },
+                },
+                doiTuongChinhSach: true,
             },
         },
         { enabled: !!input?.id }
     )
 
+    const familyRelatives =
+        initialData?.relatives?.filter((rel) =>
+            [
+                'FATHER',
+                'MOTHER',
+                'OLDER_BROTHER',
+                'OLDER_SISTER',
+                'YOUNGER_BROTHER',
+                'YOUNGER_SISTER',
+                'MARRIER',
+                'SON',
+                'DAUGHTER',
+            ].includes(rel.type)
+        ) || []
+
+    const spouseRelatives =
+        initialData?.relatives?.filter((rel) =>
+            ['FATHER_IN_LOW', 'MOTHER_IN_LOW'].includes(rel.type)
+        ) || []
+
+    const getRelationshipText = (relationType: string, userGender?: string) => {
+        const genderBasedRelationships: Record<string, Record<string, string>> = {
+            FATHER_IN_LOW: {
+                Nam: 'Bố vợ',
+                Nữ: 'Bố chồng',
+            },
+            MOTHER_IN_LOW: {
+                Nam: 'Mẹ vợ',
+                Nữ: 'Mẹ chồng',
+            },
+            MARRIER: {
+                Nam: 'Vợ',
+                Nữ: 'Chồng',
+            },
+        }
+
+        if (genderBasedRelationships[relationType] && userGender) {
+            return (
+                genderBasedRelationships[relationType][userGender] ||
+                RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE]
+            )
+        }
+
+        return RELATIONSHIP_TYPE[relationType as keyof typeof RELATIONSHIP_TYPE] || ''
+    }
+
     const totalRows = Math.max(5, data.length)
     const filledRows = [...data, ...Array(totalRows - data.length).fill({})]
-
-    const totalRows2 = Math.max(9, data2.length)
-    const filledRows2 = [...data2, ...Array(totalRows2 - data2.length).fill({})]
-
-    const totalRows3 = Math.max(5, data3.length)
-    const filledRows3 = [...data, ...Array(totalRows3 - data3.length).fill({})]
 
     return (
         <Modal
@@ -120,135 +234,264 @@ const ModalLyLichCanBo = () => {
                     SƠ YẾU LÝ LỊCH CÁN BỘ, CÔNG CHỨC
                 </span>
                 <div className="flex gap-2">
-                    <div className="border border-solid border-black min-w-[151.181px] min-h-[226.771px] flex items-center justify-center">
-                        Ảnh màu <br /> (4 x 6 cm)
+                    <div className="border border-solid border-black min-w-[113px] min-h-[151px] flex items-center justify-center">
+                        {initialData?.avatar ? (
+                            <img
+                                src={getMinioUrl(initialData?.avatar) || ''}
+                                alt="avatar"
+                                className="border border-solid border-black w-[113px] h-[151px]"
+                            />
+                        ) : (
+                            <>
+                                Ảnh màu <br /> (4 x 6 cm)
+                            </>
+                        )}
                     </div>
                     <div className="w-full flex flex-col items-start justify-center">
                         <p className="flex w-full uppercase">
-                            1) Họ và tên khai sinh (viết chữ in hoa):{' '}
-                            {initialData?.userProfile?.fullname}
-                            <span className="inline-block flex-1 border-b border-dotted  border-black" />
+                            1) Họ và tên khai sinh (viết chữ in hoa): {initialData?.fullname}
                         </p>
                         <p className="flex w-full">
-                            2) Tên gọi khác:{' '}
-                            <span className="inline-block flex-1 border-b border-dotted  border-black" />
+                            2) Tên gọi khác: {initialData?.hoTenThuongDung}
                         </p>
                         <p className="flex w-full">
-                            3) Sinh ngày:
-                            <span className="inline-block w-14 flex-1 border-b border-dotted  border-black" />
-                            tháng
-                            <span className="inline-block w-12 flex-1 border-b border-dotted  border-black" />
-                            năm
-                            <span className="inline-block w-16 flex-1 border-b border-dotted  border-black" />
-                            , Giới tính (nam, nữ):
-                            <span className="inline-block w-32 flex-1 border-b border-dotted  border-black" />
+                            3) Sinh ngày: {dayjs(initialData?.dateOfBirth).format('DD')}
+                            <span className="inline-block w-14 flex-1" />
+                            tháng: {dayjs(initialData?.dateOfBirth).format('MM')}
+                            <span className="inline-block w-12 flex-1" />
+                            năm: {dayjs(initialData?.dateOfBirth).format('YYYY')}
+                            <span className="inline-block w-16 flex-" />, Giới tính (nam, nữ):{' '}
+                            {initialData?.gender?.sTen}
+                            <span className="inline-block w-32 flex-1 " />
                         </p>
 
-                        <p className="flex w-full">
-                            4) Nơi sinh: Xã
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            , Huyện
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            , Tỉnh
-                            <span className="inline-block w-28 flex-1 border-b border-dotted  border-black" />
-                        </p>
+                        <p className="flex w-full">4) Nơi sinh: {initialData?.placeOfBirth}</p>
 
-                        <p className="flex w-full">
-                            5) Quê quán: Xã
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            , Huyện
-                            <span className="inline-block w-40 flex-1 border-b border-dotted  border-black" />
-                            , Tỉnh
-                            <span className="inline-block w-28 flex-1 border-b border-dotted  border-black" />
-                        </p>
+                        <p className="flex w-full">5) Quê quán: {initialData?.homeTown}</p>
                     </div>
                 </div>
                 <GridBlock
                     columns={2}
                     items={[
-                        { key: 'dan-toc', content: <>6) Dân tộc: </> },
-                        { key: 'ton-giao', content: <>7) Tôn giáo: </> },
+                        {
+                            key: 'dan-toc',
+                            content: <>6) Dân tộc: {initialData?.ethnicity?.sTen} </>,
+                        },
+                        {
+                            key: 'ton-giao',
+                            content: <>7) Tôn giáo: {initialData?.religion?.sTen} </>,
+                        },
                     ]}
                 />
                 <span>
                     8) Nơi đăng ký bộ khẩu thường trú (Số nhà, đường phố, thành phố, xóm, thôn, xã,
-                    huyện, tỉnh):{' '}
+                    huyện, tỉnh): {initialData?.permanentAddress}
                 </span>
                 <span>
                     9) Nơi ở hiện nay (Số nhà, đường phố, thành phố, xóm, thôn, xã, huyện, tỉnh):{' '}
+                    {initialData?.currentAddress}
                 </span>
                 <span>10) Nghề nghiệp khi được tuyển dụng: </span>
                 <GridBlock
                     columns={2}
                     items={[
-                        { key: 'ngay-tuyen-dung', content: <>11) Ngày tuyển dụng: </> },
-                        { key: 'co-quan', content: <>, Cơ quan tuyển dụng: </> },
+                        {
+                            key: 'ngay-tuyen-dung',
+                            content: <>11) Ngày tuyển dụng: {initialData?.recruitmentDate}</>,
+                        },
+                        {
+                            key: 'co-quan',
+                            content: <>, Cơ quan tuyển dụng: {initialData?.recruitmentAgency}</>,
+                        },
                     ]}
                 />
                 <span>
                     12) Chức vụ (chức danh) hiện tại (Về chính quyền hoặc Đảng, đoàn thể, kể cả chức
                     vụ kiêm nhiệm):{' '}
                 </span>
-                <span>13) Công việc chính được giao: </span>
+                <span>13) Công việc chính được giao: {initialData?.mainJobAssigned}</span>
                 <div className="flex w-full">
-                    <div className="w-[70%]">14) Ngạch công chức (viên chức): </div>
-                    <div className="w-[30%]">, Mã ngạch: </div>
+                    <div className="w-[70%]">
+                        14) Ngạch công chức (viên chức):{' '}
+                        {initialData?.QuaTrinhLuong?.[0]?.ngach?.name || ''}
+                    </div>
+                    <div className="w-[30%]">
+                        , Mã ngạch: {initialData?.QuaTrinhLuong?.[0]?.maNgach || ''}
+                    </div>
                 </div>
                 <div className="flex w-full">
-                    <div className="w-[20%]">Bậc lương: </div>
-                    <div className="w-[20%]">, Hệ số: </div>
-                    <div className="w-[20%]">, Ngày hưởng: </div>
-                    <div className="w-[20%]">, Phụ cấp chức vụ: </div>
-                    <div className="w-[20%]">, Phụ cấp khác: </div>
+                    <div className="w-[20%]">
+                        Bậc lương: {initialData?.QuaTrinhLuong?.[0]?.bacLuong?.name || ''}
+                    </div>
+                    <div className="w-[20%]">
+                        , Hệ số: {initialData?.QuaTrinhLuong?.[0]?.heSo || ''}
+                    </div>
+                    <div className="w-[20%]">
+                        , Ngày hưởng:{' '}
+                        {initialData?.QuaTrinhLuong?.[0]?.tuNgay
+                            ? dayjs(initialData.QuaTrinhLuong[0].tuNgay).format('DD/MM/YYYY')
+                            : ''}
+                    </div>
+                    <div className="w-[20%]">
+                        , Phụ cấp chức vụ: {initialData?.QuaTrinhLuong?.[0]?.phuCapChucVu || ''}
+                    </div>
+                    <div className="w-[20%]">
+                        , Phụ cấp khác: {initialData?.QuaTrinhLuong?.[0]?.phuCapKhac || ''}
+                    </div>
                 </div>
                 <span>
                     15.1- Trình độ giáo dục phổ thông (đã tốt nghiệp lớp mấy/thuộc hệ nào):{' '}
+                    {initialData?.trinhDoHocVan?.name || ''}
                 </span>
                 <span>
                     15.2- Trình độ chuyên môn cao nhất (TSKH, TS, Ths, cử nhân, kỹ sư, cao đẳng,
                     trung cấp, sơ cấp, chuyên ngành):{' '}
                 </span>
                 <div className="flex w-full">
-                    <div className="w-[50%]">15.3- Lý luận chính trị: </div>
-                    <div className="w-[50%]">15.4-Quản lý nhà nước: </div>
+                    <div className="w-[50%]">
+                        15.3- Lý luận chính trị:{' '}
+                        {initialData?.trinhDoLyLuanChinhTri?.[0]?.trinhDo?.name || ''}
+                    </div>
+                    <div className="w-[50%]">
+                        15.4-Quản lý nhà nước:{' '}
+                        {initialData?.trinhDoQuanLyNhaNuoc?.[0]?.trinhDo?.name || ''}
+                    </div>
                 </div>
                 <div className="flex w-full">
-                    <div className="w-[50%]">15.5- Ngoại ngữ: </div>
-                    <div className="w-[50%]">15.6-Tin học: </div>
+                    <div className="w-[50%]">
+                        15.5- Ngoại ngữ:
+                        {initialData?.ngoaiNgu?.length
+                            ? initialData.ngoaiNgu
+                                  .map((item) => item.ngonNgu?.sTen)
+                                  .filter(Boolean)
+                                  .join(', ')
+                            : ''}
+                    </div>
+                    <div className="w-[50%]">
+                        15.6-Tin học:
+                        {initialData?.tinHoc?.length
+                            ? initialData.tinHoc
+                                  .map((item) => item.dM_TrinhDoTinHoc?.sTen)
+                                  .join(', ')
+                            : ''}
+                    </div>
                 </div>
                 <div className="flex w-full">
-                    <div className="w-[60%]">16) Ngày vào Đảng Cộng sản Việt Nam: </div>
-                    <div className="w-[40%]">, Ngày chính thức: </div>
+                    <div className="w-[60%]">
+                        16) Ngày vào Đảng Cộng sản Việt Nam:{' '}
+                        {initialData?.CPVJoinDate
+                            ? dayjs(initialData?.CPVJoinDate).format('DD/MM/YYYY')
+                            : null}
+                    </div>
+                    <div className="w-[40%]">
+                        , Ngày chính thức:{' '}
+                        {initialData?.officialCPVDate
+                            ? dayjs(initialData?.officialCPVDate).format('DD/MM/YYYY')
+                            : null}
+                    </div>
                 </div>
                 <span>
                     17) Ngày tham gia tổ chức chính trị - xã hội (Ngày tham gia tổ chức: Đoàn,
-                    Hội,..... và làm việc gì trong tổ chức đó):{' '}
+                    Hội,..... và làm việc gì trong tổ chức đó):
+                    {initialData?.ToChucXaHoi?.length
+                        ? initialData.ToChucXaHoi.map((item) =>
+                              [
+                                  item.ten?.name,
+                                  item?.congViec,
+                                  dayjs(item?.tuNgay).format('DD/MM/YYYY'),
+                                  dayjs(item?.denNgay).format('DD/MM/YYYY'),
+                              ]
+                                  .filter(Boolean)
+                                  .join(', ')
+                          )
+                              .join('\n')
+                              .split('\n')
+                              .map((line, idx) => (
+                                  <span key={line}>
+                                      - {line}
+                                      <br />
+                                  </span>
+                              ))
+                        : ''}
                 </span>
                 <div className="flex w-full">
-                    <div className="w-[33.3%]">18) Ngày nhập ngũ: </div>
-                    <div className="w-[33.3%]">Ngày xuất ngũ: </div>
-                    <div className="w-[33.3%]">Quân hàm cao nhất: </div>
+                    <div className="w-[33.3%]">
+                        18) Ngày nhập ngũ:{' '}
+                        {initialData?.enlistmentDate
+                            ? dayjs(initialData?.enlistmentDate).format('DD/MM/YYYY')
+                            : null}
+                    </div>
+                    <div className="w-[33.3%]">
+                        Ngày xuất ngũ:{' '}
+                        {initialData?.dischargeDate
+                            ? dayjs(initialData?.dischargeDate).format('DD/MM/YYYY')
+                            : null}
+                    </div>
+                    <div className="w-[33.3%]">
+                        Quân hàm cao nhất: {initialData?.capBac?.[0]?.capBac?.sTen}{' '}
+                    </div>
                 </div>
-                <span>19) Danh hiệu được phong tặng cao nhất: </span>
-                <span>20) Sở trường công tác: </span>
+                <span>
+                    19) Danh hiệu được phong tặng cao nhất: {initialData?.danhHieu?.[0]?.ten}
+                </span>
+                <span>20) Sở trường công tác: {initialData?.soTruong}</span>
                 <div className="flex w-full">
-                    <div className="w-[50%]">21) Khen thưởng: </div>
-                    <div className="w-[50%]">22) Kỷ luật: </div>
+                    <div className="w-[50%]">
+                        21) Khen thưởng:{' '}
+                        {initialData?.khenThuong?.[0]
+                            ? `${initialData.khenThuong[0].hinhThucKhenThuong || ''} ${
+                                  initialData.khenThuong[0].ngayNhanQuyetDinh
+                                      ? `(${dayjs(initialData.khenThuong[0].ngayNhanQuyetDinh).format('DD/MM/YYYY')})`
+                                      : null
+                              }`
+                            : ''}
+                    </div>
+                    <div className="w-[50%]">
+                        22) Kỷ luật:{' '}
+                        {initialData?.kyLuat?.[0]
+                            ? `${initialData.kyLuat[0].hinhThucKyLuat || ''} ${
+                                  initialData.kyLuat[0].ngayNhanQuyetDinh
+                                      ? `(${dayjs(initialData.kyLuat[0].ngayNhanQuyetDinh).format('DD/MM/YYYY')})`
+                                      : null
+                              }`
+                            : ''}
+                    </div>
                 </div>
                 <div className="flex w-full">
-                    <div className="w-[25%]">23) Tình trạng sức khoẻ: </div>
-                    <div className="w-[25%]">, Chiều cao: </div>
-                    <div className="w-[25%]">, Cân nặng: </div>
-                    <div className="w-[25%]">, Nhóm máu: </div>
+                    <div className="w-[25%]">
+                        23) Tình trạng sức khoẻ: {initialData?.sucKhoe?.name}
+                    </div>
+                    <div className="w-[25%]">, Chiều cao: {initialData?.chieuCao} </div>
+                    <div className="w-[25%]">, Cân nặng: {initialData?.canNang} </div>
+                    <div className="w-[25%]">, Nhóm máu: {initialData?.nhomMau?.name}</div>
                 </div>
                 <div className="flex w-full">
-                    <div className="w-[50%]">24) Là thương binh hạng: </div>
-                    <div className="w-[50%]">, Là con gia đình chính sách: </div>
+                    <div className="w-[50%]">
+                        24) Là thương binh hạng: {initialData?.thuongBinh}
+                    </div>
+                    <div className="w-[50%]">
+                        , Là con gia đình chính sách:{' '}
+                        {initialData?.doiTuongChinhSach.length
+                            ? initialData.doiTuongChinhSach
+                                  .map((item) => item.tenDoiTuong)
+                                  .filter(Boolean)
+                                  .join(', ')
+                            : ''}
+                    </div>
                 </div>
                 <div className="flex w-full">
-                    <div className="w-[33.3%]">25) Số chứng minh nhân dân: </div>
-                    <div className="w-[33.3%]">Ngày cấp: </div>
-                    <div className="w-[33.3%]">26) Số sổ BHXH: </div>
+                    <div className="w-[33.3%]">
+                        25) Số chứng minh nhân dân: {initialData?.idCardNumber}{' '}
+                    </div>
+                    <div className="w-[33.3%]">
+                        Ngày cấp:{' '}
+                        {initialData?.idCardDate
+                            ? dayjs(initialData?.idCardNumber).format('DD/MM/YYYY')
+                            : null}
+                    </div>
+                    <div className="w-[33.3%]">
+                        26) Số sổ BHXH: {initialData?.healthInsuranceNumber}
+                    </div>
                 </div>
                 <span>
                     27) Đào tạo, bồi dưỡng về chuyên môn, nghiệp vụ, lý luận chính trị, ngoại ngữ,
@@ -321,20 +564,38 @@ const ModalLyLichCanBo = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filledRows2.map((item, i) => (
-                            <tr key={`${item.duration}-${i}`}>
+                        {initialData?.quaTrinhCongTac.map((item, index) => (
+                            <tr key={item.id}>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {item.duration || ''}
+                                    {item.tuThangNam
+                                        ? dayjs(item.tuThangNam).format('MM/YYYY')
+                                        : '....../......'}{' '}
+                                    -{' '}
+                                    {item.denThangNam
+                                        ? dayjs(item.denThangNam).format('MM/YYYY')
+                                        : '....../......'}
                                 </td>
+
                                 <td className="border border-black p-1 h-[32px]">
-                                    {item.detail || ''}
+                                    {[
+                                        item.donVi,
+                                        item.chucDanh,
+                                        item.chucVuDangDoan,
+                                        item.soQuyetDinh,
+                                        item.ngayNhanQuyetDinh
+                                            ? dayjs(item.ngayNhanQuyetDinh).format('DD/MM/YYYY')
+                                            : null,
+                                        item.chucVu?.sTen,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(', ')}
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
                 <span>29) Đặc điểm lịch sử bản thân:</span>
-                <span>
+                {/* <span>
                     - Khai rõ: bị bắt, bị tù (từ ngày tháng năm nào đến ngày tháng năm nào, ở đâu),
                     đã khai báo cho ai, những vấn đề gì? Bản thân có làm việc trong chế độ cũ (cơ
                     quan, đơn vị nào, địa điểm, chức danh, chức vụ, thời gian làm việc ....)
@@ -356,12 +617,16 @@ const ModalLyLichCanBo = () => {
                 <span>
                     - Có thân nhân (Cha, Mẹ, Vợ, Chồng, con, anh chị em ruột) ở nước ngoài (làm gì,
                     địa chỉ ........)?
-                </span>
-                <div className="space-y-2">
-                    <div className="h-6 border-b border-dotted border-black w-full" />
-                    <div className="h-6 border-b border-dotted border-black w-full" />
-                    <div className="h-6 border-b border-dotted border-black w-full" />
-                </div>
+                </span> */}
+                {initialData?.lichSuBanThan ? (
+                    initialData.lichSuBanThan
+                ) : (
+                    <div className="space-y-2">
+                        <div className="h-6 border-b border-dotted border-black w-full" />
+                        <div className="h-6 border-b border-dotted border-black w-full" />
+                        <div className="h-6 border-b border-dotted border-black w-full" />
+                    </div>
+                )}
                 <span>30) Quan hệ gia đình</span>
                 <span>a) Về bản thân: Cha, Mẹ, Vợ (hoặc chồng), các con, anh chị em ruột</span>
                 <table className="min-w-full border border-gray-300">
@@ -384,19 +649,29 @@ const ModalLyLichCanBo = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filledRows3.map((row, index) => (
-                            <tr key={`${row.fullName}-${index}`}>
+                        {familyRelatives.map((relative, index) => (
+                            <tr key={relative.id}>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.relationship || ''}
+                                    {getRelationshipText(
+                                        relative.type,
+                                        initialData?.gender?.sTen ?? undefined
+                                    )}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.fullName || ''}
+                                    {relative.name || ''}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.yearOfBirth || ''}
+                                    {relative.birthYear || ''}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.details || ''}
+                                    {[
+                                        relative.queQuan,
+                                        relative.job,
+                                        relative.noiOHienTai,
+                                        relative.information,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(', ')}
                                 </td>
                             </tr>
                         ))}
@@ -423,19 +698,29 @@ const ModalLyLichCanBo = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filledRows3.map((row, index) => (
-                            <tr key={`${row.fullName}-${index}`}>
+                        {spouseRelatives.map((relative, index) => (
+                            <tr key={relative.id}>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.relationship || ''}
+                                    {getRelationshipText(
+                                        relative.type,
+                                        initialData?.gender?.sTen ?? undefined
+                                    )}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.fullName || ''}
+                                    {relative.name || ''}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.yearOfBirth || ''}
+                                    {relative.birthYear || ''}
                                 </td>
                                 <td className="border border-black p-1 h-[32px]">
-                                    {row.details || ''}
+                                    {[
+                                        relative.queQuan,
+                                        relative.job,
+                                        relative.noiOHienTai,
+                                        relative.information,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(', ')}
                                 </td>
                             </tr>
                         ))}
@@ -444,15 +729,44 @@ const ModalLyLichCanBo = () => {
                 <span>31) Diễn biến quá trình lương của cán bộ, công chức</span>
                 <table className="min-w-full border border-black">
                     <tbody>
-                        {['Tháng/năm', 'Mã ngạch/bậc', 'Hệ số lương'].map((header) => (
+                        {['Tháng/năm', 'Mã ngạch/bậc', 'Hệ số lương'].map((header, headerIndex) => (
                             <tr key={header}>
                                 <td className="border border-black p-2 font-medium w-1/4">
                                     {header}
                                 </td>
                                 {[...Array(5)].map((_, cellIndex) => {
                                     const cellKey = `${header.replace(/\s+/g, '-')}-cell-${cellIndex}`
+                                    const salaryData = initialData?.QuaTrinhLuong?.[cellIndex]
+
+                                    let cellContent = ''
+                                    if (salaryData) {
+                                        switch (headerIndex) {
+                                            case 0: // Tháng/năm
+                                                cellContent = salaryData.tuNgay
+                                                    ? dayjs(salaryData.tuNgay).format('MM/YYYY')
+                                                    : ''
+                                                break
+                                            case 1: // Mã ngạch/bậc
+                                                cellContent = [
+                                                    salaryData.maNgach,
+                                                    salaryData.bacLuong?.name,
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join('/')
+                                                break
+                                            case 2: // Hệ số lương
+                                                cellContent = salaryData.heSo || ''
+                                                break
+                                        }
+                                    }
+
                                     return (
-                                        <td key={cellKey} className="border border-black p-2 h-8" />
+                                        <td
+                                            key={cellKey}
+                                            className="border border-black p-2 h-8 text-center"
+                                        >
+                                            {cellContent}
+                                        </td>
                                     )
                                 })}
                             </tr>
