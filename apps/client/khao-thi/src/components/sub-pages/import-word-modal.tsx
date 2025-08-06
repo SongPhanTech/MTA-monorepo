@@ -162,7 +162,11 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                         zip,
                         relMap
                     )
-                    question.content = contentResult.text
+                    let processedContent = contentResult.text
+                    if (processedContent.startsWith('Câu hỏi:')) {
+                        processedContent = processedContent.substring('Câu hỏi:'.length).trim()
+                    }
+                    question.content = processedContent
                     question.contentImagesRaw = contentResult.images
                     question.point = extractPointFromCell(
                         contentCells[contentCells.length - 1],

@@ -39,6 +39,7 @@ export default function TestStructureRule() {
         visible: false,
         examBankId: '',
         questionBankId: '',
+        examCode: '',
     })
     const [filters, setFilters] = useState<FilterProps>({
         questionType: undefined,
@@ -59,11 +60,12 @@ export default function TestStructureRule() {
         tag: PutExamBank.name,
     })
 
-    const openExamBankModal = (examBankId: string, questionBankId: string) => {
+    const openExamBankModal = (examBankId: string, questionBankId: string, examCode: string) => {
         setExamBankModal({
             visible: true,
             examBankId,
             questionBankId,
+            examCode,
         })
     }
 
@@ -72,6 +74,7 @@ export default function TestStructureRule() {
             visible: false,
             examBankId: '',
             questionBankId: '',
+            examCode: '',
         })
     }
 
@@ -79,7 +82,11 @@ export default function TestStructureRule() {
         {
             where: { id: examId },
             include: {
-                questionBank: true,
+                questionBank: {
+                    include: {
+                        subjectVersion: true,
+                    },
+                },
             },
         },
         { enabled: !!examId }
@@ -161,7 +168,7 @@ export default function TestStructureRule() {
         { enabled: !!examId }
     )
 
-    const { data: countExam } = useCountExamBank(
+    const { data: countExam, refetch: refetchCount } = useCountExamBank(
         {
             where: {
                 examId,
@@ -205,7 +212,10 @@ export default function TestStructureRule() {
 
     const { onOpen: onOpenModalSinhDeThiTuDong } = useDisclosure<string>({
         tag: ModalSinhDeThiTuDong.name,
-        onClose: refetch,
+        onClose: () => {
+            refetch()
+            refetchCount()
+        },
     })
 
     return (
@@ -429,7 +439,8 @@ export default function TestStructureRule() {
                                                     onClick={() =>
                                                         openExamBankModal(
                                                             record.id,
-                                                            initialValue?.questionBankId ?? ''
+                                                            initialValue?.questionBankId ?? '',
+                                                            record?.examCode ?? ''
                                                         )
                                                     }
                                                 />
@@ -474,6 +485,8 @@ export default function TestStructureRule() {
                 onCancel={closeExamBankModal}
                 examBankId={examBankModal.examBankId}
                 questionBankId={examBankModal.questionBankId}
+                subjectVersionName={initialValue?.questionBank?.subjectVersion?.name || ''}
+                examCode={examBankModal.examCode}
             />
         </div>
     )
