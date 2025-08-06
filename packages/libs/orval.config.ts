@@ -73,7 +73,7 @@ export default defineConfig({
             client: 'react-query',
             httpClient: 'fetch',
             mode: 'single',
-            target: './src/api/training.ts',
+            target: './src/api/exam.ts',
             schemas: './src/api/schemas',
             biome: true,
             packageJson: 'fake',

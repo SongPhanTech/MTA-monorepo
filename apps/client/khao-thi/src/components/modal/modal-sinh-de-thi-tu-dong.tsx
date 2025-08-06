@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useGenExamBank } from '@workspace/libs/api/training'
+import { useGenExamBank } from '@workspace/libs/api/exam'
 import { Col, Form, InputNumber, message, Radio } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
