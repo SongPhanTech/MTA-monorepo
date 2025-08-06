@@ -369,6 +369,7 @@ const PutCurriculumVersion = () => {
                                             form={form}
                                             name="diplomaTypeId"
                                             label="Bậc đào tạo"
+                                            required
                                         >
                                             <Select
                                                 placeholder="Chọn bậc đào tạo"
