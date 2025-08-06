@@ -171,7 +171,7 @@ const PutOpenSubjectClassModal = () => {
         useFindManyTrainingLocation()
 
     const { data: schoolYears = [] } = useFindManySchoolYear({
-        include: { semesters: { orderBy: { createdAt: 'asc' } } },
+        include: { semesters: { orderBy: { createdAt: 'desc' } } },
         orderBy: { createdAt: 'asc' },
     })
 

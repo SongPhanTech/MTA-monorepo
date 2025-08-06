@@ -118,7 +118,7 @@ function TabDotKhaoSat() {
         hideSpinner()
     }
 
-    const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'asc' } })
+    const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
     const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
         orderBy: { createdAt: 'asc' },
     })
