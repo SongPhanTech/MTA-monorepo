@@ -10,6 +10,7 @@ import {
     useUpdateScholarshipAward,
 } from '@workspace/db/hooks'
 import { Col, Form, InputNumber, message } from 'antd'
+import { useWatch } from 'antd/es/form/Form'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -34,6 +35,9 @@ const PutScholarshipAward = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
+
+    const selectedStudentId = useWatch('studentId', form)
+    const selectedScholarshipId = useWatch('scholarshipId', form)
 
     const { mutateAsync: createScholarshipAward } = useCreateScholarshipAward()
     const { mutateAsync: updateScholarshipAward } = useUpdateScholarshipAward()
@@ -97,6 +101,7 @@ const PutScholarshipAward = () => {
         include: {
             userProfile: true,
             studentSemesterResult: true,
+            fixedClass: true,
         },
         orderBy: {
             userProfile: {
@@ -105,13 +110,12 @@ const PutScholarshipAward = () => {
         },
     })
 
+    const selectedStudent = studentData.find((student) => student.id === selectedStudentId)
+    const trainingCourseId = selectedStudent?.fixedClass?.trainingCourseId
+
     const { data: scholarshipData = [] } = useFindManyScholarship({
         where: {
-            awards: {
-                some: {
-                    semesterId: input?.semesterId,
-                },
-            },
+            trainingCourseId,
         },
         include: {
             trainingCourse: true,
@@ -131,16 +135,15 @@ const PutScholarshipAward = () => {
     }, [initialValue])
 
     useEffect(() => {
-        const currentScholarshipId = form.getFieldValue('scholarshipId')
-        if (currentScholarshipId) {
-            const selectedScholarship = scholarshipData.find((s) => s.id === currentScholarshipId)
+        if (selectedScholarshipId) {
+            const selectedScholarship = scholarshipData.find((s) => s.id === selectedScholarshipId)
             if (selectedScholarship) {
                 const amount =
                     Number(selectedScholarship.baseAmount) * selectedScholarship.multiplier
                 form.setFieldValue('amount', amount)
             }
         }
-    }, [form, scholarshipData])
+    }, [selectedScholarshipId, form, scholarshipData])
 
     return (
         <PutFormModal
@@ -165,14 +168,20 @@ const PutScholarshipAward = () => {
                             }
                         })}
                         disabled={!!input?.id}
+                        onChange={() => {
+                            form.setFieldValue('scholarshipId', undefined)
+                            form.setFieldValue('amount', undefined)
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="scholarshipId" label="Sinh viên" required>
+                <FormItem form={form} name="scholarshipId" label="Học bổng" required>
                     <Select
                         maxTagCount={'responsive'}
-                        placeholder="Chọn sinh viên"
+                        placeholder={
+                            selectedStudentId ? 'Chọn học bổng' : 'Vui lòng chọn sinh viên trước'
+                        }
                         options={scholarshipData.map((i) => {
                             return {
                                 value: i.id,
@@ -188,17 +197,13 @@ const PutScholarshipAward = () => {
                                 )
                             }
                         }}
+                        disabled={!selectedStudentId}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="amount" label="Số tiền học bổng">
-                    <InputNumber
-                        placeholder="Nhập số tiền học bổng"
-                        className="w-full"
-                        step={1}
-                        // disabled
-                    />
+                    <InputNumber placeholder="Nhập số tiền học bổng" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
