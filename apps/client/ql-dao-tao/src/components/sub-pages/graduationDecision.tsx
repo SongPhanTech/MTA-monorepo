@@ -122,6 +122,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             },
                         },
                         include: {
+                            diplomaType: true,
                             application: true,
                             student: {
                                 include: {
@@ -257,6 +258,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 })),
                                 width: 100,
                                 render: (_, record) =>
+                                    record?.diplomaType?.name ||
                                     record?.student?.curriculumVersion?.diplomaType?.name,
                             },
                             {
