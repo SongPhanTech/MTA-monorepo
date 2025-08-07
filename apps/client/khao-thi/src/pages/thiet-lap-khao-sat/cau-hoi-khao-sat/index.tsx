@@ -34,7 +34,7 @@ function Page() {
         surveyId: undefined,
     })
 
-    const commonWhere = useMemo(
+    const where = useMemo(
         () => ({
             ...(filters.code && filters.code !== ''
                 ? {
@@ -67,7 +67,7 @@ function Page() {
     )
 
     const { data = [], refetch } = useFindManySurveyQuestion({
-        where: commonWhere,
+        where,
         include: { survey: true },
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
@@ -76,7 +76,7 @@ function Page() {
 
     const { data: count } = useCountSurveyQuestion({
         where: {
-            ...commonWhere,
+            ...where,
             deletedAt: null,
         },
     })

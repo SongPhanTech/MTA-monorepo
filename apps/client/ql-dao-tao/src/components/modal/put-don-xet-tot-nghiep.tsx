@@ -55,6 +55,15 @@ const PutGraduationApplication = () => {
                       ],
                   }
                 : {}),
+            ...(input?.id
+                ? {}
+                : {
+                      graduationApplications: {
+                          none: {
+                              sessionId: input?.graduationSessionId,
+                          },
+                      },
+                  }),
         },
         include: {
             userProfile: true,

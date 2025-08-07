@@ -129,7 +129,7 @@ const PutAcademicWarning = () => {
                         options={studentData.map((i) => {
                             return {
                                 value: i.id,
-                                label: [i.userProfile?.code, i.userProfile?.fullname]
+                                label: [i.code, i.userProfile?.fullname]
                                     .filter(Boolean)
                                     .join(' - '),
                             }
