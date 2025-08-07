@@ -202,7 +202,7 @@ const PutGraduationDecision = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="diplomaNumber" label="Số hiệu văn bằng">
-                    <InputNumber placeholder="Nhập số hiệu" step={1} className="w-full" />
+                    <Input placeholder="Nhập số hiệu" step={1} className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>

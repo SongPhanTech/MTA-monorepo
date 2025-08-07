@@ -4615,7 +4615,7 @@ model GraduationDecision {
   finalRankingId   String
   diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
   diplomaTypeId    String?
-  diplomaNumber    Int                          @unique() @default(autoincrement())
+  diplomaNumber    String?                      @unique()
   diplomaIssueDate DateTime?
 
   @@schema("ql-dao-tao")
