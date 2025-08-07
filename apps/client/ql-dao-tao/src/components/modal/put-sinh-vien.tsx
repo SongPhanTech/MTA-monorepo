@@ -124,14 +124,7 @@ const PutStudentModal = () => {
     const { mutateAsync: createStudent } = useCreateStudent()
     const { mutateAsync: updateStudent } = useUpdateStudent()
     const { data = [] } = useFindManyUserProfile({
-        where: {
-            bLaHocVien: true,
-            educationAndTraining: {
-                some: {
-                    deletedAt: null, // Chỉ lấy Student chưa bị xóa mềm
-                },
-            },
-        },
+        where: { bLaHocVien: true },
         select: {
             firstName: true,
             lastName: true,

@@ -85,17 +85,17 @@ const PutTrainingFormModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa hình thức huấn luyên' : 'Thêm mới thời gian đào tạog'}
+            title={id ? 'Chỉnh sửa hình thức đào tạo' : 'Thêm mới hình thức đào tạo'}
             className="w-[45vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name="code" label="Mã hình thức huấn luyên" required>
-                    <Input placeholder="Nhập mã hình thức huấn luyên" />
+                <FormItem form={form} name="code" label="Mã hình thức đào tạo" required>
+                    <Input placeholder="Nhập mã hình thức đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="name" label="Tên hình thức huấn luyên" required>
-                    <Input placeholder="Nhập tên hình thức huấn luyên" />
+                <FormItem form={form} name="name" label="Tên hình thức đào tạo" required>
+                    <Input placeholder="Nhập tên hình thức đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

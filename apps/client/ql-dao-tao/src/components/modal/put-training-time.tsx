@@ -84,7 +84,7 @@ const PutTrainingTimeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa thời gian đào tạo' : 'Thêm mới thời gian đào tạog'}
+            title={id ? 'Chỉnh sửa thời gian đào tạo' : 'Thêm mới thời gian đào tạo'}
             className="w-[45vw]"
         >
             <Col span={24}>

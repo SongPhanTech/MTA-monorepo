@@ -226,15 +226,6 @@ model DM_QuocGia extends CoreBase {
 }
 
 model DM_Tinh extends CoreBase {
-  sDM_QuocGiaId        String? @db.Uuid
-  iDM_KhuVucDiaLy_Id   Int?
-  iDM_DonViHanhChinhId Int?
-
-  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
-  @@schema("mta")
-}
-
-model DM_Tinh_New extends CoreBase {
   sDM_QuocGiaId               String?       @db.Uuid
   iDM_KhuVucDiaLy_Id          Int?
   iDM_DonViHanhChinhId        Int?
@@ -243,6 +234,15 @@ model DM_Tinh_New extends CoreBase {
   userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
   userProfileCurrentAddress   UserProfile[] @relation("ProvinceCurrentAddress")
+
+  @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
+  @@schema("mta")
+}
+
+model DM_Tinh_New extends CoreBase {
+  sDM_QuocGiaId        String? @db.Uuid
+  iDM_KhuVucDiaLy_Id   Int?
+  iDM_DonViHanhChinhId Int?
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_New_iDM_QuocGiaId")
   @@schema("mta")
@@ -258,23 +258,23 @@ model DM_QuanHuyen extends CoreBase {
 }
 
 model DM_XaPhuong extends CoreBase {
-  sDM_QuanHuyen_Ma     String?
-  sDM_TinhId           String? @db.Uuid
-  sDM_QuanHuyenId      String? @db.Uuid
-  iDM_DonViHanhChinhId Int?
-
-  @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
-  @@schema("mta")
-}
-
-model DM_XaPhuong_New extends CoreBase {
-  sDM_TinhId_New              String?       @db.Uuid
+  sDM_QuanHuyen_Ma            String?
+  sDM_TinhId                  String?       @db.Uuid
+  sDM_QuanHuyenId             String?       @db.Uuid
   iDM_DonViHanhChinhId        Int?
 
   userProfileHometown         UserProfile[] @relation("CommuneHometown")
   userProfilePlaceOfBirth     UserProfile[] @relation("CommunePlaceOfBirth")
   userProfilePermanentAddress UserProfile[] @relation("CommunePermanentAddress")
   userProfileCurrentAddress   UserProfile[] @relation("CommuneCurrentAddress")
+
+  @@index([sDM_QuanHuyenId], map: "IX_DM_XaPhuong_iDM_QuanHuyenId")
+  @@schema("mta")
+}
+
+model DM_XaPhuong_New extends CoreBase {
+  sDM_TinhId_New       String? @db.Uuid
+  iDM_DonViHanhChinhId Int?
 
   @@index([sDM_TinhId_New])
   @@schema("mta")
