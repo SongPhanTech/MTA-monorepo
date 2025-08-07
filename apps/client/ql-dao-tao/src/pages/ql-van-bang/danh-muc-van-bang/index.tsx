@@ -191,13 +191,21 @@ export default function DiplomaType() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={() => onOpenPutDiplomaType(record?.id)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpenPutDiplomaType(record?.id)
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteDiplomaType(record?.id),
+                                                        onConfirm: (e) => {
+                                                            handleDeleteDiplomaType(record?.id)
+                                                            e?.stopPropagation()
+                                                        },
+                                                    }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
                                                     }}
                                                 />
                                             </Row>

@@ -69,10 +69,18 @@ export default function StudentDetailPage() {
                 <Row gutter={16}>
                     <Col span={24} className="mb-6">
                         <div className="text-lg font-semibold">
-                            {lecturerData?.code} -{' '}
-                            {lecturerData?.userProfile?.fullname
-                                ? lecturerData?.userProfile?.fullname
-                                : `${lecturerData?.userProfile?.firstName} ${lecturerData?.userProfile?.lastName}`}{' '}
+                            {[
+                                lecturerData?.code,
+                                lecturerData?.userProfile?.fullname ??
+                                    [
+                                        lecturerData?.userProfile?.firstName,
+                                        lecturerData?.userProfile?.lastName,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' '),
+                            ]
+                                .filter(Boolean)
+                                .join(' - ')}
                         </div>
                     </Col>
                     <Col span={24} className="mb-6">
