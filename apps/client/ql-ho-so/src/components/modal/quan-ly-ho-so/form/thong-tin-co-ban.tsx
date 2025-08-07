@@ -2,16 +2,28 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import type { DomProps } from '@constants/type'
+import { buildOrgTree } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import {
     useFindManyDM_DanToc,
+    useFindManyDM_DonVi,
     useFindManyDM_GioiTinh,
     useFindManyDM_NhomMau,
     useFindManyDM_QuocGia,
     useFindManyDM_TonGiao,
     useFindManyDM_TrinhDoHocVan,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, InputNumber, Row, Typography } from 'antd'
+import {
+    Checkbox,
+    Col,
+    Collapse,
+    Form,
+    Input,
+    InputNumber,
+    Row,
+    TreeSelect,
+    Typography,
+} from 'antd'
 import dayjs from 'dayjs'
 
 dayjs.locale('vi')
@@ -27,6 +39,8 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: genderData = [] } = useFindManyDM_GioiTinh()
     const { data: bloodType = [] } = useFindManyDM_NhomMau()
     const { data: trinhDoHocVan = [] } = useFindManyDM_TrinhDoHocVan()
+    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(organizations)
 
     const renderContent = () => {
         return (
@@ -200,7 +214,13 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="dateOfBirth" label="Ngày sinh" className="mb-0">
+                        <FormItem
+                            form={form}
+                            name="dateOfBirth"
+                            label="Ngày sinh"
+                            className="mb-0"
+                            required
+                        >
                             <DatePicker
                                 format={{
                                     format: 'DD/MM/YYYY',
@@ -257,6 +277,51 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                     }
                                 })}
                             />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            required
+                            name="sDM_DonViId"
+                            label="Đơn vị quản lý"
+                            className="mb-2"
+                        >
+                            <TreeSelect
+                                allowClear
+                                showSearch
+                                placeholder="Chọn đơn vị quản lý"
+                                treeDefaultExpandAll
+                                treeData={treeData}
+                                filterTreeNode={(input, node) =>
+                                    (node.label as string)
+                                        .toLowerCase()
+                                        .includes(input?.toLowerCase())
+                                }
+                            />
+                        </FormItem>
+                    </Col>
+
+                    <Col span={8}>
+                        <FormItem
+                            form={form}
+                            name="bLaHocVien"
+                            label="Đối tượng"
+                            valuePropName="checked"
+                            className="mb-0"
+                        >
+                            <Checkbox>Bạn là học viên</Checkbox>
+                        </FormItem>
+                    </Col>
+                    <Col span={4}>
+                        <FormItem
+                            form={form}
+                            name="bLaCanBoNhanVien"
+                            label=""
+                            valuePropName="checked"
+                            className="mb-0"
+                        >
+                            <Checkbox>Bạn là giảng viên</Checkbox>
                         </FormItem>
                     </Col>
                 </Row>
