@@ -913,7 +913,7 @@ export default function UpdateUserPage() {
         <Form form={form} onFinish={handleSubmit}>
             <div>
                 <Flex justify="space-between" className="p-4">
-                    <div className="text-xl font-semibold">Thêm hồ sơ</div>
+                    <div className="text-xl font-semibold">Cập nhật hồ sơ</div>
                     <Flex justify="end">
                         <Button
                             className="mr-3"
