@@ -26,7 +26,7 @@ export default function DiplomaType() {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        englistName: '',
+        englishName: '',
     })
 
     const { data = [], refetch } = useFindManyDiplomaType({
@@ -47,10 +47,10 @@ export default function DiplomaType() {
                       },
                   }
                 : {}),
-            ...(filters.englistName && filters.englistName !== ''
+            ...(filters.englishName && filters.englishName !== ''
                 ? {
-                      englistName: {
-                          contains: filters.englistName,
+                      englishName: {
+                          contains: filters.englishName,
                           mode: 'insensitive',
                       },
                   }
@@ -78,10 +78,10 @@ export default function DiplomaType() {
                       },
                   }
                 : {}),
-            ...(filters.englistName && filters.englistName !== ''
+            ...(filters.englishName && filters.englishName !== ''
                 ? {
-                      englistName: {
-                          contains: filters.englistName,
+                      englishName: {
+                          contains: filters.englishName,
                           mode: 'insensitive',
                       },
                   }

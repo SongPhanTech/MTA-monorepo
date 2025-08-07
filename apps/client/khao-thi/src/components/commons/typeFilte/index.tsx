@@ -101,7 +101,7 @@ export type FilterProps = {
     startDate?: Date[]
     examDate?: Date[]
     endDate?: Date[]
-    englistName?: string | ''
+    englishName?: string | ''
     subjectVersionId?: string[]
     content?: string | ''
     questionType?: QuestionType[]
