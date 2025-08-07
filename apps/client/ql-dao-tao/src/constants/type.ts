@@ -100,7 +100,7 @@ export type FilterProps = {
     startDate?: Date[]
     examDate?: Date[]
     endDate?: Date[]
-    englistName?: string | ''
+    englishName?: string | ''
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]

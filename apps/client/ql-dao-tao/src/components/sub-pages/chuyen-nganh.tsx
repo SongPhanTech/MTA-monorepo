@@ -201,7 +201,7 @@ export default function MajorInforList({ infor }: any) {
                             },
                             {
                                 title: 'Tên tiếng anh',
-                                dataIndex: 'englistName',
+                                dataIndex: 'englishName',
                                 align: 'center',
                                 width: 120,
                             },
