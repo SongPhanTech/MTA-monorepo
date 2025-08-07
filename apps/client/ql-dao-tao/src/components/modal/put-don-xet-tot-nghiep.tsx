@@ -43,7 +43,7 @@ const PutGraduationApplication = () => {
 
     const { data: students, refetch } = useFindManyStudent({
         where: {
-            ...(searchText && searchText !== ''
+            ...(searchText
                 ? {
                       OR: [
                           { code: { contains: searchText, mode: 'insensitive' } },
@@ -171,7 +171,7 @@ const PutGraduationApplication = () => {
                         mode={input?.id ? undefined : 'multiple'}
                         placeholder={input?.id ? 'Chọn sinh viên' : 'Chọn nhiều sinh viên'}
                         options={students?.map((item) => ({
-                            label: [item.userProfile.fullname, item.userProfile.code]
+                            label: [item.code, item.userProfile.fullname]
                                 .filter(Boolean)
                                 .join(' - '),
                             value: item.id,

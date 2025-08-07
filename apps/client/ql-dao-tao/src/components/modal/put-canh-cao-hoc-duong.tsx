@@ -34,7 +34,6 @@ const PutDisciplinaryWarningReason = () => {
         try {
             showSpinner()
             const data = {
-                code: output.code,
                 name: output.name,
                 severityLevel: output.severityLevel,
                 description: output.description,
@@ -95,11 +94,6 @@ const PutDisciplinaryWarningReason = () => {
             title={id ? 'Chỉnh sửa cảnh cáo học đường' : 'Thêm mới cảnh cáo học đường'}
             className="w-[30vw]"
         >
-            <Col span={24}>
-                <FormItem form={form} name="code" label="Mã cảnh cáo học đường" required>
-                    <Input placeholder="Nhập mã cảnh cáo học đường" />
-                </FormItem>
-            </Col>
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên cảnh cáo học đường" required>
                     <Input placeholder="Nhập tên cảnh cáo học đường" />

@@ -119,9 +119,7 @@ const PutGraduationDecision = () => {
                     some: {
                         fixedClasses: {
                             some: {
-                                trainingCourse: {
-                                    id: input?.trainingCourseId,
-                                },
+                                trainingCourseId: input?.trainingCourseId,
                             },
                         },
                     },
@@ -145,7 +143,7 @@ const PutGraduationDecision = () => {
                     <Select
                         placeholder={'Chọn sinh viên'}
                         options={students?.map((item) => ({
-                            label: [item.userProfile.fullname, item.userProfile.code]
+                            label: [item.code, item.userProfile.fullname]
                                 .filter(Boolean)
                                 .join(' - '),
                             value: item.id,

@@ -22,21 +22,12 @@ export default function DisciplinaryWarningReason() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        code: '',
         name: '',
         severityLevel: undefined,
     })
 
-    const { data = [], refetch } = useFindManyDisciplinaryWarningReason({
+    const { data = [] } = useFindManyDisciplinaryWarningReason({
         where: {
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -63,14 +54,6 @@ export default function DisciplinaryWarningReason() {
 
     const { data: count } = useCountDisciplinaryWarningReason({
         where: {
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -79,6 +62,7 @@ export default function DisciplinaryWarningReason() {
                       },
                   }
                 : {}),
+            deletedAt: null,
         },
     })
 
@@ -134,14 +118,6 @@ export default function DisciplinaryWarningReason() {
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã tiêu chí',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 150,
-                                fixed: 'left',
-                                type: 'input',
                             },
                             {
                                 title: 'Tên',

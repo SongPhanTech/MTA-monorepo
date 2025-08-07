@@ -28,7 +28,6 @@ export default function AcademicWarningRule() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        code: '',
         trainingObjectId: null,
         trainingCourseId: null,
         field: undefined,
@@ -59,11 +58,6 @@ export default function AcademicWarningRule() {
                           : {}),
                       academicWarningRule: {
                           some: {
-                              ...(filters.code && filters.code !== ''
-                                  ? {
-                                        code: { contains: filters.code, mode: 'insensitive' },
-                                    }
-                                  : {}),
                               ...(filters.field
                                   ? Array.isArray(filters.field)
                                       ? {
@@ -219,13 +213,6 @@ export default function AcademicWarningRule() {
                         defaultExpandAll
                         currentPage={currentPage}
                         columns={[
-                            {
-                                title: 'Mã tiêu chí',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 150,
-                                fixed: 'left',
-                            },
                             {
                                 title: 'Trường được đánh giá',
                                 dataIndex: 'field',

@@ -29,7 +29,6 @@ export default function AcademicActionConfig() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        code: '',
         name: '',
         trainingCourseId: null,
         actionTaken: undefined,
@@ -41,14 +40,6 @@ export default function AcademicActionConfig() {
         where: {
             academicActionConfig: {
                 some: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
                     ...(filters.name && filters.name !== ''
                         ? {
                               name: {
@@ -81,14 +72,6 @@ export default function AcademicActionConfig() {
         include: {
             academicActionConfig: {
                 where: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
                     ...(filters.name && filters.name !== ''
                         ? {
                               name: {
@@ -129,14 +112,6 @@ export default function AcademicActionConfig() {
         where: {
             academicActionConfig: {
                 some: {
-                    ...(filters.code && filters.code !== ''
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
                     ...(filters.name && filters.name !== ''
                         ? {
                               name: {
@@ -242,14 +217,6 @@ export default function AcademicActionConfig() {
                         setFilters={setFilters}
                         currentPage={currentPage}
                         columns={[
-                            {
-                                title: 'Mã cấu hình',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 150,
-                                fixed: 'left',
-                                type: 'input',
-                            },
                             {
                                 title: 'Tên cấu hình',
                                 dataIndex: 'name',

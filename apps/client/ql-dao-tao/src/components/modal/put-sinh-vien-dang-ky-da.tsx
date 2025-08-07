@@ -256,10 +256,7 @@ const PutStudentThesisRegistration = () => {
                             input?.studentThesisId ? 'Chọn sinh viên' : 'Chọn nhiều sinh viên'
                         }
                         options={studentData?.subjectClassStudent?.map((item) => ({
-                            label: [
-                                item.student.userProfile.fullname,
-                                item.student.userProfile.code,
-                            ]
+                            label: [item.student.code, item.student.userProfile.fullname]
                                 .filter(Boolean)
                                 .join(' - '),
                             value: item.student.id,

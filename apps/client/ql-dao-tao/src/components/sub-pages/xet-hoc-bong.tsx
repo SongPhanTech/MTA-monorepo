@@ -254,7 +254,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                             if (highestOrderScholarship) {
                                 newSelectedStudents.push({
                                     id: student.id,
-                                    code: student.userProfile.code,
+                                    code: student.code,
                                     fullname: student.userProfile.fullname,
                                     scholarshipId: highestOrderScholarship.id,
                                     scholarshipName: highestOrderScholarship.name,
@@ -309,7 +309,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                     ...filtered,
                     {
                         id: studentId,
-                        code: studentInfo.userProfile.code,
+                        code: studentInfo.code,
                         fullname: studentInfo.userProfile.fullname,
                         scholarshipId: scholarship.id,
                         scholarshipName: scholarship.name,

@@ -92,11 +92,6 @@ const PutAcademicActionConfig = () => {
             title={input?.id ? 'Chỉnh sửa cấu hình xử lý' : 'Thêm mới cấu hình xử lý'}
         >
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã cấu hình">
-                    <Input placeholder="Nhập mã cấu hình" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="name" label="Tên cấu hình" required>
                     <Input placeholder="Nhập tên cấu hình" />
                 </FormItem>
@@ -110,7 +105,7 @@ const PutAcademicActionConfig = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>

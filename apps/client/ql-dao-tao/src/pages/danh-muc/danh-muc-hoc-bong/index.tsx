@@ -29,7 +29,6 @@ export default function Scholarship() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        code: '',
         trainingCourseId: null,
         field: undefined,
         operator: undefined,
@@ -53,11 +52,6 @@ export default function Scholarship() {
                           : {}),
                       criteria: {
                           some: {
-                              ...(filters.code && filters.code !== ''
-                                  ? {
-                                        code: { contains: filters.code, mode: 'insensitive' },
-                                    }
-                                  : {}),
                               ...(filters.field
                                   ? Array.isArray(filters.field)
                                       ? {
@@ -213,14 +207,6 @@ export default function Scholarship() {
                         filters={filters}
                         setFilters={setFilters}
                         columns={[
-                            {
-                                title: 'Mã tiêu chí',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 150,
-                                fixed: 'left',
-                                type: 'input',
-                            },
                             {
                                 title: 'Trường được đánh giá',
                                 dataIndex: 'field',
