@@ -9,7 +9,6 @@ import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { buildOrgTree } from '@lib/utils'
-import { useMutation } from '@tanstack/react-query'
 import type { Prisma, TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountFixedClass,
@@ -18,6 +17,7 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
+import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -75,15 +75,15 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                       semesterId: semesterId,
                                   },
                               },
+                              ...(filters.code && filters.code !== ''
+                                  ? {
+                                        code: {
+                                            contains: filters.code,
+                                            mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
                               userProfile: {
-                                  ...(filters.code && filters.code !== ''
-                                      ? {
-                                            code: {
-                                                contains: filters.code,
-                                                mode: 'insensitive',
-                                            },
-                                        }
-                                      : {}),
                                   ...(filters.name && filters.name !== ''
                                       ? {
                                             fullname: {
@@ -132,15 +132,15 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                 },
                 students: {
                     where: {
+                        ...(filters.code && filters.code !== ''
+                            ? {
+                                  code: {
+                                      contains: filters.code,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
                         userProfile: {
-                            ...(filters.code && filters.code !== ''
-                                ? {
-                                      code: {
-                                          contains: filters.code,
-                                          mode: 'insensitive',
-                                      },
-                                  }
-                                : {}),
                             ...(filters.name && filters.name !== ''
                                 ? {
                                       fullname: {
@@ -209,23 +209,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
         []
     )
 
-    const calculateSemesterResultsMutation = useMutation({
-        mutationFn: async (params: { semesterId: string }) => {
-            const { calculateStudentSemesterResultJson } = await import(
-                '@workspace/libs/api/training'
-            )
-            return calculateStudentSemesterResultJson(params)
-        },
-        onSuccess: () => {
-            message.success('Tổng kết kết quả học kỳ thành công')
-            refetch()
-        },
-        onError: (error: any) => {
-            message.error(error?.message || 'Có lỗi xảy ra khi tổng kết kết quả học kỳ')
-        },
-    })
-    const calculateSemesterResults = calculateSemesterResultsMutation.mutateAsync
-    const isCalculating = calculateSemesterResultsMutation.isPending
+    const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
 
     const handleSummaryClick = async () => {
         if (!semesterId) {
@@ -235,9 +219,18 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
 
         try {
             showSpinner()
-            await calculateSemesterResults({ semesterId })
+            const res = await calculateSemesterResults({ params: { semesterId } })
+
+            if (res?.status === 400 || res?.status === 500) {
+                message.error(res?.data?.message || 'Đã xảy ra lỗi khi tổng kết học kỳ')
+                return
+            }
+
+            message.success('Tổng kết kết quả học kỳ thành công')
+            refetch()
         } catch (error) {
             console.error('Lỗi khi tổng kết kết quả học kỳ:', error)
+            message.error('Có lỗi xảy ra khi tổng kết kết quả học kỳ')
         } finally {
             hideSpinner()
         }
@@ -362,7 +355,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                render: (__, record) => record?.userProfile?.code,
+                                render: (__, record) => record?.code,
                             },
                             {
                                 title: 'Tên sinh viên',

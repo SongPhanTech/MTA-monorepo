@@ -22,7 +22,7 @@ export default function Difficulty() {
         level: undefined,
     })
 
-    const commonWhere = useMemo(
+    const where = useMemo(
         () => ({
             ...(filters.code && filters.code !== ''
                 ? {
@@ -45,7 +45,7 @@ export default function Difficulty() {
     )
 
     const { data, refetch } = useFindManyDifficulty({
-        where: commonWhere,
+        where,
         orderBy: [
             ...emptyObjectIf(
                 [
@@ -63,7 +63,7 @@ export default function Difficulty() {
 
     const { data: count } = useCountDifficulty({
         where: {
-            ...commonWhere,
+            ...where,
             deletedAt: null,
         },
     })

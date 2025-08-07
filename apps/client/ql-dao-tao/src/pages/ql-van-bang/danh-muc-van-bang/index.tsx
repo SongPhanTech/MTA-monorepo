@@ -16,7 +16,7 @@ import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function DiplomaType() {
@@ -29,13 +29,13 @@ export default function DiplomaType() {
         englishName: '',
     })
 
-    const { data = [], refetch } = useFindManyDiplomaType({
-        where: {
+    const where = useMemo(
+        () => ({
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -43,7 +43,7 @@ export default function DiplomaType() {
                 ? {
                       name: {
                           contains: filters.name,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -51,41 +51,24 @@ export default function DiplomaType() {
                 ? {
                       englishName: {
                           contains: filters.englishName,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
-        },
+        }),
+        [filters.code, filters.name, filters.englishName]
+    )
+
+    const { data = [], refetch } = useFindManyDiplomaType({
+        where,
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count } = useCountDiplomaType({
         where: {
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.englishName && filters.englishName !== ''
-                ? {
-                      englishName: {
-                          contains: filters.englishName,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 

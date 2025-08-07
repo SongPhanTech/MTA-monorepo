@@ -67,15 +67,15 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                         some: {
                             semesterId,
                             student: {
+                                ...(filters.code && filters.code !== ''
+                                    ? {
+                                          code: {
+                                              contains: filters.code,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      }
+                                    : {}),
                                 userProfile: {
-                                    ...(filters.code && filters.code !== ''
-                                        ? {
-                                              code: {
-                                                  contains: filters.code,
-                                                  mode: 'insensitive' as const,
-                                              },
-                                          }
-                                        : {}),
                                     ...(filters.name && filters.name !== ''
                                         ? {
                                               fullname: {
@@ -141,12 +141,12 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                         },
                         where: {
                             student: {
+                                ...(filters.code && filters.code !== ''
+                                    ? {
+                                          code: { contains: filters.code, mode: 'insensitive' },
+                                      }
+                                    : {}),
                                 userProfile: {
-                                    ...(filters.code && filters.code !== ''
-                                        ? {
-                                              code: { contains: filters.code, mode: 'insensitive' },
-                                          }
-                                        : {}),
                                     ...(filters.name && filters.name !== ''
                                         ? {
                                               fullname: {
@@ -468,8 +468,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                 width: 120,
                                                 align: 'center',
                                                 type: 'input',
-                                                render: (__, record) =>
-                                                    record?.student?.userProfile?.code,
+                                                render: (__, record) => record?.student?.code,
                                             },
                                             {
                                                 title: 'Tên sinh viên',
@@ -589,7 +588,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         columns={[
                                             {
                                                 title: 'Mã sinh viên',
-                                                dataIndex: ['userProfile', 'code'],
+                                                dataIndex: ['code'],
                                                 width: 120,
                                                 align: 'center',
                                             },

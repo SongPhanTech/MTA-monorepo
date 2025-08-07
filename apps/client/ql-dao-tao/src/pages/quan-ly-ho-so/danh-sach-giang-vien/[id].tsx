@@ -69,7 +69,7 @@ export default function StudentDetailPage() {
                 <Row gutter={16}>
                     <Col span={24} className="mb-6">
                         <div className="text-lg font-semibold">
-                            {lecturerData?.userProfile?.code} -{' '}
+                            {lecturerData?.code} -{' '}
                             {lecturerData?.userProfile?.fullname
                                 ? lecturerData?.userProfile?.fullname
                                 : `${lecturerData?.userProfile?.firstName} ${lecturerData?.userProfile?.lastName}`}{' '}

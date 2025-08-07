@@ -41,7 +41,7 @@ function Exam() {
         questionBankId: undefined,
     })
 
-    const commonWhere = useMemo(
+    const where = useMemo(
         () => ({
             ...(filters.title && filters.title !== ''
                 ? {
@@ -90,7 +90,7 @@ function Exam() {
     )
 
     const { data = [] } = useFindManyExam({
-        where: commonWhere,
+        where,
         include: {
             questionBank: true,
         },
@@ -118,7 +118,7 @@ function Exam() {
     })
 
     const { data: count } = useCountExam({
-        where: { ...commonWhere, deletedAt: null },
+        where: { ...where, deletedAt: null },
     })
 
     const { onOpen } = useDisclosure<string>({

@@ -64,7 +64,7 @@ export default function QuestionPage() {
         { enabled: !!questionBankId }
     )
 
-    const commonWhere = useMemo(
+    const where = useMemo(
         () => ({
             questionBankId,
             ...(filters.questionType && filters.questionType.length > 0
@@ -118,7 +118,7 @@ export default function QuestionPage() {
 
     const { data } = useFindManyQuestion(
         {
-            where: commonWhere,
+            where,
             include: {
                 knowledgeBlock: true,
                 difficulty: true,
@@ -144,7 +144,7 @@ export default function QuestionPage() {
     const { data: count } = useCountQuestion(
         {
             where: {
-                ...commonWhere,
+                ...where,
                 deletedAt: null,
             },
         },
