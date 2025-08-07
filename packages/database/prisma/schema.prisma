@@ -2428,48 +2428,56 @@ model DM_Tinh {
 }
 
 model DM_Tinh_New {
-  Id                   String    @id() @default(uuid()) @db.Uuid()
-  sMa                  String?
-  sTen                 String?
-  sGhiChu              String?
-  iSTT                 Int?      @default(0)
-  bActive              Boolean?  @default(true)
-  bDeleted             Boolean?  @default(false)
-  bSystem              Boolean?  @default(false)
-  iDictionaryKey       Int?      @default(0)
-  dNgayTao             DateTime?
-  dNgaySua             DateTime?
-  sNguoiTao            String?
-  sNguoiSua            String?
-  sThietBiTao          String?
-  sThietBiSua          String?
-  sDM_QuocGiaId        String?   @db.Uuid()
-  iDM_KhuVucDiaLy_Id   Int?
-  iDM_DonViHanhChinhId Int?
+  Id                          String        @id() @default(uuid()) @db.Uuid()
+  sMa                         String?
+  sTen                        String?
+  sGhiChu                     String?
+  iSTT                        Int?          @default(0)
+  bActive                     Boolean?      @default(true)
+  bDeleted                    Boolean?      @default(false)
+  bSystem                     Boolean?      @default(false)
+  iDictionaryKey              Int?          @default(0)
+  dNgayTao                    DateTime?
+  dNgaySua                    DateTime?
+  sNguoiTao                   String?
+  sNguoiSua                   String?
+  sThietBiTao                 String?
+  sThietBiSua                 String?
+  sDM_QuocGiaId               String?       @db.Uuid()
+  iDM_KhuVucDiaLy_Id          Int?
+  iDM_DonViHanhChinhId        Int?
+  userProfileHometown         UserProfile[] @relation("NewProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("NewProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("NewProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("NewProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_New_iDM_QuocGiaId")
   @@schema("mta")
 }
 
 model DM_QuanHuyen {
-  Id                   String    @id() @default(uuid()) @db.Uuid()
-  sMa                  String?
-  sTen                 String?
-  sGhiChu              String?
-  iSTT                 Int?      @default(0)
-  bActive              Boolean?  @default(true)
-  bDeleted             Boolean?  @default(false)
-  bSystem              Boolean?  @default(false)
-  iDictionaryKey       Int?      @default(0)
-  dNgayTao             DateTime?
-  dNgaySua             DateTime?
-  sNguoiTao            String?
-  sNguoiSua            String?
-  sThietBiTao          String?
-  sThietBiSua          String?
-  sDM_TinhId           String?   @db.Uuid()
-  sDM_Tinh_Ma          String?
-  iDM_DonViHanhChinhId Int?
+  Id                          String        @id() @default(uuid()) @db.Uuid()
+  sMa                         String?
+  sTen                        String?
+  sGhiChu                     String?
+  iSTT                        Int?          @default(0)
+  bActive                     Boolean?      @default(true)
+  bDeleted                    Boolean?      @default(false)
+  bSystem                     Boolean?      @default(false)
+  iDictionaryKey              Int?          @default(0)
+  dNgayTao                    DateTime?
+  dNgaySua                    DateTime?
+  sNguoiTao                   String?
+  sNguoiSua                   String?
+  sThietBiTao                 String?
+  sThietBiSua                 String?
+  sDM_TinhId                  String?       @db.Uuid()
+  sDM_Tinh_Ma                 String?
+  iDM_DonViHanhChinhId        Int?
+  userProfileHometown         UserProfile[] @relation("DistrictHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("DistrictPlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("DistrictCurrentAddress")
 
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("mta")
@@ -2505,23 +2513,27 @@ model DM_XaPhuong {
 }
 
 model DM_XaPhuong_New {
-  Id                   String    @id() @default(uuid()) @db.Uuid()
-  sMa                  String?
-  sTen                 String?
-  sGhiChu              String?
-  iSTT                 Int?      @default(0)
-  bActive              Boolean?  @default(true)
-  bDeleted             Boolean?  @default(false)
-  bSystem              Boolean?  @default(false)
-  iDictionaryKey       Int?      @default(0)
-  dNgayTao             DateTime?
-  dNgaySua             DateTime?
-  sNguoiTao            String?
-  sNguoiSua            String?
-  sThietBiTao          String?
-  sThietBiSua          String?
-  sDM_TinhId_New       String?   @db.Uuid()
-  iDM_DonViHanhChinhId Int?
+  Id                          String        @id() @default(uuid()) @db.Uuid()
+  sMa                         String?
+  sTen                        String?
+  sGhiChu                     String?
+  iSTT                        Int?          @default(0)
+  bActive                     Boolean?      @default(true)
+  bDeleted                    Boolean?      @default(false)
+  bSystem                     Boolean?      @default(false)
+  iDictionaryKey              Int?          @default(0)
+  dNgayTao                    DateTime?
+  dNgaySua                    DateTime?
+  sNguoiTao                   String?
+  sNguoiSua                   String?
+  sThietBiTao                 String?
+  sThietBiSua                 String?
+  sDM_TinhId_New              String?       @db.Uuid()
+  iDM_DonViHanhChinhId        Int?
+  userProfileHometown         UserProfile[] @relation("NewCommuneHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("NewCommunePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("NewCommunePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("NewCommuneCurrentAddress")
 
   @@index([sDM_TinhId_New])
   @@schema("mta")
@@ -2550,164 +2562,189 @@ model DM_ViTriCongViec {
 }
 
 model UserProfile {
-  id                         String                    @id() @default(cuid())
-  code                       String?                   @unique()
-  active                     Boolean                   @default(true)
-  description                String?                   @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime                  @default(now())
-  updatedAt                  DateTime                  @default(now()) @updatedAt()
-  bLaNguoiDung               Boolean?
-  bLaCanBoNhanVien           Boolean?
-  bLaHocVien                 Boolean?
-  group                      Group?                    @relation(fields: [groupId], references: [id])
-  groupId                    String?
-  sDM_DonViId                String?                   @db.Uuid()
-  sDM_ViTriCongViecId        String?                   @db.Uuid()
-  sQuanlyTrucTiepId          String?                   @db.Uuid()
-  iDictionaryKey             Int?
-  bSystem                    Boolean?
-  sNguoiTao                  String?
-  sNguoiSua                  String?
-  sThietBiTao                String?
-  sThietBiSua                String?
-  avatar                     String?
-  firstName                  String
-  lastName                   String
-  idCardNumber               String                    @unique()
-  placeOfIdCardNumber        String?
-  fullname                   String?
-  healthInsuranceNumber      String?
-  bankAccountNumber          String?
-  bankName                   String?
-  currentAddress             String?
-  occupationWhenRecruiting   String?
-  thuongBinh                 String?
-  benh                       String?
-  tinhHinhNhaO               String?
-  truocKhiNhapNgu            String?
-  thanhPhanGiaDinh           String?
-  soTruong                   String?
-  hoTenThuongDung            String?
-  lichSuBanThan              String?
-  conThuMay                  Int?
-  chieuCao                   String?
-  canNang                    String?
-  soACE                      Int?
-  kinhTeGiaDinh              String?
-  chinhTriGiaDinh            String?
-  fSoACE                     Int?
-  fKinhTeGiaDinh             String?
-  fThanhPhanGiaDinh          String?
-  fChinhTriGiaDinh           String?
-  fBanThan                   String?
-  nationalId                 String?                   @db.Uuid()
-  provinceCurrentAddress     DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
-  provinceCurrentAddressId   String?                   @db.Uuid()
-  communeCurrentAddress      DM_XaPhuong?              @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
-  communeCurrentAddressId    String?                   @db.Uuid()
-  dateOfBirth                DateTime?
-  placeOfBirth               String?
-  provinceOfBirth            DM_Tinh?                  @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
-  provinceOfBirthId          String?                   @db.Uuid()
-  communeOfBirth             DM_XaPhuong?              @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
-  communeOfBirthId           String?                   @db.Uuid()
-  homeTown                   String?
-  idCardDate                 DateTime?
-  idCardExpirationDate       DateTime?
-  gender                     DM_GioiTinh?              @relation(fields: [genderId], references: [Id])
-  genderId                   String?                   @db.Uuid()
-  permanentAddress           String?
-  provincePermanentAddress   DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
-  provincePermanentAddressId String?                   @db.Uuid()
-  communePermanentAddress    DM_XaPhuong?              @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
-  communePermanentAddressId  String?                   @db.Uuid()
-  temporaryAddress           String?
-  contactAddress             String?
-  phoneNumber                String?
-  email                      String?
-  nationality                DM_QuocGia?               @relation(fields: [nationalityId], references: [Id])
-  nationalityId              String?                   @db.Uuid()
-  religion                   DM_TonGiao?               @relation(fields: [religionId], references: [Id])
-  religionId                 String?                   @db.Uuid()
-  ethnicity                  DM_DanToc?                @relation(fields: [ethnicityId], references: [Id])
-  ethnicityId                String?                   @db.Uuid()
-  provinceHometown           DM_Tinh?                  @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
-  provinceHometownId         String?                   @db.Uuid()
-  communeHometown            DM_XaPhuong?              @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
-  communeHometownId          String?                   @db.Uuid()
-  officerNumber              String?
-  rank                       DM_CapBac?                @relation(fields: [rankId], references: [Id])
-  rankId                     String?                   @db.Uuid()
-  rankDate                   DateTime?
-  academicDegreeType         DM_HocVi?                 @relation(fields: [academicDegreeTypeId], references: [Id])
-  academicDegreeTypeId       String?                   @db.Uuid()
-  academicDegreeDate         DateTime?
-  academicRankType           DM_HocHam?                @relation(fields: [academicRankTypeId], references: [Id])
-  academicRankTypeId         String?                   @db.Uuid()
-  academicRankDate           DateTime?
-  level                      DM_ChucDanh?              @relation(fields: [levelId], references: [Id])
-  levelId                    String?                   @db.Uuid()
-  chiHuyQuanLy               DM_ChiHuyQuanLy?          @relation(fields: [chiHuyQuanLyId], references: [id])
-  chiHuyQuanLyId             String?
-  chuyenMonKyThuat           DM_ChuyenMonKyThuat?      @relation(fields: [chuyenMonKyThuatId], references: [id])
-  chuyenMonKyThuatId         String?
-  sucKhoe                    DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
-  sucKhoeId                  String?
-  nhomMau                    DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
-  nhomMauId                  String?
-  unionDate                  DateTime?
-  unionPlace                 String?
-  CPVJoinDate                DateTime?
-  officialCPVDate            DateTime?
-  CPVJoinPlace               String?
-  positionCPV                DM_ChucVu?                @relation(fields: [positionCPVId], references: [Id])
-  positionCPVId              String?                   @db.Uuid()
-  tenureDate                 DateTime?
-  enlistmentDate             DateTime?
-  reEnlistmentDate           DateTime?
-  dischargeDate              DateTime?
-  recruitmentDate            DateTime?
-  recruitmentAgency          String?
-  mainJobAssigned            String?
-  revolutionaryDate          DateTime?
-  originalPlace              String?
-  familyPhone                String?
-  familyName                 String?
-  relatives                  Relative[]
-  trinhDoLyLuanChinhTri      TrinhDoLyLuanChinhTri[]
-  trinhDoQuanLyNhaNuoc       TrinhDoQuanLyNhaNuoc[]
-  ngoaiNgu                   NgoaiNgu[]
-  tinHoc                     TinHoc[]
-  boiDuongQuocPhongAnNinh    BoiDuongQuocPhongAnNinh[]
-  capBac                     CapBac[]
-  quaTrinhCongTac            QuaTrinhCongTac[]
-  quaTrinhCuDiCongTac        QuaTrinhCuDiCongTac[]
-  quaTrinhCuDiDaoTao         QuaTrinhCuDiDaoTao[]
-  khenThuong                 KhenThuong[]
-  kyLuat                     KyLuat[]
-  doiTuongChinhSach          DoiTuongChinhSach[]
-  keKhaiTaiSan               KeKhaiTaiSan[]
-  hocVi                      HocVi[]
-  hocHam                     HocHam[]
-  tiengDanToc                TiengDanToc[]
-  chienDau                   ChienDau[]
-  diNuocNgoai                NuocNgoai[]
-  thuongTat                  ThuongTat[]
-  danhHieu                   DanhHieu[]
-  quaTrinhHocTap             QuaTrinhHocTap[]
-  ToChucXaHoi                ToChucXaHoi[]
-  QuaTrinhLuong              QuaTrinhLuong[]
-  trinhDoHocVan              DM_TrinhDoHocVan?         @relation(fields: [trinhDoHocVanId], references: [id])
-  trinhDoHocVanId            String?
+  id                            String                    @id() @default(cuid())
+  code                          String?                   @unique()
+  active                        Boolean                   @default(true)
+  description                   String?                   @db.Text()
+  deletedAt                     DateTime?
+  createdAt                     DateTime                  @default(now())
+  updatedAt                     DateTime                  @default(now()) @updatedAt()
+  bLaNguoiDung                  Boolean?
+  bLaCanBoNhanVien              Boolean?
+  bLaHocVien                    Boolean?
+  group                         Group?                    @relation(fields: [groupId], references: [id])
+  groupId                       String?
+  sDM_DonViId                   String?                   @db.Uuid()
+  sDM_ViTriCongViecId           String?                   @db.Uuid()
+  sQuanlyTrucTiepId             String?                   @db.Uuid()
+  iDictionaryKey                Int?
+  bSystem                       Boolean?
+  sNguoiTao                     String?
+  sNguoiSua                     String?
+  sThietBiTao                   String?
+  sThietBiSua                   String?
+  avatar                        String?
+  firstName                     String
+  lastName                      String
+  idCardNumber                  String                    @unique()
+  placeOfIdCardNumber           String?
+  fullname                      String?
+  healthInsuranceNumber         String?
+  bankAccountNumber             String?
+  bankName                      String?
+  currentAddress                String?
+  newCurrentAddress             String?
+  occupationWhenRecruiting      String?
+  thuongBinh                    String?
+  benh                          String?
+  tinhHinhNhaO                  String?
+  truocKhiNhapNgu               String?
+  thanhPhanGiaDinh              String?
+  soTruong                      String?
+  hoTenThuongDung               String?
+  lichSuBanThan                 String?
+  conThuMay                     Int?
+  chieuCao                      String?
+  canNang                       String?
+  soACE                         Int?
+  kinhTeGiaDinh                 String?
+  chinhTriGiaDinh               String?
+  fSoACE                        Int?
+  fKinhTeGiaDinh                String?
+  fThanhPhanGiaDinh             String?
+  fChinhTriGiaDinh              String?
+  fBanThan                      String?
+  nationalId                    String?                   @db.Uuid()
+  provinceCurrentAddress        DM_Tinh?                  @relation(name: "ProvinceCurrentAddress", fields: [provinceCurrentAddressId], references: [Id])
+  provinceCurrentAddressId      String?                   @db.Uuid()
+  districtCurrentAddress        DM_QuanHuyen?             @relation(name: "DistrictCurrentAddress", fields: [districtCurrentAddressId], references: [Id])
+  districtCurrentAddressId      String?                   @db.Uuid()
+  communeCurrentAddress         DM_XaPhuong?              @relation(name: "CommuneCurrentAddress", fields: [communeCurrentAddressId], references: [Id])
+  communeCurrentAddressId       String?                   @db.Uuid()
+  newProvinceCurrentAddress     DM_Tinh_New?              @relation(name: "NewProvinceCurrentAddress", fields: [newProvinceCurrentAddressId], references: [Id])
+  newProvinceCurrentAddressId   String?                   @db.Uuid()
+  newCommuneCurrentAddress      DM_XaPhuong_New?          @relation(name: "NewCommuneCurrentAddress", fields: [newCommuneCurrentAddressId], references: [Id])
+  newCommuneCurrentAddressId    String?                   @db.Uuid()
+  dateOfBirth                   DateTime?
+  placeOfBirth                  String?
+  provinceOfBirth               DM_Tinh?                  @relation(name: "ProvincePlaceOfBirth", fields: [provinceOfBirthId], references: [Id])
+  provinceOfBirthId             String?                   @db.Uuid()
+  districtOfBirth               DM_QuanHuyen?             @relation(name: "DistrictPlaceOfBirth", fields: [districtOfBirthId], references: [Id])
+  districtOfBirthId             String?                   @db.Uuid()
+  communeOfBirth                DM_XaPhuong?              @relation(name: "CommunePlaceOfBirth", fields: [communeOfBirthId], references: [Id])
+  communeOfBirthId              String?                   @db.Uuid()
+  newProvinceOfBirth            DM_Tinh_New?              @relation(name: "NewProvincePlaceOfBirth", fields: [newProvinceOfBirthId], references: [Id])
+  newProvinceOfBirthId          String?                   @db.Uuid()
+  newCommuneOfBirth             DM_XaPhuong_New?          @relation(name: "NewCommunePlaceOfBirth", fields: [newCommuneOfBirthId], references: [Id])
+  newCommuneOfBirthId           String?                   @db.Uuid()
+  homeTown                      String?
+  idCardDate                    DateTime?
+  idCardExpirationDate          DateTime?
+  gender                        DM_GioiTinh?              @relation(fields: [genderId], references: [Id])
+  genderId                      String?                   @db.Uuid()
+  permanentAddress              String?
+  provincePermanentAddress      DM_Tinh?                  @relation(name: "ProvincePermanentAddress", fields: [provincePermanentAddressId], references: [Id])
+  provincePermanentAddressId    String?                   @db.Uuid()
+  districtPermanentAddress      DM_QuanHuyen?             @relation(name: "DistrictPermanentAddress", fields: [districtPermanentAddressId], references: [Id])
+  districtPermanentAddressId    String?                   @db.Uuid()
+  communePermanentAddress       DM_XaPhuong?              @relation(name: "CommunePermanentAddress", fields: [communePermanentAddressId], references: [Id])
+  communePermanentAddressId     String?                   @db.Uuid()
+  newProvincePermanentAddress   DM_Tinh_New?              @relation(name: "NewProvincePermanentAddress", fields: [newProvincePermanentAddressId], references: [Id])
+  newProvincePermanentAddressId String?                   @db.Uuid()
+  newCommunePermanentAddress    DM_XaPhuong_New?          @relation(name: "NewCommunePermanentAddress", fields: [newCommunePermanentAddressId], references: [Id])
+  newCommunePermanentAddressId  String?                   @db.Uuid()
+  temporaryAddress              String?
+  contactAddress                String?
+  phoneNumber                   String?
+  email                         String?
+  nationality                   DM_QuocGia?               @relation(fields: [nationalityId], references: [Id])
+  nationalityId                 String?                   @db.Uuid()
+  religion                      DM_TonGiao?               @relation(fields: [religionId], references: [Id])
+  religionId                    String?                   @db.Uuid()
+  ethnicity                     DM_DanToc?                @relation(fields: [ethnicityId], references: [Id])
+  ethnicityId                   String?                   @db.Uuid()
+  provinceHometown              DM_Tinh?                  @relation(name: "ProvinceHometown", fields: [provinceHometownId], references: [Id])
+  provinceHometownId            String?                   @db.Uuid()
+  districtHometown              DM_QuanHuyen?             @relation(name: "DistrictHometown", fields: [districtHometownId], references: [Id])
+  districtHometownId            String?                   @db.Uuid()
+  communeHometown               DM_XaPhuong?              @relation(name: "CommuneHometown", fields: [communeHometownId], references: [Id])
+  communeHometownId             String?                   @db.Uuid()
+  newProvinceHometown           DM_Tinh_New?              @relation(name: "NewProvinceHometown", fields: [newProvinceHometownId], references: [Id])
+  newProvinceHometownId         String?                   @db.Uuid()
+  newCommuneHometown            DM_XaPhuong_New?          @relation(name: "NewCommuneHometown", fields: [newCommuneHometownId], references: [Id])
+  newCommuneHometownId          String?                   @db.Uuid()
+  officerNumber                 String?
+  rank                          DM_CapBac?                @relation(fields: [rankId], references: [Id])
+  rankId                        String?                   @db.Uuid()
+  rankDate                      DateTime?
+  academicDegreeType            DM_HocVi?                 @relation(fields: [academicDegreeTypeId], references: [Id])
+  academicDegreeTypeId          String?                   @db.Uuid()
+  academicDegreeDate            DateTime?
+  academicRankType              DM_HocHam?                @relation(fields: [academicRankTypeId], references: [Id])
+  academicRankTypeId            String?                   @db.Uuid()
+  academicRankDate              DateTime?
+  level                         DM_ChucDanh?              @relation(fields: [levelId], references: [Id])
+  levelId                       String?                   @db.Uuid()
+  chiHuyQuanLy                  DM_ChiHuyQuanLy?          @relation(fields: [chiHuyQuanLyId], references: [id])
+  chiHuyQuanLyId                String?
+  chuyenMonKyThuat              DM_ChuyenMonKyThuat?      @relation(fields: [chuyenMonKyThuatId], references: [id])
+  chuyenMonKyThuatId            String?
+  sucKhoe                       DM_SucKhoe?               @relation(fields: [sucKhoeId], references: [id])
+  sucKhoeId                     String?
+  nhomMau                       DM_NhomMau?               @relation(fields: [nhomMauId], references: [id])
+  nhomMauId                     String?
+  unionDate                     DateTime?
+  unionPlace                    String?
+  CPVJoinDate                   DateTime?
+  officialCPVDate               DateTime?
+  CPVJoinPlace                  String?
+  positionCPV                   DM_ChucVu?                @relation(fields: [positionCPVId], references: [Id])
+  positionCPVId                 String?                   @db.Uuid()
+  tenureDate                    DateTime?
+  enlistmentDate                DateTime?
+  reEnlistmentDate              DateTime?
+  dischargeDate                 DateTime?
+  recruitmentDate               DateTime?
+  recruitmentAgency             String?
+  mainJobAssigned               String?
+  revolutionaryDate             DateTime?
+  originalPlace                 String?
+  familyPhone                   String?
+  familyName                    String?
+  relatives                     Relative[]
+  trinhDoLyLuanChinhTri         TrinhDoLyLuanChinhTri[]
+  trinhDoQuanLyNhaNuoc          TrinhDoQuanLyNhaNuoc[]
+  ngoaiNgu                      NgoaiNgu[]
+  tinHoc                        TinHoc[]
+  boiDuongQuocPhongAnNinh       BoiDuongQuocPhongAnNinh[]
+  capBac                        CapBac[]
+  quaTrinhCongTac               QuaTrinhCongTac[]
+  quaTrinhCuDiCongTac           QuaTrinhCuDiCongTac[]
+  quaTrinhCuDiDaoTao            QuaTrinhCuDiDaoTao[]
+  khenThuong                    KhenThuong[]
+  kyLuat                        KyLuat[]
+  doiTuongChinhSach             DoiTuongChinhSach[]
+  keKhaiTaiSan                  KeKhaiTaiSan[]
+  hocVi                         HocVi[]
+  hocHam                        HocHam[]
+  tiengDanToc                   TiengDanToc[]
+  chienDau                      ChienDau[]
+  diNuocNgoai                   NuocNgoai[]
+  thuongTat                     ThuongTat[]
+  danhHieu                      DanhHieu[]
+  quaTrinhHocTap                QuaTrinhHocTap[]
+  ToChucXaHoi                   ToChucXaHoi[]
+  QuaTrinhLuong                 QuaTrinhLuong[]
+  trinhDoHocVan                 DM_TrinhDoHocVan?         @relation(fields: [trinhDoHocVanId], references: [id])
+  trinhDoHocVanId               String?
   /// hồ sơ đào tạo
-  educationAndTraining       Student[]
+  educationAndTraining          Student[]
   /// hồ sơ giảng viên
-  lecturer                   Lecturer?
-  lecturerHistory            LecturerHistory[]
+  lecturer                      Lecturer?
+  lecturerHistory               LecturerHistory[]
   /// hồ sơ cán bộ
-  staffs                     Staff?
-  staffHistory               StaffHistory[]
+  staffs                        Staff?
+  staffHistory                  StaffHistory[]
 
   @@schema("ql-nguoi-dung")
 }

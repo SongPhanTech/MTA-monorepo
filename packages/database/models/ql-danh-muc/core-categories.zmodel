@@ -240,18 +240,28 @@ model DM_Tinh extends CoreBase {
 }
 
 model DM_Tinh_New extends CoreBase {
-  sDM_QuocGiaId        String? @db.Uuid
-  iDM_KhuVucDiaLy_Id   Int?
-  iDM_DonViHanhChinhId Int?
+  sDM_QuocGiaId               String?       @db.Uuid
+  iDM_KhuVucDiaLy_Id          Int?
+  iDM_DonViHanhChinhId        Int?
+
+  userProfileHometown         UserProfile[] @relation("NewProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("NewProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("NewProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("NewProvinceCurrentAddress")
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_New_iDM_QuocGiaId")
   @@schema("mta")
 }
 
 model DM_QuanHuyen extends CoreBase {
-  sDM_TinhId           String? @db.Uuid
-  sDM_Tinh_Ma          String?
-  iDM_DonViHanhChinhId Int?
+  sDM_TinhId                  String?       @db.Uuid
+  sDM_Tinh_Ma                 String?
+  iDM_DonViHanhChinhId        Int?
+
+  userProfileHometown         UserProfile[] @relation("DistrictHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("DistrictPlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("DistrictPermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("DistrictCurrentAddress")
 
   @@index([sDM_TinhId], map: "IX_DM_QuanHuyen_iDM_TinhId")
   @@schema("mta")
@@ -273,9 +283,13 @@ model DM_XaPhuong extends CoreBase {
 }
 
 model DM_XaPhuong_New extends CoreBase {
-  sDM_TinhId_New       String? @db.Uuid
-  iDM_DonViHanhChinhId Int?
+  sDM_TinhId_New              String?       @db.Uuid
+  iDM_DonViHanhChinhId        Int?
 
+  userProfileHometown         UserProfile[] @relation("NewCommuneHometown")
+  userProfilePlaceOfBirth     UserProfile[] @relation("NewCommunePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[] @relation("NewCommunePermanentAddress")
+  userProfileCurrentAddress   UserProfile[] @relation("NewCommuneCurrentAddress")
   @@index([sDM_TinhId_New])
   @@schema("mta")
 }
