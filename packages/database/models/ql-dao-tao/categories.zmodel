@@ -20,7 +20,6 @@ enum TrainingObjectTypes {
 model TrainingObjectType extends Base {
   name                 String                              @unique
   type                 TrainingObjectTypes
-  baseScore            AcademicRankingBaseType
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]

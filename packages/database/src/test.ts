@@ -12,7 +12,7 @@ await prisma.graduationRankDowngradeRule.deleteMany()
 await prisma.academicRankingConvert.deleteMany()
 
 const trainingCourses = await prisma.trainingCourse.findMany({
-    select: { id: true, trainingObjectType: { select: { baseScore: true } } },
+    select: { id: true, baseScore: true },
     where: {
         academicRankingConvert: { none: {} },
     },
@@ -20,10 +20,7 @@ const trainingCourses = await prisma.trainingCourse.findMany({
 
 await Promise.all(
     trainingCourses
-        .filter(
-            ({ trainingObjectType }) =>
-                trainingObjectType.baseScore === AcademicRankingBaseType.Base10
-        )
+        .filter(({ baseScore }) => baseScore === AcademicRankingBaseType.Base10)
         .map((trainingCourse) =>
             prisma.academicRankingConvert.createMany({
                 skipDuplicates: true,
@@ -39,10 +36,7 @@ await Promise.all(
 
 await Promise.all(
     trainingCourses
-        .filter(
-            ({ trainingObjectType }) =>
-                trainingObjectType.baseScore === AcademicRankingBaseType.Base4
-        )
+        .filter(({ baseScore }) => baseScore === AcademicRankingBaseType.Base4)
         .map((trainingCourse) =>
             prisma.academicRankingConvert.createMany({
                 skipDuplicates: true,

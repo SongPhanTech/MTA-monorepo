@@ -45,7 +45,6 @@ async function main() {
             {
                 id: '550e8402-e29b-41d4-a716-446655440000',
                 name: 'Đại học quân sự',
-                baseScore: 'Base10',
                 code: 'QS',
                 type: $Enums.TrainingObjectTypes.MILITARY,
                 createdAt: new Date('2025-04-03T12:58:40.507Z'),
@@ -54,7 +53,6 @@ async function main() {
             {
                 id: '550e8402-e29b-41d4-a716-446655440001',
                 name: 'Đại học dân sự',
-                baseScore: 'Base4',
                 code: 'DS',
                 type: $Enums.TrainingObjectTypes.CIVILIAN,
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
@@ -379,11 +377,12 @@ async function main() {
 
     // Seed TrainingCourse
     const trainingCourses = await prisma.trainingCourse.createManyAndReturn({
-        select: { id: true, trainingObjectType: { select: { baseScore: true } } },
+        select: { id: true, baseScore: true },
         skipDuplicates: true,
         data: [
             {
                 id: '550e8406-e29b-41d4-a716-446655440000',
+                baseScore: AcademicRankingBaseType.Base10,
                 code: 'K58',
                 name: 'Khóa 58',
                 description: 'Khóa 58',
@@ -394,9 +393,10 @@ async function main() {
             },
             {
                 id: '550e8406-e29b-41d4-a716-446655440001',
+                baseScore: AcademicRankingBaseType.Base10,
                 code: 'K59',
-                name: 'Khóa 58',
-                description: 'Khóa 58',
+                name: 'Khóa 59',
+                description: 'Khóa 59',
                 semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
                 trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440001',
                 createdAt: new Date('2025-04-03T12:58:41.507Z'),
@@ -418,10 +418,7 @@ async function main() {
 
     await Promise.all(
         trainingCourses
-            .filter(
-                ({ trainingObjectType }) =>
-                    trainingObjectType.baseScore === AcademicRankingBaseType.Base10
-            )
+            .filter(({ baseScore }) => baseScore === AcademicRankingBaseType.Base10)
             .map((trainingCourse) =>
                 prisma.academicRankingConvert.createMany({
                     skipDuplicates: true,
@@ -437,10 +434,7 @@ async function main() {
 
     await Promise.all(
         trainingCourses
-            .filter(
-                ({ trainingObjectType }) =>
-                    trainingObjectType.baseScore === AcademicRankingBaseType.Base4
-            )
+            .filter(({ baseScore }) => baseScore === AcademicRankingBaseType.Base4)
             .map((trainingCourse) =>
                 prisma.academicRankingConvert.createMany({
                     skipDuplicates: true,
@@ -844,7 +838,6 @@ async function main() {
                             create: {
                                 name: 'Đại học quân sự',
                                 type: $Enums.TrainingObjectTypes.MILITARY,
-                                baseScore: 'Base10',
                             },
                         },
                     },

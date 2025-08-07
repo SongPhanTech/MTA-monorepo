@@ -228,6 +228,38 @@ const PutTrainingCourseModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="baseScore" label="Hệ số điểm" required>
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={[
+                            {
+                                label: 'Hệ 10',
+                                value: 'Base10',
+                            },
+                            {
+                                label: 'Hệ 4',
+                                value: 'Base4',
+                            },
+                        ]}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="scoreToTakeExam"
+                    label="Điểm tối thiểu được thi"
+                    required
+                >
+                    <InputNumber placeholder="Nhập điểm tối thiểu được thi" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="scoreToPass" label="Điểm tối thiểu để qua" required>
+                    <InputNumber placeholder="Nhập điểm tối thiểu để qua" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem form={form} name="coef_1" label="Hệ số điểm chuyên cần">
                     <InputNumber
                         min={0}
@@ -258,21 +290,6 @@ const PutTrainingCourseModal = () => {
                         placeholder="Nhập hệ số điểm điểm thi"
                         className="w-full"
                     />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="scoreToTakeExam"
-                    label="Điểm tối thiểu được thi"
-                    required
-                >
-                    <InputNumber placeholder="Nhập điểm tối thiểu được thi" className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="scoreToPass" label="Điểm tối thiểu để qua" required>
-                    <InputNumber placeholder="Nhập điểm tối thiểu để qua" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={12}>

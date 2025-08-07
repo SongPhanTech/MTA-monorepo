@@ -128,7 +128,6 @@ app.openapi(graduationCheck, async (c) => {
                                     },
                                     orderBy: { rankOrder: 'asc' },
                                 },
-                                trainingObjectType: { select: { baseScore: true } },
                             },
                         },
                         curriculumVersion: {
@@ -179,7 +178,7 @@ app.openapi(graduationCheck, async (c) => {
 
         const scoreToPass = student.fixedClass?.trainingCourse.scoreToPass || 4
         const scoreToPassGraduation = student.fixedClass?.trainingCourse.scoreToPassGraduation || 5
-        const baseScore = student.fixedClass.trainingCourse.trainingObjectType.baseScore
+        const baseScore = student.fixedClass.trainingCourse.baseScore
 
         const subjectScores = await prisma.studentSubjectScore.findMany({
             where: {

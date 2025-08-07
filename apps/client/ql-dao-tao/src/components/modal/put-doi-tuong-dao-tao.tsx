@@ -113,23 +113,6 @@ const PutTrainingObjectTypeModal = () => {
                     <Input placeholder="Nhập tên đối đượng đào tạo" />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem form={form} name="baseScore" label="Hệ số điểm" required>
-                    <Select
-                        placeholder="Chọn đối tượng đào tạo"
-                        options={[
-                            {
-                                label: 'Hệ 10',
-                                value: 'Base10',
-                            },
-                            {
-                                label: 'Hệ 4',
-                                value: 'Base4',
-                            },
-                        ]}
-                    />
-                </FormItem>
-            </Col>
 
             <Col span={12}>
                 <FormItem form={form} name={'active'} label="Trạng thái" required>

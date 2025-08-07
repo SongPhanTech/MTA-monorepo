@@ -915,6 +915,7 @@ model TrainingCourse {
   academicYear           String?
   maxTrainingTime        Float?
   admissionQuota         Int?
+  baseScore              AcademicRankingBaseType
   coef_1                 Float                    @default(0.1)
   coef_2                 Float                    @default(0.3)
   coef_3                 Float                    @default(0.6)
@@ -1218,7 +1219,6 @@ model TrainingObjectType {
   updatedAt            DateTime                            @default(now()) @updatedAt()
   name                 String                              @unique()
   type                 TrainingObjectTypes
-  baseScore            AcademicRankingBaseType
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
@@ -4578,7 +4578,7 @@ model GraduationDecision {
   finalRankingId   String
   diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
   diplomaTypeId    String?
-  diplomaNumber    String?
+  diplomaNumber    String?                      @unique()
   diplomaIssueDate DateTime?
 
   @@schema("ql-dao-tao")

@@ -94,7 +94,7 @@ model GraduationDecision extends Base {
 
   diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
   diplomaTypeId    String?          // curriculumVersion.diplomaId
-  diplomaNumber    String?          // Số hiệu văn bằng
+  diplomaNumber    String?                      @unique  // Số hiệu văn bằng
   diplomaIssueDate DateTime?        // Ngày cấp bằng
 
   @@schema("ql-dao-tao")

@@ -181,6 +181,8 @@ model TrainingCourse extends Base {
   maxTrainingTime        Float?
   admissionQuota         Int?
 
+  baseScore              AcademicRankingBaseType
+
   coef_1                 Float                    @default(0.1) // Hệ số 1
   coef_2                 Float                    @default(0.3) // Hệ số 2
   coef_3                 Float                    @default(0.6) // Hệ số 3
@@ -191,8 +193,6 @@ model TrainingCourse extends Base {
 
   scoreToTakeGraduation  Float                    @default(5) // Điểm liệt môn tốt nghiệp
   scoreToPassGraduation  Float                    @default(5.5) // Điểm tối để qua môn tốt nghiệp
-
-  // TODO: Thêm các quy chế về học bổng, cảnh cáo học tập
 
   trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
   trainingObjectTypeId   String

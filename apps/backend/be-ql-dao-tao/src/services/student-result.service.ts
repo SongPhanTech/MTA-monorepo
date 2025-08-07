@@ -646,6 +646,11 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                         trainingCourseId: true, // Lấy ID khóa học
                         classMonitorId: true, // Lấy ID lớp trưởng
                         unionLeaderId: true, // Lấy ID bí thư
+                        trainingCourse: {
+                            select: {
+                                baseScore: true, // Lấy điểm chuẩn của đối tượng đào tạo
+                            },
+                        },
                     },
                 },
                 trainingObjectType: {
@@ -653,7 +658,6 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                         id: true,
                         name: true, // Lấy tên đối tượng đào tạo
                         code: true, // Lấy mã đối tượng đào tạo
-                        baseScore: true, // Lấy điểm chuẩn của đối tượng đào tạo
                     },
                 },
 
@@ -697,7 +701,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
             }
 
             // Lấy thông tin điểm học viên
-            const baseType = student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là Base10 nếu không có thông tin
+            const baseType =
+                student.fixedClass?.trainingCourse?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là Base10 nếu không có thông tin
 
             // Lấy thông tin điểm học kỳ
             const thongTinDiemHocKy = await ThongTinDiemHocKy(
@@ -735,7 +740,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
                     baseScore:
-                        student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base4
+                        student.fixedClass?.trainingCourse?.baseScore ||
+                        AcademicRankingBaseType.Base10, // Lấy baseScore từ đối tượng đào tạo, nếu không có thì mặc định là Base10
                     gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
                     gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
                     cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
@@ -795,7 +801,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     isLastSemester: thongTinTichLuy.kyCuoi, // Kỳ cuối hay không
 
                     baseScore:
-                        student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10,
+                        student.fixedClass?.trainingCourse?.baseScore ||
+                        AcademicRankingBaseType.Base10,
                     gpaBase4: new Decimal(thongTinDiemHocKy.diemTrungBinh4TrongKy),
                     gpaBase10: new Decimal(thongTinDiemHocKy.diemTrungBinh10TrongKy),
                     cumulativeGpaBase4: new Decimal(thongTinTichLuy.diemTrungBinh4TichLuy),
@@ -925,7 +932,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                 // Danh sách chuyển đổi
 
                 const baseScore =
-                    item.student.trainingObjectType?.baseScore || AcademicRankingBaseType.Base10 // Mặc định là 10 nếu không có thông tin
+                    item.student.fixedClass?.trainingCourse?.baseScore ||
+                    AcademicRankingBaseType.Base10 // Mặc định là 10 nếu không có thông tin
                 const xepLoaiHocTap =
                     baseScore === AcademicRankingBaseType.Base10
                         ? await phanLoaiDiemHe10(
