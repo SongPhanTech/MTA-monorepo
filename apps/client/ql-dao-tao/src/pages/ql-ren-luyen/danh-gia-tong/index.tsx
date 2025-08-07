@@ -9,19 +9,22 @@ import type { Semester, TrainingObjectType } from '@workspace/db'
 import {
     useCountStudent,
     useCreateStudentTrainingScore,
+    useCreateStudentTrainingSemester,
     useFindManyFixedClass,
     useFindManySemester,
     useFindManyStudent,
     useFindManyStudentTrainingScore,
+    useFindManyStudentTrainingSemester,
     useFindManyTrainingObjectType,
     useFindManyTrainingScoreSession,
     useUpdateStudentTrainingScore,
+    useUpdateStudentTrainingSemester,
 } from '@workspace/db/hooks'
-import { Col, DatePicker, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, DatePicker, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
-import { Search } from 'lucide-react'
+import { Save, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopBienCheItem from './lop-bien-che'
 
@@ -161,6 +164,15 @@ export default function SubjectClassScore() {
             },
         })
 
+    const { data: studentTrainingSemesterData = [] } = useFindManyStudentTrainingSemester({
+        where: {
+            semesterId: selectedSemesterId || '',
+            student: {
+                fixedClassId: selectedFixedClass || '',
+            },
+        },
+    })
+
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -210,33 +222,33 @@ export default function SubjectClassScore() {
         hideSpinner()
     }
 
+    const { mutateAsync: createStudentTrainingSemester } = useCreateStudentTrainingSemester()
+    const { mutateAsync: updateStudentTrainingSemester } = useUpdateStudentTrainingSemester()
     const handleSave = async () => {
         try {
             showSpinner()
             // Lưu điểm rèn luyện
-            console.log('Saving training scores:', scoreList, studentTrainingScoreData)
+            console.log('Saving training scores:', scoreList, studentTrainingSemesterData)
             for (const score of scoreList) {
                 // Kiểm tra nếu điểm rèn luyện đã tồn tại
-                const existingScore = studentTrainingScoreData.find(
-                    (s) =>
-                        s.studentId === score.studentId &&
-                        s.trainingScoreSessionId === selectedTrainingScoreSessionId
+                const existingScore = studentTrainingSemesterData.find(
+                    (s) => s.studentId === score.studentId && s.semesterId === selectedSemesterId
                 )
 
                 if (existingScore) {
                     // Cập nhật điểm rèn luyện
                     console.log('Existing score:', existingScore)
-                    await updateStudentTrainingScore({
+                    await updateStudentTrainingSemester({
                         where: { id: existingScore.id },
                         data: { score: score.trainingScore },
                     })
                 } else {
                     // Tạo mới điểm rèn luyện
                     console.log('Creating new score for student:', score.studentId)
-                    await createStudentTrainingScore({
+                    await createStudentTrainingSemester({
                         data: {
                             studentId: score.studentId,
-                            trainingScoreSessionId: selectedTrainingScoreSessionId ?? '',
+                            semesterId: selectedSemesterId ?? '',
                             score: score.trainingScore,
                         },
                     })
@@ -253,20 +265,16 @@ export default function SubjectClassScore() {
         }
     }
 
-    const updatedScoreList = useMemo(() => {
-        return studentTrainingScoreData.map((score) => ({
-            studentId: score.studentId,
-            trainingScore: score.score,
-        }))
-    }, [studentTrainingScoreData])
-
     useEffect(() => {
-        if (selectedTrainingScoreSessionId) {
-            setScoreList(updatedScoreList)
-        } else {
-            setScoreList([])
+        console.log('Student training score data changed:', studentTrainingSemesterData)
+        if (studentTrainingSemesterData) {
+            const initialScores = studentTrainingSemesterData.map((score) => ({
+                studentId: score.studentId,
+                trainingScore: score.score,
+            }))
+            setScoreList(initialScores)
         }
-    }, [selectedTrainingScoreSessionId, updatedScoreList])
+    }, [studentTrainingSemesterData])
 
     const { mutateAsync: createStudentTrainingScore } = useCreateStudentTrainingScore()
     const { mutateAsync: updateStudentTrainingScore } = useUpdateStudentTrainingScore()
@@ -392,30 +400,14 @@ export default function SubjectClassScore() {
 
                                 <Col span={6} />
                             </Row>
-                            {/* <Row className="mt-4">
-                                <Col span={20} className="flex">
-                                    <Select
-                                        placeholder="Chọn đợt đánh giá"
-                                        style={{ width: 200, height: 40 }}
-                                        options={trainingScoreSessionData.map((session) => ({
-                                            value: session.id,
-                                            label: session.name,
-                                        }))}
-                                        onChange={(value) => {
-                                            handleFilterChange(
-                                                'trainingScoreSessionId',
-                                                value
-                                            );
-                                            setSelectedTrainingScoreSessionId(value);
-                                        }}
-                                    />
-                                </Col>
+                            <Row className="mt-4">
+                                <Col span={20} className="flex" />
                                 <Col span={4} className="flex justify-end">
                                     <Flex justify="end" gap={4}>
                                         <Button
                                             type="primary"
                                             className="h-[40px]"
-                                            disabled={!selectedFixedClass || !selectedTrainingScoreSessionId}
+                                            disabled={!selectedFixedClass}
                                             onClick={handleSave}
                                         >
                                             <Save stroke="white" />
@@ -423,7 +415,7 @@ export default function SubjectClassScore() {
                                         </Button>
                                     </Flex>
                                 </Col>
-                            </Row> */}
+                            </Row>
                         </Col>
                         <Col span={24}>
                             <Table
@@ -471,13 +463,6 @@ export default function SubjectClassScore() {
                                             const scores = studentTrainingScoreData.filter(
                                                 (s) => s.studentId === record.id
                                             )
-                                            // const score =
-                                            //     scores.length > 0
-                                            //         ? scores.reduce(
-                                            //               (total, curr) => total + curr.score,
-                                            //               0
-                                            //           ) / scores.length
-                                            //         : null
 
                                             // Tính tổng số điểm theo loại trong đợt (cho tất cả sinh viên)
                                             const countByType = {
@@ -545,7 +530,7 @@ export default function SubjectClassScore() {
                                                     placeholder="Chọn xếp loại"
                                                     style={{ width: '100%' }}
                                                     options={optionsRank}
-                                                    defaultValue={
+                                                    value={
                                                         scoreList.find(
                                                             (s) => s.studentId === record.id
                                                         )?.trainingScore || 0 // Mặc định là 0
