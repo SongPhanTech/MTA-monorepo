@@ -397,7 +397,6 @@ export default function CreateUserPage() {
         try {
             showSpinner()
 
-            const id = crypto.randomUUID()
             const res = await axios.post('https://mta.swantech.vn/DM_NhanViens', {
                 sDM_DonViId: values.sDM_DonViId,
                 sMa: values.code,
@@ -409,14 +408,13 @@ export default function CreateUserPage() {
                 sCCCD: values.idCardNumber,
                 sSDTDiDong: values.phoneNumber,
                 sEmail: values.email,
-                Id: id,
             })
 
             if (res.status === 200) {
                 await createUserProfile({
                     data: {
                         ...values,
-                        id: id,
+                        id: res?.data?.Id,
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()
                             : null,
