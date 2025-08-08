@@ -134,6 +134,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                     },
                                 },
                             },
+
                             finalRanking: true,
                         },
                     },
