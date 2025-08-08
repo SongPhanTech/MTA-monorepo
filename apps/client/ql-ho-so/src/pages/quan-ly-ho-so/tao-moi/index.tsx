@@ -397,7 +397,6 @@ export default function CreateUserPage() {
         try {
             showSpinner()
 
-            const id = crypto.randomUUID()
             const res = await axios.post('https://mta.swantech.vn/DM_NhanViens', {
                 sDM_DonViId: values.sDM_DonViId,
                 sMa: values.code,
@@ -409,14 +408,13 @@ export default function CreateUserPage() {
                 sCCCD: values.idCardNumber,
                 sSDTDiDong: values.phoneNumber,
                 sEmail: values.email,
-                Id: id,
             })
 
             if (res.status === 200) {
                 await createUserProfile({
                     data: {
                         ...values,
-                        id: id,
+                        id: res?.data?.Id,
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()
                             : null,
@@ -751,7 +749,7 @@ export default function CreateUserPage() {
             queryClient.invalidateQueries({
                 queryKey: ['UserProfile'],
             })
-            // router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
+            router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
         } catch (error) {
             message.error('Đã có lỗi xảy ra, vui lòng thử lại sau')
         }

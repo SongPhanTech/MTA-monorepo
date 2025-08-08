@@ -24,7 +24,11 @@ interface ModalExamBankProps {
     examBankId: string
     questionBankId: string
     subjectVersionName: string
+    subject: string
+    semester: string
     examCode: string
+    examId: string
+    duration: number
 }
 
 const ModalExamBank: React.FC<ModalExamBankProps> = ({
@@ -33,7 +37,11 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
     examBankId,
     questionBankId,
     subjectVersionName,
+    subject,
+    semester,
     examCode,
+    examId,
+    duration,
 }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -57,7 +65,11 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
     const { onOpen: onOpenModalPrintExamBank } = useDisclosure<{
         data?: (ExamBankQuestion & { question: Question })[]
         subjectVersionName: string
+        subject: string
         examCode: string
+        semester: string
+        examId: string
+        duration: number
     }>({
         tag: ModalPrintExamBank.name,
     })
@@ -157,7 +169,11 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                         onOpenModalPrintExamBank({
                                             data,
                                             subjectVersionName,
+                                            subject,
                                             examCode,
+                                            semester,
+                                            examId,
+                                            duration,
                                         })
                                     }
                                     icon={<Printer />}
