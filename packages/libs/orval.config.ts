@@ -89,4 +89,27 @@ export default defineConfig({
             afterAllFilesWrite: 'biome check --fix --unsafe .',
         },
     },
+
+    system_api: {
+        input: 'https://mta.swantech.vn/api/system/public/swagger/v1/swagger.json',
+        output: {
+            client: 'react-query',
+            httpClient: 'fetch',
+            mode: 'single',
+            target: './src/api/exam.ts',
+            schemas: './src/api/schemas',
+            biome: true,
+            packageJson: 'fake',
+            override: {
+                query: { version: 5 },
+                mutator: {
+                    path: './src/api/custom-instance.ts',
+                    name: 'customSystemFetch',
+                },
+            },
+        },
+        hooks: {
+            afterAllFilesWrite: 'biome check --fix --unsafe .',
+        },
+    },
 })

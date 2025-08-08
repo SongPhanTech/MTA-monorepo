@@ -92,7 +92,7 @@ export default function TestStructureRule() {
         { enabled: !!examId }
     )
 
-    const commonWhere = useMemo(
+    const where = useMemo(
         () => ({
             examId,
             ...(filters.knowledgeBlockId
@@ -111,7 +111,7 @@ export default function TestStructureRule() {
 
     const { data = [] } = useFindManyTestStructureRule(
         {
-            where: commonWhere,
+            where,
             include: {
                 knowledgeBlock: true,
             },
@@ -143,7 +143,7 @@ export default function TestStructureRule() {
     const { data: count } = useCountTestStructureRule(
         {
             where: {
-                ...commonWhere,
+                ...where,
                 deletedAt: null,
             },
         },

@@ -53,44 +53,55 @@ export default function StudentGraduationApplication() {
         statusApplication: initialStatuses,
     })
 
-    const { data: studentGraduationApplicationData, refetch } =
-        useFindManyStudentGraduationApplication({
-            where: {
-                sessionId: graduationSessionId,
-                student: {
-                    userProfile: {
-                        ...(filters.code && filters.code !== ''
-                            ? {
-                                  code: {
-                                      contains: filters.code,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                        ...(filters.name && filters.name !== ''
-                            ? {
-                                  fullname: {
-                                      contains: filters.name,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                    },
-                },
-                ...(filters.applicationDate?.length === 2
+    const where = useMemo(
+        () => ({
+            sessionId: graduationSessionId,
+            student: {
+                ...(filters.code && filters.code !== ''
                     ? {
-                          applicationDate: {
-                              gte: dayjs(filters.applicationDate?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.applicationDate?.[1], 'DD/MM/YYYY').toDate(),
+                          code: {
+                              contains: filters.code,
+                              mode: 'insensitive' as const,
                           },
                       }
                     : {}),
-                ...(filters.statusApplication
-                    ? {
-                          status: { in: filters.statusApplication },
-                      }
-                    : {}),
+                userProfile: {
+                    ...(filters.name && filters.name !== ''
+                        ? {
+                              fullname: {
+                                  contains: filters.name,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                },
             },
+            ...(filters.applicationDate?.length === 2
+                ? {
+                      applicationDate: {
+                          gte: dayjs(filters.applicationDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.applicationDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.statusApplication
+                ? {
+                      status: { in: filters.statusApplication },
+                  }
+                : {}),
+        }),
+        [
+            filters.code,
+            filters.name,
+            filters.applicationDate,
+            filters.statusApplication,
+            graduationSessionId,
+        ]
+    )
+
+    const { data: studentGraduationApplicationData, refetch } =
+        useFindManyStudentGraduationApplication({
+            where,
             include: {
                 student: {
                     include: {
@@ -131,7 +142,8 @@ export default function StudentGraduationApplication() {
 
     const { data: count } = useCountStudentGraduationApplication({
         where: {
-            sessionId: graduationSessionId,
+            ...where,
+            deletedAt: null,
         },
     })
 
@@ -210,6 +222,10 @@ export default function StudentGraduationApplication() {
                 },
             })
 
+            if (res?.status === 400) {
+                message.error(res?.data?.message || 'Đã xảy ra lỗi khi xét tốt nghiệp')
+                return
+            }
             if (res.status === 200) {
                 setGraduationCheckResults(res.data.results)
 
@@ -438,7 +454,7 @@ export default function StudentGraduationApplication() {
                                                     fixed: 'left',
                                                     type: 'input',
                                                     render: (_, record) =>
-                                                        record.student?.userProfile?.code || '',
+                                                        record.student?.code || '',
                                                 },
                                                 {
                                                     title: 'Họ và tên',
@@ -661,7 +677,6 @@ export default function StudentGraduationApplication() {
                                                 current: currentPage,
                                                 pageSize: numberOfPages,
                                                 total: count,
-
                                                 onChange: (page, pageSize) => {
                                                     if (numberOfPages === pageSize) {
                                                         setCurrentPage(page)

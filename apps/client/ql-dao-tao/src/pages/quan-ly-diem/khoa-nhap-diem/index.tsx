@@ -61,13 +61,13 @@ export default function SubjectClassScore() {
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
-    const { data: dataTable = [], refetch } = useFindManySubjectClass({
-        where: {
+    const where = useMemo(
+        () => ({
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -75,7 +75,7 @@ export default function SubjectClassScore() {
                 ? {
                       name: {
                           contains: filters.name,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -96,7 +96,7 @@ export default function SubjectClassScore() {
                       subject: {
                           name: {
                               contains: filters.subjectName,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
                       },
                   }
@@ -141,8 +141,23 @@ export default function SubjectClassScore() {
                       },
                   }
                 : {}),
-            deletedAt: null,
-        },
+        }),
+        [
+            filters.code,
+            filters.name,
+            filters.semesterId,
+            filters.trainingObjectId,
+            filters.subjectName,
+            filters.scoreDeadline,
+            filters.examScoreDeadline,
+            filters.startDate,
+            filters.examDate,
+            filters.endDate,
+        ]
+    )
+
+    const { data: dataTable = [], refetch } = useFindManySubjectClass({
+        where,
         include: {
             subject: {
                 include: {
@@ -180,84 +195,7 @@ export default function SubjectClassScore() {
 
     const { data: count } = useCountSubjectClass({
         where: {
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
-            ...(filters.trainingObjectId
-                ? {
-                      subjectClassStudent: {
-                          some: {
-                              student: {
-                                  trainingObjectTypeId: filters.trainingObjectId,
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.subjectName && filters.subjectName !== ''
-                ? {
-                      subject: {
-                          name: {
-                              contains: filters.subjectName,
-                              mode: 'insensitive',
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.scoreDeadline?.length === 2
-                ? {
-                      scoreDeadline: {
-                          gte: dayjs(filters.scoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.scoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.examScoreDeadline?.length === 2
-                ? {
-                      examScoreDeadline: {
-                          gte: dayjs(filters.examScoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.examScoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.startDate?.length === 2
-                ? {
-                      startDate: {
-                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.examDate?.length === 2
-                ? {
-                      examDate: {
-                          gte: dayjs(filters.examDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.examDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.endDate?.length === 2
-                ? {
-                      endDate: {
-                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
+            ...where,
             deletedAt: null,
         },
     })

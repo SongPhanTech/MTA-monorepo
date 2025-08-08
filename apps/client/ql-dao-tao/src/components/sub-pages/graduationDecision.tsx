@@ -47,19 +47,19 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                               graduationDecision: {
                                   some: {
                                       student: {
+                                          ...(filters.code
+                                              ? {
+                                                    code: {
+                                                        contains: filters.code,
+                                                        mode: 'insensitive',
+                                                    },
+                                                }
+                                              : {}),
                                           userProfile: {
                                               ...(filters.name
                                                   ? {
                                                         fullname: {
                                                             contains: filters.name,
-                                                            mode: 'insensitive',
-                                                        },
-                                                    }
-                                                  : {}),
-                                              ...(filters.code
-                                                  ? {
-                                                        code: {
-                                                            contains: filters.code,
                                                             mode: 'insensitive',
                                                         },
                                                     }
@@ -122,10 +122,16 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             },
                         },
                         include: {
+                            diplomaType: true,
                             application: true,
                             student: {
                                 include: {
                                     userProfile: true,
+                                    curriculumVersion: {
+                                        include: {
+                                            diplomaType: true,
+                                        },
+                                    },
                                 },
                             },
                             finalRanking: true,
@@ -208,7 +214,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 width: 120,
                                 fixed: 'left',
                                 type: 'input',
-                                render: (_, record) => record?.student?.userProfile?.code || '',
+                                render: (_, record) => record?.student?.code || '',
                             },
                             {
                                 title: 'Họ và tên',
@@ -251,7 +257,9 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                     value: item.id,
                                 })),
                                 width: 100,
-                                render: (_, record) => record?.diplomaType?.name,
+                                render: (_, record) =>
+                                    record?.diplomaType?.name ||
+                                    record?.student?.curriculumVersion?.diplomaType?.name,
                             },
                             {
                                 title: 'Số hiệu văn bằng',

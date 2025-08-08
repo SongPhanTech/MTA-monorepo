@@ -16,7 +16,7 @@ import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function DiplomaType() {
@@ -26,16 +26,16 @@ export default function DiplomaType() {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        englistName: '',
+        englishName: '',
     })
 
-    const { data = [], refetch } = useFindManyDiplomaType({
-        where: {
+    const where = useMemo(
+        () => ({
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -43,49 +43,32 @@ export default function DiplomaType() {
                 ? {
                       name: {
                           contains: filters.name,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
-            ...(filters.englistName && filters.englistName !== ''
+            ...(filters.englishName && filters.englishName !== ''
                 ? {
-                      englistName: {
-                          contains: filters.englistName,
-                          mode: 'insensitive',
+                      englishName: {
+                          contains: filters.englishName,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
-        },
+        }),
+        [filters.code, filters.name, filters.englishName]
+    )
+
+    const { data = [], refetch } = useFindManyDiplomaType({
+        where,
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count } = useCountDiplomaType({
         where: {
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.englistName && filters.englistName !== ''
-                ? {
-                      englistName: {
-                          contains: filters.englistName,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 
@@ -208,13 +191,21 @@ export default function DiplomaType() {
                                                     />
                                                 </Tooltip> */}
                                                 <EditIcon
-                                                    onClick={() => onOpenPutDiplomaType(record?.id)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpenPutDiplomaType(record?.id)
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteDiplomaType(record?.id),
+                                                        onConfirm: (e) => {
+                                                            handleDeleteDiplomaType(record?.id)
+                                                            e?.stopPropagation()
+                                                        },
+                                                    }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
                                                     }}
                                                 />
                                             </Row>

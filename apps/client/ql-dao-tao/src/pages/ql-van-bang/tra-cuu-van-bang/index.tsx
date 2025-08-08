@@ -91,19 +91,19 @@ export default function GraduationDecisionDiploma() {
                     : {}),
             },
             student: {
+                ...(filters.code
+                    ? {
+                          code: {
+                              contains: filters.code,
+                              mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
                 userProfile: {
                     ...(filters.name
                         ? {
                               fullname: {
                                   contains: filters.name,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.code
-                        ? {
-                              code: {
-                                  contains: filters.code,
                                   mode: 'insensitive' as const,
                               },
                           }
@@ -344,7 +344,7 @@ export default function GraduationDecisionDiploma() {
                                 width: 120,
                                 fixed: 'left',
                                 type: 'input',
-                                render: (_, record) => record?.student?.userProfile?.code || '',
+                                render: (_, record) => record?.student?.code || '',
                             },
                             {
                                 title: 'Họ và tên',

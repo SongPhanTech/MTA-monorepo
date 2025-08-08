@@ -272,7 +272,7 @@ const PutOneSubjectClassModal = () => {
                                 return {
                                     ...i,
                                     value: i?.id,
-                                    label: `${i?.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                    label: `${i?.code} - ${i?.userProfile?.fullname}`,
                                 }
                             })}
                         placeholder="Chọn giảng viên 1"
@@ -287,7 +287,7 @@ const PutOneSubjectClassModal = () => {
                             .map((i) => {
                                 return {
                                     value: i?.id,
-                                    label: `${i?.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                    label: `${i?.code} - ${i?.userProfile?.fullname}`,
                                 }
                             })}
                         placeholder="Chọn giảng viên"
@@ -300,7 +300,7 @@ const PutOneSubjectClassModal = () => {
                         options={enterGradeLecturerOptions.map((i) => {
                             return {
                                 value: i?.id,
-                                label: `${i?.userProfile?.code} - ${i?.userProfile?.fullname}`,
+                                label: `${i?.code} - ${i?.userProfile?.fullname}`,
                             }
                         })}
                         placeholder="Chọn giảng viên"

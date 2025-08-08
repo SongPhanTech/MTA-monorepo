@@ -20,12 +20,19 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                             name="phoneNumber"
                             label="Số điện thoại"
                             className="mb-0"
+                            required
                         >
                             <Input placeholder="Nhập số điện thoại" className="h-9" />
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="email" label="Thư điện tử" className="mb-0">
+                        <FormItem
+                            form={form}
+                            name="email"
+                            label="Thư điện tử"
+                            className="mb-0"
+                            required
+                        >
                             <Input placeholder="Nhập thư điện tử" className="h-9" />
                         </FormItem>
                     </Col>
