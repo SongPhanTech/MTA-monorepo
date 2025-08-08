@@ -60,6 +60,10 @@ export type ListOfundefinedAllOfDataItem = {
   /** @nullable */
   currentAddress?: string | null;
   /** @nullable */
+  newCurrentAddress?: string | null;
+  /** @nullable */
+  occupationWhenRecruiting?: string | null;
+  /** @nullable */
   thuongBinh?: string | null;
   /** @nullable */
   benh?: string | null;
@@ -77,6 +81,10 @@ export type ListOfundefinedAllOfDataItem = {
   lichSuBanThan?: string | null;
   /** @nullable */
   conThuMay?: number | null;
+  /** @nullable */
+  chieuCao?: string | null;
+  /** @nullable */
+  canNang?: string | null;
   /** @nullable */
   soACE?: number | null;
   /** @nullable */

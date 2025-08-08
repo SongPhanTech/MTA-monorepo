@@ -128,6 +128,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                     userProfile: true,
                                 },
                             },
+
                             finalRanking: true,
                         },
                     },
