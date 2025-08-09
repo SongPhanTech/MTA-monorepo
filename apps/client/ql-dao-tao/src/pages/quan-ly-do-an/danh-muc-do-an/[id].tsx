@@ -72,7 +72,7 @@ export default function ThesisProjectDetail() {
 
     const { data: council } = useFindManyCouncil({
         where: {
-            thesisId: thesisProjectId,
+            thesis: { some: { id: thesisProjectId } },
         },
         include: {
             members: {
@@ -91,9 +91,9 @@ export default function ThesisProjectDetail() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const councilWithName = council?.map((council, index) => ({
+    const councilWithName = council?.map((council) => ({
         ...council,
-        name: `Hội đồng ${index + 1}`,
+        name: 'Hội đồng',
     }))
 
     const { onOpen: openDecision } = useDisclosure<{ thesisProjectId: string; decisionId: string }>(
