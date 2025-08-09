@@ -48,6 +48,10 @@ model ThesisProject extends Base {
   // Thông tin đăng ký
   maxStudents       Int                           // Số lượng học viên tối đa
   currentStudents   Int                         @default(0) // Số học viên hiện tại
+
+  // Hội đồng đánh giá
+  council           Council?                    @relation(fields: [councilId], references: [id])
+  councilId         String?
   
   // Thời gian
   registrationStart DateTime                      // Thời gian mở đăng ký
@@ -58,7 +62,6 @@ model ThesisProject extends Base {
   defenseRecord     DefenseRecord?
   librarySubmission LibrarySubmission?
 
-  council           Council[]
   decisions         Decision[]
   registrations     StudentThesisRegistration[]
 
@@ -109,9 +112,10 @@ model ExpertProfile extends Base {
   specialization     String?   // Chuyên ngành
   workplace          String?   // Đơn vị công tác
   phone              String?
-  email              String?         @unique // Dùng email này để liên lạc nếu là chuyên gia ngoài
+  email              String?         @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
 
   supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
+  subjectClass       SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
   councilMemberships CouncilMember[]
   payments           PaymentRecord[]
 
@@ -168,12 +172,10 @@ model Council extends Base {
   defenseDate                 DateTime? // Ngày bảo vệ
   location                    String? // Phòng bảo vệ
 
-  thesisId                    String
-  thesis                      ThesisProject              @relation(fields: [thesisId], references: [id])
-
   studentThesisRegistration   StudentThesisRegistration? @relation(fields: [studentThesisRegistrationId], references: [id])
   studentThesisRegistrationId String?                    @unique
 
+  thesis                      ThesisProject[]
   members                     CouncilMember[]
 
   @@schema("ql-dao-tao")

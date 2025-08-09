@@ -315,9 +315,8 @@ export default function ThesisProject() {
     const { data: selectedThesisProjects } = useFindManyThesisProject(
         {
             where: {
-                id: {
-                    in: selectedRowKeys.map(String),
-                },
+                id: { in: selectedRowKeys.map(String) },
+                councilId: { not: null },
             },
             include: {
                 council: {
@@ -330,12 +329,10 @@ export default function ThesisProject() {
         { enabled: !!selectedRowKeys.length }
     )
 
-    const councilMemberIds = selectedThesisProjects
-        ?.flatMap(
-            (project) => project.council?.flatMap((council: any) => council.members || []) || []
-        ) //TODO: Add type council
-        .map((member) => member.id)
-        .filter((id): id is string => Boolean(id))
+    const councilMemberIds =
+        selectedThesisProjects
+            ?.flatMap(({ council }) => council?.members.map((member) => member.id))
+            .filter((id): id is string => Boolean(id)) || []
 
     const createInvitations = async () => {
         if (!councilMemberIds || councilMemberIds.length === 0) {
