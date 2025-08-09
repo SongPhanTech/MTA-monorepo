@@ -80,15 +80,15 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
             isFiltering
                 ? {
                       student: {
+                          ...(filters.code && filters.code !== ''
+                              ? {
+                                    code: {
+                                        contains: filters.code,
+                                        mode: 'insensitive',
+                                    },
+                                }
+                              : {}),
                           userProfile: {
-                              ...(filters.code && filters.code !== ''
-                                  ? {
-                                        code: {
-                                            contains: filters.code,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
                               ...(filters.name && filters.name !== ''
                                   ? {
                                         fullname: {
@@ -247,7 +247,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     if (studentInfo) {
                         return {
                             id: studentInfo.id,
-                            code: studentInfo.userProfile?.code,
+                            code: studentInfo.code,
                             fullname: studentInfo.userProfile?.fullname,
                             academicActionId: studentInfo.academicAction?.[0]?.id,
                             academicActionName: studentInfo.academicAction?.[0]?.name,
@@ -394,7 +394,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     align: 'center',
                                     fixed: 'left',
                                     type: 'input',
-                                    render: (__, record) => record?.student?.userProfile?.code,
+                                    render: (__, record) => record?.student?.code,
                                 },
                                 {
                                     title: 'Tên sinh viên',
@@ -559,7 +559,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             columns={[
                                 {
                                     title: 'Mã sinh viên',
-                                    dataIndex: ['userProfile', 'code'],
+                                    dataIndex: ['code'],
                                     width: 120,
                                     align: 'center',
                                 },

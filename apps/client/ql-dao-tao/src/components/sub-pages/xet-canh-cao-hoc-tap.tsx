@@ -55,12 +55,12 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
             isFiltering
                 ? {
                       student: {
+                          ...(filters.code && filters.code !== ''
+                              ? {
+                                    code: { contains: filters.code, mode: 'insensitive' },
+                                }
+                              : {}),
                           userProfile: {
-                              ...(filters.code && filters.code !== ''
-                                  ? {
-                                        code: { contains: filters.code, mode: 'insensitive' },
-                                    }
-                                  : {}),
                               ...(filters.name && filters.name !== ''
                                   ? {
                                         fullname: { contains: filters.name, mode: 'insensitive' },
@@ -461,7 +461,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                             columns={[
                                 {
                                     title: 'Mã sinh viên',
-                                    dataIndex: ['userProfile', 'code'],
+                                    dataIndex: ['code'],
                                     width: 120,
                                     align: 'center',
                                 },

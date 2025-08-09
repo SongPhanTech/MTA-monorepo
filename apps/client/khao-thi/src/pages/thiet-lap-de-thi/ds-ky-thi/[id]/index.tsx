@@ -3,13 +3,19 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { ModalSinhDeThiTuDong, PutExamBank, PutTestStructureRule } from '@components/modal'
+import {
+    ModalPrintAllExams,
+    ModalSinhDeThiTuDong,
+    PutExamBank,
+    PutTestStructureRule,
+} from '@components/modal'
 import { ModalExamBank } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
+import type { Question } from '@workspace/db'
 import {
     useCountExamBank,
     useCountTestStructureRule,
@@ -22,7 +28,7 @@ import {
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, message, Row } from 'antd'
-import { BookPlus } from 'lucide-react'
+import { BookPlus, Printer } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -60,6 +66,20 @@ export default function TestStructureRule() {
         tag: PutExamBank.name,
     })
 
+    const { onOpen: onOpenModalPrintAllExams } = useDisclosure<{
+        exams: {
+            examCode: string
+            questions: Question[]
+            subjectVersionName: string
+            subject: string
+            semester: string
+            examId: string
+            duration: number
+        }[]
+    }>({
+        tag: ModalPrintAllExams.name,
+    })
+
     const openExamBankModal = (examBankId: string, questionBankId: string, examCode: string) => {
         setExamBankModal({
             visible: true,
@@ -84,7 +104,20 @@ export default function TestStructureRule() {
             include: {
                 questionBank: {
                     include: {
-                        subjectVersion: true,
+                        subjectVersion: {
+                            include: {
+                                subject: true,
+                            },
+                        },
+                    },
+                },
+                subjectClass: {
+                    include: {
+                        semester: {
+                            include: {
+                                schoolYear: true,
+                            },
+                        },
                     },
                 },
             },
@@ -92,7 +125,7 @@ export default function TestStructureRule() {
         { enabled: !!examId }
     )
 
-    const commonWhere = useMemo(
+    const where = useMemo(
         () => ({
             examId,
             ...(filters.knowledgeBlockId
@@ -111,7 +144,7 @@ export default function TestStructureRule() {
 
     const { data = [] } = useFindManyTestStructureRule(
         {
-            where: commonWhere,
+            where,
             include: {
                 knowledgeBlock: true,
             },
@@ -143,7 +176,7 @@ export default function TestStructureRule() {
     const { data: count } = useCountTestStructureRule(
         {
             where: {
-                ...commonWhere,
+                ...where,
                 deletedAt: null,
             },
         },
@@ -156,8 +189,8 @@ export default function TestStructureRule() {
             orderBy: { examCode: 'asc' },
             include: {
                 questions: {
-                    select: {
-                        question: { select: { point: true } },
+                    include: {
+                        question: true,
                     },
                 },
                 _count: { select: { questions: true } },
@@ -216,6 +249,28 @@ export default function TestStructureRule() {
             refetchCount()
         },
     })
+
+    const handlePrintAllExams = () => {
+        if (!examData) return
+
+        const exams = examData.map((exam) => ({
+            examCode: exam.examCode,
+            questions: exam.questions.map((q) => q.question),
+            subjectVersionName: initialValue?.questionBank?.subjectVersion?.name || '',
+            subject: (() => {
+                const { code, name } = initialValue?.questionBank?.subjectVersion?.subject || {}
+                return [code, name].filter(Boolean).join(' - ')
+            })(),
+            semester: (() => {
+                const { name, schoolYear } = initialValue?.subjectClass?.[0]?.semester || {}
+                return [name, schoolYear?.name].filter(Boolean).join('<br/>')
+            })(),
+            examId: examId,
+            duration: Number(initialValue?.duration),
+        }))
+
+        onOpenModalPrintAllExams({ exams })
+    }
 
     return (
         <div>
@@ -376,6 +431,10 @@ export default function TestStructureRule() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
+                                <Button type="primary" onClick={() => handlePrintAllExams()}>
+                                    <Printer />
+                                    In toàn bộ đề thi
+                                </Button>
                                 <Button
                                     type="primary"
                                     onClick={() => onOpenPutExamBank({ examId, id: '' })}
@@ -485,7 +544,17 @@ export default function TestStructureRule() {
                 examBankId={examBankModal.examBankId}
                 questionBankId={examBankModal.questionBankId}
                 subjectVersionName={initialValue?.questionBank?.subjectVersion?.name || ''}
+                duration={Number(initialValue?.duration)}
+                subject={(() => {
+                    const { code, name } = initialValue?.questionBank?.subjectVersion?.subject || {}
+                    return [code, name].filter(Boolean).join(' - ')
+                })()}
+                semester={(() => {
+                    const { name, schoolYear } = initialValue?.subjectClass?.[0]?.semester || {}
+                    return [name, schoolYear?.name].filter(Boolean).join('<br/>')
+                })()}
                 examCode={examBankModal.examCode}
+                examId={examId}
             />
         </div>
     )

@@ -1,9 +1,9 @@
-// import { formatDateVN } from '@lib/utils'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import type { ExamBankQuestion, Question } from '@workspace/db'
+import { useFindUniqueExam } from '@workspace/db/hooks'
 // import { Docxtemplater, exportFile, loadFile } from '@workspace/libs/docxjs'
 import { Button, Modal, Space } from 'antd'
-// import dayjs from 'dayjs'
+import dayjs from 'dayjs'
 // import { saveAs } from 'file-saver'
 // import { upperFirst } from 'lodash'
 import { FileDown, Printer } from 'lucide-react'
@@ -11,20 +11,37 @@ import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 
-const tableCellClassName = 'border text-black bg-white border-black text-center p-2 text-xs'
-const tableHeaderClassName =
-    'border text-black bg-white border-black text-center p-2 font-bold text-xs'
-
 export const ModalPrintExamBank = () => {
+    const formattedDate = `Ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
     const { isOpen, onClose, input } = useDisclosure<{
         data?: (ExamBankQuestion & { question: Question })[]
         subjectVersionName: string
+        subject: string
         examCode: string
+        semester: string
+        examId: string
+        duration: number
     }>({
         tag: ModalPrintExamBank.name,
     })
 
-    const handoverId = (input as any)?.handoverId
+    const { data } = useFindUniqueExam(
+        {
+            where: { id: input?.examId },
+            include: {
+                examBank: {
+                    include: {
+                        questions: {
+                            include: {
+                                question: true,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        { enabled: !!input?.examId }
+    )
 
     const printRef = useRef<HTMLDivElement>(null)
 
@@ -182,90 +199,112 @@ export const ModalPrintExamBank = () => {
                 <div
                     ref={printRef}
                     className="!font-time-news-roman text-black bg-white p-6"
-                    style={{ fontSize: '12px', lineHeight: '1.3' }}
+                    style={{ fontSize: '16px', lineHeight: '1.5' }}
                 >
                     {/* Header */}
-                    <table className="w-full  border-separate border-spacing-0">
+                    <table className="w-full border-separate border-spacing-0">
                         <tbody>
                             <tr>
-                                <td className="align-top w-1/3 border border-dotted border-black p-2 text-center">
+                                {/* Bên trái */}
+                                <td className="align-top w-1/3 p-2 text-center">
+                                    <span className="font-bold uppercase">
+                                        PHÒNG KHẢO THÍ <br /> &amp; ĐBCLGD-ĐT
+                                    </span>
+                                </td>
+
+                                {/* Ở giữa */}
+                                <td className="align-top w-1/3 p-2 text-center">
                                     <div className="flex flex-col items-center">
-                                        <span className="text-sm uppercase">
-                                            Học viện Kỹ thuật Quân sự
-                                        </span>
-                                        <span className="text-sm font-bold">NHÀ MÁY X52</span>
-                                        <hr
-                                            className="border-t border-black items-center mx-auto"
-                                            style={{ width: '20%' }}
-                                        />{' '}
-                                        <span className="text-sm">
-                                            Số:{' '}
-                                            {/* {isEditing ? (
-                                            <Input
-                                                value={editableData.number}
-                                                onChange={(e) =>
-                                                    setEditableData((prev) => ({
-                                                        ...prev,
-                                                        number: e.target.value,
-                                                    }))
-                                                }
-                                                className="inline-block w-auto min-w-[100px] text-xs h-5 px-1 py-0"
-                                                placeholder="Số biên bản"
-                                            />
-                                        ) : (
-                                            editableData.number || ''
-                                        )}/BB-NM */}
+                                        <span className="font-bold uppercase">PHIẾU ĐỀ THI</span>
+                                        <span className="italic">
+                                            (Dùng cho lớp: {input?.subject})
                                         </span>
                                     </div>
                                 </td>
-                                <td className="align-top w-1/3 border border-dotted border-black p-2 text-center">
-                                    <span className="text-sm font-bold block">
-                                        CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
-                                    </span>
-                                    <span className="text-sm font-bold block">
-                                        Độc lập - Tự do - Hạnh phúc
-                                    </span>
-                                    <hr
-                                        className="border-t border-black items-center mx-auto"
-                                        style={{ width: '20%' }}
-                                    />{' '}
-                                    <span className="text-sm block mt-1">
-                                        Khánh Hòa, ngày{' '}
-                                        {/* {handoverDetail.date
-                                            ? formatDateVN(handoverDetail.date)
-                                            : '      tháng      năm 20..'} */}
-                                    </span>
+
+                                {/* Bên phải */}
+                                <td className="align-top w-1/3 p-2 text-center">
+                                    <span className="font-bold uppercase ">{input?.semester}</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    {/* Tiêu đề chính */}
-                    <div className="text-center mb-6">
-                        <h1 className="font-bold text-lg uppercase">BIÊN BẢN</h1>
-                        <h2 className="font-bold text-base">
-                            Bàn giao trang thiết bị trước khi vào sửa chữa
-                        </h2>
-                        <hr
-                            className="border-t border-black items-center mx-auto"
-                            style={{ width: '20%' }}
-                        />{' '}
-                    </div>
-                    <div className="mb-4 space-y-4">
+
+                    <span className="flex w-full justify-end italic">{formattedDate}</span>
+
+                    <table className="w-full border-2 border-black border-double border-collapse text-center align-middle">
+                        <tbody>
+                            <tr>
+                                {/* Cột trái */}
+                                <td className="w-1/5 border-2 border-black border-double p-2 align-top">
+                                    <span className="font-bold">Giáo viên ra đề</span>
+                                </td>
+
+                                {/* Cột giữa */}
+                                <td className="w-3/5 border-2 border-black border-double p-2 align-middle">
+                                    <div>
+                                        <div>
+                                            <span className="font-bold">
+                                                Đề thi số: {input?.examCode}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="font-bold">
+                                                Học phần: {input?.subjectVersionName}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="font-bold">
+                                                Thời gian làm bài: {input?.duration} phút
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                {/* Cột phải */}
+                                <td className="w-1/5 border-2 border-black border-double p-2">
+                                    <div className="flex flex-col justify-between h-[80px]">
+                                        <div className="font-bold">
+                                            Phòng khảo thí <br />
+                                            &amp; ĐBCLGD-ĐT
+                                        </div>
+                                        {/* <div className="font-bold">Nguyễn Văn Cần</div> */}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Câu hỏi */}
+                    <div className="mb-4 mt-10 space-y-4">
                         {input?.data?.map((item, index) => (
-                            <div key={item.id}>
-                                <span className="font-bold text-base">
-                                    Câu hỏi {index + 1}:{' '}
-                                    <span
-                                        className="prose max-w-none  text-gray-800"
-                                        dangerouslySetInnerHTML={{
-                                            __html: item.question.content
-                                                ? renderWithMath(item.question.content)
-                                                : '<i>Chưa có nội dung</i>',
-                                        }}
-                                    />
+                            <div key={item.id} className="flex flex-col">
+                                <span className="font-bold ">
+                                    Câu {index + 1}(
+                                    {item?.question?.point && `${item?.question?.point} điểm`}):
                                 </span>
+                                <span
+                                    className="prose max-w-none text-gray-800"
+                                    dangerouslySetInnerHTML={{
+                                        __html: item.question.content
+                                            ? renderWithMath(item.question.content)
+                                            : '<i>Chưa có nội dung</i>',
+                                    }}
+                                />
                             </div>
                         ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-4">
+                        <div className="italic text-center font-bold">
+                            (Không được sử dụng tài liệu)
+                        </div>
+
+                        {/* Dòng 2: căn trái */}
+                        <span className="italic mt-1 font-bold">
+                            * Giám thị coi thi không giải thích gì thêm
+                        </span>
                     </div>
                 </div>
             </div>

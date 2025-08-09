@@ -67,7 +67,7 @@ export default function UpdateUserPage() {
     const [form] = Form.useForm<SubmitForm>()
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
-    const [expland, setExpland] = useState<string[]>(['thongTinCoBan'])
+    const [expland, setExpland] = useState<string[]>(['thongTinCoBan', 'thongTinLienHe'])
 
     const [fileList, setFileList] = useState<UploadFile[]>([])
 
@@ -223,15 +223,6 @@ export default function UpdateUserPage() {
                 ),
             },
             {
-                title: 'Trình độ tin học',
-                id: 'tinHoc',
-                render: (
-                    <Form.Item name="tinHoc" className="mb-0">
-                        <TinHocForm expland={expland} setExpland={setExpland} />
-                    </Form.Item>
-                ),
-            },
-            {
                 title: 'Ngoại ngữ',
                 id: 'ngoaiNgu',
                 render: (
@@ -363,7 +354,6 @@ export default function UpdateUserPage() {
         ...values
     }: SubmitForm) => {
         if (!values) return
-        const fileName = values.avatar
         if (fileList.length > 0) {
             const file = fileList[0]
             const resPresignedUrl = await generatePresignedUrl({
@@ -446,6 +436,8 @@ export default function UpdateUserPage() {
                         },
                         data: {
                             ...values,
+                            bLaHocVien: values.bLaHocVien,
+                            bLaCanBoNhanVien: values.bLaCanBoNhanVien,
                             fullname: `${values.lastName || ''} ${values.firstName || ''}`.trim(),
                             dateOfBirth: values.dateOfBirth
                                 ? dayjs(values.dateOfBirth).toISOString()
@@ -465,7 +457,7 @@ export default function UpdateUserPage() {
                             tenureDate: values.tenureDate
                                 ? dayjs(values.tenureDate).toISOString()
                                 : null,
-                            avatar: fileName,
+                            avatar: form.getFieldValue('avatar'),
                             hocVi:
                                 values.hocVi && values.hocVi.length > 0
                                     ? {
@@ -984,7 +976,7 @@ export default function UpdateUserPage() {
                                         }}
                                         className="avatar-upload "
                                     >
-                                        {fileList.length > 0
+                                        {avatar
                                             ? ''
                                             : fileList.length < 1 && (
                                                   <div className="relative flex items-center justify-center">

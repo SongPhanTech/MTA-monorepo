@@ -15,7 +15,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon, Check, X } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
@@ -140,6 +140,7 @@ export default function StudentScoreClassPage() {
                     scoreConverts: true,
                 },
             },
+            schoolYear: true,
         },
         orderBy: {
             createdAt: 'asc',
@@ -147,13 +148,6 @@ export default function StudentScoreClassPage() {
     })
 
     const { convertScore } = useScoreConverter(data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts)
-
-    const _debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
 
     return (
         <div>
@@ -196,7 +190,9 @@ export default function StudentScoreClassPage() {
                     <TableCollapse
                         rowKey="key"
                         currentPage={1}
-                        headerTitleKey="name"
+                        headerTitleKey={({ code, name, schoolYear }) =>
+                            `${[code, name, schoolYear?.name].filter(Boolean).join(' - ')}`
+                        }
                         childrenFieldName="subjectClasses"
                         defaultExpandAll
                         columns={[

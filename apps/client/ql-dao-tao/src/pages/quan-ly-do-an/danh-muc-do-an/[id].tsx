@@ -243,7 +243,7 @@ export default function ThesisProjectDetail() {
                             width: 120,
                             fixed: 'left',
                             type: 'input',
-                            render: (_, record) => record?.student?.userProfile?.code,
+                            render: (_, record) => record?.student?.code,
                         },
                         {
                             title: 'Họ và tên',

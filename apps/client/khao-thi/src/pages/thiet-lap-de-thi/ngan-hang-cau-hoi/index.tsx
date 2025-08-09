@@ -31,7 +31,7 @@ export default function QuestionBank() {
         subjectVersionId: undefined,
     })
 
-    const commonWhere = useMemo(
+    const where = useMemo(
         () => ({
             ...(filters.code && filters.code !== ''
                 ? {
@@ -61,7 +61,7 @@ export default function QuestionBank() {
     )
 
     const { data = [], refetch } = useFindManyQuestionBank({
-        where: commonWhere,
+        where,
         include: { subjectVersion: true },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -69,7 +69,7 @@ export default function QuestionBank() {
 
     const { data: count } = useCountQuestionBank({
         where: {
-            ...commonWhere,
+            ...where,
             deletedAt: null,
         },
     })

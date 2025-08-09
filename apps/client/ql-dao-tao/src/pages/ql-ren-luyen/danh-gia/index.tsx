@@ -21,7 +21,7 @@ import { Button, Col, DatePicker, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { Save, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import LopBienCheItem from './lop-bien-che'
 
@@ -111,8 +111,7 @@ export default function SubjectClassScore() {
 
     const { data: dataTable = [], refetch } = useFindManyStudent({
         where: {
-            fixedClassId: selectedFixedClass || '',
-            deletedAt: null,
+            fixedClassId: selectedFixedClass,
         },
         include: {
             userProfile: true,
@@ -131,7 +130,10 @@ export default function SubjectClassScore() {
     const { data: studentTrainingScoreData = [], refetch: refetchStudentTrainingScore } =
         useFindManyStudentTrainingScore({
             where: {
-                trainingScoreSessionId: selectedTrainingScoreSessionId || '',
+                trainingScoreSessionId: selectedTrainingScoreSessionId,
+                student: {
+                    fixedClassId: selectedFixedClass,
+                },
             },
         })
 
@@ -175,35 +177,33 @@ export default function SubjectClassScore() {
             orderBy: {
                 createdAt: 'desc',
             },
+            select: {
+                id: true,
+                name: true,
+                time: true,
+                trainingObjectTypeId: true,
+                semesterId: true,
+            },
         })
 
-    const handleChangeFixedClass = async (id: string) => {
+    const handleChangeFixedClass = (id: string) => {
         try {
             showSpinner()
-            console.log('Selected Fixed Class ID:', id)
-            if (id.includes('class-')) {
-                console.log('Selected Fixed Class ID 1:', id.replace('class-', ''))
-                setSelectedFixedClass(id.replace('class-', ''))
-            } else {
-                console.log('Selected Fixed Class ID 2:', id)
-                setSelectedFixedClass(id)
-            }
-            await refetch()
+            const classId = id.includes('class-') ? id.replace('class-', '') : id
+            setSelectedFixedClass(classId)
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
         hideSpinner()
     }
 
-    const handleChangeSemester = async (id: string) => {
+    // Corrected handleChangeSemester
+    const handleChangeSemester = (id: string) => {
         try {
             showSpinner()
-            console.log('Selected Semester ID:', id)
             setSelectedSemesterId(id)
             const semester = semesterData.find((sem: Semester) => sem.id === id)
             setSelectedSemester(semester)
-
-            await refetch()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -264,20 +264,25 @@ export default function SubjectClassScore() {
         }
     }
 
-    const updatedScoreList = useMemo(() => {
-        return studentTrainingScoreData.map((score) => ({
-            studentId: score.studentId,
-            trainingScore: score.score,
-        }))
-    }, [studentTrainingScoreData])
+    const handleChangeSelected = (id: string) => {
+        handleFilterChange('trainingScoreSessionId', id)
+        setSelectedTrainingScoreSessionId(id)
+        const selectedSession = trainingScoreSessionData.find((session) => session.id === id)
+        handleFilterChange('trainingObjectTypeId', selectedSession?.trainingObjectTypeId || '')
+
+        setScoreList([]) // Reset scoreList when changing session
+    }
 
     useEffect(() => {
-        if (selectedTrainingScoreSessionId) {
-            setScoreList(updatedScoreList)
-        } else {
-            setScoreList([])
+        console.log('Student training score data changed:', studentTrainingScoreData)
+        if (studentTrainingScoreData) {
+            const initialScores = studentTrainingScoreData.map((score) => ({
+                studentId: score.studentId,
+                trainingScore: score.score,
+            }))
+            setScoreList(initialScores)
         }
-    }, [selectedTrainingScoreSessionId, updatedScoreList])
+    }, [studentTrainingScoreData])
 
     return (
         <div>
@@ -411,9 +416,7 @@ export default function SubjectClassScore() {
                                             label: session.name,
                                         }))}
                                         onChange={(value) => {
-                                            handleFilterChange('trainingScoreSessionId', value)
-                                            setSelectedTrainingScoreSessionId(value)
-                                            setScoreList([]) // Reset scoreList when changing session
+                                            handleChangeSelected(value)
                                         }}
                                     />
                                 </Col>
@@ -472,79 +475,6 @@ export default function SubjectClassScore() {
                                             </>
                                         ),
                                     },
-                                    // {
-                                    //     title: 'Điểm rèn luyện',
-                                    //     dataIndex: 'trainingScore',
-                                    //     width: 80,
-                                    //     align: 'center',
-                                    //     render: (text, record) => {
-                                    //         // console.log('Record:', scoreList)
-                                    //         const existingScore = scoreList.find(
-                                    //             (s) => s.studentId === record.id
-                                    //         )
-                                    //         return (
-                                    //             <InputNumber
-                                    //                 value={existingScore?.trainingScore || 0}
-                                    //                 style={{ width: 80 }}
-                                    //                 min={0}
-                                    //                 max={10}
-                                    //                 onKeyDown={(event) => {
-                                    //                     if (!/[0-9]/.test(event.key)) {
-                                    //                         event.preventDefault()
-                                    //                     }
-                                    //                 }}
-                                    //                 // onChange={(value) => {
-                                    //                 //     // Update the scoreList array for trainingScore
-                                    //                 //     setScoreList((prev) => {
-                                    //                 //         const newList = [...prev];
-                                    //                 //         const index = newList.findIndex(
-                                    //                 //             (item) => item.studentId === record.id
-                                    //                 //         );
-                                    //                 //         if (index !== -1) {
-                                    //                 //             newList[index].trainingScore = value as number;
-                                    //                 //         } else {
-                                    //                 //             newList.push({
-                                    //                 //                 studentId: record.id,
-                                    //                 //                 trainingScore: value as number,
-                                    //                 //             });
-                                    //                 //         }
-                                    //                 //         return newList;
-                                    //                 //     });
-                                    //                 onChange={(value) => {
-                                    //                     // Update the scoreList array for trainingScore
-                                    //                     setScoreList((prev) => {
-                                    //                         const newList = [...prev]
-                                    //                         const index = newList.findIndex(
-                                    //                             (item) =>
-                                    //                                 item.studentId === record.id
-                                    //                         )
-                                    //                         if (index !== -1) {
-                                    //                             newList[index].trainingScore =
-                                    //                                 value as number
-                                    //                         } else {
-                                    //                             newList.push({
-                                    //                                 studentId: record.id,
-                                    //                                 trainingScore: value as number,
-                                    //                             })
-                                    //                         }
-                                    //                         return newList
-                                    //                     })
-
-                                    //                     // Update the studentTrainingScoreData array locally
-                                    //                     // const existingScore = studentTrainingScoreData.find(
-                                    //                     //     (s: any) =>
-                                    //                     //         s.studentId === record.id &&
-                                    //                     //         s.trainingScoreSessionId === selectedTrainingScoreSessionId
-                                    //                     // );
-                                    //                     // if (existingScore) {
-                                    //                     //     existingScore.score = value as number;
-                                    //                     // }
-                                    //                     // }}
-                                    //                 }}
-                                    //             />
-                                    //         )
-                                    //     },
-                                    // },
                                     {
                                         title: 'Xếp loại',
                                         dataIndex: 'ranking',
@@ -556,7 +486,7 @@ export default function SubjectClassScore() {
                                                     placeholder="Chọn xếp loại"
                                                     style={{ width: '100%' }}
                                                     options={optionsRank}
-                                                    defaultValue={
+                                                    value={
                                                         scoreList.find(
                                                             (s) => s.studentId === record.id
                                                         )?.trainingScore || 0 // Mặc định là 0

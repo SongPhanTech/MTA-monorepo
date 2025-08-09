@@ -871,7 +871,7 @@ export default function SubjectClassScore() {
                                 width: 150,
                                 fixed: 'left',
                                 type: 'input',
-                                render: (_, record) => record.student?.userProfile?.code || '',
+                                render: (_, record) => record.student?.code || '',
                             },
                             {
                                 title: 'Họ và tên',

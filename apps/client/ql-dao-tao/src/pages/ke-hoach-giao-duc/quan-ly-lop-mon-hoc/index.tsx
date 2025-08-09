@@ -698,7 +698,7 @@ export default function TeachingAssignment() {
                                             .map((i) => {
                                                 return {
                                                     value: i?.id,
-                                                    label: `${i.userProfile?.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
+                                                    label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
                                                 }
                                             })}
                                         value={record?.lecturerId}
@@ -731,7 +731,7 @@ export default function TeachingAssignment() {
                                             .map((i) => {
                                                 return {
                                                     value: i?.id,
-                                                    label: `${i.userProfile?.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
+                                                    label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
                                                 }
                                             })}
                                         value={record?.extraLecturerId || undefined}
@@ -800,25 +800,25 @@ export default function TeachingAssignment() {
                                             record?.mainLecturer && record?.extraLecturer
                                                 ? [
                                                       {
-                                                          label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
                                                           value: record?.lecturerId,
                                                       },
                                                       {
-                                                          label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
                                                           value: record?.extraLecturerId,
                                                       },
                                                   ]
                                                 : record?.mainLecturer
                                                   ? [
                                                         {
-                                                            label: `${record?.mainLecturer?.userProfile?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
                                                             value: record?.lecturerId,
                                                         },
                                                     ]
                                                   : record?.extraLecturer
                                                     ? [
                                                           {
-                                                              label: `${record?.extraLecturer?.userProfile?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
                                                               value: record?.extraLecturerId,
                                                           },
                                                       ]

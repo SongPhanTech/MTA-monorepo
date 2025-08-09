@@ -21,7 +21,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { BookPlus } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
@@ -42,60 +42,72 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data } = useFindManyDisciplinaryWarning(
-        {
-            where: {
-                semesterId,
-                student: {
-                    userProfile: {
-                        ...(filters.code && filters.code !== ''
-                            ? {
-                                  code: {
-                                      contains: filters.code,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                        ...(filters.name && filters.name !== ''
-                            ? {
-                                  fullname: {
-                                      contains: filters.name,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                    },
-                    ...(filters.fixedClassId
+    const where = useMemo(
+        () => ({
+            semesterId,
+            student: {
+                ...(filters.code && filters.code !== ''
+                    ? {
+                          code: {
+                              contains: filters.code,
+                              mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
+                userProfile: {
+                    ...(filters.name && filters.name !== ''
                         ? {
-                              fixedClassId: {
-                                  in: Array.isArray(filters.fixedClassId)
-                                      ? filters.fixedClassId
-                                      : [filters.fixedClassId],
+                              fullname: {
+                                  contains: filters.name,
+                                  mode: 'insensitive' as const,
                               },
                           }
                         : {}),
-                    fixedClass: {
-                        ...(filters.trainingCourseId
-                            ? {
-                                  trainingCourseId: {
-                                      in: Array.isArray(filters.trainingCourseId)
-                                          ? filters.trainingCourseId
-                                          : [filters.trainingCourseId],
-                                  },
-                              }
-                            : {}),
-                        ...(filters.managementOrganizationId
-                            ? {
-                                  managementOrganizationId: {
-                                      in: Array.isArray(filters.managementOrganizationId)
-                                          ? filters.managementOrganizationId
-                                          : [filters.managementOrganizationId],
-                                  },
-                              }
-                            : {}),
-                    },
+                },
+                ...(filters.fixedClassId
+                    ? {
+                          fixedClassId: {
+                              in: Array.isArray(filters.fixedClassId)
+                                  ? filters.fixedClassId
+                                  : [filters.fixedClassId],
+                          },
+                      }
+                    : {}),
+                fixedClass: {
+                    ...(filters.trainingCourseId
+                        ? {
+                              trainingCourseId: {
+                                  in: Array.isArray(filters.trainingCourseId)
+                                      ? filters.trainingCourseId
+                                      : [filters.trainingCourseId],
+                              },
+                          }
+                        : {}),
+                    ...(filters.managementOrganizationId
+                        ? {
+                              managementOrganizationId: {
+                                  in: Array.isArray(filters.managementOrganizationId)
+                                      ? filters.managementOrganizationId
+                                      : [filters.managementOrganizationId],
+                              },
+                          }
+                        : {}),
                 },
             },
+        }),
+        [
+            semesterId,
+            filters.code,
+            filters.name,
+            filters.fixedClassId,
+            filters.trainingCourseId,
+            filters.managementOrganizationId,
+        ]
+    )
+
+    const { data } = useFindManyDisciplinaryWarning(
+        {
+            where,
             include: {
                 student: {
                     include: {
@@ -122,56 +134,8 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
     const { data: count } = useCountDisciplinaryWarning(
         {
             where: {
-                semesterId,
-                student: {
-                    userProfile: {
-                        ...(filters.code && filters.code !== ''
-                            ? {
-                                  code: {
-                                      contains: filters.code,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                        ...(filters.name && filters.name !== ''
-                            ? {
-                                  fullname: {
-                                      contains: filters.name,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                    },
-                    ...(filters.fixedClassId
-                        ? {
-                              fixedClassId: {
-                                  in: Array.isArray(filters.fixedClassId)
-                                      ? filters.fixedClassId
-                                      : [filters.fixedClassId],
-                              },
-                          }
-                        : {}),
-                    fixedClass: {
-                        ...(filters.trainingCourseId
-                            ? {
-                                  trainingCourseId: {
-                                      in: Array.isArray(filters.trainingCourseId)
-                                          ? filters.trainingCourseId
-                                          : [filters.trainingCourseId],
-                                  },
-                              }
-                            : {}),
-                        ...(filters.managementOrganizationId
-                            ? {
-                                  managementOrganizationId: {
-                                      in: Array.isArray(filters.managementOrganizationId)
-                                          ? filters.managementOrganizationId
-                                          : [filters.managementOrganizationId],
-                                  },
-                              }
-                            : {}),
-                    },
-                },
+                ...where,
+                deletedAt: null,
             },
         },
         { enabled: !!semesterId }
@@ -272,7 +236,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                render: (__, record) => record?.student?.userProfile?.code,
+                                render: (__, record) => record?.student?.code,
                             },
                             {
                                 title: 'Tên sinh viên',
