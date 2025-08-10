@@ -1176,6 +1176,7 @@ model SubjectClass {
   fixedClasses               FixedClass[]
   classSchedules             ClassSchedule[]
   thesisProjects             ThesisProject[]
+  expertProfile              ExpertProfile[]
 
   @@schema("ql-dao-tao")
 }
@@ -3415,13 +3416,14 @@ model ThesisProject {
   organizationId    String                      @db.Uuid()
   maxStudents       Int
   currentStudents   Int                         @default(0)
+  council           Council?                    @relation(fields: [councilId], references: [id])
+  councilId         String?
   registrationStart DateTime
   registrationEnd   DateTime
   projectStart      DateTime?
   projectEnd        DateTime?
   defenseRecord     DefenseRecord?
   librarySubmission LibrarySubmission?
-  council           Council[]
   decisions         Decision[]
   registrations     StudentThesisRegistration[]
 
@@ -3471,8 +3473,9 @@ model ExpertProfile {
   specialization     String?
   workplace          String?
   phone              String?
-  email              String?         @unique()
+  email              String?
   supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
+  subjectClass       SubjectClass[]
   councilMemberships CouncilMember[]
   payments           PaymentRecord[]
 
@@ -3528,10 +3531,9 @@ model Council {
   status                      CouncilProposalStatus      @default(PENDING)
   defenseDate                 DateTime?
   location                    String?
-  thesisId                    String
-  thesis                      ThesisProject              @relation(fields: [thesisId], references: [id])
   studentThesisRegistration   StudentThesisRegistration? @relation(fields: [studentThesisRegistrationId], references: [id])
   studentThesisRegistrationId String?                    @unique()
+  thesis                      ThesisProject[]
   members                     CouncilMember[]
 
   @@schema("ql-dao-tao")

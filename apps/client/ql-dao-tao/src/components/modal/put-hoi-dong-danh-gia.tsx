@@ -62,7 +62,7 @@ const PutCouncil = () => {
                 await createCouncil({
                     data: {
                         ...data,
-                        thesisId: input.thesisProjectId,
+                        thesis: { connect: { id: input.thesisProjectId } },
                     },
                 })
                 message.success('Thêm mới thành công')
