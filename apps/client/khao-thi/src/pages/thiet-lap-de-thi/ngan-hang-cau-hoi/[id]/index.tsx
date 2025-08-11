@@ -28,6 +28,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { env } from '@/env'
 
 export default function QuestionPage() {
     const router = useRouter()
@@ -200,7 +201,9 @@ export default function QuestionPage() {
 
     const handleDownloadTemplate = async () => {
         try {
-            const response = await fetch('/files/file-mau-import-cau-hoi.docx')
+            const response = await fetch(
+                `${env.NEXT_PUBLIC_ASSET_PREFIX}/files/file-mau-import-cau-hoi.docx`
+            )
             const blob = await response.blob()
             const url = window.URL.createObjectURL(blob)
 

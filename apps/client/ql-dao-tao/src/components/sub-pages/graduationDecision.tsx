@@ -31,6 +31,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         decisionDate: undefined,
         finalGpa: undefined,
         diplomaNumber: '',
+        originalDiplomaNumber: '',
         diplomaIssueDate: undefined,
     })
 
@@ -84,6 +85,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                                   ? {
                                                         diplomaNumber: {
                                                             contains: filters.diplomaNumber,
+                                                            mode: 'insensitive',
+                                                        },
+                                                    }
+                                                  : {}),
+                                              ...(filters.originalDiplomaNumber
+                                                  ? {
+                                                        originalDiplomaNumber: {
+                                                            contains: filters.originalDiplomaNumber,
                                                             mode: 'insensitive',
                                                         },
                                                     }
@@ -237,11 +246,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                         : '',
                             },
                             {
-                                title: 'Ghi chú của hội đồng',
-                                width: 200,
-                                render: (_, record) => record?.notes,
-                            },
-                            {
                                 title: 'GPA cuối cùng',
                                 align: 'center',
                                 width: 100,
@@ -271,6 +275,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 render: (_, record) => record?.diplomaNumber,
                             },
                             {
+                                title: 'Số vào sổ gốc văn bằng',
+                                align: 'center',
+                                dataIndex: 'originalDiplomaNumber',
+                                type: 'input',
+                                width: 120,
+                                render: (_, record) => record?.originalDiplomaNumber,
+                            },
+                            {
                                 title: 'Ngày cấp bằng',
                                 dataIndex: 'diplomaIssueDate',
                                 align: 'center',
@@ -289,6 +301,11 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 dataIndex: 'classification',
                                 width: 100,
                                 render: (_, record) => record?.finalRanking?.classification,
+                            },
+                            {
+                                title: 'Ghi chú của hội đồng',
+                                width: 200,
+                                render: (_, record) => record?.notes,
                             },
                             {
                                 title: 'Thao tác',

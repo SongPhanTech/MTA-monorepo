@@ -40,6 +40,8 @@ export default function TestStructureRule() {
     const examId = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [currentPage2, setCurrentPage2] = useState(1)
+    const [numberOfPages2, setNumberOfPages2] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
     const [examBankModal, setExamBankModal] = useState({
         visible: false,
@@ -195,8 +197,8 @@ export default function TestStructureRule() {
                 },
                 _count: { select: { questions: true } },
             },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
+            take: numberOfPages2,
+            skip: (currentPage2 - 1) * numberOfPages2,
         },
         { enabled: !!examId }
     )
@@ -336,6 +338,7 @@ export default function TestStructureRule() {
                             {
                                 title: 'Chương mục',
                                 dataIndex: 'knowledgeBlockId',
+                                width: 200,
                                 align: 'center',
                                 type: 'select',
                                 options: knowledgeBlockData?.map(({ id, name }) => ({
@@ -523,15 +526,15 @@ export default function TestStructureRule() {
                         ]}
                         data={examData}
                         pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
+                            current: currentPage2,
+                            pageSize: numberOfPages2,
                             total: countExam,
                             onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
+                                if (numberOfPages2 === pageSize) {
+                                    setCurrentPage2(page)
                                 } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
+                                    setCurrentPage2(1)
+                                    setNumberOfPages2(pageSize)
                                 }
                             },
                         }}

@@ -12,16 +12,22 @@ import { Col, Form, Input, InputNumber, message, Select } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
-import { type GraduationDecision, RankingContext } from '@workspace/db'
+import { type DocumentFile, type GraduationDecision, RankingContext } from '@workspace/db'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 dayjs.locale('vi')
 
-type PutGraduationDecisionFormValues = GraduationDecision
+type PutGraduationDecisionFormValues = GraduationDecision & {
+    diplomaFront?: DocumentFile[]
+    diplomaBack?: DocumentFile[]
+}
 
 const PutGraduationDecision = () => {
+    const [document, setDocument] = useState<DocumentFile[]>([])
+    const [document2, setDocument2] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutGraduationDecisionFormValues>()
     const { isOpen, onClose, input } = useDisclosure<{ id: string; trainingCourseId: string }>({
         tag: PutGraduationDecision.name,
@@ -53,9 +59,8 @@ const PutGraduationDecision = () => {
                 })
                 message.success('Cập nhật thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['SchoolYear'],
+                queryKey: ['GraduationDecision'],
             })
             onClose()
         } catch (_error) {
@@ -201,11 +206,6 @@ const PutGraduationDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="diplomaNumber" label="Số hiệu văn bằng">
-                    <Input placeholder="Nhập số hiệu" step={1} className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="diplomaIssueDate" label="Ngày cấp bằng">
                     <DatePicker
                         format={{
@@ -217,8 +217,46 @@ const PutGraduationDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="diplomaNumber" label="Số hiệu văn bằng">
+                    <Input placeholder="Nhập số hiệu văn bằng" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="originalDiplomaNumber" label="Số vào sổ gốc văn bằng">
+                    <Input placeholder="Nhập số vào sổ gốc văn bằng" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
                 <FormItem form={form} name="notes" label="Ghi chú của hội đồng">
                     <Input.TextArea placeholder="Nhập ghi chú" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name={'diplomaFront'} label="Ảnh phôi mặt trước">
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={input?.id ?? ''}
+                        relationType={'diplomaFrontId'}
+                        titleForm={'diplomaFront'}
+                        multiple={false}
+                        accept="image/*,.pdf"
+                        text="ảnh"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name={'diplomaBack'} label="Ảnh phôi mặt sau">
+                    <DocumentPaths
+                        form={form}
+                        data={document2}
+                        relationId={input?.id ?? ''}
+                        relationType={'diplomaBackId'}
+                        titleForm={'diplomaBack'}
+                        multiple={false}
+                        accept="image/*,.pdf"
+                        text="ảnh"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>
