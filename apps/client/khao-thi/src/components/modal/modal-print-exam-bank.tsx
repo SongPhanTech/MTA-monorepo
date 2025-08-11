@@ -1,15 +1,15 @@
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
+import { formatDateVN } from '@lib/utils'
 import type { ExamBankQuestion, Question } from '@workspace/db'
-import { useFindUniqueExam } from '@workspace/db/hooks'
-// import { Docxtemplater, exportFile, loadFile } from '@workspace/libs/docxjs'
-import { Button, Modal, Space } from 'antd'
+import { Docxtemplater, exportFile, loadFile } from '@workspace/libs/docxjs'
+import { Button, Modal, message, Space } from 'antd'
 import dayjs from 'dayjs'
-// import { saveAs } from 'file-saver'
-// import { upperFirst } from 'lodash'
+import { saveAs } from 'file-saver'
 import { FileDown, Printer } from 'lucide-react'
 import { useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
+import { env } from '@/env'
 
 export const ModalPrintExamBank = () => {
     const formattedDate = `Ngày ${dayjs().format('DD')} tháng ${dayjs().format('MM')} năm ${dayjs().format('YYYY')}`
@@ -25,24 +25,6 @@ export const ModalPrintExamBank = () => {
         tag: ModalPrintExamBank.name,
     })
 
-    const { data } = useFindUniqueExam(
-        {
-            where: { id: input?.examId },
-            include: {
-                examBank: {
-                    include: {
-                        questions: {
-                            include: {
-                                question: true,
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        { enabled: !!input?.examId }
-    )
-
     const printRef = useRef<HTMLDivElement>(null)
 
     const handlePrint = useReactToPrint({
@@ -53,127 +35,66 @@ export const ModalPrintExamBank = () => {
     // Xử lý xuất file Word
     const exportToWord = async () => {
         if (!input?.data) return
-        // try {
-        //     console.log('Loading template file...')
-        //     const res = await loadFile('/templates/BMKT05.docx')
-        //     console.log('Template loaded successfully:', !!res)
-        //     console.log('Initializing Docxtemplater...')
-        //     const doc = new Docxtemplater(res, {
-        //         linebreaks: true,
-        //         paragraphLoop: true,
-        //         errorLogging: true,
-        //     })
-        //     // Lấy thông tin thiết bị
-        //     const equipmentInfo = handoverDetail.equipmentRevampContent?.equipmentLocation
-        //     const equipmentName = equipmentInfo?.realEquipment?.equipment?.equipmentName || ''
-        //     const serial = equipmentInfo?.realEquipment?.serial || ''
-        //     const organizationFromNameUpper = upperFirst(
-        //         handoverDetail.organizationFrom?.name || ''
-        //     )
-        //     const organizationToNameUpper = upperFirst(handoverDetail.organizationTo?.name || '')
-        //     // Format dữ liệu cho template
-        //     const templateData = {
-        //         // Thông tin cơ bản
-        //         number: handoverDetail.number || '',
-        //         date: handoverDetail.date ? formatDateVN(handoverDetail.date) : '',
-        //         currentDate: formatDateVN(dayjs()),
-        //         currentDay: dayjs().date(),
-        //         currentMonth: dayjs().month() + 1,
-        //         currentYear: dayjs().year(),
-        //         // Thông tin tổ chức
-        //         organizationFromName: handoverDetail.organizationFrom?.name || '',
-        //         organizationToName: handoverDetail.organizationTo?.name || '',
-        //         organizationFromNameUpper: organizationFromNameUpper,
-        //         organizationToNameUpper: organizationToNameUpper,
-        //         // Thông tin thiết bị chính
-        //         equipmentName: equipmentName,
-        //         equipmentSerial: serial,
-        //         equipmentUnit: equipmentInfo?.realEquipment?.equipment?.unit || '',
-        //         equipmentLocation: equipmentInfo?.organization?.name || '',
-        //         // Số phiếu sản xuất
-        //         productionNumber: latestProductionLog?.number || handoverDetail.number || '',
-        //         // Ngày tháng từ handoverDetail
-        //         handoverDay: handoverDetail.date ? new Date(handoverDetail.date).getDate() : '',
-        //         handoverMonth: handoverDetail.date
-        //             ? new Date(handoverDetail.date).getMonth() + 1
-        //             : '',
-        //         handoverYear: handoverDetail.date
-        //             ? new Date(handoverDetail.date).getFullYear()
-        //             : '',
-        //         // Thành phần tham gia
-        //         participants:
-        //             handoverDetail.technicalConditionHandoverOfEquipmentBeforeRepair?.map(
-        //                 (participant, index) => ({
-        //                     index: index + 1,
-        //                     role: participant.role || 'Vai trò',
-        //                     fullname: participant.profile?.fullname || '',
-        //                     position:
-        //                         participant.role ||
-        //                         getLatestPosition(participant.profile?.workHistory) ||
-        //                         'Vai trò',
-        //                 })
-        //             ) || [],
-        //         // Danh sách thiết bị bàn giao
-        //         handoverItems:
-        //             handoverDetail.handoverOfEquipmentBeforeRepairContent?.map(
-        //                 (content, index) => ({
-        //                     index: index + 1,
-        //                     equipmentName:
-        //                         content.equipmentLocation?.realEquipment?.equipment
-        //                             ?.equipmentName || '',
-        //                     unit: content.equipmentLocation?.realEquipment?.equipment?.unit || '',
-        //                     quantity: content.quantity?.toString() || '0',
-        //                     serial: content.equipmentLocation?.realEquipment?.serial || '',
-        //                     manufacturer:
-        //                         content.equipmentLocation?.realEquipment?.manufacturer?.name || '',
-        //                     mgfYear: content.equipmentLocation?.realEquipment?.mgfYear || '',
-        //                     technicalCondition: content.technicalCondition || '',
-        //                     note: handoverDetail.description || '',
-        //                 })
-        //             ) || [],
-        //         // Kết luận
-        //         conclusion: handoverDetail.conclusion || '',
-        //         // Tổng số thiết bị
-        //         totalItems: handoverDetail.handoverOfEquipmentBeforeRepairContent?.length || 0,
-        //     }
-        //     console.log('Rendering template with data...')
-        //     await doc.renderAsync(templateData)
-        //     console.log('Template rendered successfully')
-        //     const blob = exportFile(doc.getZip())
-        //     const fileName = `Bien_ban_ban_giao_${handoverDetail.number || 'NoNumber'}_${dayjs().format('DDMMYYYY')}.docx`
-        //     saveAs(blob, fileName)
-        //     message.success('Xuất file Word thành công')
-        // } catch (error: any) {
-        //     console.error('Lỗi khi xuất file Word:', error)
-        //     // Detailed error logging for Docxtemplater
-        //     if (error?.properties?.errors) {
-        //         console.error('Docxtemplater errors:', error.properties.errors)
-        //         error.properties.errors.forEach((err: any, index: number) => {
-        //             console.error(`Error ${index + 1}:`, {
-        //                 message: err.message,
-        //                 name: err.name,
-        //                 stack: err.stack,
-        //                 properties: err.properties,
-        //             })
-        //         })
-        //     }
-        //     message.error(`Xuất file Word thất bại: ${error?.message || 'Unknown error'}`)
-        // }
+
+        try {
+            console.log('Loading template file...')
+            const res = await loadFile(`${env.NEXT_PUBLIC_ASSET_PREFIX}/templates/InDeThi.docx`)
+            console.log('Template loaded successfully:', !!res)
+
+            console.log('Initializing Docxtemplater...')
+            const doc = new Docxtemplater(res, {
+                linebreaks: true,
+                paragraphLoop: true,
+                errorLogging: true,
+            })
+
+            // Format dữ liệu cho template
+            const templateData = {
+                currentDate: formatDateVN(dayjs()),
+                lop: input?.subject,
+                hocPhan: input?.subjectVersionName,
+                duration: input?.duration,
+                semester: input?.semester,
+                examCode: input?.examCode,
+
+                questions:
+                    input?.data?.map((item, index) => ({
+                        index: index + 1,
+                        point: item?.question?.point,
+                        content: item.question.content
+                            ? renderWithMath(item.question.content)
+                            : '<i>Chưa có nội dung</i>',
+                    })) || [],
+            }
+            console.log(templateData)
+
+            console.log('Rendering template with data...')
+            await doc.renderAsync(templateData)
+            console.log('Template rendered successfully')
+
+            const blob = exportFile(doc.getZip())
+            const fileName = `De_thi_mon_${input?.subjectVersionName}_${input?.examCode}_${dayjs().format('DDMMYYYY')}.docx`
+            saveAs(blob, fileName)
+            message.success('Xuất file Word thành công')
+        } catch (error: any) {
+            console.error('Lỗi khi xuất file Word:', error)
+
+            // Detailed error logging for Docxtemplater
+            if (error?.properties?.errors) {
+                console.error('Docxtemplater errors:', error.properties.errors)
+                error.properties.errors.forEach((err: any, index: number) => {
+                    console.error(`Error ${index + 1}:`, {
+                        message: err.message,
+                        name: err.name,
+                        stack: err.stack,
+                        properties: err.properties,
+                    })
+                })
+            }
+
+            message.error(`Xuất file Word thất bại: ${error?.message || 'Unknown error'}`)
+        }
     }
-
-    // Hàm lấy vị trí công việc mới nhất từ workHistory
-    function getLatestPosition(workHistory: any[] = []) {
-        if (!workHistory.length) return ''
-        return (
-            [...workHistory].sort((a, b) => new Date(b.to).getTime() - new Date(a.to).getTime())[0]
-                .position || ''
-        )
-    }
-
-    // if (!isOpen || !handoverDetail) return null
-
-    // const equipmentInfo = handoverDetail.equipmentRevampContent?.equipmentLocation
-    // const equipmentName = equipmentInfo?.realEquipment?.equipment?.equipmentName || ''
 
     return (
         <Modal
