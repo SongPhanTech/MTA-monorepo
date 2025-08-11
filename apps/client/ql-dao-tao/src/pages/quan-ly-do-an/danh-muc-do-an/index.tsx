@@ -4,7 +4,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutThesisProject } from '@components/modal'
+import { ModalPrintDecision, PutThesisProject } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -12,7 +12,7 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import { SubjectVersionType } from '@workspace/db'
+import { type CouncilMember, SubjectVersionType } from '@workspace/db'
 import {
     useCountSubjectClass,
     useCreateManyInvitation,
@@ -182,6 +182,16 @@ export default function ThesisProject() {
         ]
     )
 
+    const { data: data1 } = useFindManySubjectClass({
+        where: {
+            subject: {
+                type: SubjectVersionType.Project,
+            },
+        },
+    })
+
+    console.log(data1)
+
     const { data: subjectClass } = useFindManySubjectClass({
         where,
         include: {
@@ -285,6 +295,10 @@ export default function ThesisProject() {
         tag: PutThesisProject.name,
     })
 
+    const { onOpen: openModalPrintDecision } = useDisclosure({
+        tag: ModalPrintDecision.name,
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
@@ -331,7 +345,7 @@ export default function ThesisProject() {
 
     const councilMemberIds =
         selectedThesisProjects
-            ?.flatMap(({ council }) => council?.members.map((member) => member.id))
+            ?.flatMap(({ council }) => council?.members.map((member: CouncilMember) => member.id))
             .filter((id): id is string => Boolean(id)) || []
 
     const createInvitations = async () => {
@@ -399,7 +413,10 @@ export default function ThesisProject() {
                             </Flex>
                         </Col>
                         <Col>
-                            <Flex justify="end">
+                            <Flex justify="end" gap={4}>
+                                <Button onClick={() => openModalPrintDecision()} type="primary">
+                                    Quyết định
+                                </Button>
                                 <Button onClick={createInvitations} type="primary">
                                     <BookPlus />
                                     Tạo thư mời
