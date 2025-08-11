@@ -500,7 +500,7 @@ model SubjectClass extends Base {
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt              DateTime? // ngày xuất phiếu điểm
 
-  room                       Room?                 @relation(fields: [roomId], references: [id])
+  room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                     String?
 
   mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
@@ -519,6 +519,7 @@ model SubjectClass extends Base {
   // Môn đồ án
   thesisProjects             ThesisProject[] // DS đồ án
   expertProfile              ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
+  defenseRooms               Room[]                @relation("DefenseRooms")
 
   @@schema("ql-dao-tao")
 }

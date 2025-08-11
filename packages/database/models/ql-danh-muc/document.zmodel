@@ -3,6 +3,7 @@ import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/training-action'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/categories'
+import '../ql-dao-tao/ranking'
 import 'notification'
 
 model DocumentFile extends Base {
@@ -39,11 +40,10 @@ model DocumentFile extends Base {
   defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
   defenseRecordId           String?
 
-  diplomaTypeFront          DiplomaType?             @relation(name: "DiplomaTypeFront", fields: [diplomaTypeFrontId], references: [id])
-  diplomaTypeFrontId        String?                  @unique
-
-  diplomaTypeBack           DiplomaType?             @relation(name: "DiplomaTypeBack", fields: [diplomaTypeBackId], references: [id])
-  diplomaTypeBackId         String?                  @unique
+  diplomaFront              GraduationDecision?      @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
+  diplomaFrontId            String?                  @unique
+  diplomaBack               GraduationDecision?      @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
+  diplomaBackId             String?                  @unique
 
   @@schema("ql-danh-muc")
 }

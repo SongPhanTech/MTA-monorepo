@@ -2,7 +2,8 @@ import '../base'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/plan-training'
-import '../ql-danh-muc/core-categories.zmodel'
+import '../ql-dao-tao/categories'
+import '../ql-danh-muc/core-categories'
 import '../ql-danh-muc/document'
 
 // Trạng thái đồ án
@@ -108,11 +109,18 @@ model ExpertProfile extends Base {
   lecturer           Lecturer?       @relation(fields: [lecturerId], references: [id])
   lecturerId         String?         @unique // Null nếu là chuyên gia ngoài trường
   name               String?   // Họ tên
-  title              String?   // Học hàm, học vị (GS, PGS, TS, ThS)
+  academicRank       String?   // Học hàm
+  academicDegree     String?   // Học vị
+  organization       String?   // Đơn vị
+  position           String?   // Chức vụ
   specialization     String?   // Chuyên ngành
+  major              TrainingMajor[]
   workplace          String?   // Đơn vị công tác
   phone              String?
   email              String?         @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
+
+  eligiblePresident  Boolean // có thể làm chủ tịch
+  eligibleSecretary  Boolean // có thể làm thư ký
 
   supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
   subjectClass       SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
