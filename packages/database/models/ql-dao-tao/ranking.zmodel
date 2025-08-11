@@ -6,6 +6,7 @@ import '../ql-ho-so/profile'
 import 'categories'
 import 'training-score'
 import 'criteria'
+import '../ql-danh-muc/document'
 
 enum GraduationSessionStatus {
   PLANNING              // Đang lên kế hoạch
@@ -77,26 +78,29 @@ model ApplicationCheckResult extends Base {
 
 /// Lưu trữ quyết định tốt nghiệp cuối cùng cho một sinh viên
 model GraduationDecision extends Base {
-  application      StudentGraduationApplication @relation(fields: [applicationId], references: [id])
-  applicationId    String                       @unique
-  student          Student                      @relation(fields: [studentId], references: [id])
-  studentId        String                       @unique // Mỗi sinh viên chỉ có 1 quyết định tốt nghiệp
+  application           StudentGraduationApplication @relation(fields: [applicationId], references: [id])
+  applicationId         String                       @unique
+  student               Student                      @relation(fields: [studentId], references: [id])
+  studentId             String                       @unique // Mỗi sinh viên chỉ có 1 quyết định tốt nghiệp
 
-  decisionDate     DateTime                     @default(now())
-  notes            String?          // Ghi chú của hội đồng
+  decisionDate          DateTime                     @default(now())
+  notes                 String?          // Ghi chú của hội đồng
 
   // Thông tin tại thời điểm tốt nghiệp (snapshot)
-  finalGpa         Decimal                      @db.Decimal(5, 2)            // GPA cuối cùng
-  trainingMajor    TrainingMajor?               @relation(fields: [trainingMajorId], references: [id])
-  trainingMajorId  String?
-  finalRanking     AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
-  finalRankingId   String
+  finalGpa              Decimal                      @db.Decimal(5, 2)            // GPA cuối cùng
+  trainingMajor         TrainingMajor?               @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId       String?
+  finalRanking          AcademicRankingConvert       @relation(fields: [finalRankingId], references: [id])
+  finalRankingId        String
 
-  diplomaType      DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId    String?          // curriculumVersion.diplomaId
-  diplomaNumber    String?                      @unique  // Số hiệu văn bằng
-  // diplomaNumber    Int                          @default(autoincrement()) @unique  // Số hiệu văn bằng
-  diplomaIssueDate DateTime?        // Ngày cấp bằng
+  diplomaType           DiplomaType?                 @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId         String?          // curriculumVersion.diplomaId
+  originalDiplomaNumber String?                      @unique // Số vào sổ gốc văn bằng
+  diplomaNumber         String?                      @unique // Số hiệu văn bằng
+  diplomaIssueDate      DateTime?        // Ngày cấp bằng
+
+  diplomaFront          DocumentFile?                @relation("DiplomaFront")
+  diplomaBack           DocumentFile?                @relation("DiplomaBack")
 
   @@schema("ql-dao-tao")
 }

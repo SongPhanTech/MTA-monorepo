@@ -302,7 +302,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                         </FormItem>
                     </Col>
 
-                    <Col span={8}>
+                    <Col lg={8} sm={12}>
                         <FormItem
                             form={form}
                             name="bLaHocVien"
@@ -313,7 +313,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             <Checkbox>Bạn là học viên</Checkbox>
                         </FormItem>
                     </Col>
-                    <Col span={4}>
+                    <Col span={8}>
                         <FormItem
                             form={form}
                             name="bLaCanBoNhanVien"

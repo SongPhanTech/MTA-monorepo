@@ -87,7 +87,7 @@ const SiderDefaultLayout = ({
             width={230}
         >
             <div
-                className={`flex items-center bg-white justify-center py-3 fixed z-[100] top-[0px] left-[0px] ${collapsed ? 'w-[60px]' : 'w-[230px]'}`}
+                className={`flex items-center bg-white justify-center py-3 fixed z-[100] top-[0px] left-[0px] ${collapsed ? 'w-[80px]' : 'w-[230px]'}`}
             >
                 {collapsed ? logo1 : logo2}
             </div>

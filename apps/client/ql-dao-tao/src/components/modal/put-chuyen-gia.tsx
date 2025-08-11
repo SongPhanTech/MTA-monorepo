@@ -136,7 +136,7 @@ const PutExpertProfile = () => {
                 </Radio.Group>
             </Col>
             {isInternal && (
-                <Col span={12}>
+                <Col span={24}>
                     <FormItem form={form} name="lecturerId" label="Chuyên gia hướng dẫn">
                         <Select
                             placeholder="Chọn chuyên gia hướng dẫn"
