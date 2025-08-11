@@ -17,6 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag } from 'antd'
+import axios from 'axios'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Printer } from 'lucide-react'
@@ -244,14 +245,18 @@ export default function UserProfilePageDs() {
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateUserProfile({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
+            const res = await axios.delete(`https://mta.swantech.vn/DM_NhanViens/${id}`)
+            if (res.status === 200) {
+                await updateUserProfile({
+                    where: {
+                        id,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                })
+                message.success('Xoá hồ sơ thành công')
+            }
         } catch (error) {
             console.log(error)
 
@@ -485,7 +490,7 @@ export default function UserProfilePageDs() {
                                 width: 120,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id, idCardNumber }) => (
+                                render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <Dropdown
                                             overlay={
@@ -511,7 +516,7 @@ export default function UserProfilePageDs() {
                                         </Dropdown>
                                         <EditIcon
                                             onClick={() => {
-                                                router.push(`quan-ly-ho-so/${idCardNumber}`)
+                                                router.push(`quan-ly-ho-so/${id}`)
                                             }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
