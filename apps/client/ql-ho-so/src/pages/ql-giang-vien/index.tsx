@@ -1,3 +1,4 @@
+import { UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -7,6 +8,8 @@ import {
     PutUserProfileLectureModal,
 } from '@components/modal'
 import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
+import ExportTemplateLecturer from '@components/modal/quan-ly-ho-so/modals/export-template-lecturer'
+import ImportLecturerModal from '@components/modal/quan-ly-ho-so/modals/import-excel-lecturer'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -33,7 +36,7 @@ dayjs.locale('vi')
 export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-
+    const [importModalVisible, setImportModalVisible] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -167,14 +170,14 @@ export default function UserProfilePageLecture() {
         tag: PutUserProfileLectureModal.name,
     })
 
-    const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } = useDisclosure({
+    const { onOpen: onOpenModalAdd } = useDisclosure({
         tag: PutUserProfileLectureModal.name,
     })
 
-    const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
+    const { onOpen: onOpenUpload } = useDisclosure<string>({
         tag: PutUploadProfileModal.name,
     })
-    const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
+    const { onOpen: onOpenUpdateFile } = useDisclosure<string>({
         tag: PutUpdateProfileModal.name,
     })
 
@@ -322,8 +325,20 @@ export default function UserProfilePageLecture() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="end">
-                        <Col span={7}>
-                            <Flex justify="end">
+                        <Col span={24}>
+                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                                <Button
+                                    type="primary"
+                                    onClick={() => setImportModalVisible(true)}
+                                    icon={<UploadOutlined />}
+                                >
+                                    Nhập dữ liêu Excel
+                                </Button>
+                                <ImportLecturerModal
+                                    visible={importModalVisible}
+                                    onCancel={() => setImportModalVisible(false)}
+                                />
+                                <ExportTemplateLecturer />
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button>
