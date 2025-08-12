@@ -4,7 +4,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { ModalPrintDecision, PutThesisProject } from '@components/modal'
+import { ModalPrintDecision, PutSettingClass, PutThesisProject } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -30,6 +30,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { BsGear } from 'react-icons/bs'
 
 export default function ThesisProject() {
     const router = useRouter()
@@ -56,8 +57,64 @@ export default function ThesisProject() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
 
-    const where = useMemo(
-        () => ({
+    const where = useMemo(() => {
+        const thesisProjectFilters = {
+            ...(filters.code
+                ? { code: { contains: filters.code, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.title
+                ? { title: { contains: filters.title, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.titleEN
+                ? { titleEN: { contains: filters.titleEN, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.summary
+                ? { summary: { contains: filters.summary, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.supervisor
+                ? {
+                      supervisor: {
+                          name: {
+                              contains: filters.supervisor,
+                              mode: 'insensitive' as const,
+                          },
+                      },
+                  }
+                : {}),
+            ...emptyObjectIf(
+                {
+                    organizationId: {
+                        in: filters.organization,
+                    },
+                },
+                !!filters.organization
+            ),
+            ...(filters.startDate?.length === 2
+                ? {
+                      registrationStart: {
+                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endDate?.length === 2
+                ? {
+                      registrationEnd: {
+                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.statusThesisProject
+                ? Array.isArray(filters.statusThesisProject)
+                    ? { status: { in: filters.statusThesisProject } }
+                    : { status: { equals: filters.statusThesisProject } }
+                : {}),
+        }
+
+        const hasThesisProjectFilter = Object.keys(thesisProjectFilters).length > 0
+
+        return {
             subject: {
                 type: SubjectVersionType.Project,
             },
@@ -65,18 +122,8 @@ export default function ThesisProject() {
             ...(filters.searchText
                 ? {
                       OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive' as const,
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive' as const,
-                              },
-                          },
+                          { name: { contains: filters.searchText, mode: 'insensitive' as const } },
+                          { code: { contains: filters.searchText, mode: 'insensitive' as const } },
                           {
                               subject: {
                                   name: {
@@ -88,109 +135,27 @@ export default function ThesisProject() {
                       ],
                   }
                 : {}),
-            thesisProjects: {
-                some: {
-                    ...(filters.code
-                        ? { code: { contains: filters.code, mode: 'insensitive' as const } }
-                        : {}),
-                    ...(filters.title
-                        ? {
-                              title: {
-                                  contains: filters.title,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.titleEN
-                        ? {
-                              titleEN: {
-                                  contains: filters.titleEN,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.summary
-                        ? {
-                              summary: {
-                                  contains: filters.summary,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.supervisor
-                        ? {
-                              supervisor: {
-                                  name: {
-                                      contains: filters.supervisor,
-                                      mode: 'insensitive' as const,
-                                  },
-                              },
-                          }
-                        : {}),
-                    ...emptyObjectIf(
-                        {
-                            organizationId: {
-                                in: filters.organization,
-                            },
-                        },
-                        !!filters.organization
-                    ),
-                    ...(filters.startDate?.length === 2
-                        ? {
-                              registrationStart: {
-                                  gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
-                                  lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
-                              },
-                          }
-                        : {}),
-                    ...(filters.endDate?.length === 2
-                        ? {
-                              registrationEnd: {
-                                  gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
-                                  lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
-                              },
-                          }
-                        : {}),
-                    ...(filters.statusThesisProject
-                        ? Array.isArray(filters.statusThesisProject)
-                            ? {
-                                  status: {
-                                      in: filters.statusThesisProject,
-                                  },
-                              }
-                            : {
-                                  status: {
-                                      equals: filters.statusThesisProject,
-                                  },
-                              }
-                        : {}),
-                },
-            },
-        }),
-        [
-            selectedSemesterId,
-            filters.searchText,
-            filters.code,
-            filters.title,
-            filters.titleEN,
-            filters.supervisor,
-            filters.organization,
-            filters.startDate,
-            filters.endDate,
-            filters.statusThesisProject,
-            filters.summary,
-        ]
-    )
-
-    const { data: data1 } = useFindManySubjectClass({
-        where: {
-            subject: {
-                type: SubjectVersionType.Project,
-            },
-        },
-    })
-
-    console.log(data1)
+            ...(hasThesisProjectFilter
+                ? {
+                      thesisProjects: {
+                          some: thesisProjectFilters,
+                      },
+                  }
+                : {}),
+        }
+    }, [
+        selectedSemesterId,
+        filters.searchText,
+        filters.code,
+        filters.title,
+        filters.titleEN,
+        filters.supervisor,
+        filters.organization,
+        filters.startDate,
+        filters.endDate,
+        filters.statusThesisProject,
+        filters.summary,
+    ])
 
     const { data: subjectClass } = useFindManySubjectClass({
         where,
@@ -297,6 +262,10 @@ export default function ThesisProject() {
 
     const { onOpen: openModalPrintDecision } = useDisclosure({
         tag: ModalPrintDecision.name,
+    })
+
+    const { onOpen: openPutSettingClass } = useDisclosure({
+        tag: PutSettingClass.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -458,6 +427,14 @@ export default function ThesisProject() {
                                         })
                                     }}
                                     title="Thêm mới đề tài"
+                                />
+                                <BsGear
+                                    onClick={() => {
+                                        openPutSettingClass({
+                                            subjectClassId: id,
+                                        })
+                                    }}
+                                    title="Cấu hình lớp đồ án"
                                 />
                             </div>
                         )}

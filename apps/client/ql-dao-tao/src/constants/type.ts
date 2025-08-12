@@ -118,6 +118,8 @@ export type FilterProps = {
     workplace?: string
     phone?: string
     email?: string
+    academicRank?: string
+    academicDegree?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

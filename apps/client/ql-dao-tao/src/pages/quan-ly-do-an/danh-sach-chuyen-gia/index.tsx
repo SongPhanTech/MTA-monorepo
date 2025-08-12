@@ -23,7 +23,8 @@ export default function ExpertProfile() {
     const [filters, setFilters] = useState<FilterProps>({
         code: undefined,
         name: undefined,
-        title: undefined,
+        academicRank: undefined,
+        academicDegree: undefined,
         specialization: undefined,
         workplace: undefined,
         phone: undefined,
@@ -38,8 +39,16 @@ export default function ExpertProfile() {
             ...(filters.name
                 ? { name: { contains: filters.name, mode: 'insensitive' as const } }
                 : {}),
-            ...(filters.title
-                ? { title: { contains: filters.title, mode: 'insensitive' as const } }
+            ...(filters.academicRank
+                ? { academicRank: { contains: filters.academicRank, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.academicDegree
+                ? {
+                      academicDegree: {
+                          contains: filters.academicDegree,
+                          mode: 'insensitive' as const,
+                      },
+                  }
                 : {}),
             ...(filters.specialization
                 ? {
@@ -62,7 +71,8 @@ export default function ExpertProfile() {
         [
             filters.code,
             filters.name,
-            filters.title,
+            filters.academicRank,
+            filters.academicDegree,
             filters.specialization,
             filters.workplace,
             filters.phone,
@@ -151,8 +161,15 @@ export default function ExpertProfile() {
                                 align: 'center',
                             },
                             {
-                                title: 'Hàm vị, học vị',
-                                dataIndex: 'title',
+                                title: 'Hàm hàm',
+                                dataIndex: 'academicRank',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Hàm vị',
+                                dataIndex: 'academicDegree',
                                 width: 150,
                                 align: 'center',
                                 type: 'input',
