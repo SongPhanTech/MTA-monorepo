@@ -91,6 +91,8 @@ model Student extends Base {
   thesisRegistrations      StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
   examSession              ExamSession[]
   studentTrainingSemester  StudentTrainingSemester[]
+  diplomaVerificationApplication DiplomaVerificationApplication[]
+
   @@schema("ql-dao-tao")
 }
 

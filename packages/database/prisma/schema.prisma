@@ -427,9 +427,25 @@ enum RankingContext {
   @@schema("ql-dao-tao")
 }
 
+enum DiplomaVerificationStatus {
+  PENDING
+  IN_PROGRESS
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
 enum SurveyQuestionType {
   ESSAY
   SINGLE_CHOICE
+
+  @@schema("khao-thi")
+}
+
+enum SurveyObject {
+  STUDENT
+  LECTURER
 
   @@schema("khao-thi")
 }
@@ -899,6 +915,7 @@ model TrainingCourse {
   academicWarningRule    AcademicWarningRule[]
   academicActionConfig   AcademicActionConfig[]
   notifications          Notification[]
+  surveyObjectTypes      SurveyObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -934,6 +951,7 @@ model FixedClass {
   curriculumVersionId      String?
   subjectClasses           SubjectClass[]
   notifications            Notification[]
+  surveyObjectTypes        SurveyObjectType[]
 
   @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
@@ -1144,6 +1162,7 @@ model SubjectClass {
   thesisProjects             ThesisProject[]
   expertProfile              ExpertProfile[]
   defenseRooms               Room[]                @relation("DefenseRooms")
+  surveyObjectTypes          SurveyObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -1335,6 +1354,7 @@ model TrainingField {
   organizationId      String                              @db.Uuid()
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
+  surveyObjectTypes   SurveyObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -1382,6 +1402,7 @@ model TrainingMajor {
   curriculum            Curriculum[]
   graduationDecision    GraduationDecision[]
   expertProfile         ExpertProfile[]
+  surveyObjectTypes     SurveyObjectType[]
 
   @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
@@ -1511,65 +1532,66 @@ model TrainingKPI {
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student {
-  id                       String                         @id() @default(cuid())
-  code                     String?                        @unique()
-  active                   Boolean                        @default(true)
-  description              String?                        @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                       @default(now())
-  updatedAt                DateTime                       @default(now()) @updatedAt()
-  entryScore               Float?
-  note                     String?
-  from                     DateTime?
-  to                       DateTime?
-  trainingLocation         TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
-  trainingLocationId       String?
+  id                             String                           @id() @default(cuid())
+  code                           String?                          @unique()
+  active                         Boolean                          @default(true)
+  description                    String?                          @db.Text()
+  deletedAt                      DateTime?
+  createdAt                      DateTime                         @default(now())
+  updatedAt                      DateTime                         @default(now()) @updatedAt()
+  entryScore                     Float?
+  note                           String?
+  from                           DateTime?
+  to                             DateTime?
+  trainingLocation               TrainingLocation?                @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId             String?
   /// đối tượng ưu tiên
-  priorityObject           PriorityObject[]
-  unionLeader              String?
-  status                   StudentStatus                  @default(ENROLLED)
-  classMonitor             FixedClass?                    @relation("ClassMonitor")
-  unionLeaderOf            FixedClass?                    @relation("UnionLeader")
-  fixedClass               FixedClass?                    @relation(fields: [fixedClassId], references: [id])
-  fixedClassId             String?
-  subjectClassStudent      StudentSubjectScore[]
-  userProfileId            String
-  userProfile              UserProfile                    @relation(fields: [userProfileId], references: [id])
-  trainingLevel            TrainingLevel?                 @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId          String?
-  trainingObjectType       TrainingObjectType?            @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId     String?
-  trainingType             TrainingType?                  @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId           String?
-  trainingForm             TrainingForm?                  @relation(fields: [trainingFormId], references: [id])
-  trainingFormId           String?
-  registrationArea         DM_KhuVuc_DiaLy?               @relation(fields: [registrationAreaId], references: [Id])
-  registrationAreaId       String?                        @db.Uuid()
-  curriculumVersion        CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String?
-  academicWarningLevel     Int                            @default(0)
-  disciplinaryWarningLevel Int                            @default(0)
-  suspended                Boolean                        @default(false)
-  expelled                 Boolean                        @default(false)
-  foreignLangPass          Boolean                        @default(false)
-  ITCertificationPass      Boolean                        @default(false)
-  strengthTrainingPass     Boolean                        @default(false)
-  militaryTrainingPass     Boolean                        @default(false)
-  studentTrainingScore     StudentTrainingScore[]
-  studentSemesterResult    StudentSemesterResult[]
-  studentYearResult        StudentYearResult[]
-  scholarshipAwards        ScholarshipAward[]
-  academicWarning          AcademicWarning[]
-  disciplinaryWarning      DisciplinaryWarning[]
-  studentAcademicDecision  StudentAcademicDecision[]
-  graduationApplications   StudentGraduationApplication[]
-  graduationDecision       GraduationDecision?
-  surveySessions           SurveySession[]
-  notifications            Notification[]
-  researchRegistrations    StudentResearchRegistration[]
-  thesisRegistrations      StudentThesisRegistration[]
-  examSession              ExamSession[]
-  studentTrainingSemester  StudentTrainingSemester[]
+  priorityObject                 PriorityObject[]
+  unionLeader                    String?
+  status                         StudentStatus                    @default(ENROLLED)
+  classMonitor                   FixedClass?                      @relation("ClassMonitor")
+  unionLeaderOf                  FixedClass?                      @relation("UnionLeader")
+  fixedClass                     FixedClass?                      @relation(fields: [fixedClassId], references: [id])
+  fixedClassId                   String?
+  subjectClassStudent            StudentSubjectScore[]
+  userProfileId                  String
+  userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
+  trainingLevel                  TrainingLevel?                   @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId                String?
+  trainingObjectType             TrainingObjectType?              @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId           String?
+  trainingType                   TrainingType?                    @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                 String?
+  trainingForm                   TrainingForm?                    @relation(fields: [trainingFormId], references: [id])
+  trainingFormId                 String?
+  registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id])
+  registrationAreaId             String?                          @db.Uuid()
+  curriculumVersion              CurriculumVersion?               @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId            String?
+  academicWarningLevel           Int                              @default(0)
+  disciplinaryWarningLevel       Int                              @default(0)
+  suspended                      Boolean                          @default(false)
+  expelled                       Boolean                          @default(false)
+  foreignLangPass                Boolean                          @default(false)
+  ITCertificationPass            Boolean                          @default(false)
+  strengthTrainingPass           Boolean                          @default(false)
+  militaryTrainingPass           Boolean                          @default(false)
+  studentTrainingScore           StudentTrainingScore[]
+  studentSemesterResult          StudentSemesterResult[]
+  studentYearResult              StudentYearResult[]
+  scholarshipAwards              ScholarshipAward[]
+  academicWarning                AcademicWarning[]
+  disciplinaryWarning            DisciplinaryWarning[]
+  studentAcademicDecision        StudentAcademicDecision[]
+  graduationApplications         StudentGraduationApplication[]
+  graduationDecision             GraduationDecision?
+  surveySessions                 SurveySession[]
+  notifications                  Notification[]
+  researchRegistrations          StudentResearchRegistration[]
+  thesisRegistrations            StudentThesisRegistration[]
+  examSession                    ExamSession[]
+  studentTrainingSemester        StudentTrainingSemester[]
+  diplomaVerificationApplication DiplomaVerificationApplication[]
 
   @@schema("ql-dao-tao")
 }
@@ -1997,39 +2019,40 @@ model DM_DanToc {
 }
 
 model DM_DonVi {
-  Id               String            @id() @default(uuid()) @db.Uuid()
-  sMa              String?
-  sTen             String?
-  sGhiChu          String?
-  iSTT             Int?              @default(0)
-  bActive          Boolean?          @default(true)
-  bDeleted         Boolean?          @default(false)
-  bSystem          Boolean?          @default(false)
-  iDictionaryKey   Int?              @default(0)
-  dNgayTao         DateTime?
-  dNgaySua         DateTime?
-  sNguoiTao        String?
-  sNguoiSua        String?
-  sThietBiTao      String?
-  sThietBiSua      String?
-  sCode            String?
-  sTenVietTat      String?
-  sParentId        String?           @db.Uuid()
-  sTruongDonVi     String?           @db.Uuid()
-  sChucNangNhiemVu String?
-  sDiaChi          String?
-  lecturers        Lecturer[]
-  lecturerHistory  LecturerHistory[]
-  staffs           Staff[]
-  staffHistory     StaffHistory[]
-  curriculum       Curriculum[]
-  fixedClass       FixedClass[]
-  subjectVersions  SubjectVersion[]
-  subjects         Subject[]
-  trainingFields   TrainingField[]
-  trainingMajors   TrainingMajor[]
-  researchProjects ResearchProject[]
-  thesisProjects   ThesisProject[]
+  Id                String             @id() @default(uuid()) @db.Uuid()
+  sMa               String?
+  sTen              String?
+  sGhiChu           String?
+  iSTT              Int?               @default(0)
+  bActive           Boolean?           @default(true)
+  bDeleted          Boolean?           @default(false)
+  bSystem           Boolean?           @default(false)
+  iDictionaryKey    Int?               @default(0)
+  dNgayTao          DateTime?
+  dNgaySua          DateTime?
+  sNguoiTao         String?
+  sNguoiSua         String?
+  sThietBiTao       String?
+  sThietBiSua       String?
+  sCode             String?
+  sTenVietTat       String?
+  sParentId         String?            @db.Uuid()
+  sTruongDonVi      String?            @db.Uuid()
+  sChucNangNhiemVu  String?
+  sDiaChi           String?
+  lecturers         Lecturer[]
+  lecturerHistory   LecturerHistory[]
+  staffs            Staff[]
+  staffHistory      StaffHistory[]
+  curriculum        Curriculum[]
+  fixedClass        FixedClass[]
+  subjectVersions   SubjectVersion[]
+  subjects          Subject[]
+  trainingFields    TrainingField[]
+  trainingMajors    TrainingMajor[]
+  researchProjects  ResearchProject[]
+  thesisProjects    ThesisProject[]
+  surveyObjectTypes SurveyObjectType[]
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
@@ -3569,39 +3592,45 @@ model PaymentRecord {
 }
 
 model DocumentFile {
-  id                        String                   @id() @default(cuid())
-  code                      String?                  @unique()
-  active                    Boolean                  @default(true)
-  description               String?                  @db.Text()
-  deletedAt                 DateTime?
-  createdAt                 DateTime                 @default(now())
-  updatedAt                 DateTime                 @default(now()) @updatedAt()
-  name                      String
-  path                      String
-  size                      BigInt
-  mimeType                  String?
-  archivedCertificate       ArchivedCertificate?     @relation(fields: [archivedCertificateId], references: [id])
-  archivedCertificateId     String?
-  archivedAward             ArchivedAward?           @relation(fields: [archivedAwardId], references: [id])
-  archivedAwardId           String?
-  curriculum                Curriculum?              @relation(fields: [curriculumId], references: [id])
-  curriculumId              String?
-  curriculumVersion         CurriculumVersion?       @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId       String?
-  subjectVersion            SubjectVersion?          @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId          String?
-  studentAcademicDecision   StudentAcademicDecision? @relation(fields: [studentAcademicDecisionId], references: [id])
-  studentAcademicDecisionId String?
-  notification              Notification?            @relation(fields: [notificationId], references: [id])
-  notificationId            String?
-  decision                  Decision?                @relation(fields: [decisionId], references: [id])
-  decisionId                String?
-  defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
-  defenseRecordId           String?
-  diplomaFront              GraduationDecision?      @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
-  diplomaFrontId            String?                  @unique()
-  diplomaBack               GraduationDecision?      @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
-  diplomaBackId             String?                  @unique()
+  id                         String                          @id() @default(cuid())
+  code                       String?                         @unique()
+  active                     Boolean                         @default(true)
+  description                String?                         @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                        @default(now())
+  updatedAt                  DateTime                        @default(now()) @updatedAt()
+  name                       String
+  path                       String
+  size                       BigInt
+  mimeType                   String?
+  archivedCertificate        ArchivedCertificate?            @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId      String?
+  archivedAward              ArchivedAward?                  @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId            String?
+  curriculum                 Curriculum?                     @relation(fields: [curriculumId], references: [id])
+  curriculumId               String?
+  curriculumVersion          CurriculumVersion?              @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId        String?
+  subjectVersion             SubjectVersion?                 @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId           String?
+  studentAcademicDecision    StudentAcademicDecision?        @relation(fields: [studentAcademicDecisionId], references: [id])
+  studentAcademicDecisionId  String?
+  notification               Notification?                   @relation(fields: [notificationId], references: [id])
+  notificationId             String?
+  decision                   Decision?                       @relation(fields: [decisionId], references: [id])
+  decisionId                 String?
+  defenseRecord              DefenseRecord?                  @relation(fields: [defenseRecordId], references: [id])
+  defenseRecordId            String?
+  diplomaFront               GraduationDecision?             @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
+  diplomaFrontId             String?                         @unique()
+  diplomaBack                GraduationDecision?             @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
+  diplomaBackId              String?                         @unique()
+  diplomaVerification        DiplomaVerificationApplication? @relation(name: "DiplomaVerificationAttachments", fields: [diplomaVerificationId], references: [id])
+  diplomaVerificationId      String?                         @unique()
+  diplomaVerificationFront   DiplomaVerificationApplication? @relation(name: "DiplomaVerificationFront", fields: [diplomaVerificationFrontId], references: [id])
+  diplomaVerificationFrontId String?                         @unique()
+  diplomaVerificationBack    DiplomaVerificationApplication? @relation(name: "DiplomaVerificationBack", fields: [diplomaVerificationBackId], references: [id])
+  diplomaVerificationBackId  String?                         @unique()
 
   @@schema("ql-danh-muc")
 }
@@ -3902,6 +3931,7 @@ model GraduationDecision {
   diplomaIssueDate      DateTime?
   diplomaFront          DocumentFile?                @relation("DiplomaFront")
   diplomaBack           DocumentFile?                @relation("DiplomaBack")
+  totalCopy             Int?                         @default(0)
 
   @@schema("ql-dao-tao")
 }
@@ -3991,6 +4021,36 @@ model RankingCondition {
   @@schema("ql-dao-tao")
 }
 
+/// Đơn xác minh văn bằng
+model DiplomaVerificationApplication {
+  id           String                    @id() @default(cuid())
+  code         String?                   @unique()
+  active       Boolean                   @default(true)
+  description  String?                   @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @default(now()) @updatedAt()
+  fullname     String
+  idCardNumber String
+  dateOfBirth  DateTime
+  phoneNumber  String
+  email        String
+  reason       String
+  /// Tệp đính kèm khác (nhiều)
+  attachments  DocumentFile[]            @relation("DiplomaVerificationAttachments")
+  /// Ảnh mặt trước văn bằng
+  diplomaFront DocumentFile?             @relation("DiplomaVerificationFront")
+  /// Ảnh mặt sau văn bằng
+  diplomaBack  DocumentFile?             @relation("DiplomaVerificationBack")
+  /// Trạng thái xử lý
+  status       DiplomaVerificationStatus @default(PENDING)
+  /// Liên kết học viên (nếu cần)
+  studentId    String?
+  student      Student?                  @relation(fields: [studentId], references: [id])
+
+  @@schema("ql-dao-tao")
+}
+
 model Staff {
   id              String        @id() @default(cuid())
   code            String?       @unique()
@@ -4036,15 +4096,22 @@ model StaffHistory {
 }
 
 model SurveyObjectType {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  name        String
-  survey      Survey[]
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt()
+  name            String
+  survey          Survey[]
+  type            SurveyObject[]
+  organizations   DM_DonVi[]
+  trainingFields  TrainingField[]
+  trainingMajors  TrainingMajor[]
+  trainingCourses TrainingCourse[]
+  fixedClasses    FixedClass[]
+  subjectClasses  SubjectClass[]
 
   @@schema("khao-thi")
 }
@@ -4078,19 +4145,18 @@ model SurveyQuestionGroup {
 }
 
 model Survey {
-  id                   String           @id() @default(cuid())
-  code                 String?          @unique()
-  active               Boolean          @default(true)
-  description          String?          @db.Text()
+  id                   String             @id() @default(cuid())
+  code                 String?            @unique()
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @default(now()) @updatedAt()
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt()
   name                 String
   startDate            DateTime
   endDate              DateTime?
-  surveyObjectType     SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
-  surveyObjectId       String
-  surveyTopic          SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
+  surveyObjectType     SurveyObjectType[]
+  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
   additionalSuggestion Boolean
   surveyChoice         SurveyChoice[]

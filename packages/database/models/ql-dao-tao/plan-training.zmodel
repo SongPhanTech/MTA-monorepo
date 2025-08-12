@@ -16,6 +16,7 @@ import '../ql-danh-muc/notification'
 import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/research'
 import '../khao-thi/exam'
+import "../khao-thi/survey"
 
 /// Điểm môn học SV - lớp môn học
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
@@ -204,7 +205,7 @@ model TrainingCourse extends Base {
   academicWarningRule    AcademicWarningRule[]
   academicActionConfig   AcademicActionConfig[]
   notifications          Notification[]  // Thông báo cho khoá
-
+  surveyObjectTypes      SurveyObjectType[]
   @@schema("ql-dao-tao")
 }
 /// lớp niên chế
@@ -241,6 +242,7 @@ model FixedClass extends Base {
   subjectClasses           SubjectClass[]
   notifications            Notification[]  // Thông báo cho lớp
 
+  surveyObjectTypes SurveyObjectType[]
   @@unique([name, trainingCourseId, curriculumVersionId])
 
   @@schema("ql-dao-tao")
@@ -521,6 +523,7 @@ model SubjectClass extends Base {
   expertProfile              ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
   defenseRooms               Room[]                @relation("DefenseRooms")
 
+  surveyObjectTypes          SurveyObjectType[]
   @@schema("ql-dao-tao")
 }
 

@@ -3,6 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
+import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
 import { type Survey, type SurveyQuestion, SurveyQuestionType } from '@workspace/db'
 import {
     useCreateSurveyQuestion,
@@ -25,7 +26,8 @@ const PutSurveyQuestionModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { options: surveyQuestionTypeOptions, getSurveyQuestionTypeLabel } =
+        useSurveyQuestionTypeOptions()
     const { mutateAsync: create } = useCreateSurveyQuestion()
     const { mutateAsync: update } = useUpdateSurveyQuestion()
 
@@ -114,6 +116,14 @@ const PutSurveyQuestionModal = () => {
                                 label: i.name,
                             }
                         })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="type" label="Loại câu hỏi khảo sát" required>
+                    <Select
+                        placeholder="Chọn loại câu hỏi khảo sát"
+                        options={surveyQuestionTypeOptions}
                     />
                 </FormItem>
             </Col>

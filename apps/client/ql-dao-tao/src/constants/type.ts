@@ -118,6 +118,7 @@ export type FilterProps = {
     workplace?: string
     phone?: string
     email?: string
+    originalDiplomaNumber?: string
     academicRank?: string
     academicDegree?: string
 }

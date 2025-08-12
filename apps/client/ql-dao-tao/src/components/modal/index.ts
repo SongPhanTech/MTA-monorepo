@@ -8,6 +8,7 @@ import ModalPrintToDSHV from './modal-print-ds-sinh-vien-lop'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import ModalPrintDecision from './modal-print-quyet-dinh-hoi-dong'
 import ModalGraduationCriteria from './modal-tieu-chi-xet-tn'
+import ModalVanBang from './modal-van-bang'
 import PutDiplomaType from './put-bac-dao-tao'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
@@ -141,6 +142,7 @@ export {
     PutStudentModal,
     PutTrainingObjectTypeModal,
     PutTrainingTypeModal,
+    ModalVanBang,
     ModalPrintDecision,
     PutSettingClass,
 }

@@ -122,6 +122,7 @@ export type FilterProps = {
     surveyId?: string
     surveyObjectTypeId?: string[]
     surveyTopicId?: string[]
+    subjectClass?: string[]
 }
 
 export type ColumnTypeProps = ColumnsType & {

@@ -102,6 +102,8 @@ model GraduationDecision extends Base {
   diplomaFront          DocumentFile?                @relation("DiplomaFront")
   diplomaBack           DocumentFile?                @relation("DiplomaBack")
 
+  totalCopy             Int?                         @default(0) // Số lần sao y 
+
   @@schema("ql-dao-tao")
 }
 
@@ -181,6 +183,43 @@ model RankingCondition extends Base {
   tuple                  String[]                 @default([]) // giá trị sử dụng cho operator IN
 
   applicationCheckResult ApplicationCheckResult[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Đơn xác minh văn bằng
+model DiplomaVerificationApplication extends Base {
+  fullname     String // Họ và tên học viên (không liên kết userProfile vì cho phép nhập tay)
+  idCardNumber String   // Căn cước công dân / CMND
+  dateOfBirth  DateTime // ngày sinh
+  phoneNumber  String // số điện thoại
+  email        String // email
+  reason       String // Lý do làm đơn
+
+  /// Tệp đính kèm khác (nhiều)
+  attachments  DocumentFile[]            @relation("DiplomaVerificationAttachments")
+
+  /// Ảnh mặt trước văn bằng
+  diplomaFront DocumentFile?             @relation("DiplomaVerificationFront")
+
+  /// Ảnh mặt sau văn bằng
+  diplomaBack  DocumentFile?             @relation("DiplomaVerificationBack")
+
+  /// Trạng thái xử lý
+  status       DiplomaVerificationStatus @default(PENDING)
+
+  /// Liên kết học viên (nếu cần)
+  studentId    String?
+  student      Student?                  @relation(fields: [studentId], references: [id])
+
+  @@schema("ql-dao-tao")
+}
+
+enum DiplomaVerificationStatus {
+  PENDING       // Đang chờ xử lý
+  IN_PROGRESS   // Đang xử lý
+  APPROVED      // Đã duyệt
+  REJECTED      // Từ chối
 
   @@schema("ql-dao-tao")
 }
