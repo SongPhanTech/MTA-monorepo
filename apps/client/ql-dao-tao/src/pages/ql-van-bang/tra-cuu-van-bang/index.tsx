@@ -1,7 +1,8 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { PutGraduationDecision } from '@components/modal'
+import ViewIcon from '@components/icons/view'
+import { ModalVanBang, PutGraduationDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
@@ -221,6 +222,9 @@ export default function GraduationDecisionDiploma() {
         trainingCourseId: string
     }>({
         tag: PutGraduationDecision.name,
+    })
+    const { onOpen: onOpenVanBang } = useDisclosure<string>({
+        tag: ModalVanBang.name,
     })
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data: organization = [] } = useFindManyDM_DonVi({
@@ -443,7 +447,6 @@ export default function GraduationDecisionDiploma() {
                             {
                                 title: 'Xếp loại',
                                 align: 'center',
-                                fixed: 'right',
                                 // type: 'select',
                                 // dataIndex: 'classification',
                                 width: 100,
@@ -463,18 +466,13 @@ export default function GraduationDecisionDiploma() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                                                title="Xem chi tiết"
-                                                                                placement="leftTop"
-                                                                            >
-                                                                                <EyeOutlined
-                                                                                    onClick={onOpen.bind(
-                                                                                        null,
-                                                                                        id
-                                                                                    )}
-                                                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                                                />
-                                                                            </Tooltip> */}
+                                                <ViewIcon
+                                                    title="Xem văn bằng"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpenVanBang(record?.student?.id)
+                                                    }}
+                                                />
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()

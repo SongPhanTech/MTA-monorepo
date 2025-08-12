@@ -49,7 +49,7 @@ const PutGraduationDecision = () => {
                 diplomaTypeId: output?.diplomaTypeId,
                 originalDiplomaNumber: output?.originalDiplomaNumber,
                 diplomaNumber: output?.diplomaNumber,
-                diplomaIssueDate: output?.decisionDate,
+                diplomaIssueDate: output?.diplomaIssueDate,
                 diplomaFront: output.diplomaFront?.[0]
                     ? output.diplomaFront[0].id
                         ? {
