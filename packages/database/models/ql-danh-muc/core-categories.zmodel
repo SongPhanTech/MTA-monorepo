@@ -10,6 +10,7 @@ import '../ql-nguoi-dung/user'
 import '../ql-nguoi-dung/feedback'
 import '../tro-ly-ao/chat-bot'
 import 'notification'
+import "../khao-thi/survey"
 
 abstract model CoreBase {
   Id             String    @id() @default(uuid()) @db.Uuid
@@ -110,12 +111,14 @@ model DM_DonVi extends CoreBase {
   trainingMajors   TrainingMajor[]
   researchProjects ResearchProject[]         // Đề tài của đơn vị
   thesisProjects   ThesisProject[]             // Đồ án của đơn vị
-
+	surveyObjectTypes SurveyObjectType[]
 
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
   @@schema("mta")
+
+
 }
 
 model DM_DonViHanhChinh extends CoreBase {

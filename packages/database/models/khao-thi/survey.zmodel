@@ -3,6 +3,8 @@ import '../ql-dao-tao/plan-training'
 import '../ql-ho-so/profile'
 import '../ql-nguoi-dung/user'
 import '../ql-dao-tao/student'
+import '../ql-danh-muc/core-categories'
+import '../ql-dao-tao/categories'
 
 enum SurveyQuestionType {
   ESSAY
@@ -11,10 +13,24 @@ enum SurveyQuestionType {
   @@schema("khao-thi")
 }
 
+enum  SurveyObject {
+  STUDENT
+  LECTURER
+
+  @@schema("khao-thi")
+}
+
 // đối tượng khảo sát (Sinh viên, giảng viên, cán bộ quản lý,...)
 model SurveyObjectType extends Base {
   name   String
   survey Survey[]
+  type SurveyObject[]
+  organizations DM_DonVi[]
+  trainingFields TrainingField[]
+  trainingMajors TrainingMajor[]
+  trainingCourses TrainingCourse[]
+  fixedClasses FixedClass[]
+  subjectClasses SubjectClass[]
   @@schema("khao-thi")
 }
 

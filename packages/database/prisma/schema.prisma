@@ -434,6 +434,13 @@ enum SurveyQuestionType {
   @@schema("khao-thi")
 }
 
+enum SurveyObject {
+  STUDENT
+  LECTURER
+
+  @@schema("khao-thi")
+}
+
 enum FeedbackStatus {
   Pending
   InProgress
@@ -899,6 +906,7 @@ model TrainingCourse {
   academicWarningRule    AcademicWarningRule[]
   academicActionConfig   AcademicActionConfig[]
   notifications          Notification[]
+  surveyObjectTypes      SurveyObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -934,6 +942,7 @@ model FixedClass {
   curriculumVersionId      String?
   subjectClasses           SubjectClass[]
   notifications            Notification[]
+  surveyObjectTypes        SurveyObjectType[]
 
   @@unique([name, trainingCourseId, curriculumVersionId])
   @@schema("ql-dao-tao")
@@ -1144,6 +1153,7 @@ model SubjectClass {
   thesisProjects             ThesisProject[]
   expertProfile              ExpertProfile[]
   defenseRooms               Room[]                @relation("DefenseRooms")
+  surveyObjectTypes          SurveyObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -1335,6 +1345,7 @@ model TrainingField {
   organizationId      String                              @db.Uuid()
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
+  surveyObjectTypes   SurveyObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -1382,6 +1393,7 @@ model TrainingMajor {
   curriculum            Curriculum[]
   graduationDecision    GraduationDecision[]
   expertProfile         ExpertProfile[]
+  surveyObjectTypes     SurveyObjectType[]
 
   @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
@@ -1997,39 +2009,40 @@ model DM_DanToc {
 }
 
 model DM_DonVi {
-  Id               String            @id() @default(uuid()) @db.Uuid()
-  sMa              String?
-  sTen             String?
-  sGhiChu          String?
-  iSTT             Int?              @default(0)
-  bActive          Boolean?          @default(true)
-  bDeleted         Boolean?          @default(false)
-  bSystem          Boolean?          @default(false)
-  iDictionaryKey   Int?              @default(0)
-  dNgayTao         DateTime?
-  dNgaySua         DateTime?
-  sNguoiTao        String?
-  sNguoiSua        String?
-  sThietBiTao      String?
-  sThietBiSua      String?
-  sCode            String?
-  sTenVietTat      String?
-  sParentId        String?           @db.Uuid()
-  sTruongDonVi     String?           @db.Uuid()
-  sChucNangNhiemVu String?
-  sDiaChi          String?
-  lecturers        Lecturer[]
-  lecturerHistory  LecturerHistory[]
-  staffs           Staff[]
-  staffHistory     StaffHistory[]
-  curriculum       Curriculum[]
-  fixedClass       FixedClass[]
-  subjectVersions  SubjectVersion[]
-  subjects         Subject[]
-  trainingFields   TrainingField[]
-  trainingMajors   TrainingMajor[]
-  researchProjects ResearchProject[]
-  thesisProjects   ThesisProject[]
+  Id                String             @id() @default(uuid()) @db.Uuid()
+  sMa               String?
+  sTen              String?
+  sGhiChu           String?
+  iSTT              Int?               @default(0)
+  bActive           Boolean?           @default(true)
+  bDeleted          Boolean?           @default(false)
+  bSystem           Boolean?           @default(false)
+  iDictionaryKey    Int?               @default(0)
+  dNgayTao          DateTime?
+  dNgaySua          DateTime?
+  sNguoiTao         String?
+  sNguoiSua         String?
+  sThietBiTao       String?
+  sThietBiSua       String?
+  sCode             String?
+  sTenVietTat       String?
+  sParentId         String?            @db.Uuid()
+  sTruongDonVi      String?            @db.Uuid()
+  sChucNangNhiemVu  String?
+  sDiaChi           String?
+  lecturers         Lecturer[]
+  lecturerHistory   LecturerHistory[]
+  staffs            Staff[]
+  staffHistory      StaffHistory[]
+  curriculum        Curriculum[]
+  fixedClass        FixedClass[]
+  subjectVersions   SubjectVersion[]
+  subjects          Subject[]
+  trainingFields    TrainingField[]
+  trainingMajors    TrainingMajor[]
+  researchProjects  ResearchProject[]
+  thesisProjects    ThesisProject[]
+  surveyObjectTypes SurveyObjectType[]
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
@@ -4036,15 +4049,22 @@ model StaffHistory {
 }
 
 model SurveyObjectType {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  name        String
-  survey      Survey[]
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt()
+  name            String
+  survey          Survey[]
+  type            SurveyObject[]
+  organizations   DM_DonVi[]
+  trainingFields  TrainingField[]
+  trainingMajors  TrainingMajor[]
+  trainingCourses TrainingCourse[]
+  fixedClasses    FixedClass[]
+  subjectClasses  SubjectClass[]
 
   @@schema("khao-thi")
 }
