@@ -296,7 +296,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             {
                                 title: 'Xếp loại',
                                 align: 'center',
-                                fixed: 'right',
                                 type: 'select',
                                 dataIndex: 'classification',
                                 width: 100,
