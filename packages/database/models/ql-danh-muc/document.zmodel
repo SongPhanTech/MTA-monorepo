@@ -7,43 +7,50 @@ import '../ql-dao-tao/ranking'
 import 'notification'
 
 model DocumentFile extends Base {
-  name                      String
-  path                      String
-  size                      BigInt
-  mimeType                  String?
+  name                       String
+  path                       String
+  size                       BigInt
+  mimeType                   String?
 
-  archivedCertificate       ArchivedCertificate?     @relation(fields: [archivedCertificateId], references: [id])
-  archivedCertificateId     String?
+  archivedCertificate        ArchivedCertificate?            @relation(fields: [archivedCertificateId], references: [id])
+  archivedCertificateId      String?
 
 
-  archivedAward             ArchivedAward?           @relation(fields: [archivedAwardId], references: [id])
-  archivedAwardId           String?
+  archivedAward              ArchivedAward?                  @relation(fields: [archivedAwardId], references: [id])
+  archivedAwardId            String?
 
-  curriculum                Curriculum?              @relation(fields: [curriculumId], references: [id])
-  curriculumId              String?
+  curriculum                 Curriculum?                     @relation(fields: [curriculumId], references: [id])
+  curriculumId               String?
 
-  curriculumVersion         CurriculumVersion?       @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId       String?
+  curriculumVersion          CurriculumVersion?              @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId        String?
 
-  subjectVersion            SubjectVersion?          @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId          String?
+  subjectVersion             SubjectVersion?                 @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId           String?
 
-  studentAcademicDecision   StudentAcademicDecision? @relation(fields: [studentAcademicDecisionId], references: [id])
-  studentAcademicDecisionId String?
+  studentAcademicDecision    StudentAcademicDecision?        @relation(fields: [studentAcademicDecisionId], references: [id])
+  studentAcademicDecisionId  String?
 
-  notification              Notification?            @relation(fields: [notificationId], references: [id])
-  notificationId            String?
+  notification               Notification?                   @relation(fields: [notificationId], references: [id])
+  notificationId             String?
 
-  decision                  Decision?                @relation(fields: [decisionId], references: [id])
-  decisionId                String?
+  decision                   Decision?                       @relation(fields: [decisionId], references: [id])
+  decisionId                 String?
 
-  defenseRecord             DefenseRecord?           @relation(fields: [defenseRecordId], references: [id])
-  defenseRecordId           String?
+  defenseRecord              DefenseRecord?                  @relation(fields: [defenseRecordId], references: [id])
+  defenseRecordId            String?
 
-  diplomaFront              GraduationDecision?      @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
-  diplomaFrontId            String?                  @unique
-  diplomaBack               GraduationDecision?      @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
-  diplomaBackId             String?                  @unique
+  diplomaFront               GraduationDecision?             @relation(name: "DiplomaFront", fields: [diplomaFrontId], references: [id])
+  diplomaFrontId             String?                         @unique
+  diplomaBack                GraduationDecision?             @relation(name: "DiplomaBack", fields: [diplomaBackId], references: [id])
+  diplomaBackId              String?                         @unique
+
+  diplomaVerification        DiplomaVerificationApplication? @relation(name: "DiplomaVerificationAttachments", fields: [diplomaVerificationId], references: [id])
+  diplomaVerificationId      String?                         @unique
+  diplomaVerificationFront   DiplomaVerificationApplication? @relation(name: "DiplomaVerificationFront", fields: [diplomaVerificationFrontId], references: [id])
+  diplomaVerificationFrontId String?                         @unique
+  diplomaVerificationBack    DiplomaVerificationApplication? @relation(name: "DiplomaVerificationBack", fields: [diplomaVerificationBackId], references: [id])
+  diplomaVerificationBackId  String?                         @unique
 
   @@schema("ql-danh-muc")
 }
