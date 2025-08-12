@@ -1,5 +1,6 @@
-import { useFindUniqueStudent } from '@workspace/db/hooks'
-import { Button, Checkbox, Input, Modal, Space } from 'antd'
+import useSpinner from '@hooks/spinner'
+import { useFindUniqueStudent, useUpdateGraduationDecision } from '@workspace/db/hooks'
+import { Button, Checkbox, Input, Modal, message, Space } from 'antd'
 import dayjs from 'dayjs'
 import { Printer } from 'lucide-react'
 import { useRef, useState } from 'react'
@@ -38,6 +39,27 @@ export const ModalVanBang = () => {
         contentRef: printRef,
         documentTitle: `Van_bang_${data?.id}_${data?.userProfile?.fullname}.pdf`,
     })
+    const { showSpinner, hideSpinner } = useSpinner()
+    const { mutateAsync: updateGraduationDecision } = useUpdateGraduationDecision()
+
+    const handlePrintVanBang = async () => {
+        handlePrint()
+        try {
+            showSpinner()
+            await updateGraduationDecision({
+                where: {
+                    id: data?.graduationDecision?.id,
+                },
+                data: {
+                    totalCopy: (data?.graduationDecision?.totalCopy ?? 0) + 1,
+                },
+            })
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     return (
         <Modal
@@ -57,7 +79,11 @@ export const ModalVanBang = () => {
                         className="w-64"
                     />
                     <Space>
-                        <Button type="primary" onClick={() => handlePrint()} icon={<Printer />}>
+                        <Button
+                            type="primary"
+                            onClick={() => handlePrintVanBang()}
+                            icon={<Printer />}
+                        >
                             Sao lưu văn bằng
                         </Button>
                     </Space>
