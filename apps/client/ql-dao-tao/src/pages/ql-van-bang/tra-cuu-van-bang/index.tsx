@@ -445,6 +445,12 @@ export default function GraduationDecisionDiploma() {
                                         : '',
                             },
                             {
+                                title: 'Số lần sao y',
+                                dataIndex: 'totalCopy',
+                                align: 'center',
+                                width: 80,
+                            },
+                            {
                                 title: 'Xếp loại',
                                 align: 'center',
                                 // type: 'select',
