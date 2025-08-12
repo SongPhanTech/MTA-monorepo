@@ -54,8 +54,7 @@ model Survey extends Base {
   startDate            DateTime
   endDate              DateTime?
 
-  surveyObjectType     SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
-  surveyObjectId       String
+  surveyObjectType     SurveyObjectType[]
 
   surveyTopic          SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String

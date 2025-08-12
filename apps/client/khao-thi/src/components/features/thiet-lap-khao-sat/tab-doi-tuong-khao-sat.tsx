@@ -82,8 +82,83 @@ function TabDoiTuongKhaoSat() {
                       },
                   }
                 : {}),
+            ...(filters.organization
+                ? {
+                      organizations: {
+                          some: {
+                              Id: {
+                                  in: filters.organization,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingField
+                ? {
+                      trainingFields: {
+                          some: {
+                              id: {
+                                  in: filters.trainingField,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingMajors
+                ? {
+                      trainingMajors: {
+                          some: {
+                              id: {
+                                  in: filters.trainingMajors,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourse
+                ? {
+                      trainingCourses: {
+                          some: {
+                              id: {
+                                  in: filters.trainingCourse,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.fixedClass
+                ? {
+                      fixedClasses: {
+                          some: {
+                              id: {
+                                  in: filters.fixedClass,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.subjectClass
+                ? {
+                      subjectClasses: {
+                          some: {
+                              id: {
+                                  in: filters.subjectClass,
+                              },
+                          },
+                      },
+                  }
+                : {}),
         }),
-        [filters.code, filters.name]
+        [
+            filters.code,
+            filters.name,
+            filters.trainingCourse,
+            filters.organization,
+            filters.trainingField,
+            filters.trainingMajors,
+            filters.subjectClass,
+            filters.fixedClass,
+        ]
     )
 
     const { data = [], refetch } = useFindManySurveyObjectType({
