@@ -1,23 +1,13 @@
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
-import { getStorage, removeStorage, setStorage } from '@lib/storage'
+import { removeStorage } from '@lib/storage'
 import { QueryClient } from '@tanstack/react-query'
-import { getSession } from '@workspace/auth/react'
 const queryClient = new QueryClient()
 
 const fetchInstance = async (url: string, options?: RequestInit) => {
-    let accessToken = getStorage('ACCESS_TOKEN')
-    if (!accessToken) {
-        const data = await getSession()
-        if (data) {
-            accessToken = data?.access_token
-            setStorage('ACCESS_TOKEN', accessToken)
-        }
-    }
     return fetch(url, {
         ...options,
         headers: {
             ...options?.headers,
-            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
         },
     }).then((res) => {
