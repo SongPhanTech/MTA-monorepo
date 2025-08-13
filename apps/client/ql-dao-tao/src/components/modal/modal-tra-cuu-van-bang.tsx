@@ -11,8 +11,8 @@ import {
     useFindManyGraduationDecision,
     useUpdateDiplomaVerificationApplication,
 } from '@workspace/db/hooks'
-import { Col, Form, Image, Modal, message, Row } from 'antd'
-import { useMemo } from 'react'
+import { Checkbox, Col, Form, Image, Modal, message, Row } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
 import { env } from '@/env'
 
 export type GraduationCriteria = RankingCondition
@@ -21,6 +21,7 @@ dayjs.locale('vi')
 const ModalTraCuuVanBang = () => {
     const [form] = Form.useForm<GraduationCriteria>()
     const { showSpinner, hideSpinner } = useSpinner()
+    const [selectedStudentId, setSelectedStudentId] = useState<string>('')
     const { isOpen, onClose, input } = useDisclosure<{
         data: DiplomaVerificationApplication
     }>({
@@ -91,13 +92,14 @@ const ModalTraCuuVanBang = () => {
 
     const handleUpdateStatus = async (
         record: DiplomaVerificationApplication,
-        status: DiplomaVerificationStatus
+        status: DiplomaVerificationStatus,
+        studentId?: string
     ) => {
         try {
             showSpinner()
             await updateDiplomaVerificationApplication({
                 where: { id: record?.id },
-                data: { status },
+                data: { status, ...(studentId ? { studentId } : {}) },
             })
             message.success('Cập nhật trạng thái thành công')
         } catch {
@@ -109,6 +111,12 @@ const ModalTraCuuVanBang = () => {
 
     const isFound = useMemo(() => {
         return searchData && searchData.length > 0
+    }, [searchData])
+
+    useEffect(() => {
+        if (searchData && searchData.length > 0) {
+            setSelectedStudentId(searchData[0].student.id)
+        }
     }, [searchData])
 
     return (
@@ -126,7 +134,8 @@ const ModalTraCuuVanBang = () => {
                     input.data,
                     isFound
                         ? DiplomaVerificationStatus.APPROVED
-                        : DiplomaVerificationStatus.REJECTED
+                        : DiplomaVerificationStatus.REJECTED,
+                    selectedStudentId
                 )
                 onClose()
             }}
@@ -136,6 +145,10 @@ const ModalTraCuuVanBang = () => {
                     <Row gutter={16} key={item.id}>
                         <Col span={24}>
                             <div className="flex items-center">
+                                <Checkbox
+                                    checked={selectedStudentId === item.student.id}
+                                    onChange={() => setSelectedStudentId(item.student.id)}
+                                />
                                 <Col span={9}>
                                     <div className="border border-solid border-primary rounded p-2">
                                         <Row gutter={16} className="flex items-center">
