@@ -29,7 +29,7 @@ const fetchSession = async (): Promise<{
         }
     } catch (error) {
         // TODO!: toggle comment
-        signIn()
+        // signIn()
         return {
             status: 'unauthenticated',
             data: null,
