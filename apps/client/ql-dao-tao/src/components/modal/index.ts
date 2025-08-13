@@ -12,7 +12,6 @@ import ModalVanBang from './modal-van-bang'
 import PutDiplomaType from './put-bac-dao-tao'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
-import PutSettingClass from './put-cau-hinh-lop-do-an'
 import PutCertificateScoreModal from './put-chung-chi-score'
 import PutConvertScore from './put-chuyen-doi-diem'
 import PutExpertProfile from './put-chuyen-gia'
@@ -144,5 +143,4 @@ export {
     PutTrainingTypeModal,
     ModalVanBang,
     ModalPrintDecision,
-    PutSettingClass,
 }

@@ -4,6 +4,7 @@ enum ConfigKey {
     DIRECTOR
     ACADEMY_NAME
     USER_SESSION_TIMEOUT
+    ACADEMIC_ACTION_RULES
 
     @@schema("he-thong")
 }

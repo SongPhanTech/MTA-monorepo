@@ -1,31 +1,110 @@
 import FormItem from '@components/commons/form-item'
-import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { SubjectClass } from '@workspace/db'
 import {
+    CouncilProposalStatus,
+    CouncilRole,
+    type ExpertProfile,
+    type SubjectClass,
+} from '@workspace/db'
+import {
+    useCreateManyCouncil,
     useFindManyExpertProfile,
     useFindUniqueSubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
-import { Col, Form, message, Select } from 'antd'
+import { Button, Col, Form, message, Select } from 'antd'
 import dayjs from 'dayjs'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
+import DefaultLayout from '@layouts/default-layout'
 import { debounce } from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export type PutSettingClass = SubjectClass & {
     expertProfileIds?: string[]
 }
 dayjs.locale('vi')
 
-const PutSettingClass = () => {
+const SettingClass = () => {
+    const router = useRouter()
     const [searchExpert, setSearchExpert] = useState('')
     const [form] = Form.useForm<PutSettingClass>()
-    const { isOpen, onClose, input } = useDisclosure<{ subjectClassId: string }>({
-        tag: PutSettingClass.name,
-        onClose: form.resetFields,
+    const [selectedLeftKeys, setSelectedLeftKeys] = useState<React.Key[]>([])
+    const [selectedRightKeys, setSelectedRightKeys] = useState<React.Key[]>([])
+    const [leftData, setLeftData] = useState<ExpertProfile[]>([])
+    const [rightData, setRightData] = useState<ExpertProfile[]>([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [filters, setFilters] = useState<FilterProps>({
+        code: undefined,
+        name: undefined,
+        academicRank: undefined,
+        academicDegree: undefined,
+        specialization: undefined,
+        workplace: undefined,
+        phone: undefined,
+        email: undefined,
     })
+    const subjectClassId = router.query as unknown as string
+
+    const where = useMemo(
+        () => ({
+            ...(filters.code
+                ? { code: { contains: filters.code, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.name
+                ? { name: { contains: filters.name, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.academicRank
+                ? { academicRank: { contains: filters.academicRank, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.academicDegree
+                ? {
+                      academicDegree: {
+                          contains: filters.academicDegree,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.specialization
+                ? {
+                      specialization: {
+                          contains: filters.specialization,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.workplace
+                ? { workplace: { contains: filters.workplace, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.phone
+                ? { phone: { contains: filters.phone, mode: 'insensitive' as const } }
+                : {}),
+            ...(filters.email
+                ? { email: { contains: filters.email, mode: 'insensitive' as const } }
+                : {}),
+        }),
+        [
+            filters.code,
+            filters.name,
+            filters.academicRank,
+            filters.academicDegree,
+            filters.specialization,
+            filters.workplace,
+            filters.phone,
+            filters.email,
+        ]
+    )
+
+    const { data: expertProfileData } = useFindManyExpertProfile(
+        {
+            where,
+            include: { lecturer: { include: { userProfile: true } } },
+        },
+        { refetchOnWindowFocus: false }
+    )
 
     const { showSpinner, hideSpinner } = useSpinner()
     const { data: expert = [], refetch } = useFindManyExpertProfile({
@@ -51,10 +130,11 @@ const PutSettingClass = () => {
 
     const { data: subjectClass } = useFindUniqueSubjectClass({
         where: {
-            id: input?.subjectClassId,
+            id: subjectClassId,
         },
         include: {
             expertProfile: true,
+            thesisProjects: true,
         },
     })
 
@@ -84,22 +164,21 @@ const PutSettingClass = () => {
 
         try {
             showSpinner()
-            const values = (await form.validateFields()) as PutSettingClass
+            // const values = (await form.validateFields()) as PutSettingClass
 
-            if (input?.subjectClassId) {
+            if (subjectClassId) {
                 await updateSubjectClass({
-                    where: { id: input.subjectClassId },
+                    where: { id: subjectClassId },
                     data: {
                         expertProfile: {
-                            connect: values.expertProfileIds?.map((id) => ({
-                                id,
+                            connect: rightData?.map((rightData) => ({
+                                id: rightData.id,
                             })),
                         },
                     },
                 })
                 message.success('Cập nhật thành công')
             }
-            onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
@@ -121,7 +200,8 @@ const PutSettingClass = () => {
     type Person = {
         id: number
         name: string
-        internal: boolean // internal can be director/secretary
+        expertId?: string
+        internal: boolean
         eligiblePresident: boolean
         eligibleSecretary: boolean
     }
@@ -413,37 +493,72 @@ const PutSettingClass = () => {
     function main() {
         const people = generateSamplePeople()
         const batches = generateBatchesWithLookahead(ps, 2, 2, 4000)
-
-        // print summary
-        // console.log(`Generated ${batches.length} batches.`)
-        batches.forEach((batch, bi) => {
-            // console.log(`\n=== Batch ${bi + 1} (committees=${batch.length}) ===`)
-            batch.forEach((c, ci) => {
-                // console.log(
-                //     `C${ci + 1}: Dir=${c.director.name}, Sec=${
-                //         c.secretary.name
-                //     }, Cand=${c.candidates.map((x) => x.name).join(', ')}`
-                // )
-            })
-        })
         return batches
     }
 
-    if (ps.length !== 0) {
-        const batches = main()
-        console.log(batches)
+    const { mutateAsync: createManyCouncil } = useCreateManyCouncil()
+    const handleCreateCouncil = async () => {
+        if (ps.length !== 0) {
+            const batches = main()
+            console.log(batches)
+
+            const councilsData = batches.flatMap((batch, batchIndex) =>
+                batch.map((committee, committeeIndex) => {
+                    const membersData = [
+                        { ...committee.director, role: CouncilRole.CHAIRMAN },
+                        { ...committee.secretary, role: CouncilRole.SECRETARY },
+                        { ...committee.candidates[0], role: CouncilRole.REVIEWER_1 },
+                        { ...committee.candidates[1], role: CouncilRole.REVIEWER_2 },
+                        { ...committee.candidates[2], role: CouncilRole.MEMBER },
+                    ].map((member) => ({
+                        expert: { connect: { id: member.expertId } },
+                        role: member.role,
+                    }))
+
+                    return {
+                        members: {
+                            create: membersData,
+                        },
+                        thesis: {
+                            connect: {
+                                id: subjectClass?.thesisProjects[
+                                    batchIndex * batch.length + committeeIndex
+                                ].id,
+                            },
+                        },
+                        proposedDate: new Date(),
+                        status: CouncilProposalStatus.PENDING,
+                    }
+                })
+            )
+
+            await createManyCouncil({
+                data: councilsData,
+                skipDuplicates: true,
+            })
+        }
+    }
+
+    useEffect(() => {
+        setLeftData(expertProfileData || [])
+    }, [expertProfileData])
+
+    const moveRight = () => {
+        const selectedItems = leftData.filter((item) => selectedLeftKeys.includes(item.id))
+        setRightData([...rightData, ...selectedItems])
+        setLeftData(leftData.filter((item) => !selectedLeftKeys.includes(item.id)))
+        setSelectedLeftKeys([])
+    }
+
+    const moveLeft = () => {
+        const selectedItems = rightData.filter((item) => selectedRightKeys.includes(item.id))
+        setLeftData([...leftData, ...selectedItems])
+        setRightData(rightData.filter((item) => !selectedRightKeys.includes(item.id)))
+        setSelectedRightKeys([])
     }
 
     return (
-        <PutFormModal
-            open={isOpen}
-            form={form}
-            onFinish={onOk}
-            onCancel={onClose}
-            maskClosable={true}
-            title="Cấu hình lớp đồ án"
-            className="w-[60vw]"
-        >
+        <div>
             <Col span={24}>
                 <FormItem form={form} name="expertProfileIds" label="Danh sách chuyên gia" required>
                     <Select
@@ -460,8 +575,164 @@ const PutSettingClass = () => {
                     />
                 </FormItem>
             </Col>
-        </PutFormModal>
+            <Col span={11}>
+                <Table
+                    rowKey="id"
+                    id="expert-profile"
+                    filters={filters}
+                    setFilters={setFilters}
+                    rowSelection={{
+                        selectedRowKeys: selectedLeftKeys,
+                        onChange: setSelectedLeftKeys,
+                    }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index: number) =>
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                        },
+                        {
+                            title: 'Tên chuyên gia',
+                            dataIndex: 'name',
+                            width: 150,
+                            type: 'input',
+                            align: 'center',
+                        },
+                        {
+                            title: 'Hàm hàm',
+                            dataIndex: 'academicRank',
+                            width: 150,
+                            align: 'center',
+                            type: 'input',
+                        },
+                        {
+                            title: 'Hàm vị',
+                            dataIndex: 'academicDegree',
+                            width: 150,
+                            align: 'center',
+                            type: 'input',
+                        },
+                        {
+                            title: 'Chuyên ngành',
+                            dataIndex: 'specialization',
+                            width: 150,
+                            align: 'center',
+                            type: 'input',
+                        },
+                        {
+                            title: 'Đơn vị công tác',
+                            dataIndex: 'workplace',
+                            width: 150,
+                            align: 'center',
+                            type: 'input',
+                        },
+                        {
+                            title: 'Số điện thoại',
+                            dataIndex: 'phone',
+                            width: 150,
+                            align: 'center',
+                            type: 'input',
+                        },
+                        {
+                            title: 'Email',
+                            dataIndex: 'email',
+                            width: 150,
+                            align: 'center',
+                            type: 'input',
+                        },
+                    ]}
+                    data={leftData}
+                />
+            </Col>
+            <Col
+                span={2}
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    gap: '8px',
+                }}
+            >
+                <Button onClick={moveRight} disabled={!selectedLeftKeys.length}>
+                    →
+                </Button>
+                <Button onClick={moveLeft} disabled={!selectedRightKeys.length}>
+                    ←
+                </Button>
+            </Col>
+            <Col span={11}>
+                <Table
+                    rowKey="id"
+                    id="expert-profile"
+                    rowSelection={{
+                        selectedRowKeys: selectedRightKeys,
+                        onChange: setSelectedRightKeys,
+                    }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index: number) =>
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                        },
+                        {
+                            title: 'Tên chuyên gia',
+                            dataIndex: 'name',
+                            width: 150,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Hàm hàm',
+                            dataIndex: 'academicRank',
+                            width: 150,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Hàm vị',
+                            dataIndex: 'academicDegree',
+                            width: 150,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Chuyên ngành',
+                            dataIndex: 'specialization',
+                            width: 150,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Đơn vị công tác',
+                            dataIndex: 'workplace',
+                            width: 150,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Số điện thoại',
+                            dataIndex: 'phone',
+                            width: 150,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Email',
+                            dataIndex: 'email',
+                            width: 150,
+                            align: 'center',
+                        },
+                    ]}
+                    data={rightData}
+                />
+            </Col>
+            <Button onClick={() => handleCreateCouncil()} type="primary">
+                abc
+            </Button>
+        </div>
     )
 }
 
-export default PutSettingClass
+SettingClass.getLayout = function getLayout(page: React.ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>
+}

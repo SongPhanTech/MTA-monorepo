@@ -4,7 +4,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { ModalPrintDecision, PutSettingClass, PutThesisProject } from '@components/modal'
+import { ModalPrintDecision, PutThesisProject } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -264,10 +264,6 @@ export default function ThesisProject() {
         tag: ModalPrintDecision.name,
     })
 
-    const { onOpen: openPutSettingClass } = useDisclosure({
-        tag: PutSettingClass.name,
-    })
-
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
@@ -339,6 +335,14 @@ export default function ThesisProject() {
         } finally {
             hideSpinner()
         }
+    }
+
+    const handleNavigateSetting = (id: string) => {
+        // console.log(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG);
+
+        router.push(
+            `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG}?${id}`
+        )
     }
 
     return (
@@ -429,11 +433,7 @@ export default function ThesisProject() {
                                     title="Thêm mới đề tài"
                                 />
                                 <BsGear
-                                    onClick={() => {
-                                        openPutSettingClass({
-                                            subjectClassId: id,
-                                        })
-                                    }}
+                                    onClick={() => handleNavigateSetting(id)}
                                     title="Cấu hình lớp đồ án"
                                 />
                             </div>

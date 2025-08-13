@@ -19,6 +19,7 @@ enum ConfigKey {
   DIRECTOR
   ACADEMY_NAME
   USER_SESSION_TIMEOUT
+  ACADEMIC_ACTION_RULES
 
   @@schema("he-thong")
 }
@@ -3917,7 +3918,7 @@ model GraduationDecision {
   applicationId         String                       @unique()
   student               Student                      @relation(fields: [studentId], references: [id])
   studentId             String                       @unique()
-  decisionDate          DateTime                     @default(now())
+  decisionDate          DateTime                     @default(now()) @db.Date()
   notes                 String?
   finalGpa              Decimal                      @db.Decimal(5, 2)
   trainingMajor         TrainingMajor?               @relation(fields: [trainingMajorId], references: [id])
@@ -3928,7 +3929,7 @@ model GraduationDecision {
   diplomaTypeId         String?
   originalDiplomaNumber String?                      @unique()
   diplomaNumber         String?                      @unique()
-  diplomaIssueDate      DateTime?
+  diplomaIssueDate      DateTime?                    @db.Date()
   diplomaFront          DocumentFile?                @relation("DiplomaFront")
   diplomaBack           DocumentFile?                @relation("DiplomaBack")
   totalCopy             Int?                         @default(0)
@@ -4023,30 +4024,39 @@ model RankingCondition {
 
 /// Đơn xác minh văn bằng
 model DiplomaVerificationApplication {
-  id           String                    @id() @default(cuid())
-  code         String?                   @unique()
-  active       Boolean                   @default(true)
-  description  String?                   @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime                  @default(now())
-  updatedAt    DateTime                  @default(now()) @updatedAt()
-  fullname     String
-  idCardNumber String
-  dateOfBirth  DateTime
-  phoneNumber  String
-  email        String
-  reason       String
+  id                      String                    @id() @default(cuid())
+  code                    String?                   @unique()
+  active                  Boolean                   @default(true)
+  description             String?                   @db.Text()
+  deletedAt               DateTime?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now()) @updatedAt()
+  fullname                String
+  idCardNumber            String
+  dateOfBirth             DateTime                  @db.Date()
+  phoneNumber             String
+  email                   String
+  reason                  String
+  originalDiplomaNumber   String
+  diplomaNumber           String
+  trainingMajor           String?
+  trainingLevel           String?
+  trainingForm            String?
+  trainingCourseStartYear Int?
+  trainingCourseEndYear   Int?
+  diplomaIssueDate        DateTime?                 @db.Date()
+  classification          String?
   /// Tệp đính kèm khác (nhiều)
-  attachments  DocumentFile[]            @relation("DiplomaVerificationAttachments")
+  attachments             DocumentFile[]            @relation("DiplomaVerificationAttachments")
   /// Ảnh mặt trước văn bằng
-  diplomaFront DocumentFile?             @relation("DiplomaVerificationFront")
+  diplomaFront            DocumentFile?             @relation("DiplomaVerificationFront")
   /// Ảnh mặt sau văn bằng
-  diplomaBack  DocumentFile?             @relation("DiplomaVerificationBack")
+  diplomaBack             DocumentFile?             @relation("DiplomaVerificationBack")
   /// Trạng thái xử lý
-  status       DiplomaVerificationStatus @default(PENDING)
+  status                  DiplomaVerificationStatus @default(PENDING)
   /// Liên kết học viên (nếu cần)
-  studentId    String?
-  student      Student?                  @relation(fields: [studentId], references: [id])
+  studentId               String?
+  student                 Student?                  @relation(fields: [studentId], references: [id])
 
   @@schema("ql-dao-tao")
 }
