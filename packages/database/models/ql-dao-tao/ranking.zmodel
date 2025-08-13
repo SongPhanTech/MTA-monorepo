@@ -191,7 +191,7 @@ model RankingCondition extends Base {
 model DiplomaVerificationApplication extends Base {
   fullname                String // Họ và tên học viên (không liên kết userProfile vì cho phép nhập tay)
   idCardNumber            String   // Căn cước công dân / CMND
-  dateOfBirth             DateTime                  @db.Date // ngày sinh
+  dateOfBirth             DateTime?                  @db.Date // ngày sinh
   phoneNumber             String // số điện thoại
   email                   String // email
   reason                  String // Lý do làm đơn

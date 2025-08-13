@@ -1,20 +1,19 @@
 import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import { PutDiplomaType } from '@components/modal'
+import { ModalTraCuuVanBang } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useDiplomaVerificationStatusOptions } from '@hooks/diplomaVerificationStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { type DiplomaVerificationApplication, DiplomaVerificationStatus } from '@workspace/db'
 import {
     useCountDiplomaVerificationApplication,
     useFindManyDiplomaVerificationApplication,
-    useUpdateDiplomaType,
+    useUpdateDiplomaVerificationApplication,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Col, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus } from 'lucide-react'
+import { FileSearch } from 'lucide-react'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -34,6 +33,8 @@ export default function QLDONDANGKY() {
         phone: undefined,
         email: undefined,
         diplomaVerificationStatus: undefined,
+        diplomaNumber: '',
+        originalDiplomaNumber: '',
     })
 
     const where = useMemo(
@@ -91,6 +92,22 @@ export default function QLDONDANGKY() {
                           },
                       }
                 : {}),
+            ...(filters.diplomaNumber
+                ? {
+                      diplomaNumber: {
+                          contains: filters.diplomaNumber,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.originalDiplomaNumber
+                ? {
+                      originalDiplomaNumber: {
+                          contains: filters.originalDiplomaNumber,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
         }),
         [
             filters.name,
@@ -99,6 +116,8 @@ export default function QLDONDANGKY() {
             filters.email,
             filters.dateOfBirth,
             filters.diplomaVerificationStatus,
+            filters.originalDiplomaNumber,
+            filters.diplomaNumber,
         ]
     )
 
@@ -118,46 +137,34 @@ export default function QLDONDANGKY() {
         },
     })
 
-    const { onOpen: onOpenPutDiplomaType } = useDisclosure<string>({
-        tag: PutDiplomaType.name,
-    })
-
-    const handleModal = () => {
-        onOpenPutDiplomaType()
-    }
-
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateDiplomaType } = useUpdateDiplomaType()
-    async function handleDeleteDiplomaType(id: string) {
+    const { mutateAsync: updateDiplomaVerificationApplication } =
+        useUpdateDiplomaVerificationApplication()
+    const handleUpdateInProgress = async (record: DiplomaVerificationApplication) => {
         try {
             showSpinner()
-            await updateDiplomaType({
-                where: { id },
-                data: { deletedAt: new Date() },
+            if (record?.status === DiplomaVerificationStatus.IN_PROGRESS) return
+            await updateDiplomaVerificationApplication({
+                where: { id: record?.id },
+                data: { status: DiplomaVerificationStatus.IN_PROGRESS },
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
+
+    const { onOpen: onOpenPutDiplomaType } = useDisclosure<{
+        data: DiplomaVerificationApplication
+    }>({
+        tag: ModalTraCuuVanBang.name,
+    })
 
     return (
         <div>
             <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
-                            <Flex justify="end" gap={4}>
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Col>
-
                 <Col span={24}>
                     <Table
                         rowKey="id"
@@ -212,6 +219,63 @@ export default function QLDONDANGKY() {
                                 type: 'input',
                             },
                             {
+                                title: 'Số hiệu văn bằng',
+                                dataIndex: 'diplomaNumber',
+                                width: 200,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Số vào sổ gốc văn bằng',
+                                dataIndex: 'originalDiplomaNumber',
+                                width: 200,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Chuyên ngành đào tạo',
+                                dataIndex: 'trainingMajor',
+                                width: 200,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Bậc đào đạo',
+                                dataIndex: 'trainingLevel',
+                                width: 200,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Hình thức đào tạo',
+                                dataIndex: 'trainingForm',
+                                width: 200,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Xếp loại tốt nghiệp',
+                                dataIndex: 'classification',
+                                width: 200,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Năm khóa học bắt đầu',
+                                dataIndex: 'trainingCourseStartYear',
+                                width: 200,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Năm khóa học kết thúc',
+                                dataIndex: 'trainingCourseEndYear',
+                                width: 200,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Ngày cấp bằng',
+                                dataIndex: 'diplomaIssueDate',
+                                width: 150,
+                                align: 'center',
+                                render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
+                            },
+                            {
                                 title: 'Lý do nộp đơn',
                                 dataIndex: 'reason',
                                 width: 200,
@@ -246,24 +310,17 @@ export default function QLDONDANGKY() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutDiplomaType(record?.id)
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteDiplomaType(record?.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                    }}
-                                                />
+                                                <Tooltip title={'Tra cứu'} placement="top">
+                                                    <FileSearch
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            handleUpdateInProgress(record)
+                                                            onOpenPutDiplomaType({ data: record })
+                                                        }}
+                                                        size={16}
+                                                        strokeWidth={1.5}
+                                                    />
+                                                </Tooltip>
                                             </Row>
                                         )
                                     }
