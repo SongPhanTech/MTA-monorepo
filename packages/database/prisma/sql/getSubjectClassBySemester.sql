@@ -25,6 +25,7 @@ with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
                     FC."trainingCourseId"                as training_course_id,
                     C."trainingMajorId"                  as training_major_id,
                     C."managementOrganizationId"         as management_organization_id,
+                    DV."sTen"                            as management_organization_name,
                     count(FC.id)                         as fixed_class_count
              from "ql-dao-tao"."SubjectVersion"
                       join "ql-dao-tao"."TrainingBlockSubject" TBS
@@ -36,6 +37,7 @@ with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
                       join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
                       join "ql-dao-tao"."Student" S on FC.id = S."fixedClassId"
                       left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
+                      left join "mta"."DM_DonVi" DV on C."managementOrganizationId" = DV."Id"
              where FC.active = true
                and TBS."deletedAt" is null
                and TBOCV."deletedAt" is null
@@ -45,8 +47,8 @@ with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
              group by CV.id, CV.name, FC.id, FC."startYear",
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
-                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id,SC.id)
-select json_build_object('subjectVersionCode', subject_version_code,'trainingMajorId', training_major_id, 'trainingCourseId', training_course_id, 'managementOrganizationId', management_organization_id, 'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
+                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id,SC.id, C."managementOrganizationId", management_organization_name)
+select json_build_object('subjectVersionCode', subject_version_code,'trainingMajorId', training_major_id, 'trainingCourseId', training_course_id, 'managementOrganizationId', management_organization_id, 'managementOrganizationName', management_organization_name, 'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
                          'subjectVersionCredit', subject_version_credit,
                            'subjectClass', json_agg(
                                  json_build_object(
@@ -76,5 +78,5 @@ where training_block_subject_semester = fixed_class_semester and active = true a
 ($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4) or
 ($5::TEXT IS NULL AND 1=1 OR training_major_id = $5))
 group by subject_version_id, subject_version_code,
-         subject_version_credit, subject_version_name, training_major_id, training_course_id
+         subject_version_credit, subject_version_name, training_major_id, training_course_id, management_organization_id, management_organization_name
          limit $7 offset ($6 - 1) * $7
