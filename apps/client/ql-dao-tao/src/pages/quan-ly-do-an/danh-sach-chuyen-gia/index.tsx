@@ -161,7 +161,7 @@ export default function ExpertProfile() {
                                 align: 'center',
                             },
                             {
-                                title: 'Hàm hàm',
+                                title: 'Học hàm',
                                 dataIndex: 'academicRank',
                                 width: 150,
                                 align: 'center',

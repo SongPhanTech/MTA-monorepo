@@ -9,8 +9,10 @@ import {
 import {
     useCreateManyCouncil,
     useFindManyExpertProfile,
+    useFindManyRoom,
     useFindUniqueSubjectClass,
     useUpdateSubjectClass,
+    useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { Button, Col, Form, message, Select } from 'antd'
 import dayjs from 'dayjs'
@@ -24,7 +26,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export type PutSettingClass = SubjectClass & {
-    expertProfileIds?: string[]
+    roomIds?: string[]
 }
 dayjs.locale('vi')
 
@@ -34,6 +36,7 @@ export default function SettingClass() {
     const [form] = Form.useForm<PutSettingClass>()
     const [selectedLeftKeys, setSelectedLeftKeys] = useState<React.Key[]>([])
     const [selectedRightKeys, setSelectedRightKeys] = useState<React.Key[]>([])
+    const [selectedRoomIds, setSelectedRoomIds] = useState<string[]>([])
     const [leftData, setLeftData] = useState<ExpertProfile[]>([])
     const [rightData, setRightData] = useState<ExpertProfile[]>([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -47,8 +50,10 @@ export default function SettingClass() {
         phone: undefined,
         email: undefined,
     })
-    const { id } = router.query
-    const subjectClassId = id as string
+    const { subjectClassId } = router.query
+    const subjectClassIdStr = Array.isArray(subjectClassId)
+        ? subjectClassId[0]
+        : subjectClassId || ''
 
     const where = useMemo(
         () => ({
@@ -108,47 +113,21 @@ export default function SettingClass() {
     )
 
     const { showSpinner, hideSpinner } = useSpinner()
-    const { data: expert = [], refetch } = useFindManyExpertProfile({
-        where: {
-            ...(searchExpert
-                ? {
-                      lecturer: {
-                          userProfile: {
-                              fullname: { contains: searchExpert, mode: 'insensitive' },
-                          },
-                      },
-                  }
-                : {}),
-        },
-        include: {
-            lecturer: {
-                include: {
-                    userProfile: true,
-                },
-            },
-        },
-    })
 
     const { data: subjectClass } = useFindUniqueSubjectClass(
         {
             where: {
-                id: subjectClassId,
+                id: subjectClassIdStr,
             },
             include: {
                 expertProfile: true,
                 thesisProjects: true,
             },
         },
-        { enabled: !!subjectClassId }
+        { enabled: !!subjectClassIdStr }
     )
 
-    const { data: data1 } = useFindUniqueSubjectClass({
-        where: {
-            id: subjectClassId as string,
-        },
-    })
-
-    console.log(data1)
+    const { data: room = [], refetch } = useFindManyRoom({})
 
     const debouncedRefetch = useCallback(
         debounce(() => {
@@ -157,18 +136,18 @@ export default function SettingClass() {
         []
     )
 
-    const handleSearchExpert = (value: string) => {
+    const handleSearchRoom = (value: string) => {
         setSearchExpert(value)
         debouncedRefetch()
     }
 
-    useEffect(() => {
-        if (subjectClass) {
-            form.setFieldsValue({
-                expertProfileIds: subjectClass.expertProfile.map((item: { id: string }) => item.id),
-            })
-        }
-    }, [subjectClass, form])
+    // useEffect(() => {
+    //     if (subjectClass) {
+    //         form.setFieldsValue({
+    //             roomIds: subjectClass.expertProfile.map((item: { id: string }) => item.id),
+    //         })
+    //     }
+    // }, [subjectClass, form])
 
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     async function onOk(output?: PutSettingClass) {
@@ -180,7 +159,7 @@ export default function SettingClass() {
 
             if (subjectClassId) {
                 await updateSubjectClass({
-                    where: { id: subjectClassId },
+                    where: { id: subjectClassIdStr },
                     data: {
                         expertProfile: {
                             connect: rightData?.map((rightData) => ({
@@ -509,45 +488,63 @@ export default function SettingClass() {
     }
 
     const { mutateAsync: createManyCouncil } = useCreateManyCouncil()
+    const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
     const handleCreateCouncil = async () => {
         if (ps.length !== 0) {
-            const batches = main()
-            console.log(batches)
+            const thesisIds = subjectClass?.thesisProjects.map((tp) => tp.id) ?? []
+            console.log(selectedRoomIds)
+            try {
+                const batches = main()
 
-            const councilsData = batches.flatMap((batch, batchIndex) =>
-                batch.map((committee, committeeIndex) => {
-                    const membersData = [
-                        { ...committee.director, role: CouncilRole.CHAIRMAN },
-                        { ...committee.secretary, role: CouncilRole.SECRETARY },
-                        { ...committee.candidates[0], role: CouncilRole.REVIEWER_1 },
-                        { ...committee.candidates[1], role: CouncilRole.REVIEWER_2 },
-                        { ...committee.candidates[2], role: CouncilRole.MEMBER },
-                    ].map((member) => ({
-                        expert: { connect: { id: member.expertId } },
-                        role: member.role,
-                    }))
+                const councilsData = batches.flatMap((batch, batchIndex) =>
+                    batch.map((committee, committeeIndex) => {
+                        const membersData = [
+                            { ...committee.director, role: CouncilRole.CHAIRMAN },
+                            { ...committee.secretary, role: CouncilRole.SECRETARY },
+                            { ...committee.candidates[0], role: CouncilRole.REVIEWER_1 },
+                            { ...committee.candidates[1], role: CouncilRole.REVIEWER_2 },
+                            { ...committee.candidates[2], role: CouncilRole.MEMBER },
+                        ].map((member) => ({
+                            expert: { connect: { id: member.expertId } },
+                            role: member.role,
+                        }))
 
-                    return {
-                        members: {
-                            create: membersData,
-                        },
-                        thesis: {
-                            connect: {
-                                id: subjectClass?.thesisProjects[
-                                    batchIndex * batch.length + committeeIndex
-                                ].id,
+                        return {
+                            members: { create: membersData },
+                            thesis: {
+                                connect: {
+                                    id: subjectClass?.thesisProjects[
+                                        batchIndex * batch.length + committeeIndex
+                                    ].id,
+                                },
                             },
-                        },
-                        proposedDate: new Date(),
-                        status: CouncilProposalStatus.PENDING,
-                    }
-                })
-            )
+                            proposedDate: new Date(),
+                            status: CouncilProposalStatus.PENDING,
+                        }
+                    })
+                )
 
-            await createManyCouncil({
-                data: councilsData,
-                skipDuplicates: true,
-            })
+                await createManyCouncil({
+                    data: councilsData,
+                    skipDuplicates: true,
+                })
+
+                if (selectedRoomIds?.length && thesisIds.length) {
+                    await Promise.all(
+                        thesisIds.map((thesisId, index) => {
+                            const roomId = selectedRoomIds[index % selectedRoomIds.length]
+                            return updateThesisProject({
+                                where: { id: thesisId },
+                                data: { roomId },
+                            })
+                        })
+                    )
+                }
+
+                message.success('Tạo hội đồng thành công')
+            } catch (_error) {
+                message.error('Lỗi khi tạo hội đồng:')
+            }
         }
     }
 
@@ -571,19 +568,27 @@ export default function SettingClass() {
 
     return (
         <Col span={24}>
-            <Col span={24}>
-                <FormItem form={form} name="expertProfileIds" label="Danh sách chuyên gia" required>
+            <Col span={24} className="flex justify-end">
+                <Button onClick={() => handleCreateCouncil()} type="primary">
+                    Tạo hội đồng
+                </Button>
+            </Col>
+            <Col span={24} className="mt-4">
+                <FormItem form={form} name="roomIds" label="Danh sách phòng">
                     <Select
                         mode="multiple"
-                        placeholder="Chọn chuyên gia"
-                        options={expert.map((item) => ({
-                            label: `${item.lecturer?.userProfile.fullname || item.name} - ${item.code}`,
+                        placeholder="Chọn danh sách phòng"
+                        options={room.map((item) => ({
+                            label: item.name,
                             value: item.id,
                         }))}
                         showSearch
-                        onSearch={handleSearchExpert}
+                        onSearch={handleSearchRoom}
                         filterOption={false}
                         allowClear
+                        onChange={(values: string[]) => {
+                            setSelectedRoomIds(values)
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -615,7 +620,7 @@ export default function SettingClass() {
                                 align: 'center',
                             },
                             {
-                                title: 'Hàm hàm',
+                                title: 'Học hàm',
                                 dataIndex: 'academicRank',
                                 width: 150,
                                 align: 'center',
@@ -700,7 +705,7 @@ export default function SettingClass() {
                                 align: 'center',
                             },
                             {
-                                title: 'Hàm hàm',
+                                title: 'Học hàm',
                                 dataIndex: 'academicRank',
                                 width: 150,
                                 align: 'center',
@@ -740,9 +745,6 @@ export default function SettingClass() {
                     />
                 </Col>
             </Col>
-            <Button onClick={() => handleCreateCouncil()} type="primary">
-                abc
-            </Button>
         </Col>
     )
 }

@@ -338,10 +338,8 @@ export default function ThesisProject() {
     }
 
     const handleNavigateSetting = (id: string) => {
-        // console.log(ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG);
-
         router.push(
-            `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG}?${id}`
+            `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG}?subjectClassId=${id}`
         )
     }
 
