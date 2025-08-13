@@ -4,6 +4,7 @@ import type {
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
+    DiplomaVerificationStatus,
     ExamType,
     GraduationSessionStatus,
     SemesterType,
@@ -119,6 +120,8 @@ export type FilterProps = {
     phone?: string
     email?: string
     originalDiplomaNumber?: string
+    idCardNumber?: string
+    diplomaVerificationStatus?: DiplomaVerificationStatus[]
     academicRank?: string
     academicDegree?: string
 }

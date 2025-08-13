@@ -111,6 +111,7 @@ const PutSettingClass = () => {
     const ps =
         subjectClass?.expertProfile?.map((item, index) => ({
             id: index,
+            expertId: item.id,
             internal: true,
             name: item.name || '',
             eligiblePresident: item.eligiblePresident,
@@ -414,21 +415,23 @@ const PutSettingClass = () => {
         const batches = generateBatchesWithLookahead(ps, 2, 2, 4000)
 
         // print summary
-        console.log(`Generated ${batches.length} batches.`)
+        // console.log(`Generated ${batches.length} batches.`)
         batches.forEach((batch, bi) => {
-            console.log(`\n=== Batch ${bi + 1} (committees=${batch.length}) ===`)
+            // console.log(`\n=== Batch ${bi + 1} (committees=${batch.length}) ===`)
             batch.forEach((c, ci) => {
-                console.log(
-                    `C${ci + 1}: Dir=${c.director.name}, Sec=${
-                        c.secretary.name
-                    }, Cand=${c.candidates.map((x) => x.name).join(', ')}`
-                )
+                // console.log(
+                //     `C${ci + 1}: Dir=${c.director.name}, Sec=${
+                //         c.secretary.name
+                //     }, Cand=${c.candidates.map((x) => x.name).join(', ')}`
+                // )
             })
         })
+        return batches
     }
 
     if (ps.length !== 0) {
-        main()
+        const batches = main()
+        console.log(batches)
     }
 
     return (
@@ -441,7 +444,7 @@ const PutSettingClass = () => {
             title="Cấu hình lớp đồ án"
             className="w-[60vw]"
         >
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="expertProfileIds" label="Danh sách chuyên gia" required>
                     <Select
                         mode="multiple"
