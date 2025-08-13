@@ -227,8 +227,9 @@ export default function TestStructureRule() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: deleteExamBank } = useDeleteExamBank()
@@ -240,8 +241,9 @@ export default function TestStructureRule() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { onOpen: onOpenModalSinhDeThiTuDong } = useDisclosure<string>({

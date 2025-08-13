@@ -265,8 +265,9 @@ export default function StudentFixedClassPage() {
             setSelectedRowKeys([])
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     async function handleDeleteMulti() {
@@ -288,8 +289,9 @@ export default function StudentFixedClassPage() {
             setSelectedRowKeys([])
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleCancel = () => {

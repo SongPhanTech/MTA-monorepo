@@ -1,8 +1,4 @@
-import {
-    type DiplomaVerificationApplication,
-    DiplomaVerificationStatus,
-    type RankingCondition,
-} from '@workspace/db'
+import { type DiplomaVerificationApplication, DiplomaVerificationStatus } from '@workspace/db'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -11,22 +7,17 @@ import {
     useFindManyGraduationDecision,
     useUpdateDiplomaVerificationApplication,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Image, Modal, message, Row } from 'antd'
+import { Checkbox, Col, Image, Modal, message, Row } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { env } from '@/env'
 
-export type GraduationCriteria = RankingCondition
-dayjs.locale('vi')
-
 const ModalTraCuuVanBang = () => {
-    const [form] = Form.useForm<GraduationCriteria>()
     const { showSpinner, hideSpinner } = useSpinner()
     const [selectedStudentId, setSelectedStudentId] = useState<string>('')
     const { isOpen, onClose, input } = useDisclosure<{
         data: DiplomaVerificationApplication
     }>({
         tag: ModalTraCuuVanBang.name,
-        onClose: form.resetFields,
     })
 
     const { data: searchData } = useFindManyGraduationDecision(

@@ -137,8 +137,9 @@ export default function ThesisProjectDetail() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateStudentThesisRegistration } = useUpdateStudentThesisRegistration()
@@ -156,8 +157,9 @@ export default function ThesisProjectDetail() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateCouncil } = useUpdateCouncil()
@@ -175,8 +177,9 @@ export default function ThesisProjectDetail() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateCouncilMember } = useUpdateCouncilMember()
@@ -194,8 +197,9 @@ export default function ThesisProjectDetail() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (

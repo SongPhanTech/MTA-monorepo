@@ -752,8 +752,9 @@ export default function CreateUserPage() {
             router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
         } catch (error) {
             message.error('Đã có lỗi xảy ra, vui lòng thử lại sau')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
     const avatar = Form.useWatch('avatar', form)
     const fileListValue = useMemo(() => {
