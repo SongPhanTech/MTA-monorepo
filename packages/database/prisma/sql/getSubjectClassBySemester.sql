@@ -24,6 +24,7 @@ with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
                     FC.graduated                         as graduated,
                     FC."trainingCourseId"                as training_course_id,
                     C."trainingMajorId"                  as training_major_id,
+                    C."managementOrganizationId"         as management_organization_id,
                     count(FC.id)                         as fixed_class_count
              from "ql-dao-tao"."SubjectVersion"
                       join "ql-dao-tao"."TrainingBlockSubject" TBS
@@ -45,7 +46,7 @@ with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
                       "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id,SC.id)
-select json_build_object('subjectVersionCode', subject_version_code,'trainingMajorId', training_major_id, 'trainingCourseId', training_course_id,'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
+select json_build_object('subjectVersionCode', subject_version_code,'trainingMajorId', training_major_id, 'trainingCourseId', training_course_id, 'managementOrganizationId', management_organization_id, 'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
                          'subjectVersionCredit', subject_version_credit,
                            'subjectClass', json_agg(
                                  json_build_object(

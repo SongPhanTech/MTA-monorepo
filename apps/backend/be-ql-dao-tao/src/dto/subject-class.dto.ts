@@ -4,6 +4,7 @@ import { $Enums } from '@workspace/db'
 export const OpenSubjectClass = z
     .object({
         trainingMajorId: z.string(),
+        managementOrganizationId: z.string(),
         trainingCourseId: z.string(),
         subjectVersionId: z.string(),
         subjectVersionName: z.string(),
