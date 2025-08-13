@@ -50,16 +50,34 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Quận huyện
+ */
 export interface PublicApiGetAllDMQuanHuyenDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
-  /** @nullable */
+  /**
+   * Id tỉnh
+   * @nullable
+   */
   sDM_TinhId?: string | null;
-  /** @nullable */
+  /**
+   * Tên tỉnh
+   * @nullable
+   */
   sTenTinh?: string | null;
-  /** @nullable */
+  /**
+   * Tên quốc gia
+   * @nullable
+   */
   sTenQuocGia?: string | null;
 }
