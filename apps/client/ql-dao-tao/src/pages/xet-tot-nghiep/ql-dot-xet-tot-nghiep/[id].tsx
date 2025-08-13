@@ -11,7 +11,7 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { ApplicationStatus, type Prisma } from '@workspace/db'
+import { ApplicationStatus } from '@workspace/db'
 import {
     useCountStudentGraduationApplication,
     useFindManyStudentGraduationApplication,
@@ -314,7 +314,7 @@ export default function StudentGraduationApplication() {
                                 record.rank?.id
                         )
                         .map((record) => {
-                            const data: Prisma.GraduationDecisionCreateInput = {
+                            const createData = {
                                 application: { connect: { id: record.id } },
                                 student: { connect: { id: record.student.id } },
                                 finalGpa: record.gpa ?? 0,
@@ -331,8 +331,10 @@ export default function StudentGraduationApplication() {
                                     applicationId: record.id,
                                     studentId: record.student.id,
                                 },
-                                create: data,
-                                update: data,
+                                create: {
+                                    ...createData,
+                                },
+                                update: createData,
                             })
                         })
 

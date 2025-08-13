@@ -144,7 +144,11 @@ export default function QLDONDANGKY() {
     const handleUpdateInProgress = async (record: DiplomaVerificationApplication) => {
         try {
             showSpinner()
-            if (record?.status === DiplomaVerificationStatus.IN_PROGRESS) return
+            if (
+                record?.status === DiplomaVerificationStatus.IN_PROGRESS ||
+                record?.status === DiplomaVerificationStatus.APPROVED
+            )
+                return
             await updateDiplomaVerificationApplication({
                 where: { id: record?.id },
                 data: { status: DiplomaVerificationStatus.IN_PROGRESS },
