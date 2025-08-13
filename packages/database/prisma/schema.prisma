@@ -4039,7 +4039,7 @@ model DiplomaVerificationApplication {
   updatedAt               DateTime                  @default(now()) @updatedAt()
   fullname                String
   idCardNumber            String
-  dateOfBirth             DateTime                  @db.Date()
+  dateOfBirth             DateTime?                 @db.Date()
   phoneNumber             String
   email                   String
   reason                  String
