@@ -155,7 +155,7 @@ const ModalTraCuuVanBang = () => {
                                             <Col span={7}>
                                                 <Image
                                                     src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item?.student?.userProfile?.avatar}`}
-                                                    alt={item?.student?.code}
+                                                    alt={item?.student?.code || ''}
                                                     className="h-28 w-20 border border-primary object-contain"
                                                 />
                                             </Col>
