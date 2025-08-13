@@ -11,8 +11,9 @@ import {
     useFindManyGraduationDecision,
     useUpdateDiplomaVerificationApplication,
 } from '@workspace/db/hooks'
-import { Col, Form, Modal, message, Row } from 'antd'
+import { Col, Form, Image, Modal, message, Row } from 'antd'
 import { useMemo } from 'react'
+import { env } from '@/env'
 
 export type GraduationCriteria = RankingCondition
 dayjs.locale('vi')
@@ -67,11 +68,23 @@ const ModalTraCuuVanBang = () => {
                       },
                   }
                 : undefined,
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                trainingCourse: true,
+                            },
+                        },
+                    },
+                },
+                diplomaFront: true,
+                diplomaBack: true,
+            },
         },
         { enabled: !!input?.data }
     )
-
-    console.log(searchData)
 
     const { mutateAsync: updateDiplomaVerificationApplication } =
         useUpdateDiplomaVerificationApplication()
@@ -119,14 +132,90 @@ const ModalTraCuuVanBang = () => {
             }}
         >
             {isFound ? (
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <div className="flex flex-col gap-1">
-                            <span className="font-medium">Họ và tên</span>
-                            <span>1231</span>
-                        </div>
-                    </Col>
-                </Row>
+                searchData?.map((item) => (
+                    <Row gutter={16} key={item.id}>
+                        <Col span={24}>
+                            <div className="flex items-center">
+                                <Col span={9}>
+                                    <div className="border border-solid border-primary rounded p-2">
+                                        <Row gutter={16} className="flex items-center">
+                                            <Col span={7}>
+                                                <Image
+                                                    src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item?.student?.userProfile?.avatar}`}
+                                                    alt={item?.student?.code}
+                                                    className="h-28 w-20 border border-primary object-contain"
+                                                />
+                                            </Col>
+                                            <Col span={17}>
+                                                <div className="flex flex-col gap-1">
+                                                    <span>
+                                                        Họ và tên:{' '}
+                                                        <span className="uppercase font-bold">
+                                                            {item?.student?.userProfile?.fullname}
+                                                        </span>
+                                                    </span>
+                                                    <span>
+                                                        MSSV:{' '}
+                                                        <span className="uppercase font-bold">
+                                                            {item?.student?.code}
+                                                        </span>
+                                                    </span>
+                                                    <span>
+                                                        Ngày sinh:{' '}
+                                                        <span className="uppercase font-bold">
+                                                            {item?.student?.userProfile?.dateOfBirth
+                                                                ? dayjs(
+                                                                      item?.student?.userProfile
+                                                                          ?.dateOfBirth
+                                                                  ).format('DD/MM/YYYY')
+                                                                : ''}
+                                                        </span>
+                                                    </span>
+                                                    <span>
+                                                        Số CMND:{' '}
+                                                        <span className="uppercase font-bold">
+                                                            {
+                                                                item?.student?.userProfile
+                                                                    ?.idCardNumber
+                                                            }
+                                                        </span>
+                                                    </span>
+                                                    <span>
+                                                        Lớp:{' '}
+                                                        <span className="font-bold">
+                                                            {item?.student?.fixedClass?.name}
+                                                        </span>
+                                                    </span>
+                                                    <span>
+                                                        Niên khóa:{' '}
+                                                        <span className="font-bold">
+                                                            {
+                                                                item?.student?.fixedClass
+                                                                    ?.trainingCourse?.name
+                                                            }
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Col>
+                                <Col span={15}>
+                                    <div className="flex w-full gap-4">
+                                        <Image
+                                            src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item?.diplomaFront?.path}`}
+                                            className="w-full object-contain"
+                                        />
+                                        <Image
+                                            src={`${env.NEXT_PUBLIC_MINIO_ENDPOINT}/${item?.diplomaBack?.path}`}
+                                            className="w-full object-contain"
+                                        />
+                                    </div>
+                                </Col>
+                            </div>
+                        </Col>
+                    </Row>
+                ))
             ) : (
                 <div className="flex flex-col gap-2">
                     <span>Không tìm thấy học viên, sinh viên phù hợp.</span>
