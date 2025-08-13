@@ -50,10 +50,20 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Chức danh
+ */
 export interface PublicApiGetAllDMChucDanhDTO {
+  /** Id chức danh */
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã chức danh
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên chức danh
+   * @nullable
+   */
   sTen?: string | null;
 }

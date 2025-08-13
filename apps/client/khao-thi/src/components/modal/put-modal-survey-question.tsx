@@ -76,9 +76,14 @@ const PutSurveyQuestionModal = () => {
         }
     }
 
-    const { data: surveyQuestion } = useFindUniqueSurveyQuestion({
-        where: { id },
-    })
+    const { data: surveyQuestion } = useFindUniqueSurveyQuestion(
+        {
+            where: { id },
+        },
+        {
+            enabled: !!id,
+        }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (surveyQuestion) {
@@ -96,12 +101,7 @@ const PutSurveyQuestionModal = () => {
             title={id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'}
             className="w-[30vw]"
         >
-            <Col span={12}>
-                <FormItem form={form} name="code" label="Mã câu hỏi khảo sát" required>
-                    <Input placeholder="Nhập mã câu hỏi khảo sát" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Câu hỏi khảo sát" required>
                     <Input placeholder="Nhập câu hỏi khảo sát" />
                 </FormItem>

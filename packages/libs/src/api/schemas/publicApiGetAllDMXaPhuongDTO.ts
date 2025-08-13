@@ -50,20 +50,38 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Xã, phường
+ */
 export interface PublicApiGetAllDMXaPhuongDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
   /** @nullable */
   sDM_TinhId?: string | null;
   /** @nullable */
   sDM_QuanHuyenId?: string | null;
-  /** @nullable */
+  /**
+   * Quận, huyện
+   * @nullable
+   */
   sTenQuanHuyen?: string | null;
-  /** @nullable */
+  /**
+   * Tỉnh
+   * @nullable
+   */
   sTenTinh?: string | null;
-  /** @nullable */
+  /**
+   * Quốc gia
+   * @nullable
+   */
   sTenQuocGia?: string | null;
 }

@@ -50,11 +50,21 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Đơn vị
+ */
 export interface PublicApiGetAllDMDonViDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã đơn vị
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên đơn vị
+   * @nullable
+   */
   sTen?: string | null;
+  /** Đơn vị cấp trên */
   sParentId?: string;
 }

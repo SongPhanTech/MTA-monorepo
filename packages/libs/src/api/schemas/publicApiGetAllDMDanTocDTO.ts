@@ -50,10 +50,20 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Dân tộc
+ */
 export interface PublicApiGetAllDMDanTocDTO {
+  /** Id dân tộc */
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên dân tộc
+   * @nullable
+   */
   sTen?: string | null;
 }

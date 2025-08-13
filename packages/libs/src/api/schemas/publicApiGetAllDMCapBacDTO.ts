@@ -50,10 +50,20 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * DTO cho Cấp bậc
+ */
 export interface PublicApiGetAllDMCapBacDTO {
+  /** Id của Cấp bậc */
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã của Cấp bậc
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên của Cấp bậc
+   * @nullable
+   */
   sTen?: string | null;
 }

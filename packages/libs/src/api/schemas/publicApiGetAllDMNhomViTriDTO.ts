@@ -50,8 +50,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Nhóm vị trí
+ */
 export interface PublicApiGetAllDMNhomViTriDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Tên nhóm
+   * @nullable
+   */
   sTen?: string | null;
 }

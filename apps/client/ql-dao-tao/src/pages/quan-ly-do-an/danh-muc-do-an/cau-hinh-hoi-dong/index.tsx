@@ -28,7 +28,7 @@ export type PutSettingClass = SubjectClass & {
 }
 dayjs.locale('vi')
 
-const SettingClass = () => {
+export default function SettingClass() {
     const router = useRouter()
     const [searchExpert, setSearchExpert] = useState('')
     const [form] = Form.useForm<PutSettingClass>()
@@ -128,15 +128,26 @@ const SettingClass = () => {
         },
     })
 
-    const { data: subjectClass } = useFindUniqueSubjectClass({
-        where: {
-            id: subjectClassId,
+    const { data: subjectClass } = useFindUniqueSubjectClass(
+        {
+            where: {
+                id: subjectClassId,
+            },
+            include: {
+                expertProfile: true,
+                thesisProjects: true,
+            },
         },
-        include: {
-            expertProfile: true,
-            thesisProjects: true,
+        { enabled: !!subjectClassId }
+    )
+
+    const { data: data1 } = useFindUniqueSubjectClass({
+        where: {
+            id: subjectClassId as string,
         },
     })
+
+    console.log(data1)
 
     const debouncedRefetch = useCallback(
         debounce(() => {
@@ -558,7 +569,7 @@ const SettingClass = () => {
     }
 
     return (
-        <div>
+        <Col span={24}>
             <Col span={24}>
                 <FormItem form={form} name="expertProfileIds" label="Danh sách chuyên gia" required>
                     <Select
@@ -575,161 +586,163 @@ const SettingClass = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={11}>
-                <Table
-                    rowKey="id"
-                    id="expert-profile"
-                    filters={filters}
-                    setFilters={setFilters}
-                    rowSelection={{
-                        selectedRowKeys: selectedLeftKeys,
-                        onChange: setSelectedLeftKeys,
+            <Col span={24} className="flex flex-row gap-2">
+                <Col span={12}>
+                    <Table
+                        rowKey="id"
+                        id="expert-profile"
+                        filters={filters}
+                        setFilters={setFilters}
+                        rowSelection={{
+                            selectedRowKeys: selectedLeftKeys,
+                            onChange: setSelectedLeftKeys,
+                        }}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index: number) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Tên chuyên gia',
+                                dataIndex: 'name',
+                                width: 150,
+                                type: 'input',
+                                align: 'center',
+                            },
+                            {
+                                title: 'Hàm hàm',
+                                dataIndex: 'academicRank',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Hàm vị',
+                                dataIndex: 'academicDegree',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Chuyên ngành',
+                                dataIndex: 'specialization',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Đơn vị công tác',
+                                dataIndex: 'workplace',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Số điện thoại',
+                                dataIndex: 'phone',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Email',
+                                dataIndex: 'email',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                            },
+                        ]}
+                        data={leftData}
+                    />
+                </Col>
+                <Col
+                    span={1}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        gap: '8px',
                     }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index: number) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Tên chuyên gia',
-                            dataIndex: 'name',
-                            width: 150,
-                            type: 'input',
-                            align: 'center',
-                        },
-                        {
-                            title: 'Hàm hàm',
-                            dataIndex: 'academicRank',
-                            width: 150,
-                            align: 'center',
-                            type: 'input',
-                        },
-                        {
-                            title: 'Hàm vị',
-                            dataIndex: 'academicDegree',
-                            width: 150,
-                            align: 'center',
-                            type: 'input',
-                        },
-                        {
-                            title: 'Chuyên ngành',
-                            dataIndex: 'specialization',
-                            width: 150,
-                            align: 'center',
-                            type: 'input',
-                        },
-                        {
-                            title: 'Đơn vị công tác',
-                            dataIndex: 'workplace',
-                            width: 150,
-                            align: 'center',
-                            type: 'input',
-                        },
-                        {
-                            title: 'Số điện thoại',
-                            dataIndex: 'phone',
-                            width: 150,
-                            align: 'center',
-                            type: 'input',
-                        },
-                        {
-                            title: 'Email',
-                            dataIndex: 'email',
-                            width: 150,
-                            align: 'center',
-                            type: 'input',
-                        },
-                    ]}
-                    data={leftData}
-                />
-            </Col>
-            <Col
-                span={2}
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    gap: '8px',
-                }}
-            >
-                <Button onClick={moveRight} disabled={!selectedLeftKeys.length}>
-                    →
-                </Button>
-                <Button onClick={moveLeft} disabled={!selectedRightKeys.length}>
-                    ←
-                </Button>
-            </Col>
-            <Col span={11}>
-                <Table
-                    rowKey="id"
-                    id="expert-profile"
-                    rowSelection={{
-                        selectedRowKeys: selectedRightKeys,
-                        onChange: setSelectedRightKeys,
-                    }}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index: number) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Tên chuyên gia',
-                            dataIndex: 'name',
-                            width: 150,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Hàm hàm',
-                            dataIndex: 'academicRank',
-                            width: 150,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Hàm vị',
-                            dataIndex: 'academicDegree',
-                            width: 150,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Chuyên ngành',
-                            dataIndex: 'specialization',
-                            width: 150,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Đơn vị công tác',
-                            dataIndex: 'workplace',
-                            width: 150,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Số điện thoại',
-                            dataIndex: 'phone',
-                            width: 150,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Email',
-                            dataIndex: 'email',
-                            width: 150,
-                            align: 'center',
-                        },
-                    ]}
-                    data={rightData}
-                />
+                >
+                    <Button onClick={moveRight} disabled={!selectedLeftKeys.length}>
+                        →
+                    </Button>
+                    <Button onClick={moveLeft} disabled={!selectedRightKeys.length}>
+                        ←
+                    </Button>
+                </Col>
+                <Col span={11}>
+                    <Table
+                        rowKey="id"
+                        id="expert-profile"
+                        rowSelection={{
+                            selectedRowKeys: selectedRightKeys,
+                            onChange: setSelectedRightKeys,
+                        }}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 60,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index: number) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Tên chuyên gia',
+                                dataIndex: 'name',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Hàm hàm',
+                                dataIndex: 'academicRank',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Hàm vị',
+                                dataIndex: 'academicDegree',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Chuyên ngành',
+                                dataIndex: 'specialization',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Đơn vị công tác',
+                                dataIndex: 'workplace',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Số điện thoại',
+                                dataIndex: 'phone',
+                                width: 150,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Email',
+                                dataIndex: 'email',
+                                width: 150,
+                                align: 'center',
+                            },
+                        ]}
+                        data={rightData}
+                    />
+                </Col>
             </Col>
             <Button onClick={() => handleCreateCouncil()} type="primary">
                 abc
             </Button>
-        </div>
+        </Col>
     )
 }
 
