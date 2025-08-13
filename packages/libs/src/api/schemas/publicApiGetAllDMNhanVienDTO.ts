@@ -50,27 +50,58 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Cán bộ, nhân viên
+ */
 export interface PublicApiGetAllDMNhanVienDTO {
   Id?: string;
   /** @nullable */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Họ và đệm
+   * @nullable
+   */
   sHoVaDem?: string | null;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
-  /** @nullable */
+  /**
+   * Tên đầy đủ
+   * @nullable
+   */
   sTenDayDu?: string | null;
-  /** @nullable */
+  /**
+   * Ngày sinh
+   * @nullable
+   */
   dNgaySinh?: string | null;
+  /** Id Giới tính */
   sDM_GioiTinhId?: string;
-  /** @nullable */
+  /**
+   * Tên đơn vị
+   * @nullable
+   */
   sTenDonVi?: string | null;
-  /** @nullable */
+  /**
+   * Vị trí công việc
+   * @nullable
+   */
   sTenViTriCongViec?: string | null;
-  /** @nullable */
+  /**
+   * Số điện thoại
+   * @nullable
+   */
   sSDTDiDong?: string | null;
-  /** @nullable */
+  /**
+   * Email
+   * @nullable
+   */
   sEmail?: string | null;
-  /** @nullable */
+  /**
+   * Địa chỉ
+   * @nullable
+   */
   sDiaChi?: string | null;
 }

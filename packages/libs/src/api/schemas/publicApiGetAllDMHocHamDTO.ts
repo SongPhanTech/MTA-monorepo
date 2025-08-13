@@ -50,10 +50,19 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Học hàm
+ */
 export interface PublicApiGetAllDMHocHamDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * mã học hàm
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên học hàm
+   * @nullable
+   */
   sTen?: string | null;
 }

@@ -136,6 +136,10 @@ import type {
   GetDMQuocGiasId401,
   GetDMQuocGiasId403,
   GetDMQuocGiasIdParams,
+  GetDMTinhNewsId400,
+  GetDMTinhNewsId401,
+  GetDMTinhNewsId403,
+  GetDMTinhNewsIdParams,
   GetDMTinhsId400,
   GetDMTinhsId401,
   GetDMTinhsId403,
@@ -156,6 +160,10 @@ import type {
   GetDMViTriCongViecsId401,
   GetDMViTriCongViecsId403,
   GetDMViTriCongViecsIdParams,
+  GetDMXaPhuongNewsId400,
+  GetDMXaPhuongNewsId401,
+  GetDMXaPhuongNewsId403,
+  GetDMXaPhuongNewsIdParams,
   GetDMXaPhuongsId400,
   GetDMXaPhuongsId401,
   GetDMXaPhuongsId403,
@@ -212,6 +220,9 @@ import type {
   PostDMQuocGiasList400,
   PostDMQuocGiasList401,
   PostDMQuocGiasList403,
+  PostDMTinhNewsList400,
+  PostDMTinhNewsList401,
+  PostDMTinhNewsList403,
   PostDMTinhsList400,
   PostDMTinhsList401,
   PostDMTinhsList403,
@@ -227,6 +238,9 @@ import type {
   PostDMViTriCongViecsList400,
   PostDMViTriCongViecsList401,
   PostDMViTriCongViecsList403,
+  PostDMXaPhuongNewsList400,
+  PostDMXaPhuongNewsList401,
+  PostDMXaPhuongNewsList403,
   PostDMXaPhuongsList400,
   PostDMXaPhuongsList401,
   PostDMXaPhuongsList403,
@@ -247,11 +261,13 @@ import type {
   PublicApiGetAllDMQuanHuyenDTO,
   PublicApiGetAllDMQuocGiaDTO,
   PublicApiGetAllDMTinhDTO,
+  PublicApiGetAllDMTinhNewDTO,
   PublicApiGetAllDMTonGiaoDTO,
   PublicApiGetAllDMTrinhDoNgoaiNguDTO,
   PublicApiGetAllDMTrinhDoTinHocDTO,
   PublicApiGetAllDMViTriCongViecDTO,
   PublicApiGetAllDMXaPhuongDTO,
+  PublicApiGetAllDMXaPhuongNewDTO,
   PublicApiPagingRequestDto,
   PutDMNhanViens400,
   PutDMNhanViens401,
@@ -4779,6 +4795,253 @@ export function useGetDMTinhsId<TData = Awaited<ReturnType<typeof getDMTinhsId>>
 
 
 /**
+ * Lấy danh sách các Tỉnh, TP mới
+ * @summary Tỉnh, TP mới - Danh sách
+ */
+export type postDMTinhNewsListResponse200 = {
+  data: PublicApiGetAllDMTinhNewDTO
+  status: 200
+}
+
+export type postDMTinhNewsListResponse400 = {
+  data: PostDMTinhNewsList400
+  status: 400
+}
+
+export type postDMTinhNewsListResponse401 = {
+  data: PostDMTinhNewsList401
+  status: 401
+}
+
+export type postDMTinhNewsListResponse403 = {
+  data: PostDMTinhNewsList403
+  status: 403
+}
+
+export type postDMTinhNewsListResponse500 = {
+  data: void
+  status: 500
+}
+    
+export type postDMTinhNewsListResponseComposite = postDMTinhNewsListResponse200 | postDMTinhNewsListResponse400 | postDMTinhNewsListResponse401 | postDMTinhNewsListResponse403 | postDMTinhNewsListResponse500;
+    
+export type postDMTinhNewsListResponse = postDMTinhNewsListResponseComposite & {
+  headers: Headers;
+}
+
+export const getPostDMTinhNewsListUrl = () => {
+
+
+  
+
+  return `/DM_Tinh_News/list`
+}
+
+export const postDMTinhNewsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMTinhNewsListResponse> => {
+  
+  return customSystemFetch<postDMTinhNewsListResponse>(getPostDMTinhNewsListUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      publicApiPagingRequestDto,)
+  }
+);}
+
+
+
+
+export const getPostDMTinhNewsListMutationOptions = <TError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTinhNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postDMTinhNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
+
+const mutationKey = ['postDMTinhNewsList'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMTinhNewsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postDMTinhNewsList(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostDMTinhNewsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMTinhNewsList>>>
+    export type PostDMTinhNewsListMutationBody = PublicApiPagingRequestDto
+    export type PostDMTinhNewsListMutationError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void
+
+    /**
+ * @summary Tỉnh, TP mới - Danh sách
+ */
+export const usePostDMTinhNewsList = <TError = PostDMTinhNewsList400 | PostDMTinhNewsList401 | PostDMTinhNewsList403 | void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMTinhNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postDMTinhNewsList>>,
+        TError,
+        {data: PublicApiPagingRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostDMTinhNewsListMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Lấy thông tin Tỉnh, TP mới theo ID
+ * @summary Tỉnh, TP mới - Theo Id
+ */
+export type getDMTinhNewsIdResponse200 = {
+  data: PublicApiGetAllDMTinhNewDTO
+  status: 200
+}
+
+export type getDMTinhNewsIdResponse400 = {
+  data: GetDMTinhNewsId400
+  status: 400
+}
+
+export type getDMTinhNewsIdResponse401 = {
+  data: GetDMTinhNewsId401
+  status: 401
+}
+
+export type getDMTinhNewsIdResponse403 = {
+  data: GetDMTinhNewsId403
+  status: 403
+}
+
+export type getDMTinhNewsIdResponse500 = {
+  data: void
+  status: 500
+}
+    
+export type getDMTinhNewsIdResponseComposite = getDMTinhNewsIdResponse200 | getDMTinhNewsIdResponse400 | getDMTinhNewsIdResponse401 | getDMTinhNewsIdResponse403 | getDMTinhNewsIdResponse500;
+    
+export type getDMTinhNewsIdResponse = getDMTinhNewsIdResponseComposite & {
+  headers: Headers;
+}
+
+export const getGetDMTinhNewsIdUrl = (id: string,
+    params?: GetDMTinhNewsIdParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/DM_Tinh_News/${id}?${stringifiedParams}` : `/DM_Tinh_News/${id}`
+}
+
+export const getDMTinhNewsId = async (id: string,
+    params?: GetDMTinhNewsIdParams, options?: RequestInit): Promise<getDMTinhNewsIdResponse> => {
+  
+  return customSystemFetch<getDMTinhNewsIdResponse>(getGetDMTinhNewsIdUrl(id,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export const getGetDMTinhNewsIdQueryKey = (id: string,
+    params?: GetDMTinhNewsIdParams,) => {
+    return [`/DM_Tinh_News/${id}`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetDMTinhNewsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(id: string,
+    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDMTinhNewsIdQueryKey(id,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMTinhNewsId>>> = ({ signal }) => getDMTinhNewsId(id,params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMTinhNewsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMTinhNewsId>>>
+export type GetDMTinhNewsIdQueryError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void
+
+
+export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
+ id: string,
+    params: undefined |  GetDMTinhNewsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDMTinhNewsId>>,
+          TError,
+          Awaited<ReturnType<typeof getDMTinhNewsId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
+ id: string,
+    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDMTinhNewsId>>,
+          TError,
+          Awaited<ReturnType<typeof getDMTinhNewsId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
+ id: string,
+    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Tỉnh, TP mới - Theo Id
+ */
+
+export function useGetDMTinhNewsId<TData = Awaited<ReturnType<typeof getDMTinhNewsId>>, TError = GetDMTinhNewsId400 | GetDMTinhNewsId401 | GetDMTinhNewsId403 | void>(
+ id: string,
+    params?: GetDMTinhNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMTinhNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDMTinhNewsIdQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
  * Lấy danh sách các Tôn giáo
  * @summary Tôn giáo - Danh sách
  */
@@ -6002,6 +6265,253 @@ export function useGetDMXaPhuongsId<TData = Awaited<ReturnType<typeof getDMXaPhu
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetDMXaPhuongsIdQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Lấy danh sách các Xã, Phường mới
+ * @summary Xã, Phường mới - Danh sách
+ */
+export type postDMXaPhuongNewsListResponse200 = {
+  data: PublicApiGetAllDMXaPhuongNewDTO
+  status: 200
+}
+
+export type postDMXaPhuongNewsListResponse400 = {
+  data: PostDMXaPhuongNewsList400
+  status: 400
+}
+
+export type postDMXaPhuongNewsListResponse401 = {
+  data: PostDMXaPhuongNewsList401
+  status: 401
+}
+
+export type postDMXaPhuongNewsListResponse403 = {
+  data: PostDMXaPhuongNewsList403
+  status: 403
+}
+
+export type postDMXaPhuongNewsListResponse500 = {
+  data: void
+  status: 500
+}
+    
+export type postDMXaPhuongNewsListResponseComposite = postDMXaPhuongNewsListResponse200 | postDMXaPhuongNewsListResponse400 | postDMXaPhuongNewsListResponse401 | postDMXaPhuongNewsListResponse403 | postDMXaPhuongNewsListResponse500;
+    
+export type postDMXaPhuongNewsListResponse = postDMXaPhuongNewsListResponseComposite & {
+  headers: Headers;
+}
+
+export const getPostDMXaPhuongNewsListUrl = () => {
+
+
+  
+
+  return `/DM_XaPhuong_News/list`
+}
+
+export const postDMXaPhuongNewsList = async (publicApiPagingRequestDto: PublicApiPagingRequestDto, options?: RequestInit): Promise<postDMXaPhuongNewsListResponse> => {
+  
+  return customSystemFetch<postDMXaPhuongNewsListResponse>(getPostDMXaPhuongNewsListUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...options?.headers },
+    body: JSON.stringify(
+      publicApiPagingRequestDto,)
+  }
+);}
+
+
+
+
+export const getPostDMXaPhuongNewsListMutationOptions = <TError = PostDMXaPhuongNewsList400 | PostDMXaPhuongNewsList401 | PostDMXaPhuongNewsList403 | void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext> => {
+
+const mutationKey = ['postDMXaPhuongNewsList'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, {data: PublicApiPagingRequestDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postDMXaPhuongNewsList(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostDMXaPhuongNewsListMutationResult = NonNullable<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>>
+    export type PostDMXaPhuongNewsListMutationBody = PublicApiPagingRequestDto
+    export type PostDMXaPhuongNewsListMutationError = PostDMXaPhuongNewsList400 | PostDMXaPhuongNewsList401 | PostDMXaPhuongNewsList403 | void
+
+    /**
+ * @summary Xã, Phường mới - Danh sách
+ */
+export const usePostDMXaPhuongNewsList = <TError = PostDMXaPhuongNewsList400 | PostDMXaPhuongNewsList401 | PostDMXaPhuongNewsList403 | void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postDMXaPhuongNewsList>>, TError,{data: PublicApiPagingRequestDto}, TContext>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postDMXaPhuongNewsList>>,
+        TError,
+        {data: PublicApiPagingRequestDto},
+        TContext
+      > => {
+
+      const mutationOptions = getPostDMXaPhuongNewsListMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Lấy thông tin Xã, Phường mới theo ID
+ * @summary Xã, Phường mới - Theo Id
+ */
+export type getDMXaPhuongNewsIdResponse200 = {
+  data: PublicApiGetAllDMXaPhuongNewDTO
+  status: 200
+}
+
+export type getDMXaPhuongNewsIdResponse400 = {
+  data: GetDMXaPhuongNewsId400
+  status: 400
+}
+
+export type getDMXaPhuongNewsIdResponse401 = {
+  data: GetDMXaPhuongNewsId401
+  status: 401
+}
+
+export type getDMXaPhuongNewsIdResponse403 = {
+  data: GetDMXaPhuongNewsId403
+  status: 403
+}
+
+export type getDMXaPhuongNewsIdResponse500 = {
+  data: void
+  status: 500
+}
+    
+export type getDMXaPhuongNewsIdResponseComposite = getDMXaPhuongNewsIdResponse200 | getDMXaPhuongNewsIdResponse400 | getDMXaPhuongNewsIdResponse401 | getDMXaPhuongNewsIdResponse403 | getDMXaPhuongNewsIdResponse500;
+    
+export type getDMXaPhuongNewsIdResponse = getDMXaPhuongNewsIdResponseComposite & {
+  headers: Headers;
+}
+
+export const getGetDMXaPhuongNewsIdUrl = (id: string,
+    params?: GetDMXaPhuongNewsIdParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/DM_XaPhuong_News/${id}?${stringifiedParams}` : `/DM_XaPhuong_News/${id}`
+}
+
+export const getDMXaPhuongNewsId = async (id: string,
+    params?: GetDMXaPhuongNewsIdParams, options?: RequestInit): Promise<getDMXaPhuongNewsIdResponse> => {
+  
+  return customSystemFetch<getDMXaPhuongNewsIdResponse>(getGetDMXaPhuongNewsIdUrl(id,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export const getGetDMXaPhuongNewsIdQueryKey = (id: string,
+    params?: GetDMXaPhuongNewsIdParams,) => {
+    return [`/DM_XaPhuong_News/${id}`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetDMXaPhuongNewsIdQueryOptions = <TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(id: string,
+    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDMXaPhuongNewsIdQueryKey(id,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>> = ({ signal }) => getDMXaPhuongNewsId(id,params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDMXaPhuongNewsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>>
+export type GetDMXaPhuongNewsIdQueryError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void
+
+
+export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
+ id: string,
+    params: undefined |  GetDMXaPhuongNewsIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+          TError,
+          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
+ id: string,
+    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>,
+          TError,
+          Awaited<ReturnType<typeof getDMXaPhuongNewsId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
+ id: string,
+    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Xã, Phường mới - Theo Id
+ */
+
+export function useGetDMXaPhuongNewsId<TData = Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError = GetDMXaPhuongNewsId400 | GetDMXaPhuongNewsId401 | GetDMXaPhuongNewsId403 | void>(
+ id: string,
+    params?: GetDMXaPhuongNewsIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDMXaPhuongNewsId>>, TError, TData>>, request?: SecondParameter<typeof customSystemFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDMXaPhuongNewsIdQueryOptions(id,params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

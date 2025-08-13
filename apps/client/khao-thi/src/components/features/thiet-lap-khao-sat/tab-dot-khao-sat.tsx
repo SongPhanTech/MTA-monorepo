@@ -5,6 +5,7 @@ import EditIcon from '@components/icons/edit'
 import { PutSurveyModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import type { SurveyObjectType } from '@workspace/db'
 import {
     useCountSurvey,
     useFindManySurvey,
@@ -39,11 +40,15 @@ function TabDotKhaoSat() {
                   }
                 : {}),
             ...(filters.surveyObjectTypeId
-                ? Array.isArray(filters.surveyObjectTypeId)
-                    ? filters.surveyObjectTypeId.length > 1
-                        ? { surveyObjectId: { in: filters.surveyObjectTypeId } }
-                        : { surveyObjectId: { equals: filters.surveyObjectTypeId[0] } }
-                    : { surveyObjectId: { equals: filters.surveyObjectTypeId } }
+                ? {
+                      surveyObjectType: {
+                          some: {
+                              id: {
+                                  in: filters.surveyObjectTypeId,
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.surveyTopicId
                 ? Array.isArray(filters.surveyTopicId)
@@ -173,7 +178,11 @@ function TabDotKhaoSat() {
                                     label: name,
                                 })),
                                 render: (_, record) =>
-                                    record?.surveyObjectType ? record?.surveyObjectType.name : '',
+                                    record?.surveyObjectType?.length
+                                        ? record?.surveyObjectType
+                                              .map((i: SurveyObjectType) => i.name)
+                                              .join(',')
+                                        : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',

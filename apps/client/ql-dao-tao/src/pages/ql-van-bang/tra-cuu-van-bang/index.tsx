@@ -1,5 +1,8 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import EditIcon from '@components/icons/edit'
+import ViewIcon from '@components/icons/view'
+import { ModalVanBang, PutGraduationDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
@@ -27,6 +30,7 @@ import { Col, Flex, Form, Row, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function GraduationDecisionDiploma() {
     const [currentPage, setCurrentPage] = useState(1)
@@ -37,6 +41,7 @@ export default function GraduationDecisionDiploma() {
         decisionDate: undefined,
         finalGpa: undefined,
         diplomaNumber: '',
+        originalDiplomaNumber: '',
         diplomaIssueDate: undefined,
         managementOrganizationId: undefined,
         trainingCourseId: undefined,
@@ -68,6 +73,14 @@ export default function GraduationDecisionDiploma() {
                 ? {
                       diplomaNumber: {
                           contains: filters.diplomaNumber,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.originalDiplomaNumber
+                ? {
+                      originalDiplomaNumber: {
+                          contains: filters.originalDiplomaNumber,
                           mode: 'insensitive' as const,
                       },
                   }
@@ -140,15 +153,26 @@ export default function GraduationDecisionDiploma() {
             filters.fixedClassId,
             filters.trainingObjectId,
             filters.trainingCourseId,
+            filters.originalDiplomaNumber,
         ]
     )
-    const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
+
     const { data = [], refetch } = useFindManyGraduationDecision({
         where,
         include: {
             student: {
                 include: {
                     userProfile: true,
+                    fixedClass: {
+                        select: {
+                            trainingCourseId: true,
+                        },
+                    },
+                    graduationDecision: {
+                        select: {
+                            id: true,
+                        },
+                    },
                 },
             },
             trainingMajor: true,
@@ -193,7 +217,16 @@ export default function GraduationDecisionDiploma() {
             return newFilters
         })
     }
-
+    const { onOpen } = useDisclosure<{
+        id: string
+        trainingCourseId: string
+    }>({
+        tag: PutGraduationDecision.name,
+    })
+    const { onOpen: onOpenVanBang } = useDisclosure<string>({
+        tag: ModalVanBang.name,
+    })
+    const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data: organization = [] } = useFindManyDM_DonVi({
         orderBy: { sTen: 'asc' },
     })
@@ -366,11 +399,6 @@ export default function GraduationDecisionDiploma() {
                                         : '',
                             },
                             {
-                                title: 'Ghi chú của hội đồng',
-                                width: 200,
-                                render: (_, record) => record?.notes,
-                            },
-                            {
                                 title: 'GPA cuối cùng',
                                 align: 'center',
                                 width: 100,
@@ -398,6 +426,14 @@ export default function GraduationDecisionDiploma() {
                                 render: (_, record) => record?.diplomaNumber,
                             },
                             {
+                                title: 'Số vào sổ gốc văn bằng',
+                                align: 'center',
+                                dataIndex: 'originalDiplomaNumber',
+                                type: 'input',
+                                width: 120,
+                                render: (_, record) => record?.originalDiplomaNumber,
+                            },
+                            {
                                 title: 'Ngày cấp bằng',
                                 dataIndex: 'diplomaIssueDate',
                                 align: 'center',
@@ -409,13 +445,57 @@ export default function GraduationDecisionDiploma() {
                                         : '',
                             },
                             {
+                                title: 'Số lần sao y',
+                                dataIndex: 'totalCopy',
+                                align: 'center',
+                                width: 80,
+                            },
+                            {
                                 title: 'Xếp loại',
                                 align: 'center',
-                                fixed: 'right',
                                 // type: 'select',
                                 // dataIndex: 'classification',
                                 width: 100,
                                 render: (_, record) => record?.finalRanking?.classification,
+                            },
+                            {
+                                title: 'Ghi chú của hội đồng',
+                                width: 200,
+                                render: (_, record) => record?.notes,
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                render: (_, record) => {
+                                    if (record?.id) {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                <ViewIcon
+                                                    title="Xem văn bằng"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpenVanBang(record?.student?.id)
+                                                    }}
+                                                />
+                                                <EditIcon
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpen({
+                                                            id: record?.id,
+                                                            trainingCourseId:
+                                                                record?.student?.fixedClass
+                                                                    ?.trainingCourseId,
+                                                        })
+                                                    }}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                            </Row>
+                                        )
+                                    }
+                                    return ''
+                                },
                             },
                         ]}
                         pagination={{

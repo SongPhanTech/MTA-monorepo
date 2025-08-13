@@ -37,12 +37,12 @@ model ThesisProject extends Base {
 
   subjectClass      SubjectClass                @relation(fields: [subjectClassId], references: [id])
   subjectClassId    String
-  
-  // Chuyên gia hướng dẫn
+
+  /// Chuyên gia hướng dẫn
   supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId      String
 
-  // Đơn vị quản lý
+  /// Đơn vị quản lý
   organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])
   organizationId    String                      @db.Uuid
   
@@ -50,9 +50,16 @@ model ThesisProject extends Base {
   maxStudents       Int                           // Số lượng học viên tối đa
   currentStudents   Int                         @default(0) // Số học viên hiện tại
 
-  // Hội đồng đánh giá
+  /// Hội đồng đánh giá
   council           Council?                    @relation(fields: [councilId], references: [id])
   councilId         String?
+
+  /// phòng bảo vệ
+  room              Room?                       @relation(fields: [roomId], references: [id])
+  roomId            String?
+
+  /// Ngày bảo vệ
+  defenseDate       DateTime? 
   
   // Thời gian
   registrationStart DateTime                      // Thời gian mở đăng ký
@@ -174,11 +181,7 @@ enum CouncilProposalStatus {
 /// Hội đồng đánh giá
 model Council extends Base {
   proposedDate                DateTime                   @default(now())
-  proposedDefenseDate         DateTime? // Ngày bảo vệ dự kiến
   status                      CouncilProposalStatus      @default(PENDING)
-
-  defenseDate                 DateTime? // Ngày bảo vệ
-  location                    String? // Phòng bảo vệ
 
   studentThesisRegistration   StudentThesisRegistration? @relation(fields: [studentThesisRegistrationId], references: [id])
   studentThesisRegistrationId String?                    @unique

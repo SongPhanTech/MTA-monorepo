@@ -9,6 +9,7 @@ import 'training-score'
 import 'ranking'
 import '../khao-thi/exam'
 import '../ql-danh-muc/document'
+import "../khao-thi/survey"
 
 enum TrainingObjectTypes {
   MILITARY // Học viên quân sự
@@ -104,7 +105,8 @@ model Room extends Base {
 
   exam           Exam[]
   subjectClasses SubjectClass[]  @relation("ClassRoom")
-  defenseRooms   SubjectClass[]  @relation("DefenseRooms")
+  defenseRooms   SubjectClass[]  @relation("DefenseRooms") // DS phòng bảo vệ đồ án -> chọn phòng tự động
+  thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
 
@@ -121,7 +123,7 @@ model TrainingField extends Base {
   organizationId      String                              @db.Uuid
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
-
+  surveyObjectTypes   SurveyObjectType[]
   @@schema("ql-dao-tao")
 }
 
@@ -157,6 +159,7 @@ model TrainingMajor extends Base {
   graduationDecision    GraduationDecision[]
   expertProfile         ExpertProfile[]
 
+  surveyObjectTypes     SurveyObjectType[]
   @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
 }

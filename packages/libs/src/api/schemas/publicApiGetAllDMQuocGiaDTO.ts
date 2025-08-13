@@ -50,12 +50,24 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Quốc gia
+ */
 export interface PublicApiGetAllDMQuocGiaDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
-  /** @nullable */
+  /**
+   * Ngôn ngữ
+   * @nullable
+   */
   sLanguage?: string | null;
 }

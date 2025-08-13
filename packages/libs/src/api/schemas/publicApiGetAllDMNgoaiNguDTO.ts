@@ -50,10 +50,19 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Ngoại ngữ
+ */
 export interface PublicApiGetAllDMNgoaiNguDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã ngoại ngữ
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên ngoại ngữ
+   * @nullable
+   */
   sTen?: string | null;
 }

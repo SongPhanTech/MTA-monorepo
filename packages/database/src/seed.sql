@@ -87,6 +87,7 @@ INSERT INTO "ql-danh-muc"."TemplateFile"("id", "name", "code", "createdAt", "upd
 ('550e8408-e29b-41d4-a716-446655440002', 'File tạo lớp biên chế', 'IMPORT_FIXCLASS', '2025-04-03 12:58:42.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileDanhSachLopBienChe.xlsx', 'UPLOAD', 'xlsx', 0),
 ('550e8408-e29b-41d4-a716-446655440003', 'File xếp lớp', 'CLASS_DEVISION', '2025-04-03 12:58:43.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/fileXepLopHocVien.xlsx', 'UPLOAD', 'xlsx', 0),
 ('550e8408-e29b-41d4-a716-446655440004', 'File danh sách học viên lớp', 'LIST_STUDENT_FIXCLASS', '2025-04-03 12:58:43.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/DanhSachHocVienLop.docx', 'DOWNLOAD', 'docx', 0);
+('550e8408-e29b-41d4-a716-446655440005', 'File danh sách phân công giảng dạy', 'LECTURER_PCGD', '2025-04-03 12:58:44.507', '2025-04-03 12:58:40.507', 'https://minio.swantech.vn/mta/template/DanhSachBaoDay.xlsx', 'DOWNLOAD', 'xlsx', 0);
 
 
 -- Thêm data mặc định cho bảng PriorityObject

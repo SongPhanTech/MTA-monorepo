@@ -50,10 +50,20 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Chức vụ
+ */
 export interface PublicApiGetAllDMChucVuDTO {
+  /** Id chức vụ */
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã chức vụ
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên chức vụ
+   * @nullable
+   */
   sTen?: string | null;
 }

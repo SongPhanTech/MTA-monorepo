@@ -1,6 +1,5 @@
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
-import type { FilterSurveyQuestionProps } from '@components/filter/filter-survey-question'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSurveyQuestionModal } from '@components/modal'
@@ -18,9 +17,6 @@ import { Button, Col, Flex, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type Filter = FilterSurveyQuestionProps & {
-    searchText: string
-}
 function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)

@@ -309,7 +309,14 @@ const PutOneSubjectClassModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="lecturerAssignmentDeadline" label="Hạn PCGD">
-                    <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        placeholder="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -328,12 +335,26 @@ const PutOneSubjectClassModal = () => {
 
             <Col span={12}>
                 <FormItem form={form} name="scoreDeadline" label="Hạn nhập điểm CC/TX">
-                    <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        placeholder="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="examScoreDeadline" label="Hạn nhập điểm thi">
-                    <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        placeholder="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

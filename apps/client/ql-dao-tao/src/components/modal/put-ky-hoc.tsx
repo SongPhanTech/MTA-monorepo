@@ -161,12 +161,24 @@ const PutSemesterModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="endDate" label="Ngày kết thúc">
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={input?.semesterId || !input?.schoolYearId ? 12 : 24}>

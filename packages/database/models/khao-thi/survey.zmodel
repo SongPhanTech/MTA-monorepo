@@ -3,6 +3,8 @@ import '../ql-dao-tao/plan-training'
 import '../ql-ho-so/profile'
 import '../ql-nguoi-dung/user'
 import '../ql-dao-tao/student'
+import '../ql-danh-muc/core-categories'
+import '../ql-dao-tao/categories'
 
 enum SurveyQuestionType {
   ESSAY
@@ -11,17 +13,32 @@ enum SurveyQuestionType {
   @@schema("khao-thi")
 }
 
+enum  SurveyObject {
+  STUDENT
+  LECTURER
+
+  @@schema("khao-thi")
+}
+
 // đối tượng khảo sát (Sinh viên, giảng viên, cán bộ quản lý,...)
 model SurveyObjectType extends Base {
-  name   String
-  survey Survey[]
+  name            String
+  survey          Survey[]
+  type            SurveyObject[]
+  organizations   DM_DonVi[]
+  trainingFields  TrainingField[]
+  trainingMajors  TrainingMajor[]
+  trainingCourses TrainingCourse[]
+  fixedClasses    FixedClass[]
+  subjectClasses  SubjectClass[]
   @@schema("khao-thi")
 }
 
 // chủ đề khảo sát (Đánh giá giảng viên, đánh giá cơ sở vật chất,...)
 model SurveyTopic extends Base {
-  name   String
-  survey Survey[]
+  name                String
+  survey              Survey[]
+  surveyQuestionGroup SurveyQuestionGroup[]
   @@schema("khao-thi")
 }
 
@@ -29,6 +46,8 @@ model SurveyTopic extends Base {
 model SurveyQuestionGroup extends Base {
   name           String
   surveyQuestion SurveyQuestion[]
+  surveyTopic    SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId  String
   @@schema("khao-thi")
 }
 
@@ -38,10 +57,9 @@ model Survey extends Base {
   startDate            DateTime
   endDate              DateTime?
 
-  surveyObjectType     SurveyObjectType @relation(fields: [surveyObjectId], references: [id])
-  surveyObjectId       String
+  surveyObjectType     SurveyObjectType[]
 
-  surveyTopic          SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
+  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
 
   // Có góp ý bổ sung không?

@@ -1,3 +1,4 @@
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -8,7 +9,7 @@ import {
     useFindManyDM_NganhHoc,
     useFindManyDM_TruongDaoTaoBacDH,
 } from '@workspace/db/hooks'
-import { Col, DatePicker, Form, Input, message } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -114,7 +115,10 @@ export default function PutQuaTrinhHocTapModal() {
                     <DatePicker
                         style={{ width: '100%' }}
                         placeholder="Chọn từ ngày"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -123,7 +127,10 @@ export default function PutQuaTrinhHocTapModal() {
                     <DatePicker
                         style={{ width: '100%' }}
                         placeholder="Chọn đến ngày"
-                        format="DD/MM/YYYY"
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
                     />
                 </FormItem>
             </Col>
