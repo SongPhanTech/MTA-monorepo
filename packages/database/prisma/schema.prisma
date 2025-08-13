@@ -1332,6 +1332,7 @@ model Room {
   exam           Exam[]
   subjectClasses SubjectClass[]  @relation("ClassRoom")
   defenseRooms   SubjectClass[]  @relation("DefenseRooms")
+  thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
 
@@ -3376,14 +3377,22 @@ model ThesisProject {
   status            ThesisProjectStatus         @default(PROPOSED)
   subjectClass      SubjectClass                @relation(fields: [subjectClassId], references: [id])
   subjectClassId    String
+  /// Chuyên gia hướng dẫn
   supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId      String
+  /// Đơn vị quản lý
   organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])
   organizationId    String                      @db.Uuid()
   maxStudents       Int
   currentStudents   Int                         @default(0)
+  /// Hội đồng đánh giá
   council           Council?                    @relation(fields: [councilId], references: [id])
   councilId         String?
+  /// phòng bảo vệ
+  room              Room?                       @relation(fields: [roomId], references: [id])
+  roomId            String?
+  /// Ngày bảo vệ
+  defenseDate       DateTime?
   registrationStart DateTime
   registrationEnd   DateTime
   projectStart      DateTime?
@@ -3499,10 +3508,7 @@ model Council {
   createdAt                   DateTime                   @default(now())
   updatedAt                   DateTime                   @default(now()) @updatedAt()
   proposedDate                DateTime                   @default(now())
-  proposedDefenseDate         DateTime?
   status                      CouncilProposalStatus      @default(PENDING)
-  defenseDate                 DateTime?
-  location                    String?
   studentThesisRegistration   StudentThesisRegistration? @relation(fields: [studentThesisRegistrationId], references: [id])
   studentThesisRegistrationId String?                    @unique()
   thesis                      ThesisProject[]
