@@ -47,7 +47,8 @@ export default function SettingClass() {
         phone: undefined,
         email: undefined,
     })
-    const subjectClassId = router.query as unknown as string
+    const { id } = router.query
+    const subjectClassId = id as string
 
     const where = useMemo(
         () => ({
