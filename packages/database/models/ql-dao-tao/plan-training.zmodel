@@ -170,7 +170,6 @@ model Milestone extends Base {
   @@schema("ql-dao-tao")
 }
 
-
 /// Khoá học
 model TrainingCourse extends Base {
   name                   String
@@ -242,7 +241,7 @@ model FixedClass extends Base {
   subjectClasses           SubjectClass[]
   notifications            Notification[]  // Thông báo cho lớp
 
-  surveyObjectTypes SurveyObjectType[]
+  surveyObjectTypes        SurveyObjectType[]
   @@unique([name, trainingCourseId, curriculumVersionId])
 
   @@schema("ql-dao-tao")
@@ -521,7 +520,7 @@ model SubjectClass extends Base {
   // Môn đồ án
   thesisProjects             ThesisProject[] // DS đồ án
   expertProfile              ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
-  defenseRooms               Room[]                @relation("DefenseRooms")
+  defenseRooms               Room[]                @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
 
   surveyObjectTypes          SurveyObjectType[]
   @@schema("ql-dao-tao")
