@@ -1,4 +1,5 @@
 import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -22,7 +23,6 @@ import {
     useDeleteSubjectClass,
     useFindManyDM_DonVi,
     useFindManyLecturer,
-    useFindManySemester,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
@@ -31,7 +31,7 @@ import { putManySubjectClass } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TeachingAssignment() {
@@ -57,10 +57,11 @@ export default function TeachingAssignment() {
     const [isEdit, setIsEdit] = useState(false)
     const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
     const { options, getExamTypeLabel } = useExamTypeOptions()
-    const { data = [], refetch } = useFindManySubjectClass({
-        where: {
-            name: { contains: filters.name, mode: 'insensitive' },
-            code: { contains: filters.code, mode: 'insensitive' },
+
+    const where = useMemo(
+        () => ({
+            name: { contains: filters.name, mode: 'insensitive' as const },
+            code: { contains: filters.code, mode: 'insensitive' as const },
             ...(filters.examType
                 ? {
                       examType: {
@@ -120,13 +121,13 @@ export default function TeachingAssignment() {
                                   {
                                       firstName: {
                                           contains: filters.mainLecturer,
-                                          mode: 'insensitive',
+                                          mode: 'insensitive' as const,
                                       },
                                   },
                                   {
                                       lastName: {
                                           contains: filters.mainLecturer,
-                                          mode: 'insensitive',
+                                          mode: 'insensitive' as const,
                                       },
                                   },
                               ],
@@ -142,13 +143,13 @@ export default function TeachingAssignment() {
                                   {
                                       firstName: {
                                           contains: filters.extraLecturer,
-                                          mode: 'insensitive',
+                                          mode: 'insensitive' as const,
                                       },
                                   },
                                   {
                                       lastName: {
                                           contains: filters.extraLecturer,
-                                          mode: 'insensitive',
+                                          mode: 'insensitive' as const,
                                       },
                                   },
                               ],
@@ -156,7 +157,24 @@ export default function TeachingAssignment() {
                       },
                   }
                 : {}),
-        },
+        }),
+        [
+            filters.name,
+            filters.code,
+            filters.examType,
+            filters.schedule,
+            filters.semesterStartId,
+            filters.trainingCourseId,
+            filters.trainingMajorId,
+            filters.organization,
+            filters.lecturerId,
+            filters.mainLecturer,
+            filters.extraLecturer,
+        ]
+    )
+
+    const { data = [], refetch } = useFindManySubjectClass({
+        where,
         include: {
             semester: true,
             mainLecturer: {
@@ -229,103 +247,8 @@ export default function TeachingAssignment() {
 
     const { data: count } = useCountSubjectClass({
         where: {
-            name: { contains: filters.name, mode: 'insensitive' },
-            code: { contains: filters.code, mode: 'insensitive' },
-            ...(filters.examType
-                ? {
-                      examType: {
-                          in: filters.examType,
-                      },
-                  }
-                : {}),
-            ...(filters.schedule
-                ? {
-                      schedule: {
-                          in: filters.schedule,
-                      },
-                  }
-                : {}),
-            semester: {
-                ...(filters.semesterStartId ? { id: filters.semesterStartId } : {}),
-                ...(filters.trainingCourseId
-                    ? {
-                          trainingCoursesStart: {
-                              some: { id: filters.trainingCourseId },
-                          },
-                      }
-                    : {}),
-            },
-            ...(filters.trainingMajorId
-                ? {
-                      subject: {
-                          managementOrganization: {
-                              trainingMajors: {
-                                  some: {
-                                      id: filters.trainingMajorId,
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.organization
-                ? {
-                      managementOrganizationId: {
-                          in: filters.organization,
-                      },
-                  }
-                : {}),
-            ...(filters.lecturerId?.length === 1
-                ? {
-                      ...(filters.lecturerId[0]
-                          ? { lecturerId: { not: null } }
-                          : { lecturerId: null }),
-                  }
-                : {}),
-            ...(filters.mainLecturer
-                ? {
-                      mainLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              ],
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.extraLecturer
-                ? {
-                      extraLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.extraLecturer,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.extraLecturer,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                              ],
-                          },
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 
@@ -346,25 +269,17 @@ export default function TeachingAssignment() {
         })
     }
 
-    const { data: semesterData = [] } = useFindManySemester({
-        where: {},
-        include: {
-            schoolYear: true,
-        },
-    })
-
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
 
-    const { data: trainingMajorData = [], refetch: refetchManyTrainingField } =
-        useFindManyTrainingMajor({
-            orderBy: { name: 'asc' },
-        })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
     })
 
-    const { data: lecturerData = [], refetch: refetchLecturer } = useFindManyLecturer({
+    const { data: lecturerData = [] } = useFindManyLecturer({
         include: {
             userProfile: true,
         },
@@ -514,15 +429,8 @@ export default function TeachingAssignment() {
                         <Col span={12}>
                             <Row gutter={[16, 16]} align="top">
                                 <Col span={8}>
-                                    <Select
-                                        placeholder="Chọn kỳ học bắt đầu"
-                                        options={semesterData.map((i) => {
-                                            return {
-                                                value: i.id,
-                                                label: `${i.name} năm ${i.schoolYear.name}`,
-                                            }
-                                        })}
-                                        style={{ width: '100%' }}
+                                    <TreeSelectSemester
+                                        filterTimeNow={true}
                                         onChange={(val) =>
                                             handleFilterChange('semesterStartId', val)
                                         }

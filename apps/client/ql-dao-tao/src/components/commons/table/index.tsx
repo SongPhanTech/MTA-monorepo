@@ -40,6 +40,7 @@ type TableProps<T> = {
           })
         | false
     onRowClick?: (record: T) => void
+    onRowDoubleClick?: (record: T) => void
     filters?: FilterProps
     setFilters?: (record: FilterProps) => void
     expandable?: TableAntdProps<T>['expandable']
@@ -56,6 +57,7 @@ const Table = <T extends Record<string, unknown>>({
     data,
     pagination,
     onRowClick,
+    onRowDoubleClick,
     filters,
     setFilters,
     expandable,
@@ -679,6 +681,7 @@ const Table = <T extends Record<string, unknown>>({
         <TableAntd<T>
             id={id}
             rowKey={rowKey}
+            size="small"
             className="mt-4 custom-scrollbar"
             rowSelection={rowSelection}
             columns={
@@ -715,6 +718,11 @@ const Table = <T extends Record<string, unknown>>({
                 onClick: () => {
                     if (onRowClick) {
                         onRowClick(record)
+                    }
+                },
+                onDoubleClick: () => {
+                    if (onRowDoubleClick) {
+                        onRowDoubleClick(record)
                     }
                 },
                 style: { cursor: 'pointer' },

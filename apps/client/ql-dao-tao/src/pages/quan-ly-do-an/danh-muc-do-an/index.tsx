@@ -17,7 +17,6 @@ import {
     useCountSubjectClass,
     useCreateManyInvitation,
     useFindManyDM_DonVi,
-    useFindManySemester,
     useFindManySubjectClass,
     useFindManyThesisProject,
     useUpdateThesisProject,
@@ -28,7 +27,7 @@ import dayjs from 'dayjs'
 import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { BsGear } from 'react-icons/bs'
 
@@ -245,17 +244,6 @@ export default function ThesisProject() {
         },
     })
 
-    const { data: semesters } = useFindManySemester({
-        include: { schoolYear: true },
-        orderBy: { startDate: 'desc' },
-    })
-
-    useEffect(() => {
-        if (semesters && semesters.length > 0) {
-            setSelectedSemesterId((prev) => prev || semesters[0].id)
-        }
-    }, [semesters])
-
     const { onOpen } = useDisclosure<{ subjectClassId: string; thesisProjectId: string }>({
         tag: PutThesisProject.name,
     })
@@ -378,7 +366,7 @@ export default function ThesisProject() {
                                 <Col span={10}>
                                     <TreeSelectSemester
                                         style={{ width: '250px' }}
-                                        value={selectedSemesterId}
+                                        filterTimeNow={true}
                                         onChange={(val) => setSelectedSemesterId(val)}
                                     />
                                 </Col>

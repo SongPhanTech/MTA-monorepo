@@ -206,7 +206,9 @@ export default function QLDONDANGKY() {
                                 width: 150,
                                 align: 'center',
                                 type: 'date',
-                                render: (value) => dayjs(value).format('DD/MM/YYYY'),
+                                render: (_, record) =>
+                                    record?.dateOfBirth &&
+                                    dayjs(record?.dateOfBirth).format('DD/MM/YYYY'),
                             },
                             {
                                 title: 'Số điện thoại',

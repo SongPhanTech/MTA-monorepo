@@ -1,74 +1,46 @@
 import { FileDoneOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { ModalExportFileSubjectClass, PutOpenClassModal } from '@components/modal'
+import { ModalExportFileSubjectClass, ModalNhapTKB, PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Semester, TrainingCourse, TrainingObjectType } from '@workspace/db'
-import {
-    useFindManySchoolYear,
-    useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
-    useUpdateTrainingCourse,
-} from '@workspace/db/hooks'
+import type { TrainingCourse, TrainingMajor } from '@workspace/db'
+import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
-import { Button, Col, Flex, Form, Input, message, Row, TreeSelect } from 'antd'
+import { Button, Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { CalendarPlus } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
     searchText?: string
     trainingCourseId?: string
-    schoolYearId?: string
-    semesterId?: string
+    trainingMajorId?: string
 }
 
 export default function SubjectOpeningPlan() {
     const [form] = Form.useForm<FilterProps>()
-
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedSemester, setSelectedSemester] = useState({})
+    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
 
-    const { data: schoolYears = [] } = useFindManySchoolYear({
-        include: { semesters: { orderBy: { startDate: 'asc' } } },
-        orderBy: { startDate: 'asc' },
-    })
-    const semesterId = Form.useWatch('semesterId', form)
     const { data: res, refetch } = useOpenSubjectClass(
         {
             page: '1',
             pageSize: '10',
-            semesterId: semesterId as string,
-            trainingCourseId: form.getFieldValue('trainingCourseId'),
+            semesterId: selectedSemesterId as string,
             search: form.getFieldValue('searchText'),
+            trainingCourseId: form.getFieldValue('trainingCourseId'),
+            trainingMajorId: form.getFieldValue('trainingMajorId'),
         },
-        { query: { enabled: !!semesterId } },
+        { query: { enabled: !!selectedSemesterId } },
         queryClient
     )
-    const treeData = useMemo(() => {
-        return schoolYears.map((i) => ({
-            title: i?.name,
-            key: i?.id,
-            value: i?.id,
-            selectable: false,
-            code: i?.code,
-            children: i?.semesters?.length
-                ? i?.semesters.map((j: Semester) => ({
-                      title: `${j?.name} năm ${i?.name}`,
-                      key: j?.id,
-                      value: j?.id,
-                      code: j?.code,
-                  }))
-                : [],
-        }))
-    }, [schoolYears])
 
     const data = useMemo(
         () =>
@@ -81,24 +53,6 @@ export default function SubjectOpeningPlan() {
         [res]
     )
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    useEffect(() => {
-        if (schoolYears?.length) {
-            const lastSchoolYear = schoolYears[schoolYears.length - 1]
-
-            if (lastSchoolYear.semesters.length) {
-                const lastSemester = lastSchoolYear.semesters[lastSchoolYear.semesters.length - 1]
-                form.setFieldValue('semesterId', lastSemester.id)
-                setSelectedSemester({
-                    id: lastSemester?.id,
-                    label: lastSemester.name,
-                    code: lastSemester.code,
-                    key: lastSemester.id,
-                })
-            }
-        }
-    }, [schoolYears])
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -106,41 +60,22 @@ export default function SubjectOpeningPlan() {
         []
     )
 
-    const { showSpinner, hideSpinner } = useSpinner()
-
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutOpenClassModal.name,
         onClose: refetch,
     })
 
-    const _handleModal = () => {
-        onOpen()
-    }
-
     const { onOpen: onOpenXuatFileMoLop } = useDisclosure<string>({
         tag: ModalExportFileSubjectClass.name,
     })
 
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
-    async function _handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateTrainingCourse({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-        } catch (_error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
+    const { onOpen: onOpenModalNhapTKB } = useDisclosure<string>({
+        tag: ModalNhapTKB.name,
+    })
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
@@ -155,21 +90,7 @@ export default function SubjectOpeningPlan() {
                             <Form
                                 form={form}
                                 onValuesChange={(filter: FilterProps) => {
-                                    if (filter.schoolYearId) {
-                                        const schoolYear = schoolYears?.find(
-                                            (item) => item.id === filter.schoolYearId
-                                        )
-                                        const lastSemester =
-                                            schoolYear?.semesters?.[schoolYear.semesters.length - 1]
-
-                                        if (lastSemester) {
-                                            form.setFieldValue('semesterId', lastSemester.id)
-                                            debouncedRefetch()
-                                            form.focusField('semesterId')
-                                        }
-                                    } else {
-                                        debouncedRefetch()
-                                    }
+                                    debouncedRefetch()
                                 }}
                             >
                                 <Flex>
@@ -181,43 +102,28 @@ export default function SubjectOpeningPlan() {
                                     <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
-                                            name="semesterId"
                                             labelCol={{ span: 24 }}
                                             wrapperCol={{ span: 24 }}
                                             labelAlign="left"
                                         >
-                                            <TreeSelect
-                                                placeholder="Chọn học kỳ"
-                                                showSearch
-                                                treeDefaultExpandAll
-                                                treeData={treeData}
-                                                style={{ width: '100%' }}
-                                                filterTreeNode={(input, node) =>
-                                                    (node?.label as string)
-                                                        ?.toLowerCase()
-                                                        ?.includes(input?.toLowerCase())
-                                                }
-                                                onSelect={(value, node) =>
-                                                    setSelectedSemester({
-                                                        ...node,
-                                                        id: node.value,
-                                                    })
-                                                }
+                                            <TreeSelectSemester
+                                                selectLatestCreated={true}
+                                                onChange={(val) => setSelectedSemesterId(val)}
                                             />
                                         </Form.Item>
                                     </Col>
                                     <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
-                                            name="trainingObjectId"
+                                            name="trainingMajorId"
                                             labelCol={{ span: 24 }}
                                             wrapperCol={{ span: 24 }}
                                             labelAlign="left"
                                         >
                                             <Select
-                                                placeholder="Chọn đối tượng đào tạo"
-                                                options={trainingObjectTypeData.map(
-                                                    (i: TrainingObjectType) => ({
+                                                placeholder="Chọn chuyên ngành đào tạo"
+                                                options={trainingMajorData.map(
+                                                    (i: TrainingMajor) => ({
                                                         value: i.id,
                                                         label: i.name,
                                                     })
@@ -254,12 +160,15 @@ export default function SubjectOpeningPlan() {
                                 {/* <Button type="primary">Thêm mới</Button> */}
                                 <Button
                                     type="primary"
-                                    onClick={() => onOpenXuatFileMoLop(semesterId)}
+                                    onClick={() => onOpenXuatFileMoLop(selectedSemesterId)}
                                 >
                                     <FileDoneOutlined />
                                     Xuất file mẫu
                                 </Button>
-                                <Button type="primary">
+                                <Button
+                                    type="primary"
+                                    onClick={() => onOpenModalNhapTKB(selectedSemesterId)}
+                                >
                                     <EditIcon stroke="white" />
                                     Nhập từ file TKB
                                 </Button>
@@ -433,7 +342,7 @@ export default function SubjectOpeningPlan() {
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
                                                 onClick={onOpen.bind(null, {
                                                     ...record,
-                                                    semester: selectedSemester,
+                                                    semester: selectedSemesterId,
                                                 })}
                                             >
                                                 <CalendarPlus size={16} strokeWidth={2} />

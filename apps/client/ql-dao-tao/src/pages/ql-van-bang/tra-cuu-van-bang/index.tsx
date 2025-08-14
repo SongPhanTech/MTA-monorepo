@@ -49,6 +49,7 @@ export default function GraduationDecisionDiploma() {
         trainingFieldId: undefined,
         trainingMajorId: undefined,
         fixedClassId: undefined,
+        idCardNumber: '',
     })
 
     const where = useMemo(
@@ -121,6 +122,14 @@ export default function GraduationDecisionDiploma() {
                               },
                           }
                         : {}),
+                    ...(filters.idCardNumber
+                        ? {
+                              idCardNumber: {
+                                  contains: filters.idCardNumber,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
                 },
                 ...(filters.fixedClassId
                     ? {
@@ -154,6 +163,7 @@ export default function GraduationDecisionDiploma() {
             filters.trainingObjectId,
             filters.trainingCourseId,
             filters.originalDiplomaNumber,
+            filters.idCardNumber,
         ]
     )
 
@@ -386,6 +396,14 @@ export default function GraduationDecisionDiploma() {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (_, record) => record?.student?.userProfile?.fullname,
+                            },
+                            {
+                                title: 'Căn cước công dân',
+                                width: 200,
+                                dataIndex: 'idCardNumber',
+                                fixed: 'left',
+                                type: 'input',
+                                render: (_, record) => record?.student?.userProfile?.idCardNumber,
                             },
                             {
                                 title: 'Ngày duyệt đơn',

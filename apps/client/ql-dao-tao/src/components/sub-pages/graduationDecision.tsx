@@ -104,7 +104,15 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                           },
                       },
                   }
-                : {},
+                : {
+                      academicRankingConvert: {
+                          some: {
+                              graduationDecision: {
+                                  some: {},
+                              },
+                          },
+                      },
+                  },
         [filters, isFiltering]
     )
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
