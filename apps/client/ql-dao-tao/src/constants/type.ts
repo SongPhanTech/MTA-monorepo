@@ -122,6 +122,8 @@ export type FilterProps = {
     originalDiplomaNumber?: string
     idCardNumber?: string
     diplomaVerificationStatus?: DiplomaVerificationStatus[]
+    academicRank?: string
+    academicDegree?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
