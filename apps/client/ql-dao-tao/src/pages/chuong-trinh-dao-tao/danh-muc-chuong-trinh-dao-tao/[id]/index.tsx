@@ -322,8 +322,9 @@ export default function TrainingProgramSubjects() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateTrainingBlockSubject } = useUpdateTrainingBlockSubject()
@@ -341,8 +342,9 @@ export default function TrainingProgramSubjects() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const treeData = buildOrgTree(manageOrgData)

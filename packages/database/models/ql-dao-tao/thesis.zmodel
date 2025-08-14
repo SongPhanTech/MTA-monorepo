@@ -42,6 +42,10 @@ model ThesisProject extends Base {
   supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId      String
 
+  /// Chuyên gia hướng dẫn phụ
+  coSupervisor      ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
+  coSupervisorId    String?
+
   /// Đơn vị quản lý
   organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])
   organizationId    String                      @db.Uuid
@@ -130,6 +134,7 @@ model ExpertProfile extends Base {
   eligibleSecretary  Boolean // có thể làm thư ký
 
   supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
+  coSupervisedTheses ThesisProject[] @relation("CoSupervisorToThesis")
   subjectClass       SubjectClass[] // DS lớp đồ án chuyên gia tham gia hội đồng
   councilMemberships CouncilMember[]
   payments           PaymentRecord[]

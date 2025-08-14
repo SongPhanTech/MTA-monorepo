@@ -15,7 +15,6 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useUpdateAcademicWarningRule,
-    useUpdateScholarship,
 } from '@workspace/db/hooks'
 import { Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
@@ -122,20 +121,6 @@ export default function AcademicWarningRule() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateScholarship } = useUpdateScholarship()
-    async function handleDeleteScholarship(id: string) {
-        try {
-            showSpinner()
-            await updateScholarship({
-                where: { id },
-                data: { deletedAt: new Date() },
-            })
-        } catch (_error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        }
-        hideSpinner()
-    }
-
     const { mutateAsync: updateAcademicWarningRule } = useUpdateAcademicWarningRule()
     async function handleDeleteAcademicWarningRule(id: string) {
         try {
@@ -146,8 +131,9 @@ export default function AcademicWarningRule() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleFilterChange = (key: string, value: string) => {

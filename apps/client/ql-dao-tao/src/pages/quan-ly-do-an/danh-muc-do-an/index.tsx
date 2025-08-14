@@ -289,8 +289,9 @@ export default function ThesisProject() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleNavigate = (record: { id?: string }) => {

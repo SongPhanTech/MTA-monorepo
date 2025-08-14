@@ -34,8 +34,9 @@ export default function PutDoiTuongChinhSachModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // Nếu muốn set lại dữ liệu khi edit

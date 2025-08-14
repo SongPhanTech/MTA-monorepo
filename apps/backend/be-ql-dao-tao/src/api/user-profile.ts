@@ -92,15 +92,6 @@ app.openapi(uploadExcelCreateUserProfile, async (c) => {
         return c.json({ message: 'File vượt quá 50MB' }, 400)
     }
 
-    // Tìm kiếm UserType của Sinh viên
-    const userType = await prisma.userType.findFirst({
-        where: { code: type },
-    })
-
-    if (!userType) {
-        return c.json({ message: 'Không tìm thấy loại hồ sơ' }, 400)
-    }
-
     // Đọc file Excel
     const arrayBuffer = await file.arrayBuffer()
     const workbook = read(arrayBuffer, { type: 'array' })
@@ -123,7 +114,6 @@ app.openapi(uploadExcelCreateUserProfile, async (c) => {
     // Duyệt dòng 11 theo mẫu
     const userProfile = await prisma.userProfile.createManyAndReturn({
         data: rowData.slice(11).map((row) => ({
-            userTypeId: userType?.id,
             firstName: splitFullName(row[2] || '').firstName || '',
             lastName: splitFullName(row[2] || '').lastName || '',
             code: row[1] || '', // Mã
