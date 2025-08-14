@@ -1,4 +1,4 @@
-import { $Enums, AcademicRankingBaseType, PrismaClient } from '@prisma/client'
+import { $Enums, AcademicRankingBaseType, ConfigKey, PrismaClient } from '@prisma/client'
 import {
     academicRankingGraduationCivilian,
     academicRankingGraduationMilitary,
@@ -10,6 +10,28 @@ import { trainingData } from './seed/trainingData'
 const prisma = new PrismaClient()
 
 async function main() {
+    const configs: Record<
+        Exclude<ConfigKey, 'USER_SESSION_TIMEOUT' | 'ACADEMIC_ACTION_RULES'>,
+        string
+    > = {
+        [ConfigKey.MANAGEMENT_DEPARTMENT]: 'Bộ Quốc Phòng',
+        [ConfigKey.ACADEMY_NAME]: 'Học viện Kỹ thuật Quân sự',
+        [ConfigKey.ACADEMY_CODE]: 'HVKTQS',
+        [ConfigKey.DIRECTOR]: 'Trung tướng GS.TS Lê Minh Thái',
+
+        [ConfigKey.PROVINCE]: 'Hà Nội',
+        [ConfigKey.DISTRICT]: 'Bắc Từ Liêm',
+        [ConfigKey.WARD]: 'Cổ Nhuế',
+    }
+
+    for (const [key, value] of Object.entries(configs) as [ConfigKey, string][]) {
+        await prisma.config.upsert({
+            where: { key },
+            create: { key, value },
+            update: { value },
+        })
+    }
+
     // Seed Organization
     await prisma.dM_DonVi.createMany({
         skipDuplicates: true,

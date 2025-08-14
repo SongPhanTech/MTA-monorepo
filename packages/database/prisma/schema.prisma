@@ -16,8 +16,13 @@ generator client {
 }
 
 enum ConfigKey {
-  DIRECTOR
+  MANAGEMENT_DEPARTMENT
   ACADEMY_NAME
+  ACADEMY_CODE
+  DIRECTOR
+  PROVINCE
+  WARD
+  DISTRICT
   USER_SESSION_TIMEOUT
   ACADEMIC_ACTION_RULES
 
@@ -3380,6 +3385,9 @@ model ThesisProject {
   /// Chuyên gia hướng dẫn
   supervisor        ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId      String
+  /// Chuyên gia hướng dẫn phụ
+  coSupervisor      ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
+  coSupervisorId    String?
   /// Đơn vị quản lý
   organization      DM_DonVi                    @relation(fields: [organizationId], references: [Id])
   organizationId    String                      @db.Uuid()
@@ -3456,6 +3464,7 @@ model ExpertProfile {
   eligiblePresident  Boolean
   eligibleSecretary  Boolean
   supervisedTheses   ThesisProject[] @relation("SupervisorToThesis")
+  coSupervisedTheses ThesisProject[] @relation("CoSupervisorToThesis")
   subjectClass       SubjectClass[]
   councilMemberships CouncilMember[]
   payments           PaymentRecord[]

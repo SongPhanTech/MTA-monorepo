@@ -1,8 +1,15 @@
 import '../base.zmodel'
 
 enum ConfigKey {
-    DIRECTOR
-    ACADEMY_NAME
+    MANAGEMENT_DEPARTMENT // Bộ ngành quản lý
+    ACADEMY_NAME          // Tên trường/học viện
+    ACADEMY_CODE          // Mã trường/Tên viết tắt
+    DIRECTOR              // Giám đốc
+
+    PROVINCE              // Tỉnh/Thành Phố
+    DISTRICT              // Quận/Huyện
+    WARD                  // Phường/Xã
+
     USER_SESSION_TIMEOUT
     ACADEMIC_ACTION_RULES
 
