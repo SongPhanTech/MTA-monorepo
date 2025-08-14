@@ -4197,8 +4197,8 @@ model SurveyQuestion {
   type                  SurveyQuestionType
   surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
   surveyQuestionGroupId String?
-  survey                Survey?              @relation(fields: [surveyId], references: [id])
-  surveyId              String?
+  survey                Survey               @relation(fields: [surveyId], references: [id])
+  surveyId              String
   surveyResponses       SurveyResponse[]
 
   @@schema("khao-thi")

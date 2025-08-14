@@ -1,8 +1,7 @@
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import { PutSurveyQuestionGroupModal } from '@components/modal'
+// import { PutSurveyQuestionGroupModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -12,23 +11,32 @@ import {
     useFindManySurveyTopic,
     useUpdateSurveyQuestionGroup,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
-import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+
+// import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const router = useRouter()
+
     const [filters, setFilters] = useState<FilterProps>({
+        code: '',
         name: '',
-        surveyTopicId: undefined,
+        surveyQuestionType: undefined,
+        surveyId: undefined,
     })
 
     const where = useMemo(
         () => ({
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -37,15 +45,8 @@ function Page() {
                       },
                   }
                 : {}),
-            ...(filters.surveyTopicId
-                ? {
-                      surveyTopicId: {
-                          in: filters.surveyTopicId,
-                      },
-                  }
-                : {}),
         }),
-        [filters.name, filters.surveyTopicId]
+        [filters.code, filters.name]
     )
 
     const { data = [] } = useFindManySurveyQuestionGroup({
@@ -66,14 +67,14 @@ function Page() {
         },
     })
 
-    const { onOpen } = useDisclosure<string>({
-        tag: PutSurveyQuestionGroupModal.name,
-    })
+    // const { onOpen } = useDisclosure<string>({
+    //     tag: PutSurveyQuestionGroupModal.name,
+    // })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen()
+        // onOpen()
     }
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
     const { mutateAsync: updateSurveyQuestionGroup } = useUpdateSurveyQuestionGroup()
@@ -109,11 +110,6 @@ function Page() {
                     <Table
                         filters={filters}
                         setFilters={setFilters}
-                        onRowClick={({ id }) => {
-                            router.push(
-                                `${ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT}/${id}`
-                            )
-                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -127,6 +123,7 @@ function Page() {
                                 dataIndex: 'name',
                                 type: 'input',
                             },
+
                             {
                                 title: 'Chủ đề khảo sát',
                                 dataIndex: 'surveyTopicId',
@@ -138,23 +135,17 @@ function Page() {
                                 render: (_, record) =>
                                     record?.surveyTopic ? record?.surveyTopic.name : '',
                             },
-                            {
-                                title: 'Số lượng câu hỏi',
-                                dataIndex: 'surveyQuestion',
-                                align: 'center',
-                                render: (_, { surveyQuestion }) =>
-                                    surveyQuestion.length ? surveyQuestion.length : 0,
-                            },
+
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <EditIcon
+                                        {/* <EditIcon
                                             onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"
-                                        />
+                                        /> */}
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () => handleDelete(id),

@@ -9,8 +9,6 @@ export default {
     "THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI_ID": "/thiet-lap-de-thi/ngan-hang-cau-hoi/[id]",
     "THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI": "/thiet-lap-de-thi/ngan-hang-cau-hoi",
     "THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/cau-hoi-khao-sat",
-    "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat/[id]",
-    "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
   "QL_DAO_TAO": {

@@ -736,11 +736,6 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                     },
                     {
-                        id: 'nhom-cau-hoi-khao-sat',
-                        label: 'Nhóm câu hỏi khảo sát',
-                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT,
-                    },
-                    {
                         id: 'cau-hoi-khao-sat',
                         label: 'Câu hỏi khảo sát',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,

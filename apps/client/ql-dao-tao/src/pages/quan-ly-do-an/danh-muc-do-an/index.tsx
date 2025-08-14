@@ -165,14 +165,6 @@ export default function ThesisProject() {
                 include: {
                     organization: true,
                     supervisor: true,
-                    registrations: true,
-                    council: {
-                        include: {
-                            members: {
-                                include: { expert: true },
-                            },
-                        },
-                    },
                 },
                 where: {
                     ...(filters.code
@@ -268,7 +260,7 @@ export default function ThesisProject() {
         tag: PutThesisProject.name,
     })
 
-    const { onOpen: openModalPrintDecision } = useDisclosure<{ subjecClassData: any }>({
+    const { onOpen: openModalPrintDecision } = useDisclosure({
         tag: ModalPrintDecision.name,
     })
 
@@ -393,10 +385,7 @@ export default function ThesisProject() {
                         </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={() => openModalPrintDecision(subjectClass as any)}
-                                    type="primary"
-                                >
+                                <Button onClick={() => openModalPrintDecision()} type="primary">
                                     Quyết định
                                 </Button>
                                 <Button onClick={createInvitations} type="primary">

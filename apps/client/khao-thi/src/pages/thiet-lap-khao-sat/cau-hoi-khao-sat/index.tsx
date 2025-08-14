@@ -9,8 +9,8 @@ import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountSurveyQuestion,
+    useFindManySurvey,
     useFindManySurveyQuestion,
-    useFindManySurveyQuestionGroup,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
@@ -64,7 +64,7 @@ function Page() {
 
     const { data = [], refetch } = useFindManySurveyQuestion({
         where,
-        include: { surveyQuestionGroup: true },
+        include: { survey: true },
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -76,14 +76,9 @@ function Page() {
             deletedAt: null,
         },
     })
-    const { data: surveyQuestionGroupData } = useFindManySurveyQuestionGroup({
-        orderBy: { createdAt: 'desc' },
-    })
+    const { data: surveyData } = useFindManySurvey({ orderBy: { createdAt: 'desc' } })
 
-    const { onOpen } = useDisclosure<{
-        id: string
-        surveyQuestionGroupId?: string
-    }>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutSurveyQuestionModal.name,
     })
 
@@ -143,19 +138,7 @@ function Page() {
                                 dataIndex: 'name',
                                 type: 'input',
                             },
-                            {
-                                title: 'Nhóm câu hỏi khảo sát',
-                                dataIndex: 'surveyId',
-                                type: 'select',
-                                options: surveyQuestionGroupData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                })),
-                                render: (_, record) =>
-                                    record?.surveyQuestionGroup
-                                        ? record.surveyQuestionGroup.name
-                                        : '',
-                            },
+
                             {
                                 title: 'Loại câu hỏi khảo sát',
                                 dataIndex: 'surveyQuestionType',
@@ -163,18 +146,25 @@ function Page() {
                                 options: surveyQuestionTypeOptions,
                                 render: (_, record) => getSurveyQuestionTypeLabel(record?.type),
                             },
+                            {
+                                title: 'Tên khảo sát',
+                                dataIndex: 'surveyId',
+                                type: 'select',
+                                options: surveyData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) => (record?.survey ? record.survey.name : ''),
+                            },
 
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id, surveyQuestionGroupId }) => (
+                                render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
-                                            onClick={onOpen.bind(null, {
-                                                id,
-                                                surveyQuestionGroupId,
-                                            })}
+                                            onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon

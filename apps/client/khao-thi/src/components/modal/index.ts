@@ -5,14 +5,12 @@ import ModalPrintExamBank from './modal-print-exam-bank'
 import ModalSinhDeThiTuDong from './modal-sinh-de-thi-tu-dong'
 import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutKnowledgeBlock from './put-chuong-muc'
-import PutSurveyExamModal from './put-create-survey-exam'
 import PutExamBank from './put-de-thi'
 import PutExamBankQuestion from './put-exam-bank-question'
 import PutExam from './put-ky-thi'
 import PutSurveyModal from './put-modal-survey'
 import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
 import PutSurveyQuestionModal from './put-modal-survey-question'
-import PutSurveyQuestionGroupModal from './put-modal-survey-question-group'
 import PutSurveyTopicModal from './put-modal-survey-topic'
 import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
@@ -35,6 +33,4 @@ export {
     PutExamBank,
     ModalPrintExamBank,
     ModalPrintAllExams,
-    PutSurveyQuestionGroupModal,
-    PutSurveyExamModal,
 }

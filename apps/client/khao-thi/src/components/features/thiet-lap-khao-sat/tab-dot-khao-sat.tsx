@@ -1,9 +1,8 @@
-import { PlusCircleOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyExamModal, PutSurveyModal } from '@components/modal'
+import { PutSurveyModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { SurveyObjectType } from '@workspace/db'
@@ -14,7 +13,7 @@ import {
     useFindManySurveyTopic,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -96,22 +95,14 @@ function TabDotKhaoSat() {
 
     const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
 
-    const { onOpen } = useDisclosure<string>({
+    const { onOpen, onClose } = useDisclosure<string>({
         tag: PutSurveyModal.name,
-    })
-
-    const { onOpen: onOpenSurveyExamModal } = useDisclosure<string>({
-        tag: PutSurveyExamModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen()
-    }
-
-    const handleModalCreateExam = (id: string) => {
-        onOpenSurveyExamModal(id)
     }
     const { mutateAsync: updateSurvey } = useUpdateSurvey()
 
@@ -152,7 +143,6 @@ function TabDotKhaoSat() {
                 </Col>
                 <Col span={24}>
                     <Table
-                        rowKey={'id'}
                         filters={filters}
                         setFilters={setFilters}
                         columns={[
@@ -218,11 +208,6 @@ function TabDotKhaoSat() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip title={'Tạo đề khảo sát'} placement="top">
-                                            <PlusCircleOutlined
-                                                onClick={() => handleModalCreateExam(id)}
-                                            />
-                                        </Tooltip>
                                         <EditIcon
                                             onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"
