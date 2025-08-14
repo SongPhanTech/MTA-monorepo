@@ -3,10 +3,10 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { Survey, SurveyQuestionGroup } from '@workspace/db'
+import type { SurveyQuestionGroup, SurveyTopic } from '@workspace/db'
 import {
     useCreateSurveyQuestionGroup,
-    useFindManySurvey,
+    useFindManySurveyTopic,
     useFindUniqueSurveyQuestionGroup,
     useUpdateSurveyQuestionGroup,
 } from '@workspace/db/hooks'
@@ -29,7 +29,7 @@ const PutSurveyQuestionGroupModal = () => {
     const { mutateAsync: create } = useCreateSurveyQuestionGroup()
     const { mutateAsync: update } = useUpdateSurveyQuestionGroup()
 
-    const { data: surveys = [] } = useFindManySurvey()
+    const { data: SurveyTopicData = [] } = useFindManySurveyTopic()
 
     async function onOk(output?: SurveyQuestionGroup) {
         console.log(output)
@@ -39,7 +39,6 @@ const PutSurveyQuestionGroupModal = () => {
             if (id) {
                 await update({
                     data: {
-                        code: output.code,
                         name: output.name,
                         surveyTopicId: output.surveyTopicId,
                         description: output.description,
@@ -52,7 +51,6 @@ const PutSurveyQuestionGroupModal = () => {
             } else {
                 await create({
                     data: {
-                        code: output.code,
                         name: output.name,
                         surveyTopicId: output.surveyTopicId,
                         description: output.description,
@@ -72,7 +70,7 @@ const PutSurveyQuestionGroupModal = () => {
         }
     }
 
-    const { data: surveyQuestion } = useFindUniqueSurveyQuestionGroup(
+    const { data: surveyQuestionGroup } = useFindUniqueSurveyQuestionGroup(
         {
             where: { id },
         },
@@ -82,10 +80,10 @@ const PutSurveyQuestionGroupModal = () => {
     )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (surveyQuestion) {
-            form.setFieldsValue(surveyQuestion)
+        if (surveyQuestionGroup) {
+            form.setFieldsValue(surveyQuestionGroup)
         }
-    }, [surveyQuestion])
+    }, [surveyQuestionGroup])
 
     return (
         <PutFormModal
@@ -94,19 +92,19 @@ const PutSurveyQuestionGroupModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'}
-            className="w-[30vw]"
+            title={id ? 'Chỉnh sửa nhóm câu hỏi khảo sát' : 'Thêm mới nhóm câu hỏi khảo sát'}
+            className="w-[600px]"
         >
             <Col span={24}>
                 <FormItem form={form} name="name" label="Câu hỏi khảo sát" required>
                     <Input placeholder="Nhập câu hỏi khảo sát" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="surveyTopicId" label="Chủ đề khảo sát" required>
                     <Select
                         placeholder="Chọn chủ đề khảo sát"
-                        options={surveys.map((i: Survey) => {
+                        options={SurveyTopicData.map((i: SurveyTopic) => {
                             return {
                                 value: i.id,
                                 label: i.name,
@@ -115,8 +113,10 @@ const PutSurveyQuestionGroupModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem form={form} name="description" label="Loại câu hỏi khảo sát" required />
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
+                </FormItem>
             </Col>
         </PutFormModal>
     )

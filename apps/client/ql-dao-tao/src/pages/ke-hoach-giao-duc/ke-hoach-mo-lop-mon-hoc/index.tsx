@@ -404,8 +404,7 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Đơn vị phụ trách',
-                                // TODO:
-                                dataIndex: ['managementOrganization', 'name'],
+                                dataIndex: 'managementOrganizationName',
                                 width: 200,
                                 align: 'center',
                             },
