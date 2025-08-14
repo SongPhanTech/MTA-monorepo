@@ -36,19 +36,22 @@ export default function StudentCourseByPlan({
         searchText: '',
     })
 
-    const { data: initialValue } = useFindUniqueSubjectClass({
-        where: {
-            semesterId: semesterId as string,
-            id: subjectClassId as string,
-        },
-        include: {
-            mainLecturer: {
-                include: {
-                    userProfile: true,
+    const { data: initialValue } = useFindUniqueSubjectClass(
+        {
+            where: {
+                semesterId: semesterId as string,
+                id: subjectClassId as string,
+            },
+            include: {
+                mainLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
                 },
             },
         },
-    })
+        { enabled: !!semesterId && !!subjectClassId }
+    )
 
     const { data: studentData, refetch } = useStudentBySubjectClassSemester(
         {

@@ -36,7 +36,7 @@ const ModalExportFileSubjectClass = () => {
 
     const handleExport = async (output?: FilterProps) => {
         if (!output?.organizationId || !output?.semesterId) {
-            message.warning('Vui lòng chọn đầy đủ Đơn vị và Học kỳ')
+            message.warning('Vui lòng chọn đầy đủ đơn vị và học kỳ')
             return
         }
 
@@ -52,7 +52,8 @@ const ModalExportFileSubjectClass = () => {
             }
 
             if (res.status === 200) {
-                const filename = 'PhanCongGiangDay.xlsx'
+                const currentDate = dayjs().format('DD-MM-YYYY')
+                const filename = `PhanCongGiangDay_${currentDate}.xlsx`
                 const blob = new Blob([res.data], {
                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 })

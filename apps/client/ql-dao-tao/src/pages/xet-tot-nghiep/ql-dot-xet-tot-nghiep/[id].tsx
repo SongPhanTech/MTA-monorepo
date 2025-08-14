@@ -43,14 +43,11 @@ export default function StudentGraduationApplication() {
         []
     )
     const graduationSessionId = router.query.id as string
-    const initialStatuses = applicationStatusOptions
-        .map((option) => option.value)
-        .filter((status) => status !== ApplicationStatus.APPROVED)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
         applicationDate: undefined,
-        statusApplication: initialStatuses,
+        statusApplication: undefined,
     })
 
     const where = useMemo(
@@ -365,6 +362,11 @@ export default function StudentGraduationApplication() {
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange,
+        getCheckboxProps: (record: any) => ({
+            disabled:
+                record.status === ApplicationStatus.REJECTED ||
+                record.status === ApplicationStatus.APPROVED,
+        }),
     }
 
     return (
@@ -434,7 +436,7 @@ export default function StudentGraduationApplication() {
                                                 type: 'checkbox',
                                                 ...rowSelection,
                                             }}
-                                            onRowClick={(record) =>
+                                            onRowDoubleClick={(record) =>
                                                 handleOpenModalLearningResult(record)
                                             }
                                             filters={filters}
@@ -642,8 +644,10 @@ export default function StudentGraduationApplication() {
                                                                 <Row className="justify-center gap-2">
                                                                     <RejectIcon
                                                                         popConfirm={{
-                                                                            onConfirm: () =>
-                                                                                handleReject(id),
+                                                                            onConfirm: (e) => {
+                                                                                e?.stopPropagation()
+                                                                                handleReject(id)
+                                                                            },
                                                                         }}
                                                                         onClick={(e) =>
                                                                             e.stopPropagation()

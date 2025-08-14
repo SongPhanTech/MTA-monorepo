@@ -307,7 +307,7 @@ export default function ClassSubject() {
                                         labelAlign="left"
                                     >
                                         <TreeSelectSemester
-                                            defaultValue={filters.semesterId || undefined}
+                                            filterTimeNow={true}
                                             onChange={(val) =>
                                                 handleFilterChange('semesterId', val)
                                             }

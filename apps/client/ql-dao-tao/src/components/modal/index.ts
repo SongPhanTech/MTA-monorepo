@@ -2,6 +2,7 @@ import PutAddCertificateScoreModal from './add-certificate'
 import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
 import HanNhapDiem from './modal-han-nhap-diem'
+import ModalNhapTKB from './modal-import-tkb'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
 import ModalLearningResult from './modal-ket-qua-hoc-tap-ctdt'
 import ModalPrintToDSHV from './modal-print-ds-sinh-vien-lop'
@@ -147,4 +148,5 @@ export {
     ModalTraCuuVanBang,
     ModalExportFileSubjectClass,
     ModalPrintDecision,
+    ModalNhapTKB,
 }

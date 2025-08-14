@@ -95,7 +95,10 @@ const PutOneSubjectClassModal = () => {
 
     const { data: subjectVersionData = [] } = useFindManySubjectVersion({})
 
-    const { data: semesterData = [] } = useFindManySemester()
+    const { data: semesterData = [] } = useFindManySemester({
+        include: { schoolYear: { select: { name: true } } },
+        orderBy: { startDate: 'desc' },
+    })
 
     const TrainingLocationForm = Form.useWatch('trainingLocationId', form)
 
@@ -182,7 +185,9 @@ const PutOneSubjectClassModal = () => {
                         options={semesterData.map((item) => {
                             return {
                                 ...item,
-                                label: item.name,
+                                label: [item?.name, item?.schoolYear?.name]
+                                    .filter(Boolean)
+                                    .join(' - '),
                                 value: item.id,
                             }
                         })}
@@ -198,7 +203,7 @@ const PutOneSubjectClassModal = () => {
                         options={subjectVersionData.map((item) => {
                             return {
                                 ...item,
-                                label: item?.code ? `${item?.code} - ${item?.name}` : item?.name,
+                                label: [item?.code, item?.name].filter(Boolean).join(' - '),
                                 value: item.id,
                             }
                         })}
@@ -272,7 +277,9 @@ const PutOneSubjectClassModal = () => {
                                 return {
                                     ...i,
                                     value: i?.id,
-                                    label: `${i?.code} - ${i?.userProfile?.fullname}`,
+                                    label: [i?.code, i?.userProfile?.fullname]
+                                        .filter(Boolean)
+                                        .join(' - '),
                                 }
                             })}
                         placeholder="Chọn giảng viên 1"
@@ -287,7 +294,9 @@ const PutOneSubjectClassModal = () => {
                             .map((i) => {
                                 return {
                                     value: i?.id,
-                                    label: `${i?.code} - ${i?.userProfile?.fullname}`,
+                                    label: [i?.code, i?.userProfile?.fullname]
+                                        .filter(Boolean)
+                                        .join(' - '),
                                 }
                             })}
                         placeholder="Chọn giảng viên"
@@ -300,7 +309,9 @@ const PutOneSubjectClassModal = () => {
                         options={enterGradeLecturerOptions.map((i) => {
                             return {
                                 value: i?.id,
-                                label: `${i?.code} - ${i?.userProfile?.fullname}`,
+                                label: [i?.code, i?.userProfile?.fullname]
+                                    .filter(Boolean)
+                                    .join(' - '),
                             }
                         })}
                         placeholder="Chọn giảng viên"

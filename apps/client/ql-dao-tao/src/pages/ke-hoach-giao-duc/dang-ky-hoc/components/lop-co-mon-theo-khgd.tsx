@@ -13,8 +13,6 @@ import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
-// const { Option } = Select;
-
 interface FilterProps {
     searchText: string | null
 }
@@ -32,19 +30,22 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
         searchText: '',
     })
 
-    const { data: initialValue } = useFindUniqueSubjectClass({
-        where: {
-            semesterId: semesterId as string,
-            id: subjectClassId as string,
-        },
-        include: {
-            mainLecturer: {
-                include: {
-                    userProfile: true,
+    const { data: initialValue } = useFindUniqueSubjectClass(
+        {
+            where: {
+                semesterId: semesterId as string,
+                id: subjectClassId as string,
+            },
+            include: {
+                mainLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
                 },
             },
         },
-    })
+        { enabled: !!semesterId && !!subjectClassId }
+    )
 
     const { data: fixedClass } = useFixedClassBySubjectClassSemester(
         {

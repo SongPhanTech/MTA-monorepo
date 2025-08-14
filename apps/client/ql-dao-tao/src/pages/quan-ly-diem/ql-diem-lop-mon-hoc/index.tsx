@@ -17,7 +17,6 @@ import type {
     TrainingObjectType,
 } from '@workspace/db'
 import {
-    useFindManySemester,
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
@@ -80,17 +79,6 @@ export default function SubjectClassScore() {
     }>({
         tag: ModalPrintStudentSubjectScore.name,
     })
-
-    const { data: semesters } = useFindManySemester({
-        include: { schoolYear: true },
-        orderBy: { startDate: 'desc' },
-    })
-
-    useEffect(() => {
-        if (semesters && semesters.length > 0) {
-            setSelectedSemesterId((prev) => prev || semesters[0].id)
-        }
-    }, [semesters])
 
     useEffect(() => {
         if (subjectId) {
@@ -739,7 +727,7 @@ export default function SubjectClassScore() {
                                 <Col span={10}>
                                     <TreeSelectSemester
                                         style={{ width: '100%' }}
-                                        value={selectedSemesterId || undefined}
+                                        filterTimeNow={true}
                                         onChange={(val) => setSelectedSemesterId(val || '')}
                                     />
                                 </Col>

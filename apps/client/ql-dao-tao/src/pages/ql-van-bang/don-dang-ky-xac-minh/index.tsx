@@ -100,157 +100,177 @@ export default function ĐONANGKY() {
     }, [])
 
     return (
-        <Form form={form} layout="vertical" onFinish={onOk}>
-            <Row gutter={16}>
-                <Col span={12}>
-                    <FormItem form={form} name="fullname" label="Họ và tên" required>
-                        <Input placeholder="Nhập họ và tên" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="idCardNumber" label="Căn cước công dân" required>
-                        <Input placeholder="Nhập căn cước công dân" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="dateOfBirth" label="Ngày sinh">
-                        <DatePicker
-                            format={{
-                                format: 'DD/MM/YYYY',
-                                type: 'mask',
-                            }}
-                            className="w-full"
-                            placeholder="Chọn ngày sinh"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="phoneNumber" label="Số điện thoại" required>
-                        <Input placeholder="Nhập số điện thoại" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="email" label="Email" required>
-                        <Input placeholder="Nhập email" />
-                    </FormItem>
-                </Col>
+        <div className="flex justify-center w-full p-5">
+            <div className="max-w-[1300px] w-full">
+                <Form form={form} layout="vertical" onFinish={onOk}>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <FormItem form={form} name="fullname" label="Họ và tên" required>
+                                <Input placeholder="Nhập họ và tên" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="idCardNumber"
+                                label="Căn cước công dân"
+                                required
+                            >
+                                <Input placeholder="Nhập căn cước công dân" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="dateOfBirth" label="Ngày sinh">
+                                <DatePicker
+                                    format={{
+                                        format: 'DD/MM/YYYY',
+                                        type: 'mask',
+                                    }}
+                                    className="w-full"
+                                    placeholder="Chọn ngày sinh"
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="phoneNumber" label="Số điện thoại" required>
+                                <Input placeholder="Nhập số điện thoại" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="email" label="Email" required>
+                                <Input placeholder="Nhập email" />
+                            </FormItem>
+                        </Col>
 
-                <Col span={12}>
-                    <FormItem form={form} name="diplomaNumber" label="Số hiệu văn bằng" required>
-                        <Input placeholder="Nhập số hiệu văn bằng" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="originalDiplomaNumber"
-                        label="Số vào sổ gốc văn bằng"
-                        required
-                    >
-                        <Input placeholder="Nhập số vào sổ gốc văn bằng" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="trainingMajor" label="Chuyên ngành đào tạo">
-                        <Input placeholder="Nhập chuyên ngành đào tạo" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="trainingLevel" label="Bậc đào đạo">
-                        <Input placeholder="Nhập bậc đào tạo" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="trainingForm" label="Hình thức đào tạo">
-                        <Input placeholder="Nhập hình thức đào tạo" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="classification" label="Xếp loại tốt nghiệp">
-                        <Input placeholder="Nhập xếp loại tốt nghiệp" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="trainingCourseStartYear"
-                        label="Năm khóa học bắt đầu"
-                    >
-                        <Input placeholder="Nhập năm bắt đầu" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="trainingCourseEndYear"
-                        label="Năm khóa học kết thúc"
-                    >
-                        <Input placeholder="Nhập năm kết thúc" />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="diplomaIssueDate" label="Ngày cấp bằng">
-                        <DatePicker
-                            format={{
-                                format: 'DD/MM/YYYY',
-                                type: 'mask',
-                            }}
-                            className="w-full"
-                            placeholder="Chọn ngày cấp bằng"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={24}>
-                    <FormItem form={form} name="reason" label="Lý do làm đơn" required>
-                        <Input.TextArea placeholder="Nhập lý do" />
-                    </FormItem>
-                </Col>
-                <Col span={24}>
-                    <FormItem form={form} name="attachments" label="Tài liệu đính kèm">
-                        <DocumentPaths
-                            form={form}
-                            data={attachments}
-                            relationId={''}
-                            relationType="diplomaVerificationId"
-                            titleForm="attachments"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={24}>
-                    <FormItem form={form} name="diplomaFront" label="Ảnh mặt trước văn bằng">
-                        <DocumentPaths
-                            form={form}
-                            data={documentFront ? [documentFront] : []}
-                            relationId={''}
-                            relationType="diplomaVerificationFrontId"
-                            titleForm={'diplomaFront'}
-                            multiple={false}
-                            accept="image/*,.pdf"
-                            text="ảnh"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={24}>
-                    <FormItem form={form} name="diplomaBack" label="Ảnh mặt sau văn bằng">
-                        <DocumentPaths
-                            form={form}
-                            data={documentBack ? [documentBack] : []}
-                            relationId={''}
-                            relationType="diplomaVerificationBackId"
-                            titleForm={'diplomaBack'}
-                            multiple={false}
-                            accept="image/*,.pdf"
-                            text="ảnh"
-                        />
-                    </FormItem>
-                </Col>
-            </Row>
-            <Flex justify="end">
-                <Button type="primary" onClick={() => form.submit()}>
-                    Tạo đơn
-                </Button>
-            </Flex>
-        </Form>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="diplomaNumber"
+                                label="Số hiệu văn bằng"
+                                required
+                            >
+                                <Input placeholder="Nhập số hiệu văn bằng" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="originalDiplomaNumber"
+                                label="Số vào sổ gốc văn bằng"
+                                required
+                            >
+                                <Input placeholder="Nhập số vào sổ gốc văn bằng" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="trainingMajor" label="Chuyên ngành đào tạo">
+                                <Input placeholder="Nhập chuyên ngành đào tạo" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="trainingLevel" label="Bậc đào đạo">
+                                <Input placeholder="Nhập bậc đào tạo" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="trainingForm" label="Hình thức đào tạo">
+                                <Input placeholder="Nhập hình thức đào tạo" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="classification" label="Xếp loại tốt nghiệp">
+                                <Input placeholder="Nhập xếp loại tốt nghiệp" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="trainingCourseStartYear"
+                                label="Năm khóa học bắt đầu"
+                            >
+                                <Input placeholder="Nhập năm bắt đầu" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="trainingCourseEndYear"
+                                label="Năm khóa học kết thúc"
+                            >
+                                <Input placeholder="Nhập năm kết thúc" />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="diplomaIssueDate" label="Ngày cấp bằng">
+                                <DatePicker
+                                    format={{
+                                        format: 'DD/MM/YYYY',
+                                        type: 'mask',
+                                    }}
+                                    className="w-full"
+                                    placeholder="Chọn ngày cấp bằng"
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={24}>
+                            <FormItem form={form} name="reason" label="Lý do làm đơn" required>
+                                <Input.TextArea placeholder="Nhập lý do" />
+                            </FormItem>
+                        </Col>
+                        <Col span={24}>
+                            <FormItem form={form} name="attachments" label="Tài liệu đính kèm">
+                                <DocumentPaths
+                                    form={form}
+                                    data={attachments}
+                                    relationId={''}
+                                    relationType="diplomaVerificationId"
+                                    titleForm="attachments"
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={24}>
+                            <FormItem
+                                form={form}
+                                name="diplomaFront"
+                                label="Ảnh mặt trước văn bằng"
+                            >
+                                <DocumentPaths
+                                    form={form}
+                                    data={documentFront ? [documentFront] : []}
+                                    relationId={''}
+                                    relationType="diplomaVerificationFrontId"
+                                    titleForm={'diplomaFront'}
+                                    multiple={false}
+                                    accept="image/*,.pdf"
+                                    text="ảnh"
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={24}>
+                            <FormItem form={form} name="diplomaBack" label="Ảnh mặt sau văn bằng">
+                                <DocumentPaths
+                                    form={form}
+                                    data={documentBack ? [documentBack] : []}
+                                    relationId={''}
+                                    relationType="diplomaVerificationBackId"
+                                    titleForm={'diplomaBack'}
+                                    multiple={false}
+                                    accept="image/*,.pdf"
+                                    text="ảnh"
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={24}>
+                            <Flex justify="end" className="mt-6">
+                                <Button type="primary" onClick={() => form.submit()}>
+                                    Tạo đơn
+                                </Button>
+                            </Flex>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
+        </div>
     )
 }
 
