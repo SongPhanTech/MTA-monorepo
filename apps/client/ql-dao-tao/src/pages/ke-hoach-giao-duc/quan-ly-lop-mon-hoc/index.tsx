@@ -392,8 +392,9 @@ export default function TeachingAssignment() {
             setDataSubmit([...data])
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
     const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
     async function handleDelete(id: string) {
@@ -406,8 +407,9 @@ export default function TeachingAssignment() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleChangeLecturer = (

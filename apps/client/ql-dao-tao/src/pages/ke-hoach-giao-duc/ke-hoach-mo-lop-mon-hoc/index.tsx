@@ -1,8 +1,9 @@
+import { FileDoneOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { PutOpenClassModal } from '@components/modal'
+import { ModalExportFileSubjectClass, PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -116,6 +117,10 @@ export default function SubjectOpeningPlan() {
         onOpen()
     }
 
+    const { onOpen: onOpenXuatFileMoLop } = useDisclosure<string>({
+        tag: ModalExportFileSubjectClass.name,
+    })
+
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function _handleDelete(id: string) {
         try {
@@ -130,8 +135,9 @@ export default function SubjectOpeningPlan() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
@@ -246,6 +252,13 @@ export default function SubjectOpeningPlan() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 {/* <Button type="primary">Thêm mới</Button> */}
+                                <Button
+                                    type="primary"
+                                    onClick={() => onOpenXuatFileMoLop(semesterId)}
+                                >
+                                    <FileDoneOutlined />
+                                    Xuất file mẫu
+                                </Button>
                                 <Button type="primary">
                                     <EditIcon stroke="white" />
                                     Nhập từ file TKB
@@ -436,7 +449,6 @@ export default function SubjectOpeningPlan() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             // total: count,
-
                             onChange: (page, pageSize) => {
                                 if (numberOfPages === pageSize) {
                                     setCurrentPage(page)
@@ -445,8 +457,6 @@ export default function SubjectOpeningPlan() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

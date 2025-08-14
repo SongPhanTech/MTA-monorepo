@@ -261,8 +261,9 @@ export default function UserProfilePageDs() {
             console.log(error)
 
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const list = [

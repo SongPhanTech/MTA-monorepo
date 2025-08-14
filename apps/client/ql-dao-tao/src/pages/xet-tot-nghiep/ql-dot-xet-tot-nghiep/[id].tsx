@@ -182,8 +182,9 @@ export default function StudentGraduationApplication() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     async function handleReject(id: string) {
@@ -196,8 +197,9 @@ export default function StudentGraduationApplication() {
             message.success('Từ chối thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: graduationCheck } = useGraduationCheck()

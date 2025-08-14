@@ -148,8 +148,9 @@ export default function SubjectClassScore() {
             debouncedRefetch()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // #endregion
