@@ -21,7 +21,6 @@ export default function NganhHocModal() {
     const { mutateAsync: updateDM_NganhHoc } = useUpdateDM_NganhHoc()
 
     async function onOk(output: DM_NganhHoc) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

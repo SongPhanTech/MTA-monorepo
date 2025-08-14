@@ -1,3 +1,4 @@
+import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
@@ -13,7 +14,7 @@ import {
     useUpdateSurveyQuestionGroup,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -107,6 +108,7 @@ function Page() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        rowKey={'id'}
                         filters={filters}
                         setFilters={setFilters}
                         onRowClick={({ id }) => {
@@ -151,8 +153,20 @@ function Page() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title={'Xem danh sách câu hỏi'} placement="top">
+                                            <EyeOutlined
+                                                onClick={() => {
+                                                    router.push(
+                                                        `${ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT}/${id}`
+                                                    )
+                                                }}
+                                            />
+                                        </Tooltip>
                                         <EditIcon
-                                            onClick={onOpen.bind(null, id)}
+                                            onClick={(e: any) => {
+                                                e.stopPropagation()
+                                                onOpen(id)
+                                            }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon

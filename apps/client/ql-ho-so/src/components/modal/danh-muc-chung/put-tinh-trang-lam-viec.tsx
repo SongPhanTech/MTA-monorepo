@@ -21,7 +21,6 @@ export default function TrangThaiLamViecModal() {
     const { mutateAsync: updateDM_TrangThaiLamViec } = useUpdateDM_TrangThaiLamViec()
 
     async function onOk(output: DM_TrangThaiLamViec) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

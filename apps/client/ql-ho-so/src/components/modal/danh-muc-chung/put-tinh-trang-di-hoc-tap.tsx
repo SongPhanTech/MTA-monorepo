@@ -21,7 +21,6 @@ export default function TinhTrangDiHocTapModal() {
     const { mutateAsync: updateDM_TinhTrangDiHocTap } = useUpdateDM_TinhTrangDiHocTap()
 
     async function onOk(output: DM_TinhTrangDiHocTap) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

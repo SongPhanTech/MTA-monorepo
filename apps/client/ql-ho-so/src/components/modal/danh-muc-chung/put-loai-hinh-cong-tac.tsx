@@ -21,7 +21,6 @@ export default function LoaiHinhCongTacModal() {
     const { mutateAsync: updateDM_LoaiHinhCongTac } = useUpdateDM_LoaiHinhCongTac()
 
     async function onOk(output: DM_LoaiHinhCongTac) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

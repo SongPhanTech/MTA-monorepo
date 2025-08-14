@@ -21,7 +21,6 @@ export default function ChiHuyQuanLyModal() {
     const { mutateAsync: updateDM_ChiHuyQuanLy } = useUpdateDM_ChiHuyQuanLy()
 
     async function onOk(output: DM_ChiHuyQuanLy) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

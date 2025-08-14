@@ -24,7 +24,6 @@ export default function ChucDanhNgachGiangVienModal() {
     const { mutateAsync: updateDM_ChucDanhCMNVGiangVien } = useUpdateDM_ChucDanhCMNVGiangVien()
 
     async function onOk(output: DM_ChucDanhCMNVGiangVien) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

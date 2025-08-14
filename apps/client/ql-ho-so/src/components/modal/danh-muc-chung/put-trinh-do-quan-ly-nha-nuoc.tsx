@@ -24,7 +24,6 @@ export default function TrinhDoQuanLyNhaNuocModal() {
     const { mutateAsync: updateDM_TrinhDoQuanLyNhaNuoc } = useUpdateDM_TrinhDoQuanLyNhaNuoc()
 
     async function onOk(output: DM_TrinhDoQuanLyNhaNuoc) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

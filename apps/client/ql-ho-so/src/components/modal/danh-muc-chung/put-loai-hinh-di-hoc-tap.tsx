@@ -21,7 +21,6 @@ export default function LoaiHinhDiHocTapModal() {
     const { mutateAsync: updateDM_LoaiHinhDiHocTap } = useUpdateDM_LoaiHinhDiHocTap()
 
     async function onOk(output: DM_LoaiHinhDiHocTap) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

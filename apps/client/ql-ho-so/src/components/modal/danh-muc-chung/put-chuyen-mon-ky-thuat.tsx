@@ -21,7 +21,6 @@ export default function ChuyenMonKyThuatModal() {
     const { mutateAsync: updateDM_ChuyenMonKyThuat } = useUpdateDM_ChuyenMonKyThuat()
 
     async function onOk(output: DM_ChuyenMonKyThuat) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

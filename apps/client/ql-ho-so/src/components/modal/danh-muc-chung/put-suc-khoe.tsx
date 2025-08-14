@@ -21,7 +21,6 @@ export default function SucKhoeModal() {
     const { mutateAsync: updateDM_SucKhoe } = useUpdateDM_SucKhoe()
 
     async function onOk(output: DM_SucKhoe) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

@@ -141,11 +141,6 @@ function Page() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã câu hỏi khảo sát',
-                                dataIndex: 'code',
-                                type: 'input',
-                            },
-                            {
                                 title: 'Tên câu hỏi khảo sát',
                                 dataIndex: 'name',
                                 type: 'input',
@@ -158,17 +153,6 @@ function Page() {
                                 options: surveyQuestionTypeOptions,
                                 render: (_, record) => getSurveyQuestionTypeLabel(record?.type),
                             },
-                            {
-                                title: 'Tên khảo sát',
-                                dataIndex: 'surveyId',
-                                type: 'select',
-                                options: surveyData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                })),
-                                render: (_, record) => (record?.survey ? record.survey.name : ''),
-                            },
-
                             {
                                 title: 'Thao tác',
                                 width: 100,

@@ -100,7 +100,7 @@ function TabDotKhaoSat() {
         tag: PutSurveyModal.name,
     })
 
-    const { onOpen: onOpenSurveyExamModal } = useDisclosure<string>({
+    const { onOpen: onOpenSurveyExamModal } = useDisclosure<{ id: string; surveyTopicId: string }>({
         tag: PutSurveyExamModal.name,
     })
 
@@ -110,8 +110,8 @@ function TabDotKhaoSat() {
         onOpen()
     }
 
-    const handleModalCreateExam = (id: string) => {
-        onOpenSurveyExamModal(id)
+    const handleModalCreateExam = (value: { id: string; surveyTopicId: string }) => {
+        onOpenSurveyExamModal(value)
     }
     const { mutateAsync: updateSurvey } = useUpdateSurvey()
 
@@ -217,11 +217,13 @@ function TabDotKhaoSat() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id }) => (
+                                render: (_, { id, surveyTopicId }) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip title={'Tạo đề khảo sát'} placement="top">
                                             <PlusCircleOutlined
-                                                onClick={() => handleModalCreateExam(id)}
+                                                onClick={() =>
+                                                    handleModalCreateExam({ id, surveyTopicId })
+                                                }
                                             />
                                         </Tooltip>
                                         <EditIcon

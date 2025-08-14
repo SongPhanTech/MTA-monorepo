@@ -24,7 +24,6 @@ export default function XepLoaiDanhGiaCanBoModal() {
     const { mutateAsync: updateDM_XepLoaiDanhGiaCanBo } = useUpdateDM_XepLoaiDanhGiaCanBo()
 
     async function onOk(output: DM_XepLoaiDanhGiaCanBo) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

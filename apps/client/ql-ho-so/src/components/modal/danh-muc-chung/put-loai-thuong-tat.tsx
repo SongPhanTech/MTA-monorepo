@@ -21,7 +21,6 @@ export default function LoaiThuongTatModal() {
     const { mutateAsync: updateDM_LoaiThuongTat } = useUpdateDM_LoaiThuongTat()
 
     async function onOk(output: DM_LoaiThuongTat) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

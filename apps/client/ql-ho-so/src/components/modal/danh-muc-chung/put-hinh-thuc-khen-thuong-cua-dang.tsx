@@ -24,7 +24,6 @@ export default function HinhThucKhenThuongCuaDangModal() {
     const { mutateAsync: updateDM_HinhThucKhenThuongDang } = useUpdateDM_HinhThucKhenThuongDang()
 
     async function onOk(output: DM_HinhThucKhenThuongDang) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

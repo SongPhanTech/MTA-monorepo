@@ -36,7 +36,6 @@ const PutSurveyModal = () => {
     const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType()
 
     async function onOk(output?: PutSurveyType) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

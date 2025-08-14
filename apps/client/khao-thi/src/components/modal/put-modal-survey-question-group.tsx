@@ -32,7 +32,6 @@ const PutSurveyQuestionGroupModal = () => {
     const { data: SurveyTopicData = [] } = useFindManySurveyTopic()
 
     async function onOk(output?: SurveyQuestionGroup) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -96,8 +95,8 @@ const PutSurveyQuestionGroupModal = () => {
             className="w-[600px]"
         >
             <Col span={24}>
-                <FormItem form={form} name="name" label="Câu hỏi khảo sát" required>
-                    <Input placeholder="Nhập câu hỏi khảo sát" />
+                <FormItem form={form} name="name" label="Câu nhóm câu hỏi khảo sát" required>
+                    <Input placeholder="Nhập nhóm câu hỏi khảo sát" />
                 </FormItem>
             </Col>
             <Col span={24}>

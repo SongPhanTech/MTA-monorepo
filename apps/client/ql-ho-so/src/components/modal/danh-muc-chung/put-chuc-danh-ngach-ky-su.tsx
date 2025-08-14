@@ -21,7 +21,6 @@ export default function ChucDanhNgachKySuModal() {
     const { mutateAsync: updateDM_ChucDanhCMNVKySu } = useUpdateDM_ChucDanhCMNVKySu()
 
     async function onOk(output: DM_TruongDaoTaoBacDH) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

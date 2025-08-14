@@ -21,7 +21,6 @@ export default function TrinhDoHocVanModal() {
     const { mutateAsync: updateDM_TrinhDoHocVan } = useUpdateDM_TrinhDoHocVan()
 
     async function onOk(output: DM_TrinhDoHocVan) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

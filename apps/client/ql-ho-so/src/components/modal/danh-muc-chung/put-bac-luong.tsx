@@ -21,7 +21,6 @@ export default function BacLuongModal() {
     const { mutateAsync: updateDM_BacLuong } = useUpdateDM_BacLuong()
 
     async function onOk(output: DM_BacLuong) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

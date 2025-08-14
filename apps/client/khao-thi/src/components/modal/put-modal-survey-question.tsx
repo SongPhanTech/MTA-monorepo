@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
-import { type SurveyQuestion, type SurveyQuestionGroup, SurveyQuestionType } from '@workspace/db'
+import type { SurveyQuestion, SurveyQuestionGroup } from '@workspace/db'
 import {
     useCreateSurveyQuestion,
     useFindManySurveyQuestionGroup,
@@ -33,17 +33,15 @@ const PutSurveyQuestionModal = () => {
     const { data: surveyQuestionGroupData = [] } = useFindManySurveyQuestionGroup()
 
     async function onOk(output?: SurveyQuestion) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
             if (input?.id) {
                 await update({
                     data: {
-                        code: output.code,
                         name: output.name,
                         surveyQuestionGroupId: output.surveyQuestionGroupId,
-                        type: SurveyQuestionType.ESSAY,
+                        type: output.type,
                         description: output.description,
                     },
                     where: {
@@ -54,10 +52,9 @@ const PutSurveyQuestionModal = () => {
             } else {
                 await create({
                     data: {
-                        code: output.code,
                         name: output.name,
                         surveyQuestionGroupId: output.surveyQuestionGroupId,
-                        type: SurveyQuestionType.ESSAY,
+                        type: output.type,
                         description: output.description,
                     },
                 })

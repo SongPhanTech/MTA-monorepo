@@ -21,7 +21,6 @@ export default function ToChucXaHoiModal() {
     const { mutateAsync: updateDM_ToChucXaHoi } = useUpdateDM_ToChucXaHoi()
 
     async function onOk(output: DM_ToChucXaHoi) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

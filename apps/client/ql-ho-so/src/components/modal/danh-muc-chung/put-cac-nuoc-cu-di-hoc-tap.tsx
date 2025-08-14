@@ -21,7 +21,6 @@ export default function CacNuocCuDiHocTapModal() {
     const { mutateAsync: updateDM_NuocCuDiHocTap } = useUpdateDM_NuocCuDiHocTap()
 
     async function onOk(output: DM_NuocCuDiHocTap) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

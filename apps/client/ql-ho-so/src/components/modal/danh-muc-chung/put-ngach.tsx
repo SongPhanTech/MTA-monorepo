@@ -21,7 +21,6 @@ export default function NgachModal() {
     const { mutateAsync: updateDM_Ngach } = useUpdateDM_Ngach()
 
     async function onOk(output: DM_Ngach) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

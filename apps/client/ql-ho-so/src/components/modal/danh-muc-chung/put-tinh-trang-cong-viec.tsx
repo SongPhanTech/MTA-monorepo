@@ -21,7 +21,6 @@ export default function TinhTrangCongTacModal() {
     const { mutateAsync: updateDM_TinhTrangCongTac } = useUpdateDM_TinhTrangCongTac()
 
     async function onOk(output: DM_TinhTrangCongTac) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

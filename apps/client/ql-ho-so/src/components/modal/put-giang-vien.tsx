@@ -90,8 +90,6 @@ const PutUserProfileLectureModal = () => {
     async function onOk(output?: PutLecturerProfile) {
         if (!output) return
 
-        console.log(output)
-
         try {
             showSpinner()
 

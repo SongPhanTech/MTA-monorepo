@@ -21,7 +21,6 @@ export default function NhomMauModal() {
     const { mutateAsync: updateDM_NhomMau } = useUpdateDM_NhomMau()
 
     async function onOk(output: DM_NhomMau) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

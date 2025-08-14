@@ -21,7 +21,6 @@ export default function CacTruongDaoTaoBacDHModal() {
     const { mutateAsync: updateDM_TruongDaoTaoBacDH } = useUpdateDM_TruongDaoTaoBacDH()
 
     async function onOk(output: DM_TruongDaoTaoBacDH) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
