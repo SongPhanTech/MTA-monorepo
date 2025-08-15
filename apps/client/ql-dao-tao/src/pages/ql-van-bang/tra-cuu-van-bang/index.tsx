@@ -2,7 +2,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { ModalVanBang, PutGraduationDecision } from '@components/modal'
+import { ModalPrintToKQHT, ModalVanBang, PutGraduationDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
@@ -21,20 +21,23 @@ import {
     useFindManyDM_DonVi,
     useFindManyFixedClass,
     useFindManyGraduationDecision,
+    useFindManySemester,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Col, Flex, Form, Row, TreeSelect } from 'antd'
+import { Col, Flex, Form, Row, Tooltip, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+import { BookCheckIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function GraduationDecisionDiploma() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [student, setStudent] = useState<any>(null)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -50,6 +53,7 @@ export default function GraduationDecisionDiploma() {
         trainingMajorId: undefined,
         fixedClassId: undefined,
         idCardNumber: '',
+        diplomaTypeId: undefined,
     })
 
     const where = useMemo(
@@ -91,7 +95,13 @@ export default function GraduationDecisionDiploma() {
                       trainingMajorId: filters.trainingMajorId,
                   }
                 : {}),
-
+            ...(filters.diplomaTypeId
+                ? {
+                      diplomaTypeId: Array.isArray(filters.diplomaTypeId)
+                          ? { in: filters.diplomaTypeId }
+                          : filters.diplomaTypeId,
+                  }
+                : {}),
             trainingMajor: {
                 ...(filters.managementOrganizationId
                     ? {
@@ -164,6 +174,7 @@ export default function GraduationDecisionDiploma() {
             filters.trainingCourseId,
             filters.originalDiplomaNumber,
             filters.idCardNumber,
+            filters.diplomaTypeId,
         ]
     )
 
@@ -173,11 +184,31 @@ export default function GraduationDecisionDiploma() {
             student: {
                 include: {
                     userProfile: true,
-                    fixedClass: {
-                        select: {
-                            trainingCourseId: true,
+                    curriculumVersion: {
+                        include: {
+                            trainingLevel: true,
+                            curriculum: {
+                                include: {
+                                    trainingMajor: {
+                                        include: {
+                                            trainingField: true,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
+                    fixedClass: {
+                        include: {
+                            trainingCourse: {
+                                include: {
+                                    scoreConverts: true,
+                                },
+                            },
+                        },
+                    },
+                    trainingObjectType: true,
+                    trainingForm: true,
                     graduationDecision: {
                         select: {
                             id: true,
@@ -257,6 +288,73 @@ export default function GraduationDecisionDiploma() {
     })
 
     const treeData = buildOrgTree(organization)
+
+    const { onOpen: onOpenPhuLucVanBang, onClose } = useDisclosure<{
+        dataTable: any
+        dataStudent: any
+    }>({
+        tag: ModalPrintToKQHT.name,
+    })
+
+    const { data: dataTable } = useFindManySemester(
+        {
+            where: {
+                subjectClasses: {
+                    some: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                },
+            },
+            include: {
+                subjectClasses: {
+                    where: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                    include: {
+                        subjectClassStudent: {
+                            where: {
+                                studentId: student?.id,
+                            },
+                            include: {
+                                subjectVersion: true,
+                                certificates: {
+                                    include: {
+                                        archivedCertificate: true,
+                                    },
+                                },
+                                awards: {
+                                    include: {
+                                        archivedAward: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                trainingCoursesStart: {
+                    where: {
+                        id: student?.fixedClass?.trainingCourseId ?? undefined,
+                    },
+                    include: {
+                        scoreConverts: true,
+                    },
+                },
+                schoolYear: true,
+            },
+            orderBy: {
+                createdAt: 'asc',
+            },
+        },
+        { enabled: !!student?.id }
+    )
 
     return (
         <div className="bg-white rounded-lg shadow-sm p-4">
@@ -426,6 +524,7 @@ export default function GraduationDecisionDiploma() {
                             },
                             {
                                 title: 'Loại bằng',
+                                dataIndex: 'diplomaTypeId',
                                 align: 'center',
                                 type: 'select',
                                 options: diplomaTypeData.map((item) => ({
@@ -497,6 +596,19 @@ export default function GraduationDecisionDiploma() {
                                                         onOpenVanBang(record?.student?.id)
                                                     }}
                                                 />
+                                                <Tooltip title="Phụ lục văn bằng" placement="top">
+                                                    <BookCheckIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            setStudent(record?.student)
+                                                            onOpenPhuLucVanBang({
+                                                                dataStudent: record?.student,
+                                                                dataTable,
+                                                            })
+                                                        }}
+                                                        size={16}
+                                                    />
+                                                </Tooltip>
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()

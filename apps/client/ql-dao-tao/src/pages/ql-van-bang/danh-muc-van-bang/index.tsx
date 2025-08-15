@@ -203,6 +203,9 @@ export default function DiplomaType() {
                                                             handleDeleteDiplomaType(record?.id)
                                                             e?.stopPropagation()
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => {
                                                         e.stopPropagation()

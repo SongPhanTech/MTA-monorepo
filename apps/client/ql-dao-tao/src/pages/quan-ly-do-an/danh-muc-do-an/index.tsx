@@ -545,6 +545,7 @@ export default function ThesisProject() {
                                                         },
                                                         onCancel: (e) => e?.stopPropagation(),
                                                     }}
+                                                    onClick={(e) => e.stopPropagation()}
                                                 />
                                             </Row>
                                         )

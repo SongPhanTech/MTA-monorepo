@@ -213,6 +213,9 @@ export default function QuestionBank() {
                                                             handleDeleteQuestionBank(record?.id)
                                                             e?.stopPropagation()
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />

@@ -269,7 +269,11 @@ export default function GraduationRankingPage() {
                                                             handleDelete(id)
                                                             e?.stopPropagation()
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
+                                                    onClick={(e) => e.stopPropagation()}
                                                 />
                                             </Row>
                                         )

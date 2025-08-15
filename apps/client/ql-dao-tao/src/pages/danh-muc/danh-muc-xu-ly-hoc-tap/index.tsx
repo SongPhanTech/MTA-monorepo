@@ -297,6 +297,9 @@ export default function AcademicActionConfig() {
                                                             )
                                                             e?.stopPropagation()
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />

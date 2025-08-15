@@ -1,7 +1,7 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutGraduationDecision } from '@components/modal'
+import { ModalPrintToKQHT, PutGraduationDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -10,11 +10,13 @@ import {
     useCountTrainingCourse,
     useDeleteGraduationDecision,
     useFindManyDiplomaType,
+    useFindManySemester,
     useFindManyTrainingCourse,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
-import { Col, message, Row } from 'antd'
+import { Col, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { BookCheckIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -25,6 +27,7 @@ interface GraduationDecisionProps {
 export default function GraduationDecision({ sessionId }: GraduationDecisionProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [student, setStudent] = useState<any>(null)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -147,8 +150,29 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                     curriculumVersion: {
                                         include: {
                                             diplomaType: true,
+                                            trainingLevel: true,
+                                            curriculum: {
+                                                include: {
+                                                    trainingMajor: {
+                                                        include: {
+                                                            trainingField: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                     },
+                                    fixedClass: {
+                                        include: {
+                                            trainingCourse: {
+                                                include: {
+                                                    scoreConverts: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                    trainingObjectType: true,
+                                    trainingForm: true,
                                 },
                             },
 
@@ -213,6 +237,73 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
             hideSpinner()
         }
     }
+
+    const { onOpen: onOpenPhuLucVanBang, onClose } = useDisclosure<{
+        dataTable: any
+        dataStudent: any
+    }>({
+        tag: ModalPrintToKQHT.name,
+    })
+
+    const { data: dataTable } = useFindManySemester(
+        {
+            where: {
+                subjectClasses: {
+                    some: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                },
+            },
+            include: {
+                subjectClasses: {
+                    where: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                    include: {
+                        subjectClassStudent: {
+                            where: {
+                                studentId: student?.id,
+                            },
+                            include: {
+                                subjectVersion: true,
+                                certificates: {
+                                    include: {
+                                        archivedCertificate: true,
+                                    },
+                                },
+                                awards: {
+                                    include: {
+                                        archivedAward: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                trainingCoursesStart: {
+                    where: {
+                        id: student?.fixedClass?.trainingCourseId ?? undefined,
+                    },
+                    include: {
+                        scoreConverts: true,
+                    },
+                },
+                schoolYear: true,
+            },
+            orderBy: {
+                createdAt: 'asc',
+            },
+        },
+        { enabled: !!student?.id }
+    )
 
     return (
         <div className="bg-white rounded-lg shadow-sm p-4">
@@ -322,6 +413,19 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title="Phụ lục văn bằng" placement="top">
+                                            <BookCheckIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setStudent(record?.student)
+                                                    onOpenPhuLucVanBang({
+                                                        dataStudent: record?.student,
+                                                        dataTable,
+                                                    })
+                                                }}
+                                                size={16}
+                                            />
+                                        </Tooltip>
                                         <EditIcon
                                             onClick={(e) => {
                                                 e.stopPropagation()
