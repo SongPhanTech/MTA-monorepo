@@ -588,6 +588,9 @@ export default function TrainingProgramCatalog() {
                                                             )
                                                             e?.stopPropagation()
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
@@ -619,7 +622,13 @@ export default function TrainingProgramCatalog() {
                                 />
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () => handleDeleteCurriculum(id),
+                                        onConfirm: (e) => {
+                                            handleDeleteCurriculum(id)
+                                            e?.stopPropagation()
+                                        },
+                                        onCancel: (e) => {
+                                            e?.stopPropagation()
+                                        },
                                     }}
                                     onClick={(e) => e.stopPropagation()}
                                 />

@@ -161,7 +161,13 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: (e) => {
+                                                    handleDelete(id)
+                                                    e?.stopPropagation()
+                                                },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
                                             }}
                                             onClick={(e: any) => {
                                                 e.stopPropagation()

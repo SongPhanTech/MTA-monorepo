@@ -285,7 +285,11 @@ export default function GraduationSession() {
                                                             e?.stopPropagation()
                                                             handleDelete(id)
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
+                                                    onClick={(e) => e.stopPropagation()}
                                                 />
                                             </Row>
                                         )

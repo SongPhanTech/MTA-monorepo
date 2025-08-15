@@ -110,12 +110,7 @@ const ModalPrintToKQHT = () => {
     const basicInfoCol1 = [
         {
             title: 'Họ và tên:',
-            value: (
-                <span className="font-medium">
-                    {input?.dataStudent?.userProfile?.lastName}{' '}
-                    {input?.dataStudent?.userProfile?.firstName}
-                </span>
-            ),
+            value: <span className="uppercase">{input?.dataStudent?.userProfile?.fullname}</span>,
         },
         {
             title: 'Mã sinh viên:',
@@ -157,7 +152,8 @@ const ModalPrintToKQHT = () => {
             title: 'Ngày sinh:',
             value: (
                 <span>
-                    {dayjs(input?.dataStudent?.userProfile?.dateOfBirth).format('DD/MM/YYYY')}
+                    {input?.dataStudent?.userProfile?.dateOfBirth &&
+                        dayjs(input?.dataStudent?.userProfile?.dateOfBirth).format('DD/MM/YYYY')}
                 </span>
             ),
         },
@@ -167,7 +163,12 @@ const ModalPrintToKQHT = () => {
         },
         {
             title: 'Thời gian đào tạo:',
-            value: <span>{input?.dataStudent?.curriculumVersion?.time} năm</span>,
+            value: (
+                <span>
+                    {input?.dataStudent?.curriculumVersion?.time &&
+                        `${input?.dataStudent?.curriculumVersion?.time} năm`}
+                </span>
+            ),
         },
         {
             title: 'Trình độ đào tạo:',

@@ -448,7 +448,11 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                                     handleDelete(id)
                                                     e?.stopPropagation()
                                                 },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
                                             }}
+                                            onClick={(e) => e.stopPropagation()}
                                         />
                                     </Row>
                                 ),

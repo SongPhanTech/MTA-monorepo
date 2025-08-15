@@ -124,6 +124,7 @@ export type FilterProps = {
     diplomaVerificationStatus?: DiplomaVerificationStatus[]
     academicRank?: string
     academicDegree?: string
+    diplomaTypeId?: string[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

@@ -192,8 +192,15 @@ export default function TrainingLocationPage() {
                                 />
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () => handleDelete(record.id),
+                                        onConfirm: (e) => {
+                                            handleDelete(record.id)
+                                            e?.stopPropagation()
+                                        },
+                                        onCancel: (e) => {
+                                            e?.stopPropagation()
+                                        },
                                     }}
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                             </Row>
                         )}
@@ -279,7 +286,13 @@ export default function TrainingLocationPage() {
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () => handleDeleteBuilding(id),
+                                                        onConfirm: (e) => {
+                                                            handleDeleteBuilding(id)
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />

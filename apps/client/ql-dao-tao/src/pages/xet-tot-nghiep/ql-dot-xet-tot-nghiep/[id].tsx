@@ -23,6 +23,7 @@ import type { GraduationCheckResult } from '@workspace/libs/api/schemas/graduati
 import { useGraduationCheck } from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
+import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { BookPlus, X } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -359,6 +360,21 @@ export default function StudentGraduationApplication() {
         setSelectedRowKeys(newSelectedRowKeys as string[])
     }
 
+    const renderCell: NonNullable<TableRowSelection<any>['renderCell']> = (
+        _checked,
+        _record,
+        _index,
+        originNode
+    ) => (
+        <span
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onDoubleClick={(e) => e.stopPropagation()}
+        >
+            {originNode}
+        </span>
+    )
+
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange,
@@ -366,7 +382,11 @@ export default function StudentGraduationApplication() {
             disabled:
                 record.status === ApplicationStatus.REJECTED ||
                 record.status === ApplicationStatus.APPROVED,
+            onClick: (e: React.MouseEvent) => {
+                e.stopPropagation()
+            },
         }),
+        renderCell,
     }
 
     return (
@@ -436,7 +456,7 @@ export default function StudentGraduationApplication() {
                                                 type: 'checkbox',
                                                 ...rowSelection,
                                             }}
-                                            onRowDoubleClick={(record) =>
+                                            onRowClick={(record) =>
                                                 handleOpenModalLearningResult(record)
                                             }
                                             filters={filters}
@@ -648,6 +668,9 @@ export default function StudentGraduationApplication() {
                                                                                 e?.stopPropagation()
                                                                                 handleReject(id)
                                                                             },
+                                                                            onCancel: (e) => {
+                                                                                e?.stopPropagation()
+                                                                            },
                                                                         }}
                                                                         onClick={(e) =>
                                                                             e.stopPropagation()
@@ -667,6 +690,9 @@ export default function StudentGraduationApplication() {
                                                                         popConfirm={{
                                                                             onConfirm: (e) => {
                                                                                 handleDelete(id)
+                                                                                e?.stopPropagation()
+                                                                            },
+                                                                            onCancel: (e) => {
                                                                                 e?.stopPropagation()
                                                                             },
                                                                         }}

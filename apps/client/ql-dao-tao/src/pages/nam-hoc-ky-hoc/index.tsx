@@ -350,7 +350,13 @@ function YearAndSemester() {
                                     />
                                     <DeleteIcon
                                         popConfirm={{
-                                            onConfirm: () => handleDeleteSemester(id),
+                                            onConfirm: (e) => {
+                                                handleDeleteSemester(id)
+                                                e?.stopPropagation()
+                                            },
+                                            onCancel: (e) => {
+                                                e?.stopPropagation()
+                                            },
                                         }}
                                         onClick={(e) => {
                                             e.stopPropagation()

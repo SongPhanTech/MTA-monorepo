@@ -171,8 +171,15 @@ function Page() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: (e) => {
+                                                    handleDelete(id)
+                                                    e?.stopPropagation()
+                                                },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
                                             }}
+                                            onClick={(e) => e.stopPropagation()}
                                         />
                                     </Row>
                                 ),

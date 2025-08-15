@@ -307,7 +307,13 @@ function Exam() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDeleteExam(id),
+                                                onConfirm: (e) => {
+                                                    handleDeleteExam(id)
+                                                    e?.stopPropagation()
+                                                },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
                                             }}
                                             onClick={(e) => e.stopPropagation()}
                                         />
