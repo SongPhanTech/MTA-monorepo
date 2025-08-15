@@ -165,14 +165,21 @@ export default function ThesisProject() {
                 include: {
                     organization: true,
                     supervisor: true,
-                    registrations: true,
-                    council: {
+                    registrations: {
                         include: {
-                            members: {
-                                include: { expert: true },
+                            student: {
+                                include: {
+                                    userProfile: true,
+                                    fixedClass: {
+                                        include: {
+                                            trainingCourse: true,
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
+                    council: { include: { members: { include: { expert: true } } } },
                 },
                 where: {
                     ...(filters.code

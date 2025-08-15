@@ -1,6 +1,17 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useCouncilRoleOptions } from '@hooks/councilRole'
-import type { Council, CouncilMember, ExpertProfile, ThesisProject } from '@workspace/db'
+import type {
+    Council,
+    CouncilMember,
+    ExpertProfile,
+    FixedClass,
+    Student,
+    StudentThesisRegistration,
+    SubjectClass,
+    ThesisProject,
+    TrainingCourse,
+    UserProfile,
+} from '@workspace/db'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
@@ -9,9 +20,10 @@ import { useReactToPrint } from 'react-to-print'
 
 dayjs.locale('vi')
 
-// type ModalPrintDecisionInput = {
-//     thesisProject: ThesisProject[]
-// }
+type ModalPrintDecisionInput = SubjectClass &
+    {
+        thesisProjects: ThesisProject[]
+    }[]
 
 type ThesisProjectInput = ThesisProject & {
     supervisor: ExpertProfile
@@ -21,6 +33,15 @@ type ThesisProjectInput = ThesisProject & {
                 expert: ExpertProfile
             }[]
     }
+    registrations: StudentThesisRegistration &
+        {
+            student: Student & {
+                userProfile: UserProfile
+                fixedClass: FixedClass & {
+                    trainingCourse: TrainingCourse
+                }
+            }
+        }[]
 }
 
 const ModalPrintDecision = () => {
@@ -29,7 +50,7 @@ const ModalPrintDecision = () => {
         isOpen,
         onClose,
         input: subjectClassData,
-    } = useDisclosure<any>({
+    } = useDisclosure<ModalPrintDecisionInput>({
         tag: ModalPrintDecision.name,
     })
     const { getCouncilRoleLabel } = useCouncilRoleOptions()
@@ -147,13 +168,26 @@ const ModalPrintDecision = () => {
                                 <strong>Điều 1.</strong> Thành lập hội đồng đánh giá luận văn thạc
                                 sĩ ngành Khoa học máy tính về đề tài:{' '}
                                 <i>
-                                    <strong>{tp.title}</strong>
+                                    <strong>{`"${tp.title}"`}.</strong>
                                 </i>
-                                .
                             </div>
                             <div className="indent-6">
-                                Học viên thực hiện: Nguyễn Thị A, sinh ngày 12/10/1999,Khóa
-                                35(2023-2025).
+                                Học viên thực hiện:
+                                {tp.registrations
+                                    .map((registration) => {
+                                        const fullname = registration.student.userProfile.fullname
+                                        const dateOfBirth =
+                                            registration.student.userProfile.dateOfBirth
+                                        const trainingCourse =
+                                            registration.student.fixedClass.trainingCourse
+                                        return `${fullname}${
+                                            dateOfBirth
+                                                ? `, sinh ngày ${dayjs(dateOfBirth).format('DD/MM/YYYY')}
+                                        ${trainingCourse ? `, ${trainingCourse.name}(${trainingCourse.startYear}-${trainingCourse.endYear})` : ''}`
+                                                : ''
+                                        }`
+                                    })
+                                    .join('. ')}
                             </div>
                             <div className="indent-6">Cán bộ hướng dẫn: {tp.supervisor.name}</div>
                             <div className="indent-6">

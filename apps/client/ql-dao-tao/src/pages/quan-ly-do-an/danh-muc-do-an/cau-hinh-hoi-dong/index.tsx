@@ -11,7 +11,6 @@ import {
     useFindManyExpertProfile,
     useFindManyRoom,
     useFindUniqueSubjectClass,
-    useUpdateSubjectClass,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { Button, Col, Form, message, Select } from 'antd'
@@ -123,17 +122,10 @@ export default function SettingClass() {
                 expertProfile: true,
                 thesisProjects: {
                     include: {
+                        registrations: { include: { student: { include: { userProfile: true } } } },
                         supervisor: true,
                         room: true,
-                        council: {
-                            include: {
-                                members: {
-                                    include: {
-                                        expert: true,
-                                    },
-                                },
-                            },
-                        },
+                        council: { include: { members: { include: { expert: true } } } },
                     },
                 },
             },
@@ -162,34 +154,6 @@ export default function SettingClass() {
     //         })
     //     }
     // }, [subjectClass, form])
-
-    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-    async function onOk(output?: PutSettingClass) {
-        if (!output) return
-
-        try {
-            showSpinner()
-            // const values = (await form.validateFields()) as PutSettingClass
-
-            if (subjectClassId) {
-                await updateSubjectClass({
-                    where: { id: subjectClassIdStr },
-                    data: {
-                        expertProfile: {
-                            connect: rightData?.map((rightData) => ({
-                                id: rightData.id,
-                            })),
-                        },
-                    },
-                })
-                message.success('Cập nhật thành công')
-            }
-        } catch (_error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     //
     const ps =
@@ -797,6 +761,9 @@ export default function SettingClass() {
                                 </th>
                                 {subjectClass?.thesisProjects.map((tp) => (
                                     <td colSpan={3} style={cell}>
+                                        {tp.registrations.map((registration) => (
+                                            <div>{registration.student.userProfile.fullname}</div>
+                                        ))}
                                         <div>GVHD:{tp.supervisor.name}</div>
                                     </td>
                                 ))}
@@ -883,6 +850,9 @@ export default function SettingClass() {
                                 </th>
                                 {subjectClass?.thesisProjects.map((tp) => (
                                     <td colSpan={3} style={cell}>
+                                        {tp.registrations.map((registration) => (
+                                            <div>{registration.student.userProfile.fullname}</div>
+                                        ))}
                                         <div>GVHD:{tp.supervisor.name}</div>
                                     </td>
                                 ))}
