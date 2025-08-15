@@ -265,10 +265,19 @@ model TrainingTime extends Base {
 //   @@schema("ql-dao-tao")
 // }
 
+enum DiplomaTypeEnum {
+  MASTER             // Thạc sĩ
+  DOCTORATE          // Tiến sĩ
+  ENGINEER           // Kỹ sư
+  BACHELOR           // Cử nhân
+
+  @@schema("ql-dao-tao")
+}
+
 model DiplomaType extends Base {
   name               String               @unique
   englishName        String?
-
+  type               DiplomaTypeEnum
   // diplomaPlaceHolder DiplomaPlaceHolder[]
   curriculumVersion  CurriculumVersion[]
   graduationDecision GraduationDecision[]
