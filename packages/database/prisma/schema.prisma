@@ -465,6 +465,15 @@ enum SurveyObject {
   @@schema("khao-thi")
 }
 
+/// Vai trò của thành viên trong hội đồng đánh giá
+enum EvaluationMemberRole {
+  CHAIRMAN
+  SECRETARY
+  MEMBER
+
+  @@schema("khao-thi")
+}
+
 enum FeedbackStatus {
   Pending
   InProgress
@@ -2728,6 +2737,7 @@ model UserProfile {
   /// hồ sơ cán bộ
   staffs                        Staff?
   staffHistory                  StaffHistory[]
+  evidenceFiles                 EvidenceFile[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -4664,6 +4674,286 @@ model DM_BacLuong {
   quaTrinhLuong QuaTrinhLuong[]
 
   @@schema("ql-ho-so")
+}
+
+/// Đợt đánh giá CTDT
+model EvaluationPeriod {
+  id          String               @id() @default(cuid())
+  code        String?              @unique()
+  active      Boolean              @default(true)
+  description String?              @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @default(now()) @updatedAt()
+  name        String
+  startDate   DateTime             @default(now())
+  endDate     DateTime?
+  standards   EvaluationStandard[]
+  councils    EvaluationCouncil[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục tiêu chuẩn
+model StandardCatalog {
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  order              Int
+  name               String
+  criteria           CriterionCatalog[]
+  evaluationStandard EvaluationStandard[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục tiêu chí
+model CriterionCatalog {
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  standard            StandardCatalog       @relation(fields: [standardId], references: [id])
+  standardId          String
+  order               Int
+  name                String
+  scoreScale          ScoreScaleCatalog?    @relation(fields: [scoreScaleId], references: [id])
+  scoreScaleId        String?
+  evaluationCriterion EvaluationCriterion[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục thang điểm
+model ScoreScaleCatalog {
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  name                String
+  minValue            Int
+  maxValue            Int
+  passFrom            Int?
+  criteria            CriterionCatalog[]
+  evaluationCriterion EvaluationCriterion[]
+
+  @@schema("khao-thi")
+}
+
+/// Bản sao/áp dụng từ StandardCatalog cho đợt
+model EvaluationStandard {
+  id          String                @id() @default(cuid())
+  code        String?               @unique()
+  active      Boolean               @default(true)
+  description String?               @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @default(now()) @updatedAt()
+  period      EvaluationPeriod      @relation(fields: [periodId], references: [id])
+  periodId    String
+  catalog     StandardCatalog?      @relation(fields: [catalogId], references: [id])
+  catalogId   String?
+  name        String
+  criteria    EvaluationCriterion[]
+
+  @@schema("khao-thi")
+}
+
+/// Bản sao/áp dụng từ CriterionCatalog cho đợt
+model EvaluationCriterion {
+  id              String             @id() @default(cuid())
+  code            String?            @unique()
+  active          Boolean            @default(true)
+  description     String?            @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @default(now()) @updatedAt()
+  standardId      String
+  catalogId       String?
+  name            String
+  score           Int?
+  scoreScaleId    String?
+  standard        EvaluationStandard @relation(fields: [standardId], references: [id])
+  catalog         CriterionCatalog?  @relation(fields: [catalogId], references: [id])
+  scoreScale      ScoreScaleCatalog? @relation(fields: [scoreScaleId], references: [id])
+  analysisForms   AnalysisForm[]
+  evaluationForms EvaluationForm[]
+
+  @@schema("khao-thi")
+}
+
+/// Nhóm minh chứng - require code
+model EvidenceCategory {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt()
+  name        String
+  evidences   Evidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục minh chứng
+model Evidence {
+  id              String                   @id() @default(cuid())
+  code            String?                  @unique()
+  active          Boolean                  @default(true)
+  description     String?                  @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @default(now()) @updatedAt()
+  category        EvidenceCategory         @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  name            String
+  evidenceFile    EvidenceFile[]
+  analysisForms   AnalysisFormEvidence[]
+  evaluationForms EvaluationFormEvidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu tiêu chuẩn đánh giá
+model AnalysisForm {
+  id          String                 @id() @default(cuid())
+  code        String?                @unique()
+  active      Boolean                @default(true)
+  description String?                @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @default(now()) @updatedAt()
+  criterion   EvaluationCriterion    @relation(fields: [criterionId], references: [id])
+  criterionId String
+  content     String
+  orderIndex  Int?
+  evidences   AnalysisFormEvidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu tiêu chí đánh giá
+model EvaluationForm {
+  id          String                   @id() @default(cuid())
+  code        String?                  @unique()
+  active      Boolean                  @default(true)
+  description String?                  @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @default(now()) @updatedAt()
+  criterion   EvaluationCriterion      @relation(fields: [criterionId], references: [id])
+  criterionId String
+  content     String
+  orderIndex  Int?
+  evidences   EvaluationFormEvidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Minh chứng phiếu tiêu chuẩn
+model AnalysisFormEvidence {
+  analysisFormId String
+  evidenceId     String
+  orderIndex     Int
+  analysisForm   AnalysisForm @relation(fields: [analysisFormId], references: [id])
+  evidence       Evidence     @relation(fields: [evidenceId], references: [id])
+
+  @@id([analysisFormId, evidenceId])
+  @@schema("khao-thi")
+}
+
+/// Minh chứng phiếu tiêu chí
+model EvaluationFormEvidence {
+  evaluationFormId String
+  evidenceId       String
+  orderIndex       Int
+  evaluationForm   EvaluationForm @relation(fields: [evaluationFormId], references: [id])
+  evidence         Evidence       @relation(fields: [evidenceId], references: [id])
+
+  @@id([evaluationFormId, evidenceId])
+  @@schema("khao-thi")
+}
+
+model EvaluationCouncil {
+  id           String               @id() @default(cuid())
+  code         String?              @unique()
+  active       Boolean              @default(true)
+  description  String?              @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @default(now()) @updatedAt()
+  periodId     String
+  name         String
+  members      Json?
+  period       EvaluationPeriod     @relation(fields: [periodId], references: [id])
+  secretariats CouncilSecretariat[]
+
+  @@schema("khao-thi")
+}
+
+model CouncilSecretariat {
+  id          String                     @id() @default(cuid())
+  code        String?                    @unique()
+  active      Boolean                    @default(true)
+  description String?                    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @default(now()) @updatedAt()
+  councilId   String
+  name        String
+  members     CouncilSecretariatMember[]
+  council     EvaluationCouncil          @relation(fields: [councilId], references: [id])
+
+  @@schema("khao-thi")
+}
+
+model CouncilSecretariatMember {
+  id                   String               @id() @default(cuid())
+  code                 String?              @unique()
+  active               Boolean              @default(true)
+  description          String?              @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @default(now()) @updatedAt()
+  councilSecretariatId String
+  userId               String
+  role                 EvaluationMemberRole
+  councilSecretariat   CouncilSecretariat   @relation(fields: [councilSecretariatId], references: [id])
+
+  @@schema("khao-thi")
+}
+
+model EvidenceFile {
+  id            String      @id() @default(cuid())
+  code          String?     @unique()
+  active        Boolean     @default(true)
+  description   String?     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt()
+  filename      String
+  path          String
+  mimeType      String
+  size          Int
+  uploadedBy    String
+  evidence      Evidence    @relation(fields: [evidenceId], references: [id])
+  evidenceId    String
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@schema("khao-thi")
 }
 
 model Feedback {
