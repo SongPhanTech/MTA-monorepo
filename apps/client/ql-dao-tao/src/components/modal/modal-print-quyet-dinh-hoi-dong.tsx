@@ -68,7 +68,7 @@ const ModalPrintDecision = () => {
         }
       `,
     })
-
+    //TODO: ghép, cấu hình thông tin
     return (
         <Modal
             open={isOpen}

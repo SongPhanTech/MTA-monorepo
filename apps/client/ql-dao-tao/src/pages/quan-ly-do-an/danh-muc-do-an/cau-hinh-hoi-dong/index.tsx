@@ -759,6 +759,7 @@ export default function SettingClass() {
                 </Col>
             </Col>
             {
+                // TODO: ghép ca, kíp bảo vệ
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12 }}>
                         <thead>
