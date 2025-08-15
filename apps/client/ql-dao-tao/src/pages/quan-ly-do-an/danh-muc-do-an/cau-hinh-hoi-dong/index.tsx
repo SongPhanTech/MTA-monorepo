@@ -519,6 +519,7 @@ export default function SettingClass() {
                 }
 
                 message.success('Tạo hội đồng thành công')
+                setRightData([])
             } catch (_error) {
                 message.error('Lỗi khi tạo hội đồng:')
             }

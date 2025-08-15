@@ -46,16 +46,15 @@ type ThesisProjectInput = ThesisProject & {
 
 const ModalPrintDecision = () => {
     const printRef = useRef<HTMLDivElement>(null)
-    const {
-        isOpen,
-        onClose,
-        input: subjectClassData,
-    } = useDisclosure<ModalPrintDecisionInput>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        subjecClassData: ModalPrintDecisionInput
+        isCopy?: boolean
+    }>({
         tag: ModalPrintDecision.name,
     })
     const { getCouncilRoleLabel } = useCouncilRoleOptions()
 
-    const allThesisProjects = subjectClassData?.flatMap((sc: any) => sc.thesisProjects) ?? []
+    const allThesisProjects = input?.subjecClassData.flatMap((sc: any) => sc.thesisProjects) ?? []
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
@@ -230,48 +229,62 @@ const ModalPrintDecision = () => {
                             <div className="flex flex-col text-center">
                                 <div className="font-bold flex flex-col text-[18px]">
                                     <span className="uppercase">GIÁM ĐỐC</span>
-                                    <span className="font-normal my-2">(Đã ký)</span>
+                                    {input?.isCopy ? (
+                                        <span className="font-normal my-2">(Đã ký)</span>
+                                    ) : (
+                                        <div className="h-[40px]"> </div>
+                                    )}
                                     <span>Trung tướng Lê Minh Thái</span>
                                 </div>
                             </div>
                         </div>
-                        <hr className="border-t-[1px] border-black" />
-                        <div className="flex items-center text-center font-bold uppercase justify-between mt-2">
-                            <div className="flex flex-col">
-                                <span className="font-normal">BỘ QUỐC PHÒNG</span>
-                                <span className="leading-none">HỌC VIỆN KỸ THUẬT QUÂN SỰ</span>
-                                <hr className="border-t-[1px] border-black mx-14" />
-                                <span className="font-normal normal-case mt-1">
-                                    Số: &emsp;&emsp;/QĐ-HV
-                                </span>
-                            </div>
-                            <div className="flex flex-col gap-4">
-                                <span>Trích sao</span>
-                                <div className="font-normal normal-case italic mt-1">
-                                    Hà Nội, ngày 02 tháng 6 năm 2025
+                        {input?.isCopy ? (
+                            <>
+                                <hr className="border-t-[1px] border-black" />
+                                <div className="flex items-center text-center font-bold uppercase justify-between mt-2">
+                                    <div className="flex flex-col">
+                                        <span className="font-normal">BỘ QUỐC PHÒNG</span>
+                                        <span className="leading-none">
+                                            HỌC VIỆN KỸ THUẬT QUÂN SỰ
+                                        </span>
+                                        <hr className="border-t-[1px] border-black mx-14" />
+                                        <span className="font-normal normal-case mt-1">
+                                            Số: &emsp;&emsp;/QĐ-HV
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-4">
+                                        <span>Trích sao</span>
+                                        <div className="font-normal normal-case italic mt-1">
+                                            Hà Nội, ngày 02 tháng 6 năm 2025
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="overflow-x-auto mt-6 flex justify-between">
-                            <div className="flex flex-col text-[16px]">
-                                <div className="flex flex-col">
-                                    <span className="font-semibold italic">Nơi nhận:</span>
-                                    <ul className="list-none leading-4">
-                                        <li>- Thành viên Hội đồng(05);</li>
-                                        <li>- Hồ sơ bảo vệ(01);</li>
-                                        <li>- Lưu: QL/P7. Th07;</li>
-                                    </ul>
+                                <div className="overflow-x-auto mt-6 flex justify-between">
+                                    <div className="flex flex-col text-[16px]">
+                                        <div className="flex flex-col">
+                                            <span className="font-semibold italic">Nơi nhận:</span>
+                                            <ul className="list-none leading-4">
+                                                <li>- Thành viên Hội đồng(05);</li>
+                                                <li>- Hồ sơ bảo vệ(01);</li>
+                                                <li>- Lưu: QL/P7. Th07;</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col text-center">
+                                        <div className="font-bold flex flex-col text-[18px]">
+                                            <span className="uppercase">TL. GIÁM ĐỐC</span>
+                                            <span className="uppercase">
+                                                KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC
+                                            </span>
+                                            <span className="uppercase">PHÓ TRƯỞNG PHÒNG</span>
+                                            <span className="mt-12">Đại tá Trần Ngọc Châu</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-col text-center">
-                                <div className="font-bold flex flex-col text-[18px]">
-                                    <span className="uppercase">TL. GIÁM ĐỐC</span>
-                                    <span className="uppercase">KT. TRƯỞNG PHÒNG SAU ĐẠI HỌC</span>
-                                    <span className="uppercase">PHÓ TRƯỞNG PHÒNG</span>
-                                    <span className="mt-12">Đại tá Trần Ngọc Châu</span>
-                                </div>
-                            </div>
-                        </div>
+                            </>
+                        ) : (
+                            <div className="h-[40px]"> </div>
+                        )}
                         {index < allThesisProjects.length - 1 && <div className="page-break" />}
                     </>
                 ))}
