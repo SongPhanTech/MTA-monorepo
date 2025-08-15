@@ -31,7 +31,7 @@ dayjs.locale('vi')
 
 export default function SettingClass() {
     const router = useRouter()
-    const [searchExpert, setSearchExpert] = useState('')
+    const [searchRoom, setSearchRoom] = useState('')
     const [form] = Form.useForm<PutSettingClass>()
     const [selectedLeftKeys, setSelectedLeftKeys] = useState<React.Key[]>([])
     const [selectedRightKeys, setSelectedRightKeys] = useState<React.Key[]>([])
@@ -133,7 +133,11 @@ export default function SettingClass() {
         { enabled: !!subjectClassIdStr }
     )
 
-    const { data: room = [], refetch } = useFindManyRoom({})
+    const { data: room = [], refetch } = useFindManyRoom({
+        where: {
+            ...(searchRoom ? { name: { contains: searchRoom, mode: 'insensitive' } } : {}),
+        },
+    })
 
     const debouncedRefetch = useCallback(
         debounce(() => {
@@ -143,7 +147,7 @@ export default function SettingClass() {
     )
 
     const handleSearchRoom = (value: string) => {
-        setSearchExpert(value)
+        setSearchRoom(value)
         debouncedRefetch()
     }
 
@@ -472,7 +476,7 @@ export default function SettingClass() {
             const thesisIds = subjectClass?.thesisProjects.map((tp) => tp.id) ?? []
             try {
                 const batches = main()
-
+                showSpinner()
                 const councilsData = batches.flatMap((batch, batchIndex) =>
                     batch.map((committee, committeeIndex) => {
                         const membersData = [
@@ -520,6 +524,7 @@ export default function SettingClass() {
 
                 message.success('Tạo hội đồng thành công')
                 setRightData([])
+                hideSpinner()
             } catch (_error) {
                 message.error('Lỗi khi tạo hội đồng:')
             }
