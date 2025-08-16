@@ -2,7 +2,12 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import { ModalPrintToKQHT, ModalVanBang, PutGraduationDecision } from '@components/modal'
+import {
+    ModalPhuLucThacSi,
+    ModalPrintToKQHT,
+    ModalVanBang,
+    PutGraduationDecision,
+} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
@@ -294,6 +299,10 @@ export default function GraduationDecisionDiploma() {
         dataStudent: any
     }>({
         tag: ModalPrintToKQHT.name,
+    })
+
+    const { onOpen: onOpenPhuLucThacSi } = useDisclosure<string>({
+        tag: ModalPhuLucThacSi.name,
     })
 
     const { data: dataTable } = useFindManySemester(
@@ -601,10 +610,21 @@ export default function GraduationDecisionDiploma() {
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             setStudent(record?.student)
-                                                            onOpenPhuLucVanBang({
-                                                                dataStudent: record?.student,
-                                                                dataTable,
-                                                            })
+                                                            if (
+                                                                record?.diplomaType?.type ===
+                                                                'MASTER'
+                                                            ) {
+                                                                // xử lý riêng cho MASTER
+                                                                onOpenPhuLucThacSi(
+                                                                    record?.studentId
+                                                                )
+                                                            } else {
+                                                                // xử lý mặc định
+                                                                onOpenPhuLucVanBang({
+                                                                    dataStudent: record?.student,
+                                                                    dataTable,
+                                                                })
+                                                            }
                                                         }}
                                                         size={16}
                                                     />
