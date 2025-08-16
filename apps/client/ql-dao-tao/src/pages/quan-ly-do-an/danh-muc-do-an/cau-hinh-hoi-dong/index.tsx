@@ -11,7 +11,6 @@ import {
     useFindManyExpertProfile,
     useFindManyRoom,
     useFindUniqueSubjectClass,
-    useUpdateSubjectClass,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { Button, Col, Form, message, Select } from 'antd'
@@ -32,7 +31,7 @@ dayjs.locale('vi')
 
 export default function SettingClass() {
     const router = useRouter()
-    const [searchExpert, setSearchExpert] = useState('')
+    const [searchRoom, setSearchRoom] = useState('')
     const [form] = Form.useForm<PutSettingClass>()
     const [selectedLeftKeys, setSelectedLeftKeys] = useState<React.Key[]>([])
     const [selectedRightKeys, setSelectedRightKeys] = useState<React.Key[]>([])
@@ -121,13 +120,24 @@ export default function SettingClass() {
             },
             include: {
                 expertProfile: true,
-                thesisProjects: true,
+                thesisProjects: {
+                    include: {
+                        registrations: { include: { student: { include: { userProfile: true } } } },
+                        supervisor: true,
+                        room: true,
+                        council: { include: { members: { include: { expert: true } } } },
+                    },
+                },
             },
         },
         { enabled: !!subjectClassIdStr }
     )
 
-    const { data: room = [], refetch } = useFindManyRoom({})
+    const { data: room = [], refetch } = useFindManyRoom({
+        where: {
+            ...(searchRoom ? { name: { contains: searchRoom, mode: 'insensitive' } } : {}),
+        },
+    })
 
     const debouncedRefetch = useCallback(
         debounce(() => {
@@ -137,7 +147,7 @@ export default function SettingClass() {
     )
 
     const handleSearchRoom = (value: string) => {
-        setSearchExpert(value)
+        setSearchRoom(value)
         debouncedRefetch()
     }
 
@@ -148,34 +158,6 @@ export default function SettingClass() {
     //         })
     //     }
     // }, [subjectClass, form])
-
-    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-    async function onOk(output?: PutSettingClass) {
-        if (!output) return
-
-        try {
-            showSpinner()
-            // const values = (await form.validateFields()) as PutSettingClass
-
-            if (subjectClassId) {
-                await updateSubjectClass({
-                    where: { id: subjectClassIdStr },
-                    data: {
-                        expertProfile: {
-                            connect: rightData?.map((rightData) => ({
-                                id: rightData.id,
-                            })),
-                        },
-                    },
-                })
-                message.success('Cập nhật thành công')
-            }
-        } catch (_error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     //
     const ps =
@@ -492,10 +474,9 @@ export default function SettingClass() {
     const handleCreateCouncil = async () => {
         if (ps.length !== 0) {
             const thesisIds = subjectClass?.thesisProjects.map((tp) => tp.id) ?? []
-            console.log(selectedRoomIds)
             try {
                 const batches = main()
-
+                showSpinner()
                 const councilsData = batches.flatMap((batch, batchIndex) =>
                     batch.map((committee, committeeIndex) => {
                         const membersData = [
@@ -542,6 +523,8 @@ export default function SettingClass() {
                 }
 
                 message.success('Tạo hội đồng thành công')
+                setRightData([])
+                hideSpinner()
             } catch (_error) {
                 message.error('Lỗi khi tạo hội đồng:')
             }
@@ -745,8 +728,225 @@ export default function SettingClass() {
                     />
                 </Col>
             </Col>
+            {
+                // TODO: ghép ca, kíp bảo vệ
+                <div style={{ overflowX: 'auto' }}>
+                    <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12 }}>
+                        <thead>
+                            <tr>
+                                <th rowSpan={2} style={{ ...cell, width: '50px' }}>
+                                    TT
+                                </th>
+                                <th rowSpan={2} style={{ ...cell, width: '100px' }}>
+                                    Thời gian bắt đầu
+                                </th>
+                                {subjectClass?.thesisProjects.map((tp) => (
+                                    <th colSpan={3} style={{ ...cell, height: '25px' }}>
+                                        {tp.room?.name}
+                                    </th>
+                                ))}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects.map((tp) => (
+                                    <>
+                                        <th style={cell}>CD</th>
+                                        <th style={cell}>Hội đồng</th>
+                                        <th style={cell}>PB</th>
+                                    </>
+                                ))}
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <th rowSpan={6} style={cell}>
+                                    1
+                                </th>
+                                <th rowSpan={6} style={cell}>
+                                    7:30 ... 15/11/2025
+                                </th>
+                                {subjectClass?.thesisProjects.map((tp) => (
+                                    <td colSpan={3} style={cell}>
+                                        {tp.registrations.map((registration) => (
+                                            <div>{registration.student.userProfile.fullname}</div>
+                                        ))}
+                                        <div>GVHD:{tp.supervisor.name}</div>
+                                    </td>
+                                ))}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.CHAIRMAN
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>CT</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}> </td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.SECRETARY
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>TK</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}> </td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.REVIEWER_1
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>UV</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}>PB1</td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.REVIEWER_2
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>UV</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}>PB2</td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.MEMBER
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>UV</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}> </td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <th rowSpan={6} style={cell}>
+                                    2
+                                </th>
+                                <th rowSpan={6} style={cell}>
+                                    9:00 ... 15/11/2025
+                                </th>
+                                {subjectClass?.thesisProjects.map((tp) => (
+                                    <td colSpan={3} style={cell}>
+                                        {tp.registrations.map((registration) => (
+                                            <div>{registration.student.userProfile.fullname}</div>
+                                        ))}
+                                        <div>GVHD:{tp.supervisor.name}</div>
+                                    </td>
+                                ))}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.CHAIRMAN
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>CT</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}> </td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.SECRETARY
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>TK</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}> </td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.REVIEWER_1
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>UV</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}>PB1</td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.REVIEWER_2
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>UV</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}>PB2</td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                            <tr>
+                                {subjectClass?.thesisProjects?.map((thesis) => {
+                                    const chairman = thesis.council?.members.find(
+                                        (m) => m.role === CouncilRole.MEMBER
+                                    )
+                                    return (
+                                        <>
+                                            <td style={cell}>UV</td>
+                                            <td style={cell}>{chairman?.expert.name || ''}</td>
+                                            <td style={cell}> </td>
+                                        </>
+                                    )
+                                })}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
         </Col>
     )
+}
+
+const cell: React.CSSProperties = {
+    border: '1px solid #000',
+    padding: 4,
+    textAlign: 'center',
+    verticalAlign: 'middle',
 }
 
 SettingClass.getLayout = function getLayout(page: React.ReactElement) {

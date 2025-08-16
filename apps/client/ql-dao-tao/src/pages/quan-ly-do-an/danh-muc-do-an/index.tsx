@@ -164,6 +164,21 @@ export default function ThesisProject() {
                 include: {
                     organization: true,
                     supervisor: true,
+                    registrations: {
+                        include: {
+                            student: {
+                                include: {
+                                    userProfile: true,
+                                    fixedClass: {
+                                        include: {
+                                            trainingCourse: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    council: { include: { members: { include: { expert: true } } } },
                 },
                 where: {
                     ...(filters.code
@@ -248,7 +263,10 @@ export default function ThesisProject() {
         tag: PutThesisProject.name,
     })
 
-    const { onOpen: openModalPrintDecision } = useDisclosure({
+    const { onOpen: openModalPrintDecision } = useDisclosure<{
+        subjecClassData: any
+        isCopy?: boolean
+    }>({
         tag: ModalPrintDecision.name,
     })
 
@@ -374,8 +392,27 @@ export default function ThesisProject() {
                         </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
-                                <Button onClick={() => openModalPrintDecision()} type="primary">
+                                <Button
+                                    onClick={() =>
+                                        openModalPrintDecision({
+                                            subjecClassData: subjectClass,
+                                            isCopy: false,
+                                        })
+                                    }
+                                    type="primary"
+                                >
                                     Quyết định
+                                </Button>
+                                <Button
+                                    onClick={() =>
+                                        openModalPrintDecision({
+                                            subjecClassData: subjectClass,
+                                            isCopy: true,
+                                        })
+                                    }
+                                    type="primary"
+                                >
+                                    In bản sao Quyết định
                                 </Button>
                                 <Button onClick={createInvitations} type="primary">
                                     <BookPlus />
