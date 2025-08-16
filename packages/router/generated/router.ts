@@ -4,6 +4,8 @@ export default {
     "DANH_MUC_MUC_DO_KHO": "/danh-muc/muc-do-kho",
     "HOME": "/home",
     "INDEX": "/",
+    "LAM_KHAO_SAT": "/lam-khao-sat",
+    "LAM_KHAO_SAT_ID": "/lam-khao-sat/[id]",
     "THIET_LAP_DE_THI_DS_KY_THI_ID": "/thiet-lap-de-thi/ds-ky-thi/[id]",
     "THIET_LAP_DE_THI_DS_KY_THI": "/thiet-lap-de-thi/ds-ky-thi",
     "THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI_ID": "/thiet-lap-de-thi/ngan-hang-cau-hoi/[id]",

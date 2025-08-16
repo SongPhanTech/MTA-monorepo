@@ -1,18 +1,23 @@
+import { DeleteOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Survey, SurveyQuestion } from '@workspace/db'
+import type { Survey, SurveyChoice, SurveyQuestion, SurveyResponse } from '@workspace/db'
 import {
-    useCreateSurvey,
+    useCreateSurveyChoice,
+    useDeleteSurveyChoice,
     useFindManySurveyQuestionGroup,
     useFindUniqueSurvey,
     useUpdateSurvey,
+    useUpdateSurveyChoice,
 } from '@workspace/db/hooks'
-import { Empty, Form, message, Tree, type TreeProps } from 'antd'
-import { useEffect } from 'react'
+import { Button, Empty, Form, Input, message, Tooltip, Tree, type TreeProps } from 'antd'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSurveyType = Survey & {
     surveyQuestion: string[]
+    surveyChoice: SurveyChoice[]
 }
 
 interface MyTreeNode {
@@ -21,8 +26,39 @@ interface MyTreeNode {
     value?: string // nếu bạn muốn gán giá trị riêng
     children?: MyTreeNode[]
 }
+
+interface Choices {
+    id?: string
+    answer: string
+    description: string
+    surveyResponses?: SurveyResponse[]
+}
 const PutSurveyExamModal = () => {
     const [form] = Form.useForm<PutSurveyType>()
+    const [initValue, setInitValue] = useState<string[]>([])
+    const [choicesDelete, setChoicesDelete] = useState<Choices[]>([])
+    const [choices, setChoices] = useState<Choices[]>([
+        {
+            answer: '1',
+            description: 'Hoàn toàn đồng ý',
+        },
+        {
+            answer: '2',
+            description: 'Đồng ý',
+        },
+        {
+            answer: '3',
+            description: 'Không đồng ý',
+        },
+        {
+            answer: '4',
+            description: 'Hoàn toàn không đồng ý',
+        },
+        {
+            answer: '0',
+            description: 'Không ý kiến',
+        },
+    ])
 
     const { isOpen, onClose, input } = useDisclosure<{ id: string; surveyTopicId: string }>({
         tag: PutSurveyExamModal.name,
@@ -30,33 +66,7 @@ const PutSurveyExamModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: create } = useCreateSurvey()
     const { mutateAsync: update } = useUpdateSurvey()
-
-    async function onOk(output?: PutSurveyType) {
-        if (!output) return
-        try {
-            showSpinner()
-            if (input?.id) {
-                await update({
-                    data: {
-                        surveyQuestion: {
-                            set: output.surveyQuestion.map((i) => ({ id: i })),
-                        },
-                    },
-                    where: {
-                        id: input?.id,
-                    },
-                })
-                message.success('Cập nhật thành công')
-            }
-            // onClose()
-        } catch (_error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     const { data: surveyQuestionGroup = [] } = useFindManySurveyQuestionGroup(
         {
@@ -89,6 +99,26 @@ const PutSurveyExamModal = () => {
             .map((node) => node.value ?? node.key) // lấy value nếu có, không thì lấy key
 
         form.setFieldValue('surveyQuestion', onlyLeafValues)
+        setInitValue(onlyLeafValues)
+    }
+
+    const onChange = (value: string, index: number) => {
+        const result = choices.map((choice, i) => {
+            if (i === index) {
+                return { ...choice, answer: value }
+            }
+            return choice
+        })
+        setChoices(result)
+    }
+
+    const removeChoice = (index: number) => {
+        setChoicesDelete([...choicesDelete, choices[index]])
+        const result = choices.filter((_, i) => i !== index)
+        setChoices(result)
+    }
+    const addChoice = () => {
+        setChoices([...choices, { answer: '', description: '' }])
     }
 
     const { data: survey } = useFindUniqueSurvey(
@@ -96,6 +126,7 @@ const PutSurveyExamModal = () => {
             where: { id: input?.id },
             include: {
                 surveyQuestion: true,
+                surveyChoice: true,
             },
         },
         {
@@ -103,12 +134,88 @@ const PutSurveyExamModal = () => {
         }
     )
 
+    async function onOk(output?: PutSurveyType) {
+        if (!output) return
+        if (choices?.length <= 0) {
+            message.error('Bạn phải thêm lựa chọn của đáp án')
+        }
+        try {
+            showSpinner()
+            if (input?.id) {
+                //         await sqlTransaction([
+
+                // ])
+                // if(survey?.surveyChoice?.length){
+                //     await useDeleteManySurveyChoice({
+                //         where: {
+                //             surveyId: input?.id,
+                //         },
+                //     })
+                // }
+                for (const choice of choices) {
+                    if (choice?.id) {
+                        await useUpdateSurveyChoice({
+                            data: {
+                                answer: choice.answer,
+                                description: choice.description,
+                            },
+                            where: {
+                                id: choice.id,
+                            },
+                        })
+                    } else {
+                        await useCreateSurveyChoice({
+                            data: {
+                                answer: choice.answer,
+                                description: choice.description,
+                                surveyId: input?.id,
+                            },
+                        })
+                    }
+                }
+                for (const choiceDelete of choicesDelete) {
+                    if (choiceDelete?.id) {
+                        await useDeleteSurveyChoice({
+                            where: {
+                                id: choiceDelete.id,
+                            },
+                        })
+                    }
+                }
+                await update({
+                    data: {
+                        surveyQuestion: {
+                            set: output.surveyQuestion.map((i) => ({ id: i })),
+                        },
+                    },
+                    where: {
+                        id: input?.id,
+                    },
+                })
+                message.success('Cập nhật thành công')
+            }
+            queryClient.invalidateQueries({
+                queryKey: ['Level'],
+            })
+            onClose()
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
+            setInitValue(survey?.surveyQuestion.map((i: SurveyQuestion) => i.id))
+            if (survey?.surveyChoice?.length) {
+                setChoices(survey?.surveyChoice)
+            }
             form.setFieldsValue({
                 ...survey,
-                surveyQuestion: survey?.surveyQuestion.map((i) => i.id),
+                surveyQuestion: survey?.surveyQuestion.map((i: SurveyQuestion) => i.id),
+                surveyChoice: survey?.surveyChoice.map((i: SurveyChoice) => i.id),
             })
         }
     }, [survey])
@@ -124,7 +231,44 @@ const PutSurveyExamModal = () => {
             className="w-[1000px]"
         >
             <div className="w-full px-8 mt-3">
-                <div className="mb-4 text-base font-[500]">Danh sách câu hỏi khảo sát</div>
+                <div className="mb-4 text-[14px] font-[500]">Lựa chọn của câu hỏi khảo sát</div>
+                <div>
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="w-[150px]">Câu trả lời</div>
+                        <div className="w-[calc(100%-164px)]">Mô tả</div>
+                    </div>
+                    {choices.map((item, index: number) => (
+                        <div key={item.answer} className="flex items-center justify-between mb-2">
+                            <Input
+                                className="w-[150px] mr-3"
+                                value={item.answer}
+                                onChange={(e) => {
+                                    onChange(e.target.value, index)
+                                }}
+                                placeholder="Nhập câu trả lời"
+                            />
+                            <Input
+                                className="w-[calc(100%-200px)]"
+                                value={item.description}
+                                placeholder="Nhập mô tả"
+                            />
+                            <Tooltip title="Xóa" placement="top">
+                                <DeleteOutlined
+                                    disabled={Number(item?.surveyResponses?.length) > 0}
+                                    className="text-sm text-red-600 cursor-pointer"
+                                    onClick={() => removeChoice(index)}
+                                />
+                            </Tooltip>
+                        </div>
+                    ))}
+                    <div className="flex items-center justify-end">
+                        <Button color="primary" variant="outlined" onClick={() => addChoice()}>
+                            Thêm câu trả lời
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="mb-4 text-[14px] font-[500]">Danh sách câu hỏi khảo sát</div>
                 {surveyQuestionGroup ? (
                     <FormItem
                         form={form}
@@ -132,11 +276,11 @@ const PutSurveyExamModal = () => {
                         className="max-h-[800px] overflow-y-auto"
                     >
                         <Tree
+                            defaultExpandAll
+                            checkedKeys={initValue}
                             treeData={treeData}
-                            checkable={true}
-                            defaultExpandAll={true}
-                            multiple={true}
-                            blockNode
+                            checkable
+                            multiple
                             onCheck={onCheck}
                         />
                     </FormItem>
