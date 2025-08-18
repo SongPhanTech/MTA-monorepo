@@ -123,6 +123,7 @@ export type FilterProps = {
     surveyObjectTypeId?: string[]
     surveyTopicId?: string[]
     subjectClass?: string[]
+    order?: 'asc' | 'desc'
 }
 
 export type ColumnTypeProps = ColumnsType & {

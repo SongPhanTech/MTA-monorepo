@@ -7,6 +7,7 @@ import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutKnowledgeBlock from './put-chuong-muc'
 import PutSurveyExamModal from './put-create-survey-exam'
 import PutExamBank from './put-de-thi'
+import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
 import PutExamBankQuestion from './put-exam-bank-question'
 import PutExam from './put-ky-thi'
 import PutSurveyModal from './put-modal-survey'
@@ -17,6 +18,9 @@ import PutSurveyTopicModal from './put-modal-survey-topic'
 import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
 import PutQuestionModal from './put-question-modal'
+import PutCriterionCatalog from './put-tieu-chi-danh-gia-ctdt'
+import PutStandardCatalog from './put-tieu-chuan-ctdt'
+import PutRequirementCriterionCatalog from './put-yeu-cau'
 export {
     ConfirmModal,
     AddTaiLieu,
@@ -37,4 +41,8 @@ export {
     ModalPrintAllExams,
     PutSurveyQuestionGroupModal,
     PutSurveyExamModal,
+    PutStandardCatalog,
+    PutCriterionCatalog,
+    PutRequirementCriterionCatalog,
+    PutEvaluationPeriod,
 }
