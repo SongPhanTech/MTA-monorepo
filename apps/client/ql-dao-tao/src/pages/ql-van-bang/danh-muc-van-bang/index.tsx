@@ -62,6 +62,9 @@ export default function DiplomaType() {
         where,
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
+        orderBy: {
+            createdAt: 'desc',
+        },
     })
 
     const { data: count } = useCountDiplomaType({
