@@ -20,6 +20,7 @@ import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
+import { ROUTER_PATH } from '@workspace/router'
 import { debounce } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -160,8 +161,8 @@ export default function SettingClass() {
     // }, [subjectClass, form])
 
     //
-    const ps =
-        subjectClass?.expertProfile?.map((item, index) => ({
+    const listExperts =
+        rightData?.map((item, index) => ({
             id: index,
             expertId: item.id,
             internal: true,
@@ -462,20 +463,35 @@ export default function SettingClass() {
     }
 
     /* ---------- Run example ---------- */
-
-    function main() {
+    //TODO: tính toán khi chia ca, kíp
+    function getCouncilMember() {
         const people = generateSamplePeople()
-        const batches = generateBatchesWithLookahead(ps, 2, 2, 4000)
+        const batches = generateBatchesWithLookahead(
+            listExperts,
+            subjectClass?.thesisProjects.length,
+            2,
+            4000
+        )
         return batches
     }
 
     const { mutateAsync: createManyCouncil } = useCreateManyCouncil()
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
     const handleCreateCouncil = async () => {
-        if (ps.length !== 0) {
+        if (listExperts.length !== 0 && rightData.length !== 0) {
+            if (rightData.length === 0) {
+                message.info('Vui lòng chọn chuyên gia để tạo hội đồng')
+            }
+            if (
+                subjectClass?.thesisProjects &&
+                rightData.length < subjectClass?.thesisProjects.length * 5
+            ) {
+                message.info('Chưa đủ chuyên gia để tạo hội đồng')
+                return
+            }
             const thesisIds = subjectClass?.thesisProjects.map((tp) => tp.id) ?? []
             try {
-                const batches = main()
+                const batches = getCouncilMember()
                 showSpinner()
                 const councilsData = batches.flatMap((batch, batchIndex) =>
                     batch.map((committee, committeeIndex) => {
@@ -950,5 +966,18 @@ const cell: React.CSSProperties = {
 }
 
 SettingClass.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Quản lý đồ án' },
+                {
+                    title: 'Danh mục đồ án',
+                    href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                },
+                { title: 'Cấu hình hội đồng' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }
