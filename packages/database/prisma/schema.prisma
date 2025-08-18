@@ -3607,6 +3607,20 @@ model LibrarySubmission {
   @@schema("ql-dao-tao")
 }
 
+model DefaultCouncilRolePayAmount {
+  id          String      @id() @default(cuid())
+  code        String?     @unique()
+  active      Boolean     @default(true)
+  description String?     @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt()
+  role        CouncilRole @unique()
+  amount      Decimal
+
+  @@schema("ql-dao-tao")
+}
+
 /// Quản lý việc thanh toán
 model PaymentRecord {
   id              String         @id() @default(cuid())
@@ -4567,7 +4581,7 @@ model SurveyChoice {
   deletedAt       DateTime?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @default(now()) @updatedAt()
-  answer          String?
+  answer          String
   survey          Survey           @relation(fields: [surveyId], references: [id])
   surveyId        String
   surveyResponses SurveyResponse[]

@@ -252,6 +252,13 @@ model LibrarySubmission extends Base {
   @@schema("ql-dao-tao")
 }
 
+model DefaultCouncilRolePayAmount extends Base {
+  role   CouncilRole @unique
+  amount Decimal
+
+  @@schema("ql-dao-tao")
+}
+
 enum PaymentStatus {
   PENDING // Chờ thanh toán
   PROCESSING // Đang xử lý
