@@ -20,6 +20,7 @@ import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
+import { ROUTER_PATH } from '@workspace/router'
 import { debounce } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -151,17 +152,20 @@ export default function SettingClass() {
         debouncedRefetch()
     }
 
-    // useEffect(() => {
-    //     if (subjectClass) {
-    //         form.setFieldsValue({
-    //             roomIds: subjectClass.expertProfile.map((item: { id: string }) => item.id),
-    //         })
-    //     }
-    // }, [subjectClass, form])
+    useEffect(() => {
+        if (subjectClass) {
+            form.setFieldsValue({
+                roomIds: subjectClass.thesisProjects.map((item) => item.room?.id ?? ''),
+            })
+        }
+    }, [subjectClass, form])
 
-    //
-    const ps =
-        subjectClass?.expertProfile?.map((item, index) => ({
+    useEffect(() => {
+        console.log('Current form values:', form.getFieldsValue())
+    }, [form])
+
+    const listExperts =
+        rightData?.map((item, index) => ({
             id: index,
             expertId: item.id,
             internal: true,
@@ -462,72 +466,86 @@ export default function SettingClass() {
     }
 
     /* ---------- Run example ---------- */
-
-    function main() {
+    //TODO: tính toán khi chia ca, kíp
+    function getCouncilMember() {
         const people = generateSamplePeople()
-        const batches = generateBatchesWithLookahead(ps, 2, 2, 4000)
+        const batches = generateBatchesWithLookahead(
+            listExperts,
+            subjectClass?.thesisProjects.length,
+            2,
+            4000
+        )
         return batches
     }
 
     const { mutateAsync: createManyCouncil } = useCreateManyCouncil()
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
     const handleCreateCouncil = async () => {
-        if (ps.length !== 0) {
-            const thesisIds = subjectClass?.thesisProjects.map((tp) => tp.id) ?? []
-            try {
-                const batches = main()
-                showSpinner()
-                const councilsData = batches.flatMap((batch, batchIndex) =>
-                    batch.map((committee, committeeIndex) => {
-                        const membersData = [
-                            { ...committee.director, role: CouncilRole.CHAIRMAN },
-                            { ...committee.secretary, role: CouncilRole.SECRETARY },
-                            { ...committee.candidates[0], role: CouncilRole.REVIEWER_1 },
-                            { ...committee.candidates[1], role: CouncilRole.REVIEWER_2 },
-                            { ...committee.candidates[2], role: CouncilRole.MEMBER },
-                        ].map((member) => ({
-                            expert: { connect: { id: member.expertId } },
-                            role: member.role,
-                        }))
+        if (rightData.length === 0) {
+            message.info('Vui lòng chọn chuyên gia để tạo hội đồng')
+            return
+        }
+        if (
+            subjectClass?.thesisProjects &&
+            rightData.length < subjectClass?.thesisProjects.length * 5
+        ) {
+            message.info('Chưa đủ chuyên gia để tạo hội đồng')
+            return
+        }
+        const thesisIds = subjectClass?.thesisProjects.map((tp) => tp.id) ?? []
+        try {
+            const batches = getCouncilMember()
+            showSpinner()
+            const councilsData = batches.flatMap((batch, batchIndex) =>
+                batch.map((committee, committeeIndex) => {
+                    const membersData = [
+                        { ...committee.director, role: CouncilRole.CHAIRMAN },
+                        { ...committee.secretary, role: CouncilRole.SECRETARY },
+                        { ...committee.candidates[0], role: CouncilRole.REVIEWER_1 },
+                        { ...committee.candidates[1], role: CouncilRole.REVIEWER_2 },
+                        { ...committee.candidates[2], role: CouncilRole.MEMBER },
+                    ].map((member) => ({
+                        expert: { connect: { id: member.expertId } },
+                        role: member.role,
+                    }))
 
-                        return {
-                            members: { create: membersData },
-                            thesis: {
-                                connect: {
-                                    id: subjectClass?.thesisProjects[
-                                        batchIndex * batch.length + committeeIndex
-                                    ].id,
-                                },
+                    return {
+                        members: { create: membersData },
+                        thesis: {
+                            connect: {
+                                id: subjectClass?.thesisProjects[
+                                    batchIndex * batch.length + committeeIndex
+                                ].id,
                             },
-                            proposedDate: new Date(),
-                            status: CouncilProposalStatus.PENDING,
-                        }
+                        },
+                        proposedDate: new Date(),
+                        status: CouncilProposalStatus.PENDING,
+                    }
+                })
+            )
+
+            await createManyCouncil({
+                data: councilsData,
+                skipDuplicates: true,
+            })
+
+            if (selectedRoomIds?.length && thesisIds.length) {
+                await Promise.all(
+                    thesisIds.map((thesisId, index) => {
+                        const roomId = selectedRoomIds[index % selectedRoomIds.length]
+                        return updateThesisProject({
+                            where: { id: thesisId },
+                            data: { roomId },
+                        })
                     })
                 )
-
-                await createManyCouncil({
-                    data: councilsData,
-                    skipDuplicates: true,
-                })
-
-                if (selectedRoomIds?.length && thesisIds.length) {
-                    await Promise.all(
-                        thesisIds.map((thesisId, index) => {
-                            const roomId = selectedRoomIds[index % selectedRoomIds.length]
-                            return updateThesisProject({
-                                where: { id: thesisId },
-                                data: { roomId },
-                            })
-                        })
-                    )
-                }
-
-                message.success('Tạo hội đồng thành công')
-                setRightData([])
-                hideSpinner()
-            } catch (_error) {
-                message.error('Lỗi khi tạo hội đồng:')
             }
+
+            message.success('Tạo hội đồng thành công')
+            setRightData([])
+            hideSpinner()
+        } catch (_error) {
+            message.error('Lỗi khi tạo hội đồng:')
         }
     }
 
@@ -556,7 +574,7 @@ export default function SettingClass() {
                     Tạo hội đồng
                 </Button>
             </Col>
-            <Col span={24} className="mt-4">
+            <Col span={12} className="mt-4">
                 <FormItem form={form} name="roomIds" label="Danh sách phòng">
                     <Select
                         mode="multiple"
@@ -950,5 +968,18 @@ const cell: React.CSSProperties = {
 }
 
 SettingClass.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Quản lý đồ án' },
+                {
+                    title: 'Danh mục đồ án',
+                    href: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                },
+                { title: 'Cấu hình hội đồng' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

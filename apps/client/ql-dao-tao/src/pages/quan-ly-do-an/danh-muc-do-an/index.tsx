@@ -4,7 +4,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { ModalPrintDecision, PutThesisProject } from '@components/modal'
+import { ModalPrintDecision, PutPaymentRecord, PutThesisProject } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -270,6 +270,10 @@ export default function ThesisProject() {
         tag: ModalPrintDecision.name,
     })
 
+    const { onOpen: openPaymentRecord } = useDisclosure<{ selectedRowKeys: string[] }>({
+        tag: PutPaymentRecord.name,
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
@@ -392,6 +396,16 @@ export default function ThesisProject() {
                         </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
+                                <Button
+                                    onClick={() =>
+                                        openPaymentRecord({
+                                            selectedRowKeys: selectedRowKeys as string[],
+                                        })
+                                    }
+                                    type="primary"
+                                >
+                                    Tạo thanh toán
+                                </Button>
                                 <Button
                                     onClick={() =>
                                         openModalPrintDecision({

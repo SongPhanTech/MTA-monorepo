@@ -60,6 +60,9 @@ const PutExpertProfile = () => {
                 ...expert,
             })
             setIsInternal(!!expert.lecturerId)
+            if (expert.lecturerId) {
+                setSelectedLecturerId(expert.lecturerId)
+            }
         }
     }, [expert, form])
 

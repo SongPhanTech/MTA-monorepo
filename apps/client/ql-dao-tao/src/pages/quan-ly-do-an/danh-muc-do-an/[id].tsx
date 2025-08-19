@@ -335,22 +335,27 @@ export default function ThesisProjectDetail() {
                 <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16, margin: 12 }}>
                     HỘI ĐỒNG ĐÁNH GIÁ
                 </div>
-                <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full">
-                    <Col span={12}>{/*  */}</Col>
-                    <Col span={4}>
-                        <Flex justify="end" gap={4}>
-                            <Button
-                                type="primary"
-                                onClick={() =>
-                                    openCouncil({ councilId: '', thesisProjectId: thesisProjectId })
-                                }
-                            >
-                                <BookPlus />
-                                Thêm mới hội đồng
-                            </Button>
-                        </Flex>
-                    </Col>
-                </Row>
+                {!councilWithName?.length && (
+                    <Row gutter={[0, 16]} align="top" justify="space-between" className="w-full">
+                        <Col span={12}>{/*  */}</Col>
+                        <Col span={4}>
+                            <Flex justify="end" gap={4}>
+                                <Button
+                                    type="primary"
+                                    onClick={() =>
+                                        openCouncil({
+                                            councilId: '',
+                                            thesisProjectId: thesisProjectId,
+                                        })
+                                    }
+                                >
+                                    <BookPlus />
+                                    Thêm mới hội đồng
+                                </Button>
+                            </Flex>
+                        </Col>
+                    </Row>
+                )}
                 <TableCollapse
                     rowKey="key"
                     id="graduation-criteria"
