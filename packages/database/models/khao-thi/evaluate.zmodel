@@ -94,8 +94,8 @@ model EvaluationCriterion extends Base {
   scoreScale      ScoreScaleCatalog  @relation(fields: [scoreScaleId], references: [id])
   scoreScaleId    String
 
-  analysisForms   AnalysisForm[]
-  evaluationForms EvaluationForm[]
+  analysisForms   AnalysisForm?
+  evaluationForms EvaluationForm?
 
   @@unique([standardId, name])
   @@unique([standardId, order])
@@ -129,7 +129,7 @@ model Evidence extends Base {
 /// Phiếu phân tích tiêu chí
 model AnalysisForm extends Base {
   criterion             EvaluationCriterion                @relation(fields: [criterionId], references: [id])
-  criterionId           String
+  criterionId           String                             @unique
 
   /// (Nhóm) Hội đồng đánh giá
   evaluationCouncil     EvaluationCouncil?                 @relation(fields: [evaluationCouncilId], references: [id])
@@ -158,7 +158,7 @@ model AnalysisFormRequirementCriterion extends Base {
 /// Phiếu đánh giá tiêu chí
 model EvaluationForm extends Base {
   criterion           EvaluationCriterion      @relation(fields: [criterionId], references: [id])
-  criterionId         String
+  criterionId         String                   @unique
 
   /// 1. Mô tả hiện trạng
   currentSituation    String

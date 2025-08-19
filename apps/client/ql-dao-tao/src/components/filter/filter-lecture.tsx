@@ -55,7 +55,6 @@ const FilterLecture = (props: Props) => {
     }
 
     const handleApply = () => {
-        console.log('filters', form.getFieldsValue())
         onFilterChange(form.getFieldsValue())
         setOpen(false)
     }
