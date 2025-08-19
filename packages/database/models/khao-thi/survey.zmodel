@@ -87,7 +87,7 @@ model SurveyQuestion extends Base {
   surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
   surveyQuestionGroupId String?
 
-  survey                Survey?               @relation(fields: [surveyId], references: [id])
+  survey                Survey?              @relation(fields: [surveyId], references: [id])
   surveyId              String?
 
   surveyResponses       SurveyResponse[]  // Thêm relation mới
@@ -97,7 +97,7 @@ model SurveyQuestion extends Base {
 
 /// Lựa chọn của câu hỏi khảo sát
 model SurveyChoice extends Base {
-  answer          String?
+  answer          String
 
   survey          Survey           @relation(fields: [surveyId], references: [id])
   surveyId        String

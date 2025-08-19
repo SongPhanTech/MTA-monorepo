@@ -32,6 +32,32 @@ async function main() {
         })
     }
 
+    await prisma.defaultCouncilRolePayAmount.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                role: $Enums.CouncilRole.CHAIRMAN,
+                amount: 200000,
+            },
+            {
+                role: $Enums.CouncilRole.SECRETARY,
+                amount: 150000,
+            },
+            {
+                role: $Enums.CouncilRole.REVIEWER_1,
+                amount: 150000,
+            },
+            {
+                role: $Enums.CouncilRole.REVIEWER_2,
+                amount: 150000,
+            },
+            {
+                role: $Enums.CouncilRole.MEMBER,
+                amount: 100000,
+            },
+        ],
+    })
+
     // Seed Organization
     await prisma.dM_DonVi.createMany({
         skipDuplicates: true,
@@ -1024,18 +1050,22 @@ async function main() {
             {
                 name: 'Bằng kỹ sư',
                 code: 'BS',
+                type: $Enums.DiplomaTypeEnum.ENGINEER,
             },
             {
                 name: 'Bằng cử nhân',
                 code: 'BC',
+                type: $Enums.DiplomaTypeEnum.BACHELOR,
             },
             {
                 name: 'Bằng thạc sĩ',
                 code: 'BTS',
+                type: $Enums.DiplomaTypeEnum.MASTER,
             },
             {
                 name: 'Bằng tiến sĩ',
                 code: 'BTS',
+                type: $Enums.DiplomaTypeEnum.DOCTORATE,
             },
         ],
     })
