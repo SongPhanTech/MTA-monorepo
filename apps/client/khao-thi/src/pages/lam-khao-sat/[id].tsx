@@ -1,15 +1,19 @@
 import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
+import useSpinner from '@hooks/spinner'
 import KhaoSatLayout from '@layouts/khao-sat-layout'
 import type { SurveySession } from '@workspace/db'
-import { useFindUniqueSurvey } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, Row } from 'antd'
+import { useCreateSurveySession, useFindUniqueSurvey } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type PutSurveySession = SurveySession & {
-    responses?: { surveyQuestionId: string; surveyChoiceId: string }[]
+    responses: { surveyQuestionId: string; surveyChoiceId: string }[]
+    additionalSuggestion: string
 }
 
 type GroupedSurveyQuestion = {
@@ -22,8 +26,14 @@ type GroupedSurveyQuestion = {
 }
 function TakeTestPage() {
     const router = useRouter()
+    const { showSpinner, hideSpinner } = useSpinner()
     const id = router.query.id as string
     const [form] = Form.useForm<PutSurveySession>()
+    const [selected, setSelected] = useState<
+        { surveyQuestionId: string; surveyChoiceId: string }[]
+    >([])
+
+    const { mutateAsync: createSurveySession } = useCreateSurveySession()
 
     const { data: survey } = useFindUniqueSurvey(
         {
@@ -43,24 +53,31 @@ function TakeTestPage() {
     )
 
     const onChange = (SurveyQuestionId: string, value: string) => {
-        form.setFieldsValue({
-            responses: form.getFieldValue('responses').map((i: { surveyQuestionId?: string }) => {
-                if (i.surveyQuestionId === SurveyQuestionId) {
-                    return {
-                        ...i,
-                        surveyChoiceId: value,
-                    }
+        const result = form.getFieldValue('responses').map((i: { surveyQuestionId?: string }) => {
+            if (i.surveyQuestionId === SurveyQuestionId) {
+                return {
+                    ...i,
+                    surveyChoiceId: value,
                 }
-                return i
-            }),
+            }
+            return i
         })
+        form.setFieldsValue({
+            responses: result,
+        })
+        setSelected(result)
     }
-    const responses = Form.useWatch('responses', form)
-    const checkedQuestion = (surveyQuestionId: string, surveyChoiceId: string) => {
-        return !!responses?.filter(
-            (i) => i.surveyQuestionId === surveyQuestionId && i.surveyChoiceId === surveyChoiceId
-        ).length
-    }
+
+    const checkedQuestion = useCallback(
+        (surveyQuestionId: string, surveyChoiceId: string) => {
+            if (!selected) return false
+            return !!selected?.filter(
+                (i: { surveyQuestionId?: string; surveyChoiceId?: string }) =>
+                    i.surveyQuestionId === surveyQuestionId && i.surveyChoiceId === surveyChoiceId
+            ).length
+        },
+        [selected]
+    )
 
     const dataTest = useMemo(() => {
         const groupedMap = (survey?.surveyQuestion ?? []).reduce<
@@ -93,21 +110,91 @@ function TakeTestPage() {
         // return classGroups
     }, [survey?.surveyQuestion])
 
+    async function onOk() {
+        const dataSubmit = form.getFieldsValue()
+        const responses = dataSubmit?.responses.filter(
+            (i: { surveyQuestionId?: string; surveyChoiceId?: string }) =>
+                !i.surveyQuestionId || !i.surveyChoiceId
+        )
+        if (!dataSubmit.additionalSuggestion || responses?.length) {
+            message.error('Bạn chưa hoàn thành mẫu khảo sát')
+            return
+        }
+
+        try {
+            showSpinner()
+            await sqlTransaction([
+                {
+                    model: 'SurveySession',
+                    operation: 'create',
+                    data: {
+                        data: {
+                            additionalSuggestion: dataSubmit.additionalSuggestion,
+                            isCompleted: true,
+                            completedAt: new Date(),
+                            responses: {
+                                createMany: {
+                                    data: dataSubmit?.responses?.map(
+                                        (i: {
+                                            surveyQuestionId?: string
+                                            surveyChoiceId?: string
+                                        }) => ({
+                                            surveyQuestionId: i.surveyQuestionId,
+                                            surveyChoiceId: i.surveyChoiceId,
+                                        })
+                                    ),
+                                },
+                            },
+                            surveyId: id,
+                        },
+                    },
+                },
+            ])
+            // await createSurveySession({
+            //     data: {
+            //         additionalSuggestion: dataSubmit.additionalSuggestion,
+            //         isCompleted: true,
+            //         completedAt: new Date(),
+            //         responses: {
+            //             createMany: {
+            //                 data: dataSubmit?.responses?.map((i: { surveyQuestionId?: string; surveyChoiceId?: string }) => ({
+            //                     surveyQuestionId: i.surveyQuestionId,
+            //                     surveyChoiceId: i.surveyChoiceId,
+            //                 })),
+            //             },
+            //         },
+            //         surveyId: id,
+            //     },
+            // })
+
+            message.success('Gửi khảo sát thành công')
+            router.push(ROUTER_PATH.KHAO_THI.HOME)
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
-            form.setFieldsValue({
-                responses: survey?.surveyQuestion?.map((i) => {
-                    return {
-                        surveyQuestionId: i.id,
-                    }
-                }),
+            const list = survey?.surveyQuestion?.map((i) => {
+                return {
+                    surveyQuestionId: i.id,
+                    surveyChoiceId: '',
+                }
             })
+            form.setFieldsValue({
+                responses: list,
+                additionalSuggestion: '',
+            })
+            setSelected(list)
         }
     }, [survey])
 
     return (
-        <div className="p-6">
+        <Form form={form} className="p-6">
             <div className="text-xl font-bold">{survey?.name}</div>
             {survey?.surveyChoice?.length && (
                 <Row gutter={[16, 16]}>
@@ -134,53 +221,55 @@ function TakeTestPage() {
                     </Col>
 
                     <Col span={24}>
-                        <TableCollapse
-                            rowKey="id"
-                            currentPage={1}
-                            headerTitleKey={({ name }) => (
-                                <div className="flex items-center">
-                                    <div className="font-bold">{name}</div>
-                                </div>
-                            )}
-                            childrenFieldName="children"
-                            defaultExpandAll
-                            columns={[
-                                {
-                                    title: 'Nội dung phản hồi',
-                                    align: 'left',
-                                    dataIndex: 'name',
-                                    fixed: 'left',
-                                },
-                                {
-                                    title: 'Mức phản hồi',
-                                    align: 'center',
-                                    width: 200,
-                                    render: (_, record) => {
-                                        return (
-                                            <div className="flex items-center justify-center">
-                                                {survey?.surveyChoice.map((i) => {
-                                                    return (
-                                                        <Button
-                                                            key={i.id}
-                                                            onClick={() =>
-                                                                onChange(record?.id, i.id)
-                                                            }
-                                                            className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-[6px]  ${checkedQuestion(record?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
-                                                        >
-                                                            {i.answer}
-                                                        </Button>
-                                                    )
-                                                })}
-                                            </div>
-                                        )
+                        <FormItem className="block" form={form} name="responses" label="">
+                            <TableCollapse
+                                rowKey="id"
+                                currentPage={1}
+                                headerTitleKey={({ name }) => (
+                                    <div className="flex items-center">
+                                        <div className="font-bold">{name}</div>
+                                    </div>
+                                )}
+                                childrenFieldName="children"
+                                defaultExpandAll
+                                columns={[
+                                    {
+                                        title: 'Nội dung phản hồi',
+                                        align: 'left',
+                                        dataIndex: 'name',
+                                        fixed: 'left',
                                     },
-                                },
-                            ]}
-                            data={dataTest}
-                            pagination={{
-                                hideOnSinglePage: true,
-                            }}
-                        />
+                                    {
+                                        title: 'Mức phản hồi',
+                                        align: 'center',
+                                        width: 200,
+                                        render: (_, record) => {
+                                            return (
+                                                <div className="flex items-center justify-center">
+                                                    {survey?.surveyChoice.map((i) => {
+                                                        return (
+                                                            <Button
+                                                                key={i.id}
+                                                                onClick={() =>
+                                                                    onChange(record?.id, i.id)
+                                                                }
+                                                                className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-[6px]  ${checkedQuestion(record?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
+                                                            >
+                                                                {i.answer}
+                                                            </Button>
+                                                        )
+                                                    })}
+                                                </div>
+                                            )
+                                        },
+                                    },
+                                ]}
+                                data={dataTest}
+                                pagination={{
+                                    hideOnSinglePage: true,
+                                }}
+                            />
+                        </FormItem>
                     </Col>
                     {survey.additionalSuggestion && (
                         <Col span={24}>
@@ -197,12 +286,14 @@ function TakeTestPage() {
 
                     <Col span={24} className="mt-6">
                         <Flex justify="end">
-                            <Button type="primary">Lưu</Button>
+                            <Button onClick={() => onOk()} type="primary">
+                                Lưu
+                            </Button>
                         </Flex>
                     </Col>
                 </Row>
             )}
-        </div>
+        </Form>
     )
 }
 
