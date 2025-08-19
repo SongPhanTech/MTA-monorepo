@@ -19,7 +19,7 @@ export const GridBlock: React.FC<GridBlockProps> = ({ columns, items }) => {
             {items.map(({ key, content }) => (
                 <Col span={colSpan} key={key}>
                     <div className="flex items-center gap-1 min-w-0">
-                        <span className="whitespace-nowrap">{content}</span>
+                        <span className="whitespace-nowrap !font-time-news-roman">{content}</span>
                     </div>
                 </Col>
             ))}

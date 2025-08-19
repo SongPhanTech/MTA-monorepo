@@ -15,6 +15,7 @@ import {
     BookOpenCheck,
     BookUser,
     CalendarRange,
+    ClipboardCheck,
     FileCheck2,
     Flag,
     FolderOpen,
@@ -744,6 +745,28 @@ const NAVIGATION: NavigationType = {
                         id: 'cau-hoi-khao-sat',
                         label: 'Câu hỏi khảo sát',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                    },
+                ],
+            },
+            {
+                id: 'ql-danh-gia-ctdt',
+                label: 'Quản lý Tự đánh giá CTĐT',
+                icon: ClipboardCheck,
+                children: [
+                    {
+                        id: 'tieu-chuan-tieu-chi',
+                        label: 'Tiêu chuẩn, tiêu chí',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                    },
+                    {
+                        id: 'danh-muc-thang-diem',
+                        label: 'Danh mục thang điểm',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_THANG_DIEM,
+                    },
+                    {
+                        id: 'ql-dot-danh-gia',
+                        label: 'Quản lý đợt tự đánh giá',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                     },
                 ],
             },

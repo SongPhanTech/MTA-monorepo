@@ -10,6 +10,8 @@ import type { OpenSubjectClassFixedClassItem } from './openSubjectClassFixedClas
 
 export interface OpenSubjectClass {
   trainingMajorId: string;
+  managementOrganizationId: string;
+  managementOrganizationName: string;
   trainingCourseId: string;
   subjectVersionId: string;
   subjectVersionName: string;

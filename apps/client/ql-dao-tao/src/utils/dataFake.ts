@@ -72,3 +72,27 @@ export const fakeData: Member[] = [
     { stt: 4, role: 'Phản biện 2', name: 'Phạm Thị D', unit: 'ĐH Y Hà Nội' },
     { stt: 5, role: 'Ủy viên', name: 'Hoàng Văn E', unit: 'ĐH Công Nghiệp Hà Nội' },
 ]
+
+export type Subject = {
+    name: string
+    credits: number
+    score: number
+}
+
+export const dataFake: Subject[] = [
+    { name: 'Phương pháp luận nghiên cứu khoa học', credits: 2, score: 8.7 },
+    { name: 'Tiếng Anh', credits: 3, score: 10 },
+    { name: 'Triết học', credits: 3, score: 8.1 },
+    { name: 'Vật liệu tiên tiến', credits: 2, score: 7.5 },
+    { name: 'Chỉ huy, quản lý kỹ thuật quân sự', credits: 3, score: 7.6 },
+    { name: 'Cơ sở công nghệ chế tạo máy', credits: 3, score: 9.1 },
+    { name: 'Lý thuyết đàn hồi - dẻo - từ biến', credits: 2, score: 8.1 },
+    { name: 'Cơ học môi trường liên tục', credits: 2, score: 8.4 },
+    { name: 'Độ tin cậy ngòi đạn', credits: 2, score: 9 },
+    { name: 'Phương pháp tính và ứng dụng', credits: 3, score: 8 },
+    { name: 'Thử nghiệm đạn dược', credits: 2, score: 8.4 },
+    { name: 'Uy lực đạn', credits: 2, score: 7.9 },
+    { name: 'Vật lý nổ', credits: 2, score: 8.6 },
+    { name: 'Nhiệt khí động lực học', credits: 3, score: 8.4 },
+    { name: 'Phương pháp phần tử hữu hạn trong cơ kỹ thuật', credits: 2, score: 7.8 },
+]
