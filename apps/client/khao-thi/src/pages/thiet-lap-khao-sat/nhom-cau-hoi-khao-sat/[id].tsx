@@ -9,7 +9,6 @@ import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountSurveyQuestion,
-    useFindManySurvey,
     useFindManySurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
@@ -85,7 +84,7 @@ function Page() {
             deletedAt: null,
         },
     })
-    const { data: surveyData } = useFindManySurvey({ orderBy: { createdAt: 'desc' } })
+    // const { data: surveyData } = useFindManySurvey({ orderBy: { createdAt: 'desc' } })
 
     const { onOpen } = useDisclosure<{
         id: string

@@ -1,17 +1,15 @@
 import { DeleteOutlined } from '@ant-design/icons'
-import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { Survey, SurveyChoice, SurveyQuestion, SurveyResponse } from '@workspace/db'
 import {
-    useCreateSurveyChoice,
-    useDeleteSurveyChoice,
+    useCreateManySurveyChoice,
     useFindManySurveyQuestionGroup,
     useFindUniqueSurvey,
     useUpdateSurvey,
-    useUpdateSurveyChoice,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Empty, Form, Input, message, Tooltip, Tree, type TreeProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -102,10 +100,10 @@ const PutSurveyExamModal = () => {
         setInitValue(onlyLeafValues)
     }
 
-    const onChange = (value: string, index: number) => {
+    const onChange = (value: string, index: number, name: string) => {
         const result = choices.map((choice, i) => {
             if (i === index) {
-                return { ...choice, answer: value }
+                return { ...choice, [name]: value }
             }
             return choice
         })
@@ -134,52 +132,67 @@ const PutSurveyExamModal = () => {
         }
     )
 
+    const { mutateAsync: createManySurveyChoice } = useCreateManySurveyChoice()
+
     async function onOk(output?: PutSurveyType) {
         if (!output) return
         if (choices?.length <= 0) {
             message.error('Bạn phải thêm lựa chọn của đáp án')
+            return
         }
+        console.log('output', output, choices)
+
         try {
             showSpinner()
             if (input?.id) {
-                //         await sqlTransaction([
-
-                // ])
-                // if(survey?.surveyChoice?.length){
-                //     await useDeleteManySurveyChoice({
-                //         where: {
-                //             surveyId: input?.id,
-                //         },
-                //     })
-                // }
-                for (const choice of choices) {
-                    if (choice?.id) {
-                        await useUpdateSurveyChoice({
-                            data: {
-                                answer: choice.answer,
-                                description: choice.description,
-                            },
-                            where: {
-                                id: choice.id,
-                            },
+                const listUpdate = choices?.filter((i) => i.id)
+                const listCreate = choices?.filter((i) => !i.id)
+                if (listUpdate?.length) {
+                    await sqlTransaction(
+                        listUpdate.map((i) => {
+                            return {
+                                model: 'SurveyChoice',
+                                operation: 'update',
+                                data: {
+                                    where: {
+                                        id: i?.id,
+                                    },
+                                    data: {
+                                        answer: i?.answer,
+                                        description: i?.description,
+                                        surveyId: input?.id,
+                                    },
+                                },
+                            }
                         })
-                    } else {
-                        await useCreateSurveyChoice({
-                            data: {
-                                answer: choice.answer,
-                                description: choice.description,
-                                surveyId: input?.id,
-                            },
-                        })
-                    }
+                    )
                 }
-                for (const choiceDelete of choicesDelete) {
-                    if (choiceDelete?.id) {
-                        await useDeleteSurveyChoice({
-                            where: {
-                                id: choiceDelete.id,
-                            },
-                        })
+                if (listCreate?.length) {
+                    await createManySurveyChoice({
+                        data: listCreate.map((i) => ({
+                            answer: i?.answer,
+                            description: i?.description,
+                            surveyId: input?.id,
+                        })),
+                    })
+                }
+
+                if (choicesDelete?.length) {
+                    const dataDelete = choicesDelete.filter((i) => i.id)
+                    if (dataDelete.length) {
+                        await sqlTransaction(
+                            choicesDelete.map((i) => {
+                                return {
+                                    model: 'SurveyChoice',
+                                    operation: 'delete',
+                                    data: {
+                                        where: {
+                                            id: i?.id,
+                                        },
+                                    },
+                                }
+                            })
+                        )
                     }
                 }
                 await update({
@@ -194,11 +207,11 @@ const PutSurveyExamModal = () => {
                 })
                 message.success('Cập nhật thành công')
             }
-            queryClient.invalidateQueries({
-                queryKey: ['Level'],
-            })
+
             onClose()
         } catch (_error) {
+            console.log(_error, 'e')
+
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -210,12 +223,13 @@ const PutSurveyExamModal = () => {
         if (survey) {
             setInitValue(survey?.surveyQuestion.map((i: SurveyQuestion) => i.id))
             if (survey?.surveyChoice?.length) {
+                // @ts-ignore
                 setChoices(survey?.surveyChoice)
             }
             form.setFieldsValue({
                 ...survey,
                 surveyQuestion: survey?.surveyQuestion.map((i: SurveyQuestion) => i.id),
-                surveyChoice: survey?.surveyChoice.map((i: SurveyChoice) => i.id),
+                surveyChoice: survey?.surveyChoice,
             })
         }
     }, [survey])
@@ -243,13 +257,16 @@ const PutSurveyExamModal = () => {
                                 className="w-[150px] mr-3"
                                 value={item.answer}
                                 onChange={(e) => {
-                                    onChange(e.target.value, index)
+                                    onChange(e.target.value, index, 'answer')
                                 }}
                                 placeholder="Nhập câu trả lời"
                             />
                             <Input
                                 className="w-[calc(100%-200px)]"
                                 value={item.description}
+                                onChange={(e) => {
+                                    onChange(e.target.value, index, 'description')
+                                }}
                                 placeholder="Nhập mô tả"
                             />
                             <Tooltip title="Xóa" placement="top">

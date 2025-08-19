@@ -12,7 +12,7 @@ import {
     useFindUniqueSurvey,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -59,6 +59,7 @@ const PutSurveyModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
+                        additionalSuggestion: output.additionalSuggestion,
                     },
                     where: {
                         id,
@@ -69,7 +70,6 @@ const PutSurveyModal = () => {
                 await create({
                     data: {
                         code: output.code,
-                        additionalSuggestion: false,
                         name: output.name,
                         surveyObjectType: {
                             // connect: {
@@ -86,6 +86,7 @@ const PutSurveyModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
+                        additionalSuggestion: output.additionalSuggestion,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -105,6 +106,9 @@ const PutSurveyModal = () => {
     const { data: survey } = useFindUniqueSurvey(
         {
             where: { id },
+            include: {
+                surveyObjectType: true,
+            },
         },
         {
             enabled: !!id,
@@ -117,6 +121,7 @@ const PutSurveyModal = () => {
                 ...survey,
                 startDate: dayjs(survey.startDate),
                 endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
+                surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
             })
         }
     }, [survey])
@@ -177,6 +182,19 @@ const PutSurveyModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="endDate" label="Thời gian kết thúc">
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col>
+                <FormItem
+                    form={form}
+                    name={'additionalSuggestion'}
+                    label="Có góp ý bổ sung không?"
+                    required
+                >
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
         </PutFormModal>
