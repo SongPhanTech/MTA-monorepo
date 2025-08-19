@@ -4242,8 +4242,8 @@ model EvaluationCriterion {
   order           Int
   scoreScale      ScoreScaleCatalog  @relation(fields: [scoreScaleId], references: [id])
   scoreScaleId    String
-  analysisForms   AnalysisForm[]
-  evaluationForms EvaluationForm[]
+  analysisForms   AnalysisForm?
+  evaluationForms EvaluationForm?
 
   @@unique([standardId, name])
   @@unique([standardId, order])
@@ -4296,7 +4296,7 @@ model AnalysisForm {
   createdAt             DateTime                           @default(now())
   updatedAt             DateTime                           @default(now()) @updatedAt()
   criterion             EvaluationCriterion                @relation(fields: [criterionId], references: [id])
-  criterionId           String
+  criterionId           String                             @unique()
   /// (Nhóm) Hội đồng đánh giá
   evaluationCouncil     EvaluationCouncil?                 @relation(fields: [evaluationCouncilId], references: [id])
   evaluationCouncilId   String?
@@ -4336,7 +4336,7 @@ model EvaluationForm {
   createdAt           DateTime                 @default(now())
   updatedAt           DateTime                 @default(now()) @updatedAt()
   criterion           EvaluationCriterion      @relation(fields: [criterionId], references: [id])
-  criterionId         String
+  criterionId         String                   @unique()
   /// 1. Mô tả hiện trạng
   currentSituation    String
   /// 2. Điểm mạnh
