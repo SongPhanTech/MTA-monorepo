@@ -3,63 +3,23 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { EvaluationPeriod } from '@workspace/db'
+import { createId, type EvaluationPeriod } from '@workspace/db'
 import {
     useCreateEvaluationPeriod,
+    useCreateManyEvaluationCriterion,
+    useCreateManyEvaluationStandard,
+    useFindManyStandardCatalog,
     useFindUniqueEvaluationPeriod,
     useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Tree, type TreeDataNode, type TreeProps } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import TreeCatalog from '@components/commons/tree-catalog'
 export type PutEvaluationPeriod = EvaluationPeriod
 dayjs.locale('vi')
-
-const treeData: TreeDataNode[] = [
-    {
-        title: '0-0',
-        key: '0-0',
-        children: [
-            {
-                title: '0-0-0',
-                key: '0-0-0',
-                children: [
-                    { title: '0-0-0-0', key: '0-0-0-0' },
-                    { title: '0-0-0-1', key: '0-0-0-1' },
-                    { title: '0-0-0-2', key: '0-0-0-2' },
-                ],
-            },
-            {
-                title: '0-0-1',
-                key: '0-0-1',
-                children: [
-                    { title: '0-0-1-0', key: '0-0-1-0' },
-                    { title: '0-0-1-1', key: '0-0-1-1' },
-                    { title: '0-0-1-2', key: '0-0-1-2' },
-                ],
-            },
-            {
-                title: '0-0-2',
-                key: '0-0-2',
-            },
-        ],
-    },
-    {
-        title: '0-1',
-        key: '0-1',
-        children: [
-            { title: '0-1-0-0', key: '0-1-0-0' },
-            { title: '0-1-0-1', key: '0-1-0-1' },
-            { title: '0-1-0-2', key: '0-1-0-2' },
-        ],
-    },
-    {
-        title: '0-2',
-        key: '0-2',
-    },
-]
 
 const PutEvaluationPeriod = () => {
     const [form] = Form.useForm<PutEvaluationPeriod>()
@@ -75,6 +35,8 @@ const PutEvaluationPeriod = () => {
 
     const { mutateAsync: createEvaluationPeriod } = useCreateEvaluationPeriod()
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
+    const { mutateAsync: createManyEvaluationStandard } = useCreateManyEvaluationStandard()
+    const { mutateAsync: createManyEvaluationCriterion } = useCreateManyEvaluationCriterion()
     async function onOk(output?: PutEvaluationPeriod) {
         if (!output) return
         try {
@@ -94,9 +56,56 @@ const PutEvaluationPeriod = () => {
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createEvaluationPeriod({
-                    data,
+                const standards = filtered.map((s, idx) => {
+                    const standardId = createId()
+                    const criteria = s.criteria.map((c, index) => {
+                        const criteriaId = createId()
+                        const requirements = c.requirementCriterionCatalog.map((r) => {
+                            return { id: createId(), name: r.name }
+                        })
+                        return {
+                            id: criteriaId,
+                            standardId,
+                            order: index + 1,
+                            name: c.name,
+                            scoreScaleId: c.scoreScaleId || '',
+                            requirementCriterionCatalog: requirements,
+                        }
+                    })
+
+                    return {
+                        id: standardId,
+                        name: s.name,
+                        order: idx + 1,
+                        opening: '',
+                        conclusion: '',
+                        criteria,
+                    }
                 })
+
+                const periodId = createId()
+                await createEvaluationPeriod({
+                    data: { id: periodId, ...data },
+                })
+                await createManyEvaluationStandard({
+                    data: standards.map(({ criteria, ...standard }) => {
+                        return {
+                            periodId,
+                            ...standard,
+                        }
+                    }),
+                })
+                await createManyEvaluationCriterion({
+                    data: standards.flatMap((standard) =>
+                        standard.criteria.map((criterion) => ({
+                            standardId: standard.id,
+                            name: criterion.name,
+                            order: criterion.order,
+                            scoreScaleId: criterion.scoreScaleId || '',
+                        }))
+                    ),
+                })
+
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
@@ -111,11 +120,64 @@ const PutEvaluationPeriod = () => {
     }
 
     const { data: initialData } = useFindUniqueEvaluationPeriod(
-        {
-            where: { id },
-        },
+        { where: { id } },
         { enabled: !!id }
     )
+
+    const [checked, setChecked] = useState<{
+        standards: string[]
+        criteria: string[]
+        requirements: string[]
+    }>({
+        standards: [],
+        criteria: [],
+        requirements: [],
+    })
+
+    const { data: dataCatalog } = useFindManyStandardCatalog(
+        {
+            select: {
+                id: true,
+                name: true,
+                order: true,
+                criteria: {
+                    select: {
+                        id: true,
+                        name: true,
+                        order: true,
+                        scoreScaleId: true,
+                        requirementCriterionCatalog: {
+                            select: { id: true, name: true, order: true },
+                            orderBy: { order: 'asc' },
+                        },
+                    },
+                    orderBy: { order: 'asc' },
+                },
+            },
+            orderBy: { order: 'asc' },
+        },
+        { enabled: !id }
+    )
+
+    const filtered = useMemo(
+        () =>
+            dataCatalog
+                ?.filter((s) => checked.standards.includes(s.id))
+                .map((s) => {
+                    const criteria = s.criteria
+                        .filter((c) => checked.criteria.includes(c.id))
+                        .map((r) => {
+                            const requirementCriterionCatalog =
+                                r.requirementCriterionCatalog.filter((c) =>
+                                    checked.requirements.includes(c.id)
+                                )
+                            return { ...r, requirementCriterionCatalog }
+                        })
+                    return { ...s, criteria }
+                }) || [],
+        [dataCatalog, checked]
+    )
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialData) {
@@ -130,29 +192,6 @@ const PutEvaluationPeriod = () => {
             })
         }
     }, [initialData])
-
-    const [expandedKeys, setExpandedKeys] = useState<React.Key[]>(['0-0-0', '0-0-1'])
-    const [checkedKeys, setCheckedKeys] = useState<React.Key[]>(['0-0-0'])
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
-    const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true)
-
-    const onExpand: TreeProps['onExpand'] = (expandedKeysValue) => {
-        console.log('onExpand', expandedKeysValue)
-        // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-        // or, you can remove all expanded children keys.
-        setExpandedKeys(expandedKeysValue)
-        setAutoExpandParent(false)
-    }
-
-    const onCheck: TreeProps['onCheck'] = (checkedKeysValue) => {
-        console.log('onCheck', checkedKeysValue)
-        setCheckedKeys(checkedKeysValue as React.Key[])
-    }
-
-    const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info) => {
-        console.log('onSelect', info)
-        setSelectedKeys(selectedKeysValue)
-    }
 
     return (
         <PutFormModal
@@ -192,19 +231,13 @@ const PutEvaluationPeriod = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <Tree
-                    checkable
-                    onExpand={onExpand}
-                    expandedKeys={expandedKeys}
-                    autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
-                    checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
-                    treeData={treeData}
-                />
-            </Col>
+            {!id && (
+                <Col span={24}>
+                    <Form.Item label="Tiêu chuẩn đánh giá của đợt" required>
+                        <TreeCatalog data={dataCatalog} onCheckSplit={setChecked} />
+                    </Form.Item>
+                </Col>
+            )}
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />

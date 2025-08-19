@@ -7,6 +7,7 @@ export default {
     "LAM_KHAO_SAT": "/lam-khao-sat",
     "LAM_KHAO_SAT_ID": "/lam-khao-sat/[id]",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia",
+    "QL_TU_DANH_GIA_CTDT_THANG_DIEM": "/ql-tu-danh-gia-ctdt/thang-diem",
     "QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI_ID": "/ql-tu-danh-gia-ctdt/tieu-chuan-tieu-chi/[id]",
     "QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI": "/ql-tu-danh-gia-ctdt/tieu-chuan-tieu-chi",
     "THIET_LAP_DE_THI_DS_KY_THI_ID": "/thiet-lap-de-thi/ds-ky-thi/[id]",

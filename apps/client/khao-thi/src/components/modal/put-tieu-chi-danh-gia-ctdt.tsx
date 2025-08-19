@@ -125,11 +125,11 @@ const PutCriterionCatalog = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="scoreScaleId" label="Thang điểm">
+                <FormItem form={form} name="scoreScaleId" label="Thang điểm" required>
                     <Select
-                        options={scoreScaleCatalogData?.map(({ id, name }) => ({
+                        options={scoreScaleCatalogData?.map(({ id, name, passFrom }) => ({
                             value: id,
-                            label: name,
+                            label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
                         }))}
                         placeholder="Chọn thang điểm"
                     />

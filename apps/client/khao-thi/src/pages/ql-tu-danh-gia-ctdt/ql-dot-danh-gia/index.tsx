@@ -136,6 +136,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
+                                width: 150,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.startDate
@@ -145,6 +146,7 @@ export default function EvaluationPeriod() {
                             {
                                 title: 'Ngày kết thúc',
                                 dataIndex: 'endDate',
+                                width: 150,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.endDate

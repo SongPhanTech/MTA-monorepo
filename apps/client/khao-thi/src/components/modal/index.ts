@@ -18,6 +18,7 @@ import PutSurveyTopicModal from './put-modal-survey-topic'
 import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
 import PutQuestionModal from './put-question-modal'
+import PutScoreScaleCatalog from './put-thang-diem'
 import PutCriterionCatalog from './put-tieu-chi-danh-gia-ctdt'
 import PutStandardCatalog from './put-tieu-chuan-ctdt'
 import PutRequirementCriterionCatalog from './put-yeu-cau'
@@ -45,4 +46,5 @@ export {
     PutCriterionCatalog,
     PutRequirementCriterionCatalog,
     PutEvaluationPeriod,
+    PutScoreScaleCatalog,
 }

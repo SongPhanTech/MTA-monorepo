@@ -759,6 +759,11 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
                     },
                     {
+                        id: 'danh-muc-thang-diem',
+                        label: 'Danh mục thang điểm',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_THANG_DIEM,
+                    },
+                    {
                         id: 'ql-dot-danh-gia',
                         label: 'Quản lý đợt tự đánh giá',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,

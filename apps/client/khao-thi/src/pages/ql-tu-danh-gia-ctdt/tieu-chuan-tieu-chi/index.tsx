@@ -13,6 +13,7 @@ import {
     useCountStandardCatalog,
     useDeleteCriterionCatalog,
     useDeleteStandardCatalog,
+    useFindManyScoreScaleCatalog,
     useFindManyStandardCatalog,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
@@ -30,32 +31,40 @@ export default function StandardCatalog() {
         order: undefined,
         name: '',
         searchText: '',
+        scoreScalesId: undefined,
     })
 
     const where = useMemo(
         () => ({
-            ...(filters.searchText
-                ? {
-                      name: {
-                          contains: filters.searchText,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(filters.name && filters.name !== ''
-                ? {
-                      criteria: {
-                          some: {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive' as const,
-                              },
-                          },
-                      },
-                  }
-                : {}),
+            ...(filters.searchText && {
+                name: {
+                    contains: filters.searchText,
+                    mode: 'insensitive' as const,
+                },
+            }),
+            ...(filters.name && {
+                criteria: {
+                    some: {
+                        name: {
+                            contains: filters.name,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                },
+            }),
+            ...(filters.scoreScalesId && {
+                criteria: {
+                    some: {
+                        scoreScaleId: Array.isArray(filters.scoreScalesId)
+                            ? filters.scoreScalesId.length > 1
+                                ? { in: filters.scoreScalesId }
+                                : { equals: filters.scoreScalesId[0] }
+                            : { equals: filters.scoreScalesId },
+                    },
+                },
+            }),
         }),
-        [filters.name, filters.searchText]
+        [filters.searchText, filters.name, filters.scoreScalesId]
     )
 
     const { data, refetch } = useFindManyStandardCatalog({
@@ -71,6 +80,16 @@ export default function StandardCatalog() {
                               },
                           }
                         : {}),
+                    ...(filters.scoreScalesId && {
+                        scoreScaleId: Array.isArray(filters.scoreScalesId)
+                            ? filters.scoreScalesId.length > 1
+                                ? { in: filters.scoreScalesId }
+                                : { equals: filters.scoreScalesId[0] }
+                            : { equals: filters.scoreScalesId },
+                    }),
+                },
+                include: {
+                    scoreScale: true,
                 },
                 orderBy: [
                     ...emptyObjectIf(
@@ -96,6 +115,8 @@ export default function StandardCatalog() {
             deletedAt: null,
         },
     })
+
+    const { data: scoreScales } = useFindManyScoreScaleCatalog()
 
     const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{ id: string; count: number }>({
         tag: PutStandardCatalog.name,
@@ -253,6 +274,21 @@ export default function StandardCatalog() {
                                 width: 200,
                                 align: 'center',
                                 type: 'input',
+                            },
+                            {
+                                title: 'Tên',
+                                dataIndex: 'scoreScalesId',
+                                width: 200,
+                                align: 'center',
+                                type: 'select',
+                                options: scoreScales?.map(({ id, name, passFrom }) => ({
+                                    value: id,
+                                    label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
+                                })),
+                                render: (_, record) =>
+                                    record?.scoreScale?.passFrom
+                                        ? `${record?.scoreScale?.name} (${record?.scoreScale?.passFrom} điểm để qua)`
+                                        : record?.scoreScale?.name,
                             },
                             {
                                 title: 'Mô tả',
