@@ -14,9 +14,6 @@ interface CustomTreeSelectProps {
     disabled?: boolean
     onChange?: (value: string) => void
     onPopupScroll?: TreeSelectProps['onPopupScroll']
-    semesterId?: string
-    subjectVersionId?: string
-    edit?: boolean
 }
 
 const TreeSelectRoom: React.FC<CustomTreeSelectProps> = ({
@@ -28,7 +25,6 @@ const TreeSelectRoom: React.FC<CustomTreeSelectProps> = ({
     disabled = false,
     onChange,
     onPopupScroll,
-    edit = false,
 }) => {
     const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue)
 
@@ -47,7 +43,7 @@ const TreeSelectRoom: React.FC<CustomTreeSelectProps> = ({
         include: {
             rooms: true,
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { name: 'asc' },
     })
 
     const treeData: TreeNodeType[] = useMemo(() => {
