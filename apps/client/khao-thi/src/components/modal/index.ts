@@ -9,7 +9,6 @@ import PutSurveyExamModal from './put-create-survey-exam'
 import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
 import PutExamBankQuestion from './put-exam-bank-question'
-import PutExam from './put-ky-thi'
 import PutSurveyModal from './put-modal-survey'
 import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
 import PutSurveyQuestionModal from './put-modal-survey-question'
@@ -32,7 +31,6 @@ export {
     PutQuestionBank,
     PutKnowledgeBlock,
     PutDifficulty,
-    PutExam,
     PutTestStructureRule,
     PutExamBankQuestion,
     PutQuestionModal,

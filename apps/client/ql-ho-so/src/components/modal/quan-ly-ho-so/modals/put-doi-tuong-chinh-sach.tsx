@@ -92,6 +92,11 @@ export default function PutDoiTuongChinhSachModal() {
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('ngayBatDau')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
                     />
                 </FormItem>
             </Col>
