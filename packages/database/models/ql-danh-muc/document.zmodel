@@ -5,6 +5,7 @@ import '../ql-dao-tao/thesis'
 import '../ql-dao-tao/categories'
 import '../ql-dao-tao/ranking'
 import 'notification'
+import '../ql-dao-tao/note.zmodel'
 
 model DocumentFile extends Base {
   name                       String
@@ -51,6 +52,10 @@ model DocumentFile extends Base {
   diplomaVerificationFrontId String?                         @unique
   diplomaVerificationBack    DiplomaVerificationApplication? @relation(name: "DiplomaVerificationBack", fields: [diplomaVerificationBackId], references: [id])
   diplomaVerificationBackId  String?                         @unique
+
+  // THÊM MỚI:
+  note                       Note?                           @relation(fields: [noteId], references: [id])
+  noteId                     String?
 
   @@schema("ql-danh-muc")
 }

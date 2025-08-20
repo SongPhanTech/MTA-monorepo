@@ -1,0 +1,82 @@
+import '../base'
+import './student'
+import '../ql-danh-muc/document.zmodel'
+
+/// Ghi chú cá nhân của sinh viên
+model Note extends Base {
+  
+  // Nội dung ghi chú
+  content       String         @db.Text() // Toàn bộ nội dung (dòng đầu = tiêu đề)
+  
+  // Trạng thái
+  isPinned      Boolean        @default(false) // Ghim ghi chú
+  
+  // Quan hệ
+  student       Student        @relation(fields: [studentId], references: [id])
+  studentId     String
+  folder        NoteFolder?    @relation(fields: [folderId], references: [id])
+  folderId      String?
+  tags          NoteTag[]      // Many-to-many với tag
+  attachments   DocumentFile[] // Sử dụng lại DocumentFile có sẵn
+  reminders     NoteReminder[] // Danh sách nhắc nhở của ghi chú này
+
+  @@schema("ql-dao-tao")
+}
+
+/// Thư mục ghi chú
+model NoteFolder extends Base {
+    
+  name        String       // Tên thư mục
+  icon        String?      // Icon thư mục (emoji hoặc icon name)
+  sortOrder   Int          @default(0) // Thứ tự sắp xếp
+  
+  student     Student      @relation(fields: [studentId], references: [id])
+  studentId   String
+  parent      NoteFolder?  @relation("FolderHierarchy", fields: [parentId], references: [id])
+  parentId    String?      // NULL = thư mục gốc
+  children    NoteFolder[] @relation("FolderHierarchy")
+  notes       Note[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Tag ghi chú (dùng chung cho tất cả sinh viên)
+model NoteTag  extends Base {
+  
+  
+  name        String    @unique() // Tên tag duy nhất toàn hệ thống
+  color       String?   // Màu tag (hex code)
+  notes       Note[]    // Many-to-many với ghi chú
+
+  @@schema("ql-dao-tao")
+}
+
+/// Nhắc nhở ghi chú
+model NoteReminder extends Base {
+  
+  
+  // Thông tin nhắc nhở
+  title         String             // Tiêu đề nhắc nhở
+  reminderTime  DateTime           // Thời gian cần nhắc nhở
+  isCompleted   Boolean            @default(false) // Đã hoàn thành chưa
+  completedAt   DateTime?          // Thời gian hoàn thành
+  repeatType    ReminderRepeatType @default(NONE) // Loại lặp lại
+  isNotified    Boolean            @default(false) // Đã gửi thông báo chưa
+  
+  // Quan hệ
+  note          Note               @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  noteId        String             // ID ghi chú liên quan
+
+  @@schema("ql-dao-tao")
+}
+
+/// Enum cho loại lặp lại nhắc nhở
+enum ReminderRepeatType {
+  NONE    // Không lặp lại
+  DAILY   // Hàng ngày
+  WEEKLY  // Hàng tuần
+  MONTHLY // Hàng tháng
+  YEARLY  // Hàng năm
+
+  @@schema("ql-dao-tao")
+}
