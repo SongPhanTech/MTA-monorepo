@@ -142,6 +142,7 @@ const PutMilestoneModal = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        placeholder="Chọn ngày bắt đầu"
                     />
                 </FormItem>
             </Col>
@@ -153,6 +154,12 @@ const PutMilestoneModal = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('startDate')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
+                        placeholder="Chọn ngày kết thúc"
                     />
                 </FormItem>
             </Col>

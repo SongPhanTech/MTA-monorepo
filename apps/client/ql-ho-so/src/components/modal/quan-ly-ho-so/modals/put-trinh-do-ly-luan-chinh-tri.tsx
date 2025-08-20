@@ -119,6 +119,11 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
                             format: 'DD/MM/YYYY',
                             type: 'mask',
                         }}
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('thoiGianBatDau')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
                     />
                 </FormItem>
             </Col>

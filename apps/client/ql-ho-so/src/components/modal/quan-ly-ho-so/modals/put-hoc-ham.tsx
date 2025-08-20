@@ -109,6 +109,11 @@ export default function PutHocHamModal() {
                             format: 'DD/MM/YYYY',
                             type: 'mask',
                         }}
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('from')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
                     />
                 </FormItem>
             </Col>
