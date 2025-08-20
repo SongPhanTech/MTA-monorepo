@@ -618,6 +618,28 @@ async function main() {
                 extensions: 'docx',
                 numberField: 0,
             },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440005',
+                name: 'Báo cáo khảo sát',
+                code: 'SURVEY_RP',
+                createdAt: new Date('2025-04-03T12:58:43.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                path: 'https://minio.swantech.vn/mta/template/BaoCaoKhaoSat.docx',
+                fileType: 'DOWNLOAD',
+                extensions: 'docx',
+                numberField: 0,
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440006',
+                name: 'Báo cáo khảo sát đơn vị',
+                code: 'SURVEY_RP_DONVI',
+                createdAt: new Date('2025-04-03T12:58:43.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                path: 'https://minio.swantech.vn/mta/template/BaoCaoKhaoSat_DonVi.docx',
+                fileType: 'DOWNLOAD',
+                extensions: 'docx',
+                numberField: 0,
+            },
         ],
     })
 
