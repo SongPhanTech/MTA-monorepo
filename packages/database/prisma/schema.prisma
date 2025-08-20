@@ -4416,22 +4416,21 @@ model EvaluationCouncilMember {
 }
 
 model EvidenceFile {
-  id            String      @id() @default(cuid())
-  code          String?     @unique()
-  active        Boolean     @default(true)
-  description   String?     @db.Text()
+  id            String       @id() @default(cuid())
+  code          String?      @unique()
+  active        Boolean      @default(true)
+  description   String?      @db.Text()
   deletedAt     DateTime?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now()) @updatedAt()
-  filename      String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt()
+  name          String
   path          String
   mimeType      String
-  size          Int
-  uploadedBy    String
-  evidence      Evidence    @relation(fields: [evidenceId], references: [id])
+  size          BigInt
+  evidence      Evidence     @relation(fields: [evidenceId], references: [id])
   evidenceId    String
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
+  userProfileId String?
 
   @@schema("khao-thi")
 }

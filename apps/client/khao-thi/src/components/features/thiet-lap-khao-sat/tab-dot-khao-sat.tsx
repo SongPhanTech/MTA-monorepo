@@ -14,7 +14,6 @@ import {
     useFindManySurveyTopic,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -226,9 +225,7 @@ function TabDotKhaoSat() {
                                             <Tooltip title={'Xem đề khảo sát'} placement="top">
                                                 <EyeOutlined
                                                     onClick={() => {
-                                                        router.push(
-                                                            `${ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT}/${id}`
-                                                        )
+                                                        router.push(`/lam-khao-sat/${id}`)
                                                     }}
                                                     style={{ fontSize: '16px' }}
                                                 />

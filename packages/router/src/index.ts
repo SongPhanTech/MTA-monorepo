@@ -768,6 +768,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Quản lý đợt tự đánh giá',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                     },
+                    {
+                        id: 'ql-nhom-minh-chung',
+                        label: 'Quản lý minh chứng',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                    },
                 ],
             },
         ],

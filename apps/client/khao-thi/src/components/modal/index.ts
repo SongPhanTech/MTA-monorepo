@@ -9,6 +9,7 @@ import PutSurveyExamModal from './put-create-survey-exam'
 import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
 import PutExamBankQuestion from './put-exam-bank-question'
+import PutEvidence from './put-minh-chung'
 import PutSurveyModal from './put-modal-survey'
 import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
 import PutSurveyQuestionModal from './put-modal-survey-question'
@@ -16,6 +17,7 @@ import PutSurveyQuestionGroupModal from './put-modal-survey-question-group'
 import PutSurveyTopicModal from './put-modal-survey-topic'
 import PutDifficulty from './put-muc-do-kho'
 import PutQuestionBank from './put-ngan-hang-cau-hoi'
+import PutEvidenceCategory from './put-nhom-minh-chung'
 import PutQuestionModal from './put-question-modal'
 import PutScoreScaleCatalog from './put-thang-diem'
 import PutCriterionCatalog from './put-tieu-chi-danh-gia-ctdt'
@@ -45,4 +47,6 @@ export {
     PutRequirementCriterionCatalog,
     PutEvaluationPeriod,
     PutScoreScaleCatalog,
+    PutEvidenceCategory,
+    PutEvidence,
 }

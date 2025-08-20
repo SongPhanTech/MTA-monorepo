@@ -236,17 +236,16 @@ model EvaluationCouncilMember extends Base {
 }
 
 model EvidenceFile extends Base {
-  filename      String
+  name      String
   path          String
   mimeType      String
-  size          Int
-  uploadedBy    String // userId
+  size          BigInt
 
   evidence      Evidence    @relation(fields: [evidenceId], references: [id])
   evidenceId    String
 
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
+  userProfileId String?
 
   @@schema("khao-thi")
 }
