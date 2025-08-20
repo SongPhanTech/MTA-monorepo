@@ -3,6 +3,7 @@ import '../ql-dao-tao/plan-training'
 import '../ql-ho-so/profile'
 import '../ql-nguoi-dung/user'
 import '../ql-dao-tao/student'
+import '../ql-dao-tao/lecturer'
 import '../ql-danh-muc/core-categories'
 import '../ql-dao-tao/categories'
 
@@ -58,6 +59,9 @@ model Survey extends Base {
   endDate              DateTime?
 
   surveyObjectType     SurveyObjectType[]
+
+  lectureId            String?           // ID giảng viên phụ trách khảo sát
+  lecture              Lecturer?         @relation(fields: [lectureId], references: [id])
 
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
