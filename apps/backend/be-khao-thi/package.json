@@ -22,6 +22,7 @@
     "axios": "catalog:",
     "decimal.js": "catalog:",
     "docxtemplater": "catalog:",
+    "exceljs": "catalog:",
     "hono": "catalog:",
     "pizzip": "catalog:",
     "prom-client": "catalog:",
