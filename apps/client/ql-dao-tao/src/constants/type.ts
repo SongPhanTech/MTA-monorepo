@@ -1,12 +1,14 @@
 import type {
     AcademicActionType,
     ApplicationStatus,
+    CouncilRole,
     CriteriaField,
     CriteriaOperator,
     DecisionStatus,
     DiplomaVerificationStatus,
     ExamType,
     GraduationSessionStatus,
+    PaymentStatus,
     SemesterType,
     SubjectClassSchedule,
     ThesisProjectStatus,
@@ -125,6 +127,10 @@ export type FilterProps = {
     academicRank?: string
     academicDegree?: string
     diplomaTypeId?: string[]
+    transactionCode?: string
+    paymentStatus?: PaymentStatus[]
+    paymentDate?: Date[]
+    role?: CouncilRole[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
