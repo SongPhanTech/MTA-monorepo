@@ -8,6 +8,7 @@ import '../ql-ho-so/profile'
 import '../ql-dao-tao/research'
 import '../ql-dao-tao/thesis'
 import '../khao-thi/evaluate'
+import '../khao-thi/survey'
 
 model Lecturer extends Base {
   from                        DateTime? // từ ngày
@@ -35,6 +36,7 @@ model Lecturer extends Base {
   reviewedThesisRegistrations StudentThesisRegistration[] // Đăng ký đã phê duyệt
   expertProfile               ExpertProfile[]
   evaluationCouncilMember     EvaluationCouncilMember[]
+  survey                      Survey[]
 
   @@schema("ql-dao-tao")
 }

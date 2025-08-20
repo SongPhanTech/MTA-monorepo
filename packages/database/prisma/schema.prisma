@@ -3301,6 +3301,7 @@ model Lecturer {
   reviewedThesisRegistrations StudentThesisRegistration[]
   expertProfile               ExpertProfile[]
   evaluationCouncilMember     EvaluationCouncilMember[]
+  survey                      Survey[]
 
   @@schema("ql-dao-tao")
 }
@@ -4435,50 +4436,6 @@ model EvidenceFile {
   @@schema("khao-thi")
 }
 
-model Staff {
-  id              String        @id() @default(cuid())
-  code            String?       @unique()
-  active          Boolean       @default(true)
-  description     String?       @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now()) @updatedAt()
-  from            DateTime?
-  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique()
-  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String        @db.Uuid()
-  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
-  staffTypeId     String
-  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
-  staffPositionId String
-  fixedClass      FixedClass[]  @relation("ManageStaff")
-
-  @@schema("ql-dao-tao")
-}
-
-model StaffHistory {
-  id              String        @id() @default(cuid())
-  code            String?       @unique()
-  active          Boolean       @default(true)
-  description     String?       @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @default(now()) @updatedAt()
-  from            DateTime?
-  to              DateTime?
-  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-  userProfileId   String        @unique()
-  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
-  organizationId  String        @db.Uuid()
-  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
-  staffTypeId     String
-  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
-  staffPositionId String
-
-  @@schema("ql-dao-tao")
-}
-
 model SurveyObjectType {
   id              String           @id() @default(cuid())
   code            String?          @unique()
@@ -4543,6 +4500,8 @@ model Survey {
   startDate            DateTime
   endDate              DateTime?
   surveyObjectType     SurveyObjectType[]
+  lectureId            String?
+  lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
   additionalSuggestion Boolean
@@ -4632,6 +4591,50 @@ model SurveyResponse {
 
   @@unique([surveySessionId, surveyQuestionId])
   @@schema("khao-thi")
+}
+
+model Staff {
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt()
+  from            DateTime?
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique()
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String        @db.Uuid()
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
+  fixedClass      FixedClass[]  @relation("ManageStaff")
+
+  @@schema("ql-dao-tao")
+}
+
+model StaffHistory {
+  id              String        @id() @default(cuid())
+  code            String?       @unique()
+  active          Boolean       @default(true)
+  description     String?       @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt()
+  from            DateTime?
+  to              DateTime?
+  userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+  userProfileId   String        @unique()
+  organization    DM_DonVi      @relation(fields: [organizationId], references: [Id])
+  organizationId  String        @db.Uuid()
+  staffType       StaffType     @relation(fields: [staffTypeId], references: [id])
+  staffTypeId     String
+  staffPosition   StaffPosition @relation(fields: [staffPositionId], references: [id])
+  staffPositionId String
+
+  @@schema("ql-dao-tao")
 }
 
 model DM_TrinhDoHocVan {
