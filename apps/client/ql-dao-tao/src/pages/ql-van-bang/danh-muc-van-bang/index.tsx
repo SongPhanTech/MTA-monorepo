@@ -11,7 +11,6 @@ import {
     useFindManyDiplomaType,
     useUpdateDiplomaType,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -63,6 +62,9 @@ export default function DiplomaType() {
         where,
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
+        orderBy: {
+            createdAt: 'desc',
+        },
     })
 
     const { data: count } = useCountDiplomaType({
@@ -92,8 +94,9 @@ export default function DiplomaType() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (
@@ -117,14 +120,14 @@ export default function DiplomaType() {
                         rowKey="id"
                         filters={filters}
                         setFilters={setFilters}
-                        onRowClick={(record) => {
-                            router.push(
-                                ROUTER_PATH.QL_DAO_TAO.QL_VAN_BANG_DANH_MUC_VAN_BANG_ID.replace(
-                                    '[id]',
-                                    String(record.id)
-                                )
-                            )
-                        }}
+                        // onRowClick={(record) => {
+                        //     router.push(
+                        //         ROUTER_PATH.QL_DAO_TAO.QL_VAN_BANG_DANH_MUC_VAN_BANG_ID.replace(
+                        //             '[id]',
+                        //             String(record.id)
+                        //         )
+                        //     )
+                        // }}
                         columns={[
                             {
                                 title: 'STT',
@@ -201,6 +204,9 @@ export default function DiplomaType() {
                                                     popConfirm={{
                                                         onConfirm: (e) => {
                                                             handleDeleteDiplomaType(record?.id)
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => {
                                                             e?.stopPropagation()
                                                         },
                                                     }}

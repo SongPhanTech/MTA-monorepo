@@ -12,13 +12,13 @@ import {
     useFindUniqueSurvey,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSurveyType = Survey
+export type PutSurveyType = Survey & { surveyObjectTypes: string[] }
 const PutSurveyModal = () => {
-    const [form] = Form.useForm<Survey>()
+    const [form] = Form.useForm<PutSurveyType>()
     const {
         isOpen,
         onClose,
@@ -33,10 +33,9 @@ const PutSurveyModal = () => {
     const { mutateAsync: update } = useUpdateSurvey()
 
     const { data: surveyTopics = [] } = useFindManySurveyTopic()
-    const { data: surveyObjectTypes = [] } = useFindManySurveyObjectType()
+    const { data: surveyObjectTypesData = [] } = useFindManySurveyObjectType()
 
-    async function onOk(output?: Survey) {
-        console.log(output)
+    async function onOk(output?: PutSurveyType) {
         if (!output) return
         try {
             showSpinner()
@@ -45,11 +44,22 @@ const PutSurveyModal = () => {
                     data: {
                         code: output.code,
                         name: output.name,
-                        surveyObjectId: output.surveyObjectId,
-                        surveyTopicId: output.surveyTopicId,
+                        surveyObjectType: {
+                            // connect: {
+                            //     id: output.surveyObjectTypes[0],
+                            // },
+
+                            connect: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
+                        },
+                        // surveyTopic: {
+                        //     connect: {
+                        //         id: output.surveyTopicId,
+                        //     },
+                        // },
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
+                        additionalSuggestion: output.additionalSuggestion,
                     },
                     where: {
                         id,
@@ -60,13 +70,23 @@ const PutSurveyModal = () => {
                 await create({
                     data: {
                         code: output.code,
-                        additionalSuggestion: false,
                         name: output.name,
-                        surveyObjectId: output.surveyObjectId,
-                        surveyTopicId: output.surveyTopicId,
+                        surveyObjectType: {
+                            // connect: {
+                            //     id: output.surveyObjectTypes[0],
+                            // },
+
+                            connect: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
+                        },
+                        surveyTopic: {
+                            connect: {
+                                id: output.surveyTopicId,
+                            },
+                        },
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
+                        additionalSuggestion: output.additionalSuggestion,
                     },
                 })
                 message.success('Thêm mới thành công')
@@ -83,9 +103,17 @@ const PutSurveyModal = () => {
         }
     }
 
-    const { data: survey } = useFindUniqueSurvey({
-        where: { id },
-    })
+    const { data: survey } = useFindUniqueSurvey(
+        {
+            where: { id },
+            include: {
+                surveyObjectType: true,
+            },
+        },
+        {
+            enabled: !!id,
+        }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
@@ -93,6 +121,7 @@ const PutSurveyModal = () => {
                 ...survey,
                 startDate: dayjs(survey.startDate),
                 endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
+                surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
             })
         }
     }, [survey])
@@ -105,7 +134,7 @@ const PutSurveyModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa khảo sát' : 'Thêm mới khảo sát'}
-            className="w-[30vw]"
+            className="w-[1000px]"
         >
             <Col span={12}>
                 <FormItem form={form} name="code" label="Mã khảo sát" required>
@@ -131,10 +160,12 @@ const PutSurveyModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="surveyObjectId" label="Đối tượng khảo sát" required>
+                <FormItem form={form} name="surveyObjectTypes" label="Đối tượng khảo sát" required>
                     <Select
+                        mode="multiple"
+                        maxTagCount={'responsive'}
                         placeholder="Chọn đối tượng khảo sát"
-                        options={surveyObjectTypes.map((i: SurveyObjectType) => {
+                        options={surveyObjectTypesData.map((i: SurveyObjectType) => {
                             return {
                                 value: i.id,
                                 label: i.name,
@@ -151,6 +182,19 @@ const PutSurveyModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="endDate" label="Thời gian kết thúc">
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col>
+                <FormItem
+                    form={form}
+                    name={'additionalSuggestion'}
+                    label="Có góp ý bổ sung không?"
+                    required
+                >
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
                 </FormItem>
             </Col>
         </PutFormModal>

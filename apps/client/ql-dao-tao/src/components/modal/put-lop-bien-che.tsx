@@ -73,7 +73,6 @@ const PutFixedClassModal = () => {
                 },
             },
         })
-    const trainingCourseForm = Form.useWatch('trainingCourseId', form)
 
     const { data: curriculumData = [], refetch: refetchCurriculum } = useFindManyCurriculum({
         where: {},

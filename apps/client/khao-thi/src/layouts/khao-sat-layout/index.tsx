@@ -86,7 +86,7 @@ const KhaoSatLayout = ({ children, className }: { children: ReactNode; className
                     <Content className="mx-2">
                         <div
                             className={cn(
-                                'min-h-[calc(100vh-64px-24px bg-primary rounded-lg shadow-sm',
+                                'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm',
                                 className
                             )}
                             style={{

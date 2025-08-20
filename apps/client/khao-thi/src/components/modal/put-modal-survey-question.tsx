@@ -3,10 +3,11 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { type Survey, type SurveyQuestion, SurveyQuestionType } from '@workspace/db'
+import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
+import type { SurveyQuestion, SurveyQuestionGroup } from '@workspace/db'
 import {
     useCreateSurveyQuestion,
-    useFindManySurvey,
+    useFindManySurveyQuestionGroup,
     useFindUniqueSurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
@@ -16,47 +17,44 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSurveyQuestionType = SurveyQuestion
 const PutSurveyQuestionModal = () => {
     const [form] = Form.useForm<SurveyQuestion>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        surveyQuestionGroupId?: string
+    }>({
         tag: PutSurveyQuestionModal.name,
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { options: surveyQuestionTypeOptions, getSurveyQuestionTypeLabel } =
+        useSurveyQuestionTypeOptions()
     const { mutateAsync: create } = useCreateSurveyQuestion()
     const { mutateAsync: update } = useUpdateSurveyQuestion()
 
-    const { data: surveys = [] } = useFindManySurvey()
+    const { data: surveyQuestionGroupData = [] } = useFindManySurveyQuestionGroup()
 
     async function onOk(output?: SurveyQuestion) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
-            if (id) {
+            if (input?.id) {
                 await update({
                     data: {
-                        code: output.code,
                         name: output.name,
-                        surveyId: output.surveyId,
-                        type: SurveyQuestionType.ESSAY,
+                        surveyQuestionGroupId: output.surveyQuestionGroupId,
+                        type: output.type,
                         description: output.description,
                     },
                     where: {
-                        id,
+                        id: input?.id,
                     },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await create({
                     data: {
-                        code: output.code,
                         name: output.name,
-                        surveyId: output.surveyId,
-                        type: SurveyQuestionType.ESSAY,
+                        surveyQuestionGroupId: output.surveyQuestionGroupId,
+                        type: output.type,
                         description: output.description,
                     },
                 })
@@ -74,9 +72,21 @@ const PutSurveyQuestionModal = () => {
         }
     }
 
-    const { data: surveyQuestion } = useFindUniqueSurveyQuestion({
-        where: { id },
-    })
+    const { data: surveyQuestion } = useFindUniqueSurveyQuestion(
+        {
+            where: { id: input?.id },
+        },
+        {
+            enabled: !!input?.id,
+        }
+    )
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    useEffect(() => {
+        console.log(input)
+        if (input?.surveyQuestionGroupId) {
+            form.setFieldsValue({ surveyQuestionGroupId: input?.surveyQuestionGroupId })
+        }
+    }, [input?.surveyQuestionGroupId])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (surveyQuestion) {
@@ -91,30 +101,43 @@ const PutSurveyQuestionModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'}
-            className="w-[30vw]"
+            title={input?.id ? 'Chỉnh sửa câu hỏi khảo sát' : 'Thêm mới câu hỏi khảo sát'}
+            className="w-[700px]"
         >
-            <Col span={12}>
-                <FormItem form={form} name="code" label="Mã câu hỏi khảo sát" required>
-                    <Input placeholder="Nhập mã câu hỏi khảo sát" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Câu hỏi khảo sát" required>
                     <Input placeholder="Nhập câu hỏi khảo sát" />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="surveyId" label="Khảo sát" required>
+                <FormItem
+                    form={form}
+                    name="surveyQuestionGroupId"
+                    label="Nhóm câu hỏi khảo sát"
+                    required
+                >
                     <Select
-                        placeholder="Chọn chủ đề khảo sát"
-                        options={surveys.map((i: Survey) => {
+                        placeholder="Chọn nhóm câu hỏi khảo sát"
+                        options={surveyQuestionGroupData.map((i: SurveyQuestionGroup) => {
                             return {
                                 value: i.id,
                                 label: i.name,
                             }
                         })}
                     />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="type" label="Loại câu hỏi khảo sát" required>
+                    <Select
+                        placeholder="Chọn loại câu hỏi khảo sát"
+                        options={surveyQuestionTypeOptions}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
         </PutFormModal>

@@ -4,12 +4,12 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import type { ExamType, SubjectClassSchedule } from '@workspace/db'
-import { useFindManySemester, useFindManySubjectClass } from '@workspace/db/hooks'
+import { useFindManySubjectClass } from '@workspace/db/hooks'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -72,29 +72,12 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
 
     type SubjectClassData = (typeof subjectClassData)[number]
 
-    const { data: semester = [] } = useFindManySemester({
-        orderBy: {
-            createdAt: 'desc',
-        },
-    })
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
         }, 500),
         []
     )
-
-    useEffect(() => {
-        if (semester.length > 0 && !filters.semesterId) {
-            const latestSemesterId = semester[0].id
-            setFilters((prev) => {
-                const newFilters = { ...prev, semesterId: latestSemesterId }
-                debouncedRefetch()
-                return newFilters
-            })
-        }
-    }, [semester, filters, debouncedRefetch])
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -139,7 +122,7 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
                                 labelAlign="left"
                             >
                                 <TreeSelectSemester
-                                    defaultValue={filters.semesterId || undefined}
+                                    filterTimeNow={true}
                                     onChange={(val) => handleFilterChange('semesterId', val)}
                                 />
                             </Form.Item>

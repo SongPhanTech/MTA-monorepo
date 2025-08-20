@@ -207,7 +207,7 @@ const PutTrainingCourseModal = () => {
                         options={semesterData.map((i) => {
                             return {
                                 value: i.id,
-                                label: `${i.name} năm ${i.schoolYear.name}`,
+                                label: [i?.name, i?.schoolYear?.name].filter(Boolean).join(' - '),
                             }
                         })}
                     />

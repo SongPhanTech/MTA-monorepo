@@ -191,8 +191,9 @@ export default function SubjectClassScore() {
             await refetch()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleChangeSemester = async (id: string) => {
@@ -206,8 +207,9 @@ export default function SubjectClassScore() {
             await refetch()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // #endregion

@@ -21,7 +21,6 @@ export default function TrangThaiLamViecModal() {
     const { mutateAsync: updateDM_TrangThaiLamViec } = useUpdateDM_TrangThaiLamViec()
 
     async function onOk(output: DM_TrangThaiLamViec) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function TrangThaiLamViecModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

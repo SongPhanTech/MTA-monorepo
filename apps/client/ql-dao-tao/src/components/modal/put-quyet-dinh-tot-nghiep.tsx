@@ -12,16 +12,22 @@ import { Col, Form, Input, InputNumber, message, Select } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
-import { type GraduationDecision, RankingContext } from '@workspace/db'
+import { type DocumentFile, type GraduationDecision, RankingContext } from '@workspace/db'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 dayjs.locale('vi')
 
-type PutGraduationDecisionFormValues = GraduationDecision
+type PutGraduationDecisionFormValues = GraduationDecision & {
+    diplomaFront?: [DocumentFile]
+    diplomaBack?: [DocumentFile]
+}
 
 const PutGraduationDecision = () => {
+    const [documentFront, setDocumentFront] = useState<DocumentFile | null>(null)
+    const [documentBack, setDocumentBack] = useState<DocumentFile | null>(null)
     const [form] = Form.useForm<PutGraduationDecisionFormValues>()
     const { isOpen, onClose, input } = useDisclosure<{ id: string; trainingCourseId: string }>({
         tag: PutGraduationDecision.name,
@@ -41,8 +47,72 @@ const PutGraduationDecision = () => {
                 finalGpa: output?.finalGpa,
                 finalRankingId: output?.finalRankingId,
                 diplomaTypeId: output?.diplomaTypeId,
+                originalDiplomaNumber: output?.originalDiplomaNumber,
                 diplomaNumber: output?.diplomaNumber,
-                diplomaIssueDate: output?.decisionDate,
+                diplomaIssueDate: output?.diplomaIssueDate,
+                diplomaFront: output.diplomaFront?.[0]
+                    ? output.diplomaFront[0].id
+                        ? {
+                              upsert: {
+                                  where: { id: output.diplomaFront[0].id },
+                                  update: {
+                                      name: output.diplomaFront[0].name,
+                                      path: output.diplomaFront[0].path,
+                                      mimeType: output.diplomaFront[0].mimeType,
+                                      size: output.diplomaFront[0].size,
+                                  },
+                                  create: {
+                                      name: output.diplomaFront[0].name,
+                                      path: output.diplomaFront[0].path,
+                                      mimeType: output.diplomaFront[0].mimeType,
+                                      size: output.diplomaFront[0].size,
+                                      diplomaFrontId: input?.id,
+                                  },
+                              },
+                          }
+                        : {
+                              create: {
+                                  name: output.diplomaFront[0].name,
+                                  path: output.diplomaFront[0].path,
+                                  mimeType: output.diplomaFront[0].mimeType,
+                                  size: output.diplomaFront[0].size,
+                              },
+                          }
+                    : documentFront
+                      ? { disconnect: true }
+                      : undefined,
+
+                diplomaBack: output.diplomaBack?.[0]
+                    ? output.diplomaBack[0].id
+                        ? {
+                              upsert: {
+                                  where: { id: output.diplomaBack[0].id },
+                                  update: {
+                                      name: output.diplomaBack[0].name,
+                                      path: output.diplomaBack[0].path,
+                                      mimeType: output.diplomaBack[0].mimeType,
+                                      size: output.diplomaBack[0].size,
+                                  },
+                                  create: {
+                                      name: output.diplomaBack[0].name,
+                                      path: output.diplomaBack[0].path,
+                                      mimeType: output.diplomaBack[0].mimeType,
+                                      size: output.diplomaBack[0].size,
+                                      diplomaBackId: input?.id,
+                                  },
+                              },
+                          }
+                        : {
+                              create: {
+                                  name: output.diplomaBack[0].name,
+                                  path: output.diplomaBack[0].path,
+                                  mimeType: output.diplomaBack[0].mimeType,
+                                  size: output.diplomaBack[0].size,
+                              },
+                          }
+                    : documentFront
+                      ? { disconnect: true }
+                      : undefined,
             }
             if (input?.id) {
                 await updateGraduationDecision({
@@ -53,9 +123,8 @@ const PutGraduationDecision = () => {
                 })
                 message.success('Cập nhật thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['SchoolYear'],
+                queryKey: ['GraduationDecision'],
             })
             onClose()
         } catch (_error) {
@@ -70,6 +139,10 @@ const PutGraduationDecision = () => {
             where: {
                 id: input?.id,
             },
+            include: {
+                diplomaFront: true,
+                diplomaBack: true,
+            },
         },
         { enabled: !!input?.id }
     )
@@ -82,11 +155,19 @@ const PutGraduationDecision = () => {
                 decisionDate: initialValue.decisionDate && dayjs(initialValue.decisionDate),
                 diplomaIssueDate:
                     initialValue.diplomaIssueDate && dayjs(initialValue.diplomaIssueDate),
+                diplomaFront: initialValue.diplomaFront ? [initialValue.diplomaFront] : undefined,
+                diplomaBack: initialValue.diplomaBack ? [initialValue.diplomaBack] : undefined,
             })
+            setDocumentFront(initialValue.diplomaFront)
+            setDocumentBack(initialValue.diplomaBack)
         } else {
             form.setFieldsValue({
                 decisionDate: dayjs(),
+                diplomaFront: undefined,
+                diplomaBack: undefined,
             })
+            setDocumentFront(null)
+            setDocumentBack(null)
         }
     }, [initialValue])
 
@@ -201,11 +282,6 @@ const PutGraduationDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="diplomaNumber" label="Số hiệu văn bằng">
-                    <Input placeholder="Nhập số hiệu" step={1} className="w-full" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="diplomaIssueDate" label="Ngày cấp bằng">
                     <DatePicker
                         format={{
@@ -217,8 +293,46 @@ const PutGraduationDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="diplomaNumber" label="Số hiệu văn bằng">
+                    <Input placeholder="Nhập số hiệu văn bằng" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="originalDiplomaNumber" label="Số vào sổ gốc văn bằng">
+                    <Input placeholder="Nhập số vào sổ gốc văn bằng" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
                 <FormItem form={form} name="notes" label="Ghi chú của hội đồng">
                     <Input.TextArea placeholder="Nhập ghi chú" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name={'diplomaFront'} label="Ảnh phôi mặt trước">
+                    <DocumentPaths
+                        form={form}
+                        data={documentFront ? [documentFront] : []}
+                        relationId={input?.id ?? ''}
+                        relationType={'diplomaFrontId'}
+                        titleForm={'diplomaFront'}
+                        multiple={false}
+                        accept="image/*,.pdf"
+                        text="ảnh"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name={'diplomaBack'} label="Ảnh phôi mặt sau">
+                    <DocumentPaths
+                        form={form}
+                        data={documentBack ? [documentBack] : []}
+                        relationId={input?.id ?? ''}
+                        relationType={'diplomaBackId'}
+                        titleForm={'diplomaBack'}
+                        multiple={false}
+                        accept="image/*,.pdf"
+                        text="ảnh"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

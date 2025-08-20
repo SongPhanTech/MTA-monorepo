@@ -21,7 +21,6 @@ export default function BacLuongModal() {
     const { mutateAsync: updateDM_BacLuong } = useUpdateDM_BacLuong()
 
     async function onOk(output: DM_BacLuong) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function BacLuongModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

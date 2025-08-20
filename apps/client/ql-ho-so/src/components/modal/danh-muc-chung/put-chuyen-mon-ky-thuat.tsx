@@ -21,7 +21,6 @@ export default function ChuyenMonKyThuatModal() {
     const { mutateAsync: updateDM_ChuyenMonKyThuat } = useUpdateDM_ChuyenMonKyThuat()
 
     async function onOk(output: DM_ChuyenMonKyThuat) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function ChuyenMonKyThuatModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

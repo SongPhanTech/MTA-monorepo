@@ -21,7 +21,6 @@ export default function NhomMauModal() {
     const { mutateAsync: updateDM_NhomMau } = useUpdateDM_NhomMau()
 
     async function onOk(output: DM_NhomMau) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function NhomMauModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

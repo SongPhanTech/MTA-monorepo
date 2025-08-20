@@ -53,7 +53,6 @@ const FilterSurvey = (props: Props) => {
     }
 
     const handleApply = () => {
-        console.log('filters', form.getFieldsValue())
         onFilterChange(form.getFieldsValue())
         setOpen(false)
     }
@@ -140,7 +139,13 @@ const FilterSurvey = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                <DatePicker
+                                    format={{
+                                        format: 'DD/MM/YYYY',
+                                        type: 'mask',
+                                    }}
+                                    className="w-full"
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={24}>
@@ -151,7 +156,13 @@ const FilterSurvey = (props: Props) => {
                                 wrapperCol={{ span: 17 }}
                                 labelAlign="left"
                             >
-                                <DatePicker format="DD/MM/YYYY" className="w-full" />
+                                <DatePicker
+                                    format={{
+                                        format: 'DD/MM/YYYY',
+                                        type: 'mask',
+                                    }}
+                                    className="w-full"
+                                />
                             </Form.Item>
                         </Col>
                     </Row>

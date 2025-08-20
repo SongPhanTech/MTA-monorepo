@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ExpertProfile } from '@workspace/db'
+import type { ExpertProfile, Prisma } from '@workspace/db'
 import {
     useCreateExpertProfile,
     useFindManyLecturer,
@@ -9,7 +9,7 @@ import {
     useFindUniqueLecturer,
     useUpdateExpertProfile,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, Select } from 'antd'
+import { Checkbox, Col, Form, Input, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -60,15 +60,27 @@ const PutExpertProfile = () => {
                 ...expert,
             })
             setIsInternal(!!expert.lecturerId)
+            if (expert.lecturerId) {
+                setSelectedLecturerId(expert.lecturerId)
+            }
         }
     }, [expert, form])
+
+    useEffect(() => {
+        if (!expert) {
+            form.setFieldsValue({
+                eligiblePresident: isInternal,
+                eligibleSecretary: isInternal,
+            })
+        }
+    }, [isInternal, form, expert])
 
     const { mutateAsync: createExpertProfile } = useCreateExpertProfile()
     const { mutateAsync: updateExpertProfile } = useUpdateExpertProfile()
     async function onOk(output?: PutExpertProfile) {
         if (!output) return
 
-        let payload = {}
+        let payload: Prisma.ExpertProfileUncheckedCreateInput
 
         if (selectedLecturer) {
             payload = {
@@ -76,15 +88,20 @@ const PutExpertProfile = () => {
                 phone: selectedLecturer.userProfile.phoneNumber,
                 email: selectedLecturer.userProfile.email,
                 lecturerId: selectedLecturer.id,
+                eligibleSecretary: output.eligibleSecretary,
+                eligiblePresident: output.eligiblePresident,
             }
         } else {
             payload = {
-                title: output.title,
+                academicRank: output.academicRank,
+                academicDegree: output.academicDegree,
                 specialization: output.specialization,
                 workplace: output.workplace,
                 phone: output.phone,
                 email: output.email,
                 name: output.name,
+                eligibleSecretary: output.eligibleSecretary,
+                eligiblePresident: output.eligiblePresident,
             }
         }
 
@@ -129,6 +146,7 @@ const PutExpertProfile = () => {
                             form.resetFields()
                         }
                     }}
+                    disabled={!!id}
                     value={isInternal ? 'internal' : 'external'}
                 >
                     <Radio value="internal">Chuyên gia trong trường</Radio>
@@ -161,8 +179,15 @@ const PutExpertProfile = () => {
             )}
             {!isInternal && (
                 <Col span={12}>
-                    <FormItem form={form} name="title" label="Học hàm, học vị (GS, PGS, TS, ThS)">
-                        <Input placeholder="Nhập học hàm, học vị" />
+                    <FormItem form={form} name="academicRank" label="Học hàm">
+                        <Input placeholder="Nhập học hàm" />
+                    </FormItem>
+                </Col>
+            )}
+            {!isInternal && (
+                <Col span={12}>
+                    <FormItem form={form} name="academicDegree" label="Học vị">
+                        <Input placeholder="Nhập học vị" />
                     </FormItem>
                 </Col>
             )}
@@ -194,6 +219,18 @@ const PutExpertProfile = () => {
                     </FormItem>
                 </Col>
             )}
+            <Col span={24} className="flex flex-row">
+                <Col span={12}>
+                    <FormItem form={form} name="eligiblePresident" valuePropName="checked">
+                        <Checkbox>Có thể là Chủ tịch hội đồng</Checkbox>
+                    </FormItem>
+                </Col>
+                <Col span={12}>
+                    <FormItem form={form} name="eligibleSecretary" valuePropName="checked">
+                        <Checkbox>Có thể là Thư ký hội đồng</Checkbox>
+                    </FormItem>
+                </Col>
+            </Col>
         </PutFormModal>
     )
 }

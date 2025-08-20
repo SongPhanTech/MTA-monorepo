@@ -59,7 +59,6 @@ const HanNhapDiem = () => {
     const { mutateAsync: update } = useUpdateSubjectClass()
 
     async function onOk(output?: SubjectClass) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()

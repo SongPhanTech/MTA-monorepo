@@ -63,8 +63,9 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (
@@ -160,7 +161,13 @@ export default function SchoolYearPage({ selectedSchoolYear, setSelectedSchoolYe
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: (e) => {
+                                                    handleDelete(id)
+                                                    e?.stopPropagation()
+                                                },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
                                             }}
                                             onClick={(e: any) => {
                                                 e.stopPropagation()

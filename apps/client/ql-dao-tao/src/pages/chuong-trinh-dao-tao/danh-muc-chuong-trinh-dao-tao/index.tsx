@@ -279,8 +279,9 @@ export default function TrainingProgramCatalog() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
@@ -297,8 +298,9 @@ export default function TrainingProgramCatalog() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleRowClick = (record: { id?: string }) => {
@@ -586,6 +588,9 @@ export default function TrainingProgramCatalog() {
                                                             )
                                                             e?.stopPropagation()
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />
@@ -617,7 +622,13 @@ export default function TrainingProgramCatalog() {
                                 />
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () => handleDeleteCurriculum(id),
+                                        onConfirm: (e) => {
+                                            handleDeleteCurriculum(id)
+                                            e?.stopPropagation()
+                                        },
+                                        onCancel: (e) => {
+                                            e?.stopPropagation()
+                                        },
                                     }}
                                     onClick={(e) => e.stopPropagation()}
                                 />

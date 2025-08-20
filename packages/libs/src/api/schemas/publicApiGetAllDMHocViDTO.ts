@@ -50,10 +50,19 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Học vị
+ */
 export interface PublicApiGetAllDMHocViDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã học vị
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên học vị
+   * @nullable
+   */
   sTen?: string | null;
 }

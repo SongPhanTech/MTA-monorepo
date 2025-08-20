@@ -163,8 +163,9 @@ export default function GraduationSession() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleRowClick = (record: { id?: string }) => {
@@ -284,7 +285,11 @@ export default function GraduationSession() {
                                                             e?.stopPropagation()
                                                             handleDelete(id)
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
+                                                    onClick={(e) => e.stopPropagation()}
                                                 />
                                             </Row>
                                         )

@@ -112,8 +112,9 @@ export default function GraduationRankingPage() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     async function handleDeleteMultil(record: TrainingCourse) {
@@ -131,8 +132,9 @@ export default function GraduationRankingPage() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleFilterChange = (key: string, value: string) => {
@@ -267,7 +269,11 @@ export default function GraduationRankingPage() {
                                                             handleDelete(id)
                                                             e?.stopPropagation()
                                                         },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
+                                                    onClick={(e) => e.stopPropagation()}
                                                 />
                                             </Row>
                                         )

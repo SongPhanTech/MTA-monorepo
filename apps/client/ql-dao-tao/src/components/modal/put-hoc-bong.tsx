@@ -154,12 +154,24 @@ const PutHocBong = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="effectiveFrom" label="Hiệu lực từ ngày" required>
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="effectiveTo" label="Hiệu lực đến ngày">
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

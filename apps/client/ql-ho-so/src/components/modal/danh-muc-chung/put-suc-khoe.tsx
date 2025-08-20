@@ -21,7 +21,6 @@ export default function SucKhoeModal() {
     const { mutateAsync: updateDM_SucKhoe } = useUpdateDM_SucKhoe()
 
     async function onOk(output: DM_SucKhoe) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function SucKhoeModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

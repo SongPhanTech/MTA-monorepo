@@ -26,7 +26,6 @@ export default function ChucDanhNgachNghienCuuModal() {
         useUpdateDM_ChucDanhCMNVNghienCuuVien()
 
     async function onOk(output: DM_ChucDanhCMNVNghienCuuVien) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -53,8 +52,9 @@ export default function ChucDanhNgachNghienCuuModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

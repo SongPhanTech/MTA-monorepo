@@ -52,27 +52,60 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 import type { NhanVien } from './nhanVien';
 import type { NhanVienEditDtoState } from './nhanVienEditDtoState';
 
+/**
+ * Danh mục nhân viên
+ */
 export type NhanVienEditDto = NhanVien & {
   /** @nullable */
   State?: NhanVienEditDtoState;
-  /** @nullable */
+  /**
+   * Tên đơn vị
+   * @nullable
+   */
   sTenDonVi?: string | null;
-  /** @nullable */
+  /**
+   * Vị trí công việc
+   * @nullable
+   */
   sTenViTriCongViec?: string | null;
-  /** @nullable */
+  /**
+   * Người quản lý trực tiếp
+   * @nullable
+   */
   sTenQuanLyTrucTiep?: string | null;
-  /** @nullable */
+  /**
+   * Tên quốc gia
+   * @nullable
+   */
   sTenQuocGia?: string | null;
-  /** @nullable */
+  /**
+   * Tên tỉnh
+   * @nullable
+   */
   sTenTinh?: string | null;
-  /** @nullable */
+  /**
+   * Tên quận, huyện
+   * @nullable
+   */
   sTenQuanHuyen?: string | null;
-  /** @nullable */
+  /**
+   * Tên xã, phường
+   * @nullable
+   */
   sTenXaPhuong?: string | null;
-  /** @nullable */
+  /**
+   * Giới tính
+   * @nullable
+   */
   sTenGioiTinh?: string | null;
-  /** @nullable */
+  /**
+   * Tên tỉnh mới
+   * @nullable
+   */
   sTenTinhMoi?: string | null;
-  /** @nullable */
+  /**
+   * Tên xã phường mới
+   * @nullable
+   */
   sTenXaPhuongMoi?: string | null;
 };

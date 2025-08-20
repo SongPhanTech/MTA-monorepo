@@ -3,7 +3,7 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { Council } from '@workspace/db'
 import { useCreateCouncil, useFindUniqueCouncil, useUpdateCouncil } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -43,10 +43,7 @@ const PutCouncil = () => {
             }
             const data = {
                 proposedDate: output.proposedDate,
-                proposedDefenseDate: output.proposedDefenseDate,
                 status: output.status,
-                defenseDate: output.defenseDate,
-                location: output.location,
             }
             if (input?.councilId) {
                 await updateCouncil({
@@ -87,10 +84,6 @@ const PutCouncil = () => {
             form.setFieldsValue({
                 ...council,
                 proposedDate: council.proposedDate ? dayjs(council.proposedDate) : undefined,
-                proposedDefenseDate: council.proposedDefenseDate
-                    ? dayjs(council.proposedDefenseDate)
-                    : undefined,
-                defenseDate: council.defenseDate ? dayjs(council.defenseDate) : undefined,
             })
         }
     }, [council, form])
@@ -113,33 +106,6 @@ const PutCouncil = () => {
                         }}
                         className="w-full"
                     />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="proposedDefenseDate" label="Ngày bảo vệ dự kiến">
-                    <DatePicker
-                        format={{
-                            format: 'DD/MM/YYYY',
-                            type: 'mask',
-                        }}
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="defenseDate" label="Ngày bảo vệ">
-                    <DatePicker
-                        format={{
-                            format: 'DD/MM/YYYY',
-                            type: 'mask',
-                        }}
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="location" label="Địa điểm">
-                    <Input placeholder="Địa điểm" />
                 </FormItem>
             </Col>
             <Col span={12}>

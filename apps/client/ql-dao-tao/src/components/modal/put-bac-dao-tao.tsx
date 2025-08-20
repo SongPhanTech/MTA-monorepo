@@ -2,17 +2,18 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { DiplomaType } from '@workspace/db'
+import { type DiplomaType, DiplomaTypeEnum } from '@workspace/db'
 import {
     useCreateDiplomaType,
     useFindUniqueDiplomaType,
     useUpdateDiplomaType,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { useDiplomaTypeOptions } from '@hooks/diplomaType'
 export type PutDiplomaTypeFormType = DiplomaType
 dayjs.locale('vi')
 const PutDiplomaType = () => {
@@ -26,7 +27,7 @@ const PutDiplomaType = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { options: diplomaTypeOptions } = useDiplomaTypeOptions()
     const { mutateAsync: createDiplomaType } = useCreateDiplomaType()
     const { mutateAsync: updateDiplomaType } = useUpdateDiplomaType()
     async function onOk(output?: PutDiplomaTypeFormType) {
@@ -38,6 +39,7 @@ const PutDiplomaType = () => {
                 name: output.name,
                 englishName: output.englishName,
                 description: output.description,
+                type: output.type,
             }
             if (id) {
                 await updateDiplomaType({
@@ -76,6 +78,10 @@ const PutDiplomaType = () => {
             form.setFieldsValue({
                 ...initialValue,
             })
+        } else {
+            form.setFieldsValue({
+                type: DiplomaTypeEnum.ENGINEER,
+            })
         }
     }, [initialValue])
 
@@ -102,6 +108,19 @@ const PutDiplomaType = () => {
             <Col span={24}>
                 <FormItem form={form} name="englishName" label="Tên tiếng anh">
                     <Input placeholder="Nhập tên tiếng anh" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="type" label="Loại văn bằng">
+                    <Select
+                        placeholder="Chọn loại văn bằng"
+                        options={diplomaTypeOptions?.map((item) => ({
+                            label: item.label,
+                            value: item.value,
+                        }))}
+                        defaultValue={DiplomaTypeEnum.ENGINEER}
+                        allowClear
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

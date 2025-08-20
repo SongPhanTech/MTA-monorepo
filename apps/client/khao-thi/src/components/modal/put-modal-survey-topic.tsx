@@ -64,9 +64,14 @@ const PutSurveyTopicModal = () => {
         }
     }
 
-    const { data: surveyObjectType } = useFindUniqueSurveyTopic({
-        where: { id },
-    })
+    const { data: surveyObjectType } = useFindUniqueSurveyTopic(
+        {
+            where: { id },
+        },
+        {
+            enabled: !!id,
+        }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (surveyObjectType) {

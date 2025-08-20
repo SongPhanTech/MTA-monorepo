@@ -1,6 +1,5 @@
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
-import type { FilterSurveyQuestionProps } from '@components/filter/filter-survey-question'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSurveyQuestionModal } from '@components/modal'
@@ -10,17 +9,14 @@ import { useSurveyQuestionTypeOptions } from '@hooks/survey-question-type'
 import DefaultLayout from '@layouts/default-layout'
 import {
     useCountSurveyQuestion,
-    useFindManySurvey,
     useFindManySurveyQuestion,
+    useFindManySurveyQuestionGroup,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type Filter = FilterSurveyQuestionProps & {
-    searchText: string
-}
 function Page() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -68,7 +64,7 @@ function Page() {
 
     const { data = [], refetch } = useFindManySurveyQuestion({
         where,
-        include: { survey: true },
+        include: { surveyQuestionGroup: true },
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -80,9 +76,14 @@ function Page() {
             deletedAt: null,
         },
     })
-    const { data: surveyData } = useFindManySurvey({ orderBy: { createdAt: 'desc' } })
+    const { data: surveyQuestionGroupData } = useFindManySurveyQuestionGroup({
+        orderBy: { createdAt: 'desc' },
+    })
 
-    const { onOpen } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<{
+        id: string
+        surveyQuestionGroupId?: string
+    }>({
         tag: PutSurveyQuestionModal.name,
     })
 
@@ -106,8 +107,9 @@ function Page() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (
@@ -133,16 +135,23 @@ function Page() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã câu hỏi khảo sát',
-                                dataIndex: 'code',
-                                type: 'input',
-                            },
-                            {
                                 title: 'Tên câu hỏi khảo sát',
                                 dataIndex: 'name',
                                 type: 'input',
                             },
-
+                            {
+                                title: 'Nhóm câu hỏi khảo sát',
+                                dataIndex: 'surveyId',
+                                type: 'select',
+                                options: surveyQuestionGroupData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (_, record) =>
+                                    record?.surveyQuestionGroup
+                                        ? record.surveyQuestionGroup.name
+                                        : '',
+                            },
                             {
                                 title: 'Loại câu hỏi khảo sát',
                                 dataIndex: 'surveyQuestionType',
@@ -150,25 +159,18 @@ function Page() {
                                 options: surveyQuestionTypeOptions,
                                 render: (_, record) => getSurveyQuestionTypeLabel(record?.type),
                             },
-                            {
-                                title: 'Tên khảo sát',
-                                dataIndex: 'surveyId',
-                                type: 'select',
-                                options: surveyData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                })),
-                                render: (_, record) => (record?.survey ? record.survey.name : ''),
-                            },
 
                             {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id }) => (
+                                render: (_, { id, surveyQuestionGroupId }) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
-                                            onClick={onOpen.bind(null, id)}
+                                            onClick={onOpen.bind(null, {
+                                                id,
+                                                surveyQuestionGroupId,
+                                            })}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon

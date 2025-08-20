@@ -23,8 +23,12 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
         label: item.children ? (
             item.label
         ) : (
-            <Tooltip title={item.label} placement="right">
-                <Link href={item.path || '#'}>{item.label}</Link>
+            <Tooltip title={item.label} placement="right" mouseEnterDelay={0.5}>
+                <div>
+                    <Link href={item.path || '#'} className="block truncate">
+                        {item.label}
+                    </Link>
+                </div>
             </Tooltip>
         ),
         key: item.path || item.id,
@@ -32,8 +36,10 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
         children: item.children
             ? item.children.map((child) => ({
                   label: (
-                      <Tooltip title={child.label} placement="right">
-                          <Link href={child.path || '#'}>{child.label}</Link>
+                      <Tooltip title={child.label} placement="right" mouseEnterDelay={0.5}>
+                          <Link href={child.path || '#'} className="block truncate">
+                              {child.label}
+                          </Link>
                       </Tooltip>
                   ),
                   key: child.path || child.id,

@@ -21,7 +21,6 @@ export default function ChucDanhNgachKySuModal() {
     const { mutateAsync: updateDM_ChucDanhCMNVKySu } = useUpdateDM_ChucDanhCMNVKySu()
 
     async function onOk(output: DM_TruongDaoTaoBacDH) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function ChucDanhNgachKySuModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

@@ -105,6 +105,25 @@ function generatePassword(length = 12): string {
         .join('')
 }
 
+export type OrgTreeItem = {
+    value: string
+    label: string
+    children?: OrgTreeItem[]
+}
+
+function buildOrgTree(
+    list: Array<{ Id: string; sTen: string | null; sParentId: string | null }>,
+    parentId = '0'
+): OrgTreeItem[] {
+    return list
+        .filter((item) => (item.sParentId ?? '0') === parentId)
+        .map((item) => ({
+            label: item.sTen || '',
+            value: item.Id,
+            children: buildOrgTree(list, item.Id),
+        }))
+}
+
 export {
     formatDate,
     formatDateReadable,
@@ -116,4 +135,5 @@ export {
     cn,
     stringToSlug,
     generatePassword,
+    buildOrgTree,
 }

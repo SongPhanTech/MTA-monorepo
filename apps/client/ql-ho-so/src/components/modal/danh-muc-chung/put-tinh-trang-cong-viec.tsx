@@ -21,7 +21,6 @@ export default function TinhTrangCongTacModal() {
     const { mutateAsync: updateDM_TinhTrangCongTac } = useUpdateDM_TinhTrangCongTac()
 
     async function onOk(output: DM_TinhTrangCongTac) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function TinhTrangCongTacModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

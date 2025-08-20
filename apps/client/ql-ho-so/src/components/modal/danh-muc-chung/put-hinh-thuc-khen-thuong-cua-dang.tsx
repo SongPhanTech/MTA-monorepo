@@ -24,7 +24,6 @@ export default function HinhThucKhenThuongCuaDangModal() {
     const { mutateAsync: updateDM_HinhThucKhenThuongDang } = useUpdateDM_HinhThucKhenThuongDang()
 
     async function onOk(output: DM_HinhThucKhenThuongDang) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -51,8 +50,9 @@ export default function HinhThucKhenThuongCuaDangModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

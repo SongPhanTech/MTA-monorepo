@@ -24,7 +24,6 @@ export default function XepLoaiDanhGiaChatLuongDangVienModal() {
     const { mutateAsync: updateDM_XepLoaiDanhGiaDV } = useUpdateDM_XepLoaiDanhGiaChatLuongDangVien()
 
     async function onOk(output: DM_XepLoaiDanhGiaChatLuongDangVien) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -51,8 +50,9 @@ export default function XepLoaiDanhGiaChatLuongDangVienModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

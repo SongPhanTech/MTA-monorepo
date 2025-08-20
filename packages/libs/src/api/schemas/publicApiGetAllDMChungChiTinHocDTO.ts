@@ -50,18 +50,40 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Chứng chỉ tin học
+ */
 export interface PublicApiGetAllDMChungChiTinHocDTO {
+  /** Id chứng chỉ */
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã chứng chỉ
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên chứng chỉ
+   * @nullable
+   */
   sTen?: string | null;
-  /** @nullable */
+  /**
+   * nguồn cấp
+   * @nullable
+   */
   sNguonCap?: string | null;
-  /** @nullable */
+  /**
+   * Nội dung
+   * @nullable
+   */
   sNoiDung?: string | null;
-  /** @nullable */
+  /**
+   * Giá trị
+   * @nullable
+   */
   sGiaTri?: string | null;
-  /** @nullable */
+  /**
+   * Đối tượng
+   * @nullable
+   */
   sDoiTuong?: string | null;
 }

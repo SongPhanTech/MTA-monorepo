@@ -144,8 +144,9 @@ function Exam() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { data: questionBankData } = useFindManyQuestionBank()
@@ -306,7 +307,13 @@ function Exam() {
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDeleteExam(id),
+                                                onConfirm: (e) => {
+                                                    handleDeleteExam(id)
+                                                    e?.stopPropagation()
+                                                },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
                                             }}
                                             onClick={(e) => e.stopPropagation()}
                                         />

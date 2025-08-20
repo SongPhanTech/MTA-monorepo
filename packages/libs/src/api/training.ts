@@ -32,6 +32,9 @@ import type {
   ClassDivision200Item,
   EnrollFixedClassOnSubjectClassBody,
   EnrollStudentOnSubjectClassBody,
+  ExportPhanCongGiangDay400,
+  ExportPhanCongGiangDay404,
+  ExportPhanCongGiangDayParams,
   ExportStudentFixedClassDocx400,
   ExportStudentFixedClassDocx404,
   ExportStudentFixedClassDocxParams,
@@ -51,6 +54,9 @@ import type {
   ImportHeQuanSu,
   ImportHeQuanSu200,
   ImportHeQuanSu400,
+  ImportPhanCongGiangDay,
+  ImportPhanCongGiangDay200,
+  ImportPhanCongGiangDay400,
   ImportPhienBanCTDT200,
   ImportPhienBanCTDT400,
   ImportPhienBanCTĐT,
@@ -2227,6 +2233,223 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getGraduationCheckMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * Xuất file excel danh sách phân công giảng dạy
+ * @summary Export danh sách phân công giảng dạy
+ */
+export type exportPhanCongGiangDayResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type exportPhanCongGiangDayResponse400 = {
+  data: ExportPhanCongGiangDay400
+  status: 400
+}
+
+export type exportPhanCongGiangDayResponse404 = {
+  data: ExportPhanCongGiangDay404
+  status: 404
+}
+    
+export type exportPhanCongGiangDayResponseComposite = exportPhanCongGiangDayResponse200 | exportPhanCongGiangDayResponse400 | exportPhanCongGiangDayResponse404;
+    
+export type exportPhanCongGiangDayResponse = exportPhanCongGiangDayResponseComposite & {
+  headers: Headers;
+}
+
+export const getExportPhanCongGiangDayUrl = (params: ExportPhanCongGiangDayParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/plan-training/export-phan-cong-giang-day?${stringifiedParams}` : `/api/plan-training/export-phan-cong-giang-day`
+}
+
+export const exportPhanCongGiangDay = async (params: ExportPhanCongGiangDayParams, options?: RequestInit): Promise<exportPhanCongGiangDayResponse> => {
+  
+  return customTrainingFetch<exportPhanCongGiangDayResponse>(getExportPhanCongGiangDayUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export const getExportPhanCongGiangDayQueryKey = (params: ExportPhanCongGiangDayParams,) => {
+    return [`/api/plan-training/export-phan-cong-giang-day`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getExportPhanCongGiangDayQueryOptions = <TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getExportPhanCongGiangDayQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhanCongGiangDay>>> = ({ signal }) => exportPhanCongGiangDay(params, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportPhanCongGiangDayQueryResult = NonNullable<Awaited<ReturnType<typeof exportPhanCongGiangDay>>>
+export type ExportPhanCongGiangDayQueryError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404
+
+
+export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
+ params: ExportPhanCongGiangDayParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+          TError,
+          Awaited<ReturnType<typeof exportPhanCongGiangDay>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
+ params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+          TError,
+          Awaited<ReturnType<typeof exportPhanCongGiangDay>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
+ params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Export danh sách phân công giảng dạy
+ */
+
+export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
+ params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getExportPhanCongGiangDayQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * Nhập file excel danh sách phân công giảng dạy
+ * @summary Import danh sách phân công giảng dạy
+ */
+export type importPhanCongGiangDayResponse200 = {
+  data: ImportPhanCongGiangDay200
+  status: 200
+}
+
+export type importPhanCongGiangDayResponse400 = {
+  data: ImportPhanCongGiangDay400
+  status: 400
+}
+    
+export type importPhanCongGiangDayResponseComposite = importPhanCongGiangDayResponse200 | importPhanCongGiangDayResponse400;
+    
+export type importPhanCongGiangDayResponse = importPhanCongGiangDayResponseComposite & {
+  headers: Headers;
+}
+
+export const getImportPhanCongGiangDayUrl = () => {
+
+
+  
+
+  return `/api/plan-training/import-phan-cong-giang-day`
+}
+
+export const importPhanCongGiangDay = async (importPhanCongGiangDay: ImportPhanCongGiangDay, options?: RequestInit): Promise<importPhanCongGiangDayResponse> => {
+    const formData = new FormData();
+formData.append(`file`, importPhanCongGiangDay.file)
+formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
+
+  return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+
+export const getImportPhanCongGiangDayMutationOptions = <TError = ImportPhanCongGiangDay400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext> => {
+
+const mutationKey = ['importPhanCongGiangDay'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importPhanCongGiangDay>>, {data: ImportPhanCongGiangDay}> = (props) => {
+          const {data} = props ?? {};
+
+          return  importPhanCongGiangDay(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ImportPhanCongGiangDayMutationResult = NonNullable<Awaited<ReturnType<typeof importPhanCongGiangDay>>>
+    export type ImportPhanCongGiangDayMutationBody = ImportPhanCongGiangDay
+    export type ImportPhanCongGiangDayMutationError = ImportPhanCongGiangDay400
+
+    /**
+ * @summary Import danh sách phân công giảng dạy
+ */
+export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+        TError,
+        {data: ImportPhanCongGiangDay},
+        TContext
+      > => {
+
+      const mutationOptions = getImportPhanCongGiangDayMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
