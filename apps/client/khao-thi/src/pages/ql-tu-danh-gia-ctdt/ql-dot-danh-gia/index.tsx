@@ -1,3 +1,4 @@
+import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
@@ -11,13 +12,16 @@ import {
     useFindManyEvaluationPeriod,
     useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationPeriod() {
+    const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -175,6 +179,15 @@ export default function EvaluationPeriod() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
+                                                <Tooltip title={'Chi tiết'} placement="top">
+                                                    <EyeOutlined
+                                                        onClick={() => {
+                                                            router.push(
+                                                                `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}`
+                                                            )
+                                                        }}
+                                                    />
+                                                </Tooltip>
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()

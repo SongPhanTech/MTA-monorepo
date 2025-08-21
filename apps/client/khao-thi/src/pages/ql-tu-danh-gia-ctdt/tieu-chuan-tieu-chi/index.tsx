@@ -220,7 +220,7 @@ export default function StandardCatalog() {
                         filters={filters}
                         setFilters={setFilters}
                         headerRight={(record) => (
-                            <div className="flex gap-2.5 w-[85px] items-center">
+                            <div className="flex px-3 gap-2.5 w-[85px] items-center justify-end">
                                 <CreateIcon
                                     onClick={(e) => {
                                         e.stopPropagation()
@@ -264,23 +264,23 @@ export default function StandardCatalog() {
                             {
                                 title: 'Thứ tự',
                                 dataIndex: 'order',
-                                width: 200,
+                                width: 100,
                                 align: 'center',
                                 type: 'order',
                             },
                             {
-                                title: 'Tên',
+                                title: 'Tiêu chí',
                                 dataIndex: 'name',
-                                width: 200,
                                 align: 'center',
                                 type: 'input',
+                                width: 400,
                             },
                             {
-                                title: 'Tên',
+                                title: 'Thang điểm',
                                 dataIndex: 'scoreScalesId',
-                                width: 200,
                                 align: 'center',
                                 type: 'select',
+                                width: 150,
                                 options: scoreScales?.map(({ id, name, passFrom }) => ({
                                     value: id,
                                     label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
@@ -291,29 +291,19 @@ export default function StandardCatalog() {
                                         : record?.scoreScale?.name,
                             },
                             {
-                                title: 'Mô tả',
-                                width: 200,
-                                align: 'center',
-                                dataIndex: 'description',
-                                render: (value: string) => {
-                                    return (
-                                        <Tooltip title={value}>
-                                            <div className="line-clamp-2">{value}</div>
-                                        </Tooltip>
-                                    )
-                                },
-                            },
-                            {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 50,
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
-                                            <Row className="justify-center gap-2">
+                                            <Row className="justify-end gap-2 px-3">
                                                 <Tooltip title="Chi tiết tiêu chí" placement="top">
-                                                    <EyeOutlined className="text-sm cursor-pointer" />
+                                                    <EyeOutlined
+                                                        style={{ fontSize: '1rem' }}
+                                                        className="text-sm cursor-pointer"
+                                                    />
                                                 </Tooltip>
                                                 <EditIcon
                                                     onClick={(e) => {

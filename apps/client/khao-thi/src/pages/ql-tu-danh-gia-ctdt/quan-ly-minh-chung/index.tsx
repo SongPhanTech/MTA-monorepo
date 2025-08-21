@@ -115,7 +115,7 @@ export default function EvidenceCategory() {
                     <Row gutter={[16, 16]} align="top">
                         <Col span={12}>
                             <Flex>
-                                <Col span={10}>
+                                <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
@@ -126,7 +126,7 @@ export default function EvidenceCategory() {
                                                 })
                                             }
                                             className="py-0 h-8"
-                                            placeholder="Tìm kiếm tiêu chuẩn đánh giá CTĐT"
+                                            placeholder="Tìm kiếm"
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -205,13 +205,6 @@ export default function EvidenceCategory() {
                         //     )
                         // }}
                         columns={[
-                            {
-                                title: 'Thứ tự',
-                                dataIndex: 'order',
-                                width: 200,
-                                align: 'center',
-                                type: 'order',
-                            },
                             {
                                 title: 'Tên',
                                 dataIndex: 'name',

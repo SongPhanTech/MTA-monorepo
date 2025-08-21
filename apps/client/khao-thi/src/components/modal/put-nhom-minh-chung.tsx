@@ -33,6 +33,7 @@ const PutEvidenceCategory = () => {
             const data = {
                 name: output.name,
                 description: output.description,
+                code: output.code,
             }
             if (id) {
                 await updateEvidenceCategory({
@@ -85,6 +86,11 @@ const PutEvidenceCategory = () => {
             title={id ? 'Chỉnh sửa nhóm minh chứng' : 'Thêm mới nhóm minh chứng'}
             className="w-[550px]"
         >
+            <Col span={24}>
+                <FormItem form={form} name="code" label="Mã nhóm minh chứng" required>
+                    <Input placeholder="Nhập mã nhóm minh chứng" />
+                </FormItem>
+            </Col>
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên nhóm minh chứng" required>
                     <Input placeholder="Nhập tên nhóm minh chứng" />

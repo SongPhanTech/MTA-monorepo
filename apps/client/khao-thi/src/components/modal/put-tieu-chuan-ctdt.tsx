@@ -29,6 +29,7 @@ const PutStandardCatalog = () => {
             const data = {
                 order: output.order,
                 name: output.name,
+                code: output.code,
             }
             if (input?.id) {
                 await updateStandardCatalog({
@@ -92,6 +93,11 @@ const PutStandardCatalog = () => {
                         defaultValue={input?.count || 0 + 1}
                         disabled
                     />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="code" label="Mã tiêu chuẩn" required>
+                    <Input placeholder="Nhập mã tiêu chuẩn" />
                 </FormItem>
             </Col>
             <Col span={24}>
