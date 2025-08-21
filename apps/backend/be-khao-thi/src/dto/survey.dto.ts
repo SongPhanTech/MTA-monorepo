@@ -68,14 +68,14 @@ export const SurveyStatisticsBySemesterResponseSchema = z
 
 const DepartmentSchema = z.object({
     id: z.string().openapi({ example: 'BM_CNPM' }),
-    departmentName: z.string().openapi({ example: 'Bộ môn Công nghệ phần mềm' }),
-    lecturerCount: z.number().int().openapi({ example: 15 }),
+    organizationName: z.string().openapi({ example: 'Bộ môn Công nghệ phần mềm' }),
+    lecturerSurveyCount: z.number().int().openapi({ example: 15 }),
 })
 
 const FacultySchema = z.object({
     id: z.string().openapi({ example: 'K_CNTT' }),
-    facultyName: z.string().openapi({ example: 'Khoa Công nghệ thông tin' }),
-    totalLecturersInFaculty: z.number().int().openapi({ example: 40 }),
+    organizationName: z.string().openapi({ example: 'Khoa Công nghệ thông tin' }),
+    lecturerSurveyCount: z.number().int().openapi({ example: 40 }),
     departments: z.array(DepartmentSchema),
 })
 
@@ -87,16 +87,47 @@ export const FacultyStatisticsResponseSchema = z
         }),
         parentUnitInfo: z
             .object({
-                id: z.string().openapi({ example: 'D_CNTT' }),
+                id: z.string().openapi({ example: 'MTA' }),
                 name: z.string().openapi({ example: 'Hoc vien ky thuat quan su' }),
             })
             .openapi('ParentUnitInfo'),
-        totalSurveyedLecturersInUnit: z.number().int().openapi({
+        lecturerSurveyCount: z.number().int().openapi({
             description: 'Tổng số giảng viên được khảo sát trong đơn vị cha.',
             example: 75,
         }),
-        statisticsByFaculty: z
-            .array(FacultySchema) // Top-level bây giờ là một mảng các Khoa
-            .openapi('StatisticsByFaculty'),
+        statisticsByFaculty: z.array(FacultySchema).openapi('StatisticsByFaculty'),
     })
     .openapi('FacultyStatisticsResponse')
+
+export const AnswerStatisticSchema = z.object({
+    level: z.number().int().openapi({
+        description: 'Mã số của mức độ (0-4).',
+        example: 1,
+    }),
+    levelName: z.string().openapi({
+        description: 'Tên đầy đủ của mức độ.',
+        example: 'Rất hài lòng',
+    }),
+    count: z.number().int().openapi({
+        description: 'Số lượng người chọn mức độ này.',
+        example: 150,
+    }),
+    percentage: z.number().openapi({
+        description: 'Tỷ lệ phần trăm trên tổng số câu trả lời.',
+        example: 53.57,
+    }),
+})
+
+export const AnswerStatisticsResponseSchema = z
+    .object({
+        surveyId: z.string().openapi({
+            description: 'ID của cuộc khảo sát.',
+            example: 'svy-course-quality-fall24',
+        }),
+        totalAnswers: z.number().int().openapi({
+            description: 'Tổng số câu trả lời hợp lệ cho câu hỏi này.',
+            example: 280,
+        }),
+        statistics: z.array(AnswerStatisticSchema).openapi('AnswerStatistics'),
+    })
+    .openapi('AnswerStatisticsResponse')
