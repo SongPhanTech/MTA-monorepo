@@ -472,7 +472,6 @@ app.openapi(getAnswerStatistics, async (c) => {
         0: 'Phân vân',
     }
 
-    // Giả lập số lượng câu trả lời cho mỗi mức độ
     const fakeAnswerCounts: Record<number, number> = {
         1: 150, // Rất hài lòng
         2: 80, // Hài lòng
@@ -483,21 +482,18 @@ app.openapi(getAnswerStatistics, async (c) => {
 
     const totalAnswers = Object.values(fakeAnswerCounts).reduce((sum, count) => sum + count, 0)
 
-    // Xử lý dữ liệu để tạo ra mảng thống kê
     const statistics = Object.entries(fakeAnswerCounts)
         .map(([level, count]) => {
             const levelNum = Number.parseInt(level, 10)
             return {
                 level: levelNum,
-                levelName: satisfactionLevels[levelNum],
+                levelName: satisfactionLevels[levelNum] ?? 'Không xác định',
                 count: count,
-                // Tính toán tỷ lệ phần trăm, làm tròn 2 chữ số
                 percentage: Number.parseFloat(((count / totalAnswers) * 100).toFixed(2)),
             }
         })
         .sort((a, b) => a.level - b.level) // Sắp xếp theo thứ tự level
 
-    // Tạo đối tượng response hoàn chỉnh
     const responseData = {
         surveyId: surveyId,
         totalAnswers: totalAnswers,
