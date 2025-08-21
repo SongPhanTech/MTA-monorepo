@@ -5,6 +5,7 @@ import { prisma } from '..'
 import {
     AnswerStatisticsResponseSchema,
     FacultyStatisticsResponseSchema,
+    HourlyAggregateResponseSchema,
     ParticipationByTypeResponseSchema,
     SimplifiedResponseSchema,
     SurveyStatisticsBySemesterResponseSchema,
@@ -569,6 +570,86 @@ app.openapi(getDissatisfiedCountByFaculty, async (c) => {
     }
 
     return c.json(responseData)
+})
+
+const getCompletionByHourOfDay = createRoute({
+    operationId: 'get-survey-completion-by-hour-of-day',
+    path: '/statistics/surveys/completion-by-hour-of-day',
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê tổng hợp số lượt hoàn thành theo từng giờ trong ngày',
+    description:
+        'API này tổng hợp và trả về số lượt hoàn thành khảo sát cho mỗi khung giờ (0-23) trên tất cả các ngày diễn ra khảo sát.',
+    request: {
+        query: z.object({
+            surveyId: z.string().openapi({
+                description: 'ID của khảo sát cần xem thống kê.',
+                example: 'svy-engagement-q4-2024',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: { 'application/json': { schema: HourlyAggregateResponseSchema } },
+        },
+    },
+})
+
+app.openapi(getCompletionByHourOfDay, (c) => {
+    const { surveyId } = c.req.valid('query')
+
+    // --- DỮ LIỆU GIẢ (MOCK DATA) CHO NHIỀU NGÀY ---
+    const generateMultiDayFakeData = () => {
+        const records: any[] = []
+        const days = ['2024-12-01', '2024-12-02', '2024-12-03', '2024-12-04']
+        const peakHours: Record<number, number> = { 9: 20, 14: 15, 21: 40 } // Giờ cao điểm chung
+
+        days.forEach((date) => {
+            for (let hour = 0; hour < 24; hour++) {
+                // Thêm một chút ngẫu nhiên cho mỗi ngày
+                const randomFactor = Math.random() * 0.4 + 0.8 // (0.8 to 1.2)
+                const count = Math.floor(
+                    (peakHours[hour] || Math.floor(Math.random() * 5)) * randomFactor
+                )
+                for (let i = 0; i < count; i++) {
+                    const timestamp = new Date(`${date}T00:00:00Z`)
+                    timestamp.setUTCHours(hour, Math.floor(Math.random() * 60))
+                    records.push({ completedAt: timestamp.toISOString() })
+                }
+            }
+        })
+        return records
+    }
+
+    const allRecords = generateMultiDayFakeData()
+
+    const uniqueDays = new Set(allRecords.map((r) => r.completedAt.slice(0, 10)))
+    const surveyDurationInDays = uniqueDays.size
+
+    const hourlyTotalCounts = Array(24).fill(0)
+    allRecords.forEach((record) => {
+        const hour = new Date(record.completedAt).getUTCHours()
+        hourlyTotalCounts[hour]++
+    })
+
+    const hourlyAggregates = hourlyTotalCounts.map((totalCount, hour) => ({
+        hour: hour,
+        totalCompletionCount: totalCount,
+        averageCompletionCount:
+            surveyDurationInDays > 0
+                ? Number.parseFloat((totalCount / surveyDurationInDays).toFixed(2))
+                : 0,
+    }))
+
+    const responseData = {
+        surveyId: surveyId,
+        totalCompletions: allRecords.length,
+        surveyDurationInDays: surveyDurationInDays,
+        hourlyAggregates: hourlyAggregates,
+    }
+
+    return c.json(responseData, 200)
 })
 
 export default app

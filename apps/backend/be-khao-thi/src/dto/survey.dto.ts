@@ -148,3 +148,36 @@ export const SimplifiedResponseSchema = z
         statistics: SimplifiedStatisticsSchema,
     })
     .openapi('SimplifiedFacultyDissatisfiedResponse')
+
+export const HourlyAggregateDataPointSchema = z.object({
+    hour: z.number().int().min(0).max(23).openapi({
+        description: 'Khung giờ trong ngày (từ 0 đến 23).',
+        example: 21,
+    }),
+    totalCompletionCount: z.number().int().openapi({
+        description: 'Tổng số lượt hoàn thành trong khung giờ này trên tất cả các ngày.',
+        example: 155,
+    }),
+    averageCompletionCount: z.number().openapi({
+        description: 'Số lượt hoàn thành trung bình cho khung giờ này mỗi ngày.',
+        example: 38.75,
+    }),
+})
+
+export const HourlyAggregateResponseSchema = z
+    .object({
+        surveyId: z.string().openapi({
+            description: 'ID của cuộc khảo sát.',
+            example: 'svy-engagement-q4-2024',
+        }),
+        totalCompletions: z.number().int().openapi({
+            description: 'Tổng số lượt hoàn thành trong toàn bộ khảo sát.',
+            example: 850,
+        }),
+        surveyDurationInDays: z.number().int().openapi({
+            description: 'Tổng số ngày khảo sát đã diễn ra (dựa trên dữ liệu).',
+            example: 4,
+        }),
+        hourlyAggregates: z.array(HourlyAggregateDataPointSchema).openapi('HourlyAggregates'),
+    })
+    .openapi('HourlyAggregateResponse')
