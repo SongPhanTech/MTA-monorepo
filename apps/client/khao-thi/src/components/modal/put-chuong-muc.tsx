@@ -104,7 +104,7 @@ const PutKnowledgeBlock = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả" required>
+                <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>

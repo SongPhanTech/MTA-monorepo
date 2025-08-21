@@ -4,6 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { GraduationCheckResultDiplomaTypeType } from './graduationCheckResultDiplomaTypeType';
 
 /**
  * @nullable
@@ -24,4 +25,5 @@ export type GraduationCheckResultDiplomaType = {
   name: string;
   /** @nullable */
   englishName?: string | null;
+  type: GraduationCheckResultDiplomaTypeType;
 } | null;

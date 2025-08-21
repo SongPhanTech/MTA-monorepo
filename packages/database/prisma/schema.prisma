@@ -451,6 +451,17 @@ enum DiplomaVerificationStatus {
   @@schema("ql-dao-tao")
 }
 
+/// Enum cho loại lặp lại nhắc nhở
+enum ReminderRepeatType {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+
+  @@schema("ql-dao-tao")
+}
+
 /// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN
@@ -565,7 +576,7 @@ model KnowledgeBlock {
   questions        Question[]
   structureRules   TestStructureRule[]
 
-  @@unique([name])
+  @@unique([name, subjectVersionId])
   @@schema("khao-thi")
 }
 
@@ -1618,6 +1629,8 @@ model Student {
   examSession                    ExamSession[]
   studentTrainingSemester        StudentTrainingSemester[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
+  notes                          Note[]
+  noteFolders                    NoteFolder[]
 
   @@schema("ql-dao-tao")
 }
@@ -3683,6 +3696,8 @@ model DocumentFile {
   diplomaVerificationFrontId String?                         @unique()
   diplomaVerificationBack    DiplomaVerificationApplication? @relation(name: "DiplomaVerificationBack", fields: [diplomaVerificationBackId], references: [id])
   diplomaVerificationBackId  String?                         @unique()
+  note                       Note?                           @relation(fields: [noteId], references: [id])
+  noteId                     String?
 
   @@schema("ql-danh-muc")
 }
@@ -4108,6 +4123,87 @@ model DiplomaVerificationApplication {
   /// Liên kết học viên (nếu cần)
   studentId               String?
   student                 Student?                  @relation(fields: [studentId], references: [id])
+
+  @@schema("ql-dao-tao")
+}
+
+/// Ghi chú cá nhân của sinh viên
+model Note {
+  id          String         @id() @default(cuid())
+  code        String?        @unique()
+  active      Boolean        @default(true)
+  description String?        @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt()
+  content     String         @db.Text()
+  isPinned    Boolean        @default(false)
+  student     Student        @relation(fields: [studentId], references: [id])
+  studentId   String
+  folder      NoteFolder?    @relation(fields: [folderId], references: [id])
+  folderId    String?
+  tags        NoteTag[]
+  attachments DocumentFile[]
+  reminders   NoteReminder[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Thư mục ghi chú
+model NoteFolder {
+  id          String       @id() @default(cuid())
+  code        String?      @unique()
+  active      Boolean      @default(true)
+  description String?      @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt()
+  name        String
+  icon        String?
+  sortOrder   Int          @default(0)
+  student     Student      @relation(fields: [studentId], references: [id])
+  studentId   String
+  parent      NoteFolder?  @relation("FolderHierarchy", fields: [parentId], references: [id])
+  parentId    String?
+  children    NoteFolder[] @relation("FolderHierarchy")
+  notes       Note[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Tag ghi chú (dùng chung cho tất cả sinh viên)
+model NoteTag {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  name        String    @unique()
+  color       String?
+  notes       Note[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Nhắc nhở ghi chú
+model NoteReminder {
+  id           String             @id() @default(cuid())
+  code         String?            @unique()
+  active       Boolean            @default(true)
+  description  String?            @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @default(now()) @updatedAt()
+  title        String
+  reminderTime DateTime
+  isCompleted  Boolean            @default(false)
+  completedAt  DateTime?
+  repeatType   ReminderRepeatType @default(NONE)
+  isNotified   Boolean            @default(false)
+  note         Note               @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  noteId       String
 
   @@schema("ql-dao-tao")
 }

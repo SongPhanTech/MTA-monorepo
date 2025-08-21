@@ -85,7 +85,7 @@ const PutExamBank = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name="examCode" label="Mã đề thi">
+                <FormItem form={form} name="examCode" label="Mã đề thi" required>
                     <Input placeholder="Nhập mã đề thi" />
                 </FormItem>
             </Col>

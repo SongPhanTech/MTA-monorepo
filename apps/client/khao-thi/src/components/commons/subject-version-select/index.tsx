@@ -63,8 +63,8 @@ const TreeSelectSubjectVersion: React.FC<CustomTreeSelectProps> = ({
                 },
             },
             orderBy: { createdAt: 'desc' },
-        },
-        { enabled: !!subjectVersionId }
+        }
+        // { enabled: !!subjectVersionId }
     )
 
     const selectedParentId = useMemo(() => {

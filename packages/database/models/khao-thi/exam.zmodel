@@ -61,7 +61,7 @@ model KnowledgeBlock extends Base {
   questions        Question[]
   structureRules   TestStructureRule[]
 
-  @@unique([name])
+  @@unique([name, subjectVersionId])
   @@schema("khao-thi")
 }
 

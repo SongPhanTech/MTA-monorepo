@@ -21,6 +21,7 @@ export const ModalPrintExamBank = () => {
         semester: string
         examId: string
         duration: number
+        explanation: boolean
     }>({
         tag: ModalPrintExamBank.name,
     })
@@ -145,7 +146,12 @@ export const ModalPrintExamBank = () => {
 
                                 {/* Bên phải */}
                                 <td className="align-top w-1/3 p-2 text-center">
-                                    <span className="font-bold uppercase ">{input?.semester}</span>
+                                    <span
+                                        className="font-bold uppercase "
+                                        dangerouslySetInnerHTML={{
+                                            __html: input?.semester || '',
+                                        }}
+                                    />
                                 </td>
                             </tr>
                         </tbody>
@@ -212,6 +218,19 @@ export const ModalPrintExamBank = () => {
                                             : '<i>Chưa có nội dung</i>',
                                     }}
                                 />
+                                {input?.explanation && (
+                                    <>
+                                        <span className="italic text-sm">Giải thích đáp án:</span>
+                                        <span
+                                            className="prose max-w-none text-gray-800"
+                                            dangerouslySetInnerHTML={{
+                                                __html: item.question.explanation
+                                                    ? renderWithMath(item.question.explanation)
+                                                    : '<i>Chưa có nội dung</i>',
+                                            }}
+                                        />
+                                    </>
+                                )}
                             </div>
                         ))}
                     </div>

@@ -4,11 +4,16 @@ import { Segmented, Tabs } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useState } from 'react'
+import TestStructureRule from './components/cau-hinh-sinh-de'
+import ExamBank from './components/danh-sach-de-thi'
 import Information from './components/thong-tin-ky-thi'
 
 export default function PageId() {
     const router = useRouter()
     const examId = router.query.id as string
+    const { ids } = router.query
+    const selectedIds = ids ? ids.toString().split(',') : []
+
     const [id, setId] = useState('')
     useEffect(() => {
         if (!examId) return
@@ -26,12 +31,17 @@ export default function PageId() {
         {
             key: 'infor',
             label: 'Thông tin kỳ thi',
-            children: <Information id={id} />,
+            children: <Information id={id} selectedIds={selectedIds} />,
+        },
+        {
+            key: 'sinhDeTuDong',
+            label: 'Cấu hình sinh đề tự động',
+            children: <TestStructureRule id={id} />,
         },
         {
             key: 'examBank',
             label: 'Danh sách đề thi',
-            children: <div>3423</div>,
+            children: <ExamBank id={id} />,
         },
     ]
 
@@ -42,6 +52,7 @@ export default function PageId() {
                 onChange={(val) => setActiveKey(val as string)}
                 options={[
                     { label: 'Thông tin kỳ thi', value: 'infor' },
+                    { label: 'Cấu hình sinh đề tự động', value: 'sinhDeTuDong' },
                     { label: 'Danh sách đề thi', value: 'examBank' },
                 ]}
                 style={{ marginBottom: 14 }}
