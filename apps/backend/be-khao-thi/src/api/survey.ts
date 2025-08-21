@@ -5,7 +5,9 @@ import { prisma } from '..'
 import {
     AnswerStatisticsResponseSchema,
     FacultyStatisticsResponseSchema,
+    HourlyAggregateResponseSchema,
     ParticipationByTypeResponseSchema,
+    SimplifiedResponseSchema,
     SurveyStatisticsBySemesterResponseSchema,
 } from '../dto/survey.dto'
 import { getBufferFromUrl } from '../services/template.service'
@@ -472,7 +474,6 @@ app.openapi(getAnswerStatistics, async (c) => {
         0: 'Phân vân',
     }
 
-    // Giả lập số lượng câu trả lời cho mỗi mức độ
     const fakeAnswerCounts: Record<number, number> = {
         1: 150, // Rất hài lòng
         2: 80, // Hài lòng
@@ -483,25 +484,169 @@ app.openapi(getAnswerStatistics, async (c) => {
 
     const totalAnswers = Object.values(fakeAnswerCounts).reduce((sum, count) => sum + count, 0)
 
-    // Xử lý dữ liệu để tạo ra mảng thống kê
     const statistics = Object.entries(fakeAnswerCounts)
         .map(([level, count]) => {
             const levelNum = Number.parseInt(level, 10)
             return {
                 level: levelNum,
-                levelName: satisfactionLevels[levelNum],
+                levelName: satisfactionLevels[levelNum] ?? 'Không xác định',
                 count: count,
-                // Tính toán tỷ lệ phần trăm, làm tròn 2 chữ số
                 percentage: Number.parseFloat(((count / totalAnswers) * 100).toFixed(2)),
             }
         })
         .sort((a, b) => a.level - b.level) // Sắp xếp theo thứ tự level
 
-    // Tạo đối tượng response hoàn chỉnh
     const responseData = {
         surveyId: surveyId,
         totalAnswers: totalAnswers,
         statistics: statistics,
+    }
+
+    return c.json(responseData, 200)
+})
+
+const getDissatisfiedCountByFaculty = createRoute({
+    operationId: 'get-dissatisfied-count-by-faculty',
+    path: '/statistics/lecturers/dissatisfied-count-by-faculty', // Đường dẫn mới rõ ràng hơn
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê giảng viên không hài lòng theo từng Khoa',
+    description: 'Trả về một đối tượng đơn giản { Tên Khoa: Số lượng } cho toàn trường.',
+    request: {
+        query: z.object({
+            surveyId: z.string().openapi({ example: 'svy-annual-review-2025' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: { 'application/json': { schema: SimplifiedResponseSchema } },
+        },
+    },
+})
+
+app.openapi(getDissatisfiedCountByFaculty, async (c) => {
+    const { surveyId } = c.req.valid('query')
+
+    const universityData = {
+        universityName: 'Học viện Kỹ thuật Quân sự',
+        faculties: [
+            { id: 'K_CNTT', name: 'Khoa Công nghệ thông tin' },
+            { id: 'K_KT', name: 'Khoa Kinh tế' },
+            { id: 'K_NN', name: 'Khoa Ngoại ngữ' },
+        ],
+        lecturerRatings: [
+            { lecturerId: 'gv001', facultyId: 'K_CNTT', rating: 1 },
+            { lecturerId: 'gv002', facultyId: 'K_CNTT', rating: 3 }, // Không hài lòng
+            { lecturerId: 'gv003', facultyId: 'K_CNTT', rating: 4 }, // Rất không hài lòng
+            { lecturerId: 'gv004', facultyId: 'K_CNTT', rating: 2 },
+            { lecturerId: 'gv005', facultyId: 'K_KT', rating: 3 }, // Không hài lòng
+            { lecturerId: 'gv006', facultyId: 'K_KT', rating: 1 },
+            { lecturerId: 'gv007', facultyId: 'K_KT', rating: 2 },
+            { lecturerId: 'gv008', facultyId: 'K_KT', rating: 4 }, // Rất không hài lòng
+            { lecturerId: 'gv009', facultyId: 'K_NN', rating: 2 },
+            { lecturerId: 'gv010', facultyId: 'K_NN', rating: 3 }, // Không hài lòng
+        ],
+    }
+    const dissatisfiedLecturers = universityData.lecturerRatings.filter(
+        (lecturer) => lecturer.rating === 3 || lecturer.rating === 4
+    )
+
+    const facultyIdToNameMap = new Map(universityData.faculties.map((f) => [f.id, f.name]))
+
+    const finalStatistics = dissatisfiedLecturers.reduce(
+        (acc: Record<string, number>, lecturer) => {
+            const facultyName = facultyIdToNameMap.get(lecturer.facultyId) || 'Khoa không xác định'
+            acc[facultyName] = (acc[facultyName] || 0) + 1
+            return acc
+        },
+        {} as Record<string, number>
+    )
+
+    const responseData = {
+        surveyId: surveyId,
+        universityName: universityData.universityName,
+        statistics: finalStatistics,
+    }
+
+    return c.json(responseData)
+})
+
+const getCompletionByHourOfDay = createRoute({
+    operationId: 'get-survey-completion-by-hour-of-day',
+    path: '/statistics/surveys/completion-by-hour-of-day',
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê tổng hợp số lượt hoàn thành theo từng giờ trong ngày',
+    description:
+        'API này tổng hợp và trả về số lượt hoàn thành khảo sát cho mỗi khung giờ (0-23) trên tất cả các ngày diễn ra khảo sát.',
+    request: {
+        query: z.object({
+            surveyId: z.string().openapi({
+                description: 'ID của khảo sát cần xem thống kê.',
+                example: 'svy-engagement-q4-2024',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: { 'application/json': { schema: HourlyAggregateResponseSchema } },
+        },
+    },
+})
+
+app.openapi(getCompletionByHourOfDay, (c) => {
+    const { surveyId } = c.req.valid('query')
+
+    // --- DỮ LIỆU GIẢ (MOCK DATA) CHO NHIỀU NGÀY ---
+    const generateMultiDayFakeData = () => {
+        const records: any[] = []
+        const days = ['2024-12-01', '2024-12-02', '2024-12-03', '2024-12-04']
+        const peakHours: Record<number, number> = { 9: 20, 14: 15, 21: 40 } // Giờ cao điểm chung
+
+        days.forEach((date) => {
+            for (let hour = 0; hour < 24; hour++) {
+                // Thêm một chút ngẫu nhiên cho mỗi ngày
+                const randomFactor = Math.random() * 0.4 + 0.8 // (0.8 to 1.2)
+                const count = Math.floor(
+                    (peakHours[hour] || Math.floor(Math.random() * 5)) * randomFactor
+                )
+                for (let i = 0; i < count; i++) {
+                    const timestamp = new Date(`${date}T00:00:00Z`)
+                    timestamp.setUTCHours(hour, Math.floor(Math.random() * 60))
+                    records.push({ completedAt: timestamp.toISOString() })
+                }
+            }
+        })
+        return records
+    }
+
+    const allRecords = generateMultiDayFakeData()
+
+    const uniqueDays = new Set(allRecords.map((r) => r.completedAt.slice(0, 10)))
+    const surveyDurationInDays = uniqueDays.size
+
+    const hourlyTotalCounts = Array(24).fill(0)
+    allRecords.forEach((record) => {
+        const hour = new Date(record.completedAt).getUTCHours()
+        hourlyTotalCounts[hour]++
+    })
+
+    const hourlyAggregates = hourlyTotalCounts.map((totalCount, hour) => ({
+        hour: hour,
+        totalCompletionCount: totalCount,
+        averageCompletionCount:
+            surveyDurationInDays > 0
+                ? Number.parseFloat((totalCount / surveyDurationInDays).toFixed(2))
+                : 0,
+    }))
+
+    const responseData = {
+        surveyId: surveyId,
+        totalCompletions: allRecords.length,
+        surveyDurationInDays: surveyDurationInDays,
+        hourlyAggregates: hourlyAggregates,
     }
 
     return c.json(responseData, 200)
