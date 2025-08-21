@@ -1,6 +1,7 @@
 import PutAddCertificateScoreModal from './add-certificate'
 import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
+import PutUpdatePaymentStatus from './modal-cap-nhat-trang-thai-thanh-toan'
 import HanNhapDiem from './modal-han-nhap-diem'
 import ModalNhapTKB from './modal-import-tkb'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
@@ -155,4 +156,5 @@ export {
     ModalPhuLucThacSi,
     PutPaymentRecord,
     PutPaymentRecordDetail,
+    PutUpdatePaymentStatus,
 }

@@ -1,5 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Table from '@components/commons/table'
+import { useCouncilRoleOptions } from '@hooks/councilRole'
 import useSpinner from '@hooks/spinner'
 import { CouncilRole, type DefaultCouncilRolePayAmount, PaymentStatus } from '@workspace/db'
 import {
@@ -29,6 +31,7 @@ const PutPaymentRecord = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
+    const { getCouncilRoleLabel } = useCouncilRoleOptions()
 
     const { data: selectedThesisProjects } = useFindManyThesisProject(
         {
@@ -43,7 +46,18 @@ const PutPaymentRecord = () => {
         { enabled: !!input?.selectedRowKeys.length }
     )
 
-    console.log(selectedThesisProjects)
+    const membersData =
+        selectedThesisProjects?.flatMap((project) =>
+            project.council
+                ? project.council.members.map((m) => ({
+                      ...m,
+                      thesisProjectId: project.id,
+                      thesisProjectTitle: project.title,
+                      expertName: m.expert?.name,
+                      expertEmail: m.expert?.email,
+                  }))
+                : []
+        ) ?? []
 
     const { data: defaultCouncilRolePayAmount } = useFindManyDefaultCouncilRolePayAmount()
 
@@ -147,8 +161,57 @@ const PutPaymentRecord = () => {
             onCancel={onClose}
             maskClosable={true}
             title={'Thêm thông tin thanh toán'}
-            className="w-[40vw]"
+            className="w-[60vw]"
         >
+            <Table
+                rowKey="id"
+                id="expert-profile"
+                dataSource={membersData}
+                className="mb-8"
+                scroll={{ y: 300 }}
+                columns={[
+                    {
+                        title: 'STT',
+                        width: 60,
+                        align: 'center',
+                        fixed: 'left',
+                        render: (_, __, index) => index + 1,
+                    },
+                    {
+                        title: 'Tên chuyên gia',
+                        width: 150,
+                        align: 'center',
+                        render: (_, record) => record?.expert.name,
+                    },
+                    {
+                        title: 'Hàm hàm',
+                        width: 150,
+                        align: 'center',
+                        render: (_, record) => record?.expert.academicRank,
+                    },
+                    {
+                        title: 'Hàm vị',
+                        width: 150,
+                        align: 'center',
+                        render: (_, record) => record?.expert.academicDegree,
+                    },
+                    {
+                        title: 'Vai trò',
+                        width: 150,
+                        align: 'center',
+                        render: (_, record) => getCouncilRoleLabel(record?.role),
+                    },
+                    {
+                        title: 'Đề tài',
+                        width: 250,
+                        align: 'center',
+                        render: (_, record) => record?.thesisProjectTitle,
+                    },
+                ]}
+                pagination={{
+                    hideOnSinglePage: true,
+                }}
+            />
             <Col span={12}>
                 <FormItem form={form} name="chairman" label="Chủ tịch">
                     <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
