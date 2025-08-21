@@ -6,6 +6,7 @@ import {
     AnswerStatisticsResponseSchema,
     FacultyStatisticsResponseSchema,
     ParticipationByTypeResponseSchema,
+    SimplifiedResponseSchema,
     SurveyStatisticsBySemesterResponseSchema,
 } from '../dto/survey.dto'
 import { getBufferFromUrl } from '../services/template.service'
@@ -501,6 +502,73 @@ app.openapi(getAnswerStatistics, async (c) => {
     }
 
     return c.json(responseData, 200)
+})
+
+const getDissatisfiedCountByFaculty = createRoute({
+    operationId: 'get-dissatisfied-count-by-faculty',
+    path: '/statistics/lecturers/dissatisfied-count-by-faculty', // Đường dẫn mới rõ ràng hơn
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê giảng viên không hài lòng theo từng Khoa',
+    description: 'Trả về một đối tượng đơn giản { Tên Khoa: Số lượng } cho toàn trường.',
+    request: {
+        query: z.object({
+            surveyId: z.string().openapi({ example: 'svy-annual-review-2025' }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: { 'application/json': { schema: SimplifiedResponseSchema } },
+        },
+    },
+})
+
+app.openapi(getDissatisfiedCountByFaculty, async (c) => {
+    const { surveyId } = c.req.valid('query')
+
+    const universityData = {
+        universityName: 'Học viện Kỹ thuật Quân sự',
+        faculties: [
+            { id: 'K_CNTT', name: 'Khoa Công nghệ thông tin' },
+            { id: 'K_KT', name: 'Khoa Kinh tế' },
+            { id: 'K_NN', name: 'Khoa Ngoại ngữ' },
+        ],
+        lecturerRatings: [
+            { lecturerId: 'gv001', facultyId: 'K_CNTT', rating: 1 },
+            { lecturerId: 'gv002', facultyId: 'K_CNTT', rating: 3 }, // Không hài lòng
+            { lecturerId: 'gv003', facultyId: 'K_CNTT', rating: 4 }, // Rất không hài lòng
+            { lecturerId: 'gv004', facultyId: 'K_CNTT', rating: 2 },
+            { lecturerId: 'gv005', facultyId: 'K_KT', rating: 3 }, // Không hài lòng
+            { lecturerId: 'gv006', facultyId: 'K_KT', rating: 1 },
+            { lecturerId: 'gv007', facultyId: 'K_KT', rating: 2 },
+            { lecturerId: 'gv008', facultyId: 'K_KT', rating: 4 }, // Rất không hài lòng
+            { lecturerId: 'gv009', facultyId: 'K_NN', rating: 2 },
+            { lecturerId: 'gv010', facultyId: 'K_NN', rating: 3 }, // Không hài lòng
+        ],
+    }
+    const dissatisfiedLecturers = universityData.lecturerRatings.filter(
+        (lecturer) => lecturer.rating === 3 || lecturer.rating === 4
+    )
+
+    const facultyIdToNameMap = new Map(universityData.faculties.map((f) => [f.id, f.name]))
+
+    const finalStatistics = dissatisfiedLecturers.reduce(
+        (acc: Record<string, number>, lecturer) => {
+            const facultyName = facultyIdToNameMap.get(lecturer.facultyId) || 'Khoa không xác định'
+            acc[facultyName] = (acc[facultyName] || 0) + 1
+            return acc
+        },
+        {} as Record<string, number>
+    )
+
+    const responseData = {
+        surveyId: surveyId,
+        universityName: universityData.universityName,
+        statistics: finalStatistics,
+    }
+
+    return c.json(responseData)
 })
 
 export default app

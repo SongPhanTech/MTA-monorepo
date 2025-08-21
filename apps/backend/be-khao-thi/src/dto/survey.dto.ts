@@ -131,3 +131,20 @@ export const AnswerStatisticsResponseSchema = z
         statistics: z.array(AnswerStatisticSchema).openapi('AnswerStatistics'),
     })
     .openapi('AnswerStatisticsResponse')
+
+const SimplifiedStatisticsSchema = z.record(z.string(), z.number().int()).openapi({
+    description: 'Đối tượng với key là tên Khoa và value là số lượng.',
+    example: {
+        'Khoa Công nghệ thông tin': 2,
+        'Khoa Kinh tế': 2,
+        'Khoa Ngoại ngữ': 1,
+    },
+})
+
+export const SimplifiedResponseSchema = z
+    .object({
+        surveyId: z.string().openapi({ example: 'svy-annual-review-2025' }),
+        universityName: z.string().openapi({ example: 'Học viện Kỹ thuật Quân sự' }),
+        statistics: SimplifiedStatisticsSchema,
+    })
+    .openapi('SimplifiedFacultyDissatisfiedResponse')
