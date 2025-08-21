@@ -2,6 +2,12 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import Docxtemplater from 'docxtemplater'
 import PizZip from 'pizzip'
 import { prisma } from '..'
+import {
+    AnswerStatisticsResponseSchema,
+    FacultyStatisticsResponseSchema,
+    ParticipationByTypeResponseSchema,
+    SurveyStatisticsBySemesterResponseSchema,
+} from '../dto/survey.dto'
 import { getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
 
@@ -193,6 +199,312 @@ app.openapi(exportReportSurveyOrganizational, async (c) => {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Content-Disposition': `attachment; filename="BaoCaoKhaoThi.docx"`,
     })
+})
+
+const getParticipationByType = createRoute({
+    operationId: 'get-participation-by-type',
+    path: '/statistics/participation-by-type',
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê số lượng sinh viên tham gia theo loại hình',
+    description:
+        'API này trả về dữ liệu giả về số lượng sinh viên tham gia khảo sát, được nhóm theo loại hình đào tạo.',
+    request: {
+        query: z.object({
+            surveyId: z.string().openapi({
+                description: 'ID của khảo sát cần xem thống kê.',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: {
+                'application/json': {
+                    schema: ParticipationByTypeResponseSchema,
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getParticipationByType, async (c) => {
+    const { surveyId } = c.req.valid('query')
+
+    // Validate survey exists
+    const survey = await prisma.survey.findUnique({
+        where: { id: surveyId },
+    })
+
+    if (!survey) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const fakeStatistics = [
+        { studentType: 'Sinh viên dân sự', participantCount: 350 },
+        { studentType: 'Học viên quân sự', participantCount: 120 },
+        { studentType: 'Sinh viên liên thông', participantCount: 35 },
+        { studentType: 'Sinh viên tại chức', participantCount: 15 },
+    ]
+
+    const totalParticipants = fakeStatistics.reduce((sum, item) => sum + item.participantCount, 0)
+
+    const responseData = {
+        surveyId: surveyId,
+        totalParticipants: totalParticipants,
+        statistics: fakeStatistics,
+    }
+    return c.json(responseData, 200)
+})
+
+const getSurveyStatisticsBySemester = createRoute({
+    operationId: 'get-survey-statistics-by-semester', // Tên operationId đã được cập nhật
+    path: '/statistics/surveys/count-by-semester', // Giữ nguyên đường dẫn
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê chi tiết số lượng khảo sát trong học kỳ',
+    description:
+        'API này trả về dữ liệu giả về tổng số lượng và chi tiết số lượng theo từng loại khảo sát trong một học kỳ cụ thể.',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi({
+                description: 'ID của học kỳ cần xem thống kê (ví dụ: HK1-2425).',
+                example: 'HK1-2425',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê chi tiết thành công.',
+            content: {
+                'application/json': {
+                    // Sử dụng schema mới chi tiết hơn
+                    schema: SurveyStatisticsBySemesterResponseSchema,
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy thông tin cho học kỳ này.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getSurveyStatisticsBySemester, (c) => {
+    const { semesterId } = c.req.valid('query')
+
+    const semesterName = `Học kỳ ${semesterId.slice(2, 3)} năm học ${20 + semesterId.slice(4, 6)}-${20 + semesterId.slice(6, 8)}`
+
+    const fakeDetails = [
+        { surveyType: 'Khảo sát chất lượng môn học', count: 15 },
+        { surveyType: 'Khảo sát cơ sở vật chất', count: 2 },
+        { surveyType: 'Khảo sát mức độ hài lòng của sinh viên', count: 4 },
+        { surveyType: 'Khảo sát hoạt động ngoại khóa', count: 1 },
+    ]
+
+    const totalSurveyCount = fakeDetails.reduce((sum, item) => sum + item.count, 0)
+
+    const responseData = {
+        semesterId: semesterId,
+        semesterName: semesterName,
+        totalSurveyCount: totalSurveyCount,
+        details: fakeDetails,
+    }
+
+    return c.json(responseData, 200)
+})
+
+const getFacultyStatisticsByParentUnit = createRoute({
+    operationId: 'get-faculty-statistics-by-parent-unit',
+    path: '/statistics/faculties/by-parent-unit', // Đường dẫn mới
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê giảng viên theo Khoa (con của một Đơn vị)',
+    description:
+        'API trả về danh sách các khoa và số lượng giảng viên được khảo sát bên trong một đơn vị cha cụ thể.',
+    request: {
+        query: z.object({
+            surveyId: z.string().openapi({
+                description: 'ID của khảo sát cần xem thống kê.',
+                example: 'svy-lecturer-fall-2024',
+            }),
+            organizationId: z.string().openapi({
+                description: 'ID của đơn vị cha để xem thống kê các khoa con.',
+                example: 'MTA',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: { 'application/json': { schema: FacultyStatisticsResponseSchema } },
+        },
+        404: {
+            description: 'Không tìm thấy đơn vị với ID được cung cấp.',
+            content: { 'application/json': { schema: z.object({ message: z.string() }) } },
+        },
+    },
+})
+
+app.openapi(getFacultyStatisticsByParentUnit, async (c) => {
+    const { surveyId, organizationId } = c.req.valid('query')
+
+    const allUnitsData = [
+        {
+            id: 'MTA',
+            unitName: 'Hoc vien ky thuat quan su',
+            faculties: [
+                {
+                    id: 'K_CNTT',
+                    organizationName: 'Khoa Công nghệ thông tin',
+                    departments: [
+                        {
+                            id: 'BM_CNPM',
+                            organizationName: 'Bộ môn Công nghệ phần mềm',
+                            lecturerSurveyCount: 15,
+                        },
+                        {
+                            id: 'BM_MMT',
+                            organizationName: 'Bộ môn Mạng máy tính và Truyền thông',
+                            lecturerSurveyCount: 12,
+                        },
+                    ],
+                },
+                {
+                    id: 'K_VK',
+                    organizationName: 'Khoa Vũ khí',
+                    departments: [
+                        {
+                            id: 'BM_KHDL',
+                            organizationName: 'Bộ môn Khoa học dữ liệu',
+                            lecturerSurveyCount: 20,
+                        },
+                    ],
+                },
+            ],
+        },
+    ]
+
+    const parentUnit = allUnitsData.find((unit) => unit.id === organizationId)
+    if (!parentUnit) {
+        return c.json({ message: `Không tìm thấy đơn vị với ID '${organizationId}'` }, 404)
+    }
+
+    const dataSource = parentUnit.faculties
+
+    let totalSurveyedLecturersInUnit = 0
+    const statisticsByFaculty = dataSource.map((faculty) => {
+        const lecturerSurveyCount = faculty.departments.reduce(
+            (sum, dept) => sum + dept.lecturerSurveyCount,
+            0
+        )
+        totalSurveyedLecturersInUnit += lecturerSurveyCount
+        return { ...faculty, lecturerSurveyCount }
+    })
+
+    const responseData = {
+        surveyId: surveyId,
+        parentUnitInfo: {
+            id: parentUnit.id,
+            name: parentUnit.unitName,
+        },
+        lecturerSurveyCount: totalSurveyedLecturersInUnit,
+        statisticsByFaculty: statisticsByFaculty,
+    }
+
+    return c.json(responseData, 200)
+})
+
+const getAnswerStatistics = createRoute({
+    operationId: 'get-answer-statistics-by-level',
+    path: '/statistics/answers/by-satisfaction-level',
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê câu trả lời theo các mức độ hài lòng',
+    description:
+        'API trả về số lượng và tỷ lệ câu trả lời cho từng mức độ của một câu hỏi khảo sát cụ thể.',
+    request: {
+        query: z.object({
+            surveyId: z.string().openapi({
+                description: 'ID của khảo sát.',
+                example: 'svy-course-quality-fall24',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: { 'application/json': { schema: AnswerStatisticsResponseSchema } },
+        },
+        404: {
+            description: 'Không tìm thấy câu hỏi hoặc khảo sát.',
+            content: { 'application/json': { schema: z.object({ message: z.string() }) } },
+        },
+    },
+})
+
+app.openapi(getAnswerStatistics, async (c) => {
+    const { surveyId } = c.req.valid('query')
+
+    const surveyExists = !!surveyId
+
+    if (!surveyExists) {
+        return c.json({ message: 'Không tìm thấy khảo sát.' }, 404)
+    }
+
+    const satisfactionLevels: Record<number, string> = {
+        1: 'Rất hài lòng',
+        2: 'Hài lòng',
+        3: 'Không hài lòng',
+        4: 'Rất không hài lòng',
+        0: 'Phân vân',
+    }
+
+    // Giả lập số lượng câu trả lời cho mỗi mức độ
+    const fakeAnswerCounts: Record<number, number> = {
+        1: 150, // Rất hài lòng
+        2: 80, // Hài lòng
+        3: 25, // Không hài lòng
+        4: 5, // Rất không hài lòng
+        0: 20, // Phân vân
+    }
+
+    const totalAnswers = Object.values(fakeAnswerCounts).reduce((sum, count) => sum + count, 0)
+
+    // Xử lý dữ liệu để tạo ra mảng thống kê
+    const statistics = Object.entries(fakeAnswerCounts)
+        .map(([level, count]) => {
+            const levelNum = Number.parseInt(level, 10)
+            return {
+                level: levelNum,
+                levelName: satisfactionLevels[levelNum],
+                count: count,
+                // Tính toán tỷ lệ phần trăm, làm tròn 2 chữ số
+                percentage: Number.parseFloat(((count / totalAnswers) * 100).toFixed(2)),
+            }
+        })
+        .sort((a, b) => a.level - b.level) // Sắp xếp theo thứ tự level
+
+    // Tạo đối tượng response hoàn chỉnh
+    const responseData = {
+        surveyId: surveyId,
+        totalAnswers: totalAnswers,
+        statistics: statistics,
+    }
+
+    return c.json(responseData, 200)
 })
 
 export default app
