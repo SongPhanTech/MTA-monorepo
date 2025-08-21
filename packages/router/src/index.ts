@@ -566,6 +566,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
                         description: 'Danh sách chuyên gia',
                     },
+                    {
+                        id: 'danh-sach-thanh-toan',
+                        label: 'Danh sách thanh toán',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                        description: 'Danh sách thanh toán',
+                    },
                 ],
             },
             {
