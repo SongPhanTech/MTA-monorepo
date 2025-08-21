@@ -193,8 +193,9 @@ export default function SubjectClassScore() {
             setSelectedFixedClass(classId)
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // Corrected handleChangeSemester
@@ -206,8 +207,9 @@ export default function SubjectClassScore() {
             setSelectedSemester(semester)
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // #endregion

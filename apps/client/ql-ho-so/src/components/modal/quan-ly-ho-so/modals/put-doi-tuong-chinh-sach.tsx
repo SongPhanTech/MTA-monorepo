@@ -34,8 +34,9 @@ export default function PutDoiTuongChinhSachModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // Nếu muốn set lại dữ liệu khi edit
@@ -91,6 +92,11 @@ export default function PutDoiTuongChinhSachModal() {
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('ngayBatDau')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
                     />
                 </FormItem>
             </Col>

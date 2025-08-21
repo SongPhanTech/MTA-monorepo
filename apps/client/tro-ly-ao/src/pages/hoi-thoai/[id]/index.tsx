@@ -26,9 +26,14 @@ export default function Page() {
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
-    const { data: conversationCurrent } = useFindUniqueConversation({
-        where: { id: id as string },
-    })
+    const { data: conversationCurrent } = useFindUniqueConversation(
+        {
+            where: { id: id as string },
+        },
+        {
+            enabled: !!id,
+        }
+    )
 
     const { data: messageList } = useFindManyMessage({
         where: { conversationId: id as string },

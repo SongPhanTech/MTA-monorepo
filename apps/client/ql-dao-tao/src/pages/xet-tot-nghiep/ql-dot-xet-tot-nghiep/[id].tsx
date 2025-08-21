@@ -11,7 +11,7 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { ApplicationStatus, type Prisma } from '@workspace/db'
+import { ApplicationStatus } from '@workspace/db'
 import {
     useCountStudentGraduationApplication,
     useFindManyStudentGraduationApplication,
@@ -23,6 +23,7 @@ import type { GraduationCheckResult } from '@workspace/libs/api/schemas/graduati
 import { useGraduationCheck } from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
+import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { BookPlus, X } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -43,14 +44,11 @@ export default function StudentGraduationApplication() {
         []
     )
     const graduationSessionId = router.query.id as string
-    const initialStatuses = applicationStatusOptions
-        .map((option) => option.value)
-        .filter((status) => status !== ApplicationStatus.APPROVED)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
         applicationDate: undefined,
-        statusApplication: initialStatuses,
+        statusApplication: undefined,
     })
 
     const where = useMemo(
@@ -182,8 +180,9 @@ export default function StudentGraduationApplication() {
             message.success('Xóa thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     async function handleReject(id: string) {
@@ -196,8 +195,9 @@ export default function StudentGraduationApplication() {
             message.success('Từ chối thành công')
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: graduationCheck } = useGraduationCheck()
@@ -314,7 +314,7 @@ export default function StudentGraduationApplication() {
                                 record.rank?.id
                         )
                         .map((record) => {
-                            const data: Prisma.GraduationDecisionCreateInput = {
+                            const createData = {
                                 application: { connect: { id: record.id } },
                                 student: { connect: { id: record.student.id } },
                                 finalGpa: record.gpa ?? 0,
@@ -331,8 +331,10 @@ export default function StudentGraduationApplication() {
                                     applicationId: record.id,
                                     studentId: record.student.id,
                                 },
-                                create: data,
-                                update: data,
+                                create: {
+                                    ...createData,
+                                },
+                                update: createData,
                             })
                         })
 
@@ -358,9 +360,33 @@ export default function StudentGraduationApplication() {
         setSelectedRowKeys(newSelectedRowKeys as string[])
     }
 
+    const renderCell: NonNullable<TableRowSelection<any>['renderCell']> = (
+        _checked,
+        _record,
+        _index,
+        originNode
+    ) => (
+        <span
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onDoubleClick={(e) => e.stopPropagation()}
+        >
+            {originNode}
+        </span>
+    )
+
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange,
+        getCheckboxProps: (record: any) => ({
+            disabled:
+                record.status === ApplicationStatus.REJECTED ||
+                record.status === ApplicationStatus.APPROVED,
+            onClick: (e: React.MouseEvent) => {
+                e.stopPropagation()
+            },
+        }),
+        renderCell,
     }
 
     return (
@@ -638,8 +664,13 @@ export default function StudentGraduationApplication() {
                                                                 <Row className="justify-center gap-2">
                                                                     <RejectIcon
                                                                         popConfirm={{
-                                                                            onConfirm: () =>
-                                                                                handleReject(id),
+                                                                            onConfirm: (e) => {
+                                                                                e?.stopPropagation()
+                                                                                handleReject(id)
+                                                                            },
+                                                                            onCancel: (e) => {
+                                                                                e?.stopPropagation()
+                                                                            },
                                                                         }}
                                                                         onClick={(e) =>
                                                                             e.stopPropagation()
@@ -659,6 +690,9 @@ export default function StudentGraduationApplication() {
                                                                         popConfirm={{
                                                                             onConfirm: (e) => {
                                                                                 handleDelete(id)
+                                                                                e?.stopPropagation()
+                                                                            },
+                                                                            onCancel: (e) => {
                                                                                 e?.stopPropagation()
                                                                             },
                                                                         }}

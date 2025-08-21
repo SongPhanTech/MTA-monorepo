@@ -10,6 +10,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 import examApp from './api/exam'
+import surveyApp from './api/survey'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -62,6 +63,7 @@ const audience = config.keycloak.clientId
 setupOpenApi(app)
 
 app.route('/api/exam', examApp)
+app.route('/api/survey', surveyApp)
 
 const nv = await prisma.dM_NhanVien.findFirstOrThrow()
 

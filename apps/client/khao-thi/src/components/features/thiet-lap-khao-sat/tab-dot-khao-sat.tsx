@@ -1,10 +1,12 @@
+import { EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyModal } from '@components/modal'
+import { PutSurveyExamModal, PutSurveyModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import type { SurveyObjectType } from '@workspace/db'
 import {
     useCountSurvey,
     useFindManySurvey,
@@ -12,8 +14,9 @@ import {
     useFindManySurveyTopic,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -27,7 +30,7 @@ function TabDotKhaoSat() {
         startDate: undefined,
         endDate: undefined,
     })
-
+    const router = useRouter()
     const where = useMemo(
         () => ({
             ...(filters.name && filters.name !== ''
@@ -39,11 +42,15 @@ function TabDotKhaoSat() {
                   }
                 : {}),
             ...(filters.surveyObjectTypeId
-                ? Array.isArray(filters.surveyObjectTypeId)
-                    ? filters.surveyObjectTypeId.length > 1
-                        ? { surveyObjectId: { in: filters.surveyObjectTypeId } }
-                        : { surveyObjectId: { equals: filters.surveyObjectTypeId[0] } }
-                    : { surveyObjectId: { equals: filters.surveyObjectTypeId } }
+                ? {
+                      surveyObjectType: {
+                          some: {
+                              id: {
+                                  in: filters.surveyObjectTypeId,
+                              },
+                          },
+                      },
+                  }
                 : {}),
             ...(filters.surveyTopicId
                 ? Array.isArray(filters.surveyTopicId)
@@ -83,6 +90,7 @@ function TabDotKhaoSat() {
         include: {
             surveyObjectType: true,
             surveyTopic: true,
+            surveyQuestion: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -90,14 +98,22 @@ function TabDotKhaoSat() {
 
     const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: PutSurveyModal.name,
+    })
+
+    const { onOpen: onOpenSurveyExamModal } = useDisclosure<{ id: string; surveyTopicId: string }>({
+        tag: PutSurveyExamModal.name,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen()
+    }
+
+    const handleModalCreateExam = (value: { id: string; surveyTopicId: string }) => {
+        onOpenSurveyExamModal(value)
     }
     const { mutateAsync: updateSurvey } = useUpdateSurvey()
 
@@ -114,8 +130,9 @@ function TabDotKhaoSat() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
@@ -138,6 +155,7 @@ function TabDotKhaoSat() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        rowKey={'id'}
                         filters={filters}
                         setFilters={setFilters}
                         columns={[
@@ -173,7 +191,11 @@ function TabDotKhaoSat() {
                                     label: name,
                                 })),
                                 render: (_, record) =>
-                                    record?.surveyObjectType ? record?.surveyObjectType.name : '',
+                                    record?.surveyObjectType?.length
+                                        ? record?.surveyObjectType
+                                              .map((i: SurveyObjectType) => i.name)
+                                              .join(',')
+                                        : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -195,10 +217,27 @@ function TabDotKhaoSat() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 100,
+                                width: 110,
                                 align: 'center',
-                                render: (_, { id }) => (
-                                    <Row className="justify-center gap-2">
+                                render: (_, { id, surveyTopicId, surveyQuestion }) => (
+                                    <Row className="justify-end gap-2">
+                                        {surveyQuestion?.length > 0 && (
+                                            <Tooltip title={'Xem đề khảo sát'} placement="top">
+                                                <EyeOutlined
+                                                    onClick={() => {
+                                                        router.push(`/lam-khao-sat/${id}`)
+                                                    }}
+                                                    style={{ fontSize: '16px' }}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                        <Tooltip title={'Tạo đề khảo sát'} placement="top">
+                                            <PlusCircleOutlined
+                                                onClick={() =>
+                                                    handleModalCreateExam({ id, surveyTopicId })
+                                                }
+                                            />
+                                        </Tooltip>
                                         <EditIcon
                                             onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"

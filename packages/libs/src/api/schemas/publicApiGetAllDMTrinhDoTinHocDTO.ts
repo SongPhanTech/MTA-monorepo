@@ -50,8 +50,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Trình độ tin học
+ */
 export interface PublicApiGetAllDMTrinhDoTinHocDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
 }

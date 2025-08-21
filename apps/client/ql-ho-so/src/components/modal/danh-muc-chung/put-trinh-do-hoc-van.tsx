@@ -21,7 +21,6 @@ export default function TrinhDoHocVanModal() {
     const { mutateAsync: updateDM_TrinhDoHocVan } = useUpdateDM_TrinhDoHocVan()
 
     async function onOk(output: DM_TrinhDoHocVan) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -48,8 +47,9 @@ export default function TrinhDoHocVanModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

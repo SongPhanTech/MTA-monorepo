@@ -50,8 +50,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Giới tính
+ */
 export interface PublicApiGetAllDMGioiTinhDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Tên giới tính
+   * @nullable
+   */
   sTen?: string | null;
 }

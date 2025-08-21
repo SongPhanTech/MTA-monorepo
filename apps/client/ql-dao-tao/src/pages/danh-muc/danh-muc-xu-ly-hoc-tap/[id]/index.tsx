@@ -133,8 +133,9 @@ export default function AcademicActionCondition() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateAcademicActionConfig } = useUpdateAcademicActionRuleSet()
@@ -147,8 +148,9 @@ export default function AcademicActionCondition() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateAcademicActionCondition } = useUpdateAcademicActionCondition()
@@ -161,8 +163,9 @@ export default function AcademicActionCondition() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { onOpen: onOpenPutAcademicActionCondition } = useDisclosure<{

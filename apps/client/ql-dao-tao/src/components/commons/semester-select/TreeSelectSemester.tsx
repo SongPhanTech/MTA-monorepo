@@ -1,3 +1,4 @@
+import type { Semester } from '@workspace/db'
 import { useFindManySchoolYear, useFindManySemester } from '@workspace/db/hooks'
 import type { TreeSelectProps } from 'antd'
 import { TreeSelect as TreeSelectAnt } from 'antd'
@@ -15,6 +16,23 @@ interface CustomTreeSelectProps {
     disabled?: boolean
     onChange?: (value: string) => void
     onPopupScroll?: TreeSelectProps['onPopupScroll']
+    filterTimeNow?: boolean
+    selectLatestCreated?: boolean
+}
+
+const isCurrentSemester = (semester: Semester, now: Date): boolean => {
+    try {
+        const startDate = new Date(semester.startDate)
+        if (startDate > now) return false
+
+        if (!semester.endDate) return true // Nếu không có endDate coi như vẫn còn hiệu lực
+
+        const endDate = new Date(semester.endDate)
+        return now <= endDate
+    } catch (error) {
+        console.error('Error parsing date:', error)
+        return false
+    }
 }
 
 const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
@@ -26,6 +44,8 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     disabled = false,
     onChange,
     onPopupScroll,
+    filterTimeNow = false,
+    selectLatestCreated = false,
 }) => {
     const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue)
 
@@ -44,7 +64,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
         include: {
             schoolYear: true,
         },
-        orderBy: { startDate: 'desc' },
+        orderBy: selectLatestCreated ? { createdAt: 'desc' } : { startDate: 'desc' },
     })
 
     // Tạo treeData từ schoolYears và semesters
@@ -65,6 +85,33 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
         )
     }, [schoolYears, semesters])
 
+    useEffect(() => {
+        if ((filterTimeNow || selectLatestCreated) && !internalValue && semesters?.length) {
+            const nowTime = new Date()
+
+            // Ưu tiên filterTimeNow nếu cả hai prop đều true
+            if (filterTimeNow) {
+                const currentSemester = semesters.find((semester) =>
+                    isCurrentSemester(semester, nowTime)
+                )
+
+                if (currentSemester) {
+                    setInternalValue(currentSemester.id)
+                    onChange?.(currentSemester.id)
+                    return
+                }
+            }
+
+            // Nếu selectLatestCreated = true hoặc không tìm thấy học kỳ hiện tại
+            if (selectLatestCreated || filterTimeNow) {
+                // Phần tử đầu tiên đã là mới nhất do đã sắp xếp trong useQuery
+                const latestSemester = semesters[0]
+                setInternalValue(latestSemester.id)
+                onChange?.(latestSemester.id)
+            }
+        }
+    }, [filterTimeNow, selectLatestCreated, semesters, internalValue, onChange])
+
     const handleChange = (newValue: string) => {
         setInternalValue(newValue)
         if (onChange) {
@@ -82,31 +129,6 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     const filterTreeNode = (input: string, treeNode: any) => {
         return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
     }
-
-    // useEffect(() => {
-    //     const nowTime = new Date()
-    //     // Tự động chọn học kỳ hiện tại nếu có
-    //     const currentSemester = semesters?.find((semester) => {
-    //         const startDate = new Date(semester.startDate)
-    //         const endDate = new Date(semester.endDate)
-    //         return startDate <= nowTime && endDate >= nowTime
-    //     })
-    //     if (currentSemester) {
-    //         setInternalValue(currentSemester.id)
-    //         if (onChange) {
-    //             onChange(currentSemester.id)
-    //         }
-    //     } else {
-    //         // Nếu không có học kỳ hiện tại, chọn học kỳ đầu tiên
-    //         const firstSemester = semesters?.[0]
-    //         if (firstSemester) {
-    //             setInternalValue(firstSemester.id)
-    //             if (onChange) {
-    //                 onChange(firstSemester.id)
-    //             }
-    //         }
-    //     }
-    // })
 
     return (
         <TreeSelectAnt

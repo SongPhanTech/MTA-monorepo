@@ -50,13 +50,25 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Tỉnh, TP
+ */
 export interface PublicApiGetAllDMTinhDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
-  /** @nullable */
+  /**
+   * Quốc gia
+   * @nullable
+   */
   sTenQuocGia?: string | null;
   /** @nullable */
   sDM_QuocGiaId?: string | null;

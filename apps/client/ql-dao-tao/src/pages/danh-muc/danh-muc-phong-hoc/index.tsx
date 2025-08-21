@@ -120,8 +120,9 @@ export default function TrainingLocationPage() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     async function handleDeleteBuilding(id: string) {
@@ -133,8 +134,9 @@ export default function TrainingLocationPage() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleFilterChange = (key: string, value: string) => {
@@ -190,8 +192,15 @@ export default function TrainingLocationPage() {
                                 />
                                 <DeleteIcon
                                     popConfirm={{
-                                        onConfirm: () => handleDelete(record.id),
+                                        onConfirm: (e) => {
+                                            handleDelete(record.id)
+                                            e?.stopPropagation()
+                                        },
+                                        onCancel: (e) => {
+                                            e?.stopPropagation()
+                                        },
                                     }}
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                             </Row>
                         )}
@@ -277,7 +286,13 @@ export default function TrainingLocationPage() {
                                                 />
                                                 <DeleteIcon
                                                     popConfirm={{
-                                                        onConfirm: () => handleDeleteBuilding(id),
+                                                        onConfirm: (e) => {
+                                                            handleDeleteBuilding(id)
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
                                                     }}
                                                     onClick={(e) => e.stopPropagation()}
                                                 />

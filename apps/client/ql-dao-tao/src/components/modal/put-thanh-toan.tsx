@@ -1,0 +1,181 @@
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import useSpinner from '@hooks/spinner'
+import { CouncilRole, type DefaultCouncilRolePayAmount, PaymentStatus } from '@workspace/db'
+import {
+    useCreateManyPaymentRecord,
+    useDeleteManyPaymentRecord,
+    useFindManyDefaultCouncilRolePayAmount,
+    useFindManyThesisProject,
+} from '@workspace/db/hooks'
+import { Col, Form, InputNumber, message } from 'antd'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+export type PaymentRecord = DefaultCouncilRolePayAmount & {
+    chairman: number
+    secretary: number
+    reviewer1: number
+    reviewer2: number
+    member: number
+}
+
+const PutPaymentRecord = () => {
+    const [form] = Form.useForm<PaymentRecord>()
+    const { isOpen, onClose, input } = useDisclosure<{
+        selectedRowKeys: string[]
+    }>({
+        tag: PutPaymentRecord.name,
+        onClose: form.resetFields,
+    })
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { data: selectedThesisProjects } = useFindManyThesisProject(
+        {
+            where: {
+                id: { in: input?.selectedRowKeys.map(String) },
+                councilId: { not: null },
+            },
+            include: {
+                council: { include: { members: { include: { expert: true } } } },
+            },
+        },
+        { enabled: !!input?.selectedRowKeys.length }
+    )
+
+    console.log(selectedThesisProjects)
+
+    const { data: defaultCouncilRolePayAmount } = useFindManyDefaultCouncilRolePayAmount()
+
+    const { mutateAsync: createPaymentRecord } = useCreateManyPaymentRecord()
+    const { mutateAsync: deletePaymentRecord } = useDeleteManyPaymentRecord()
+    async function onOk(values: PaymentRecord) {
+        try {
+            const data =
+                selectedThesisProjects?.flatMap(
+                    (thesisProject) =>
+                        thesisProject.council?.members.map((member) => {
+                            let amount = 0
+                            switch (member.role) {
+                                case CouncilRole.CHAIRMAN:
+                                    amount = values.chairman
+                                    break
+                                case CouncilRole.SECRETARY:
+                                    amount = values.secretary
+                                    break
+                                case CouncilRole.REVIEWER_1:
+                                    amount = values.reviewer1
+                                    break
+                                case CouncilRole.REVIEWER_2:
+                                    amount = values.reviewer2
+                                    break
+                                case CouncilRole.MEMBER:
+                                    amount = values.member
+                                    break
+                                default:
+                                    amount = 0
+                            }
+
+                            return {
+                                councilMemberId: member.id,
+                                expertId: member.expert?.id,
+                                amount,
+                            }
+                        }) ?? []
+                ) ?? []
+
+            showSpinner()
+            await deletePaymentRecord({
+                where: {
+                    councilMemberId: { in: data.map((d) => d.councilMemberId) },
+                    status: PaymentStatus.PENDING,
+                },
+            })
+            if (data.length > 0) {
+                await createPaymentRecord(
+                    {
+                        data,
+                    },
+                    { skipDuplicates: true }
+                )
+            }
+            message.success('Thêm mới thanh toán thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    useEffect(() => {
+        if (defaultCouncilRolePayAmount) {
+            const values: Record<string, number> = {}
+
+            defaultCouncilRolePayAmount.forEach((item) => {
+                const amount: number = item.amount.toNumber()
+
+                switch (item.role) {
+                    case CouncilRole.CHAIRMAN:
+                        values.chairman = amount
+                        break
+                    case CouncilRole.SECRETARY:
+                        values.secretary = amount
+                        break
+                    case CouncilRole.REVIEWER_1:
+                        values.reviewer1 = amount
+                        break
+                    case CouncilRole.REVIEWER_2:
+                        values.reviewer2 = amount
+                        break
+                    case CouncilRole.MEMBER:
+                        values.member = amount
+                        break
+                    default:
+                        break
+                }
+            })
+
+            form.setFieldsValue(values)
+        }
+    }, [defaultCouncilRolePayAmount, form])
+
+    return (
+        <PutFormModal
+            open={isOpen}
+            form={form}
+            onFinish={onOk}
+            onCancel={onClose}
+            maskClosable={true}
+            title={'Thêm thông tin thanh toán'}
+            className="w-[40vw]"
+        >
+            <Col span={12}>
+                <FormItem form={form} name="chairman" label="Chủ tịch">
+                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="secretary" label="Thư kí">
+                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="reviewer1" label="Phản biện 1">
+                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="reviewer2" label="Phản biện 2">
+                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="member" label="Ủy viên">
+                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                </FormItem>
+            </Col>
+        </PutFormModal>
+    )
+}
+
+export default PutPaymentRecord

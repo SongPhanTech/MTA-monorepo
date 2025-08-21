@@ -1,7 +1,7 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutGraduationDecision } from '@components/modal'
+import { ModalPrintToKQHT, PutGraduationDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -10,11 +10,13 @@ import {
     useCountTrainingCourse,
     useDeleteGraduationDecision,
     useFindManyDiplomaType,
+    useFindManySemester,
     useFindManyTrainingCourse,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
-import { Col, message, Row } from 'antd'
+import { Col, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { BookCheckIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -25,12 +27,14 @@ interface GraduationDecisionProps {
 export default function GraduationDecision({ sessionId }: GraduationDecisionProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [student, setStudent] = useState<any>(null)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
         decisionDate: undefined,
         finalGpa: undefined,
         diplomaNumber: '',
+        originalDiplomaNumber: '',
         diplomaIssueDate: undefined,
     })
 
@@ -88,6 +92,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                                         },
                                                     }
                                                   : {}),
+                                              ...(filters.originalDiplomaNumber
+                                                  ? {
+                                                        originalDiplomaNumber: {
+                                                            contains: filters.originalDiplomaNumber,
+                                                            mode: 'insensitive',
+                                                        },
+                                                    }
+                                                  : {}),
                                           },
                                       },
                                   },
@@ -95,7 +107,15 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                           },
                       },
                   }
-                : {},
+                : {
+                      academicRankingConvert: {
+                          some: {
+                              graduationDecision: {
+                                  some: {},
+                              },
+                          },
+                      },
+                  },
         [filters, isFiltering]
     )
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
@@ -130,8 +150,29 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                     curriculumVersion: {
                                         include: {
                                             diplomaType: true,
+                                            trainingLevel: true,
+                                            curriculum: {
+                                                include: {
+                                                    trainingMajor: {
+                                                        include: {
+                                                            trainingField: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                     },
+                                    fixedClass: {
+                                        include: {
+                                            trainingCourse: {
+                                                include: {
+                                                    scoreConverts: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                    trainingObjectType: true,
+                                    trainingForm: true,
                                 },
                             },
 
@@ -192,9 +233,77 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
+
+    const { onOpen: onOpenPhuLucVanBang, onClose } = useDisclosure<{
+        dataTable: any
+        dataStudent: any
+    }>({
+        tag: ModalPrintToKQHT.name,
+    })
+
+    const { data: dataTable } = useFindManySemester(
+        {
+            where: {
+                subjectClasses: {
+                    some: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                },
+            },
+            include: {
+                subjectClasses: {
+                    where: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                    include: {
+                        subjectClassStudent: {
+                            where: {
+                                studentId: student?.id,
+                            },
+                            include: {
+                                subjectVersion: true,
+                                certificates: {
+                                    include: {
+                                        archivedCertificate: true,
+                                    },
+                                },
+                                awards: {
+                                    include: {
+                                        archivedAward: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                trainingCoursesStart: {
+                    where: {
+                        id: student?.fixedClass?.trainingCourseId ?? undefined,
+                    },
+                    include: {
+                        scoreConverts: true,
+                    },
+                },
+                schoolYear: true,
+            },
+            orderBy: {
+                createdAt: 'asc',
+            },
+        },
+        { enabled: !!student?.id }
+    )
 
     return (
         <div className="bg-white rounded-lg shadow-sm p-4">
@@ -237,11 +346,6 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                         : '',
                             },
                             {
-                                title: 'Ghi chú của hội đồng',
-                                width: 200,
-                                render: (_, record) => record?.notes,
-                            },
-                            {
                                 title: 'GPA cuối cùng',
                                 align: 'center',
                                 width: 100,
@@ -271,6 +375,14 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 render: (_, record) => record?.diplomaNumber,
                             },
                             {
+                                title: 'Số vào sổ gốc văn bằng',
+                                align: 'center',
+                                dataIndex: 'originalDiplomaNumber',
+                                type: 'input',
+                                width: 120,
+                                render: (_, record) => record?.originalDiplomaNumber,
+                            },
+                            {
                                 title: 'Ngày cấp bằng',
                                 dataIndex: 'diplomaIssueDate',
                                 align: 'center',
@@ -284,11 +396,15 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                             {
                                 title: 'Xếp loại',
                                 align: 'center',
-                                fixed: 'right',
                                 type: 'select',
                                 dataIndex: 'classification',
                                 width: 100,
                                 render: (_, record) => record?.finalRanking?.classification,
+                            },
+                            {
+                                title: 'Ghi chú của hội đồng',
+                                width: 200,
+                                render: (_, record) => record?.notes,
                             },
                             {
                                 title: 'Thao tác',
@@ -297,6 +413,19 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-2">
+                                        <Tooltip title="Phụ lục văn bằng" placement="top">
+                                            <BookCheckIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setStudent(record?.student)
+                                                    onOpenPhuLucVanBang({
+                                                        dataStudent: record?.student,
+                                                        dataTable,
+                                                    })
+                                                }}
+                                                size={16}
+                                            />
+                                        </Tooltip>
                                         <EditIcon
                                             onClick={(e) => {
                                                 e.stopPropagation()

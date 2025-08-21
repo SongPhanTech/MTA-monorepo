@@ -51,56 +51,127 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 import type { BaseEntity } from './baseEntity';
 
+/**
+ * Danh mục nhân viên
+ */
 export type NhanVien = BaseEntity & {
+  /** Id nhân viên */
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã nhân viên
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Họ và đệm
+   * @nullable
+   */
   sHoVaDem?: string | null;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
-  /** @nullable */
+  /**
+   * Họ và tên
+   * @nullable
+   */
   sTenDayDu?: string | null;
-  /** @nullable */
+  /**
+   * Ngày sinh
+   * @nullable
+   */
   dNgaySinh?: string | null;
-  /** @nullable */
+  /**
+   * Id DM giới tính
+   * @nullable
+   */
   sDM_GioiTinhId?: string | null;
-  /** @nullable */
+  /**
+   * Id đơn vị công tác
+   * @nullable
+   */
   sDM_DonViId?: string | null;
-  /** @nullable */
+  /**
+   * Id vị trí công việc
+   * @nullable
+   */
   sDM_ViTriCongViecId?: string | null;
-  /** @nullable */
+  /**
+   * Id người quản lý trực tiếp
+   * @nullable
+   */
   sQuanlyTrucTiepId?: string | null;
-  /** @nullable */
+  /**
+   * ID Quốc gia
+   * @nullable
+   */
   sDM_QuocGiaId?: string | null;
-  /** @nullable */
+  /**
+   * Id tỉnh, TP
+   * @nullable
+   */
   sDM_TinhId?: string | null;
-  /** @nullable */
+  /**
+   * Id quận, huyện
+   * @nullable
+   */
   sDM_QuanHuyenId?: string | null;
-  /** @nullable */
+  /**
+   * Id xã, phường
+   * @nullable
+   */
   sDM_XaPhuongId?: string | null;
-  /** @nullable */
+  /**
+   * Số điện thoại
+   * @nullable
+   */
   sSDTDiDong?: string | null;
-  /** @nullable */
+  /**
+   * Email
+   * @nullable
+   */
   sEmail?: string | null;
-  /** @nullable */
+  /**
+   * Địa chỉ
+   * @nullable
+   */
   sDiaChi?: string | null;
-  /** @nullable */
+  /**
+   * Ảnh đại diện
+   * @nullable
+   */
   sAvatarId?: string | null;
+  /** Là người dùng? */
   bLaNguoiDung?: boolean;
+  /** Là cán bộ, nhân viên? */
   bLaCanBoNhanVien?: boolean;
+  /** Là học viên? */
   bLaHocVien?: boolean;
+  /** Trạng thái */
   bActive?: boolean;
   bDeleted?: boolean;
   bSystem?: boolean;
   /** @nullable */
   iDictionaryKey?: number | null;
-  /** @nullable */
+  /**
+   * Số căn cước công dân
+   * @nullable
+   */
   sCCCD?: string | null;
-  /** @nullable */
+  /**
+   * Id tỉnh, TP mới
+   * @nullable
+   */
   sDM_TinhId_New?: string | null;
-  /** @nullable */
+  /**
+   * Id xã, phường mới
+   * @nullable
+   */
   sDM_XaPhuongId_New?: string | null;
-  /** @nullable */
+  /**
+   * Địa chỉ mới
+   * @nullable
+   */
   sDiaChi_New?: string | null;
 };

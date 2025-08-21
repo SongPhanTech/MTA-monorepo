@@ -2,18 +2,208 @@ import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/categories'
+import '../ql-ho-so/profile'
+import '../ql-dao-tao/lecturer'
 
 
-// Đợt đánh giá CTDT
-model EvaluationSession extends Base {
-  startTime DateTime              @default(now())
-  endTime   DateTime?
+/// Đợt đánh giá CTDT
+model EvaluationPeriod extends Base {
   name      String
+  startDate DateTime             @default(now())
+  endDate   DateTime?
+
+  standards EvaluationStandard[]
+  councils  EvaluationCouncil[]
 
   @@schema("khao-thi")
 }
 
-// Vai trò của thành viên trong hội đồng đánh giá
+/// Danh mục tiêu chuẩn
+model StandardCatalog extends Base {
+  order    Int                @unique
+  name     String
+  criteria CriterionCatalog[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục tiêu chí
+model CriterionCatalog extends Base {
+  standard                    StandardCatalog               @relation(fields: [standardId], references: [id])
+  standardId                  String
+  order                       Int
+  name                        String
+  scoreScale                  ScoreScaleCatalog?            @relation(fields: [scoreScaleId], references: [id])
+  scoreScaleId                String?  // mặc định dùng thang đánh giá nào
+
+  requirementCriterionCatalog RequirementCriterionCatalog[]
+
+  @@unique([standardId, order])
+  @@schema("khao-thi")
+}
+
+/// Danh mục yêu cầu
+model RequirementCriterionCatalog extends Base {
+  criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
+  criterionCatalogId String
+  order              Int
+  name               String
+  questions          String[]
+
+  @@unique([criterionCatalogId, order])
+  @@schema("khao-thi")
+}
+
+/// Danh mục thang điểm
+model ScoreScaleCatalog extends Base {
+  name                String // e.g. "Thang 1-7"
+  minValue            Int
+  maxValue            Int
+  passFrom            Int? // điểm từ bao nhiêu thì đạt
+
+  criteria            CriterionCatalog[]
+  evaluationCriterion EvaluationCriterion[]
+
+  @@schema("khao-thi")
+}
+
+/// Tiêu chuẩn đánh giá của đợt (Bản sao/áp dụng từ StandardCatalog)
+model EvaluationStandard extends Base {
+  period     EvaluationPeriod      @relation(fields: [periodId], references: [id])
+  periodId   String
+  name       String
+  order      Int
+
+  /// Mở đầu
+  opening    String
+  /// Kết luận
+  conclusion String
+
+  criteria   EvaluationCriterion[]
+
+  @@unique([periodId, order])
+  @@schema("khao-thi")
+}
+
+/// Tiêu chí đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
+model EvaluationCriterion extends Base {
+  standard        EvaluationStandard @relation(fields: [standardId], references: [id])
+  standardId      String
+  name            String
+  order           Int
+  scoreScale      ScoreScaleCatalog  @relation(fields: [scoreScaleId], references: [id])
+  scoreScaleId    String
+
+  analysisForms   AnalysisForm?
+  evaluationForms EvaluationForm?
+
+  @@unique([standardId, name])
+  @@unique([standardId, order])
+  @@schema("khao-thi")
+}
+
+/// Nhóm minh chứng - require code
+model EvidenceCategory extends Base {
+  name      String
+
+  evidences Evidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Danh mục minh chứng
+model Evidence extends Base {
+  category             EvidenceCategory         @relation(fields: [categoryId], references: [id])
+  categoryId           String
+  name                 String
+  information          String // Số, ngày ban hành, hoặc thời điểm khảo sát, điều tra, phỏng vấn, quan sát,…
+  issuer               String // Nơi ban hành hoặc nhóm, cá nhân thực hiện
+
+  evidenceFile         EvidenceFile[]
+  evaluationForms      EvaluationFormEvidence[]
+  analysisFormEvidence AnalysisFormEvidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Phiếu phân tích tiêu chí
+model AnalysisForm extends Base {
+  criterion             EvaluationCriterion                @relation(fields: [criterionId], references: [id])
+  criterionId           String                             @unique
+
+  /// (Nhóm) Hội đồng đánh giá
+  evaluationCouncil     EvaluationCouncil?                 @relation(fields: [evaluationCouncilId], references: [id])
+  evaluationCouncilId   String?
+
+  /// Yêu cầu trong phiếu phân tích
+  requirementCriterions AnalysisFormRequirementCriterion[]
+
+  @@schema("khao-thi")
+}
+
+/// Yêu cầu trong phiếu phân tích tiêu chí
+model AnalysisFormRequirementCriterion extends Base {
+  analysisForm   AnalysisForm           @relation(fields: [analysisFormId], references: [id])
+  analysisFormId String
+  order          Int
+  name           String
+  questions      String[]
+
+  evidences      AnalysisFormEvidence[]
+
+  @@unique([analysisFormId, order])
+  @@schema("khao-thi")
+}
+
+/// Phiếu đánh giá tiêu chí
+model EvaluationForm extends Base {
+  criterion           EvaluationCriterion      @relation(fields: [criterionId], references: [id])
+  criterionId         String                   @unique
+
+  /// 1. Mô tả hiện trạng
+  currentSituation    String
+  /// 2. Điểm mạnh
+  strengths           String
+  /// 3. Điểm tồn tại
+  weakness            String
+  /// 4. Kế hoạch hành động
+  actionPlan          String
+  /// 5. Tự đánh giá
+    score               Int?
+
+  /// (Nhóm) Hội đồng đánh giá
+  evaluationCouncil   EvaluationCouncil?       @relation(fields: [evaluationCouncilId], references: [id])
+  evaluationCouncilId String?
+
+  evidences           EvaluationFormEvidence[]
+
+  @@schema("khao-thi")
+}
+
+/// Minh chứng phiếu phân tích
+model AnalysisFormEvidence {
+  analysisFormRequirementCriterion   AnalysisFormRequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id])
+  analysisFormRequirementCriterionId String
+  evidence                           Evidence                         @relation(fields: [evidenceId], references: [id])
+  evidenceId                         String
+
+  @@id([analysisFormRequirementCriterionId, evidenceId])
+  @@schema("khao-thi")
+}
+
+/// Minh chứng phiếu tiêu chí
+model EvaluationFormEvidence {
+  evaluationForm   EvaluationForm @relation(fields: [evaluationFormId], references: [id])
+  evaluationFormId String
+  evidence         Evidence       @relation(fields: [evidenceId], references: [id])
+  evidenceId       String
+  orderIndex       String?        @unique
+
+  @@id([evaluationFormId, evidenceId])
+  @@schema("khao-thi")
+}
+
+/// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN // Chủ tịch hội đồng
   SECRETARY // Thư ký
@@ -22,9 +212,40 @@ enum EvaluationMemberRole {
   @@schema("khao-thi")
 }
 
-model EvaluationDecision extends Base {
-  name String
+/// Hội đồng đánh giá
+model EvaluationCouncil extends Base {
+  period         EvaluationPeriod          @relation(fields: [periodId], references: [id])
+  periodId       String
+  name           String
+
+  members        EvaluationCouncilMember[]
+  analysisForm   AnalysisForm[]
+  evaluationForm EvaluationForm[]
 
   @@schema("khao-thi")
 }
 
+model EvaluationCouncilMember extends Base {
+  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id])
+  evaluationCouncilId String
+  lecturer            Lecturer             @relation(fields: [lecturerId], references: [id])
+  lecturerId          String
+  role                EvaluationMemberRole
+
+  @@schema("khao-thi")
+}
+
+model EvidenceFile extends Base {
+  name      String
+  path          String
+  mimeType      String
+  size          BigInt
+
+  evidence      Evidence    @relation(fields: [evidenceId], references: [id])
+  evidenceId    String
+
+  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
+  userProfileId String?
+
+  @@schema("khao-thi")
+}

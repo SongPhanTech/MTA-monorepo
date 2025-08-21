@@ -594,6 +594,9 @@ importers:
       docxtemplater:
         specifier: 'catalog:'
         version: 3.65.2
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
       hono:
         specifier: 'catalog:'
         version: 4.8.4
@@ -619,6 +622,9 @@ importers:
       '@types/bun':
         specifier: 'catalog:'
         version: 1.2.18(@types/react@18.3.23)
+      '@types/exceljs':
+        specifier: ^1.3.2
+        version: 1.3.2
       '@workspace/auth':
         specifier: workspace:*
         version: link:../../../packages/auth
@@ -743,9 +749,6 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../../../packages/database
-      '@workspace/libs':
-        specifier: workspace:*
-        version: link:../../../packages/libs
       '@workspace/router':
         specifier: workspace:*
         version: link:../../../packages/router
@@ -836,6 +839,9 @@ importers:
       react-images-viewer:
         specifier: 'catalog:'
         version: 1.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-infinite-scroll-component:
+        specifier: ^6.1.0
+        version: 6.1.0(react@18.3.1)
       react-to-print:
         specifier: 'catalog:'
         version: 3.1.1(react@18.3.1)
@@ -885,6 +891,9 @@ importers:
       '@types/react-image-fallback':
         specifier: 'catalog:'
         version: 8.0.6
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
       autoprefixer:
         specifier: 'catalog:'
         version: 10.4.21(postcss@8.5.6)
@@ -3835,6 +3844,10 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/exceljs@1.3.2':
+    resolution: {integrity: sha512-etq4LpmL5vZKzf29U5u7cWjoCWGc67hTc2WrvwmcBUyRiHydUPg5ZXGFwBHcEkTLinyT6fRmJiVSRwf4RdnjUA==}
+    deprecated: This is a stub types definition. exceljs provides its own type definitions, so you do not need this installed.
 
   '@types/file-saver@2.0.7':
     resolution: {integrity: sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==}
@@ -7496,6 +7509,11 @@ packages:
       react: ^15.0 || ^16.0 || ^17.0
       react-dom: ^15.0 || ^16.0 || ^17.0
 
+  react-infinite-scroll-component@6.1.0:
+    resolution: {integrity: sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==}
+    peerDependencies:
+      react: '>=16.0.0'
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -8164,6 +8182,10 @@ packages:
 
   thenify@3.3.1:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
+
+  throttle-debounce@2.3.0:
+    resolution: {integrity: sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==}
+    engines: {node: '>=8'}
 
   throttle-debounce@5.0.2:
     resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
@@ -10935,6 +10957,10 @@ snapshots:
       '@types/estree': 1.0.8
 
   '@types/estree@1.0.8': {}
+
+  '@types/exceljs@1.3.2':
+    dependencies:
+      exceljs: 4.4.0
 
   '@types/file-saver@2.0.7': {}
 
@@ -15244,6 +15270,11 @@ snapshots:
       react-scrolllock: 3.0.2
       react-transition-group: 2.9.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
+  react-infinite-scroll-component@6.1.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      throttle-debounce: 2.3.0
+
   react-is@16.13.1: {}
 
   react-is@18.3.1: {}
@@ -16039,6 +16070,8 @@ snapshots:
   thenify@3.3.1:
     dependencies:
       any-promise: 1.3.0
+
+  throttle-debounce@2.3.0: {}
 
   throttle-debounce@5.0.2: {}
 

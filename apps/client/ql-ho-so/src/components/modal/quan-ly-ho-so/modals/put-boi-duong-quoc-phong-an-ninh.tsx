@@ -34,8 +34,9 @@ export default function PutBoiDuongQuocPhongModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {
@@ -90,6 +91,11 @@ export default function PutBoiDuongQuocPhongModal() {
                         format={{
                             format: 'DD/MM/YYYY',
                             type: 'mask',
+                        }}
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('thoiGianBatDau')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
                         }}
                     />
                 </FormItem>

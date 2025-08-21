@@ -260,6 +260,7 @@ const PutThesisProject = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        placeholder="Chọn thời gian bắt đầu"
                     />
                 </FormItem>
             </Col>
@@ -271,6 +272,12 @@ const PutThesisProject = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('projectStart')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
+                        placeholder="Chọn thời gian kết thúc"
                     />
                 </FormItem>
             </Col>

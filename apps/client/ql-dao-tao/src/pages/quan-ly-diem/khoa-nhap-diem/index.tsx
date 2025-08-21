@@ -9,7 +9,6 @@ import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountSubjectClass,
-    useFindManySemester,
     useFindManySubjectClass,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
@@ -17,7 +16,7 @@ import { Button, Col, Flex, Form, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function SubjectClassScore() {
@@ -26,18 +25,10 @@ export default function SubjectClassScore() {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [form] = Form.useForm()
 
-    const { data: semesters = [] } = useFindManySemester({
-        orderBy: {
-            createdAt: 'desc',
-        },
-    })
-
-    const latestSemester = useMemo(() => semesters?.[0]?.id || null, [semesters])
-
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        semesterId: latestSemester,
+        semesterId: '',
         trainingObjectId: null,
         subjectName: '',
         scoreDeadline: undefined,
@@ -210,15 +201,6 @@ export default function SubjectClassScore() {
         },
     }
 
-    useEffect(() => {
-        if (latestSemester && !filters.semesterId) {
-            setFilters((prev) => ({
-                ...prev,
-                semesterId: latestSemester,
-            }))
-        }
-    }, [latestSemester, filters.semesterId])
-
     return (
         <div>
             <Form form={form}>
@@ -235,8 +217,7 @@ export default function SubjectClassScore() {
                                             labelAlign="left"
                                         >
                                             <TreeSelectSemester
-                                                defaultValue={latestSemester || ''}
-                                                value={filters.semesterId || ''}
+                                                filterTimeNow={true}
                                                 onChange={(val) =>
                                                     handleFilterChange('semesterId', val)
                                                 }

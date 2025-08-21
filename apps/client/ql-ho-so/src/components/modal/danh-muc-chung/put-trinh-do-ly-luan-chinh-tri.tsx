@@ -24,7 +24,6 @@ export default function TrinhDoLyLuanChinhTriModal() {
     const { mutateAsync: updateDM_TrinhDoLyLuanChinhTri } = useUpdateDM_TrinhDoLyLuanChinhTri()
 
     async function onOk(output: DM_TrinhDoLyLuanChinhTri) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -51,8 +50,9 @@ export default function TrinhDoLyLuanChinhTriModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

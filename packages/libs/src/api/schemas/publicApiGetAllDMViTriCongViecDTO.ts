@@ -50,17 +50,32 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  * OpenAPI spec version: v1.0
  */
 
+/**
+ * Vị trí công việc
+ */
 export interface PublicApiGetAllDMViTriCongViecDTO {
   Id?: string;
-  /** @nullable */
+  /**
+   * Mã
+   * @nullable
+   */
   sMa?: string | null;
-  /** @nullable */
+  /**
+   * Tên
+   * @nullable
+   */
   sTen?: string | null;
   /** @nullable */
   sDM_ChucDanhId?: string | null;
-  /** @nullable */
+  /**
+   * Nhóm vị trí
+   * @nullable
+   */
   sTenNhomViTri?: string | null;
-  /** @nullable */
+  /**
+   * Chức danh
+   * @nullable
+   */
   sTenChucDanh?: string | null;
   /** @nullable */
   sDM_NhomViTriId?: string | null;

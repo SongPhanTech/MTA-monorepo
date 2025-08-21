@@ -233,8 +233,9 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     return (
@@ -447,7 +448,11 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                                     handleDelete(id)
                                                     e?.stopPropagation()
                                                 },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
                                             }}
+                                            onClick={(e) => e.stopPropagation()}
                                         />
                                     </Row>
                                 ),

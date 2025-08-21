@@ -401,9 +401,7 @@ app.openapi(openSubjectClass, async (c) => {
 
     const semesterType = semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
 
-    const res = await prisma.$queryRawTyped<{
-        data: OpenSubjectClass
-    }>(
+    const res = (await prisma.$queryRawTyped(
         getSubjectClassBySemester(
             semesterYear,
             semesterType,
@@ -412,8 +410,10 @@ app.openapi(openSubjectClass, async (c) => {
             trainingMajorId ?? null,
             Number(page),
             Number(pageSize)
-        ) as any
-    )
+        )
+    )) as {
+        data: OpenSubjectClass
+    }[]
 
     return c.json(
         {
@@ -737,7 +737,6 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
             where: {
                 subjectClassId,
                 subjectVersionId: subjectClass.subjectId,
-                status: $Enums.SubjectClassStudentStatus.Registered,
             },
         })
         return await tx.studentSubjectScore.createManyAndReturn({
@@ -747,7 +746,6 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
                     studentId: student.id,
                     subjectClassId,
                     subjectVersionId: subjectClass.subjectId,
-                    status: $Enums.SubjectClassStudentStatus.Registered,
                 })),
             skipDuplicates: true,
         })
@@ -792,7 +790,6 @@ app.openapi(enrollStudentOnSubjectClass, async (c) => {
                 studentId: studentId,
                 subjectClassId,
                 subjectVersionId: subjectClass.subjectId,
-                status: $Enums.SubjectClassStudentStatus.Registered,
             })),
             skipDuplicates: true,
         })

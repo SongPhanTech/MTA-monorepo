@@ -40,7 +40,6 @@ const FilterMonHocCTDT = (props: Props) => {
     }
 
     const handleApply = () => {
-        console.log('filters', form.getFieldsValue())
         const values = form.getFieldsValue()
 
         const newFilters = {

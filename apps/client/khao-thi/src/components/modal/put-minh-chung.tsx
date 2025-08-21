@@ -1,0 +1,188 @@
+import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
+import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
+import useSpinner from '@hooks/spinner'
+import { useSession } from '@workspace/auth/react'
+import type { Evidence, EvidenceFile } from '@workspace/db'
+import { useCreateEvidence, useFindUniqueEvidence, useUpdateEvidence } from '@workspace/db/hooks'
+import { Col, Form, Input, message } from 'antd'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+export type PutEvidenceType = Evidence & {
+    evidenceFile?: EvidenceFile[]
+}
+const PutEvidence = () => {
+    const { data: dataUser } = useSession()
+    console.log(dataUser)
+
+    const [form] = Form.useForm<PutEvidenceType>()
+    const [document, setDocument] = useState<EvidenceFile[]>([])
+    const { isOpen, onClose, input } = useDisclosure<{
+        id: string
+        categoryId: string
+    }>({
+        tag: PutEvidence.name,
+        onClose: form.resetFields,
+    })
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { mutateAsync: createEvidence } = useCreateEvidence()
+    const { mutateAsync: updateEvidence } = useUpdateEvidence()
+    async function onOk(output?: PutEvidenceType) {
+        if (!output) return
+        try {
+            showSpinner()
+            const data = {
+                name: output.name,
+                categoryId: input?.categoryId || '',
+                information: output.information,
+                issuer: output.issuer,
+            }
+            console.log('data', output)
+
+            if (input?.id) {
+                await updateEvidence({
+                    data: {
+                        ...data,
+                        evidenceFile: {
+                            upsert: (output.evidenceFile || [])
+                                .filter((file) => !!file.id)
+                                .map((file) => ({
+                                    where: { id: file.id },
+                                    create: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                        evidence: { connect: { id: input?.id } },
+                                        userProfileId: dataUser?.sid || null,
+                                    },
+                                    update: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                })),
+                            create: (output.evidenceFile || [])
+                                .filter((file) => !file.id)
+                                .map((file) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                    userProfileId: dataUser?.sid || null,
+                                })),
+                            disconnect: document
+                                .filter(
+                                    (existing) =>
+                                        !output.evidenceFile?.some((f) => f.id === existing.id)
+                                )
+                                .map((file) => ({ id: file.id })),
+                        },
+                    },
+                    where: {
+                        id: input?.id,
+                    },
+                })
+                message.success('Cập nhật thành công')
+            } else {
+                await createEvidence({
+                    data: {
+                        ...data,
+                        evidenceFile: {
+                            create: (output.evidenceFile || []).map((file: EvidenceFile) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                                userProfileId: dataUser?.sid || null,
+                            })),
+                        },
+                    },
+                })
+                message.success('Thêm mới thành công')
+            }
+            queryClient.invalidateQueries({
+                queryKey: ['Evidence'],
+            })
+            onClose()
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const { data: initialValue } = useFindUniqueEvidence(
+        {
+            where: { id: input?.id },
+            include: {
+                evidenceFile: true,
+            },
+        },
+        {
+            enabled: !!input?.id,
+        }
+    )
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    useEffect(() => {
+        if (initialValue) {
+            form.setFieldsValue({ ...initialValue })
+            setDocument(initialValue.evidenceFile)
+        } else {
+            form.setFieldsValue({
+                evidenceFile: [],
+            })
+            setDocument([])
+        }
+    }, [initialValue])
+
+    return (
+        <PutFormModal
+            open={isOpen}
+            form={form}
+            onFinish={onOk}
+            onCancel={onClose}
+            maskClosable={true}
+            title={input?.id ? 'Chỉnh sửa minh chứng' : 'Thêm mới minh chứng'}
+            className="w-[700px]"
+        >
+            <Col span={24}>
+                <FormItem form={form} name="name" label="Tên minh chứng" required>
+                    <Input placeholder="Nhập tên minh chứng" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="information" label="Thông tin minh chứng" required>
+                    <Input.TextArea placeholder="Nhập thông tin minh chứng" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="issuer" label="Người thực hiện" required>
+                    <Input placeholder="Nhập người thực hiện" />
+                </FormItem>
+            </Col>
+
+            <Col span={24}>
+                <FormItem form={form} name="evidenceFile" label="Tệp bằng chứng">
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={input?.id ?? ''}
+                        relationType="evidenceId"
+                    />
+                </FormItem>
+            </Col>
+
+            {/* <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
+                </FormItem>
+            </Col> */}
+        </PutFormModal>
+    )
+}
+
+export default PutEvidence

@@ -90,8 +90,6 @@ const PutUserProfileLectureModal = () => {
     async function onOk(output?: PutLecturerProfile) {
         if (!output) return
 
-        console.log(output)
-
         try {
             showSpinner()
 
@@ -128,8 +126,9 @@ const PutUserProfileLectureModal = () => {
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // SỬA: Cập nhật useEffect để fill đầy đủ các trường

@@ -111,12 +111,31 @@ const PutSchoolYearModal = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                        placeholder="Chọn ngày bắt đầu"
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="endDate" label="Ngày kết thúc">
-                    <DatePicker format="DD/MM/YYYY" className="w-full" />
+                    <DatePicker
+                        format={{
+                            format: 'DD/MM/YYYY',
+                            type: 'mask',
+                        }}
+                        className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('startDate')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
+                        placeholder="Chọn ngày kết thúc"
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

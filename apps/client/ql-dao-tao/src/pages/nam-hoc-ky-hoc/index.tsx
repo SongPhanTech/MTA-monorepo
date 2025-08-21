@@ -184,8 +184,9 @@ function YearAndSemester() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const { mutateAsync: updateSemester } = useUpdateSemester()
@@ -202,8 +203,9 @@ function YearAndSemester() {
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     const handleFilterChange = (key: string, value: any) => {
@@ -348,7 +350,13 @@ function YearAndSemester() {
                                     />
                                     <DeleteIcon
                                         popConfirm={{
-                                            onConfirm: () => handleDeleteSemester(id),
+                                            onConfirm: (e) => {
+                                                handleDeleteSemester(id)
+                                                e?.stopPropagation()
+                                            },
+                                            onCancel: (e) => {
+                                                e?.stopPropagation()
+                                            },
                                         }}
                                         onClick={(e) => {
                                             e.stopPropagation()

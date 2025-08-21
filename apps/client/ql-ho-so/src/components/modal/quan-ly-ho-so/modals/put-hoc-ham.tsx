@@ -39,8 +39,9 @@ export default function PutHocHamModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {
@@ -107,6 +108,11 @@ export default function PutHocHamModal() {
                         format={{
                             format: 'DD/MM/YYYY',
                             type: 'mask',
+                        }}
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('from')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
                         }}
                     />
                 </FormItem>

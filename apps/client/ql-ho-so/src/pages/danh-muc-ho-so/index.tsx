@@ -4,7 +4,7 @@ import { ROUTER_PATH } from '@workspace/router'
 import { Col, Flex, Row } from 'antd'
 import { useRouter } from 'next/router'
 
-export default function Ngach() {
+export default function DanhMucHoSo() {
     const router = useRouter()
     const listTrinhDo = [
         {
@@ -129,7 +129,7 @@ export default function Ngach() {
             description: 'Loại hình công tác',
         },
         {
-            id: 'working-status',
+            id: 'work-status',
             label: 'Tình Trạng Công Tác',
             icon: ReadOutlined,
             path: ROUTER_PATH.QL_HO_SO.DANH_MUC_HO_SO_TINH_TRANG_CONG_TAC,
@@ -222,7 +222,7 @@ export default function Ngach() {
             <Row gutter={16}>
                 {listTrinhDo.map((i) => {
                     return (
-                        <Col className="mb-4" span={8}>
+                        <Col key={i.id} className="mb-4" span={8}>
                             <Flex
                                 align="center"
                                 className="h-[64px] border-[1px] border-solid p-4 rounded-lg cursor-pointer"
@@ -244,7 +244,7 @@ export default function Ngach() {
             <Row gutter={16}>
                 {list.map((i) => {
                     return (
-                        <Col className="mb-4" span={8}>
+                        <Col key={i.id} className="mb-4" span={8}>
                             <Flex
                                 align="center"
                                 className="h-[64px] border-[1px] border-solid p-4 rounded-lg cursor-pointer"
@@ -266,7 +266,7 @@ export default function Ngach() {
             <Row gutter={16}>
                 {listXepLoai.map((i) => {
                     return (
-                        <Col className="mb-4" span={8}>
+                        <Col key={i.id} className="mb-4" span={8}>
                             <Flex
                                 align="center"
                                 className="h-[64px] border-[1px] border-solid p-4 rounded-lg cursor-pointer"
@@ -288,7 +288,7 @@ export default function Ngach() {
             <Row gutter={16}>
                 {listCaNhan.map((i) => {
                     return (
-                        <Col className="mb-4" span={8}>
+                        <Col key={i.id} className="mb-4" span={8}>
                             <Flex
                                 align="center"
                                 className="h-[64px] border-[1px] border-solid p-4 rounded-lg cursor-pointer"
@@ -310,7 +310,7 @@ export default function Ngach() {
             <Row gutter={16}>
                 {listSuckhoe.map((i) => {
                     return (
-                        <Col className="mb-4" span={8}>
+                        <Col key={i.id} className="mb-4" span={8}>
                             <Flex
                                 align="center"
                                 className="h-[64px] border-[1px] border-solid p-4 rounded-lg cursor-pointer"
@@ -332,6 +332,6 @@ export default function Ngach() {
     )
 }
 
-Ngach.getLayout = function getLayout(page: React.ReactElement) {
+DanhMucHoSo.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

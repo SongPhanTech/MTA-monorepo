@@ -96,7 +96,7 @@ export default function StudentScoreClassPage() {
                 some: {
                     subjectClassStudent: {
                         some: {
-                            studentId: studentId,
+                            studentId,
                         },
                     },
                 },

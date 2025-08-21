@@ -2,11 +2,17 @@ import PutAddCertificateScoreModal from './add-certificate'
 import AddStudentToFixedClassModal from './add-student-to-fixedClass'
 import ConfirmModal from './confirm-dialog'
 import HanNhapDiem from './modal-han-nhap-diem'
+import ModalNhapTKB from './modal-import-tkb'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
 import ModalLearningResult from './modal-ket-qua-hoc-tap-ctdt'
+import ModalPhuLucThacSi from './modal-phu-luc-thac-si'
 import ModalPrintToDSHV from './modal-print-ds-sinh-vien-lop'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
+import ModalPrintDecision from './modal-print-quyet-dinh-hoi-dong'
 import ModalGraduationCriteria from './modal-tieu-chi-xet-tn'
+import ModalTraCuuVanBang from './modal-tra-cuu-van-bang'
+import ModalVanBang from './modal-van-bang'
+import ModalExportFileSubjectClass from './modal-xuat-file-mo-lop'
 import PutDiplomaType from './put-bac-dao-tao'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
@@ -57,6 +63,7 @@ import PutStudentModal from './put-sinh-vien'
 import PutStudentThesisRegistration from './put-sinh-vien-dang-ky-da'
 import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
+import PutPaymentRecord from './put-thanh-toan'
 import PutCouncilMember from './put-thanh-vien-hoi-dong'
 import PutBuildingModal from './put-toa-nha'
 import PutTrainingFormModal from './put-training-form'
@@ -139,4 +146,11 @@ export {
     PutStudentModal,
     PutTrainingObjectTypeModal,
     PutTrainingTypeModal,
+    ModalVanBang,
+    ModalTraCuuVanBang,
+    ModalExportFileSubjectClass,
+    ModalPrintDecision,
+    ModalNhapTKB,
+    ModalPhuLucThacSi,
+    PutPaymentRecord,
 }

@@ -24,7 +24,6 @@ export default function ChuyenNganhDaoTaoModal() {
     const { mutateAsync: updateDM_ChuyenNganhDaoTaoBacDH } = useUpdateDM_ChuyenNganhDaoTaoBacDH()
 
     async function onOk(output: DM_ChuyenNganhDaoTaoBacDH) {
-        console.log(output)
         if (!output) return
         try {
             showSpinner()
@@ -51,8 +50,9 @@ export default function ChuyenNganhDaoTaoModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     useEffect(() => {

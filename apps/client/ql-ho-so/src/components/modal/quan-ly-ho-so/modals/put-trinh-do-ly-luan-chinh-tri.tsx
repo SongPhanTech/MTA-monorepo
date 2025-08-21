@@ -42,8 +42,9 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
             onClose()
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
         }
-        hideSpinner()
     }
 
     // Load dữ liệu khi edit
@@ -117,6 +118,11 @@ export default function PutTrinhDoLyLuanChinhTriModal() {
                         format={{
                             format: 'DD/MM/YYYY',
                             type: 'mask',
+                        }}
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('thoiGianBatDau')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
                         }}
                     />
                 </FormItem>

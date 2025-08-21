@@ -83,7 +83,7 @@ model GraduationDecision extends Base {
   student               Student                      @relation(fields: [studentId], references: [id])
   studentId             String                       @unique // Mỗi sinh viên chỉ có 1 quyết định tốt nghiệp
 
-  decisionDate          DateTime                     @default(now())
+  decisionDate          DateTime                     @default(now()) @db.Date
   notes                 String?          // Ghi chú của hội đồng
 
   // Thông tin tại thời điểm tốt nghiệp (snapshot)
@@ -97,10 +97,12 @@ model GraduationDecision extends Base {
   diplomaTypeId         String?          // curriculumVersion.diplomaId
   originalDiplomaNumber String?                      @unique // Số vào sổ gốc văn bằng
   diplomaNumber         String?                      @unique // Số hiệu văn bằng
-  diplomaIssueDate      DateTime?        // Ngày cấp bằng
+  diplomaIssueDate      DateTime?                    @db.Date      // Ngày cấp bằng
 
   diplomaFront          DocumentFile?                @relation("DiplomaFront")
   diplomaBack           DocumentFile?                @relation("DiplomaBack")
+
+  totalCopy             Int?                         @default(0) // Số lần sao y 
 
   @@schema("ql-dao-tao")
 }
@@ -181,6 +183,53 @@ model RankingCondition extends Base {
   tuple                  String[]                 @default([]) // giá trị sử dụng cho operator IN
 
   applicationCheckResult ApplicationCheckResult[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Đơn xác minh văn bằng
+model DiplomaVerificationApplication extends Base {
+  fullname                String // Họ và tên học viên (không liên kết userProfile vì cho phép nhập tay)
+  idCardNumber            String   // Căn cước công dân / CMND
+  dateOfBirth             DateTime?                  @db.Date // ngày sinh
+  phoneNumber             String // số điện thoại
+  email                   String // email
+  reason                  String // Lý do làm đơn
+
+  originalDiplomaNumber   String // Số vào sổ gốc văn bằng
+  diplomaNumber           String // Số hiệu văn bằng
+  trainingMajor           String?
+  trainingLevel           String?
+  trainingForm            String?
+  trainingCourseStartYear Int?
+  trainingCourseEndYear   Int?
+  diplomaIssueDate        DateTime?                 @db.Date // ngày cấp bằng
+  classification          String?
+
+  /// Tệp đính kèm khác (nhiều)
+  attachments             DocumentFile[]            @relation("DiplomaVerificationAttachments")
+
+  /// Ảnh mặt trước văn bằng
+  diplomaFront            DocumentFile?             @relation("DiplomaVerificationFront")
+
+  /// Ảnh mặt sau văn bằng
+  diplomaBack             DocumentFile?             @relation("DiplomaVerificationBack")
+
+  /// Trạng thái xử lý
+  status                  DiplomaVerificationStatus @default(PENDING)
+
+  /// Liên kết học viên (nếu cần)
+  studentId               String?
+  student                 Student?                  @relation(fields: [studentId], references: [id])
+
+  @@schema("ql-dao-tao")
+}
+
+enum DiplomaVerificationStatus {
+  PENDING       // Đang chờ xử lý
+  IN_PROGRESS   // Đang xử lý
+  APPROVED      // Đã duyệt
+  REJECTED      // Từ chối
 
   @@schema("ql-dao-tao")
 }

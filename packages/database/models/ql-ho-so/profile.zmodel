@@ -9,6 +9,7 @@ import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/staff'
 import '../khao-thi/survey'
 import '../ql-ho-so/categories'
+import '../khao-thi/evaluate'
 
 enum UserType {
   MILITARY_STUDENT // Học viên quân sự
@@ -232,6 +233,8 @@ model UserProfile extends Base {
   /// hồ sơ cán bộ
   staffs                        Staff?
   staffHistory                  StaffHistory[]
+
+  evidenceFiles                 EvidenceFile[]
 
   @@schema("ql-nguoi-dung")
 }

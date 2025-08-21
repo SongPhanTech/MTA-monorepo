@@ -3,12 +3,12 @@ import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import { useFindManySemester, useFindManySubjectClass } from '@workspace/db/hooks'
+import { useFindManySubjectClass } from '@workspace/db/hooks'
 import { Checkbox, Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -27,12 +27,6 @@ export default function RegisterClassManager({
     const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
     const { getScheduleLabel } = useScheduleOptions()
     const { getExamTypeLabel } = useExamTypeOptions()
-
-    const { data: semesters = [] } = useFindManySemester({
-        orderBy: {
-            createdAt: 'desc',
-        },
-    })
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -86,12 +80,6 @@ export default function RegisterClassManager({
         []
     )
 
-    useEffect(() => {
-        if (semesters && semesters.length > 0) {
-            setSelectedSemesterId((prev) => prev || semesters[0].id)
-        }
-    }, [semesters])
-
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -134,7 +122,7 @@ export default function RegisterClassManager({
                         </Col>
                         <Col span={8}>
                             <TreeSelectSemester
-                                value={selectedSemesterId}
+                                filterTimeNow={true}
                                 onChange={(val) => setSelectedSemesterId(val)}
                             />
                         </Col>
