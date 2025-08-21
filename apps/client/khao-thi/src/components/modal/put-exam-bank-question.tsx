@@ -10,7 +10,6 @@ import { emptyObjectIf } from '@workspace/constant'
 import type { ExamBankQuestion } from '@workspace/db'
 import {
     useCountQuestion,
-    useCreateExamBankQuestion,
     useCreateManyExamBankQuestion,
     useFindManyDifficulty,
     useFindManyKnowledgeBlock,
@@ -32,7 +31,6 @@ const PutExamBankQuestion = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-    const { mutateAsync: createExamBankQuestion } = useCreateExamBankQuestion()
     const { mutateAsync: createManyExamBankQuestion } = useCreateManyExamBankQuestion()
     async function onOk() {
         if (!input?.examBankId) {
