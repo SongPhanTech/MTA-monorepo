@@ -20,7 +20,7 @@ model EvaluationPeriod extends Base {
 
 /// Danh mục tiêu chuẩn
 model StandardCatalog extends Base {
-  order    Int                @unique
+  order    Int
   name     String
   criteria CriterionCatalog[]
 
@@ -38,7 +38,6 @@ model CriterionCatalog extends Base {
 
   requirementCriterionCatalog RequirementCriterionCatalog[]
 
-  @@unique([standardId, order])
   @@schema("khao-thi")
 }
 
@@ -50,7 +49,6 @@ model RequirementCriterionCatalog extends Base {
   name               String
   questions          String[]
 
-  @@unique([criterionCatalogId, order])
   @@schema("khao-thi")
 }
 
@@ -81,7 +79,6 @@ model EvaluationStandard extends Base {
 
   criteria   EvaluationCriterion[]
 
-  @@unique([periodId, order])
   @@schema("khao-thi")
 }
 
@@ -114,7 +111,6 @@ model EvaluationCriterion extends Base {
     score                 Int?
 
   @@unique([standardId, name])
-  @@unique([standardId, order])
   @@schema("khao-thi")
 }
 

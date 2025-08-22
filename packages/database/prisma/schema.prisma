@@ -4235,7 +4235,7 @@ model StandardCatalog {
   deletedAt   DateTime?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @default(now()) @updatedAt()
-  order       Int                @unique()
+  order       Int
   name        String
   criteria    CriterionCatalog[]
 
@@ -4259,7 +4259,6 @@ model CriterionCatalog {
   scoreScaleId                String
   requirementCriterionCatalog RequirementCriterionCatalog[]
 
-  @@unique([standardId, order])
   @@schema("khao-thi")
 }
 
@@ -4278,7 +4277,6 @@ model RequirementCriterionCatalog {
   name               String
   questions          String[]
 
-  @@unique([criterionCatalogId, order])
   @@schema("khao-thi")
 }
 
@@ -4320,7 +4318,6 @@ model EvaluationStandard {
   conclusion  String
   criteria    EvaluationCriterion[]
 
-  @@unique([periodId, order])
   @@schema("khao-thi")
 }
 
@@ -4356,7 +4353,6 @@ model EvaluationCriterion {
   score                 Int?
 
   @@unique([standardId, name])
-  @@unique([standardId, order])
   @@schema("khao-thi")
 }
 
