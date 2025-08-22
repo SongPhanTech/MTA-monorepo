@@ -8,6 +8,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
+import { ExamStatus } from '@workspace/db'
 import {
     useCountTestStructureRule,
     useDeleteTestStructureRule,
@@ -151,6 +152,11 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
         }
     }
 
+    const isDraft = useMemo(() => {
+        if (!id) return true
+        return initialValue?.status === ExamStatus.DRAFT
+    }, [id, initialValue?.status])
+
     return (
         <div>
             {data.length > 0 ? (
@@ -159,7 +165,10 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
                         <Row gutter={[16, 16]} align="top" justify="end">
                             <Col span={12}>
                                 <Flex justify="end" gap={4}>
-                                    <Button onClick={() => onOpenModalSinhDeThiTuDong(id)}>
+                                    <Button
+                                        onClick={() => onOpenModalSinhDeThiTuDong(id)}
+                                        disabled={!isDraft}
+                                    >
                                         <Shuffle />
                                         Sinh đề tự động
                                     </Button>
@@ -174,6 +183,7 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
                                                     '',
                                             })
                                         }
+                                        disabled={!isDraft}
                                     >
                                         <BookPlus />
                                         Thêm mới
@@ -256,6 +266,7 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
                                                                         ?.subjectVersionId || '',
                                                             })
                                                         }
+                                                        disabled={!isDraft}
                                                     />
                                                     <DeleteIcon
                                                         popConfirm={{
@@ -264,6 +275,7 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
                                                                     record.id
                                                                 ),
                                                         }}
+                                                        disabled={!isDraft}
                                                     />
                                                 </Row>
                                             )
@@ -306,6 +318,7 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
                                         initialValue?.questionBank?.subjectVersionId || '',
                                 })
                             }
+                            disabled={!isDraft}
                         >
                             <BookPlus />
                             Thêm cấu hình đề thi
