@@ -67,15 +67,15 @@ model ScoreScaleCatalog extends Base {
 
 /// Tiêu chuẩn đánh giá của đợt (Bản sao/áp dụng từ StandardCatalog)
 model EvaluationStandard extends Base {
-  period     EvaluationPeriod      @relation(fields: [periodId], references: [id])
+  period     EvaluationPeriod      @relation(fields: [periodId], references: [id], onDelete: Cascade)
   periodId   String
   name       String
   order      Int
 
   /// Mở đầu
-  opening    String
+  opening    String                @default("")
   /// Kết luận
-  conclusion String
+  conclusion String                @default("")
 
   criteria   EvaluationCriterion[]
 
@@ -84,7 +84,7 @@ model EvaluationStandard extends Base {
 
 /// Tiêu chí đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
 model EvaluationCriterion extends Base {
-  standard              EvaluationStandard     @relation(fields: [standardId], references: [id])
+  standard              EvaluationStandard     @relation(fields: [standardId], references: [id], onDelete: Cascade)
   standardId            String
   name                  String
   order                 Int
@@ -100,13 +100,13 @@ model EvaluationCriterion extends Base {
 
   // Phiếu đánh giá
   /// 1. Mô tả hiện trạng
-  currentSituation      String
+  currentSituation      String                 @default("")
   /// 2. Điểm mạnh
-  strengths             String
+  strengths             String                 @default("")
   /// 3. Điểm tồn tại
-  weakness              String
+  weakness              String                 @default("")
   /// 4. Kế hoạch hành động
-  actionPlan            String
+  actionPlan            String                 @default("")
   /// 5. Tự đánh giá
     score                 Int?
 
@@ -139,7 +139,7 @@ model Evidence extends Base {
 
 /// Yêu cầu trong phiếu phân tích tiêu chí
 model RequirementCriterion extends Base {
-  evaluationCriterion   EvaluationCriterion    @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterion   EvaluationCriterion    @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
   evaluationCriterionId String
   order                 Int
   name                  String
@@ -152,9 +152,9 @@ model RequirementCriterion extends Base {
 
 /// Minh chứng phiếu phân tích
 model AnalysisFormEvidence {
-  analysisFormRequirementCriterion   RequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id])
+  analysisFormRequirementCriterion   RequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id], onDelete: Cascade)
   analysisFormRequirementCriterionId String
-  evidence                           Evidence             @relation(fields: [evidenceId], references: [id])
+  evidence                           Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
   evidenceId                         String
   order                              Int
 
@@ -173,7 +173,7 @@ enum EvaluationMemberRole {
 
 /// Hội đồng đánh giá
 model EvaluationCouncil extends Base {
-  period              EvaluationPeriod          @relation(fields: [periodId], references: [id])
+  period              EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
   periodId            String
   name                String
 
@@ -184,7 +184,7 @@ model EvaluationCouncil extends Base {
 }
 
 model EvaluationCouncilMember extends Base {
-  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id])
+  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId String
   lecturer            Lecturer             @relation(fields: [lecturerId], references: [id])
   lecturerId          String

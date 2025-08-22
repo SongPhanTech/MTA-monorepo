@@ -4308,14 +4308,14 @@ model EvaluationStandard {
   deletedAt   DateTime?
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @default(now()) @updatedAt()
-  period      EvaluationPeriod      @relation(fields: [periodId], references: [id])
+  period      EvaluationPeriod      @relation(fields: [periodId], references: [id], onDelete: Cascade)
   periodId    String
   name        String
   order       Int
   /// Mở đầu
-  opening     String
+  opening     String                @default("")
   /// Kết luận
-  conclusion  String
+  conclusion  String                @default("")
   criteria    EvaluationCriterion[]
 
   @@schema("khao-thi")
@@ -4330,7 +4330,7 @@ model EvaluationCriterion {
   deletedAt             DateTime?
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @default(now()) @updatedAt()
-  standard              EvaluationStandard     @relation(fields: [standardId], references: [id])
+  standard              EvaluationStandard     @relation(fields: [standardId], references: [id], onDelete: Cascade)
   standardId            String
   name                  String
   order                 Int
@@ -4342,13 +4342,13 @@ model EvaluationCriterion {
   /// Yêu cầu trong phiếu phân tích
   requirementCriterions RequirementCriterion[]
   /// 1. Mô tả hiện trạng
-  currentSituation      String
+  currentSituation      String                 @default("")
   /// 2. Điểm mạnh
-  strengths             String
+  strengths             String                 @default("")
   /// 3. Điểm tồn tại
-  weakness              String
+  weakness              String                 @default("")
   /// 4. Kế hoạch hành động
-  actionPlan            String
+  actionPlan            String                 @default("")
   /// 5. Tự đánh giá
   score                 Int?
 
@@ -4400,7 +4400,7 @@ model RequirementCriterion {
   deletedAt             DateTime?
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @default(now()) @updatedAt()
-  evaluationCriterion   EvaluationCriterion    @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterion   EvaluationCriterion    @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
   evaluationCriterionId String
   order                 Int
   name                  String
@@ -4412,9 +4412,9 @@ model RequirementCriterion {
 
 /// Minh chứng phiếu phân tích
 model AnalysisFormEvidence {
-  analysisFormRequirementCriterion   RequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id])
+  analysisFormRequirementCriterion   RequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id], onDelete: Cascade)
   analysisFormRequirementCriterionId String
-  evidence                           Evidence             @relation(fields: [evidenceId], references: [id])
+  evidence                           Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
   evidenceId                         String
   order                              Int
 
@@ -4431,7 +4431,7 @@ model EvaluationCouncil {
   deletedAt           DateTime?
   createdAt           DateTime                  @default(now())
   updatedAt           DateTime                  @default(now()) @updatedAt()
-  period              EvaluationPeriod          @relation(fields: [periodId], references: [id])
+  period              EvaluationPeriod          @relation(fields: [periodId], references: [id], onDelete: Cascade)
   periodId            String
   name                String
   members             EvaluationCouncilMember[]
@@ -4448,7 +4448,7 @@ model EvaluationCouncilMember {
   deletedAt           DateTime?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @default(now()) @updatedAt()
-  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id])
+  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId String
   lecturer            Lecturer             @relation(fields: [lecturerId], references: [id])
   lecturerId          String
