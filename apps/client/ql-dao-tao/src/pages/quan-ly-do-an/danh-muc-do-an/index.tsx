@@ -27,7 +27,7 @@ import dayjs from 'dayjs'
 import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { BsGear } from 'react-icons/bs'
 
@@ -274,9 +274,15 @@ export default function ThesisProject() {
         tag: ModalPrintDecision.name,
     })
 
-    const { onOpen: openPaymentRecord } = useDisclosure<{ selectedRowKeys: string[] }>({
+    const { onOpen: openPaymentRecord, isOpen } = useDisclosure<{ selectedRowKeys: string[] }>({
         tag: PutPaymentRecord.name,
     })
+
+    useEffect(() => {
+        if (!isOpen) {
+            setSelectedRowKeys([])
+        }
+    }, [isOpen])
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -496,10 +502,9 @@ export default function ThesisProject() {
                                     }}
                                     title="Thêm mới đề tài"
                                 />
-                                <BsGear
-                                    onClick={() => handleNavigateSetting(id)}
-                                    title="Cấu hình lớp đồ án"
-                                />
+                                <Tooltip title="Cấu hình lớp đồ án" placement="top">
+                                    <BsGear onClick={() => handleNavigateSetting(id)} />
+                                </Tooltip>
                             </div>
                         )}
                         columns={[

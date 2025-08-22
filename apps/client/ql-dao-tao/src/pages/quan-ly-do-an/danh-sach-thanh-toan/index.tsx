@@ -9,6 +9,7 @@ import { useCouncilRoleOptions } from '@hooks/councilRole'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { PaymentStatus } from '@workspace/db'
 import {
     useCountPaymentRecord,
     useDeletePaymentRecord,
@@ -17,7 +18,7 @@ import {
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function PaymentRecordPage() {
@@ -129,9 +130,17 @@ export default function PaymentRecordPage() {
         tag: PutPaymentRecordDetail.name,
     })
 
-    const { onOpen: openUpdatePaymentStatus } = useDisclosure<{ paymentRecordIds: string[] }>({
+    const { onOpen: openUpdatePaymentStatus, isOpen } = useDisclosure<{
+        paymentRecordIds: string[]
+    }>({
         tag: PutUpdatePaymentStatus.name,
     })
+
+    useEffect(() => {
+        if (!isOpen) {
+            setSelectedRowKeys([])
+        }
+    }, [isOpen])
 
     const { mutateAsync: deletePaymentRecord } = useDeletePaymentRecord()
     async function handleDelete(id: string) {
@@ -174,6 +183,7 @@ export default function PaymentRecordPage() {
                                             paymentRecordIds: selectedRowKeys as string[],
                                         })
                                     }
+                                    disabled={selectedRowKeys.length === 0}
                                     type="primary"
                                 >
                                     Cập nhật trạng thái
@@ -192,6 +202,15 @@ export default function PaymentRecordPage() {
                         rowSelection={{
                             selectedRowKeys,
                             onChange: setSelectedRowKeys,
+                            getCheckboxProps: (record) => {
+                                return {
+                                    disabled: record.status === PaymentStatus.PAID,
+                                    style:
+                                        record.status === PaymentStatus.PAID
+                                            ? { display: 'none' }
+                                            : {},
+                                }
+                            },
                         }}
                         columns={[
                             {

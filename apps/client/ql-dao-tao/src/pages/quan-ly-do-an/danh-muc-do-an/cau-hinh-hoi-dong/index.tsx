@@ -160,10 +160,6 @@ export default function SettingClass() {
         }
     }, [subjectClass, form])
 
-    useEffect(() => {
-        console.log('Current form values:', form.getFieldsValue())
-    }, [form])
-
     const listExperts =
         rightData?.map((item, index) => ({
             id: index,
@@ -574,25 +570,27 @@ export default function SettingClass() {
                     Tạo hội đồng
                 </Button>
             </Col>
-            <Col span={12} className="mt-4">
-                <FormItem form={form} name="roomIds" label="Danh sách phòng">
-                    <Select
-                        mode="multiple"
-                        placeholder="Chọn danh sách phòng"
-                        options={room.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        showSearch
-                        onSearch={handleSearchRoom}
-                        filterOption={false}
-                        allowClear
-                        onChange={(values: string[]) => {
-                            setSelectedRoomIds(values)
-                        }}
-                    />
-                </FormItem>
-            </Col>
+            <Form form={form}>
+                <Col span={12} className="mt-4">
+                    <FormItem form={form} name="roomIds" label="Danh sách phòng">
+                        <Select
+                            mode="multiple"
+                            placeholder="Chọn danh sách phòng"
+                            options={room.map((item) => ({
+                                label: item.name,
+                                value: item.id,
+                            }))}
+                            showSearch
+                            onSearch={handleSearchRoom}
+                            filterOption={false}
+                            allowClear
+                            onChange={(values: string[]) => {
+                                setSelectedRoomIds(values)
+                            }}
+                        />
+                    </FormItem>
+                </Col>
+            </Form>
             <Col span={24} className="flex flex-row gap-2">
                 <Col span={12}>
                     <Table

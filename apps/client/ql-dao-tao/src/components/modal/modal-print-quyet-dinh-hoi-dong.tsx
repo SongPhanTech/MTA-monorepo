@@ -115,7 +115,7 @@ const ModalPrintDecision = () => {
                 className="mx-auto p-10 page text-sm leading-relaxed !font-time-news-roman"
             >
                 {allThesisProjects.map((tp: ThesisProjectInput, index: number) => (
-                    <>
+                    <div key={tp.id}>
                         <div className="text-center font-bold uppercase">
                             <div className="flex items-center justify-between">
                                 <div className="flex flex-col">
@@ -286,7 +286,7 @@ const ModalPrintDecision = () => {
                             <div className="h-[40px]"> </div>
                         )}
                         {index < allThesisProjects.length - 1 && <div className="page-break" />}
-                    </>
+                    </div>
                 ))}
             </div>
             <style>
