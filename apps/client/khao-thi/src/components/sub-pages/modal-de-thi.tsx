@@ -1,21 +1,23 @@
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
 import { ModalPrintExamBank, PutExamBankQuestion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
+import { emptyObjectIf } from '@workspace/constant'
 import type { ExamBankQuestion, Question } from '@workspace/db'
 import {
     useCountExamBankQuestion,
+    useDeleteExamBankQuestion,
+    useFindManyDifficulty,
     useFindManyExamBankQuestion,
-    useUpdateExamBankQuestion,
+    useFindManyKnowledgeBlock,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Modal, message, Row, Switch, Tooltip } from 'antd'
+import { Button, Col, Flex, Modal, message, Row } from 'antd'
 import { BookPlus, Printer } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface ModalExamBankProps {
@@ -45,14 +47,52 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
 }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
     const [filters, setFilters] = useState<FilterProps>({
+        content: '',
         questionType: undefined,
+        difficultyId: undefined,
         knowledgeBlockId: undefined,
-        count: undefined,
-        questionPoint: undefined,
+        point: undefined,
     })
-    const [showAllExplanations, setShowAllExplanations] = useState(false)
-    const [rowVisibility, setRowVisibility] = useState<Record<string, boolean>>({})
+
+    const where = useMemo(
+        () => ({
+            examBankId,
+            ...(filters.questionType && filters.questionType.length > 0
+                ? {
+                      question: { type: { in: filters.questionType } },
+                  }
+                : {}),
+            ...(filters.content && filters.content !== ''
+                ? {
+                      question: {
+                          content: {
+                              contains: filters.content,
+                              mode: 'insensitive' as const,
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.difficultyId
+                ? Array.isArray(filters.difficultyId)
+                    ? { question: { difficultyId: { in: filters.difficultyId } } }
+                    : { question: { difficultyId: filters.difficultyId } }
+                : {}),
+            ...(filters.knowledgeBlockId
+                ? Array.isArray(filters.knowledgeBlockId)
+                    ? { question: { knowledgeBlockId: { in: filters.knowledgeBlockId } } }
+                    : { question: { knowledgeBlockId: filters.knowledgeBlockId } }
+                : {}),
+        }),
+        [
+            examBankId,
+            filters.questionType,
+            filters.content,
+            filters.difficultyId,
+            filters.knowledgeBlockId,
+        ]
+    )
 
     const { onOpen: onOpenPutExamBankQuestion } = useDisclosure<{
         id: string
@@ -70,6 +110,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
         semester: string
         examId: string
         duration: number
+        explanation: boolean
     }>({
         tag: ModalPrintExamBank.name,
     })
@@ -78,10 +119,31 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
 
     const { data } = useFindManyExamBankQuestion(
         {
-            where: { examBankId },
+            where,
             include: {
-                question: true,
+                question: {
+                    include: {
+                        knowledgeBlock: true,
+                        difficulty: true,
+                    },
+                },
             },
+            orderBy: [
+                ...emptyObjectIf(
+                    [
+                        {
+                            question: {
+                                point: filters.point,
+                            },
+                        },
+                    ],
+                    !!filters.point
+                ),
+                { order: 'asc' },
+                { createdAt: 'asc' },
+            ],
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
         {
             enabled: !!examBankId,
@@ -90,20 +152,19 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
 
     const { data: count } = useCountExamBankQuestion(
         {
-            where: { examBankId },
+            where: { ...where, deletedAt: null },
         },
         {
             enabled: !!examBankId,
         }
     )
 
-    const { mutateAsync: updateExamBankQuestion } = useUpdateExamBankQuestion()
+    const { mutateAsync: deleteExamBankQuestion } = useDeleteExamBankQuestion()
     async function handleDeleteExamBankQuestion(id: string) {
         try {
             showSpinner()
-            await updateExamBankQuestion({
+            await deleteExamBankQuestion({
                 where: { id },
-                data: { deletedAt: new Date() },
             })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -112,32 +173,13 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
         }
     }
 
-    const toggleAllExplanations = (checked: boolean) => {
-        setShowAllExplanations(checked)
-        if (!checked) {
-            const newVisibility: Record<string, boolean> = {}
-            data?.forEach((item) => {
-                newVisibility[item.id] = false
-            })
-            setRowVisibility(newVisibility)
-        }
-    }
+    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
+        where: { structureRules: { some: { exam: { questionBankId } } } },
+    })
 
-    const toggleRowExplanation = (id: string) => {
-        setRowVisibility((prev) => ({
-            ...prev,
-            [id]: !prev[id],
-        }))
-
-        const allVisible = data?.every(
-            (item) => rowVisibility[item.id] || (item.id === id && !rowVisibility[id])
-        )
-        if (allVisible) {
-            setShowAllExplanations(true)
-        } else if (showAllExplanations) {
-            setShowAllExplanations(false)
-        }
-    }
+    const { data: difficultyData } = useFindManyDifficulty({
+        orderBy: { level: 'asc' },
+    })
 
     return (
         <Modal
@@ -152,16 +194,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="middle" justify="space-between">
-                        <Col>
-                            <Flex align="center" gap={8}>
-                                <span>Hiển thị giải thích:</span>
-                                <Switch
-                                    checked={showAllExplanations}
-                                    onChange={toggleAllExplanations}
-                                />
-                            </Flex>
-                        </Col>
-                        <Col>
+                        <Col span={24}>
                             <Flex justify="end" gap={4}>
                                 <Button
                                     type="primary"
@@ -174,6 +207,25 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                             semester,
                                             examId,
                                             duration,
+                                            explanation: true,
+                                        })
+                                    }
+                                    icon={<Printer />}
+                                >
+                                    In đáp án
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    onClick={() =>
+                                        onOpenModalPrintExamBank({
+                                            data,
+                                            subjectVersionName,
+                                            subject,
+                                            examCode,
+                                            semester,
+                                            examId,
+                                            duration,
+                                            explanation: false,
                                         })
                                     }
                                     icon={<Printer />}
@@ -229,6 +281,53 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                 ),
                             },
                             {
+                                title: 'Loại câu hỏi',
+                                dataIndex: 'questionType',
+                                width: 100,
+                                align: 'center',
+                                type: 'select',
+                                options: questionTypeOptions,
+                                render: (__, record) =>
+                                    getQuestionTypeLabel(record?.question?.type) || 'Chưa xác định',
+                            },
+                            {
+                                title: 'Chương mục',
+                                dataIndex: 'knowledgeBlockId',
+                                width: 100,
+                                align: 'center',
+                                type: 'select',
+                                options: knowledgeBlockData?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                render: (__, record) => {
+                                    return record?.question?.knowledgeBlock?.name || 'Chưa xác định'
+                                },
+                            },
+                            {
+                                title: 'Độ khó',
+                                dataIndex: 'difficultyId',
+                                width: 100,
+                                align: 'center',
+                                type: 'select',
+                                options: difficultyData?.map(({ id, name, level }) => ({
+                                    value: id,
+                                    label: `${name} (level ${level})`,
+                                })),
+                                render: (__, record) => {
+                                    if (!record?.question?.difficulty) {
+                                        return 'Chưa xác định'
+                                    }
+                                    if (!record.question?.difficulty.name) {
+                                        return `Level ${record.question?.difficulty.level || 'N/A'}`
+                                    }
+                                    if (!record.question?.difficulty.level) {
+                                        return record.question?.difficulty.name
+                                    }
+                                    return `${record.question?.difficulty.name} (level ${record.question?.difficulty.level})`
+                                },
+                            },
+                            {
                                 title: 'Điểm số',
                                 dataIndex: 'point',
                                 width: 80,
@@ -239,63 +338,14 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                 },
                             },
                             {
-                                title: 'Giải thích đáp án',
-                                dataIndex: 'explanation',
-                                width: 200,
-                                type: 'input',
-                                render: (__, record) => {
-                                    const isVisible =
-                                        showAllExplanations || rowVisibility[record.id]
-                                    return isVisible ? (
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: record?.question?.explanation
-                                                    ? renderWithMath(record?.question?.explanation)
-                                                    : '<i>Chưa có nội dung</i>',
-                                            }}
-                                        />
-                                    ) : (
-                                        '***'
-                                    )
-                                },
-                            },
-                            {
                                 title: 'Thao tác',
                                 align: 'center',
                                 fixed: 'right',
                                 width: 120,
                                 render: (__, record) => {
                                     if (record?.id) {
-                                        const isVisible =
-                                            showAllExplanations || rowVisibility[record.id]
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title="Ẩn/hiện giải thích">
-                                                    <Button
-                                                        type="text"
-                                                        icon={
-                                                            isVisible ? (
-                                                                <EyeOutlined />
-                                                            ) : (
-                                                                <EyeInvisibleOutlined />
-                                                            )
-                                                        }
-                                                        onClick={() =>
-                                                            toggleRowExplanation(record.id)
-                                                        }
-                                                        className="-mr-1.5"
-                                                    />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                    onClick={() =>
-                                                        onOpenPutExamBankQuestion({
-                                                            id: record.id,
-                                                            examBankId,
-                                                            questionBankId,
-                                                        })
-                                                    }
-                                                />
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>

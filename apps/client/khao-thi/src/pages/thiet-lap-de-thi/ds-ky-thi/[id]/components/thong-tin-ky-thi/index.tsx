@@ -37,9 +37,10 @@ export type PutExamType = Exam & {
 
 interface InformationProps {
     id: string
+    selectedIds?: string[]
 }
 
-export default function Information({ id }: InformationProps) {
+export default function Information({ id, selectedIds }: InformationProps) {
     const router = useRouter()
     const [form] = Form.useForm<PutExamType>()
     const { options: examStatusOptions } = useExamStatusOptions()
@@ -67,6 +68,8 @@ export default function Information({ id }: InformationProps) {
                 subjectClass: {
                     some: {
                         semesterId: selectedSemesterId || undefined,
+                        cancelled: false,
+                        id: selectedIds?.[0] || undefined,
                     },
                 },
             },
@@ -210,6 +213,7 @@ export default function Information({ id }: InformationProps) {
                             semesterId={selectedSemesterId}
                             subjectVersionId={selectedSubjectVersionId}
                             edit={!!id}
+                            defaultValue={selectedIds}
                         />
                     </FormItem>
                 </Col>

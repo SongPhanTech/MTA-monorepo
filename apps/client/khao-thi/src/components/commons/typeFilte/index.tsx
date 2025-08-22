@@ -125,6 +125,7 @@ export type FilterProps = {
     subjectClass?: string[]
     order?: 'asc' | 'desc'
     scoreScalesId?: string[]
+    hasExam?: boolean
 }
 
 export type ColumnTypeProps = ColumnsType & {

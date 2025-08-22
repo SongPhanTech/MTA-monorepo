@@ -2,44 +2,32 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import NoExamBank from '@components/icons/icon-no-exambank'
 import ViewIcon from '@components/icons/view'
-import {
-    ModalPrintAllExams,
-    ModalSinhDeThiTuDong,
-    PutExamBank,
-    PutTestStructureRule,
-} from '@components/modal'
+import { ModalPrintAllExams, ModalSinhDeThiTuDong, PutExamBank } from '@components/modal'
 import { ModalExamBank } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
-import { emptyObjectIf } from '@workspace/constant'
 import type { Question } from '@workspace/db'
 import {
     useCountExamBank,
-    useCountTestStructureRule,
     useDeleteExamBank,
     useFindManyExamBank,
-    useFindManyKnowledgeBlock,
-    useFindManyTestStructureRule,
     useFindUniqueExam,
-    useUpdateTestStructureRule,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, message, Row } from 'antd'
-import { BookPlus, Printer } from 'lucide-react'
-import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { Button, Col, Flex, message, Row } from 'antd'
+import { BookPlus, Printer, Shuffle } from 'lucide-react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function TestStructureRule() {
-    const router = useRouter()
+interface ExamBankProps {
+    id: string
+}
+
+export default function ExamBank({ id }: ExamBankProps) {
     const { showSpinner, hideSpinner } = useSpinner()
-    const examId = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [currentPage2, setCurrentPage2] = useState(1)
-    const [numberOfPages2, setNumberOfPages2] = useState(DEFAULT_PAGINATE_SIZE)
-    const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
     const [examBankModal, setExamBankModal] = useState({
         visible: false,
         examBankId: '',
@@ -53,15 +41,11 @@ export default function TestStructureRule() {
         questionPoint: undefined,
     })
 
-    const { onOpen: onOpenPutTestStructureRule } = useDisclosure<{
-        id: string
+    const { onOpen: onOpenPutExamBank } = useDisclosure<{
         examId: string
-        subjectVersionId: string
+        id: string
+        questionBankId: string
     }>({
-        tag: PutTestStructureRule.name,
-    })
-
-    const { onOpen: onOpenPutExamBank } = useDisclosure<{ examId: string; id: string }>({
         tag: PutExamBank.name,
     })
 
@@ -75,6 +59,7 @@ export default function TestStructureRule() {
             examId: string
             duration: number
         }[]
+        explanation: boolean
     }>({
         tag: ModalPrintAllExams.name,
     })
@@ -99,7 +84,7 @@ export default function TestStructureRule() {
 
     const { data: initialValue } = useFindUniqueExam(
         {
-            where: { id: examId },
+            where: { id },
             include: {
                 questionBank: {
                     include: {
@@ -121,70 +106,12 @@ export default function TestStructureRule() {
                 },
             },
         },
-        { enabled: !!examId }
+        { enabled: !!id }
     )
 
-    const where = useMemo(
-        () => ({
-            examId,
-            ...(filters.knowledgeBlockId
-                ? Array.isArray(filters.knowledgeBlockId)
-                    ? { knowledgeBlockId: { in: filters.knowledgeBlockId } }
-                    : { knowledgeBlockId: filters.knowledgeBlockId }
-                : {}),
-            ...(filters.questionType && filters.questionType.length > 0
-                ? {
-                      questionType: { in: filters.questionType },
-                  }
-                : {}),
-        }),
-        [examId, filters.knowledgeBlockId, filters.questionType]
-    )
-
-    const { data = [] } = useFindManyTestStructureRule(
+    const { data: examBankData = [], refetch } = useFindManyExamBank(
         {
-            where,
-            include: {
-                knowledgeBlock: true,
-            },
-            orderBy: [
-                ...emptyObjectIf(
-                    [
-                        {
-                            count: filters.count,
-                        },
-                    ],
-                    !!filters.count
-                ),
-                ...emptyObjectIf(
-                    [
-                        {
-                            questionPoint: filters.questionPoint,
-                        },
-                    ],
-                    !!filters.questionPoint
-                ),
-                { questionPoint: 'asc' },
-            ],
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        },
-        { enabled: !!examId }
-    )
-
-    const { data: count } = useCountTestStructureRule(
-        {
-            where: {
-                ...where,
-                deletedAt: null,
-            },
-        },
-        { enabled: !!examId }
-    )
-
-    const { data: examData = [], refetch } = useFindManyExamBank(
-        {
-            where: { examId },
+            where: { examId: id },
             orderBy: { examCode: 'asc' },
             include: {
                 questions: {
@@ -194,40 +121,21 @@ export default function TestStructureRule() {
                 },
                 _count: { select: { questions: true } },
             },
-            take: numberOfPages2,
-            skip: (currentPage2 - 1) * numberOfPages2,
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        { enabled: !!examId }
+        { enabled: !!id }
     )
 
     const { data: countExam, refetch: refetchCount } = useCountExamBank(
         {
             where: {
-                examId,
+                examId: id,
                 deletedAt: null,
             },
         },
-        { enabled: !!examId }
+        { enabled: !!id }
     )
-
-    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
-        where: { subjectVersionId: initialValue?.questionBank?.subjectVersionId },
-    })
-
-    const { mutateAsync: updateTestStructureRule } = useUpdateTestStructureRule()
-    async function handleDeleteTestStructureRule(id: string) {
-        try {
-            showSpinner()
-            await updateTestStructureRule({
-                where: { id },
-                data: { deletedAt: new Date() },
-            })
-        } catch (_error) {
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     const { mutateAsync: deleteExamBank } = useDeleteExamBank()
     async function handleDeleteExamBank(id: string) {
@@ -251,10 +159,10 @@ export default function TestStructureRule() {
         },
     })
 
-    const handlePrintAllExams = () => {
-        if (!examData) return
+    const handlePrintAllExams = (explanation: boolean) => {
+        if (!examBankData) return
 
-        const exams = examData.map((exam) => ({
+        const exams = examBankData.map((exam) => ({
             examCode: exam.examCode,
             questions: exam.questions.map((q) => q.question),
             subjectVersionName: initialValue?.questionBank?.subjectVersion?.name || '',
@@ -266,298 +174,207 @@ export default function TestStructureRule() {
                 const { name, schoolYear } = initialValue?.subjectClass?.[0]?.semester || {}
                 return [name, schoolYear?.name].filter(Boolean).join('<br/>')
             })(),
-            examId: examId,
+            examId: id,
             duration: Number(initialValue?.duration),
         }))
 
-        onOpenModalPrintAllExams({ exams })
+        onOpenModalPrintAllExams({ exams, explanation })
     }
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                {[
-                    initialValue?.code,
-                    initialValue?.title,
-                    initialValue?.questionBank?.name,
-                    initialValue?.duration && `${initialValue?.duration} phút`,
-                    initialValue?.passScore && `Điểm đạt: ${initialValue?.passScore} điểm`,
-                ]
-                    .filter(Boolean)
-                    .join(' - ')}
-            </Divider>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="end">
-                        <Col span={12}>
-                            <strong>Cấu hình tạo tự động</strong>
+            {examBankData.length > 0 ? (
+                <>
+                    <Row gutter={[16, 0]}>
+                        <Col span={24}>
+                            <Row gutter={[16, 16]} align="top" justify="end">
+                                <Col span={12}>
+                                    <Flex justify="end" gap={4}>
+                                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)}>
+                                            <Shuffle />
+                                            Sinh đề tự động
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => {
+                                                onOpenPutExamBank({
+                                                    examId: id,
+                                                    id: '',
+                                                    questionBankId:
+                                                        initialValue?.questionBankId || '',
+                                                })
+                                            }}
+                                        >
+                                            <BookPlus />
+                                            Thêm đề thi
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => handlePrintAllExams(true)}
+                                            disabled={!examBankData}
+                                        >
+                                            <Printer />
+                                            In đáp án
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => handlePrintAllExams(false)}
+                                            disabled={!examBankData}
+                                        >
+                                            <Printer />
+                                            In toàn bộ đề thi
+                                        </Button>
+                                    </Flex>
+                                </Col>
+                            </Row>
                         </Col>
-                        <Col span={12}>
-                            <Flex justify="end" gap={4}>
-                                <Button
-                                    type="primary"
-                                    onClick={() =>
-                                        onOpenPutTestStructureRule({
-                                            id: '',
-                                            examId,
-                                            subjectVersionId:
-                                                initialValue?.questionBank?.subjectVersionId || '',
-                                        })
-                                    }
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenModalSinhDeThiTuDong(examId)}
-                                >
-                                    <BookPlus />
-                                    Tạo đề tự động
-                                </Button>
-                            </Flex>
+
+                        <Col span={24}>
+                            <Table
+                                rowKey="key"
+                                filters={filters}
+                                setFilters={setFilters}
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        align: 'center',
+                                        fixed: 'left',
+                                        render: (_, __, index) =>
+                                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    },
+                                    {
+                                        title: 'Mã đề',
+                                        align: 'center',
+                                        fixed: 'left',
+                                        dataIndex: 'examCode',
+                                    },
+                                    {
+                                        title: 'Số câu hỏi',
+                                        align: 'center',
+                                        dataIndex: ['_count', 'questions'],
+                                    },
+                                    {
+                                        title: 'Tổng điểm',
+                                        align: 'center',
+                                        render: (__, record) => {
+                                            let total = 0
+                                            if (!record?.questions) {
+                                                return '-'
+                                            }
+                                            for (const q of record.questions) {
+                                                total += q.question.point || 0
+                                            }
+                                            return total
+                                        },
+                                    },
+                                    {
+                                        title: 'Thao tác',
+                                        align: 'center',
+                                        fixed: 'right',
+                                        render: (__, record) => {
+                                            if (record?.id) {
+                                                return (
+                                                    <Row className="justify-center gap-2">
+                                                        <ViewIcon
+                                                            onClick={() =>
+                                                                openExamBankModal(
+                                                                    record.id,
+                                                                    initialValue?.questionBankId ??
+                                                                        '',
+                                                                    record?.examCode ?? ''
+                                                                )
+                                                            }
+                                                        />
+                                                        <EditIcon
+                                                            className="text-sm text-blue-700 cursor-pointer"
+                                                            onClick={() =>
+                                                                onOpenPutExamBank({
+                                                                    examId: id,
+                                                                    id: record.id,
+                                                                    questionBankId:
+                                                                        initialValue?.questionBankId ||
+                                                                        '',
+                                                                })
+                                                            }
+                                                        />
+                                                        <DeleteIcon
+                                                            popConfirm={{
+                                                                onConfirm: () =>
+                                                                    handleDeleteExamBank(record.id),
+                                                            }}
+                                                        />
+                                                    </Row>
+                                                )
+                                            }
+                                            return ''
+                                        },
+                                    },
+                                ]}
+                                data={examBankData}
+                                pagination={{
+                                    current: currentPage,
+                                    pageSize: numberOfPages,
+                                    total: countExam,
+                                    onChange: (page, pageSize) => {
+                                        if (numberOfPages === pageSize) {
+                                            setCurrentPage(page)
+                                        } else {
+                                            setCurrentPage(1)
+                                            setNumberOfPages(pageSize)
+                                        }
+                                    },
+                                }}
+                            />
                         </Col>
                     </Row>
-                </Col>
-
-                <Col span={24}>
-                    <Table
-                        rowKey="key"
-                        filters={filters}
-                        setFilters={setFilters}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Chương mục',
-                                dataIndex: 'knowledgeBlockId',
-                                width: 200,
-                                align: 'center',
-                                type: 'select',
-                                options: knowledgeBlockData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                })),
-                                render: (__, record) => {
-                                    return record?.knowledgeBlock?.name || 'Chưa xác định'
-                                },
-                            },
-                            {
-                                title: 'Loại câu hỏi',
-                                dataIndex: 'questionType',
-                                width: 200,
-                                align: 'center',
-                                type: 'select',
-                                options: questionTypeOptions,
-                                render: (__, record) =>
-                                    getQuestionTypeLabel(record?.questionType) || 'Chưa xác định',
-                            },
-                            {
-                                title: 'Số lượng câu hỏi',
-                                dataIndex: 'count',
-                                width: 200,
-                                align: 'center',
-                                type: 'order',
-                            },
-                            {
-                                title: 'Điểm từng câu',
-                                dataIndex: 'questionPoint',
-                                width: 200,
-                                align: 'center',
-                                type: 'order',
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 150,
-                                align: 'center',
-                                fixed: 'right',
-                                render: (__, record) => {
-                                    if (record?.id) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                    onClick={() =>
-                                                        onOpenPutTestStructureRule({
-                                                            id: record.id,
-                                                            examId,
-                                                            subjectVersionId:
-                                                                initialValue?.questionBank
-                                                                    ?.subjectVersionId || '',
-                                                        })
-                                                    }
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteTestStructureRule(
-                                                                record.id
-                                                            ),
-                                                    }}
-                                                />
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                    <ModalExamBank
+                        open={examBankModal.visible}
+                        onCancel={closeExamBankModal}
+                        examBankId={examBankModal.examBankId}
+                        questionBankId={examBankModal.questionBankId}
+                        subjectVersionName={initialValue?.questionBank?.subjectVersion?.name || ''}
+                        duration={Number(initialValue?.duration)}
+                        subject={(() => {
+                            const { code, name } =
+                                initialValue?.questionBank?.subjectVersion?.subject || {}
+                            return [code, name].filter(Boolean).join(' - ')
+                        })()}
+                        semester={(() => {
+                            const { name, schoolYear } =
+                                initialValue?.subjectClass?.[0]?.semester || {}
+                            return [name, schoolYear?.name].filter(Boolean).join(' <br/> ')
+                        })()}
+                        examCode={examBankModal.examCode}
+                        examId={id}
                     />
-                </Col>
-            </Row>
-            <Row gutter={[16, 0]} style={{ marginTop: 16 }}>
-                <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="end">
-                        <Col span={12}>
-                            <strong>Đề thi</strong>
-                        </Col>
-                        <Col span={12}>
-                            <Flex justify="end" gap={4}>
-                                <Button type="primary" onClick={() => handlePrintAllExams()}>
-                                    <Printer />
-                                    In toàn bộ đề thi
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenPutExamBank({ examId, id: '' })}
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Col>
-
-                <Col span={24}>
-                    <Table
-                        rowKey="key"
-                        filters={filters}
-                        setFilters={setFilters}
-                        columns={[
-                            {
-                                title: 'STT',
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã đề',
-                                align: 'center',
-                                fixed: 'left',
-                                dataIndex: 'examCode',
-                            },
-                            {
-                                title: 'Số câu hỏi',
-                                align: 'center',
-                                dataIndex: ['_count', 'questions'],
-                            },
-                            {
-                                title: 'Tổng điểm',
-                                align: 'center',
-                                render: (__, record) => {
-                                    let total = 0
-                                    if (!record?.questions) {
-                                        return '-'
-                                    }
-                                    for (const q of record.questions) {
-                                        total += q.question.point || 0
-                                    }
-                                    return total
-                                },
-                            },
-                            {
-                                title: 'Thao tác',
-                                align: 'center',
-                                fixed: 'right',
-                                render: (__, record) => {
-                                    if (record?.id) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                <ViewIcon
-                                                    onClick={() =>
-                                                        openExamBankModal(
-                                                            record.id,
-                                                            initialValue?.questionBankId ?? '',
-                                                            record?.examCode ?? ''
-                                                        )
-                                                    }
-                                                />
-                                                <EditIcon
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                    onClick={() =>
-                                                        onOpenPutExamBank({ examId, id: record.id })
-                                                    }
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteExamBank(record.id),
-                                                    }}
-                                                />
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        data={examData}
-                        pagination={{
-                            current: currentPage2,
-                            pageSize: numberOfPages2,
-                            total: countExam,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages2 === pageSize) {
-                                    setCurrentPage2(page)
-                                } else {
-                                    setCurrentPage2(1)
-                                    setNumberOfPages2(pageSize)
-                                }
-                            },
-                        }}
-                    />
-                </Col>
-            </Row>
-            <ModalExamBank
-                open={examBankModal.visible}
-                onCancel={closeExamBankModal}
-                examBankId={examBankModal.examBankId}
-                questionBankId={examBankModal.questionBankId}
-                subjectVersionName={initialValue?.questionBank?.subjectVersion?.name || ''}
-                duration={Number(initialValue?.duration)}
-                subject={(() => {
-                    const { code, name } = initialValue?.questionBank?.subjectVersion?.subject || {}
-                    return [code, name].filter(Boolean).join(' - ')
-                })()}
-                semester={(() => {
-                    const { name, schoolYear } = initialValue?.subjectClass?.[0]?.semester || {}
-                    return [name, schoolYear?.name].filter(Boolean).join('<br/>')
-                })()}
-                examCode={examBankModal.examCode}
-                examId={examId}
-            />
+                </>
+            ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+                    <NoExamBank />
+                    <span className="text-[#4A4A4A] text-[13px]">
+                        Chưa có đề thi nào. Vui lòng thêm mới đề thi.
+                    </span>
+                    <div className="flex gap-2">
+                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)}>
+                            <Shuffle />
+                            Sinh đề tự động
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={() =>
+                                onOpenPutExamBank({
+                                    examId: id,
+                                    id: '',
+                                    questionBankId: initialValue?.questionBankId || '',
+                                })
+                            }
+                        >
+                            <BookPlus />
+                            Thêm đề thi
+                        </Button>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

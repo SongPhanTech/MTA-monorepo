@@ -14,7 +14,7 @@ import {
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { Pencil, Plus } from 'lucide-react'
+import { BookPlus, Pencil } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
@@ -155,7 +155,7 @@ function Exam() {
                                     }}
                                     type="primary"
                                 >
-                                    <Plus />
+                                    <BookPlus />
                                     Thêm kỳ thi
                                 </Button>
                             </Flex>

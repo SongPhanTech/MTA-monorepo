@@ -18,6 +18,7 @@ const ModalPrintAllExams = () => {
             examId: string
             duration: number
         }[]
+        explanation: boolean
     }>({
         tag: 'ModalPrintAllExams',
     })
@@ -85,9 +86,12 @@ const ModalPrintAllExams = () => {
                                                 </div>
                                             </td>
                                             <td className="align-top w-1/3 p-2 text-center">
-                                                <span className="font-bold uppercase">
-                                                    {exam?.semester}
-                                                </span>
+                                                <span
+                                                    className="font-bold uppercase"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: exam?.semester || '',
+                                                    }}
+                                                />
                                             </td>
                                         </tr>
                                     </tbody>
@@ -152,6 +156,23 @@ const ModalPrintAllExams = () => {
                                                         : '<i>Chưa có nội dung</i>',
                                                 }}
                                             />
+                                            {input?.explanation && (
+                                                <>
+                                                    <span className="italic text-sm">
+                                                        Giải thích đáp án:
+                                                    </span>
+                                                    <span
+                                                        className="prose max-w-none text-gray-800"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: question.explanation
+                                                                ? renderWithMath(
+                                                                      question.explanation
+                                                                  )
+                                                                : '<i>Chưa có nội dung</i>',
+                                                        }}
+                                                    />
+                                                </>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
