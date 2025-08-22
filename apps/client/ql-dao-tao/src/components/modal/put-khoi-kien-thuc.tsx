@@ -204,7 +204,6 @@ const PutTrainingBlockOnCurriculumVersion = () => {
     }
 
     const hanldeOnchange = (value: ItemProps[]) => {
-        console.log(value)
         if (value?.length) {
             setItems(
                 value.map((i: ItemProps) => {

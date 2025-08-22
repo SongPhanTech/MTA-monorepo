@@ -1,3 +1,4 @@
+import AddEvidenceToPeriod from './add-minh-chung'
 import AddTaiLieu from './add-tai-lieu'
 import ConfirmModal from './confirm-dialog'
 import ModalPrintAllExams from './modal-print-all-exam-bank'
@@ -49,4 +50,5 @@ export {
     PutScoreScaleCatalog,
     PutEvidenceCategory,
     PutEvidence,
+    AddEvidenceToPeriod,
 }

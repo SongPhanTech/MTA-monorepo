@@ -220,7 +220,7 @@ export default function StandardCatalog() {
                         filters={filters}
                         setFilters={setFilters}
                         headerRight={(record) => (
-                            <div className="flex px-3 gap-2.5 w-[85px] items-center justify-end">
+                            <div className="flex px-3 gap-2.5 w-[100px] items-center justify-end">
                                 <CreateIcon
                                     onClick={(e) => {
                                         e.stopPropagation()
@@ -264,7 +264,7 @@ export default function StandardCatalog() {
                             {
                                 title: 'Thứ tự',
                                 dataIndex: 'order',
-                                width: 100,
+                                width: 150,
                                 align: 'center',
                                 type: 'order',
                             },
@@ -280,7 +280,7 @@ export default function StandardCatalog() {
                                 dataIndex: 'scoreScalesId',
                                 align: 'center',
                                 type: 'select',
-                                width: 150,
+                                width: 200,
                                 options: scoreScales?.map(({ id, name, passFrom }) => ({
                                     value: id,
                                     label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
@@ -292,8 +292,8 @@ export default function StandardCatalog() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 50,
                                 align: 'center',
+                                width: 80,
                                 fixed: 'right',
                                 render: (_, record) => {
                                     if (record?.id) {
@@ -301,7 +301,7 @@ export default function StandardCatalog() {
                                             <Row className="justify-end gap-2 px-3">
                                                 <Tooltip title="Chi tiết tiêu chí" placement="top">
                                                     <EyeOutlined
-                                                        style={{ fontSize: '1rem' }}
+                                                        style={{ fontSize: '24px' }}
                                                         className="text-sm cursor-pointer"
                                                     />
                                                 </Tooltip>
