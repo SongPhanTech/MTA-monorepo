@@ -5,13 +5,15 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import TreeSelectSubjectVersion from '@components/commons/subject-version-select'
 import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
-import { type Exam, ExamStatus } from '@workspace/db'
+import { type Exam, ExamStatus, type StudentSubjectScore } from '@workspace/db'
 import {
     useCreateExam,
+    useCreateManyExamSession,
     useFindManyQuestionBank,
     useFindUniqueExam,
     useUpdateExam,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
@@ -28,7 +30,7 @@ import {
 } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 export type PutExamType = Exam & {
     subjectClass: string[]
     semesterId?: string
@@ -106,6 +108,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
 
     const { mutateAsync: createExam } = useCreateExam()
     const { mutateAsync: updateExam } = useUpdateExam()
+    const { mutateAsync: createManyExamSession } = useCreateManyExamSession()
     async function onOk(output?: PutExamType) {
         if (!output) return
         try {
@@ -126,6 +129,23 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 shuffleAnswers: output.shuffleAnswers,
                 showResult: output.showResult,
             }
+            const res = await sqlTransaction([
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'findMany',
+                    data: {
+                        where: {
+                            subjectClassId: { in: output.subjectClass },
+                            examBanned: false,
+                        },
+                        select: { studentId: true },
+                    },
+                },
+            ])
+
+            if (res.status !== 200) throw new Error('Lỗi khi tạo phiên thi cho sinh viên')
+
+            const studentScores = res.data?.[0] as StudentSubjectScore[]
             if (id) {
                 await updateExam({
                     data: {
@@ -136,11 +156,23 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         room: {
                             set: output.room?.map((item) => ({ id: item })) || [],
                         },
+                        examSessions: { deleteMany: { examId: id } },
                     },
                     where: {
                         id,
                     },
                 })
+                if (output.subjectClass?.length) {
+                    if (studentScores.length) {
+                        await createManyExamSession({
+                            data: studentScores.map((s) => ({
+                                studentId: s.studentId,
+                                examId: id,
+                            })),
+                            skipDuplicates: true,
+                        })
+                    }
+                }
                 message.success('Cập nhật thành công')
             } else {
                 const newExam = await createExam({
@@ -154,6 +186,19 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         },
                     },
                 })
+
+                if (output.subjectClass?.length && newExam?.id) {
+                    if (studentScores.length) {
+                        await createManyExamSession({
+                            data: studentScores.map((s) => ({
+                                studentId: s.studentId,
+                                examId: newExam.id,
+                            })),
+                            skipDuplicates: true,
+                        })
+                    }
+                }
+
                 message.success('Thêm mới thành công')
                 router.push(`${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${newExam?.id}`)
             }
@@ -167,8 +212,13 @@ export default function Information({ id, selectedIds }: InformationProps) {
         }
     }
 
+    const isDraft = useMemo(() => {
+        if (!id) return true
+        return initialValue?.status === ExamStatus.DRAFT
+    }, [id, initialValue?.status])
+
     return (
-        <Form form={form} layout="vertical" onFinish={onOk}>
+        <Form form={form} layout="vertical" onFinish={onOk} disabled={!isDraft}>
             <Row gutter={16}>
                 <Col span={12}>
                     <FormItem form={form} name="title" label="Tên kỳ thi" required>
@@ -182,7 +232,10 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 </Col>
                 <Col span={12}>
                     <Form.Item name="semesterId" label="Chọn kỳ học">
-                        <TreeSelectSemester onChange={(val) => setSelectedSemesterId(val)} />
+                        <TreeSelectSemester
+                            onChange={(val) => setSelectedSemesterId(val)}
+                            disabled={!isDraft}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -214,12 +267,13 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             subjectVersionId={selectedSubjectVersionId}
                             edit={!!id}
                             defaultValue={selectedIds}
+                            disabled={!isDraft}
                         />
                     </FormItem>
                 </Col>
                 <Col span={12}>
                     <FormItem form={form} name="room" label="Phòng thi">
-                        <TreeSelectRoom />
+                        <TreeSelectRoom disabled={!isDraft} />
                     </FormItem>
                 </Col>
                 <Col span={12}>

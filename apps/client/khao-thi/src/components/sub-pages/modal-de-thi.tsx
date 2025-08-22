@@ -31,6 +31,7 @@ interface ModalExamBankProps {
     examCode: string
     examId: string
     duration: number
+    disabled?: boolean
 }
 
 const ModalExamBank: React.FC<ModalExamBankProps> = ({
@@ -44,6 +45,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
     examCode,
     examId,
     duration,
+    disabled = false,
 }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -241,6 +243,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                             questionBankId,
                                         })
                                     }
+                                    disabled={disabled}
                                     icon={<BookPlus />}
                                 >
                                     Thêm mới
@@ -351,6 +354,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                                         onConfirm: () =>
                                                             handleDeleteExamBankQuestion(record.id),
                                                     }}
+                                                    disabled={disabled}
                                                 />
                                             </Row>
                                         )

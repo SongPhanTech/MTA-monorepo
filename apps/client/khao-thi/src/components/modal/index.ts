@@ -10,6 +10,7 @@ import PutSurveyExamModal from './put-create-survey-exam'
 import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
 import PutExamBankQuestion from './put-exam-bank-question'
+import PutFax from './put-fax'
 import PutEvidence from './put-minh-chung'
 import PutSurveyModal from './put-modal-survey'
 import PutSurveyObjectTypeModal from './put-modal-survey-object-type'
@@ -51,4 +52,5 @@ export {
     PutEvidenceCategory,
     PutEvidence,
     AddEvidenceToPeriod,
+    PutFax,
 }

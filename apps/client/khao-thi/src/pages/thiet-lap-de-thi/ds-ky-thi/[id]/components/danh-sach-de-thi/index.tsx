@@ -8,7 +8,7 @@ import { ModalPrintAllExams, ModalSinhDeThiTuDong, PutExamBank } from '@componen
 import { ModalExamBank } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { Question } from '@workspace/db'
+import { ExamStatus, type Question } from '@workspace/db'
 import {
     useCountExamBank,
     useDeleteExamBank,
@@ -17,7 +17,7 @@ import {
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus, Printer, Shuffle } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface ExamBankProps {
@@ -28,6 +28,7 @@ export default function ExamBank({ id }: ExamBankProps) {
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [examBankModal, setExamBankModal] = useState({
         visible: false,
         examBankId: '',
@@ -44,7 +45,6 @@ export default function ExamBank({ id }: ExamBankProps) {
     const { onOpen: onOpenPutExamBank } = useDisclosure<{
         examId: string
         id: string
-        questionBankId: string
     }>({
         tag: PutExamBank.name,
     })
@@ -162,7 +162,14 @@ export default function ExamBank({ id }: ExamBankProps) {
     const handlePrintAllExams = (explanation: boolean) => {
         if (!examBankData) return
 
-        const exams = examBankData.map((exam) => ({
+        const isPrintAll =
+            selectedRowKeys.length === 0 || selectedRowKeys.length === examBankData.length
+
+        const filteredExamBank = isPrintAll
+            ? examBankData
+            : examBankData.filter((exam) => selectedRowKeys.includes(exam.id))
+
+        const exams = filteredExamBank.map((exam) => ({
             examCode: exam.examCode,
             questions: exam.questions.map((q) => q.question),
             subjectVersionName: initialValue?.questionBank?.subjectVersion?.name || '',
@@ -181,6 +188,18 @@ export default function ExamBank({ id }: ExamBankProps) {
         onOpenModalPrintAllExams({ exams, explanation })
     }
 
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (newSelectedRowKeys: React.Key[]) => {
+            setSelectedRowKeys(newSelectedRowKeys)
+        },
+    }
+
+    const isDraft = useMemo(() => {
+        if (!id) return true
+        return initialValue?.status === ExamStatus.DRAFT
+    }, [id, initialValue?.status])
+
     return (
         <div>
             {examBankData.length > 0 ? (
@@ -190,7 +209,10 @@ export default function ExamBank({ id }: ExamBankProps) {
                             <Row gutter={[16, 16]} align="top" justify="end">
                                 <Col span={12}>
                                     <Flex justify="end" gap={4}>
-                                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)}>
+                                        <Button
+                                            onClick={() => onOpenModalSinhDeThiTuDong(id)}
+                                            disabled={!isDraft}
+                                        >
                                             <Shuffle />
                                             Sinh đề tự động
                                         </Button>
@@ -200,10 +222,9 @@ export default function ExamBank({ id }: ExamBankProps) {
                                                 onOpenPutExamBank({
                                                     examId: id,
                                                     id: '',
-                                                    questionBankId:
-                                                        initialValue?.questionBankId || '',
                                                 })
                                             }}
+                                            disabled={!isDraft}
                                         >
                                             <BookPlus />
                                             Thêm đề thi
@@ -231,9 +252,10 @@ export default function ExamBank({ id }: ExamBankProps) {
 
                         <Col span={24}>
                             <Table
-                                rowKey="key"
+                                rowKey="id"
                                 filters={filters}
                                 setFilters={setFilters}
+                                rowSelection={rowSelection}
                                 columns={[
                                     {
                                         title: 'STT',
@@ -291,17 +313,16 @@ export default function ExamBank({ id }: ExamBankProps) {
                                                                 onOpenPutExamBank({
                                                                     examId: id,
                                                                     id: record.id,
-                                                                    questionBankId:
-                                                                        initialValue?.questionBankId ||
-                                                                        '',
                                                                 })
                                                             }
+                                                            disabled={!isDraft}
                                                         />
                                                         <DeleteIcon
                                                             popConfirm={{
                                                                 onConfirm: () =>
                                                                     handleDeleteExamBank(record.id),
                                                             }}
+                                                            disabled={!isDraft}
                                                         />
                                                     </Row>
                                                 )
@@ -346,6 +367,7 @@ export default function ExamBank({ id }: ExamBankProps) {
                         })()}
                         examCode={examBankModal.examCode}
                         examId={id}
+                        disabled={!isDraft}
                     />
                 </>
             ) : (
@@ -355,7 +377,7 @@ export default function ExamBank({ id }: ExamBankProps) {
                         Chưa có đề thi nào. Vui lòng thêm mới đề thi.
                     </span>
                     <div className="flex gap-2">
-                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)}>
+                        <Button onClick={() => onOpenModalSinhDeThiTuDong(id)} disabled={!isDraft}>
                             <Shuffle />
                             Sinh đề tự động
                         </Button>
@@ -365,7 +387,6 @@ export default function ExamBank({ id }: ExamBankProps) {
                                 onOpenPutExamBank({
                                     examId: id,
                                     id: '',
-                                    questionBankId: initialValue?.questionBankId || '',
                                 })
                             }
                         >
