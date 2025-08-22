@@ -39,7 +39,6 @@ const PutEvidence = () => {
                 information: output.information,
                 issuer: output.issuer,
             }
-            console.log('data', output)
 
             if (input?.id) {
                 await updateEvidence({

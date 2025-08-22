@@ -22,14 +22,18 @@ export default function EvaluationPeriodPage() {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data, refetch } = useFindUniqueEvaluationPeriod({
+    const { data } = useFindUniqueEvaluationPeriod({
         where: { id },
         include: {
             standards: {
                 include: {
                     criteria: {
                         include: {
-                            analysisForms: true,
+                            requirementCriterions: {
+                                include: {
+                                    evidences: true,
+                                },
+                            },
                         },
                     },
                 },

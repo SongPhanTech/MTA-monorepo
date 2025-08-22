@@ -1,10 +1,17 @@
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
+import { AddEvidenceToPeriod } from '@components/modal'
 import { Tabs } from 'antd'
 import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluatedPage({ data, index }: { data: any; index: number }) {
     const [activeKey, setActiveKey] = useState('infor')
+
+    const { onOpen: onOpenAddEvaluationPeriod } = useDisclosure<string>({
+        tag: AddEvidenceToPeriod.name,
+    })
+
     const items = useMemo(() => {
         return [
             {
@@ -45,9 +52,23 @@ export default function EvaluatedPage({ data, index }: { data: any; index: numbe
                                                         },
                                                         {
                                                             title: 'Các câu hỏi đặt ra',
-                                                            dataIndex: 'startDate',
+                                                            dataIndex: 'questions',
                                                             width: 150,
-                                                            align: 'center',
+                                                            render: (questions: any) => {
+                                                                return (
+                                                                    <div className="flex flex-col gap-2">
+                                                                        {questions?.map(
+                                                                            (question: any) => {
+                                                                                return (
+                                                                                    <div>
+                                                                                        {question}
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        )}
+                                                                    </div>
+                                                                )
+                                                            },
                                                         },
                                                     ],
                                                 },
@@ -76,12 +97,15 @@ export default function EvaluatedPage({ data, index }: { data: any; index: numbe
                                                     title: 'Thao tác',
                                                     width: 100,
                                                     align: 'center',
-                                                    render: () => {
+                                                    render: (__, { id }) => {
                                                         return (
                                                             <div className="flex gap-2 items-center justify-center">
                                                                 <EditIcon
                                                                     onClick={(e) => {
                                                                         e.stopPropagation()
+                                                                        onOpenAddEvaluationPeriod(
+                                                                            id
+                                                                        )
                                                                     }}
                                                                     className="text-sm text-blue-700 cursor-pointer"
                                                                 />
@@ -90,7 +114,7 @@ export default function EvaluatedPage({ data, index }: { data: any; index: numbe
                                                     },
                                                 },
                                             ]}
-                                            data={data?.criteria}
+                                            data={item?.requirementCriterions || []}
                                             pagination={false}
                                         />
                                     </div>
@@ -106,7 +130,7 @@ export default function EvaluatedPage({ data, index }: { data: any; index: numbe
                 children: <div>3423</div>,
             },
         ]
-    }, [data, index])
+    }, [data, index, onOpenAddEvaluationPeriod])
     return (
         <div className="h-[calc(100vh-200px)] overflow-y-auto">
             <Tabs activeKey={activeKey} onChange={(key) => setActiveKey(key)} items={items} />
