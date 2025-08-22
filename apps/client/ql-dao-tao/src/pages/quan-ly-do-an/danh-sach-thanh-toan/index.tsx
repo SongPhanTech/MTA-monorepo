@@ -1,7 +1,8 @@
+import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutPaymentRecordDetail } from '@components/modal'
+import { PutPaymentRecordDetail, PutUpdatePaymentStatus } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useCouncilRoleOptions } from '@hooks/councilRole'
@@ -13,7 +14,7 @@ import {
     useDeletePaymentRecord,
     useFindManyPaymentRecord,
 } from '@workspace/db/hooks'
-import { Col, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -26,6 +27,7 @@ export default function PaymentRecordPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
     const [filters, setFilters] = useState<FilterProps>({
         name: undefined,
         transactionCode: undefined,
@@ -52,16 +54,22 @@ export default function PaymentRecordPage() {
                     ? { status: { in: filters.paymentStatus } }
                     : { status: { equals: filters.paymentStatus } }
                 : {}),
-            ...(filters.role
-                ? Array.isArray(filters.role)
-                    ? { councilMember: { role: { in: filters.role } } }
-                    : { councilMember: { role: { equals: filters.role } } }
-                : {}),
             ...(filters.paymentDate?.length === 2
                 ? {
                       paymentDate: {
                           gte: dayjs(filters.paymentDate?.[0], 'DD/MM/YYYY').toDate(),
                           lte: dayjs(filters.paymentDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(selectedSemesterId
+                ? {
+                      councilMember: {
+                          council: {
+                              thesis: {
+                                  some: { subjectClass: { semesterId: selectedSemesterId } },
+                              },
+                          },
                       },
                   }
                 : {}),
@@ -71,19 +79,30 @@ export default function PaymentRecordPage() {
             filters.transactionCode,
             filters.paymentStatus,
             filters.paymentDate,
-            filters.role,
+            selectedSemesterId,
         ]
     )
 
     const { data: paymentRecordData } = useFindManyPaymentRecord({
-        where,
+        where: {
+            ...where,
+            ...(filters.role
+                ? Array.isArray(filters.role)
+                    ? { councilMember: { role: { in: filters.role } } }
+                    : { councilMember: { role: { equals: filters.role } } }
+                : {}),
+        },
         include: {
             expert: true,
             councilMember: {
                 include: {
                     council: {
                         include: {
-                            thesis: true,
+                            thesis: {
+                                include: {
+                                    subjectClass: true,
+                                },
+                            },
                         },
                     },
                 },
@@ -93,12 +112,25 @@ export default function PaymentRecordPage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountPaymentRecord({ where })
+    const { data: count } = useCountPaymentRecord({
+        where: {
+            ...where,
+            ...(filters.role
+                ? Array.isArray(filters.role)
+                    ? { councilMember: { role: { in: filters.role } } }
+                    : { councilMember: { role: { equals: filters.role } } }
+                : {}),
+        },
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen: openPaymentRecord } = useDisclosure<{ paymentRecordId: string }>({
         tag: PutPaymentRecordDetail.name,
+    })
+
+    const { onOpen: openUpdatePaymentStatus } = useDisclosure<{ paymentRecordIds: string[] }>({
+        tag: PutUpdatePaymentStatus.name,
     })
 
     const { mutateAsync: deletePaymentRecord } = useDeletePaymentRecord()
@@ -121,6 +153,35 @@ export default function PaymentRecordPage() {
     return (
         <div>
             <Row gutter={[16, 0]}>
+                <Col span={24}>
+                    <Row gutter={[0, 16]} align="top" justify="space-between">
+                        <Col span={12}>
+                            <Flex>
+                                <Col span={10}>
+                                    <TreeSelectSemester
+                                        style={{ width: '250px' }}
+                                        filterTimeNow={true}
+                                        onChange={(val) => setSelectedSemesterId(val)}
+                                    />
+                                </Col>
+                            </Flex>
+                        </Col>
+                        <Col>
+                            <Flex justify="end" gap={4}>
+                                <Button
+                                    onClick={() =>
+                                        openUpdatePaymentStatus({
+                                            paymentRecordIds: selectedRowKeys as string[],
+                                        })
+                                    }
+                                    type="primary"
+                                >
+                                    Cập nhật trạng thái
+                                </Button>
+                            </Flex>
+                        </Col>
+                    </Row>
+                </Col>
                 <Col span={24}>
                     <Table
                         rowKey="id"

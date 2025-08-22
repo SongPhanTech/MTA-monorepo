@@ -12,7 +12,7 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import { type CouncilMember, SubjectVersionType } from '@workspace/db'
+import { type CouncilMember, SubjectVersionType, ThesisProjectStatus } from '@workspace/db'
 import {
     useCountSubjectClass,
     useCreateManyInvitation,
@@ -55,6 +55,11 @@ export default function ThesisProject() {
     const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
+    const ALLOWED_STATUSES: ThesisProjectStatus[] = [
+        ThesisProjectStatus.COMPLETED,
+        ThesisProjectStatus.DEFENDED_FAILED,
+        ThesisProjectStatus.DEFENDED_PASSED,
+    ]
 
     const where = useMemo(() => {
         const thesisProjectFilters = {
@@ -104,11 +109,6 @@ export default function ThesisProject() {
                       },
                   }
                 : {}),
-            ...(filters.statusThesisProject
-                ? Array.isArray(filters.statusThesisProject)
-                    ? { status: { in: filters.statusThesisProject } }
-                    : { status: { equals: filters.statusThesisProject } }
-                : {}),
         }
 
         const hasThesisProjectFilter = Object.keys(thesisProjectFilters).length > 0
@@ -152,7 +152,6 @@ export default function ThesisProject() {
         filters.organization,
         filters.startDate,
         filters.endDate,
-        filters.statusThesisProject,
         filters.summary,
     ])
 
@@ -181,6 +180,11 @@ export default function ThesisProject() {
                     council: { include: { members: { include: { expert: true } } } },
                 },
                 where: {
+                    ...(filters.statusThesisProject
+                        ? Array.isArray(filters.statusThesisProject)
+                            ? { status: { in: filters.statusThesisProject } }
+                            : { status: { equals: filters.statusThesisProject } }
+                        : {}),
                     ...(filters.code
                         ? { code: { contains: filters.code, mode: 'insensitive' } }
                         : {}),
@@ -354,6 +358,24 @@ export default function ThesisProject() {
         )
     }
 
+    const isEligibleForPayment = (selectedRowKeys: string[]) => {
+        if (!subjectClass) return false
+
+        const selectableProjects = subjectClass.flatMap((sc) =>
+            sc.thesisProjects ? sc.thesisProjects : []
+        )
+
+        const projectIds = selectableProjects.map((p) => p.id)
+
+        const validSelectedKeys = selectedRowKeys.filter((id) => projectIds.includes(id))
+
+        if (validSelectedKeys.length === 0) return false
+
+        const selectedProjects = selectableProjects.filter((p) => validSelectedKeys.includes(p.id))
+
+        return selectedProjects.every((p) => ALLOWED_STATUSES.includes(p.status))
+    }
+
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -403,6 +425,10 @@ export default function ThesisProject() {
                                         })
                                     }
                                     type="primary"
+                                    disabled={
+                                        selectedRowKeys.length === 0 ||
+                                        !isEligibleForPayment(selectedRowKeys as string[])
+                                    }
                                 >
                                     Tạo thanh toán
                                 </Button>
