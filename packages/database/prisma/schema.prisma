@@ -4255,8 +4255,8 @@ model CriterionCatalog {
   standardId                  String
   order                       Int
   name                        String
-  scoreScale                  ScoreScaleCatalog?            @relation(fields: [scoreScaleId], references: [id])
-  scoreScaleId                String?
+  scoreScale                  ScoreScaleCatalog             @relation(fields: [scoreScaleId], references: [id])
+  scoreScaleId                String
   requirementCriterionCatalog RequirementCriterionCatalog[]
 
   @@unique([standardId, order])
@@ -4326,21 +4326,34 @@ model EvaluationStandard {
 
 /// Tiêu chí đánh giá của đợt (Bản sao/áp dụng từ CriterionCatalog)
 model EvaluationCriterion {
-  id              String             @id() @default(cuid())
-  code            String?            @unique()
-  active          Boolean            @default(true)
-  description     String?            @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @default(now()) @updatedAt()
-  standard        EvaluationStandard @relation(fields: [standardId], references: [id])
-  standardId      String
-  name            String
-  order           Int
-  scoreScale      ScoreScaleCatalog  @relation(fields: [scoreScaleId], references: [id])
-  scoreScaleId    String
-  analysisForms   AnalysisForm?
-  evaluationForms EvaluationForm?
+  id                    String                 @id() @default(cuid())
+  code                  String?                @unique()
+  active                Boolean                @default(true)
+  description           String?                @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now()) @updatedAt()
+  standard              EvaluationStandard     @relation(fields: [standardId], references: [id])
+  standardId            String
+  name                  String
+  order                 Int
+  scoreScale            ScoreScaleCatalog      @relation(fields: [scoreScaleId], references: [id])
+  scoreScaleId          String
+  /// (Nhóm) Hội đồng đánh giá
+  evaluationCouncil     EvaluationCouncil?     @relation(fields: [evaluationCouncilId], references: [id])
+  evaluationCouncilId   String?
+  /// Yêu cầu trong phiếu phân tích
+  requirementCriterions RequirementCriterion[]
+  /// 1. Mô tả hiện trạng
+  currentSituation      String
+  /// 2. Điểm mạnh
+  strengths             String
+  /// 3. Điểm tồn tại
+  weakness              String
+  /// 4. Kế hoạch hành động
+  actionPlan            String
+  /// 5. Tự đánh giá
+  score                 Int?
 
   @@unique([standardId, name])
   @@unique([standardId, order])
@@ -4364,132 +4377,69 @@ model EvidenceCategory {
 
 /// Danh mục minh chứng
 model Evidence {
-  id                   String                   @id() @default(cuid())
-  code                 String?                  @unique()
-  active               Boolean                  @default(true)
-  description          String?                  @db.Text()
+  id                   String                 @id() @default(cuid())
+  code                 String?                @unique()
+  active               Boolean                @default(true)
+  description          String?                @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime                 @default(now())
-  updatedAt            DateTime                 @default(now()) @updatedAt()
-  category             EvidenceCategory         @relation(fields: [categoryId], references: [id])
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now()) @updatedAt()
+  category             EvidenceCategory       @relation(fields: [categoryId], references: [id])
   categoryId           String
   name                 String
   information          String
   issuer               String
   evidenceFile         EvidenceFile[]
-  evaluationForms      EvaluationFormEvidence[]
   analysisFormEvidence AnalysisFormEvidence[]
 
   @@schema("khao-thi")
 }
 
-/// Phiếu phân tích tiêu chí
-model AnalysisForm {
-  id                    String                             @id() @default(cuid())
-  code                  String?                            @unique()
-  active                Boolean                            @default(true)
-  description           String?                            @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime                           @default(now())
-  updatedAt             DateTime                           @default(now()) @updatedAt()
-  criterion             EvaluationCriterion                @relation(fields: [criterionId], references: [id])
-  criterionId           String                             @unique()
-  /// (Nhóm) Hội đồng đánh giá
-  evaluationCouncil     EvaluationCouncil?                 @relation(fields: [evaluationCouncilId], references: [id])
-  evaluationCouncilId   String?
-  /// Yêu cầu trong phiếu phân tích
-  requirementCriterions AnalysisFormRequirementCriterion[]
-
-  @@schema("khao-thi")
-}
-
 /// Yêu cầu trong phiếu phân tích tiêu chí
-model AnalysisFormRequirementCriterion {
-  id             String                 @id() @default(cuid())
-  code           String?                @unique()
-  active         Boolean                @default(true)
-  description    String?                @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @default(now()) @updatedAt()
-  analysisForm   AnalysisForm           @relation(fields: [analysisFormId], references: [id])
-  analysisFormId String
-  order          Int
-  name           String
-  questions      String[]
-  evidences      AnalysisFormEvidence[]
-
-  @@unique([analysisFormId, order])
-  @@schema("khao-thi")
-}
-
-/// Phiếu đánh giá tiêu chí
-model EvaluationForm {
-  id                  String                   @id() @default(cuid())
-  code                String?                  @unique()
-  active              Boolean                  @default(true)
-  description         String?                  @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime                 @default(now())
-  updatedAt           DateTime                 @default(now()) @updatedAt()
-  criterion           EvaluationCriterion      @relation(fields: [criterionId], references: [id])
-  criterionId         String                   @unique()
-  /// 1. Mô tả hiện trạng
-  currentSituation    String
-  /// 2. Điểm mạnh
-  strengths           String
-  /// 3. Điểm tồn tại
-  weakness            String
-  /// 4. Kế hoạch hành động
-  actionPlan          String
-  /// 5. Tự đánh giá
-  score               Int?
-  /// (Nhóm) Hội đồng đánh giá
-  evaluationCouncil   EvaluationCouncil?       @relation(fields: [evaluationCouncilId], references: [id])
-  evaluationCouncilId String?
-  evidences           EvaluationFormEvidence[]
+model RequirementCriterion {
+  id                    String                 @id() @default(cuid())
+  code                  String?                @unique()
+  active                Boolean                @default(true)
+  description           String?                @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now()) @updatedAt()
+  evaluationCriterion   EvaluationCriterion    @relation(fields: [evaluationCriterionId], references: [id])
+  evaluationCriterionId String
+  order                 Int
+  name                  String
+  questions             String[]
+  evidences             AnalysisFormEvidence[]
 
   @@schema("khao-thi")
 }
 
 /// Minh chứng phiếu phân tích
 model AnalysisFormEvidence {
-  analysisFormRequirementCriterion   AnalysisFormRequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id])
+  analysisFormRequirementCriterion   RequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id])
   analysisFormRequirementCriterionId String
-  evidence                           Evidence                         @relation(fields: [evidenceId], references: [id])
+  evidence                           Evidence             @relation(fields: [evidenceId], references: [id])
   evidenceId                         String
+  order                              Int
 
   @@id([analysisFormRequirementCriterionId, evidenceId])
   @@schema("khao-thi")
 }
 
-/// Minh chứng phiếu tiêu chí
-model EvaluationFormEvidence {
-  evaluationForm   EvaluationForm @relation(fields: [evaluationFormId], references: [id])
-  evaluationFormId String
-  evidence         Evidence       @relation(fields: [evidenceId], references: [id])
-  evidenceId       String
-  orderIndex       String?        @unique()
-
-  @@id([evaluationFormId, evidenceId])
-  @@schema("khao-thi")
-}
-
 /// Hội đồng đánh giá
 model EvaluationCouncil {
-  id             String                    @id() @default(cuid())
-  code           String?                   @unique()
-  active         Boolean                   @default(true)
-  description    String?                   @db.Text()
-  deletedAt      DateTime?
-  createdAt      DateTime                  @default(now())
-  updatedAt      DateTime                  @default(now()) @updatedAt()
-  period         EvaluationPeriod          @relation(fields: [periodId], references: [id])
-  periodId       String
-  name           String
-  members        EvaluationCouncilMember[]
-  analysisForm   AnalysisForm[]
-  evaluationForm EvaluationForm[]
+  id                  String                    @id() @default(cuid())
+  code                String?                   @unique()
+  active              Boolean                   @default(true)
+  description         String?                   @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @default(now()) @updatedAt()
+  period              EvaluationPeriod          @relation(fields: [periodId], references: [id])
+  periodId            String
+  name                String
+  members             EvaluationCouncilMember[]
+  evaluationCriterion EvaluationCriterion[]
 
   @@schema("khao-thi")
 }

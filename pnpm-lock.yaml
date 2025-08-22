@@ -429,6 +429,9 @@ importers:
       docxtemplater:
         specifier: 'catalog:'
         version: 3.65.2
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
       hono:
         specifier: 'catalog:'
         version: 4.8.4
