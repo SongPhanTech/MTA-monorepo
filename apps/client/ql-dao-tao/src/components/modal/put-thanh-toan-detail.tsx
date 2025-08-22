@@ -6,6 +6,7 @@ import useSpinner from '@hooks/spinner'
 import type { PaymentRecord } from '@workspace/db'
 import {
     useCreatePaymentRecord,
+    useFindManyExpertProfile,
     useFindUniquePaymentRecord,
     useUpdatePaymentRecord,
 } from '@workspace/db/hooks'
@@ -58,25 +59,37 @@ const PutPaymentRecordDetail = () => {
         }
     }
 
-    const { data } = useFindUniquePaymentRecord(
+    const { data: paymentRecord } = useFindUniquePaymentRecord(
         {
             where: { id },
         },
         { enabled: !!id }
     )
 
+    const { data: expert = [] } = useFindManyExpertProfile({
+        include: {
+            lecturer: {
+                include: {
+                    userProfile: true,
+                },
+            },
+        },
+    })
+
     useEffect(() => {
-        if (data) {
+        if (paymentRecord) {
             form.setFieldsValue({
-                ...data,
-                paymentDate: data.paymentDate ? dayjs(data.paymentDate) : undefined,
+                ...paymentRecord,
+                paymentDate: paymentRecord.paymentDate
+                    ? dayjs(paymentRecord.paymentDate)
+                    : undefined,
             })
         } else {
             form.setFieldsValue({
                 active: true,
             })
         }
-    }, [data, form])
+    }, [paymentRecord, form])
 
     return (
         <PutFormModal
@@ -88,6 +101,19 @@ const PutPaymentRecordDetail = () => {
             title={id ? 'Chỉnh sửa thanh toán' : 'Thêm mới thanh toán'}
             className="w-[45vw]"
         >
+            <Col span={12}>
+                <FormItem form={form} name="expertId" label="Chuyên gia">
+                    <Select
+                        placeholder="Chọn chuyên gia"
+                        options={expert.map((item) => ({
+                            label: `${item.lecturer?.userProfile.fullname || item.name} - ${item.code}`,
+                            value: item.id,
+                        }))}
+                        disabled={true}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="transactionCode" label="Mã giao dịch">
                     <Input placeholder="Nhập mã giao dịch" />
