@@ -257,7 +257,8 @@ model ExamBankQuestion extends Base {
 
 /// Bài thi
 model ExamSession extends Base {
-  startTime  DateTime  @default(now())
+  fax        String?
+  startTime  DateTime?
   endTime    DateTime?
   score      Decimal?  @db.Decimal(5, 2)
   isGraded   Boolean   @default(false)
@@ -275,5 +276,6 @@ model ExamSession extends Base {
   answers    Answer[]              // Tất cả câu trả lời trong phiên này
 
   @@unique([studentId, examId])
+  @@unique([fax, examId])
   @@schema("khao-thi")
 }
