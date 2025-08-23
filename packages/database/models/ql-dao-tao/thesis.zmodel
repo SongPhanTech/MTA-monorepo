@@ -66,8 +66,8 @@ model ThesisProject extends Base {
   defenseDate        DateTime? 
   
   // Thời gian
-  registrationStart  DateTime                      // Thời gian mở đăng ký
-  registrationEnd    DateTime                      // Thời gian đóng đăng ký
+  registrationStart  DateTime?                      // Thời gian mở đăng ký
+  registrationEnd    DateTime?                     // Thời gian đóng đăng ký
   projectStart       DateTime?                     // Thời gian bắt đầu thực hiện
   projectEnd         DateTime?                     // Thời gian kết thúc dự kiến
 

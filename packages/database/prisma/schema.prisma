@@ -3438,8 +3438,8 @@ model ThesisProject {
   roomId             String?
   /// Ngày bảo vệ
   defenseDate        DateTime?
-  registrationStart  DateTime
-  registrationEnd    DateTime
+  registrationStart  DateTime?
+  registrationEnd    DateTime?
   projectStart       DateTime?
   projectEnd         DateTime?
   defenseRecord      DefenseRecord?
