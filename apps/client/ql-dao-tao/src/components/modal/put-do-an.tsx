@@ -211,22 +211,12 @@ const PutThesisProject = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem form={form} name="currentStudents" label="Số học viên hiện tại" required>
-                    <InputNumber placeholder="Nhập số lượng học viên" className="w-full" min={0} />
-                </FormItem>
-            </Col>
-            <Col span={8}>
                 <FormItem form={form} name="maxStudents" label="Số lượng học viên tối đa" required>
                     <InputNumber placeholder="Nhập số lượng học viên" className="w-full" min={0} />
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="registrationStart"
-                    label="Thời gian mở đăng ký"
-                    required
-                >
+                <FormItem form={form} name="registrationStart" label="Thời gian mở đăng ký">
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
@@ -237,12 +227,7 @@ const PutThesisProject = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="registrationEnd"
-                    label="Thời gian đóng đăng ký"
-                    required
-                >
+                <FormItem form={form} name="registrationEnd" label="Thời gian đóng đăng ký">
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',

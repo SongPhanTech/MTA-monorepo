@@ -19,6 +19,7 @@ export type PaymentRecord = DefaultCouncilRolePayAmount & {
     reviewer1: number
     reviewer2: number
     member: number
+    supervisor: number
 }
 
 const PutPaymentRecord = () => {
@@ -41,23 +42,38 @@ const PutPaymentRecord = () => {
             },
             include: {
                 council: { include: { members: { include: { expert: true } } } },
+                supervisor: true,
             },
         },
         { enabled: !!input?.selectedRowKeys.length }
     )
 
     const membersData =
-        selectedThesisProjects?.flatMap((project) =>
-            project.council
-                ? project.council.members.map((m) => ({
-                      ...m,
-                      thesisProjectId: project.id,
-                      thesisProjectTitle: project.title,
-                      expertName: m.expert?.name,
-                      expertEmail: m.expert?.email,
-                  }))
-                : []
-        ) ?? []
+        selectedThesisProjects
+            ?.flatMap((project) => {
+                const councilMembers = project.council
+                    ? project.council.members.map((m) => ({
+                          ...m,
+                          thesisProjectId: project.id,
+                          thesisProjectTitle: project.title,
+                      }))
+                    : []
+
+                const supervisorMember = project.supervisor
+                    ? [
+                          {
+                              id: project.supervisor.id,
+                              thesisProjectId: project.id,
+                              thesisProjectTitle: project.title,
+                              role: 'SUPERVISOR',
+                              expert: project.supervisor,
+                          },
+                      ]
+                    : []
+
+                return [...councilMembers, ...supervisorMember]
+            })
+            .filter(Boolean) ?? []
 
     const { data: defaultCouncilRolePayAmount } = useFindManyDefaultCouncilRolePayAmount()
 
@@ -185,13 +201,13 @@ const PutPaymentRecord = () => {
                         render: (_, record) => record?.expert.name,
                     },
                     {
-                        title: 'Hàm hàm',
+                        title: 'Học hàm',
                         width: 150,
                         align: 'center',
                         render: (_, record) => record?.expert.academicRank,
                     },
                     {
-                        title: 'Hàm vị',
+                        title: 'Học vị',
                         width: 150,
                         align: 'center',
                         render: (_, record) => record?.expert.academicDegree,
@@ -235,6 +251,11 @@ const PutPaymentRecord = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="member" label="Ủy viên">
+                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="supervisor" label="Giảng viên hướng dẫn">
                     <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
                 </FormItem>
             </Col>
