@@ -48,7 +48,7 @@ const PutDisciplinaryWarning = () => {
         },
         orderBy: {
             userProfile: {
-                fullname: 'asc',
+                firstName: 'asc',
             },
         },
     })

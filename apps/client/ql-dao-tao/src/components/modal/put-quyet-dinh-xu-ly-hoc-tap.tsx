@@ -199,7 +199,7 @@ const PutStudentAcademicDecision = () => {
         },
         orderBy: {
             userProfile: {
-                fullname: 'asc',
+                firstName: 'asc',
             },
         },
     })

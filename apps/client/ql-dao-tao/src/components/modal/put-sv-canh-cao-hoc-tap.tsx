@@ -48,7 +48,7 @@ const PutAcademicWarning = () => {
         },
         orderBy: {
             userProfile: {
-                fullname: 'asc',
+                firstName: 'asc',
             },
         },
     })

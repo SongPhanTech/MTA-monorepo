@@ -1,5 +1,6 @@
 import Table from '@components/commons/table'
-import { ModalTraCuuVanBang } from '@components/modal'
+import EditIcon from '@components/icons/edit'
+import { ModalTraCuuVanBang, PutStatusQLTraCuuVanBang } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useDiplomaVerificationStatusOptions } from '@hooks/diplomaVerificationStatus'
@@ -161,10 +162,14 @@ export default function QLDONDANGKY() {
         }
     }
 
-    const { onOpen: onOpenPutDiplomaType } = useDisclosure<{
+    const { onOpen: onOpenModalTraCuuVanBang } = useDisclosure<{
         data: DiplomaVerificationApplication
     }>({
         tag: ModalTraCuuVanBang.name,
+    })
+
+    const { onOpen: onOpenPutStatusQLTraCuuVanBang } = useDisclosure<string>({
+        tag: PutStatusQLTraCuuVanBang.name,
     })
 
     return (
@@ -323,7 +328,7 @@ export default function QLDONDANGKY() {
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             handleUpdateInProgress(rec)
-                                                            onOpenPutDiplomaType({
+                                                            onOpenModalTraCuuVanBang({
                                                                 data: rec,
                                                             })
                                                         }}
@@ -331,6 +336,13 @@ export default function QLDONDANGKY() {
                                                         strokeWidth={1.5}
                                                     />
                                                 </Tooltip>
+                                                <EditIcon
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpenPutStatusQLTraCuuVanBang(record.id)
+                                                    }}
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
                                             </Row>
                                         )
                                     }

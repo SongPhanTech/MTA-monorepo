@@ -291,7 +291,6 @@ export default function TrainingProgramSubjects() {
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
-        managementOrganization: string
     }>({
         tag: PutTrainingBlockSubject.name,
     })
@@ -701,10 +700,6 @@ export default function TrainingProgramSubjects() {
                                                             trainingBlockOnCurriculumVersionId:
                                                                 record?.trainingBlockOnCurriculumVersionId,
                                                             trainingBlockSubjectId: record?.id,
-                                                            managementOrganization:
-                                                                initialValue?.curriculum
-                                                                    ?.managementOrganizationId ??
-                                                                '',
                                                         })
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -734,9 +729,6 @@ export default function TrainingProgramSubjects() {
                                         onOpenTrainingBlockSubject({
                                             trainingBlockOnCurriculumVersionId: id,
                                             trainingBlockSubjectId: '',
-                                            managementOrganization:
-                                                initialValue?.curriculum
-                                                    ?.managementOrganizationId ?? '',
                                         })
                                     }}
                                 />

@@ -147,6 +147,13 @@ export default function Information({ id, selectedIds }: InformationProps) {
 
             const studentScores = res.data?.[0] as StudentSubjectScore[]
             if (id) {
+                const oldSubjectClassIds = initialValue?.subjectClass?.map((sc) => sc.id) || []
+                const newSubjectClassIds = output.subjectClass || []
+
+                const hasSubjectClassChanged =
+                    oldSubjectClassIds.length !== newSubjectClassIds.length ||
+                    oldSubjectClassIds.some((id) => !newSubjectClassIds.includes(id))
+
                 await updateExam({
                     data: {
                         ...data,
@@ -156,14 +163,22 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         room: {
                             set: output.room?.map((item) => ({ id: item })) || [],
                         },
-                        examSessions: { deleteMany: { examId: id } },
                     },
                     where: {
                         id,
                     },
                 })
-                if (output.subjectClass?.length) {
-                    if (studentScores.length) {
+
+                if (hasSubjectClassChanged) {
+                    await sqlTransaction([
+                        {
+                            model: 'ExamSession',
+                            operation: 'deleteMany',
+                            data: { where: { examId: id } },
+                        },
+                    ])
+
+                    if (output.subjectClass?.length && studentScores.length) {
                         await createManyExamSession({
                             data: studentScores.map((s) => ({
                                 studentId: s.studentId,
@@ -218,16 +233,21 @@ export default function Information({ id, selectedIds }: InformationProps) {
     }, [id, initialValue?.status])
 
     return (
-        <Form form={form} layout="vertical" onFinish={onOk} disabled={!isDraft}>
+        <Form form={form} layout="vertical" onFinish={onOk}>
             <Row gutter={16}>
                 <Col span={12}>
                     <FormItem form={form} name="title" label="Tên kỳ thi" required>
-                        <Input placeholder="Nhập tên kỳ thi" />
+                        <Input placeholder="Nhập tên kỳ thi" disabled={!isDraft} />
                     </FormItem>
                 </Col>
                 <Col span={12}>
                     <FormItem form={form} name="duration" label="Thời gia thi (phút)" required>
-                        <InputNumber className="w-full" step={1} placeholder="Nhập thời gian thi" />
+                        <InputNumber
+                            className="w-full"
+                            step={1}
+                            placeholder="Nhập thời gian thi"
+                            disabled={!isDraft}
+                        />
                     </FormItem>
                 </Col>
                 <Col span={12}>
@@ -257,6 +277,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                                 setSelectedSubjectVersionId(option?.subjectVersionId || '')
                             }}
                             allowClear
+                            disabled={!isDraft}
                         />
                     </FormItem>
                 </Col>
@@ -285,6 +306,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             }}
                             className="w-full"
                             placeholder="Chọn thời gian bắt đầu"
+                            disabled={!isDraft}
                         />
                     </FormItem>
                 </Col>
@@ -302,6 +324,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                                 if (!startTime) return false
                                 return current && current < dayjs(startTime).startOf('day')
                             }}
+                            disabled={!isDraft}
                         />
                     </FormItem>
                 </Col>
@@ -312,6 +335,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             step={0.1}
                             defaultValue={5}
                             placeholder="Nhập điểm đạt"
+                            disabled={!isDraft}
                         />
                     </FormItem>
                 </Col>
@@ -327,13 +351,13 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 </Col>
                 <Col span={24}>
                     <FormItem form={form} name="shuffleQuestions" valuePropName="checked">
-                        <Checkbox>Trộn thứ tự câu hỏi</Checkbox>
+                        <Checkbox disabled={!isDraft}>Trộn thứ tự câu hỏi</Checkbox>
                     </FormItem>
                     <FormItem form={form} name="shuffleAnswers" valuePropName="checked">
-                        <Checkbox>Trộn thứ tự đáp án</Checkbox>
+                        <Checkbox disabled={!isDraft}>Trộn thứ tự đáp án</Checkbox>
                     </FormItem>
                     <FormItem form={form} name="showResult" valuePropName="checked">
-                        <Checkbox>Hiển thị kết quả ngay sau khi thi</Checkbox>
+                        <Checkbox disabled={!isDraft}>Hiển thị kết quả ngay sau khi thi</Checkbox>
                     </FormItem>
                 </Col>
                 <Col span={24}>
