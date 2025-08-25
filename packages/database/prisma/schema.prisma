@@ -4437,13 +4437,20 @@ model RequirementCriterion {
 
 /// Minh chứng phiếu phân tích
 model AnalysisFormEvidence {
-  analysisFormRequirementCriterion   RequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id], onDelete: Cascade)
-  analysisFormRequirementCriterionId String
-  evidence                           Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
-  evidenceId                         String
-  order                              Int
+  id                     String               @id() @default(cuid())
+  code                   String?              @unique()
+  active                 Boolean              @default(true)
+  description            String?              @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @default(now()) @updatedAt()
+  requirementCriterion   RequirementCriterion @relation(fields: [requirementCriterionId], references: [id])
+  requirementCriterionId String
+  evidence               Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  evidenceId             String
+  order                  Int
 
-  @@id([analysisFormRequirementCriterionId, evidenceId])
+  @@unique([requirementCriterionId, evidenceId])
   @@schema("khao-thi")
 }
 

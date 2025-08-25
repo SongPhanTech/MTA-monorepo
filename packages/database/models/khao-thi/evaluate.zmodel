@@ -151,14 +151,14 @@ model RequirementCriterion extends Base {
 }
 
 /// Minh chứng phiếu phân tích
-model AnalysisFormEvidence {
-  analysisFormRequirementCriterion   RequirementCriterion @relation(fields: [analysisFormRequirementCriterionId], references: [id], onDelete: Cascade)
-  analysisFormRequirementCriterionId String
-  evidence                           Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
-  evidenceId                         String
-  order                              Int
+model AnalysisFormEvidence extends Base {
+  requirementCriterion   RequirementCriterion @relation(fields: [requirementCriterionId], references: [id])
+  requirementCriterionId String
+  evidence               Evidence             @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  evidenceId             String
+  order                  Int
 
-  @@id([analysisFormRequirementCriterionId, evidenceId])
+  @@unique([requirementCriterionId, evidenceId])
   @@schema("khao-thi")
 }
 
