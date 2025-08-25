@@ -9,13 +9,14 @@ import {
     useFindUniqueThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Select } from 'antd'
+import { Col, Form, Input, InputNumber, message, Select, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import Tabs from '@components/commons/tabar'
 import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
+import { buildOrgTree } from '@lib/utils'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -155,6 +156,8 @@ const PutThesisProject = () => {
         }
     }
 
+    const treeData = buildOrgTree(organization)
+
     return (
         <PutFormModal
             open={isOpen}
@@ -197,16 +200,17 @@ const PutThesisProject = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="organizationId" label="Đơn vị quản lý" required>
-                    <Select
+                    <TreeSelect
                         placeholder="Chọn đơn vị quản lý"
-                        options={organization.map((item) => ({
-                            label: item.sTen,
-                            value: item.Id,
-                        }))}
-                        showSearch
-                        onSearch={handleSearchOrganization}
-                        filterOption={false}
                         allowClear
+                        showSearch
+                        maxTagCount={'responsive'}
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                        filterTreeNode={(input, node) =>
+                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
+                        }
+                        onChange={(val) => handleSearchOrganization(val)}
                     />
                 </FormItem>
             </Col>

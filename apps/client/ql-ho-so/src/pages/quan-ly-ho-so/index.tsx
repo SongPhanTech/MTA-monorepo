@@ -1,4 +1,3 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -7,6 +6,7 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import type { DM_DonVi } from '@workspace/db'
 import {
     useCountUserProfile,
@@ -16,7 +16,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag } from 'antd'
+import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag, TreeSelect } from 'antd'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -198,12 +198,13 @@ export default function UserProfilePageDs() {
                 : {}),
         },
         orderBy: {
-            fullname: 'asc',
+            firstName: 'asc',
         },
     })
 
     const { data: genderData = [] } = useFindManyDM_GioiTinh()
-    const { data: organizations = [] } = useFindManyDM_DonVi()
+    const { data: organizations = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(organizations)
     const { showSpinner, hideSpinner } = useSpinner()
     // const treeData = buildOrgTree(organizations)
     const debouncedRefetch = useCallback(
@@ -314,12 +315,16 @@ export default function UserProfilePageDs() {
                                     wrapperCol={{ span: 24 }}
                                     labelAlign="left"
                                 >
-                                    <Select
+                                    <TreeSelect
+                                        showSearch
                                         placeholder="Chọn đơn vị quản lý"
-                                        options={organizations.map((i: DM_DonVi) => ({
-                                            value: i.Id,
-                                            label: i.sTen,
-                                        }))}
+                                        treeDefaultExpandAll
+                                        treeData={treeData}
+                                        filterTreeNode={(input, node) =>
+                                            (node?.label as string)
+                                                ?.toLowerCase()
+                                                ?.includes(input?.toLowerCase())
+                                        }
                                         onChange={(val) => handleFilterChange('sDM_DonViId', val)}
                                         allowClear
                                         className="h-8"
