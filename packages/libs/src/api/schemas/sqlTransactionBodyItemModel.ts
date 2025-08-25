@@ -139,6 +139,7 @@ export const SqlTransactionBodyItemModel = {
   LibrarySubmission: 'LibrarySubmission',
   DefaultCouncilRolePayAmount: 'DefaultCouncilRolePayAmount',
   PaymentRecord: 'PaymentRecord',
+  SupervisorPaymentRecord: 'SupervisorPaymentRecord',
   DocumentFile: 'DocumentFile',
   AcademicActionConfig: 'AcademicActionConfig',
   AcademicActionRuleSet: 'AcademicActionRuleSet',
