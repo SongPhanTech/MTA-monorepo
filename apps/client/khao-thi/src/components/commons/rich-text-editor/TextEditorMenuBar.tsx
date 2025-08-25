@@ -19,6 +19,7 @@ import {
     RiAlignJustify,
     RiAlignLeft,
     RiAlignRight,
+    RiAtLine,
     RiBold,
     RiCodeSSlashLine,
     RiFunctions,
@@ -109,6 +110,19 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 event.target.value = ''
             }
         }
+    }
+
+    const handleAddEvidence = async () => {
+        // try {
+        //     editor
+        //         ?.chain()
+        //         .focus()
+        //         .setLink({ href: 'https://example.com', target: '_blank' })
+        //         .run();
+        // } catch (error) {
+        //     console.error('Image upload failed:', error)
+        //     message.error('Image upload failed. Please try again.')
+        // }
     }
 
     const insertMathFormula = () => {
@@ -349,6 +363,13 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 isActive: false,
                 disabled: false,
                 description: 'Math latex div',
+            },
+            {
+                icon: <RiAtLine className="size-5" />,
+                onClick: () => handleAddEvidence(),
+                isActive: false,
+                disabled: false,
+                description: 'Thêm minh chứng',
             },
         ],
         // [

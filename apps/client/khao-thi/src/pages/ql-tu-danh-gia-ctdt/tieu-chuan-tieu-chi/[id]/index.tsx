@@ -138,7 +138,7 @@ export default function RequirementCriterionCatalog() {
                                 type: 'order',
                             },
                             {
-                                title: 'Tên',
+                                title: 'Yêu cầu',
                                 dataIndex: 'name',
                                 width: 200,
                                 align: 'center',

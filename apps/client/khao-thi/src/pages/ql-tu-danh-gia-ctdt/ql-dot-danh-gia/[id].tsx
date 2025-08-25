@@ -1,28 +1,20 @@
-import type { FilterProps } from '@components/commons/typeFilte'
 import EvaluatedPage from '@components/sub-pages/tu-danh-gia'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { EvaluationStandard } from '@workspace/db'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
 import { Col, Row, Tabs } from 'antd'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 export default function EvaluationPeriodPage() {
     const router = useRouter()
-    const [search, setSearch] = useState<string>('')
-    const [currentPage, setCurrentPage] = useState(1)
+
     const id = router.query.id as string
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [filters, setFilters] = useState<FilterProps>({
-        name: '',
-        startDate: undefined,
-        endDate: undefined,
-    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data } = useFindUniqueEvaluationPeriod({
+    const { data, refetch } = useFindUniqueEvaluationPeriod({
         where: { id },
         include: {
             standards: {
@@ -31,7 +23,11 @@ export default function EvaluationPeriodPage() {
                         include: {
                             requirementCriterions: {
                                 include: {
-                                    evidences: true,
+                                    evidences: {
+                                        include: {
+                                            evidence: true,
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -47,11 +43,13 @@ export default function EvaluationPeriodPage() {
                 return {
                     key: i.id,
                     label: `Tiêu chuẩn ${index + 1}`,
-                    children: <EvaluatedPage key={i.id} data={i} index={index + 1} />,
+                    children: (
+                        <EvaluatedPage key={i.id} data={i} index={index + 1} refetch={refetch} />
+                    ),
                 }
             })
         }
-    }, [data])
+    }, [data, refetch])
 
     return (
         <div className="h-full">

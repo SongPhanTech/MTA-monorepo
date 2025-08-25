@@ -1,16 +1,12 @@
-import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { RequirementCriterion } from '@workspace/db'
-import {
-    useFindManyEvidenceCategory,
-    useFindUniqueRequirementCriterion,
-    useUpdateRequirementCriterion,
-} from '@workspace/db/hooks'
-import type { ItemProps } from '@workspace/libs/utils'
-import { Col, Form, message, Select, type TreeProps } from 'antd'
+import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
+import { useFindManyEvidence, useFindUniqueRequirementCriterion } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { diffArrays, type ItemProps } from '@workspace/libs/utils'
+import { Col, Form, message, Select } from 'antd'
 import { GripVertical } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -25,40 +21,100 @@ interface MyTreeNode {
     children?: MyTreeNode[]
 }
 const AddEvidenceToPeriod = () => {
-    const [initValue, setInitValue] = useState<string[]>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
     const [form] = Form.useForm<PutEvidenceType>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{ id: string; refetch: () => void }>({
         tag: AddEvidenceToPeriod.name,
         onClose: form.resetFields,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateRequirementCriterion } = useUpdateRequirementCriterion()
     async function onOk(output?: PutEvidenceType) {
         if (!output) return
         try {
             showSpinner()
 
-            await updateRequirementCriterion({
-                where: {
-                    id: id,
-                },
-                data: {},
-            })
-            if (id) {
+            if (input?.id) {
+                const { onlyInA: onlyInNew, onlyInB: onlyInOld } = diffArrays(
+                    items,
+                    initialValue?.evidences?.length
+                        ? initialValue?.evidences.map(
+                              (i: { evidenceId: string; evidence: Evidence }) => ({
+                                  value: i?.evidenceId,
+                                  label: i?.evidence?.name,
+                              })
+                          )
+                        : [],
+                    'value'
+                )
+                let listTransition: any = []
+
+                if (onlyInOld.length) {
+                    listTransition = [
+                        ...listTransition,
+                        ...items.map((i) => {
+                            return {
+                                model: 'AnalysisFormEvidence',
+                                operation: 'delete',
+                                data: {
+                                    where: {
+                                        requirementCriterionId_evidenceId: {
+                                            requirementCriterionId: input?.id,
+                                            evidenceId: i.value,
+                                        },
+                                    },
+                                },
+                            }
+                        }),
+                    ]
+                }
+                if (onlyInNew.length) {
+                    listTransition = [
+                        ...listTransition,
+                        ...onlyInNew.map((i) => {
+                            return {
+                                model: 'AnalysisFormEvidence',
+                                operation: 'create',
+                                data: {
+                                    data: {
+                                        requirementCriterionId: input?.id,
+                                        evidenceId: i.value,
+                                        order: 1,
+                                    },
+                                },
+                            }
+                        }),
+                    ]
+                }
+
+                listTransition = [
+                    ...listTransition,
+                    ...onlyInNew.map((i, index: number) => {
+                        return {
+                            model: 'AnalysisFormEvidence',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    requirementCriterionId_evidenceId: {
+                                        requirementCriterionId: input?.id,
+                                        evidenceId: i.value,
+                                    },
+                                },
+                                data: {
+                                    order: index + 1,
+                                },
+                            },
+                        }
+                    }),
+                ]
+                if (listTransition?.length) {
+                    await sqlTransaction(listTransition)
+                }
+
                 message.success('Cập nhật thành công')
-            } else {
-                message.success('Thêm mới thành công')
             }
-            queryClient.invalidateQueries({
-                queryKey: ['Evidence'],
-            })
+            input?.refetch()
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -66,14 +122,10 @@ const AddEvidenceToPeriod = () => {
             hideSpinner()
         }
     }
-    const { data: listEvidence } = useFindManyEvidenceCategory({
-        include: {
-            evidences: true,
-        },
-    })
+    const { data: listEvidence } = useFindManyEvidence()
     const { data: initialValue } = useFindUniqueRequirementCriterion(
         {
-            where: { id: id },
+            where: { id: input?.id },
             include: {
                 evidences: {
                     include: {
@@ -83,7 +135,7 @@ const AddEvidenceToPeriod = () => {
             },
         },
         {
-            enabled: !!id,
+            enabled: !!input?.id,
         }
     )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -91,35 +143,22 @@ const AddEvidenceToPeriod = () => {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                evidences: initialValue.evidences.map((evi) => evi.evidenceId),
+                evidences: initialValue.evidences.map(
+                    (evi: AnalysisFormEvidence) => evi.evidenceId
+                ),
             })
+            setItems(
+                initialValue.evidences.map((evi: AnalysisFormEvidence & { evidence: Evidence }) => {
+                    return {
+                        key: evi.evidenceId,
+                        label: evi.evidence.name,
+                        value: evi.evidenceId,
+                    }
+                })
+            )
         }
     }, [initialValue])
 
-    const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
-        // info.checkedNodes: (DataNode & { children?: DataNode[] })[]
-        const onlyLeafValues = (info.checkedNodes as MyTreeNode[])
-            .filter((node) => !node.children?.length) // chỉ lấy node không có children
-            .map((node) => node.value ?? node.key) // lấy value nếu có, không thì lấy key
-
-        // form.setFieldValue('evidences', onlyLeafValues)
-        setInitValue(onlyLeafValues)
-    }
-
-    const treeData = useMemo(() => {
-        return (
-            listEvidence?.map(({ evidences, ...evidenceCategory }) => ({
-                key: evidenceCategory.id,
-                title: evidenceCategory.name,
-                name: evidenceCategory.name,
-                children: evidences.map(({ ...evi }) => ({
-                    key: evi.id,
-                    title: evi.name,
-                    ...evi,
-                })),
-            })) || []
-        )
-    }, [listEvidence])
     const ItemType = 'LIST_ITEM'
     type Item = {
         value: string
@@ -204,34 +243,22 @@ const AddEvidenceToPeriod = () => {
             className="w-[700px]"
         >
             <Col span={24}>
-                <Form.Item label="Minh chứng" required>
+                <Form.Item name="evidences" label="Minh chứng" required>
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}
                         placeholder="Chọn khối kiến thức"
+                        options={listEvidence?.map((i) => {
+                            return {
+                                label: i.name,
+                                value: i.id,
+                                key: i.id,
+                            }
+                        })}
                         onChange={(value, option: any) => {
                             hanldeOnchange(option)
                         }}
                     />
-                    <Col span={24}>
-                        <Col span={24} className="font-semibold pl-4">
-                            Danh sách khối kiến thức trong CTĐT
-                        </Col>
-                        <Col span={24}>
-                            <DndProvider backend={HTML5Backend}>
-                                <div className=" mt-6">
-                                    {items.map((item: Item, index: number) => (
-                                        <DraggableItem
-                                            key={item.value}
-                                            item={item}
-                                            index={index}
-                                            moveItem={moveItem}
-                                        />
-                                    ))}
-                                </div>
-                            </DndProvider>
-                        </Col>
-                    </Col>
                     {/* <Tree
                         defaultExpandAll
                         checkedKeys={initValue}
@@ -241,6 +268,25 @@ const AddEvidenceToPeriod = () => {
                         onCheck={onCheck}
                     /> */}
                 </Form.Item>
+            </Col>
+            <Col span={24}>
+                <Col span={24} className="font-semibold mb-3">
+                    Danh sách khối kiến thức trong CTĐT
+                </Col>
+                <Col span={24}>
+                    <DndProvider backend={HTML5Backend}>
+                        <div className="">
+                            {items.map((item: Item, index: number) => (
+                                <DraggableItem
+                                    key={item.value}
+                                    item={item}
+                                    index={index}
+                                    moveItem={moveItem}
+                                />
+                            ))}
+                        </div>
+                    </DndProvider>
+                </Col>
             </Col>
         </PutFormModal>
     )
