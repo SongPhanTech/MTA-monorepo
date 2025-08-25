@@ -251,8 +251,8 @@ const saveExamSessions = createRoute({
                         .array(
                             z.object({
                                 id: z.string(),
-                                fax: z.string().nullable(),
-                                score: z.number().nullable(),
+                                fax: z.string().nullish(),
+                                score: z.number().nullish(),
                             })
                         )
                         .openapi('ExamSessions'),
@@ -298,13 +298,21 @@ app.openapi(saveExamSessions, async (c) => {
 
     const ids = updates.map((u) => u.id)
 
-    const faxCases = updates.map((u) => Prisma.sql`WHEN "id" = ${u.id} THEN ${u.fax}`)
-    const faxCaseSql = Prisma.sql`CASE ${Prisma.join(faxCases, ' ')} END`
+    const faxCases = updates
+        .filter((u) => u.fax !== undefined)
+        .map((u) => Prisma.sql`WHEN "id" = ${u.id} THEN ${u.fax}`)
+    const faxCaseSql =
+        faxCases.length > 0
+            ? Prisma.sql`CASE ${Prisma.join(faxCases, ' ')} ELSE "fax" END`
+            : Prisma.sql`"fax"`
 
-    const scoreCases = updates.map(
-        (u) => Prisma.sql`WHEN "id" = ${u.id} THEN ${u.score}::DECIMAL(5, 2)`
-    )
-    const scoreCaseSql = Prisma.sql`CASE ${Prisma.join(scoreCases, ' ')} END`
+    const scoreCases = updates
+        .filter((u) => u.score !== undefined)
+        .map((u) => Prisma.sql`WHEN "id" = ${u.id} THEN ${u.score}`)
+    const scoreCaseSql =
+        scoreCases.length > 0
+            ? Prisma.sql`CASE ${Prisma.join(scoreCases, ' ')} ELSE "score" END`
+            : Prisma.sql`"score"`
 
     // We update rows where a score is being set.
     const isGradedCases = updates
@@ -320,7 +328,7 @@ app.openapi(saveExamSessions, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.examSession.updateMany({
-            where: { id: { in: ids } },
+            where: { id: { in: updates.filter((u) => u.fax).map((u) => u.id) } },
             data: { fax: null },
         })
         await tx.$executeRaw`
