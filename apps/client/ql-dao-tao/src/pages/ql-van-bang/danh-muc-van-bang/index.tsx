@@ -120,14 +120,6 @@ export default function DiplomaType() {
                         rowKey="id"
                         filters={filters}
                         setFilters={setFilters}
-                        // onRowClick={(record) => {
-                        //     router.push(
-                        //         ROUTER_PATH.QL_DAO_TAO.QL_VAN_BANG_DANH_MUC_VAN_BANG_ID.replace(
-                        //             '[id]',
-                        //             String(record.id)
-                        //         )
-                        //     )
-                        // }}
                         columns={[
                             {
                                 title: 'STT',

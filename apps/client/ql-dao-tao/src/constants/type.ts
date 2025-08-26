@@ -131,6 +131,7 @@ export type FilterProps = {
     paymentStatus?: PaymentStatus[]
     paymentDate?: Date[]
     role?: CouncilRole[]
+    order?: 'asc' | 'desc'
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

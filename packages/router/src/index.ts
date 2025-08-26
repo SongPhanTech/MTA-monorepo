@@ -394,12 +394,6 @@ const NAVIGATION: NavigationType = {
                         description: 'Nhập điểm',
                     },
                     {
-                        id: 'ql-diem-ren-luyen',
-                        label: 'Nhập điểm rèn luyện',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_REN_LUYEN,
-                        description: 'Nhập điểm rèn luyện',
-                    },
-                    {
                         id: 'ql-diem-cong',
                         label: 'Quản lý điểm cộng',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CONG,
@@ -576,28 +570,10 @@ const NAVIGATION: NavigationType = {
             },
             {
                 id: 'ql-ren-luyen',
-                label: 'Quản lý rèn luyện',
+                label: 'Quản lý đợt rèn luyện',
                 icon: ListChecks,
-                children: [
-                    {
-                        id: 'ql-dot-ren-luyen',
-                        label: 'QL đợt rèn luyện',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN_DOT_DANH_GIA,
-                    },
-                    {
-                        id: 'danh-gia-ren-luyen',
-                        label: 'Đánh giá rèn luyện',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN_DANH_GIA,
-                    },
-                    {
-                        id: 'tong-hop-danh-gia-ren-luyen',
-                        label: 'Tổng hợp đánh giá rèn luyện',
-                        icon: ReadOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN_DANH_GIA_TONG,
-                    },
-                ],
+                path: ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN,
+                description: 'Quản lý đợt rèn luyện',
             },
             {
                 id: 'ql-ho-so',

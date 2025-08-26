@@ -1,59 +1,102 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutMilestoneModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { SchoolYear } from '@workspace/db'
+import { emptyObjectIf } from '@workspace/constant'
 import {
     useCountMilestone,
     useFindManyMilestone,
     useFindManySchoolYear,
     useUpdateMilestone,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function MilestonePage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [searchText, setSearchText] = useState<string>('')
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState<FilterProps>({
+        name: '',
         schoolYearId: undefined,
+        order: undefined,
+        startDate: undefined,
+        endDate: undefined,
     })
-    const { data = [], refetch } = useFindManyMilestone({
-        where: {
-            name: {
-                contains: searchText,
-            },
-            schoolYearId: filters.schoolYearId,
-        },
+    const where = useMemo(
+        () => ({
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.schoolYearId
+                ? {
+                      schoolYearId: {
+                          in: Array.isArray(filters.schoolYearId)
+                              ? filters.schoolYearId
+                              : [filters.schoolYearId],
+                      },
+                  }
+                : {}),
+            ...(filters.startDate?.length === 2
+                ? {
+                      startDate: {
+                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endDate?.length === 2
+                ? {
+                      endDate: {
+                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+        }),
+        [filters.name, filters.schoolYearId, filters.startDate, filters.endDate]
+    )
+
+    const { data = [] } = useFindManyMilestone({
+        where,
         include: {
             schoolYear: true,
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        period: filters.order,
+                    },
+                ],
+                !!filters.order
+            ),
+            {
+                createdAt: 'desc',
+            },
+        ],
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count } = useCountMilestone({
         where: {
-            name: {
-                contains: searchText,
-            },
-            schoolYearId: filters.schoolYearId,
+            ...where,
+            deletedAt: null,
         },
     })
 
-    const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutMilestoneModal.name,
     })
@@ -81,74 +124,15 @@ export default function MilestonePage() {
             hideSpinner()
         }
     }
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
-    useEffect(() => {
-        if (dataSchoolYear && dataSchoolYear.length > 0) {
-            const today = new Date()
-            const currentSchoolYear = dataSchoolYear.find((year) => {
-                const start = new Date(year.startDate)
-                const end = year.endDate ? new Date(year.endDate) : undefined
-                if (end) {
-                    return today >= start && today <= end
-                }
-                return today >= start
-            })
-            if (currentSchoolYear) {
-                setFilters((prev: any) => ({
-                    ...prev,
-                    schoolYearId: currentSchoolYear.id,
-                }))
-            }
-        }
-    }, [dataSchoolYear])
+    const { data: dataSchoolYear = [] } = useFindManySchoolYear()
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                Mốc huấn luyện
-            </Divider>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        {/* Tìm kiếm */}
-                        <Col span={6}>
-                            <Form.Item label="Tìm kiếm" name="search">
-                                <Input
-                                    id="search"
-                                    onChange={(e) => debouncedSearchText(e.target.value)}
-                                    placeholder="Tìm kiếm"
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={6}>
-                            {/* <Form.Item label="Năm học" name="schoolYearId" value={filters.schoolYearId}> */}
-                            <Flex justify="space-between" align="center">
-                                <label htmlFor="schoolYearId">Năm học:</label>
-                                <Select
-                                    id="schoolYearId"
-                                    className="w-[70%]"
-                                    placeholder="Chọn năm học"
-                                    allowClear
-                                    options={dataSchoolYear.map((i: SchoolYear) => {
-                                        return {
-                                            value: i.id,
-                                            label: i.name,
-                                        }
-                                    })}
-                                    value={filters.schoolYearId}
-                                    onChange={(value: number | null) => {
-                                        setFilters((prev: any) => ({
-                                            ...prev,
-                                            schoolYearId: value ?? undefined,
-                                        }))
-                                    }}
-                                />
-                            </Flex>
-
-                            {/* </Form.Item> */}
-                        </Col>
+                    <Row gutter={[16, 0]} align="top" justify="space-between">
                         {/* Thêm mới */}
-                        <Col span={6}>
+                        <Col span={24}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới
@@ -159,6 +143,8 @@ export default function MilestonePage() {
                 </Col>
                 <Col span={24}>
                     <Table
+                        filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -171,33 +157,63 @@ export default function MilestonePage() {
                                 title: 'Nội dung',
                                 align: 'center',
                                 dataIndex: 'name',
+                                type: 'input',
+                                width: 150,
+                            },
+                            {
+                                title: 'Tiết bắt đầu',
+                                align: 'center',
+                                dataIndex: 'order',
+                                width: 100,
+                                type: 'order',
+                                render: (_, record) => record?.startPeriod,
                             },
                             {
                                 title: 'Số tiết',
                                 align: 'center',
                                 dataIndex: 'period',
+                                width: 100,
                             },
                             {
                                 title: 'Năm học',
                                 align: 'center',
-                                dataIndex: 'schoolYear',
-                                render: (value) => (value?.name ? value?.name : ''),
+                                dataIndex: 'schoolYearId',
+                                type: 'select',
+                                options: dataSchoolYear?.map(({ id, name }) => ({
+                                    value: id,
+                                    label: name,
+                                })),
+                                width: 150,
+                                render: (_, record) =>
+                                    record?.schoolYear?.name ? record?.schoolYear?.name : '',
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 align: 'center',
-                                render: ({ startDate }) => dayjs(startDate).format('DD/MM/YYYY'),
+                                width: 120,
+                                dataIndex: 'startDate',
+                                type: 'date',
+                                render: (_, record) =>
+                                    record?.startDate
+                                        ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Ngày kết thúc',
                                 align: 'center',
-                                render: ({ endDate }) =>
-                                    endDate ? dayjs(endDate).format('DD/MM/YYYY') : '',
+                                width: 120,
+                                dataIndex: 'endDate',
+                                type: 'date',
+                                render: (_, record) =>
+                                    record?.endDate
+                                        ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Mô tả',
                                 align: 'center',
                                 dataIndex: 'description',
+                                width: 150,
                             },
                             {
                                 title: 'Thao tác',
@@ -205,15 +221,6 @@ export default function MilestonePage() {
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        {/* <Tooltip
-                                            title="Xem chi tiết"
-                                            placement="leftTop"
-                                        >
-                                            <EyeOutlined
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        </Tooltip> */}
                                         <EditIcon
                                             onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"
@@ -232,7 +239,6 @@ export default function MilestonePage() {
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-
                             onChange: (page, pageSize) => {
                                 if (numberOfPages === pageSize) {
                                     setCurrentPage(page)
@@ -241,8 +247,6 @@ export default function MilestonePage() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>
