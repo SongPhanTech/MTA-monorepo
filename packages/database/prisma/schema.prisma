@@ -3824,11 +3824,10 @@ model TrainingScoreSession {
   updatedAt            DateTime               @default(now()) @updatedAt()
   name                 String
   time                 DateTime               @default(now())
-  StudentTrainingType  StudentTrainingType?
   semester             Semester               @relation(fields: [semesterId], references: [id])
   semesterId           String
-  trainingObjectType   TrainingObjectType?    @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
+  trainingObjectType   TrainingObjectType     @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
   studentTrainingScore StudentTrainingScore[]
 
   @@schema("ql-dao-tao")
@@ -3847,6 +3846,7 @@ model StudentTrainingScore {
   student                Student              @relation(fields: [studentId], references: [id])
   studentId              String
   score                  Float                @default(0)
+  StudentTrainingType    StudentTrainingType?
 
   @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-dao-tao")
