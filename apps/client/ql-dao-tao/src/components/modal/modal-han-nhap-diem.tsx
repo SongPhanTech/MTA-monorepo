@@ -40,6 +40,7 @@ const HanNhapDiem = () => {
         { enabled: !!id }
     )
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({
@@ -54,7 +55,7 @@ const HanNhapDiem = () => {
                 isLockExamScore: initialValue.isLockExamScore,
             })
         }
-    }, [initialValue, form.setFieldsValue])
+    }, [initialValue])
 
     const { mutateAsync: update } = useUpdateSubjectClass()
 
