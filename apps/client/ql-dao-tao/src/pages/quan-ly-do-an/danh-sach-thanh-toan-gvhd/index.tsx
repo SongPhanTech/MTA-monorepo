@@ -63,12 +63,8 @@ export default function SupervisorPaymentRecordPage() {
                 : {}),
             ...(selectedSemesterId
                 ? {
-                      councilMember: {
-                          council: {
-                              thesis: {
-                                  some: { subjectClass: { semesterId: selectedSemesterId } },
-                              },
-                          },
+                      thesisProject: {
+                          subjectClass: { semesterId: selectedSemesterId },
                       },
                   }
                 : {}),
@@ -82,11 +78,16 @@ export default function SupervisorPaymentRecordPage() {
         ]
     )
 
-    const { data: paymentRecordData } = useFindManySupervisorPaymentRecord({
+    const { data: supervisorPaymentData } = useFindManySupervisorPaymentRecord({
         where: {
             ...where,
         },
         include: {
+            thesisProject: {
+                include: {
+                    subjectClass: true,
+                },
+            },
             expert: true,
         },
         take: numberOfPages,
@@ -173,7 +174,7 @@ export default function SupervisorPaymentRecordPage() {
                         id="payment-record"
                         filters={filters}
                         setFilters={setFilters}
-                        data={paymentRecordData}
+                        data={supervisorPaymentData}
                         rowSelection={{
                             selectedRowKeys,
                             onChange: setSelectedRowKeys,
@@ -203,6 +204,14 @@ export default function SupervisorPaymentRecordPage() {
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => record.expert.name,
+                            },
+                            {
+                                title: 'Đề tài',
+                                dataIndex: 'title',
+                                width: 150,
+                                type: 'input',
+                                align: 'center',
+                                render: (_, record) => record.thesisProject.title,
                             },
                             {
                                 title: 'Mã giao dịch',

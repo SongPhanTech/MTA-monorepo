@@ -6,7 +6,9 @@ import useSpinner from '@hooks/spinner'
 import { CouncilRole, type DefaultCouncilRolePayAmount, PaymentStatus } from '@workspace/db'
 import {
     useCreateManyPaymentRecord,
+    useCreateManySupervisorPaymentRecord,
     useDeleteManyPaymentRecord,
+    useDeleteManySupervisorPaymentRecord,
     useFindManyDefaultCouncilRolePayAmount,
     useFindManyThesisProject,
 } from '@workspace/db/hooks'
@@ -79,6 +81,9 @@ const PutPaymentRecord = () => {
 
     const { mutateAsync: createPaymentRecord } = useCreateManyPaymentRecord()
     const { mutateAsync: deletePaymentRecord } = useDeleteManyPaymentRecord()
+    const { mutateAsync: createSupervisorPayment } = useCreateManySupervisorPaymentRecord()
+    const { mutateAsync: deleteSupervisorPayment } = useDeleteManySupervisorPaymentRecord()
+
     async function onOk(values: PaymentRecord) {
         try {
             const data =
@@ -114,6 +119,14 @@ const PutPaymentRecord = () => {
                         }) ?? []
                 ) ?? []
 
+            const dataSupervisorPayment = selectedThesisProjects?.map((thesisProject) => {
+                return {
+                    expertId: thesisProject.supervisor.id,
+                    amount: values.supervisor,
+                    thesisProjectId: thesisProject.id,
+                }
+            })
+
             showSpinner()
             await deletePaymentRecord({
                 where: {
@@ -122,12 +135,25 @@ const PutPaymentRecord = () => {
                 },
             })
             if (data.length > 0) {
-                await createPaymentRecord(
-                    {
-                        data,
+                await createPaymentRecord({
+                    data,
+                    skipDuplicates: true,
+                })
+            }
+            if (dataSupervisorPayment && dataSupervisorPayment.length > 0) {
+                await deleteSupervisorPayment({
+                    where: {
+                        status: PaymentStatus.PENDING,
+                        expertId: { in: dataSupervisorPayment.map((d) => d.expertId) },
+                        thesisProjectId: {
+                            in: dataSupervisorPayment.map((d) => d.thesisProjectId),
+                        },
                     },
-                    { skipDuplicates: true }
-                )
+                })
+                await createSupervisorPayment({
+                    data: dataSupervisorPayment,
+                    skipDuplicates: true,
+                })
             }
             message.success('Thêm mới thanh toán thành công')
         } catch (_error) {
