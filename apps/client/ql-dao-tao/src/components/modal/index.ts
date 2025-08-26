@@ -68,6 +68,7 @@ import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutPaymentRecord from './put-thanh-toan'
 import PutPaymentRecordDetail from './put-thanh-toan-detail'
+import PutSupervisorPaymentRecord from './put-thanh-toan-gvhd'
 import PutCouncilMember from './put-thanh-vien-hoi-dong'
 import PutBuildingModal from './put-toa-nha'
 import PutTrainingFormModal from './put-training-form'
@@ -161,4 +162,5 @@ export {
     PutUpdatePaymentStatus,
     PutStatusQLTraCuuVanBang,
     PutDotRenLuyen,
+    PutSupervisorPaymentRecord,
 }

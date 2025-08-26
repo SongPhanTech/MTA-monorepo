@@ -46,6 +46,9 @@ const PutThesisProject = () => {
                 : {}),
         },
     })
+
+    const treeData = buildOrgTree(organization)
+
     const { data: expert = [], refetch } = useFindManyExpertProfile({
         where: {
             ...(searchExpert
@@ -81,11 +84,6 @@ const PutThesisProject = () => {
 
     const handleSearchExpert = (value: string) => {
         setSearchExpert(value)
-        debouncedRefetch()
-    }
-
-    const handleSearchOrganization = (value: string) => {
-        setSearchOrganization(value)
         debouncedRefetch()
     }
 
@@ -156,8 +154,6 @@ const PutThesisProject = () => {
         }
     }
 
-    const treeData = buildOrgTree(organization)
-
     return (
         <PutFormModal
             open={isOpen}
@@ -204,19 +200,12 @@ const PutThesisProject = () => {
                         placeholder="Chọn đơn vị quản lý"
                         allowClear
                         showSearch
-                        maxTagCount={'responsive'}
                         treeDefaultExpandAll
                         treeData={treeData}
                         filterTreeNode={(input, node) =>
                             (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
-                        onChange={(val) => handleSearchOrganization(val)}
                     />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="currentStudents" label="Số học viên hiện tại" required>
-                    <InputNumber placeholder="Nhập số lượng học viên" className="w-full" min={0} />
                 </FormItem>
             </Col>
             <Col span={8}>
@@ -225,12 +214,7 @@ const PutThesisProject = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="registrationStart"
-                    label="Thời gian mở đăng ký"
-                    required
-                >
+                <FormItem form={form} name="registrationStart" label="Thời gian mở đăng ký">
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
@@ -241,12 +225,7 @@ const PutThesisProject = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="registrationEnd"
-                    label="Thời gian đóng đăng ký"
-                    required
-                >
+                <FormItem form={form} name="registrationEnd" label="Thời gian đóng đăng ký">
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',

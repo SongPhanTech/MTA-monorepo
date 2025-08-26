@@ -154,9 +154,11 @@ export default function SettingClass() {
 
     useEffect(() => {
         if (subjectClass) {
-            form.setFieldsValue({
-                roomIds: subjectClass.thesisProjects.map((item) => item.room?.id ?? ''),
-            })
+            const roomIds = subjectClass.thesisProjects
+                .map((item) => item.room?.id)
+                .filter((id): id is string => id !== undefined && id !== null && id !== '')
+
+            form.setFieldsValue({ roomIds })
         }
     }, [subjectClass, form])
 
@@ -464,11 +466,10 @@ export default function SettingClass() {
     /* ---------- Run example ---------- */
     //TODO: tính toán khi chia ca, kíp
     function getCouncilMember() {
-        const people = generateSamplePeople()
         const batches = generateBatchesWithLookahead(
             listExperts,
             subjectClass?.thesisProjects.length,
-            2,
+            1,
             4000
         )
         return batches
