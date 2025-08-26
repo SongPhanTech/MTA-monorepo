@@ -11,6 +11,7 @@ import 'student'
 model TrainingScoreSession extends Base {
   name                 String
   time                 DateTime               @default(now())// thời gian
+  StudentTrainingType  StudentTrainingType?
 
   semester             Semester               @relation(fields: [semesterId], references: [id])
   semesterId           String
@@ -33,20 +34,6 @@ model StudentTrainingScore extends Base {
   score                  Float                @default(0) // điểm rèn luyện
 
   @@unique([trainingScoreSessionId, studentId])
-  @@schema("ql-dao-tao")
-}
-
-// Điểm rèn luyện của sinh viên, được tính theo kỳ
-model StudentTrainingSemester extends Base {
-  semester   Semester @relation(fields: [semesterId], references: [id])
-  semesterId String
-
-  student    Student  @relation(fields: [studentId], references: [id])
-  studentId  String
-
-  score      Float    @default(0) // điểm rèn luyện
-
-  @@unique([semesterId, studentId])
   @@schema("ql-dao-tao")
 }
 

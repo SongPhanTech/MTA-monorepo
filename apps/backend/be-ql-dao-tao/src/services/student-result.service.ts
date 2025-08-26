@@ -722,8 +722,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     studentId: student.id,
                     trainingScoreSession: { semesterId },
                 },
+                orderBy: { createdAt: 'desc' },
             })
-            // const studentTraining = await prisma.tra.findFirst({
 
             if (!existingResult) {
                 console.log(`Không tìm thấy kết quả học kỳ cho sinh viên ${student.id}, tạo mới...`)

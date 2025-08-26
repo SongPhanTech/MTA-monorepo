@@ -20,83 +20,82 @@ import './note.zmodel'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
-  entryScore               Float?   // Điểm thi đầu vào (nếu có)
-  note                     String?
-  from                     DateTime? // từ ngày
-  to                       DateTime? // đến ngày
+  entryScore                     Float?   // Điểm thi đầu vào (nếu có)
+  note                           String?
+  from                           DateTime? // từ ngày
+  to                             DateTime? // đến ngày
 
-  trainingLocation         TrainingLocation?              @relation(fields: [trainingLocationId], references: [id])
-  trainingLocationId       String?
+  trainingLocation               TrainingLocation?                @relation(fields: [trainingLocationId], references: [id])
+  trainingLocationId             String?
 
   /// đối tượng ưu tiên
-  priorityObject           PriorityObject[]
+  priorityObject                 PriorityObject[]
 
-  unionLeader              String?
+  unionLeader                    String?
 
-  status                   StudentStatus                  @default(ENROLLED)
+  status                         StudentStatus                    @default(ENROLLED)
 
-  classMonitor             FixedClass?                    @relation("ClassMonitor")
-  unionLeaderOf            FixedClass?                    @relation("UnionLeader")
-  fixedClass               FixedClass?                    @relation(fields: [fixedClassId], references: [id])
-  fixedClassId             String?
-  subjectClassStudent      StudentSubjectScore[]
+  classMonitor                   FixedClass?                      @relation("ClassMonitor")
+  unionLeaderOf                  FixedClass?                      @relation("UnionLeader")
+  fixedClass                     FixedClass?                      @relation(fields: [fixedClassId], references: [id])
+  fixedClassId                   String?
+  subjectClassStudent            StudentSubjectScore[]
 
-  userProfileId            String
-  userProfile              UserProfile                    @relation(fields: [userProfileId], references: [id])
+  userProfileId                  String
+  userProfile                    UserProfile                      @relation(fields: [userProfileId], references: [id])
 
-  trainingLevel            TrainingLevel?                 @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId          String?
+  trainingLevel                  TrainingLevel?                   @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId                String?
 
-  trainingObjectType       TrainingObjectType?            @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
-  trainingObjectTypeId     String?
+  trainingObjectType             TrainingObjectType?              @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectTypeId           String?
 
-  trainingType             TrainingType?                  @relation(fields: [trainingTypeId], references: [id])
-  trainingTypeId           String?
+  trainingType                   TrainingType?                    @relation(fields: [trainingTypeId], references: [id])
+  trainingTypeId                 String?
 
-  trainingForm             TrainingForm?                  @relation(fields: [trainingFormId], references: [id])
-  trainingFormId           String?
+  trainingForm                   TrainingForm?                    @relation(fields: [trainingFormId], references: [id])
+  trainingFormId                 String?
 
-  registrationArea         DM_KhuVuc_DiaLy?               @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
-  registrationAreaId       String?                        @db.Uuid
+  registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id]) // khu vực đăng ký
+  registrationAreaId             String?                          @db.Uuid
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý
   // phiên bản -> CTĐT -> chuyên ngành
-  curriculumVersion        CurriculumVersion?             @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId      String?
+  curriculumVersion              CurriculumVersion?               @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId            String?
 
   // Giảm 1 khi kỳ hiện tại không vi phạm
-  academicWarningLevel     Int                            @default(0) // mức cảnh cáo học tập
-  disciplinaryWarningLevel Int                            @default(0) // mức cảnh cáo học đường
+  academicWarningLevel           Int                              @default(0) // mức cảnh cáo học tập
+  disciplinaryWarningLevel       Int                              @default(0) // mức cảnh cáo học đường
 
-  suspended                Boolean                        @default(false) // đình chỉ học
-  expelled                 Boolean                        @default(false) // đuổi học
+  suspended                      Boolean                          @default(false) // đình chỉ học
+  expelled                       Boolean                          @default(false) // đuổi học
 
   // Điều kiện để xét tốt nghiệp
-  foreignLangPass          Boolean                        @default(false) // Đạt chuẩn ngoại ngữ
-  ITCertificationPass      Boolean                        @default(false) // Đạt chứng chỉ CNTT
-  strengthTrainingPass     Boolean                        @default(false) // Đạt yêu cầu rèn luyện sức khoẻ
-  militaryTrainingPass     Boolean                        @default(false) // Đạt yêu cầu giáo dục quốc phòng, quân sự
+  foreignLangPass                Boolean                          @default(false) // Đạt chuẩn ngoại ngữ
+  ITCertificationPass            Boolean                          @default(false) // Đạt chứng chỉ CNTT
+  strengthTrainingPass           Boolean                          @default(false) // Đạt yêu cầu rèn luyện sức khoẻ
+  militaryTrainingPass           Boolean                          @default(false) // Đạt yêu cầu giáo dục quốc phòng, quân sự
 
-  studentTrainingScore     StudentTrainingScore[]
-  studentSemesterResult    StudentSemesterResult[]
-  studentYearResult        StudentYearResult[]
-  scholarshipAwards        ScholarshipAward[]
-  academicWarning          AcademicWarning[]
-  disciplinaryWarning      DisciplinaryWarning[]
-  studentAcademicDecision  StudentAcademicDecision[]
-  graduationApplications   StudentGraduationApplication[]
-  graduationDecision       GraduationDecision?
-  surveySessions           SurveySession[]   // Thêm relation với khảo sát
-  notifications            Notification[]     // Thông báo cá nhân
-  researchRegistrations    StudentResearchRegistration[] // Đăng ký đề tài nghiên cứu
-  thesisRegistrations      StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
-  examSession              ExamSession[]
-  studentTrainingSemester  StudentTrainingSemester[]
+  studentTrainingScore           StudentTrainingScore[]
+  studentSemesterResult          StudentSemesterResult[]
+  studentYearResult              StudentYearResult[]
+  scholarshipAwards              ScholarshipAward[]
+  academicWarning                AcademicWarning[]
+  disciplinaryWarning            DisciplinaryWarning[]
+  studentAcademicDecision        StudentAcademicDecision[]
+  graduationApplications         StudentGraduationApplication[]
+  graduationDecision             GraduationDecision?
+  surveySessions                 SurveySession[]   // Thêm relation với khảo sát
+  notifications                  Notification[]     // Thông báo cá nhân
+  researchRegistrations          StudentResearchRegistration[] // Đăng ký đề tài nghiên cứu
+  thesisRegistrations            StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
+  examSession                    ExamSession[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
 
   // THÊM MỚI:
-  notes           Note[]
-  noteFolders     NoteFolder[]
+  notes                          Note[]
+  noteFolders                    NoteFolder[]
 
   @@schema("ql-dao-tao")
 }
