@@ -28,7 +28,6 @@ dayjs.locale('vi')
 type TrainingBlockOnCurriculumVersionInput = {
     trainingBlockOnCurriculumVersionId: string
     trainingBlockSubjectId: string
-    managementOrganization: string
 }
 
 interface FilterProps {
@@ -43,7 +42,7 @@ const PutTrainingBlockSubject = () => {
     })
 
     const [filters, setFilters] = useState<FilterProps>({
-        managementOrganizationId: input?.managementOrganization || '',
+        managementOrganizationId: '',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -173,23 +172,25 @@ const PutTrainingBlockSubject = () => {
             }
             className="min-w-[400px] w-[500px]"
         >
-            <Col span={24}>
-                <Form.Item name="managementOrganizationId" label="Đơn vị quản lý" required>
-                    <TreeSelect
-                        placeholder="Chọn đơn vị quản lý"
-                        allowClear
-                        showSearch
-                        treeDefaultExpandAll
-                        onChange={(val) => handleFilterChange('managementOrganizationId', val)}
-                        treeData={treeData}
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
-                        defaultValue={input?.managementOrganization || ''}
-                        disabled={!!input?.trainingBlockSubjectId}
-                    />
-                </Form.Item>
-            </Col>
+            {!input?.trainingBlockSubjectId && (
+                <Col span={24}>
+                    <Form.Item name="managementOrganizationId" label="Đơn vị quản lý">
+                        <TreeSelect
+                            placeholder="Chọn đơn vị quản lý"
+                            allowClear
+                            showSearch
+                            treeDefaultExpandAll
+                            onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                            treeData={treeData}
+                            filterTreeNode={(input, node) =>
+                                (node?.label as string)
+                                    ?.toLowerCase()
+                                    ?.includes(input?.toLowerCase())
+                            }
+                        />
+                    </Form.Item>
+                </Col>
+            )}
             <Col span={24}>
                 <FormItem form={form} name="subjectId" label="Môn học" required>
                     <Select

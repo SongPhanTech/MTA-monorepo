@@ -206,7 +206,7 @@ export default function EvidenceCategory() {
                         // }}
                         columns={[
                             {
-                                title: 'Tên',
+                                title: 'Tên minh chứng',
                                 dataIndex: 'name',
                                 width: 200,
                                 align: 'center',

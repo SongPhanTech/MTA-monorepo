@@ -62,6 +62,7 @@ import PutScholarshipAward from './put-scholarship-award'
 import PutScholarshipCriteria from './put-scholarship-criteria'
 import PutStudentModal from './put-sinh-vien'
 import PutStudentThesisRegistration from './put-sinh-vien-dang-ky-da'
+import PutStatusQLTraCuuVanBang from './put-status-ql-tra-cuu-van-bang'
 import PutAcademicWarning from './put-sv-canh-cao-hoc-tap'
 import PutOpenSubjectClassModal from './put-tao-lop-mh'
 import PutPaymentRecord from './put-thanh-toan'
@@ -158,5 +159,6 @@ export {
     PutPaymentRecord,
     PutPaymentRecordDetail,
     PutUpdatePaymentStatus,
+    PutStatusQLTraCuuVanBang,
     PutSupervisorPaymentRecord,
 }

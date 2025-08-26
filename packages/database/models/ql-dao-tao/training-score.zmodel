@@ -15,8 +15,8 @@ model TrainingScoreSession extends Base {
   semester             Semester               @relation(fields: [semesterId], references: [id])
   semesterId           String
 
-  trainingObjectType   TrainingObjectType?    @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
-  trainingObjectTypeId String?
+  trainingObjectType   TrainingObjectType     @relation(fields: [trainingObjectTypeId], references: [id]) // loại đối tượng đào tạo
+  trainingObjectTypeId String
 
   studentTrainingScore StudentTrainingScore[]
   @@schema("ql-dao-tao")
@@ -31,22 +31,9 @@ model StudentTrainingScore extends Base {
   studentId              String
 
   score                  Float                @default(0) // điểm rèn luyện
+  StudentTrainingType    StudentTrainingType?
 
   @@unique([trainingScoreSessionId, studentId])
-  @@schema("ql-dao-tao")
-}
-
-// Điểm rèn luyện của sinh viên, được tính theo kỳ
-model StudentTrainingSemester extends Base {
-  semester   Semester @relation(fields: [semesterId], references: [id])
-  semesterId String
-
-  student    Student  @relation(fields: [studentId], references: [id])
-  studentId  String
-
-  score      Float    @default(0) // điểm rèn luyện
-
-  @@unique([semesterId, studentId])
   @@schema("ql-dao-tao")
 }
 

@@ -7,8 +7,9 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { DM_DonVi, ExamType } from '@workspace/db'
+import type { ExamType } from '@workspace/db'
 import {
     useCountSubject,
     useFindManyDM_DonVi,
@@ -16,7 +17,7 @@ import {
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, message, Row, Select, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, message, Row, Tag, Tooltip, TreeSelect } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
@@ -45,7 +46,8 @@ export default function SubjectList() {
     })
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
-    const { data: organization = [] } = useFindManyDM_DonVi()
+    const { data: organization = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
+    const treeData = buildOrgTree(organization)
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where: {
@@ -236,22 +238,27 @@ export default function SubjectList() {
                                         wrapperCol={{ span: 24 }}
                                         labelAlign="left"
                                     >
-                                        <Select
+                                        <TreeSelect
                                             placeholder="Chọn đơn vị quản lý"
-                                            options={organization.map((i: DM_DonVi) => ({
-                                                value: i.Id,
-                                                label: i.sTen,
-                                            }))}
+                                            allowClear
+                                            showSearch
+                                            maxTagCount={'responsive'}
+                                            treeDefaultExpandAll
+                                            treeData={treeData}
+                                            filterTreeNode={(input, node) =>
+                                                (node?.label as string)
+                                                    ?.toLowerCase()
+                                                    ?.includes(input?.toLowerCase())
+                                            }
                                             onChange={(val) =>
                                                 handleFilterChange('managementOrganizationId', val)
                                             }
-                                            allowClear
                                         />
                                     </Form.Item>
                                 </Col>
                             </Flex>
                         </Col>
-                        <Col span={6}>
+                        <Col span={12}>
                             <Flex justify="end" gap={8}>
                                 <Button onClick={handleModal} type="primary">
                                     <BookPlus />

@@ -105,7 +105,7 @@ const PutScholarshipAward = () => {
         },
         orderBy: {
             userProfile: {
-                fullname: 'asc',
+                firstName: 'asc',
             },
         },
     })

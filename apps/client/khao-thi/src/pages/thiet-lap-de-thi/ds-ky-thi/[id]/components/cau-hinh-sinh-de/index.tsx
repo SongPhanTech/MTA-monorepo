@@ -53,24 +53,7 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
         {
             where: { id },
             include: {
-                questionBank: {
-                    include: {
-                        subjectVersion: {
-                            include: {
-                                subject: true,
-                            },
-                        },
-                    },
-                },
-                subjectClass: {
-                    include: {
-                        semester: {
-                            include: {
-                                schoolYear: true,
-                            },
-                        },
-                    },
-                },
+                questionBank: true,
             },
         },
         { enabled: !!id }
