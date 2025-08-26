@@ -278,6 +278,7 @@ export default function PaymentRecordPage() {
                                 dataIndex: 'paymentStatus',
                                 width: 150,
                                 align: 'center',
+                                fixed: 'right',
                                 type: 'select',
                                 options: paymentStatusOptions,
                                 render: (_, record) => {
