@@ -2,7 +2,7 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutPaymentRecordDetail, PutUpdatePaymentStatus } from '@components/modal'
+import { PutSupervisorPaymentRecord, PutUpdatePaymentStatus } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
@@ -11,7 +11,7 @@ import DefaultLayout from '@layouts/default-layout'
 import { PaymentStatus } from '@workspace/db'
 import {
     useCountSupervisorPaymentRecord,
-    useDeletePaymentRecord,
+    useDeleteSupervisorPaymentRecord,
     useFindManySupervisorPaymentRecord,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
@@ -103,7 +103,7 @@ export default function SupervisorPaymentRecordPage() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen: openPaymentRecord } = useDisclosure<{ paymentRecordId: string }>({
-        tag: PutPaymentRecordDetail.name,
+        tag: PutSupervisorPaymentRecord.name,
     })
 
     const { onOpen: openUpdatePaymentStatus, isOpen } = useDisclosure<{
@@ -118,7 +118,7 @@ export default function SupervisorPaymentRecordPage() {
         }
     }, [isOpen])
 
-    const { mutateAsync: deletePaymentRecord } = useDeletePaymentRecord()
+    const { mutateAsync: deletePaymentRecord } = useDeleteSupervisorPaymentRecord()
     async function handleDelete(id: string) {
         try {
             showSpinner()
