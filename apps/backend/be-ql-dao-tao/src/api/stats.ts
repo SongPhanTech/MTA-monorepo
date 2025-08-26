@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { Prisma } from '@workspace/db'
+import { $Enums, type AcademicActionType, Prisma } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 import { prisma } from '..'
 
@@ -531,6 +531,11 @@ app.openapi(
         method: 'get',
         path: '/student-distribution-by-training-level-filtered',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                managementOrganizationId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Phân bổ theo Trình độ đào tạo (lọc theo đơn vị quản lý)',
@@ -549,11 +554,22 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.query()
+        const { managementOrganizationId } = c.req.valid('query')
 
-        if (!managementOrganizationId) {
-            return c.json([])
-        }
+        const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
+            WITH RECURSIVE org_tree AS (
+                SELECT "Id", "sParentId"
+                FROM mta."DM_DonVi"
+                WHERE "Id" = ${managementOrganizationId}::UUID
+
+                UNION ALL
+
+                SELECT child."Id", child."sParentId"
+                FROM mta."DM_DonVi" child
+                INNER JOIN org_tree parent ON child."sParentId" = parent."Id"
+            )
+            SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
+            `
 
         const result = await prisma.$queryRaw<
             Array<{ trainingLevelId: string; name: string; count: number }>
@@ -570,7 +586,7 @@ app.openapi(
                 "ql-dao-tao"."FixedClass" AS "FC" ON "S"."fixedClassId" = "FC"."id"
             WHERE
                 "S"."trainingLevelId" IS NOT NULL
-                AND "FC"."managementOrganizationId" = ${managementOrganizationId}
+                AND "FC"."managementOrganizationId" = ANY(${all_ids}::uuid[])
             GROUP BY
                 "TL"."id", "TL"."name"
             ORDER BY
@@ -586,6 +602,11 @@ app.openapi(
         method: 'get',
         path: '/student-distribution-by-training-course-filtered',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                managementOrganizationId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Phân bổ theo Khoá học (lọc theo đơn vị quản lý)',
@@ -604,11 +625,22 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.query()
+        const { managementOrganizationId } = c.req.valid('query')
 
-        if (!managementOrganizationId) {
-            return c.json([])
-        }
+        const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
+            WITH RECURSIVE org_tree AS (
+                SELECT "Id", "sParentId"
+                FROM mta."DM_DonVi"
+                WHERE "Id" = ${managementOrganizationId}::UUID
+
+                UNION ALL
+
+                SELECT child."Id", child."sParentId"
+                FROM mta."DM_DonVi" child
+                INNER JOIN org_tree parent ON child."sParentId" = parent."Id"
+            )
+            SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
+            `
 
         const result = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; count: number }>
@@ -623,7 +655,7 @@ app.openapi(
                 "ql-dao-tao"."FixedClass" AS "FC" ON "TC"."id" = "FC"."trainingCourseId"
             JOIN
                 "ql-dao-tao"."Student" AS "S" ON "FC"."id" = "S"."fixedClassId"
-            WHERE "FC"."managementOrganizationId" = ${managementOrganizationId}
+            WHERE "FC"."managementOrganizationId" = ANY(${all_ids}::uuid[])
             GROUP BY
                 "TC"."id", "TC"."name"
             ORDER BY
@@ -639,6 +671,11 @@ app.openapi(
         method: 'get',
         path: '/average-entry-score-by-course-filtered',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                managementOrganizationId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Điểm trúng tuyển trung bình qua các Khoá (lọc theo đơn vị quản lý)',
@@ -657,11 +694,22 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.query()
+        const { managementOrganizationId } = c.req.valid('query')
 
-        if (!managementOrganizationId) {
-            return c.json([])
-        }
+        const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
+            WITH RECURSIVE org_tree AS (
+                SELECT "Id", "sParentId"
+                FROM mta."DM_DonVi"
+                WHERE "Id" = ${managementOrganizationId}::UUID
+
+                UNION ALL
+
+                SELECT child."Id", child."sParentId"
+                FROM mta."DM_DonVi" child
+                INNER JOIN org_tree parent ON child."sParentId" = parent."Id"
+            )
+            SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
+            `
 
         const result = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgEntryScore: number }>
@@ -678,7 +726,7 @@ app.openapi(
                 "ql-dao-tao"."Student" AS "S" ON "FC"."id" = "S"."fixedClassId"
             WHERE
                 "S"."entryScore" IS NOT NULL
-                AND "FC"."managementOrganizationId" = ${managementOrganizationId}
+                AND "FC"."managementOrganizationId" = ANY(${all_ids}::uuid[])
             GROUP BY
                 "TC"."id", "TC"."name"
             ORDER BY
@@ -694,6 +742,11 @@ app.openapi(
         method: 'get',
         path: '/average-gpa-by-course-filtered',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                managementOrganizationId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description:
@@ -713,11 +766,22 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.query()
+        const { managementOrganizationId } = c.req.valid('query')
 
-        if (!managementOrganizationId) {
-            return c.json([])
-        }
+        const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
+            WITH RECURSIVE org_tree AS (
+                SELECT "Id", "sParentId"
+                FROM mta."DM_DonVi"
+                WHERE "Id" = ${managementOrganizationId}::UUID
+
+                UNION ALL
+
+                SELECT child."Id", child."sParentId"
+                FROM mta."DM_DonVi" child
+                INNER JOIN org_tree parent ON child."sParentId" = parent."Id"
+            )
+            SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
+            `
 
         const result = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgGpa: number }>
@@ -737,7 +801,7 @@ app.openapi(
             WHERE
                 "S"."status" = 'GRADUATED'
                 AND "SSR"."cumulativeGpaBase10" IS NOT NULL
-                AND "FC"."managementOrganizationId" = ${managementOrganizationId}
+                AND "FC"."managementOrganizationId" = ANY(${all_ids}::uuid[])
             GROUP BY
                 "TC"."id", "TC"."name"
             ORDER BY
@@ -753,6 +817,11 @@ app.openapi(
         method: 'get',
         path: '/graduation-rate-by-course-filtered',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                managementOrganizationId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Tỷ lệ tốt nghiệp (lọc theo đơn vị quản lý)',
@@ -771,11 +840,22 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.query()
+        const { managementOrganizationId } = c.req.valid('query')
 
-        if (!managementOrganizationId) {
-            return c.json([])
-        }
+        const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
+            WITH RECURSIVE org_tree AS (
+                SELECT "Id", "sParentId"
+                FROM mta."DM_DonVi"
+                WHERE "Id" = ${managementOrganizationId}::UUID
+
+                UNION ALL
+
+                SELECT child."Id", child."sParentId"
+                FROM mta."DM_DonVi" child
+                INNER JOIN org_tree parent ON child."sParentId" = parent."Id"
+            )
+            SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
+            `
 
         const result = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; graduationRate: number }>
@@ -790,7 +870,7 @@ app.openapi(
                 "ql-dao-tao"."FixedClass" AS "FC" ON "TC"."id" = "FC"."trainingCourseId"
             JOIN
                 "ql-dao-tao"."Student" AS "S" ON "FC"."id" = "S"."fixedClassId"
-            WHERE "FC"."managementOrganizationId" = ${managementOrganizationId}
+            WHERE "FC"."managementOrganizationId" = ANY(${all_ids}::uuid[])
             GROUP BY
                 "TC"."id", "TC"."name"
             ORDER BY
@@ -806,6 +886,11 @@ app.openapi(
         method: 'get',
         path: '/academic-performance-by-year-filtered',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                managementOrganizationId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Thống kê kết quả học tập toàn Học viện (lọc theo đơn vị quản lý)',
@@ -828,11 +913,22 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.query()
+        const { managementOrganizationId } = c.req.valid('query')
 
-        if (!managementOrganizationId) {
-            return c.json([])
-        }
+        const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
+            WITH RECURSIVE org_tree AS (
+                SELECT "Id", "sParentId"
+                FROM mta."DM_DonVi"
+                WHERE "Id" = ${managementOrganizationId}::UUID
+
+                UNION ALL
+
+                SELECT child."Id", child."sParentId"
+                FROM mta."DM_DonVi" child
+                INNER JOIN org_tree parent ON child."sParentId" = parent."Id"
+            )
+            SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
+            `
 
         const result = await prisma.$queryRaw<
             Array<{
@@ -861,7 +957,7 @@ app.openapi(
                 "ql-dao-tao"."Student" AS "S" ON "SSR"."studentId" = "S"."id"
             JOIN
                 "ql-dao-tao"."FixedClass" AS "FC" ON "S"."fixedClassId" = "FC"."id"
-            WHERE "FC"."managementOrganizationId" = ${managementOrganizationId}
+            WHERE "FC"."managementOrganizationId" = ANY(${all_ids}::uuid[])
             GROUP BY
                 "SY"."id", "SY"."name"
             ORDER BY
@@ -877,6 +973,11 @@ app.openapi(
         method: 'get',
         path: '/student-distribution-by-province-filtered',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                managementOrganizationId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Phân bổ địa lý của sinh viên (lọc theo đơn vị quản lý)',
@@ -895,11 +996,22 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.query()
+        const { managementOrganizationId } = c.req.valid('query')
 
-        if (!managementOrganizationId) {
-            return c.json([])
-        }
+        const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
+            WITH RECURSIVE org_tree AS (
+                SELECT "Id", "sParentId"
+                FROM mta."DM_DonVi"
+                WHERE "Id" = ${managementOrganizationId}::UUID
+
+                UNION ALL
+
+                SELECT child."Id", child."sParentId"
+                FROM mta."DM_DonVi" child
+                INNER JOIN org_tree parent ON child."sParentId" = parent."Id"
+            )
+            SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
+            `
 
         const result = await prisma.$queryRaw<
             Array<{ provinceId: string; name: string; count: number }>
@@ -909,16 +1021,16 @@ app.openapi(
                 "P"."sTen" AS "name",
                 CAST(COUNT("UP"."id") AS INTEGER) AS "count"
             FROM
-                "ql-dao-tao"."UserProfile" AS "UP"
+                "ql-nguoi-dung"."UserProfile" AS "UP"
             JOIN
                 "ql-dao-tao"."Student" AS "S" ON "UP"."id" = "S"."userProfileId"
             JOIN
                 "ql-dao-tao"."FixedClass" AS "FC" ON "S"."fixedClassId" = "FC"."id"
             JOIN
-                "ql-dao-tao"."DM_Tinh" AS "P" ON "UP"."provinceHometownId" = "P"."Id"
+                "mta"."DM_Tinh" AS "P" ON "UP"."provinceHometownId" = "P"."Id"
             WHERE
                 "UP"."provinceHometownId" IS NOT NULL
-                AND "FC"."managementOrganizationId" = ${managementOrganizationId}
+                AND "FC"."managementOrganizationId" = ANY(${all_ids}::uuid[])
             GROUP BY
                 "P"."Id", "P"."sTen"
             ORDER BY
@@ -934,6 +1046,13 @@ app.openapi(
         method: 'get',
         path: '/students-of-interest',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                warningLevel: z.string().optional(),
+                debtCredits: z.string().optional(),
+                gpaThreshold: z.string().optional(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Danh sách SV cần quan tâm',
@@ -954,7 +1073,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { warningLevel, debtCredits, gpaThreshold } = c.req.query()
+        const { warningLevel, debtCredits, gpaThreshold } = c.req.valid('query')
 
         const conditions = []
         if (warningLevel) {
@@ -997,7 +1116,7 @@ app.openapi(
             FROM
                 "ql-dao-tao"."Student" AS "S"
             JOIN
-                "ql-dao-tao"."UserProfile" AS "UP" ON "S"."userProfileId" = "UP"."id"
+                "ql-nguoi-dung"."UserProfile" AS "UP" ON "S"."userProfileId" = "UP"."id"
             LEFT JOIN
                 "ql-dao-tao"."StudentSemesterResult" AS "SSR" ON "S"."id" = "SSR"."studentId"
             WHERE ${where}
@@ -1036,7 +1155,7 @@ app.openapi(
             SELECT
                 "FC"."id" as "fixedClassId",
                 "FC"."name" as "name",
-                AVG("SSR"."gpaBase10") as "avgGpa"
+                CAST(AVG("SSR"."gpaBase10") AS REAL) as "avgGpa"
             FROM "ql-dao-tao"."StudentSemesterResult" "SSR"
             JOIN "ql-dao-tao"."Student" "S" ON "S"."id" = "SSR"."studentId"
             JOIN "ql-dao-tao"."FixedClass" "FC" ON "FC"."id" = "S"."fixedClassId"
@@ -1076,11 +1195,12 @@ app.openapi(
             SELECT
                 "TM"."id" as "trainingMajorId",
                 "TM"."name" as "name",
-                AVG("SSR"."gpaBase10") as "avgGpa"
+                CAST(AVG("SSR"."gpaBase10") AS REAL) as "avgGpa"
             FROM "ql-dao-tao"."StudentSemesterResult" "SSR"
             JOIN "ql-dao-tao"."Student" "S" ON "S"."id" = "SSR"."studentId"
             JOIN "ql-dao-tao"."CurriculumVersion" "CV" ON "CV"."id" = "S"."curriculumVersionId"
-            JOIN "ql-dao-tao"."TrainingMajor" "TM" ON "TM"."id" = "CV"."trainingMajorId"
+            JOIN "ql-dao-tao"."Curriculum" "C" ON "C"."id" = "CV"."curriculumId"
+            JOIN "ql-dao-tao"."TrainingMajor" "TM" ON "TM"."id" = "C"."trainingMajorId"
             GROUP BY "TM"."id", "TM"."name"
         `
         return c.json(result)
@@ -1167,6 +1287,11 @@ app.openapi(
         method: 'get',
         path: '/subject-class-statistics',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                semesterId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Thống kê Lớp học phần',
@@ -1189,11 +1314,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { semesterId } = c.req.query()
-
-        if (!semesterId) {
-            return c.json({ totalClasses: 0, classes: [] })
-        }
+        const { semesterId } = c.req.valid('query')
 
         const classes = await prisma.$queryRaw<
             Array<{
@@ -1242,7 +1363,7 @@ app.openapi(
                                 lecturerId: z.string(),
                                 name: z.string(),
                                 classCount: z.number(),
-                                totalHours: z.number(),
+                                totalPeriods: z.number(),
                             })
                         ),
                     },
@@ -1252,17 +1373,17 @@ app.openapi(
     }),
     async (c) => {
         const result = await prisma.$queryRaw<
-            Array<{ lecturerId: string; name: string; classCount: number; totalHours: number }>
+            Array<{ lecturerId: string; name: string; classCount: number; totalPeriods: number }>
         >`
             SELECT
                 "L"."id" as "lecturerId",
                 "UP"."fullname" as "name",
                 CAST(COUNT("SC"."id") AS INTEGER) as "classCount",
-                CAST(COALESCE(SUM("SV"."period"), 0) AS INTEGER) as "totalHours"
+                CAST(COALESCE(SUM("SV"."period"), 0) AS INTEGER) as "totalPeriods"
             FROM "ql-dao-tao"."Lecturer" "L"
-            JOIN "ql-dao-tao"."UserProfile" "UP" ON "UP"."id" = "L"."userProfileId"
-            LEFT JOIN "ql-dao-tao"."SubjectClass" "SC" ON "SC"."mainLecturerId" = "L"."id" OR "SC"."extraLecturerId" = "L"."id"
-            LEFT JOIN "ql-dao-tao"."SubjectVersion" "SV" ON "SV"."id" = "SC"."subjectVersionId"
+            JOIN "ql-nguoi-dung"."UserProfile" "UP" ON "UP"."id" = "L"."userProfileId"
+            LEFT JOIN "ql-dao-tao"."SubjectClass" "SC" ON "SC"."lecturerId" = "L"."id" OR "SC"."extraLecturerId" = "L"."id"
+            LEFT JOIN "ql-dao-tao"."SubjectVersion" "SV" ON "SV"."id" = "SC"."subjectId"
             GROUP BY "L"."id", "UP"."fullname"
         `
         return c.json(result)
@@ -1296,9 +1417,8 @@ app.openapi(
                 "AR"."classification" as "ranking",
                 CAST(COUNT("S"."id") AS INTEGER) as "count"
             FROM "ql-dao-tao"."Student" "S"
-            JOIN "ql-dao-tao"."GraduationDecision" "GD" ON "GD"."id" = "S"."graduationDecisionId"
-            JOIN "ql-dao-tao"."AcademicRanking" "AR" ON "AR"."id" = "GD"."academicRankingId"
-            WHERE "S"."graduationDecisionId" IS NOT NULL
+            JOIN "ql-dao-tao"."GraduationDecision" "GD" ON "GD"."studentId" = "S"."id"
+            JOIN "ql-dao-tao"."AcademicRankingConvert" "AR" ON "AR"."id" = "GD"."finalRankingId"
             GROUP BY "AR"."classification"
         `
         return c.json(result)
@@ -1319,7 +1439,7 @@ app.openapi(
                             z.object({
                                 studentId: z.string(),
                                 studentName: z.string(),
-                                actionType: z.string(),
+                                actionType: z.nativeEnum($Enums.AcademicActionType),
                                 reason: z.string(),
                             })
                         ),
@@ -1330,16 +1450,21 @@ app.openapi(
     }),
     async (c) => {
         const result = await prisma.$queryRaw<
-            Array<{ studentId: string; studentName: string; actionType: string; reason: string }>
+            Array<{
+                studentId: string
+                studentName: string
+                actionType: AcademicActionType
+                reason: string
+            }>
         >`
             SELECT
                 "S"."id" as "studentId",
                 "UP"."fullname" as "studentName",
-                "SAD"."actionType",
+                "SAD"."actionTaken",
                 "SAD"."reason"
             FROM "ql-dao-tao"."StudentAcademicDecision" "SAD"
             JOIN "ql-dao-tao"."Student" "S" ON "S"."id" = "SAD"."studentId"
-            JOIN "ql-dao-tao"."UserProfile" "UP" ON "UP"."id" = "S"."userProfileId"
+            JOIN "ql-nguoi-dung"."UserProfile" "UP" ON "UP"."id" = "S"."userProfileId"
         `
         return c.json(result)
     }
@@ -1351,6 +1476,11 @@ app.openapi(
         method: 'get',
         path: '/exam-participants-by-semester',
         tags: ['Stats'],
+        request: {
+            query: z.object({
+                semesterId: z.string().uuid(),
+            }),
+        },
         responses: {
             200: {
                 description: 'Tổng số lượt sinh viên dự thi trong học kỳ',
@@ -1365,16 +1495,13 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { semesterId } = c.req.query()
-        if (!semesterId) {
-            return c.json({ totalParticipants: 0 })
-        }
+        const { semesterId } = c.req.valid('query')
+
         const result = await prisma.$queryRaw<Array<{ totalParticipants: bigint }>>`
             SELECT COUNT("ES"."id") as "totalParticipants"
-            FROM "ql-dao-tao"."ExamSession" "ES"
-            JOIN "ql-dao-tao"."Exam" "E" ON "E"."id" = "ES"."examId"
-            JOIN "ql-dao-tao"."_ExamToSubjectClass" "ETSC" ON "ETSC"."A" = "E"."id"
-            JOIN "ql-dao-tao"."SubjectClass" "SC" ON "SC"."id" = "ETSC"."B"
+            FROM "khao-thi"."ExamSession" "ES"
+            JOIN "khao-thi"."Exam" "E" ON "E"."id" = "ES"."examId"
+            JOIN "ql-dao-tao"."SubjectClass" "SC" ON "SC"."examId" = "E"."id"
             WHERE "SC"."semesterId" = ${semesterId}
         `
         const totalParticipants = Number(result[0]?.totalParticipants)
@@ -1470,8 +1597,8 @@ app.openapi(
             Array<{ id: string; name: string; count: number }>
         >`
             SELECT "QB"."id", "QB"."name", CAST(COUNT("Q"."id") AS INTEGER) as "count"
-            FROM "ql-dao-tao"."QuestionBank" "QB"
-            JOIN "ql-dao-tao"."Question" "Q" ON "Q"."questionBankId" = "QB"."id"
+            FROM "khao-thi"."QuestionBank" "QB"
+            JOIN "khao-thi"."Question" "Q" ON "Q"."questionBankId" = "QB"."id"
             GROUP BY "QB"."id", "QB"."name"
         `
 
@@ -1480,8 +1607,8 @@ app.openapi(
         >`
             SELECT "SV"."id", "SV"."name", CAST(COUNT("Q"."id") AS INTEGER) as "count"
             FROM "ql-dao-tao"."SubjectVersion" "SV"
-            JOIN "ql-dao-tao"."QuestionBank" "QB" ON "QB"."subjectVersionId" = "SV"."id"
-            JOIN "ql-dao-tao"."Question" "Q" ON "Q"."questionBankId" = "QB"."id"
+            JOIN "khao-thi"."QuestionBank" "QB" ON "QB"."subjectVersionId" = "SV"."id"
+            JOIN "khao-thi"."Question" "Q" ON "Q"."questionBankId" = "QB"."id"
             GROUP BY "SV"."id", "SV"."name"
         `
 
@@ -1489,8 +1616,8 @@ app.openapi(
             Array<{ id: string; name: string; count: number }>
         >`
             SELECT "D"."id", "D"."name", CAST(COUNT("Q"."id") AS INTEGER) as "count"
-            FROM "ql-dao-tao"."Difficulty" "D"
-            JOIN "ql-dao-tao"."Question" "Q" ON "Q"."difficultyId" = "D"."id"
+            FROM "khao-thi"."Difficulty" "D"
+            JOIN "khao-thi"."Question" "Q" ON "Q"."difficultyId" = "D"."id"
             GROUP BY "D"."id", "D"."name"
         `
 
@@ -1498,8 +1625,8 @@ app.openapi(
             Array<{ id: string; name: string; count: number }>
         >`
             SELECT "KB"."id", "KB"."name", CAST(COUNT("Q"."id") AS INTEGER) as "count"
-            FROM "ql-dao-tao"."KnowledgeBlock" "KB"
-            JOIN "ql-dao-tao"."Question" "Q" ON "Q"."knowledgeBlockId" = "KB"."id"
+            FROM "khao-thi"."KnowledgeBlock" "KB"
+            JOIN "khao-thi"."Question" "Q" ON "Q"."knowledgeBlockId" = "KB"."id"
             GROUP BY "KB"."id", "KB"."name"
         `
 
@@ -1543,8 +1670,8 @@ app.openapi(
                 "Q"."id" as "questionId",
                 "Q"."content",
                 (CAST(SUM(CASE WHEN "A"."isCorrect" = false THEN 1 ELSE 0 END) AS REAL) / COUNT("A"."id")) * 100 as "incorrectRate"
-            FROM "ql-dao-tao"."Question" "Q"
-            JOIN "ql-dao-tao"."Answer" "A" ON "A"."questionId" = "Q"."id"
+            FROM "khao-thi"."Question" "Q"
+            JOIN "khao-thi"."Answer" "A" ON "A"."questionId" = "Q"."id"
             GROUP BY "Q"."id", "Q"."content"
             ORDER BY "incorrectRate" DESC
         `
@@ -1582,8 +1709,8 @@ app.openapi(
                 "Q"."id" as "questionId",
                 "Q"."content",
                 CAST(COUNT("EBQ"."id") AS INTEGER) as "usageCount"
-            FROM "ql-dao-tao"."Question" "Q"
-            JOIN "ql-dao-tao"."ExamBankQuestion" "EBQ" ON "EBQ"."questionId" = "Q"."id"
+            FROM "khao-thi"."Question" "Q"
+            JOIN "khao-thi"."ExamBankQuestion" "EBQ" ON "EBQ"."questionId" = "Q"."id"
             GROUP BY "Q"."id", "Q"."content"
             ORDER BY "usageCount" DESC
         `
@@ -1621,19 +1748,20 @@ app.openapi(
     }),
     async (c) => {
         const byGender = await prisma.$queryRaw<Array<{ gender: number; count: number }>>`
-            SELECT "iGioiTinh" as "gender", CAST(COUNT("id") AS INTEGER) as "count"
-            FROM "ql-dao-tao"."UserProfile"
-            WHERE "iGioiTinh" IS NOT NULL
-            GROUP BY "iGioiTinh"
+            SELECT "sTen" as "gender", CAST(COUNT("S"."id") AS INTEGER) as "count"
+            FROM "mta"."DM_GioiTinh" "G"
+            JOIN "ql-nguoi-dung"."UserProfile" "UP" ON "G"."Id" = "UP"."genderId"
+            JOIN "ql-dao-tao"."Student" "S" ON "UP"."id" = "S"."userProfileId"
+            GROUP BY "G"."sTen"
         `
 
         const byEthnicity = await prisma.$queryRaw<
             Array<{ id: string; name: string; count: number }>
         >`
             SELECT "D"."Id" as "id", "D"."sTen" as "name", CAST(COUNT("UP"."id") AS INTEGER) as "count"
-            FROM "ql-dao-tao"."UserProfile" "UP"
-            JOIN "ql-dao-tao"."DM_DanToc" "D" ON "D"."Id" = "UP"."sDanToc"
-            WHERE "UP"."sDanToc" IS NOT NULL
+            FROM "ql-nguoi-dung"."UserProfile" "UP"
+            JOIN "mta"."DM_DanToc" "D" ON "D"."Id" = "UP"."ethnicityId"
+            WHERE "UP"."ethnicityId" IS NOT NULL
             GROUP BY "D"."Id", "D"."sTen"
         `
 
@@ -1641,9 +1769,9 @@ app.openapi(
             Array<{ id: string; name: string; count: number }>
         >`
             SELECT "R"."Id" as "id", "R"."sTen" as "name", CAST(COUNT("UP"."id") AS INTEGER) as "count"
-            FROM "ql-dao-tao"."UserProfile" "UP"
-            JOIN "ql-dao-tao"."DM_TonGiao" "R" ON "R"."Id" = "UP"."sTonGiao"
-            WHERE "UP"."sTonGiao" IS NOT NULL
+            FROM "ql-nguoi-dung"."UserProfile" "UP"
+            JOIN "mta"."DM_TonGiao" "R" ON "R"."Id" = "UP"."religionId"
+            WHERE "UP"."religionId" IS NOT NULL
             GROUP BY "R"."Id", "R"."sTen"
         `
 
@@ -1651,8 +1779,8 @@ app.openapi(
             Array<{ id: string; name: string; count: number }>
         >`
             SELECT "P"."Id" as "id", "P"."sTen" as "name", CAST(COUNT("UP"."id") AS INTEGER) as "count"
-            FROM "ql-dao-tao"."UserProfile" "UP"
-            JOIN "ql-dao-tao"."DM_Tinh" "P" ON "P"."Id" = "UP"."provinceHometownId"
+            FROM "ql-nguoi-dung"."UserProfile" "UP"
+            JOIN "mta"."DM_Tinh" "P" ON "P"."Id" = "UP"."provinceHometownId"
             WHERE "UP"."provinceHometownId" IS NOT NULL
             GROUP BY "P"."Id", "P"."sTen"
         `
