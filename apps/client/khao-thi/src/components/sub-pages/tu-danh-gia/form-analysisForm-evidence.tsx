@@ -1,25 +1,21 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import { Form } from 'antd'
+import { PutRequirementCriterion } from '.'
 
-type SubmitForm = {
-    currentSituation: string
-    strengths: string
-    weakness: string
-    actionPlan: string
-}
 export default function FormEvaluationCriterion({ item }: any) {
+    const form = Form.useFormInstance<PutRequirementCriterion>()
     return (
-        <Form layout="horizontal" className="mt-4">
+        <Form form={form} layout="horizontal" className="mt-4">
             <Form.Item label="1. Mô tả hiện trạng" name={['criteria', item.id, 'currentSituation']}>
                 <RichTextEditor id={item?.id} />
             </Form.Item>
-            <Form.Item label="2. Điểm mạnh" name={'strengths'}>
+            <Form.Item label="2. Điểm mạnh"name={['criteria', item.id, 'strengths']}>
                 <RichTextEditor id={item?.id} />
             </Form.Item>
-            <Form.Item label="3. Điểm tồn tại" name={'weakness'}>
+            <Form.Item label="3. Điểm tồn tại" name={['criteria', item.id, 'weakness']}>
                 <RichTextEditor id={item?.id} />
             </Form.Item>
-            <Form.Item label="4. Kế hoạch hành động" name={'actionPlan'}>
+            <Form.Item label="4. Kế hoạch hành động"name={['criteria', item.id, 'actionPlan']}>
                 <RichTextEditor id={item?.id} />
             </Form.Item>
         </Form>

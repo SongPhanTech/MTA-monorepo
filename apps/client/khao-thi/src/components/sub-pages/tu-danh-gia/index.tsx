@@ -2,14 +2,15 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import { AddEvidenceToPeriod } from '@components/modal'
-import type { AnalysisFormEvidence, Evidence } from '@workspace/db'
+import type { AnalysisFormEvidence, EvaluationCriterion, Evidence } from '@workspace/db'
 import { Button, Collapse, Form, Tabs } from 'antd'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
-import FormEvaluationCriterion from './form-analysisForm-evidence'
+import { useUpdateEvaluationCriterion } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 
-type SubmitForm = {
+type SubmitForm =EvaluationCriterion& {
     currentSituation: string
     strengths: string
     weakness: string
@@ -38,12 +39,62 @@ export default function EvaluatedPage({
         tag: AddEvidenceToPeriod.name,
     })
 
+    const { mutateAsync: UpdateEvaluationCriterion } = useUpdateEvaluationCriterion()
+
     const handleSubmit = async () => {
-        console.log(form.getFieldsValue(), '123')
+        const dataSubmit = form.getFieldsValue()
+        console.log(dataSubmit, '123')
+        let listSqlTransaction: any = [
+            {
+                model: 'EvaluationStandard',
+                operation: 'update',
+                data: {
+                    where: {
+                        id: data?.id,
+                    },
+                    data: {
+                        opening: dataSubmit?.opening,
+                        conclusion: dataSubmit?.conclusion,
+                    },
+                },
+            },
+        ]
+        if (dataSubmit?.criteria.length) {
+            listSqlTransaction = [
+                ...listSqlTransaction,
+                ...dataSubmit.criteria?.map((i: EvaluationCriterion) => {
+                    return {
+                        model: 'EvaluationCriterion',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: i?.id,
+                            },
+                            data:{
+                                currentSituation:i?.currentSituation,
+                                strengths:i?.strengths,
+                                weakness:i?.weakness,
+                                actionPlan:i?.actionPlan
+                            }
+                        },
+                    }
+                }),
+            ]
+        }
+
+        await sqlTransaction(listSqlTransaction)
     }
 
-    const handleChangeValue = (e: any) => {}
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    useEffect(() => {
+        if (activeKey === 'examBank') {
+            form.setFieldsValue({
+                criteria: data.criteria,
+                opening: data?.opening,
+                conclusion: data?.conclusion,
+            })
+        }
+    }, [data, activeKey])
     const items = useMemo(() => {
         return [
             {
@@ -201,28 +252,94 @@ export default function EvaluatedPage({
                             <Form.Item label="Mở đầu" name={'opening'}>
                                 <RichTextEditor />
                             </Form.Item>
-                            <Collapse
-                                items={data?.criteria?.map((item: any, idx: number) => {
-                                    return {
-                                        label: (
-                                            <div>
-                                                <span className="font-bold">
-                                                    Tiêu chí {idx + 1}:{' '}
-                                                </span>
-                                                {item?.name}
-                                            </div>
-                                        ),
-                                        key: item.id,
-                                        children: <FormEvaluationCriterion item={item} />,
-                                    }
-                                })}
-                                bordered={true}
-                                expandIconPosition="end"
-                                className="bg-transparent mb-6"
-                                // onChange={(value) => {
-                                //     setExpland([...value])
-                                // }}
-                            />
+                            <div className="mb-3 font-bold">Đánh giá tiêu chí : </div>
+
+                            <Form.List name="criteria">
+                                {(fields) => (
+                                    <>
+                                        {fields.map(({ key, name }, idx: number) => {
+                                            const item = data.criteria[name] // lấy ra dữ liệu gốc theo index
+                                            return (
+                                                <div key={key} style={{ marginBottom: 24 }}>
+                                                    <Collapse
+                                                        items={[
+                                                            {
+                                                                label: (
+                                                                    <div>
+                                                                        <span className="font-bold">
+                                                                            Tiêu chí {idx + 1}:{' '}
+                                                                        </span>
+                                                                        {item?.name}
+                                                                    </div>
+                                                                ),
+                                                                key: item.id,
+                                                                children: (
+                                                                    <>
+                                                                        <Form.Item
+                                                                            label="1. Mô tả hiện trạng"
+                                                                            name={[
+                                                                                name,
+                                                                                'currentSituation',
+                                                                            ]}
+                                                                        >
+                                                                            <RichTextEditor
+                                                                                id={item.id}
+                                                                            />
+                                                                        </Form.Item>
+
+                                                                        <Form.Item
+                                                                            label="2. Điểm mạnh"
+                                                                            name={[
+                                                                                name,
+                                                                                'strengths',
+                                                                            ]}
+                                                                        >
+                                                                            <RichTextEditor
+                                                                                id={item.id}
+                                                                            />
+                                                                        </Form.Item>
+
+                                                                        <Form.Item
+                                                                            label="3. Điểm tồn tại"
+                                                                            name={[
+                                                                                name,
+                                                                                'weakness',
+                                                                            ]}
+                                                                        >
+                                                                            <RichTextEditor
+                                                                                id={item.id}
+                                                                            />
+                                                                        </Form.Item>
+
+                                                                        <Form.Item
+                                                                            label="4. Kế hoạch hành động"
+                                                                            name={[
+                                                                                name,
+                                                                                'actionPlan',
+                                                                            ]}
+                                                                        >
+                                                                            <RichTextEditor
+                                                                                id={item.id}
+                                                                            />
+                                                                        </Form.Item>
+                                                                    </>
+                                                                ),
+                                                            },
+                                                        ]}
+                                                        bordered={true}
+                                                        expandIconPosition="end"
+                                                        className="bg-transparent mb-6"
+                                                        // onChange={(value) => {
+                                                        //     setExpland([...value])
+                                                        // }}
+                                                    />
+                                                </div>
+                                            )
+                                        })}
+                                    </>
+                                )}
+                            </Form.List>
+
                             <Form.Item label="Kết luận" name={'conclusion'}>
                                 <RichTextEditor />
                             </Form.Item>
