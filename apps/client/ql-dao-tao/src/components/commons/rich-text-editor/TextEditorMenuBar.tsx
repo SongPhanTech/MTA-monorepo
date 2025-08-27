@@ -134,7 +134,6 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 setMathInput('')
                 setMathModalVisible(false)
             } catch (error) {
-                console.error('Failed to insert math formula:', error)
                 message.error('Failed to insert math formula')
             }
         }
