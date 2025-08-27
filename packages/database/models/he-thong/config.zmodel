@@ -4,7 +4,13 @@ enum ConfigKey {
     MANAGEMENT_DEPARTMENT // Bộ ngành quản lý
     ACADEMY_NAME          // Tên trường/học viện
     ACADEMY_CODE          // Mã trường/Tên viết tắt
-    DIRECTOR              // Giám đốc
+    DIRECTOR              // Tên Giám đốc
+
+    TRAINING_DEPARTMENT // Phòng Đào Tạo
+    HEAD_OF_TRAINING_DEPARTMENT // Trưởng phòng Đào tạo
+
+    EXAMINATION_DEPARTMENT // Phòng Khảo Thí
+    HEAD_OF_EXAMINATION_DEPARTMENT // Trưởng phòng Khảo thí
 
     PROVINCE              // Tỉnh/Thành Phố
     DISTRICT              // Quận/Huyện
