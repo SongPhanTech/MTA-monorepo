@@ -1,21 +1,21 @@
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import DefaultLayout from '@layouts/default-layout'
+import type { StudentTrainingType } from '@workspace/db'
 import {
     useCountStudent,
-    useCreateStudentTrainingScore,
     useFindManyStudent,
     useFindManyStudentTrainingScore,
     useFindUniqueTrainingScoreSession,
-    useUpdateStudentTrainingScore,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, message, Row } from 'antd'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { Button, Col, Divider, Flex, InputNumber, message, Row, Select, Tag } from 'antd'
 import { Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import LopBienCheItem from './lop-bien-che'
 
 export default function SubjectClassScore() {
@@ -24,7 +24,23 @@ export default function SubjectClassScore() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
-    const [scoreList, setScoreList] = useState<{ studentId: string; trainingScore: number }[]>([])
+    const {
+        options: studentTrainingTypeOptions,
+        getStudentTrainingTypeLabel,
+        getStudentTrainingTypeColor,
+    } = useStudentTrainingTypeOptions()
+
+    const [editableData, setEditableData] = useState<
+        Map<
+            string,
+            {
+                studentId: string
+                scoreId?: string
+                score?: number
+                studentTrainingType?: StudentTrainingType
+            }
+        >
+    >(new Map())
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -36,7 +52,7 @@ export default function SubjectClassScore() {
         { enabled: !!id }
     )
 
-    const { data: dataTable = [], refetch } = useFindManyStudent(
+    const { data = [], refetch } = useFindManyStudent(
         {
             where: {
                 fixedClassId: selectedFixedClass,
@@ -69,14 +85,45 @@ export default function SubjectClassScore() {
         }
     )
 
-    const { data: studentTrainingScoreData = [] } = useFindManyStudentTrainingScore({
-        where: {
-            trainingScoreSessionId: id,
-            student: {
-                fixedClassId: selectedFixedClass,
+    const { data: studentTrainingScoreData = [] } = useFindManyStudentTrainingScore(
+        {
+            where: {
+                trainingScoreSessionId: id,
+                student: {
+                    fixedClassId: selectedFixedClass,
+                },
+            },
+            orderBy: {
+                student: {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
             },
         },
-    })
+        {
+            enabled: !!selectedFixedClass,
+        }
+    )
+
+    const mergedData = useMemo(() => {
+        if (!data) return []
+
+        return data.map((student) => {
+            const scoreInfo = studentTrainingScoreData.find((s) => s.studentId === student.id)
+
+            return {
+                ...student,
+                scoreId: scoreInfo?.id ?? null,
+                score: scoreInfo?.score ?? null,
+                studentTrainingType: scoreInfo?.studentTrainingType ?? null,
+            }
+        })
+    }, [data, studentTrainingScoreData])
+
+    useEffect(() => {
+        if (selectedFixedClass) setEditableData(new Map())
+    }, [selectedFixedClass])
 
     const handleChangeFixedClass = (id: string) => {
         try {
@@ -90,50 +137,46 @@ export default function SubjectClassScore() {
         }
     }
 
-    const { mutateAsync: createStudentTrainingScore } = useCreateStudentTrainingScore()
-    const { mutateAsync: updateStudentTrainingScore } = useUpdateStudentTrainingScore()
-    // const handleSave = async () => {
-    //     try {
-    //         showSpinner()
-    //         // Lưu điểm rèn luyện
-    //         console.log('Saving training scores:', scoreList, studentTrainingScoreData)
-    //         for (const score of scoreList) {
-    //             // Kiểm tra nếu điểm rèn luyện đã tồn tại
-    //             const existingScore = studentTrainingScoreData.find(
-    //                 (s) =>
-    //                     s.studentId === score.studentId &&
-    //                     s.trainingScoreSessionId === selectedTrainingScoreSessionId
-    //             )
+    const handleSave = async () => {
+        try {
+            showSpinner()
 
-    //             if (existingScore) {
-    //                 // Cập nhật điểm rèn luyện
-    //                 console.log('Existing score:', existingScore)
-    //                 await updateStudentTrainingScore({
-    //                     where: { id: existingScore.id },
-    //                     data: { score: score.trainingScore },
-    //                 })
-    //             } else {
-    //                 // Tạo mới điểm rèn luyện
-    //                 console.log('Creating new score for student:', score.studentId)
-    //                 await createStudentTrainingScore({
-    //                     data: {
-    //                         studentId: score.studentId,
-    //                         trainingScoreSessionId: selectedTrainingScoreSessionId ?? '',
-    //                         score: score.trainingScore,
-    //                     },
-    //                 })
-    //             }
-    //             // Gọi API để lưu điểm rèn luyện cho từng sinh viên
-    //             // Ví dụ: await saveTrainingScore(score.id, score.trainingScore)
-    //             console.log(`Saving score for student ${score.studentId}: ${score.trainingScore}`)
-    //         }
-    //         message.success('Lưu điểm rèn luyện thành công')
-    //     } catch (error) {
-    //         message.error('Đã xảy ra lỗi khi lưu điểm rèn luyện')
-    //     } finally {
-    //         hideSpinner()
-    //     }
-    // }
+            const commands = Array.from(
+                editableData.values().map((value) => ({
+                    model: 'StudentTrainingScore' as const,
+                    operation: 'upsert',
+                    data: {
+                        where: {
+                            trainingScoreSessionId_studentId: {
+                                trainingScoreSessionId: id,
+                                studentId: value.studentId,
+                            },
+                        },
+                        create: {
+                            trainingScoreSessionId: id,
+                            studentId: value.studentId,
+                            score: value.score,
+                            studentTrainingType: value.studentTrainingType,
+                        },
+                        update: {
+                            score: value.score,
+                            studentTrainingType: value.studentTrainingType,
+                        },
+                    },
+                }))
+            )
+
+            await sqlTransaction(commands)
+
+            setEditableData(new Map())
+
+            message.success('Lưu điểm rèn luyện thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi khi lưu điểm rèn luyện')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     return (
         <div>
@@ -162,7 +205,7 @@ export default function SubjectClassScore() {
                                 <Button
                                     type="primary"
                                     disabled={!selectedFixedClass}
-                                    // onClick={handleSave}
+                                    onClick={handleSave}
                                 >
                                     <Save stroke="white" />
                                     Lưu
@@ -193,61 +236,104 @@ export default function SubjectClassScore() {
                                         align: 'center',
                                         dataIndex: 'name',
                                         width: 180,
-                                        render: (text, record) => record?.userProfile?.fullname,
+                                        render: (_, record) => record?.userProfile?.fullname,
                                     },
                                     {
                                         title: 'Điểm',
                                         align: 'center',
                                         dataIndex: 'name',
                                         width: 100,
+                                        render: (_, record) => (
+                                            <InputNumber
+                                                min={0}
+                                                value={
+                                                    editableData.get(record.id)?.score ??
+                                                    record.score ??
+                                                    undefined
+                                                }
+                                                onChange={(value) => {
+                                                    setEditableData((prev) => {
+                                                        const newMap = new Map(prev)
+
+                                                        const entry = newMap.get(record.id)
+                                                        if (entry) {
+                                                            entry.score = value
+                                                        } else {
+                                                            newMap.set(record.id, {
+                                                                studentId: record.id,
+                                                                scoreId: record.id,
+                                                                score: value,
+                                                            })
+                                                        }
+
+                                                        return newMap
+                                                    })
+                                                }}
+                                            />
+                                        ),
                                     },
                                     {
                                         title: 'Xếp loại',
                                         dataIndex: 'ranking',
                                         width: 100,
                                         align: 'center',
-                                        render: (text, record) => {
+                                        render: (_, record) => {
                                             return (
                                                 <Select
-                                                    placeholder="Chọn xếp loại"
                                                     style={{ width: '100%' }}
                                                     value={
-                                                        scoreList.find(
-                                                            (s) => s.studentId === record.id
-                                                        )?.trainingScore || 0 // Mặc định là 0
+                                                        editableData.get(record.id)
+                                                            ?.studentTrainingType ??
+                                                        record.studentTrainingType ??
+                                                        undefined
                                                     }
-                                                    allowClear
                                                     onChange={(value) => {
-                                                        // Cập nhật điểm rèn luyện trong scoreList
-                                                        setScoreList((prev) => {
-                                                            const newList = [...prev]
-                                                            const index = newList.findIndex(
-                                                                (item) =>
-                                                                    item.studentId === record.id
-                                                            )
-                                                            if (index !== -1) {
-                                                                newList[index].trainingScore =
-                                                                    value as number
+                                                        setEditableData((prev) => {
+                                                            const newMap = new Map(prev)
+
+                                                            const entry = newMap.get(record.id)
+                                                            if (entry) {
+                                                                entry.studentTrainingType = value
                                                             } else {
-                                                                newList.push({
+                                                                newMap.set(record.id, {
                                                                     studentId: record.id,
-                                                                    trainingScore: value as number,
+                                                                    scoreId: record.id,
+                                                                    studentTrainingType: value,
                                                                 })
                                                             }
-                                                            return newList
+
+                                                            return newMap
                                                         })
                                                     }}
+                                                    options={studentTrainingTypeOptions.map(
+                                                        (opt) => ({
+                                                            label: (
+                                                                <Tag color={opt.color}>
+                                                                    {opt.label}
+                                                                </Tag>
+                                                            ),
+                                                            value: opt.value,
+                                                        })
+                                                    )}
+                                                    tagRender={(props) => (
+                                                        <Tag
+                                                            color={getStudentTrainingTypeColor(
+                                                                props.value
+                                                            )}
+                                                        >
+                                                            {props.label}
+                                                        </Tag>
+                                                    )}
                                                 />
                                             )
                                         },
                                     },
                                 ]}
-                                data={dataTable}
+                                data={mergedData}
                                 pagination={{
                                     current: currentPage,
                                     pageSize: numberOfPages,
                                     total: count,
-
                                     onChange: (page, pageSize) => {
                                         if (numberOfPages === pageSize) {
                                             setCurrentPage(page)
@@ -256,8 +342,6 @@ export default function SubjectClassScore() {
                                             setNumberOfPages(pageSize)
                                         }
                                     },
-                                    showTotal: (total, range) =>
-                                        `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                                 }}
                             />
                         </Col>

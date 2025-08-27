@@ -71,7 +71,10 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
                         blockNode // Node chiếm toàn bộ chiều rộng
                         onSelect={(selectedKeys) => {
                             if (selectedKeys.length > 0) {
-                                onChangeSelected?.(selectedKeys[0] as string)
+                                const selectedKey = selectedKeys[0] as string
+                                if (!selectedKey.startsWith('course-')) {
+                                    onChangeSelected?.(selectedKey)
+                                }
                             }
                         }}
                     />
