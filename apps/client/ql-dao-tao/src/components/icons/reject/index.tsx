@@ -3,13 +3,13 @@ import clsx from 'clsx'
 import type { LucideProps } from 'lucide-react'
 import { SquareX } from 'lucide-react'
 
-type DeleteIconProps = {
+type RejectIconProps = {
     popConfirm?: Partial<PopconfirmProps>
     title?: string
     disabled?: boolean
 } & LucideProps
 
-const RejectIcon = ({ title, popConfirm, disabled = false, ...props }: DeleteIconProps) => {
+const RejectIcon = ({ title, popConfirm, disabled = false, ...props }: RejectIconProps) => {
     const icon = (
         <SquareX
             size={16}
@@ -31,7 +31,7 @@ const RejectIcon = ({ title, popConfirm, disabled = false, ...props }: DeleteIco
     }
 
     return (
-        <Tooltip title={title ?? 'Xóa'} placement="top">
+        <Tooltip title={title ?? 'Từ chối'} placement="top">
             <Popconfirm
                 placement="topLeft"
                 title="Xác nhận từ chối đơn?"
