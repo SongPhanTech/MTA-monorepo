@@ -11,10 +11,11 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { ApplicationStatus } from '@workspace/db'
+import { ApplicationStatus, GraduationSessionStatus } from '@workspace/db'
 import {
     useCountStudentGraduationApplication,
     useFindManyStudentGraduationApplication,
+    useFindUniqueGraduationSession,
     useUpdateManyStudentGraduationApplication,
     useUpdateStudentGraduationApplication,
     useUpsertGraduationDecision,
@@ -98,23 +99,41 @@ export default function StudentGraduationApplication() {
     )
 
     const { data: studentGraduationApplicationData, refetch } =
-        useFindManyStudentGraduationApplication({
-            where,
-            include: {
-                student: {
-                    include: {
-                        userProfile: {
-                            include: {
-                                ethnicity: true,
+        useFindManyStudentGraduationApplication(
+            {
+                where,
+                include: {
+                    student: {
+                        include: {
+                            userProfile: {
+                                include: {
+                                    ethnicity: true,
+                                },
                             },
                         },
                     },
                 },
+                orderBy: { createdAt: 'asc' },
+                take: numberOfPages,
+                skip: (currentPage - 1) * numberOfPages,
             },
-            orderBy: { createdAt: 'asc' },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        })
+            {
+                enabled: !!graduationSessionId,
+            }
+        )
+
+    const { data: initialValue } = useFindUniqueGraduationSession(
+        {
+            where: {
+                id: graduationSessionId,
+            },
+        },
+        {
+            enabled: !!graduationSessionId,
+        }
+    )
+
+    console.log(initialValue)
 
     const data: Array<
         NonNullable<typeof studentGraduationApplicationData>[number] &
@@ -138,12 +157,17 @@ export default function StudentGraduationApplication() {
         })
     }, [studentGraduationApplicationData, graduationCheckResults])
 
-    const { data: count } = useCountStudentGraduationApplication({
-        where: {
-            ...where,
-            deletedAt: null,
+    const { data: count } = useCountStudentGraduationApplication(
+        {
+            where: {
+                ...where,
+                deletedAt: null,
+            },
         },
-    })
+        {
+            enabled: !!graduationSessionId,
+        }
+    )
 
     const { onOpen } = useDisclosure<{
         id: string | null
@@ -411,11 +435,22 @@ export default function StudentGraduationApplication() {
                                                     <Button
                                                         onClick={handleRejectAll}
                                                         type="primary"
+                                                        disabled={
+                                                            initialValue?.status !==
+                                                            GraduationSessionStatus.IN_REVIEW
+                                                        }
                                                     >
                                                         <X />
                                                         Từ chối
                                                     </Button>
-                                                    <Button onClick={handleModal} type="primary">
+                                                    <Button
+                                                        onClick={handleModal}
+                                                        type="primary"
+                                                        disabled={
+                                                            initialValue?.status !==
+                                                            GraduationSessionStatus.OPEN_FOR_APPLICATION
+                                                        }
+                                                    >
                                                         <BookPlus />
                                                         Thêm
                                                     </Button>
@@ -423,6 +458,10 @@ export default function StudentGraduationApplication() {
                                                         type="primary"
                                                         className="h-[32px] px-4"
                                                         onClick={handleMutationGraduationCheck}
+                                                        disabled={
+                                                            initialValue?.status !==
+                                                            GraduationSessionStatus.IN_REVIEW
+                                                        }
                                                     >
                                                         <BookPlus />
                                                         Xét
@@ -438,7 +477,11 @@ export default function StudentGraduationApplication() {
                                                             type="primary"
                                                             className="h-[32px] px-4"
                                                             onClick={handleApproved}
-                                                            disabled={isApproveButtonDisabled}
+                                                            disabled={
+                                                                isApproveButtonDisabled ||
+                                                                initialValue?.status !==
+                                                                    GraduationSessionStatus.IN_REVIEW
+                                                            }
                                                         >
                                                             <BookPlus />
                                                             Duyệt
@@ -674,6 +717,10 @@ export default function StudentGraduationApplication() {
                                                                         }}
                                                                         onClick={(e) =>
                                                                             e.stopPropagation()
+                                                                        }
+                                                                        disabled={
+                                                                            initialValue?.status !==
+                                                                            GraduationSessionStatus.IN_REVIEW
                                                                         }
                                                                     />
                                                                     <EditIcon

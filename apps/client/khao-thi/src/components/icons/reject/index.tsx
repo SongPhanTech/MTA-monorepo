@@ -1,14 +1,37 @@
 import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
-import { type LucideProps, SquareX } from 'lucide-react'
+import clsx from 'clsx'
+import type { LucideProps } from 'lucide-react'
+import { SquareX } from 'lucide-react'
 
 type RejectIconProps = {
     popConfirm?: Partial<PopconfirmProps>
     title?: string
     disabled?: boolean
 } & LucideProps
-const RejectIcon = ({ title, popConfirm, disabled, ...props }: RejectIconProps) => {
+
+const RejectIcon = ({ title, popConfirm, disabled = false, ...props }: RejectIconProps) => {
+    const icon = (
+        <SquareX
+            size={16}
+            strokeWidth={1.5}
+            className={clsx(
+                disabled ? 'text-gray-300 cursor-not-allowed' : 'text-red-600 cursor-pointer'
+            )}
+            onClick={(e) => disabled && e.stopPropagation()}
+            {...props}
+        />
+    )
+
+    if (disabled) {
+        return (
+            <span className="inline-flex items-center">
+                <Tooltip title={undefined}>{icon}</Tooltip>
+            </span>
+        )
+    }
+
     return (
-        <Tooltip title={title ? title : 'Từ chối'} placement="top">
+        <Tooltip title={title ?? 'Từ chối'} placement="top">
             <Popconfirm
                 placement="topLeft"
                 title="Xác nhận từ chối đơn?"
@@ -17,17 +40,7 @@ const RejectIcon = ({ title, popConfirm, disabled, ...props }: RejectIconProps) 
                 cancelText="Hủy"
                 {...popConfirm}
             >
-                <SquareX
-                    size={16}
-                    strokeWidth={1.5}
-                    className={
-                        disabled
-                            ? 'text-gray-300 cursor-not-allowed'
-                            : 'text-sm text-red-600 cursor-pointer'
-                    }
-                    onClick={(e) => e.stopPropagation()}
-                    {...props}
-                />
+                {icon}
             </Popconfirm>
         </Tooltip>
     )

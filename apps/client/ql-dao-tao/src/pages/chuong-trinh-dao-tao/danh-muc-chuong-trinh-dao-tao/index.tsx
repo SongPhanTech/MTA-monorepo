@@ -9,28 +9,31 @@ import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
     FixedClass,
-    Prisma,
     TrainingBlockOnCurriculumVersion,
     TrainingCourse,
+    TrainingMajor,
     TrainingObjectType,
     TrainingTime,
 } from '@workspace/db'
 import {
     useCountCurriculum,
     useFindManyCurriculum,
+    useFindManyDM_DonVi,
     useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
     useFindManyTrainingTime,
     useUpdateCurriculum,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Eye, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -52,83 +55,92 @@ export default function TrainingProgramCatalog() {
         requiredCredits: undefined,
         electiveCredits: undefined,
         trainingTime: undefined,
-        // trainingMajorId: '',
+        trainingMajorId: undefined,
+        managementOrganizationId: undefined,
     })
 
-    const isFiltering = useMemo(() => {
-        return Object.values(filters).some((value) => !!value)
-    }, [filters])
-
-    const where: Prisma.CurriculumWhereInput = useMemo(
-        () =>
-            isFiltering
+    const where = useMemo(
+        () => ({
+            ...(filters.managementOrganizationId && {
+                managementOrganizationId: filters.managementOrganizationId,
+            }),
+            ...(filters.trainingMajorId && {
+                trainingMajorId: filters.trainingMajorId,
+            }),
+            ...(filters.searchText
                 ? {
-                      ...(filters.searchText
-                          ? {
-                                OR: [
-                                    {
-                                        code: {
-                                            contains: filters.searchText,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                    {
-                                        name: {
-                                            contains: filters.searchText,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                ],
-                            }
-                          : {}),
-                      curriculumVersion: {
-                          some: {
-                              ...(filters.name
-                                  ? {
-                                        name: {
-                                            contains: filters.name,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.code
-                                  ? {
-                                        code: {
-                                            contains: filters.code,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.trainingObjectTypes
-                                  ? {
-                                        trainingObjectTypeId: {
-                                            in: filters.trainingObjectTypes,
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.trainingCourses
-                                  ? {
-                                        fixedClasses: {
-                                            some: {
-                                                trainingCourseId: {
-                                                    in: filters.trainingCourses,
-                                                },
-                                            },
-                                        },
-                                    }
-                                  : {}),
-                              ...(filters.trainingTime
-                                  ? {
-                                        trainingTimeId: {
-                                            in: filters.trainingTime,
-                                        },
-                                    }
-                                  : {}),
+                      OR: [
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive' as const,
+                              },
                           },
-                      },
+                          {
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      ],
                   }
-                : {},
-        [filters, isFiltering]
+                : {}),
+            curriculumVersion: {
+                some: {
+                    ...(filters.name
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.code
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive' as const,
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingObjectTypes
+                        ? {
+                              trainingObjectTypeId: {
+                                  in: filters.trainingObjectTypes,
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingCourses
+                        ? {
+                              fixedClasses: {
+                                  some: {
+                                      trainingCourseId: {
+                                          in: filters.trainingCourses,
+                                      },
+                                  },
+                              },
+                          }
+                        : {}),
+                    ...(filters.trainingTime
+                        ? {
+                              trainingTimeId: {
+                                  in: filters.trainingTime,
+                              },
+                          }
+                        : {}),
+                },
+            },
+        }),
+        [
+            filters.searchText,
+            filters.trainingObjectTypes,
+            filters.name,
+            filters.trainingTime,
+            filters.trainingCourses,
+            filters.code,
+            filters.managementOrganizationId,
+            filters.trainingMajorId,
+        ]
     )
 
     const { data = [], refetch } = useFindManyCurriculum({
@@ -249,6 +261,15 @@ export default function TrainingProgramCatalog() {
         orderBy: { name: 'asc' },
     })
 
+    const { data: organization = [] } = useFindManyDM_DonVi({
+        orderBy: { sTen: 'asc' },
+    })
+    const treeData = buildOrgTree(organization)
+
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+
     const { onOpen: onOpenCurriculum, onClose: onCloseCurriculum } = useDisclosure<string>({
         tag: PutCurriculum.name,
     })
@@ -323,28 +344,64 @@ export default function TrainingProgramCatalog() {
                         <Col span={12}>
                             <Flex>
                                 <Col span={8}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    searchText: e.target.value,
-                                                })
-                                            }
-                                            className="py-0"
-                                            placeholder="Tìm kiếm chương trình đào tạo"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
+                                    <Input
+                                        id="search"
+                                        onChange={(e) =>
+                                            setFilters({
+                                                ...filters,
+                                                searchText: e.target.value,
+                                            })
+                                        }
+                                        className="py-0"
+                                        placeholder="Tìm kiếm chương trình đào tạo"
+                                        prefix={
+                                            <Search
+                                                size={15}
+                                                style={{
+                                                    color: 'rgba(0, 0, 0, 0.25)',
+                                                }}
+                                            />
+                                        }
+                                        allowClear
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <TreeSelect
+                                        placeholder="Chọn đơn vị quản lý"
+                                        allowClear
+                                        showSearch
+                                        treeDefaultExpandAll
+                                        onChange={(val) =>
+                                            setFilters({
+                                                ...filters,
+                                                managementOrganizationId: val,
+                                            })
+                                        }
+                                        treeData={treeData}
+                                        filterTreeNode={(input, node) =>
+                                            (node?.label as string)
+                                                ?.toLowerCase()
+                                                ?.includes(input?.toLowerCase())
+                                        }
+                                        maxTagCount={'responsive'}
+                                        className="w-full"
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <Select
+                                        placeholder="Chọn chuyên ngành đào tạo"
+                                        options={trainingMajorData.map((i: TrainingMajor) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                        onChange={(val) =>
+                                            setFilters({
+                                                ...filters,
+                                                trainingMajorId: val,
+                                            })
+                                        }
+                                        allowClear
+                                    />
                                 </Col>
                             </Flex>
                         </Col>
@@ -363,9 +420,51 @@ export default function TrainingProgramCatalog() {
                     <TableCollapse
                         rowKey="key"
                         id="version-category"
-                        headerTitleKey={({ code, name, managementOrganization }) =>
-                            `${[code, name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
-                        }
+                        headerTitleKey={({ code, name, managementOrganization, trainingMajor }) => {
+                            const displayText = [
+                                code,
+                                name,
+                                managementOrganization?.sTen,
+                                trainingMajor?.name,
+                            ]
+                                .filter(Boolean)
+                                .join(' - ')
+
+                            const tooltipContent = (
+                                <div>
+                                    {code && (
+                                        <div>
+                                            <strong>Code:</strong> {code}
+                                        </div>
+                                    )}
+                                    {name && (
+                                        <div>
+                                            <strong>Name:</strong> {name}
+                                        </div>
+                                    )}
+                                    {managementOrganization?.sTen && (
+                                        <div>
+                                            <strong>Đơn vị quản lý:</strong>{' '}
+                                            {managementOrganization.sTen}
+                                        </div>
+                                    )}
+                                    {trainingMajor?.name && (
+                                        <div>
+                                            <strong>Chuyên ngành đào tạo:</strong>{' '}
+                                            {trainingMajor.name}
+                                        </div>
+                                    )}
+                                </div>
+                            )
+
+                            return (
+                                <Tooltip title={tooltipContent} placement="top">
+                                    <span className="truncate inline-block align-middle">
+                                        {displayText}
+                                    </span>
+                                </Tooltip>
+                            )
+                        }}
                         childrenFieldName="curriculumVersion"
                         currentPage={currentPage}
                         defaultExpandAll
