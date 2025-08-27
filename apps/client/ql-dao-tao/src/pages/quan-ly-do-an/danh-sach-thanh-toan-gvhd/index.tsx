@@ -108,6 +108,7 @@ export default function SupervisorPaymentRecordPage() {
 
     const { onOpen: openUpdatePaymentStatus, isOpen } = useDisclosure<{
         paymentRecordIds: string[]
+        isSupervisor: boolean
     }>({
         tag: PutUpdatePaymentStatus.name,
     })
@@ -157,6 +158,7 @@ export default function SupervisorPaymentRecordPage() {
                                     onClick={() =>
                                         openUpdatePaymentStatus({
                                             paymentRecordIds: selectedRowKeys as string[],
+                                            isSupervisor: true,
                                         })
                                     }
                                     disabled={selectedRowKeys.length === 0}
