@@ -572,6 +572,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
                         description: 'Danh sách thanh toán',
                     },
+                    {
+                        id: 'danh-sach-thanh-toan-gvhd',
+                        label: 'Danh sách thanh toán GVHD',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                        description: 'Danh sách thanh toán GVHD',
+                    },
                 ],
             },
             {
