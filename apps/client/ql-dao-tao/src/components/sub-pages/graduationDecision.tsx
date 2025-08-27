@@ -188,19 +188,21 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         skip: (currentPage - 1) * numberOfPages,
     })
     const transformedData = useMemo(() => {
-        return data.map((course) => ({
-            ...course,
-            academicRankingConvert: course.academicRankingConvert.map((ranking) => ({
-                ...ranking,
-                graduationDecision: undefined,
-            })),
-            graduationDecisions: course.academicRankingConvert.flatMap((ranking) =>
-                ranking.graduationDecision.map((decision) => ({
-                    ...decision,
-                    academicRankingConvertId: ranking.id,
-                }))
-            ),
-        }))
+        return data
+            .map((course) => ({
+                ...course,
+                academicRankingConvert: course.academicRankingConvert.map((ranking) => ({
+                    ...ranking,
+                    graduationDecision: undefined,
+                })),
+                graduationDecisions: course.academicRankingConvert.flatMap((ranking) =>
+                    ranking.graduationDecision.map((decision) => ({
+                        ...decision,
+                        academicRankingConvertId: ranking.id,
+                    }))
+                ),
+            }))
+            .filter((item) => item.graduationDecisions.length > 0)
     }, [data])
 
     const { data: count } = useCountTrainingCourse({
