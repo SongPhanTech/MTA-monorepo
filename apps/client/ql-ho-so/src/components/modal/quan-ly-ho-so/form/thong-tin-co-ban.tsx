@@ -394,6 +394,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem form={form} name="conThuMay" label="Con thứ mấy" className="mb-0">
                             <InputNumber
+                                type="number"
                                 placeholder="Nhập số thứ tự"
                                 className="w-full h-9"
                                 min={1}
@@ -405,6 +406,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                     <Col span={12}>
                         <FormItem form={form} name="soACE" label="Số anh chị em" className="mb-0">
                             <InputNumber
+                                type="number"
                                 placeholder="Nhập số anh chị em"
                                 className="w-full h-9"
                                 min={0}
@@ -501,6 +503,7 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             className="mb-0"
                         >
                             <InputNumber
+                                type="number"
                                 placeholder="Nhập số anh chị em"
                                 className="w-full h-9"
                                 min={0}

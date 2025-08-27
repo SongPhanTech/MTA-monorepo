@@ -105,7 +105,13 @@ const PutRequirementCriterionCatalog = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
-                    <InputNumber className="w-full" step={1} placeholder="Nhập thứ tự" disabled />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        step={1}
+                        placeholder="Nhập thứ tự"
+                        disabled
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

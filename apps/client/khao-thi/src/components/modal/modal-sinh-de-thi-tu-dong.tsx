@@ -67,7 +67,7 @@ const ModalSinhDeThiTuDong = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="nOfnExamBank" label="Số lượng đề thi" required>
-                    <InputNumber step={1} min={1} className="w-full" />
+                    <InputNumber type="number" step={1} min={1} className="w-full" />
                 </FormItem>
             </Col>
             <Col span={24}>

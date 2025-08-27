@@ -116,6 +116,7 @@ const PutHocBong = () => {
             <Col span={12}>
                 <FormItem form={form} name="rankOrder" label="Độ ưu tiên" required>
                     <InputNumber
+                        type="number"
                         placeholder="Nhập độ ưu tiên"
                         className="w-full"
                         min={1}
@@ -126,6 +127,7 @@ const PutHocBong = () => {
             <Col span={12}>
                 <FormItem form={form} name="baseAmount" label="Số tiền cơ bản" required>
                     <InputNumber
+                        type="number"
                         placeholder="Nhập số tiền"
                         className="w-full"
                         min={0}
@@ -144,6 +146,7 @@ const PutHocBong = () => {
             <Col span={12}>
                 <FormItem form={form} name="multiplier" label="Hệ số" required>
                     <InputNumber
+                        type="number"
                         placeholder="Nhập hệ số"
                         className="w-full"
                         min={0}

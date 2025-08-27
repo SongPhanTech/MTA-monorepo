@@ -251,17 +251,26 @@ const PutTrainingCourseModal = () => {
                     label="Điểm tối thiểu được thi"
                     required
                 >
-                    <InputNumber placeholder="Nhập điểm tối thiểu được thi" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập điểm tối thiểu được thi"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="scoreToPass" label="Điểm tối thiểu để qua" required>
-                    <InputNumber placeholder="Nhập điểm tối thiểu để qua" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập điểm tối thiểu để qua"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="coef_1" label="Hệ số điểm chuyên cần">
                     <InputNumber
+                        type="number"
                         min={0}
                         max={1}
                         step={0.1}
@@ -273,6 +282,7 @@ const PutTrainingCourseModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="coef_2" label="Hệ số điểm thường xuyên">
                     <InputNumber
+                        type="number"
                         min={0}
                         max={1}
                         step={0.1}
@@ -284,6 +294,7 @@ const PutTrainingCourseModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="coef_3" label="Hệ số điểm điểm thi">
                     <InputNumber
+                        type="number"
                         min={0}
                         max={1}
                         step={0.1}
@@ -300,6 +311,7 @@ const PutTrainingCourseModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="maxTrainingTime" label="Thời gian đào tạo Max">
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         min={0}
                         step={1}
@@ -310,6 +322,7 @@ const PutTrainingCourseModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         min={0}
                         step={1}

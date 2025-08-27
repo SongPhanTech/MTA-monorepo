@@ -333,6 +333,7 @@ const PutOpenClassModal = () => {
                     <span className="min-w-[100px]">Số LMH</span>
                     <FormItem className="w-full mb-0" form={form} name="numberOfClass" label="">
                         <InputNumber
+                            type="number"
                             className="w-full"
                             placeholder="Nhập số lớp cần tạo"
                             step={1}
@@ -349,6 +350,7 @@ const PutOpenClassModal = () => {
                     <span className="min-w-[100px]">Số SV tối đa</span>
                     <FormItem className="w-full mb-0" form={form} name="maxStudent" label="">
                         <InputNumber
+                            type="number"
                             className="w-full"
                             placeholder="Nhập số SV tối đa"
                             step={1}

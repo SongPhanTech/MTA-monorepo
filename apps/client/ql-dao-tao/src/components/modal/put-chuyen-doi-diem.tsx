@@ -105,8 +105,19 @@ const PutConvertScore = () => {
             </Col>
 
             <Col span={12}>
-                <FormItem form={form} name="base10Min" label="Hệ 10 từ" required>
+                <FormItem
+                    form={form}
+                    name="base10Min"
+                    label="Hệ 10 từ"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập điểm hệ 10',
+                        },
+                    ]}
+                >
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
                         step={0.1}
@@ -115,8 +126,19 @@ const PutConvertScore = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="base10Max" label="Hệ 10 đến" required>
+                <FormItem
+                    form={form}
+                    name="base10Max"
+                    label="Hệ 10 đến"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập điểm hệ 10',
+                        },
+                    ]}
+                >
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
                         step={0.1}
@@ -127,6 +149,7 @@ const PutConvertScore = () => {
             <Col span={12}>
                 <FormItem form={form} name="base4" label="Điểm hệ 4" required>
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
                         step={0.1}

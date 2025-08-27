@@ -131,7 +131,12 @@ const PutAcademicActionCondition = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="value" label="Giá trị để so sánh" required>
-                    <InputNumber placeholder="Nhập giá trị ngưỡng" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập giá trị ngưỡng"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -141,7 +146,12 @@ const PutAcademicActionCondition = () => {
                     label="Áp dụng cho sinh viên năm thứ..."
                     required
                 >
-                    <InputNumber placeholder="Nhập giá trị ngưỡng" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập giá trị ngưỡng"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

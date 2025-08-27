@@ -94,17 +94,17 @@ const PutScoreScaleCatalog = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="minValue" label="Điểm thấp nhất" required>
-                    <InputNumber className="w-full" step={1} />
+                    <InputNumber type="number" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="maxValue" label="Điểm cao nhất" required>
-                    <InputNumber className="w-full" step={1} />
+                    <InputNumber type="number" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="passFrom" label="Điểm đạt">
-                    <InputNumber className="w-full" step={1} />
+                    <InputNumber type="number" className="w-full" step={1} />
                 </FormItem>
             </Col>
         </PutFormModal>

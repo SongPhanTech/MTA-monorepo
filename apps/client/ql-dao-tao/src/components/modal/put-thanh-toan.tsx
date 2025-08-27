@@ -257,32 +257,62 @@ const PutPaymentRecord = () => {
             />
             <Col span={12}>
                 <FormItem form={form} name="chairman" label="Chủ tịch">
-                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập giá trị"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="secretary" label="Thư kí">
-                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập giá trị"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="reviewer1" label="Phản biện 1">
-                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập giá trị"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="reviewer2" label="Phản biện 2">
-                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập giá trị"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="member" label="Ủy viên">
-                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập giá trị"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="supervisor" label="Giảng viên hướng dẫn">
-                    <InputNumber className="w-full" min={0} placeholder="Nhập giá trị" />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập giá trị"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

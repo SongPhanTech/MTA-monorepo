@@ -114,7 +114,12 @@ const PutMilestoneModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="startPeriod" label="Tiết bắt đầu">
-                    <InputNumber step={1} placeholder="Nhập tiết bắt đầu" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        step={1}
+                        placeholder="Nhập tiết bắt đầu"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

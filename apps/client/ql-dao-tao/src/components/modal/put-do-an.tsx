@@ -210,7 +210,12 @@ const PutThesisProject = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="maxStudents" label="Số lượng học viên tối đa" required>
-                    <InputNumber placeholder="Nhập số lượng học viên" className="w-full" min={0} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập số lượng học viên"
+                        className="w-full"
+                        min={0}
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>

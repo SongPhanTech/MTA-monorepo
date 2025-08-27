@@ -245,6 +245,7 @@ export default function SubjectClassScore() {
                                         width: 100,
                                         render: (_, record) => (
                                             <InputNumber
+                                                type="number"
                                                 min={0}
                                                 value={
                                                     editableData.get(record.id)?.score ??

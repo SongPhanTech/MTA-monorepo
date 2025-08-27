@@ -145,7 +145,12 @@ const PutRankDowngradeCondition = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="value" label="Giá trị ngưỡng để so sánh" required>
-                    <InputNumber placeholder="Nhập giá trị ngưỡng" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập giá trị ngưỡng"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             {input?.downgradeConditionId && (

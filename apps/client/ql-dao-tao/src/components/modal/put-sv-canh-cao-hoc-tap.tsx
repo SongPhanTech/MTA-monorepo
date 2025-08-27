@@ -141,6 +141,7 @@ const PutAcademicWarning = () => {
             <Col span={12}>
                 <FormItem form={form} name="level" label="Mức cảnh cáo học tập">
                     <InputNumber
+                        type="number"
                         placeholder="Nhập mức cảnh cáo"
                         className="w-full"
                         step={1}

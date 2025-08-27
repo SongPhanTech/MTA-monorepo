@@ -98,7 +98,13 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber max={1} min={0} step={0.01} disabled={!isEditing} />
+                            <InputNumber
+                                type="number"
+                                max={1}
+                                min={0}
+                                step={0.01}
+                                disabled={!isEditing}
+                            />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -108,7 +114,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber min={0} step={1} disabled={!isEditing} />
+                            <InputNumber type="number" min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -118,7 +124,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber min={0} step={1} disabled={!isEditing} />
+                            <InputNumber type="number" min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -128,7 +134,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber min={0} step={1} disabled={!isEditing} />
+                            <InputNumber type="number" min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                     <Col span={24}>
@@ -138,7 +144,7 @@ function Page() {
                             required
                             form={form}
                         >
-                            <InputNumber min={0} step={1} disabled={!isEditing} />
+                            <InputNumber type="number" min={0} step={1} disabled={!isEditing} />
                         </FormItem>
                     </Col>
                 </Row>

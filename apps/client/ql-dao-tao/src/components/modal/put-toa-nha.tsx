@@ -101,7 +101,13 @@ const PutBuildingModal = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="floor" label="Số tầng">
-                    <InputNumber className="w-full" step={1} min={0} placeholder="Nhập số tầng" />
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        step={1}
+                        min={0}
+                        placeholder="Nhập số tầng"
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -243,6 +243,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 <Col span={12}>
                     <FormItem form={form} name="duration" label="Thời gia thi (phút)" required>
                         <InputNumber
+                            type="number"
                             className="w-full"
                             step={1}
                             placeholder="Nhập thời gian thi"
@@ -331,6 +332,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 <Col span={12}>
                     <FormItem form={form} name="passScore" label="Điểm đạt" required>
                         <InputNumber
+                            type="number"
                             className="w-full"
                             step={0.1}
                             defaultValue={5}

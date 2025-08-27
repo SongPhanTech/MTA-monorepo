@@ -328,42 +328,50 @@ const PutVersionSubjectModal = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="credit" label="Số tín chỉ" required>
-                    <InputNumber placeholder="Số tín chỉ" className="w-full" />
+                    <InputNumber type="number" placeholder="Số tín chỉ" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="period" label="Số tiết" required>
-                    <InputNumber placeholder="Số tiết" className="w-full" />
+                    <InputNumber type="number" placeholder="Số tiết" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết">
-                    <InputNumber placeholder="Số tiết lý thuyết" className="w-full" />
+                    <InputNumber type="number" placeholder="Số tiết lý thuyết" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfPractical" label="Số tiết bài tập">
-                    <InputNumber placeholder="Số tiết bài tập" className="w-full" />
+                    <InputNumber type="number" placeholder="Số tiết bài tập" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfSelfStudy" label="Số tiết thảo luận/tự học">
-                    <InputNumber placeholder="Số tiết thảo luận/tự học" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        placeholder="Số tiết thảo luận/tự học"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfPractice" label="Số tiết thí nghiệm/thực hành">
-                    <InputNumber placeholder="Số tiết thí nghiệm/thực hành" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        placeholder="Số tiết thí nghiệm/thực hành"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfReview" label="Số tiết ôn tập">
-                    <InputNumber placeholder="Số tiết ôn tập" className="w-full" />
+                    <InputNumber type="number" placeholder="Số tiết ôn tập" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfExam" label="Số tiết KT/thi">
-                    <InputNumber placeholder="Số tiết KT/thi" className="w-full" />
+                    <InputNumber type="number" placeholder="Số tiết KT/thi" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>

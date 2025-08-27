@@ -79,6 +79,7 @@ export default function PutThuongTatModal() {
             <Col span={24}>
                 <FormItem label="Tỉ lệ (%)" name="tiLe" form={form}>
                     <InputNumber
+                        type="number"
                         min={0}
                         max={100}
                         style={{ width: '100%' }}

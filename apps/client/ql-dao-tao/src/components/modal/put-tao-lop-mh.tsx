@@ -279,6 +279,7 @@ const PutOpenSubjectClassModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="totalStudent" label="Tổng SV" required>
                     <InputNumber
+                        type="number"
                         placeholder="Nhập tổng số sinh viên"
                         className="w-full"
                         min={0}
@@ -291,6 +292,7 @@ const PutOpenSubjectClassModal = () => {
                     <span className="min-w-[100px]">Số LMH</span>
                     <FormItem form={form} name="numberOfClass" label="" className="mb-0">
                         <InputNumber
+                            type="number"
                             className="w-full"
                             placeholder="Nhập số lớp cần tạo"
                             step={1}
@@ -314,6 +316,7 @@ const PutOpenSubjectClassModal = () => {
                     <span className="min-w-[100px]">Số SV tối đa</span>
                     <FormItem form={form} name="maxStudent" label="" className="mb-0">
                         <InputNumber
+                            type="number"
                             className="w-full"
                             placeholder="Nhập số SV tối đa"
                             step={1}

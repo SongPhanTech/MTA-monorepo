@@ -102,6 +102,7 @@ const PutDisciplinaryWarningReason = () => {
             <Col span={24}>
                 <FormItem form={form} name="severityLevel" label="Mức nâng" required>
                     <InputNumber
+                        type="number"
                         placeholder="Nhập mức nâng"
                         className="w-full"
                         min={0}

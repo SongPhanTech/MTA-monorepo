@@ -259,6 +259,7 @@ const PutOneSubjectClassModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="maxStudent" label="Số SV tối đa" required>
                     <InputNumber
+                        type="number"
                         min={1}
                         step={1}
                         placeholder="Nhập số SV tối đa"
