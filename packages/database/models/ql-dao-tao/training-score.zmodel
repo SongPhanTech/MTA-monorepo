@@ -31,7 +31,7 @@ model StudentTrainingScore extends Base {
   studentId              String
 
   score                  Float                @default(0) // điểm rèn luyện
-  StudentTrainingType    StudentTrainingType?
+  studentTrainingType    StudentTrainingType?
 
   @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-dao-tao")

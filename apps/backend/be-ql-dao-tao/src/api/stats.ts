@@ -462,7 +462,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -533,7 +536,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -604,7 +610,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -673,7 +682,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -744,7 +756,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -819,7 +834,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -888,7 +906,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -975,7 +996,10 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                managementOrganizationId: z.string().uuid(),
+                managementOrganizationId: z
+                    .string()
+                    .uuid()
+                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
         },
         responses: {
@@ -1289,7 +1313,7 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                semesterId: z.string().uuid(),
+                semesterId: z.string().describe('Semester.id - ID học kỳ'),
             }),
         },
         responses: {
@@ -1478,7 +1502,7 @@ app.openapi(
         tags: ['Stats'],
         request: {
             query: z.object({
-                semesterId: z.string().uuid(),
+                semesterId: z.string().describe('Semester.id - ID học kỳ'),
             }),
         },
         responses: {
