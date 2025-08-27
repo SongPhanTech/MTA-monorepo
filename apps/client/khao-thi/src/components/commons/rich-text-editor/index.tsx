@@ -21,6 +21,8 @@ import { env } from '@/env'
 import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
 import 'katex/dist/katex.min.css'
+import { Color } from '@tiptap/extension-text-style'
+import { CustomTextStyle } from './CustomTextStyle'
 
 // import Mention from '@tiptap/extension-mention'
 // import Link from '@tiptap/extension-link'
@@ -39,6 +41,7 @@ type TextEditorProps = {
     className?: string
     mentions?: Array<MentionType>
     editorProps?: Omit<EditorContentProps, 'ref' | 'editor'>
+    id?: string
 }
 
 export function RichTextEditor({
@@ -47,6 +50,7 @@ export function RichTextEditor({
     className,
     mentions = [],
     editorProps,
+    id,
 }: TextEditorProps) {
     const editor = useEditor({
         extensions: [
@@ -56,6 +60,8 @@ export function RichTextEditor({
                 types: ['heading', 'paragraph'],
             }),
             Highlight,
+            CustomTextStyle,
+            Color.configure({ types: ['textStyle'] }),
             // ExportDocx.configure({
             //     onCompleteExport: (result: ArrayBuffer) => {
             //         setIsLoading(false)
@@ -292,13 +298,13 @@ export function RichTextEditor({
     }
     useEffect(() => {
         if (editor && value !== editor.getHTML()) {
-            editor.commands.setContent(value || '', false)
+            editor.commands.setContent(value || '', {})
         }
     }, [value, editor])
 
     return (
         <div>
-            <TextEditorMenuBar editor={editor} />
+            <TextEditorMenuBar editor={editor} id={id} />
             <EditorContent editor={editor} {...editorProps} />
         </div>
     )

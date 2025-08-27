@@ -33,10 +33,13 @@ import {
 } from 'react-icons/ri'
 import { env } from '@/env'
 import 'katex/dist/katex.min.css'
+import { PinEvidenceToPeriod } from '@components/modal'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title } = Typography
 
 type MenuButton = {
+    id: string
     icon: React.ReactNode
     onClick: () => void
     isActive: boolean
@@ -69,11 +72,17 @@ const Button = ({
     </Tooltip>
 )
 
-export default function TextEditorMenuBar({ editor }: { editor: Editor | null }) {
+export default function TextEditorMenuBar({ editor, id }: { editor: Editor | null; id?: string }) {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [mathModalVisible, setMathModalVisible] = useState(false)
     const [mathInput, setMathInput] = useState('')
     const [isBlockMath, setIsBlockMath] = useState(false)
+    const { onOpen: onOpenPinEvidenceToPeriod } = useDisclosure<{
+        id: string
+        changeValue: (value: { value: string; label: string }) => void
+    }>({
+        tag: PinEvidenceToPeriod.name,
+    })
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -103,8 +112,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 })
                 .run()
         } catch (error) {
-            console.error('Image upload failed:', error)
-            message.error('Image upload failed. Please try again.')
+            message.error('Tải ảnh lên không thành công. Vui lòng thử lại.')
         } finally {
             if (event.target) {
                 event.target.value = ''
@@ -113,16 +121,43 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
     }
 
     const handleAddEvidence = async () => {
-        // try {
-        //     editor
-        //         ?.chain()
-        //         .focus()
-        //         .setLink({ href: 'https://example.com', target: '_blank' })
-        //         .run();
-        // } catch (error) {
-        //     console.error('Image upload failed:', error)
-        //     message.error('Image upload failed. Please try again.')
-        // }
+        if (!editor) return
+        if (id) {
+            onOpenPinEvidenceToPeriod({
+                id: id,
+                changeValue: (value) => {
+                    insertPinFormula(value)
+                },
+            })
+        }
+    }
+
+    const insertPinFormula = (value: { value: string; label: string }) => {
+        if (!editor) return
+        console.log(value)
+        if (value) {
+            try {
+                editor
+                    .chain()
+                    .focus()
+                    .insertContent({
+                        type: 'text',
+                        text: `[${value.label}]`,
+                        marks: [
+                            {
+                                type: 'textStyle',
+                                attrs: {
+                                    id: value.value,
+                                    color: '#c89f08',
+                                },
+                            },
+                        ],
+                    })
+                    .run()
+            } catch (error) {
+                message.error('Lỗi ghim dữ liệu')
+            }
+        }
     }
 
     const insertMathFormula = () => {
@@ -148,8 +183,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 setMathInput('')
                 setMathModalVisible(false)
             } catch (error) {
-                console.error('Failed to insert math formula:', error)
-                message.error('Failed to insert math formula')
+                message.error('Không chèn được công thức toán học')
             }
         }
     }
@@ -252,22 +286,26 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
     const groupedButtons: MenuButton[][] = [
         [
             {
+                id: 'RiBold',
                 icon: <RiBold className="size-5" />,
                 onClick: () => editor.chain().focus().toggleBold().run(),
                 isActive: editor.isActive('bold'),
             },
             {
+                id: 'BsTypeUnderline',
                 icon: <BsTypeUnderline className="size-5" />,
                 onClick: () => editor.chain().focus().toggleUnderline().run(),
                 isActive: editor.isActive('underline'),
             },
             {
+                id: 'RiItalic',
                 icon: <RiItalic className="size-5" />,
                 onClick: () => editor.chain().focus().toggleItalic().run(),
                 isActive: editor.isActive('italic'),
                 disabled: !editor.can().chain().focus().toggleItalic().run(),
             },
             {
+                id: 'RiStrikethrough',
                 icon: <RiStrikethrough className="size-5" />,
                 onClick: () => editor.chain().focus().toggleStrike().run(),
                 isActive: editor.isActive('strike'),
@@ -276,12 +314,14 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'RiMarkPenFill',
                 icon: <RiMarkPenFill className="size-5" />,
                 onClick: () => editor.chain().focus().toggleHighlight().run(),
                 isActive: editor.isActive('highlight'),
                 disabled: !editor.can().chain().focus().toggleHighlight().run(),
             },
             {
+                id: 'RiCodeSSlashLine',
                 icon: <RiCodeSSlashLine className="size-5" />,
                 onClick: () => editor.chain().focus().toggleCode().run(),
                 isActive: editor.isActive('code'),
@@ -290,18 +330,21 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'RiAlignLeft',
                 icon: <RiAlignLeft className="size-5" />,
                 onClick: () => editor.chain().focus().setTextAlign('left').run(),
                 isActive: editor.isActive({ textAlign: 'left' }),
                 disabled: !editor.can().chain().focus().unsetTextAlign().run(),
             },
             {
+                id: 'RiAlignJustify',
                 icon: <RiAlignJustify className="size-5" />,
                 onClick: () => editor.chain().focus().setTextAlign('center').run(),
                 isActive: editor.isActive({ textAlign: 'center' }),
                 disabled: !editor.can().chain().focus().unsetTextAlign().run(),
             },
             {
+                id: 'RiAlignRight',
                 icon: <RiAlignRight className="size-5" />,
                 onClick: () => editor.chain().focus().setTextAlign('right').run(),
                 isActive: editor.isActive({ textAlign: 'right' }),
@@ -310,6 +353,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'IoListOutline',
                 icon: <IoListOutline className="size-5" />,
                 onClick: () => editor.chain().focus().toggleBulletList().run(),
                 isActive: editor.isActive('bulletList'),
@@ -318,6 +362,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                     !editor.can().chain().focus().toggleBulletList().run(),
             },
             {
+                id: 'RiListOrdered2',
                 icon: <RiListOrdered2 className="size-5" />,
                 onClick: () => editor.chain().focus().toggleOrderedList().run(),
                 isActive: editor.isActive('orderedList'),
@@ -326,6 +371,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                     !editor.can().chain().focus().toggleOrderedList().run(),
             },
             {
+                id: 'RiImage2Line',
                 icon: (
                     <>
                         <RiImage2Line className="size-5" />
@@ -345,12 +391,14 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'RiFunctions',
                 icon: <RiFunctions className="size-5" />,
                 onClick: toggleMathFormula,
                 isActive: editor.isActive('math'),
                 disabled: false,
             },
             {
+                id: 'RiMoneyDollarCircleLine',
                 icon: <RiMoneyDollarCircleLine className="size-5" />,
                 onClick: () => wrapSelectionWith('$', '$'),
                 isActive: false,
@@ -358,6 +406,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 description: 'Math latex span',
             },
             {
+                id: 'RiMoneyDollarBoxLine',
                 icon: <RiMoneyDollarBoxLine className="size-5" />,
                 onClick: () => wrapSelectionWith('$$', '$$'),
                 isActive: false,
@@ -365,6 +414,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 description: 'Math latex div',
             },
             {
+                id: 'RiAtLine',
                 icon: <RiAtLine className="size-5" />,
                 onClick: () => handleAddEvidence(),
                 isActive: false,
@@ -383,7 +433,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
             <div className="flex space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap">
                 {groupedButtons.map((group, index) => (
                     <div
-                        key={`group-${group.map((btn) => btn.icon).join('-')}`}
+                        key={`group-${group.map((btn) => btn.id).join('-')}`}
                         className="flex items-center space-x-2"
                     >
                         {group.map(
