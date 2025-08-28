@@ -8,7 +8,5 @@
 export type ExamSessionsItem = {
   id: string;
   /** @nullable */
-  fax: string | null;
-  /** @nullable */
-  score: number | null;
+  examFaxId?: string | null;
 };

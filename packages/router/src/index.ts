@@ -761,6 +761,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Quản lý minh chứng',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                     },
+                    {
+                        id: 'ql-thanh-vien-hoi-dong',
+                        label: 'Hội đồng đánh giá',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                    },
                 ],
             },
         ],

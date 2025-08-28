@@ -5,6 +5,7 @@ export default {
     "HOME": "/home",
     "INDEX": "/",
     "LAM_KHAO_SAT_ID": "/lam-khao-sat/[id]",
+    "QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA": "/ql-tu-danh-gia-ctdt/hoi-dong-danh-gia",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia",
     "QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG": "/ql-tu-danh-gia-ctdt/quan-ly-minh-chung",
