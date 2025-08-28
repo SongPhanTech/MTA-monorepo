@@ -469,6 +469,8 @@ enum ReminderRepeatType {
 /// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN
+  VICE_PRESIDENT
+  HEAD_SECRETARY
   SECRETARY
   MEMBER
 
@@ -4490,18 +4492,18 @@ model EvaluationCouncil {
 }
 
 model EvaluationCouncilMember {
-  id                  String               @id() @default(cuid())
-  code                String?              @unique()
-  active              Boolean              @default(true)
-  description         String?              @db.Text()
+  id                  String                 @id() @default(cuid())
+  code                String?                @unique()
+  active              Boolean                @default(true)
+  description         String?                @db.Text()
   deletedAt           DateTime?
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @default(now()) @updatedAt()
-  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @default(now()) @updatedAt()
+  evaluationCouncil   EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId String
-  lecturer            Lecturer             @relation(fields: [lecturerId], references: [id])
+  lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId          String
-  role                EvaluationMemberRole
+  role                EvaluationMemberRole[]
 
   @@schema("khao-thi")
 }

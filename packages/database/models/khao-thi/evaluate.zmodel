@@ -165,9 +165,11 @@ model AnalysisFormEvidence extends Base {
 /// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN // Chủ tịch hội đồng
-
+  VICE_PRESIDENT // Phó chủ tịch
+  HEAD_SECRETARY // Truỏng ban thư ký
   SECRETARY // Thư ký
-  MEMBER // Thành viên
+  MEMBER // Uỷ viên
+
 
   @@schema("khao-thi")
 }
@@ -189,7 +191,7 @@ model EvaluationCouncilMember extends Base {
   evaluationCouncilId String
   lecturer            Lecturer             @relation(fields: [lecturerId], references: [id])
   lecturerId          String
-  role                EvaluationMemberRole
+  role                EvaluationMemberRole[]
 
   @@schema("khao-thi")
 }
