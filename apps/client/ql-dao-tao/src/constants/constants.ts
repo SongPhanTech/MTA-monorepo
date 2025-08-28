@@ -171,6 +171,7 @@ const TRAINING_OBJECT_TYPE = {
     CIVILIAN: 'Học viên dân sự',
     INTERNATIONAL_MILITARY: 'Học viên quân sự quốc tế',
 }
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,

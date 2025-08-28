@@ -57,7 +57,7 @@ export function RichTextEditor({
             StarterKit,
             Underline,
             TextAlign.configure({
-                types: ['heading', 'paragraph'],
+                types: ['heading', 'paragraph', 'textStyle', 'image'],
             }),
             Highlight,
             CustomTextStyle,
@@ -298,7 +298,7 @@ export function RichTextEditor({
     }
     useEffect(() => {
         if (editor && value !== editor.getHTML()) {
-            editor.commands.setContent(value || '', {})
+            editor.commands.setContent(value || '', false)
         }
     }, [value, editor])
 

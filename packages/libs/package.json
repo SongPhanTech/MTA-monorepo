@@ -11,7 +11,7 @@
     "./docxjs": "./src/docxjs.ts"
   },
   "scripts": {
-    "generate": "orval"
+    "generate:api": "orval"
   },
   "devDependencies": {
     "@types/node": "catalog:",

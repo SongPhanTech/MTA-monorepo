@@ -53,6 +53,14 @@ const DOCUMENT_TYPE = [
     },
 ]
 
+const EVALUATION_MEMBER_ROLE = [
+    { label: 'Chủ tịch hội đồng', value: $Enums.EvaluationMemberRole.CHAIRMAN },
+    { label: 'Phó chủ tịch', value: $Enums.EvaluationMemberRole.VICE_PRESIDENT },
+    { label: 'Trưởng ban thư ký', value: $Enums.EvaluationMemberRole.HEAD_SECRETARY },
+    { label: 'Thư ký', value: $Enums.EvaluationMemberRole.SECRETARY },
+    { label: 'Uỷ viên', value: $Enums.EvaluationMemberRole.MEMBER },
+]
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -60,4 +68,5 @@ export {
     API_BASE_URL,
     DOCUMENT_TYPE,
     API_MODEL_BASE_URL,
+    EVALUATION_MEMBER_ROLE,
 }

@@ -2,7 +2,12 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import { AddEvidenceToPeriod } from '@components/modal'
-import type { AnalysisFormEvidence, EvaluationCriterion, Evidence } from '@workspace/db'
+import type {
+    AnalysisFormEvidence,
+    EvaluationCriterion,
+    Evidence,
+    RequirementCriterion,
+} from '@workspace/db'
 import { Button, Collapse, Form, Tabs } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -10,7 +15,7 @@ import './index.css'
 import { useUpdateEvaluationCriterion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 
-type SubmitForm = EvaluationCriterion & {
+interface SubmitForm {
     currentSituation: string
     strengths: string
     weakness: string
@@ -19,7 +24,7 @@ type SubmitForm = EvaluationCriterion & {
 export type PutRequirementCriterion = {
     opening: string
     conclusion: string
-    criteria: Record<string, SubmitForm>
+    criteria: Record<string, any>
 }
 export default function EvaluatedPage({
     data,
@@ -43,7 +48,6 @@ export default function EvaluatedPage({
 
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
-        console.log(dataSubmit, '123')
         let listSqlTransaction: any = [
             {
                 model: 'EvaluationStandard',
@@ -62,7 +66,7 @@ export default function EvaluatedPage({
         if (dataSubmit?.criteria.length) {
             listSqlTransaction = [
                 ...listSqlTransaction,
-                ...dataSubmit.criteria?.map((i: EvaluationCriterion) => {
+                ...dataSubmit.criteria.map((i: EvaluationCriterion) => {
                     return {
                         model: 'EvaluationCriterion',
                         operation: 'update',
@@ -106,140 +110,154 @@ export default function EvaluatedPage({
                             <span className="font-bold">Tiêu chuẩn {index}: </span>
                             <span>{data?.name}</span>
                         </div>
-                        {data?.criteria?.map((item: any, idx: number) => {
-                            return (
-                                <div key={item.id} className="ml-4 mb-6">
-                                    <div className="text-base mb-3">
-                                        <span className="font-bold">Tiêu chí {idx + 1}: </span>
-                                        <span>{item?.name}</span>
-                                    </div>
-                                    <div>
-                                        <Table
-                                            rowKey="id"
-                                            columns={[
-                                                {
-                                                    title: 'STT',
-                                                    width: 30,
-                                                    align: 'center',
-                                                    render: (_, __, index) => index + 1,
-                                                },
-                                                {
-                                                    title: 'Phân tích tiêu chí',
-                                                    children: [
-                                                        {
-                                                            title: 'Các yêu cầu',
-                                                            dataIndex: 'name',
-                                                            width: 200,
-                                                            align: 'center',
-                                                            type: 'input',
-                                                        },
-                                                        {
-                                                            title: 'Các câu hỏi đặt ra',
-                                                            dataIndex: 'questions',
-                                                            width: 150,
-                                                            render: (questions: any) => {
-                                                                return (
-                                                                    <div className="flex flex-col gap-2">
-                                                                        {questions?.map(
-                                                                            (question: any) => {
-                                                                                return (
-                                                                                    <div
-                                                                                        key={
-                                                                                            question
-                                                                                        }
-                                                                                    >
-                                                                                        {question}
-                                                                                    </div>
-                                                                                )
-                                                                            }
-                                                                        )}
-                                                                    </div>
-                                                                )
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                                {
-                                                    title: 'Thông tin, minh chứng',
-                                                    children: [
-                                                        {
-                                                            title: 'Tên minh chứng',
-                                                            width: 200,
-                                                            align: 'left',
-                                                            render: (record: {
-                                                                evidences: AnalysisFormEvidence[]
-                                                            }) => {
-                                                                return record?.evidences.length ? (
-                                                                    <div className="flex flex-col gap-2">
-                                                                        {record?.evidences?.map(
-                                                                            (
-                                                                                evidence: AnalysisFormEvidence & {
-                                                                                    evidence?: Evidence
-                                                                                }
-                                                                            ) => {
-                                                                                return (
-                                                                                    <div
-                                                                                        key={
-                                                                                            evidence.id
-                                                                                        }
-                                                                                    >
-                                                                                        -{' '}
-                                                                                        {
-                                                                                            evidence
-                                                                                                ?.evidence
-                                                                                                ?.name
-                                                                                        }
-                                                                                    </div>
-                                                                                )
-                                                                            }
-                                                                        )}
-                                                                    </div>
-                                                                ) : (
-                                                                    ''
-                                                                )
-                                                            },
-                                                        },
-                                                        {
-                                                            title: 'Nơi thu thập',
-                                                            width: 150,
-                                                            align: 'left',
-                                                        },
-                                                        {
-                                                            title: 'Phương pháp thu thập',
-                                                            width: 150,
-                                                            align: 'center',
-                                                        },
-                                                    ],
-                                                },
-                                                {
-                                                    title: 'Thao tác',
-                                                    width: 100,
-                                                    align: 'center',
-                                                    render: (__, { id }) => {
-                                                        return (
-                                                            <div className="flex gap-2 items-center justify-center">
-                                                                <EditIcon
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation()
-                                                                        onOpenAddEvaluationPeriod({
-                                                                            id,
-                                                                            refetch,
-                                                                        })
-                                                                    }}
-                                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                                />
-                                                            </div>
-                                                        )
+                        {data?.criteria?.map(
+                            (
+                                item: EvaluationCriterion & {
+                                    requirementCriterions?: RequirementCriterion[]
+                                },
+                                idx: number
+                            ) => {
+                                return (
+                                    <div key={item.id} className="ml-4 mb-6">
+                                        <div className="text-base mb-3">
+                                            <span className="font-bold">Tiêu chí {idx + 1}: </span>
+                                            <span>{item?.name}</span>
+                                        </div>
+                                        <div>
+                                            <Table
+                                                rowKey="id"
+                                                columns={[
+                                                    {
+                                                        title: 'STT',
+                                                        width: 30,
+                                                        align: 'center',
+                                                        render: (_, __, index) => index + 1,
                                                     },
-                                                },
-                                            ]}
-                                            data={item?.requirementCriterions || []}
-                                            pagination={false}
-                                        />
+                                                    {
+                                                        title: 'Phân tích tiêu chí',
+                                                        children: [
+                                                            {
+                                                                title: 'Các yêu cầu',
+                                                                dataIndex: 'name',
+                                                                width: 200,
+                                                                align: 'center',
+                                                                type: 'input',
+                                                            },
+                                                            {
+                                                                title: 'Các câu hỏi đặt ra',
+                                                                dataIndex: 'questions',
+                                                                width: 150,
+                                                                render: (questions: string[]) => {
+                                                                    return (
+                                                                        <div className="flex flex-col gap-2">
+                                                                            {questions?.map(
+                                                                                (
+                                                                                    question: string
+                                                                                ) => {
+                                                                                    return (
+                                                                                        <div
+                                                                                            key={
+                                                                                                question
+                                                                                            }
+                                                                                        >
+                                                                                            {
+                                                                                                question
+                                                                                            }
+                                                                                        </div>
+                                                                                    )
+                                                                                }
+                                                                            )}
+                                                                        </div>
+                                                                    )
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                    {
+                                                        title: 'Thông tin, minh chứng',
+                                                        children: [
+                                                            {
+                                                                title: 'Tên minh chứng',
+                                                                width: 200,
+                                                                align: 'left',
+                                                                render: (record: {
+                                                                    evidences: AnalysisFormEvidence[]
+                                                                }) => {
+                                                                    return record?.evidences
+                                                                        .length ? (
+                                                                        <div className="flex flex-col gap-2">
+                                                                            {record?.evidences?.map(
+                                                                                (
+                                                                                    evidence: AnalysisFormEvidence & {
+                                                                                        evidence?: Evidence
+                                                                                    }
+                                                                                ) => {
+                                                                                    return (
+                                                                                        <div
+                                                                                            key={
+                                                                                                evidence.id
+                                                                                            }
+                                                                                        >
+                                                                                            -{' '}
+                                                                                            {
+                                                                                                evidence
+                                                                                                    ?.evidence
+                                                                                                    ?.name
+                                                                                            }
+                                                                                        </div>
+                                                                                    )
+                                                                                }
+                                                                            )}
+                                                                        </div>
+                                                                    ) : (
+                                                                        ''
+                                                                    )
+                                                                },
+                                                            },
+                                                            {
+                                                                title: 'Nơi thu thập',
+                                                                width: 150,
+                                                                align: 'left',
+                                                            },
+                                                            {
+                                                                title: 'Phương pháp thu thập',
+                                                                width: 150,
+                                                                align: 'center',
+                                                            },
+                                                        ],
+                                                    },
+                                                    {
+                                                        title: 'Thao tác',
+                                                        width: 100,
+                                                        align: 'center',
+                                                        render: (__, { id }) => {
+                                                            return (
+                                                                <div className="flex gap-2 items-center justify-center">
+                                                                    <EditIcon
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation()
+                                                                            onOpenAddEvaluationPeriod(
+                                                                                {
+                                                                                    id,
+                                                                                    refetch,
+                                                                                }
+                                                                            )
+                                                                        }}
+                                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                                    />
+                                                                </div>
+                                                            )
+                                                        },
+                                                    },
+                                                ]}
+                                                data={item?.requirementCriterions || []}
+                                                pagination={false}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        })}
+                                )
+                            }
+                        )}
                     </div>
                 ),
             },
