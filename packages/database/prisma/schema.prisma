@@ -661,6 +661,7 @@ model Exam {
   examBank           ExamBank[]
   testStructureRules TestStructureRule[]
   examSessions       ExamSession[]
+  examFax            ExamFax[]
 
   @@schema("khao-thi")
 }
@@ -725,6 +726,24 @@ model ExamBankQuestion {
   @@schema("khao-thi")
 }
 
+model ExamFax {
+  id          String       @id() @default(cuid())
+  code        String?      @unique()
+  active      Boolean      @default(true)
+  description String?      @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt()
+  examId      String
+  exam        Exam         @relation(fields: [examId], references: [id], onDelete: Cascade)
+  fax         String
+  score       Decimal?     @db.Decimal(5, 2)
+  examSession ExamSession?
+
+  @@unique([examId, fax])
+  @@schema("khao-thi")
+}
+
 /// Bài thi
 model ExamSession {
   id          String    @id() @default(cuid())
@@ -734,11 +753,8 @@ model ExamSession {
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now()) @updatedAt()
-  fax         String?
   startTime   DateTime?
   endTime     DateTime?
-  score       Decimal?  @db.Decimal(5, 2)
-  isGraded    Boolean   @default(false)
   student     Student?  @relation(fields: [studentId], references: [id])
   studentId   String?
   exam        Exam      @relation(fields: [examId], references: [id])
@@ -748,9 +764,10 @@ model ExamSession {
   examBank    ExamBank? @relation(fields: [examBankId], references: [id])
   examBankId  String?
   answers     Answer[]
+  examFax     ExamFax?  @relation(fields: [examFaxId], references: [id])
+  examFaxId   String?   @unique()
 
   @@unique([studentId, examId])
-  @@unique([fax, examId])
   @@schema("khao-thi")
 }
 
