@@ -20,6 +20,10 @@ enum ConfigKey {
   ACADEMY_NAME
   ACADEMY_CODE
   DIRECTOR
+  TRAINING_DEPARTMENT
+  HEAD_OF_TRAINING_DEPARTMENT
+  EXAMINATION_DEPARTMENT
+  HEAD_OF_EXAMINATION_DEPARTMENT
   PROVINCE
   DISTRICT
   WARD
@@ -465,6 +469,8 @@ enum ReminderRepeatType {
 /// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN
+  VICE_PRESIDENT
+  HEAD_SECRETARY
   SECRETARY
   MEMBER
 
@@ -3450,6 +3456,20 @@ model ThesisProject {
   @@schema("ql-dao-tao")
 }
 
+/// Ca bảo vệ
+model DefenseSession {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  startTime   DateTime  @db.Time(0)
+
+  @@schema("ql-dao-tao")
+}
+
 model StudentThesisRegistration {
   id              String                          @id() @default(cuid())
   code            String?                         @unique()
@@ -4455,18 +4475,18 @@ model EvaluationCouncil {
 }
 
 model EvaluationCouncilMember {
-  id                  String               @id() @default(cuid())
-  code                String?              @unique()
-  active              Boolean              @default(true)
-  description         String?              @db.Text()
+  id                  String                 @id() @default(cuid())
+  code                String?                @unique()
+  active              Boolean                @default(true)
+  description         String?                @db.Text()
   deletedAt           DateTime?
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @default(now()) @updatedAt()
-  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @default(now()) @updatedAt()
+  evaluationCouncil   EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId String
-  lecturer            Lecturer             @relation(fields: [lecturerId], references: [id])
+  lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId          String
-  role                EvaluationMemberRole
+  role                EvaluationMemberRole[]
 
   @@schema("khao-thi")
 }

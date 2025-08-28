@@ -3,67 +3,54 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutEvaluationCouncilMember } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
-    useCountEvaluationCouncilMember,
-    useFindManyEvaluationCouncilMember,
+    useFindUniqueEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function EvaluationCouncilMember() {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+export default function EvaluationCouncil() {
+    const router = useRouter()
+    const id = router.query.id as string
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
     })
 
-    const where = useMemo(
-        () => ({
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-        }),
-        [filters.name]
-    )
-
-    const { data, refetch } = useFindManyEvaluationCouncilMember({
-        include: {
-            evaluationCouncil: true,
-            lecturer: {
-                include: {
-                    userProfile: true,
-                    organization: true,
+    const { data } = useFindUniqueEvaluationCouncil(
+        {
+            where: {
+                id: router.query.id as string,
+            },
+            include: {
+                period: true,
+                members: {
+                    include: {
+                        lecturer: {
+                            include: {
+                                userProfile: true,
+                                organization: true,
+                            },
+                        },
+                    },
                 },
             },
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
-
-    const { data: count } = useCountEvaluationCouncilMember({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
-
-    const { onOpen: onOpenPutEvaluationCouncilMember } = useDisclosure<string>({
-        tag: PutEvaluationCouncilMember.name,
-    })
+        {
+            enabled: !!id,
+        }
+    )
 
     const { showSpinner, hideSpinner } = useSpinner()
 
+    const { onOpen } = useDisclosure<string>({
+        tag: PutEvaluationCouncilMember.name,
+    })
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
     async function handleDeleteEvaluationCouncilMember(id: string) {
         try {
@@ -90,7 +77,7 @@ export default function EvaluationCouncilMember() {
                                 <Button
                                     type="primary"
                                     onClick={() => {
-                                        onOpenPutEvaluationCouncilMember()
+                                        onOpen()
                                     }}
                                 >
                                     <BookPlus />
@@ -112,25 +99,24 @@ export default function EvaluationCouncilMember() {
                                 width: 50,
                                 align: 'center',
                                 fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                render: (_, __, index) => index + 1,
                             },
                             {
                                 title: 'Tên đồng chí',
                                 dataIndex: 'name',
                                 width: 200,
                                 align: 'center',
-                                type: 'input',
                                 fixed: 'left',
                                 render: (__, record) => {
                                     return (
                                         record?.lecturer?.userProfile?.fullname ||
-                                        `${record?.lecturer?.userProfile.lastName} ${record?.lecturer?.userProfile.firstName}`
+                                        `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
                                     )
                                 },
                             },
                             {
                                 title: 'Chức vụ, đơn vị',
+                                dataIndex: 'period',
                                 width: 200,
                                 align: 'center',
                                 render: (__, record) => {
@@ -138,17 +124,13 @@ export default function EvaluationCouncilMember() {
                                 },
                             },
                             {
-                                title: 'Hội đồng',
-                                dataIndex: 'evaluationCouncil',
-                                width: 150,
-                                render: (__, record) => {
-                                    return record?.evaluationCouncil?.name || ''
-                                },
-                            },
-                            {
                                 title: 'Chức vụ trong HĐ',
-                                dataIndex: 'passFrom',
-                                width: 150,
+                                dataIndex: 'role',
+                                width: 200,
+                                align: 'center',
+                                render: (__, record) => {
+                                    return ''
+                                },
                             },
                             {
                                 title: 'Thao tác',
@@ -162,7 +144,7 @@ export default function EvaluationCouncilMember() {
                                                 <EditIcon
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        onOpenPutEvaluationCouncilMember(record?.id)
+                                                        onOpen(record?.id)
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
@@ -184,20 +166,8 @@ export default function EvaluationCouncilMember() {
                                 },
                             },
                         ]}
-                        data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        data={data?.members || []}
+                        pagination={false}
                     />
                 </Col>
             </Row>
@@ -205,6 +175,15 @@ export default function EvaluationCouncilMember() {
     )
 }
 
-EvaluationCouncilMember.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+EvaluationCouncil.getLayout = function getLayout(page: React.ReactElement) {
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Hội đồng đánh giá' },
+                { title: 'Chi tiết hội đồng đánh giá' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

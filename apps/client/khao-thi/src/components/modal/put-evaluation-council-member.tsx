@@ -1,61 +1,64 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
+import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { KnowledgeBlock } from '@workspace/db'
+import type { EvaluationCouncilMember } from '@workspace/db'
 import {
-    useCreateKnowledgeBlock,
-    useFindUniqueKnowledgeBlock,
-    useUpdateKnowledgeBlock,
+    useCreateEvaluationCouncilMember,
+    useFindManyLecturer,
+    useFindUniqueEvaluationCouncilMember,
+    useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, message } from 'antd'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutEvaluationCouncilMemberType = KnowledgeBlock
+export type PutEvaluationCouncilMemberType = EvaluationCouncilMember
 const PutEvaluationCouncilMember = () => {
     const [form] = Form.useForm<PutEvaluationCouncilMemberType>()
-    const { isOpen, onClose, input } = useDisclosure<{
-        id: string
-        subjectVersionId: string
-    }>({
+    const router = useRouter()
+    const {
+        isOpen,
+        onClose,
+        input: id,
+    } = useDisclosure<string>({
         tag: PutEvaluationCouncilMember.name,
         onClose: form.resetFields,
     })
+    const evaluationCouncilId = router.query.id as string
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createKnowledgeBlock } = useCreateKnowledgeBlock()
-    const { mutateAsync: updateKnowledgeBlock } = useUpdateKnowledgeBlock()
+    const { mutateAsync: createEvaluationCouncilMember } = useCreateEvaluationCouncilMember()
+    const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
     async function onOk(output?: PutEvaluationCouncilMemberType) {
         if (!output) return
         try {
             showSpinner()
-            if (!input?.subjectVersionId) {
-                message.error('Thiếu mã phiên bản môn học')
-                hideSpinner()
-                return
-            }
             const data = {
-                code: output.code,
-                name: output.name,
-                description: output.description,
-                subjectVersionId: input.subjectVersionId,
+                evaluationCouncilId: evaluationCouncilId,
+                lecturerId: output.lecturerId,
+                role: output.role,
             }
-            if (input?.id) {
-                await updateKnowledgeBlock({
+            if (id && evaluationCouncilId) {
+                await updateEvaluationCouncilMember({
                     data,
                     where: {
-                        id: input.id,
+                        id: id,
                     },
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createKnowledgeBlock({
-                    data,
+                await createEvaluationCouncilMember({
+                    data: {
+                        ...data,
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
-                queryKey: ['SubjectVersion', 'KnowledgeBlock'],
+                queryKey: ['EvaluationCouncilMember'],
             })
             onClose()
         } catch (_error) {
@@ -65,12 +68,23 @@ const PutEvaluationCouncilMember = () => {
         }
     }
 
-    const { data: initialValue } = useFindUniqueKnowledgeBlock(
+    const { data: lecturerData = [] } = useFindManyLecturer({
+        include: {
+            userProfile: true,
+        },
+        orderBy: {
+            userProfile: {
+                firstName: 'asc',
+            },
+        },
+    })
+
+    const { data: initialValue } = useFindUniqueEvaluationCouncilMember(
         {
-            where: { id: input?.id },
+            where: { id: id },
         },
         {
-            enabled: !!input?.id,
+            enabled: !!id,
         }
     )
 
@@ -90,22 +104,31 @@ const PutEvaluationCouncilMember = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.id ? 'Chỉnh sửa chương mục' : 'Thêm mới chương mục'}
-            className="w-[30vw]"
+            title={id ? 'Chỉnh sửa hội đồng đánh giá' : 'Thêm mới hội đồng đánh giá'}
+            className="w-[600px]"
         >
             <Col span={24}>
-                <FormItem form={form} name="code" label="Mã chương">
-                    <Input placeholder="Nhập mã chương" />
+                <FormItem form={form} name="lecturerId" label="Giáo viên">
+                    <Select
+                        placeholder="Chọn giáo viên"
+                        options={lecturerData.map((i) => {
+                            return {
+                                value: i?.id,
+                                label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
+                            }
+                        })}
+                        // onChange={(val) =>handleMajorChange(val)}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="name" label="Tên chương mục" required>
-                    <Input placeholder="Nhập mã chương mục" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+                <FormItem form={form} name="role" label="Chương mục" required>
+                    <Select
+                        mode="multiple"
+                        maxTagCount={'responsive'}
+                        placeholder="Chọn chương mục"
+                        options={EVALUATION_MEMBER_ROLE}
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

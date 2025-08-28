@@ -19,7 +19,6 @@
 		"@casl/react": "catalog:",
 		"@t3-oss/env-nextjs": "catalog:",
 		"@tanstack/react-query": "^5.62.3",
-		"@tiptap/core": "^3.3.0",
 		"@tiptap/extension-color": "^3.3.0",
 		"@tiptap/extension-highlight": "catalog:",
 		"@tiptap/extension-image": "catalog:",
