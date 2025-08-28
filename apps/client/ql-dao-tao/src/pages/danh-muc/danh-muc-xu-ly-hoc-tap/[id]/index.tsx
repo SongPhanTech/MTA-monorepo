@@ -100,8 +100,6 @@ export default function AcademicActionCondition() {
         { enabled: !!configId }
     )
 
-    console.log(data)
-
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()

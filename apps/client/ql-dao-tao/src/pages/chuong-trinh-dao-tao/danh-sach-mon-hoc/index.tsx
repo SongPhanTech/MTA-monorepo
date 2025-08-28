@@ -116,7 +116,7 @@ export default function SubjectList() {
         },
 
         orderBy: {
-            name: 'asc',
+            createdAt: 'desc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,

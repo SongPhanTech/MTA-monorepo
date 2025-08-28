@@ -32,6 +32,7 @@ export default {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
     "CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
     "CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT": "/chuong-trinh-dao-tao/khoi-kien-thuc-ctdt",
+    "CHUONG_TRINH_DAO_TAO_QL_MON_HOC": "/chuong-trinh-dao-tao/ql-mon-hoc",
     "DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG": "/danh-muc/danh-muc-canh-cao-hoc-duong",
     "DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP": "/danh-muc/danh-muc-canh-cao-hoc-tap",
     "DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM": "/danh-muc/danh-muc-chuyen-doi-diem",

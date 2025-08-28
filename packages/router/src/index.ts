@@ -343,6 +343,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
                         description: 'Danh sách môn học',
                     },
+                    {
+                        id: 'ql-mon-hoc',
+                        label: 'Quản lý môn hoc',
+                        path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                        description: 'Quản lý môn học',
+                    },
                 ],
             },
             {
