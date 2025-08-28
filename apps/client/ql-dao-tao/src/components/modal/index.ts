@@ -48,6 +48,7 @@ import PutOpenClassModal from './put-mo-lop'
 import PutMilestoneModal from './put-moc-huan-luyen'
 import PutSubjectModal from './put-mon-hoc'
 import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
+import PutSubjectTienQuyetSongHanh from './put-mon-hoc-tien-quyet-song-hanh'
 import PutSchoolYearModal from './put-nam-hoc'
 import PutTrainingFieldModal from './put-nganh'
 import PutSubjectGroupModal from './put-nhom-mon-hoc'
@@ -163,4 +164,5 @@ export {
     PutStatusQLTraCuuVanBang,
     PutDotRenLuyen,
     PutSupervisorPaymentRecord,
+    PutSubjectTienQuyetSongHanh,
 }

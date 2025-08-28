@@ -307,6 +307,7 @@ function SubjectVersion() {
                                         )
                                     }}
                                     type="primary"
+                                    disabled={selectedRowKeys.length === 0}
                                 >
                                     <BookOpenCheck />
                                     Tạo kỳ thi
