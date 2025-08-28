@@ -594,6 +594,13 @@ export default function SettingClass() {
             </Form>
             <Col span={24} className="flex flex-row gap-2">
                 <Col span={12}>
+                    <div
+                        style={{
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Danh sách chuyên gia
+                    </div>
                     <Table
                         rowKey="id"
                         id="expert-profile"
@@ -682,6 +689,13 @@ export default function SettingClass() {
                     </Button>
                 </Col>
                 <Col span={11}>
+                    <div
+                        style={{
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Danh sách chuyên gia hội đồng
+                    </div>
                     <Table
                         rowKey="id"
                         id="expert-profile"
@@ -758,7 +772,7 @@ export default function SettingClass() {
                                     Thời gian bắt đầu
                                 </th>
                                 {subjectClass?.thesisProjects.map((tp) => (
-                                    <th colSpan={3} style={{ ...cell, height: '25px' }}>
+                                    <th key={tp.id} colSpan={3} style={{ ...cell, height: '25px' }}>
                                         {tp.room?.name}
                                     </th>
                                 ))}

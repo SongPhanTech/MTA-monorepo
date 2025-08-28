@@ -156,7 +156,7 @@ const PutCouncilMember = () => {
                     <Select
                         placeholder="Chọn chuyên gia"
                         options={expert.map((item) => ({
-                            label: `${item.lecturer?.userProfile.fullname || item.name} - ${item.code}`,
+                            label: `${item.code ? `${item.code} -` : ''} ${item.lecturer?.userProfile.fullname || item.name}`,
                             value: item.id,
                         }))}
                         showSearch

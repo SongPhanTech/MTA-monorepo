@@ -486,7 +486,10 @@ export default function ThesisProject() {
                             onChange: setSelectedRowKeys,
                             getCheckboxProps: (record) => {
                                 if (record.thesisProjects) {
-                                    return { style: { display: 'none' } }
+                                    return {
+                                        disabled: true,
+                                        style: { display: 'none' },
+                                    }
                                 }
                                 return {}
                             },
@@ -552,7 +555,7 @@ export default function ThesisProject() {
                                 dataIndex: 'currentStudents',
                                 align: 'center',
                                 width: 150,
-                                type: 'order',
+                                render: (_, record) => record.registrations?.length,
                             },
                             {
                                 title: 'Số lượng HV tối đa',

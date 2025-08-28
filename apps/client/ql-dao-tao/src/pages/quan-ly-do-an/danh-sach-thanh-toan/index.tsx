@@ -5,7 +5,6 @@ import EditIcon from '@components/icons/edit'
 import { PutPaymentRecordDetail, PutUpdatePaymentStatus } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
-import { useCouncilRoleOptions } from '@hooks/councilRole'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -24,7 +23,6 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function PaymentRecordPage() {
     const { getPaymentStatusColor, getPaymentStatusLabel, paymentStatusOptions } =
         usePaymentStatusOptions()
-    const { getCouncilRoleLabel, councilRoleOptions } = useCouncilRoleOptions()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -87,11 +85,6 @@ export default function PaymentRecordPage() {
     const { data: paymentRecordData } = useFindManyPaymentRecord({
         where: {
             ...where,
-            ...(filters.role
-                ? Array.isArray(filters.role)
-                    ? { councilMember: { role: { in: filters.role } } }
-                    : { councilMember: { role: { equals: filters.role } } }
-                : {}),
         },
         include: {
             expert: true,
@@ -228,25 +221,6 @@ export default function PaymentRecordPage() {
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => record.expert.name,
-                            },
-                            {
-                                title: 'Vai trò',
-                                dataIndex: 'role',
-                                align: 'center',
-                                width: 150,
-                                type: 'select',
-                                options: councilRoleOptions,
-                                render: (_, record) => (
-                                    <div>{getCouncilRoleLabel(record.councilMember.role)}</div>
-                                ),
-                            },
-                            {
-                                title: 'Đề tài',
-                                dataIndex: 'thesis',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                                render: (_, record) => record.councilMember.council.thesis[0].title,
                             },
                             {
                                 title: 'Mã giao dịch',

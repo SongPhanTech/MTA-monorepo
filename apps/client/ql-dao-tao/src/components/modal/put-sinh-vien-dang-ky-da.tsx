@@ -286,7 +286,7 @@ const PutStudentThesisRegistration = () => {
                     <Select
                         placeholder="Người phê duyệt"
                         options={reviewer.map((item) => ({
-                            label: `${item?.userProfile.fullname} - ${item.code}`,
+                            label: `${item.code ? `${item.code} -` : ''} ${item?.userProfile.fullname}`,
                             value: item.id,
                         }))}
                         showSearch
