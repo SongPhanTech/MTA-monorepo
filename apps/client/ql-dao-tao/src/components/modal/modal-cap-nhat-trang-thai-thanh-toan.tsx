@@ -6,7 +6,12 @@ import { useCouncilRoleOptions } from '@hooks/councilRole'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import type { PaymentRecord } from '@workspace/db'
-import { useFindManyPaymentRecord, useUpdateManyPaymentRecord } from '@workspace/db/hooks'
+import {
+    useFindManyPaymentRecord,
+    useFindManySupervisorPaymentRecord,
+    useUpdateManyPaymentRecord,
+    useUpdateManySupervisorPaymentRecord,
+} from '@workspace/db/hooks'
 import { Col, Form, message } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -16,6 +21,7 @@ const PutUpdatePaymentStatus = () => {
     const [form] = Form.useForm<PutUpdatePaymentStatus>()
     const { isOpen, onClose, input } = useDisclosure<{
         paymentRecordIds: string[]
+        isSupervisor: boolean
     }>({
         tag: PutUpdatePaymentStatus.name,
         onClose: form.resetFields,
@@ -37,24 +43,53 @@ const PutUpdatePaymentStatus = () => {
             },
         },
         {
-            enabled: !!paymentRecordIds?.length,
+            enabled: !!paymentRecordIds?.length && !input?.isSupervisor,
+        }
+    )
+
+    const { data: supervisorPaymentData } = useFindManySupervisorPaymentRecord(
+        {
+            where: {
+                id: { in: paymentRecordIds },
+            },
+            include: {
+                expert: true,
+            },
+        },
+        {
+            enabled: !!paymentRecordIds?.length && input?.isSupervisor,
         }
     )
 
     const { mutateAsync: update } = useUpdateManyPaymentRecord()
+    const { mutateAsync: updateSupervisorPayment } = useUpdateManySupervisorPaymentRecord()
+
     async function onOk(value: PutUpdatePaymentStatus) {
         try {
             showSpinner()
-            await update({
-                data: {
-                    status: value.status,
-                },
-                where: {
-                    id: {
-                        in: paymentRecordIds,
+            if (input?.isSupervisor) {
+                await updateSupervisorPayment({
+                    data: {
+                        status: value.status,
                     },
-                },
-            })
+                    where: {
+                        id: {
+                            in: paymentRecordIds,
+                        },
+                    },
+                })
+            } else {
+                await update({
+                    data: {
+                        status: value.status,
+                    },
+                    where: {
+                        id: {
+                            in: paymentRecordIds,
+                        },
+                    },
+                })
+            }
 
             message.success('Cập nhật thành công')
             onClose()
@@ -75,43 +110,77 @@ const PutUpdatePaymentStatus = () => {
             title={'Cập nhật trạng thái thanh toán'}
             className="w-[45vw]"
         >
-            <Table
-                rowKey="id"
-                id="expert-profile"
-                dataSource={paymentRecord}
-                className="mb-8"
-                scroll={{ y: 300 }}
-                columns={[
-                    {
-                        title: 'STT',
-                        width: 60,
-                        align: 'center',
-                        fixed: 'left',
-                        render: (_, __, index) => index + 1,
-                    },
-                    {
-                        title: 'Tên chuyên gia',
-                        width: 150,
-                        align: 'center',
-                        render: (_, record) => record?.councilMember.expert.name,
-                    },
-                    {
-                        title: 'Vai trò',
-                        width: 150,
-                        align: 'center',
-                        render: (_, record) => getCouncilRoleLabel(record?.councilMember.role),
-                    },
-                    {
-                        title: 'Số tiền thanh toán',
-                        width: 250,
-                        align: 'center',
-                        render: (_, record) => record?.amount.toString(),
-                    },
-                ]}
-                pagination={{
-                    hideOnSinglePage: true,
-                }}
-            />
+            {input?.isSupervisor ? (
+                <Table
+                    rowKey="id"
+                    id="expert-profile"
+                    dataSource={supervisorPaymentData}
+                    className="mb-8"
+                    scroll={{ y: 300 }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Tên chuyên gia',
+                            width: 150,
+                            align: 'center',
+                            render: (_, record) => record.expert.name,
+                        },
+                        {
+                            title: 'Số tiền thanh toán',
+                            width: 250,
+                            align: 'center',
+                            render: (_, record) => record?.amount.toString(),
+                        },
+                    ]}
+                    pagination={{
+                        hideOnSinglePage: true,
+                    }}
+                />
+            ) : (
+                <Table
+                    rowKey="id"
+                    id="expert-profile"
+                    dataSource={paymentRecord}
+                    className="mb-8"
+                    scroll={{ y: 300 }}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 60,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Tên chuyên gia',
+                            width: 150,
+                            align: 'center',
+                            render: (_, record) => record?.councilMember.expert.name,
+                        },
+                        {
+                            title: 'Vai trò',
+                            width: 150,
+                            align: 'center',
+                            render: (_, record) => getCouncilRoleLabel(record?.councilMember.role),
+                        },
+                        {
+                            title: 'Số tiền thanh toán',
+                            width: 250,
+                            align: 'center',
+                            render: (_, record) => record?.amount.toString(),
+                        },
+                    ]}
+                    pagination={{
+                        hideOnSinglePage: true,
+                    }}
+                />
+            )}
             <Col span={12}>
                 <FormItem form={form} name="status" label="Trạng thái">
                     <Select

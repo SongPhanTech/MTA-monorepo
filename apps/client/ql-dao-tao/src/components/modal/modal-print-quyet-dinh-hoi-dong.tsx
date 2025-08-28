@@ -26,19 +26,19 @@ type ModalPrintDecisionInput = SubjectClass &
     }[]
 
 type ThesisProjectInput = ThesisProject & {
-    supervisor: ExpertProfile
-    council: Council & {
+    supervisor?: ExpertProfile
+    council?: Council & {
         members: CouncilMember &
             {
-                expert: ExpertProfile
+                expert?: ExpertProfile
             }[]
     }
     registrations: StudentThesisRegistration &
         {
-            student: Student & {
-                userProfile: UserProfile
-                fixedClass: FixedClass & {
-                    trainingCourse: TrainingCourse
+            student?: Student & {
+                userProfile?: UserProfile
+                fixedClass?: FixedClass & {
+                    trainingCourse?: TrainingCourse
                 }
             }
         }[]
@@ -174,11 +174,11 @@ const ModalPrintDecision = () => {
                                 Học viên thực hiện:
                                 {tp.registrations
                                     .map((registration) => {
-                                        const fullname = registration.student.userProfile.fullname
+                                        const fullname = registration.student?.userProfile?.fullname
                                         const dateOfBirth =
-                                            registration.student.userProfile.dateOfBirth
+                                            registration.student?.userProfile?.dateOfBirth
                                         const trainingCourse =
-                                            registration.student.fixedClass.trainingCourse
+                                            registration.student?.fixedClass?.trainingCourse
                                         return `${fullname}${
                                             dateOfBirth
                                                 ? `, sinh ngày ${dayjs(dateOfBirth).format('DD/MM/YYYY')}
@@ -188,20 +188,23 @@ const ModalPrintDecision = () => {
                                     })
                                     .join('. ')}
                             </div>
-                            <div className="indent-6">Cán bộ hướng dẫn: {tp.supervisor.name}</div>
+                            <div className="indent-6">Cán bộ hướng dẫn: {tp.supervisor?.name}</div>
                             <div className="indent-6">
                                 Chỉ định và mời các đồng chí có tên sau đây tham gia hội đồng:
                             </div>
                             <ul className="list-none indent-6">
-                                {[...tp.council.members].reverse().map((mem: any) => (
-                                    <li key={mem.id} className="grid grid-cols-3 gap-2 mb-1">
-                                        <span className="col-span-1 before:content-['-'] before:mr-1">
-                                            {mem.expert.name}
-                                        </span>
-                                        <span>{mem.expert.workplace}</span>
-                                        <span>{getCouncilRoleLabel(mem.role)}</span>
-                                    </li>
-                                ))}
+                                {tp.council?.members
+                                    ?.slice()
+                                    .reverse()
+                                    .map((mem: any) => (
+                                        <li key={mem.id} className="grid grid-cols-3 gap-2 mb-1">
+                                            <span className="col-span-1 before:content-['-'] before:mr-1">
+                                                {mem.expert.name}
+                                            </span>
+                                            <span>{mem.expert.workplace}</span>
+                                            <span>{getCouncilRoleLabel(mem.role)}</span>
+                                        </li>
+                                    ))}
                             </ul>
                             <div className="indent-6 mt-1">
                                 <strong>Điều 2.</strong> Nhiệm vụ của Hội đồng được quy định theo

@@ -10,7 +10,7 @@ import './index.css'
 import { useUpdateEvaluationCriterion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 
-type SubmitForm =EvaluationCriterion& {
+type SubmitForm = EvaluationCriterion & {
     currentSituation: string
     strengths: string
     weakness: string
@@ -70,12 +70,12 @@ export default function EvaluatedPage({
                             where: {
                                 id: i?.id,
                             },
-                            data:{
-                                currentSituation:i?.currentSituation,
-                                strengths:i?.strengths,
-                                weakness:i?.weakness,
-                                actionPlan:i?.actionPlan
-                            }
+                            data: {
+                                currentSituation: i?.currentSituation,
+                                strengths: i?.strengths,
+                                weakness: i?.weakness,
+                                actionPlan: i?.actionPlan,
+                            },
                         },
                     }
                 }),
