@@ -3,8 +3,10 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutEvaluationCouncilMember } from '@components/modal'
+import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { EvaluationMemberRole } from '@workspace/db'
 import {
     useFindUniqueEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
@@ -128,9 +130,28 @@ export default function EvaluationCouncil() {
                                 dataIndex: 'role',
                                 width: 200,
                                 align: 'center',
-                                render: (__, record) => {
-                                    return ''
-                                },
+                                render: (__, record) => (
+                                    <ul
+                                        style={{
+                                            paddingLeft: 16,
+                                            margin: 0,
+                                        }}
+                                    >
+                                        {record?.role?.map(
+                                            (val: EvaluationMemberRole, index: number) => (
+                                                // biome-ignore lint/suspicious/noArrayIndexKey: <>
+                                                <li key={index}>
+                                                    -{' '}
+                                                    {
+                                                        EVALUATION_MEMBER_ROLE.find(
+                                                            (i) => i.value === val
+                                                        )?.label
+                                                    }
+                                                </li>
+                                            )
+                                        )}
+                                    </ul>
+                                ),
                             },
                             {
                                 title: 'Thao tác',
