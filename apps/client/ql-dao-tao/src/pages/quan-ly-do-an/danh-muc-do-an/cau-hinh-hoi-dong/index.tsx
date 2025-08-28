@@ -772,7 +772,7 @@ export default function SettingClass() {
                                     Thời gian bắt đầu
                                 </th>
                                 {subjectClass?.thesisProjects.map((tp) => (
-                                    <th colSpan={3} style={{ ...cell, height: '25px' }}>
+                                    <th key={tp.id} colSpan={3} style={{ ...cell, height: '25px' }}>
                                         {tp.room?.name}
                                     </th>
                                 ))}

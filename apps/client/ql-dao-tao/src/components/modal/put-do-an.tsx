@@ -27,6 +27,8 @@ const PutThesisProject = () => {
     const { thesisProjectStatusOptions } = useThesisProjectStatusOptions()
     const [searchExpert, setSearchExpert] = useState('')
     const [searchOrganization, setSearchOrganization] = useState('')
+    const [supervisorId, setSupervisorId] = useState<string | undefined>()
+    const [coSupervisorId, setCoSupervisorId] = useState<string | undefined>()
     const [form] = Form.useForm<PutThesisProject>()
     const { isOpen, onClose, input } = useDisclosure<{
         subjectClassId: string
@@ -53,11 +55,18 @@ const PutThesisProject = () => {
         where: {
             ...(searchExpert
                 ? {
-                      lecturer: {
-                          userProfile: {
-                              fullname: { contains: searchExpert, mode: 'insensitive' },
+                      OR: [
+                          {
+                              lecturer: {
+                                  userProfile: {
+                                      fullname: { contains: searchExpert, mode: 'insensitive' },
+                                  },
+                              },
                           },
-                      },
+                          {
+                              name: { contains: searchExpert, mode: 'insensitive' },
+                          },
+                      ],
                   }
                 : {}),
         },
@@ -87,6 +96,22 @@ const PutThesisProject = () => {
         debouncedRefetch()
     }
 
+    const handleSupervisorChange = (value: string | undefined) => {
+        setSupervisorId(value)
+        if (value && value === coSupervisorId) {
+            form.setFieldValue('coSupervisorId', undefined)
+            setCoSupervisorId(undefined)
+        }
+    }
+
+    const handleCoSupervisorChange = (value: string | undefined) => {
+        setCoSupervisorId(value)
+        if (value && value === supervisorId) {
+            form.setFieldValue('supervisorId', undefined)
+            setSupervisorId(undefined)
+        }
+    }
+
     useEffect(() => {
         if (thesisProject) {
             form.setFieldsValue({
@@ -102,6 +127,8 @@ const PutThesisProject = () => {
                     : undefined,
                 projectEnd: thesisProject.projectEnd ? dayjs(thesisProject.projectEnd) : undefined,
             })
+            setSupervisorId(thesisProject.supervisorId)
+            setCoSupervisorId(thesisProject.coSupervisorId || '')
         }
     }, [thesisProject, form])
 
@@ -121,6 +148,7 @@ const PutThesisProject = () => {
             requirements: output.requirements,
             technologies: output.technologies,
             supervisorId: output.supervisorId,
+            coSupervisorId: output.coSupervisorId,
             organizationId: output.organizationId,
             maxStudents: output.maxStudents,
             currentStudents: output.currentStudents,
@@ -190,6 +218,23 @@ const PutThesisProject = () => {
                         showSearch
                         onSearch={handleSearchExpert}
                         filterOption={false}
+                        onChange={handleSupervisorChange}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="coSupervisorId" label="Chuyên gia hướng dẫn phụ">
+                    <Select
+                        placeholder="Chọn chuyên gia hướng dẫn phụ"
+                        options={expert.map((item) => ({
+                            label: `${item.code ? `${item.code} -` : ''} ${item.lecturer?.userProfile.fullname || item.name}`,
+                            value: item.id,
+                        }))}
+                        showSearch
+                        onSearch={handleSearchExpert}
+                        filterOption={false}
+                        onChange={handleCoSupervisorChange}
                         allowClear
                     />
                 </FormItem>

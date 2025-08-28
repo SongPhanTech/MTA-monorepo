@@ -242,7 +242,10 @@ const PutPaymentRecord = () => {
                         title: 'Vai trò',
                         width: 150,
                         align: 'center',
-                        render: (_, record) => getCouncilRoleLabel(record?.role),
+                        render: (_, record) =>
+                            record.role
+                                ? getCouncilRoleLabel(record?.role)
+                                : 'Giảng viên hướng dẫn',
                     },
                     {
                         title: 'Đề tài',
