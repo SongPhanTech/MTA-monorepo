@@ -165,6 +165,7 @@ model AnalysisFormEvidence extends Base {
 /// Vai trò của thành viên trong hội đồng đánh giá
 enum EvaluationMemberRole {
   CHAIRMAN // Chủ tịch hội đồng
+
   SECRETARY // Thư ký
   MEMBER // Thành viên
 
