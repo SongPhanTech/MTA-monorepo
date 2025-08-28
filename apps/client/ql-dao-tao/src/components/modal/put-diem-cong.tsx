@@ -99,6 +99,7 @@ const PutOlympicScoreModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="bonusScore" label="Điểm cộng">
                     <InputNumber
+                        type="number"
                         placeholder="Nhập điểm cộng"
                         className="w-full"
                         min={0}

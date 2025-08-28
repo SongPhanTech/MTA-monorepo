@@ -237,17 +237,17 @@ const PutTrainingMajorModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="numberCreditsMajor" label="Số TC Chuyên Ngành">
-                    <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                    <InputNumber type="number" style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="numberCreditsRequired" label="Số TC Bắt Buộc">
-                    <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                    <InputNumber type="number" style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="numberCreditsElective" label="Số TC Lựa Chọn">
-                    <InputNumber style={{ width: '100%' }} min={0} step={1} />
+                    <InputNumber type="number" style={{ width: '100%' }} min={0} step={1} />
                 </FormItem>
             </Col>
             <Col span={24}>

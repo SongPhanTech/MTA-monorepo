@@ -42,7 +42,7 @@ const PutKnowledgeBlock = () => {
             }
             if (input?.id) {
                 await updateKnowledgeBlock({
-                    data: data,
+                    data,
                     where: {
                         id: input.id,
                     },
@@ -50,7 +50,7 @@ const PutKnowledgeBlock = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createKnowledgeBlock({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

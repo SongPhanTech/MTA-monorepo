@@ -178,7 +178,13 @@ const PutDisciplinaryWarning = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="increasedFrom" label="Mức CCHĐ hiện tại">
-                    <InputNumber placeholder="Nhập hệ số" className="w-full" step={1} disabled />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập hệ số"
+                        className="w-full"
+                        step={1}
+                        disabled
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -199,6 +205,7 @@ const PutDisciplinaryWarning = () => {
             <Col span={12}>
                 <FormItem form={form} name="level" label="Mức CCHĐ" required>
                     <InputNumber
+                        type="number"
                         placeholder="Nhập độ ưu tiên"
                         className="w-full"
                         min={1}

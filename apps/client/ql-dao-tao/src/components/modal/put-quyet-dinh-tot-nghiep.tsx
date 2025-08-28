@@ -264,7 +264,12 @@ const PutGraduationDecision = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="finalGpa" label="GPA cuối cùng" required>
-                    <InputNumber placeholder="Nhập gpa" step={0.1} className="w-full" />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập gpa"
+                        step={0.1}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

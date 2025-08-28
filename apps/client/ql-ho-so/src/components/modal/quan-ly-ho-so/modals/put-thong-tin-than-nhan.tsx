@@ -81,6 +81,7 @@ export default function PutThongTinThanNhan() {
             <Col span={12}>
                 <FormItem label="Năm sinh" name="birthYear" form={form}>
                     <InputNumber
+                        type="number"
                         precision={0}
                         style={{ width: '100%' }}
                         max={new Date().getFullYear()}

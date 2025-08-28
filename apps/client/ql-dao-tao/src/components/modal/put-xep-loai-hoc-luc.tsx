@@ -113,6 +113,7 @@ const PutAcademicRanking = () => {
             <Col span={12}>
                 <FormItem form={form} name="base10Min" label="Hệ 10 từ" required>
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
                         step={0.1}
@@ -123,6 +124,7 @@ const PutAcademicRanking = () => {
             <Col span={12}>
                 <FormItem form={form} name="base10Max" label="Hệ 10 đến" required>
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
                         step={0.1}
@@ -133,6 +135,7 @@ const PutAcademicRanking = () => {
             <Col span={12}>
                 <FormItem form={form} name="base4Min" label="Điểm hệ 4 từ">
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
                         step={0.1}
@@ -143,6 +146,7 @@ const PutAcademicRanking = () => {
             <Col span={12}>
                 <FormItem form={form} name="base4Max" label="Điểm hệ 4 đến">
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         placeholder="Nhập điểm"
                         step={0.1}
@@ -166,6 +170,7 @@ const PutAcademicRanking = () => {
                 <Col span={12}>
                     <FormItem form={form} name="rankOrder" label="Hạng xếp loại" required>
                         <InputNumber
+                            type="number"
                             style={{ width: '100%' }}
                             placeholder="Nhập hạng xếp loại"
                             step={1}

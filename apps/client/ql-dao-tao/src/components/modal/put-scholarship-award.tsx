@@ -201,17 +201,32 @@ const PutScholarshipAward = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="amount" label="Số tiền học bổng">
-                    <InputNumber placeholder="Nhập số tiền học bổng" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập số tiền học bổng"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="gpaAtAward" label="GPA">
-                    <InputNumber placeholder="Nhập GPA" className="w-full" step={0.1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập GPA"
+                        className="w-full"
+                        step={0.1}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="priorityRank" label="Xếp hạng xét học bổng">
-                    <InputNumber placeholder="Nhập hệ số" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập hệ số"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

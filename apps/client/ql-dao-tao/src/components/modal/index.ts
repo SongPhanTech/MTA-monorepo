@@ -31,6 +31,7 @@ import PutAcademicActionCondition from './put-dieu-kien-xu-ly-hoc-tap'
 import PutThesisProject from './put-do-an'
 import PutTrainingObjectTypeModal from './put-doi-tuong-dao-tao'
 import PutGraduationApplication from './put-don-xet-tot-nghiep'
+import PutDotRenLuyen from './put-dot-danh-gia-ren-luyen'
 import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
 import PutUploadDivisionModal from './put-file-phan-lop'
@@ -160,5 +161,6 @@ export {
     PutPaymentRecordDetail,
     PutUpdatePaymentStatus,
     PutStatusQLTraCuuVanBang,
+    PutDotRenLuyen,
     PutSupervisorPaymentRecord,
 }

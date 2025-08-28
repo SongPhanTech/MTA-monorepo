@@ -152,7 +152,12 @@ const PutScholarshipCriteria = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="value" label="Giá trị ngưỡng để so sánh" required>
-                    <InputNumber placeholder="Nhập giá trị ngưỡng" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập giá trị ngưỡng"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             {/* <Col span={24}>
@@ -164,6 +169,7 @@ const PutScholarshipCriteria = () => {
             <Col span={12}>
                 <FormItem form={form} name="bonusValue" label="Cộng thêm điểm nếu đúng tiêu chí">
                     <InputNumber
+                        type="number"
                         placeholder="Nhập điểm cộng nếu đúng tiêu chí"
                         className="w-full"
                         step={0.1}

@@ -7,12 +7,11 @@ import useSpinner from '@hooks/spinner'
 import type { Milestone, SchoolYear } from '@workspace/db'
 import {
     useCreateMilestone,
-    useFindManyMilestone,
     useFindManySchoolYear,
     useFindUniqueMilestone,
     useUpdateMilestone,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message } from 'antd'
+import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -32,10 +31,10 @@ const PutMilestoneModal = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data = [], refetch } = useFindManySchoolYear({
+        orderBy: { createdAt: 'desc' },
         take: 1000,
         skip: 0,
     })
-    const { data: organizations = [], refetch: refetchMilestones } = useFindManyMilestone()
 
     const { mutateAsync: createMilestone } = useCreateMilestone()
     const { mutateAsync: updateMilestone } = useUpdateMilestone()
@@ -43,16 +42,18 @@ const PutMilestoneModal = () => {
         if (!output) return
         try {
             showSpinner()
+            const data = {
+                name: output.name,
+                period: output.period,
+                startPeriod: output.startPeriod,
+                startDate: output.startDate,
+                endDate: output.endDate,
+                schoolYearId: output.schoolYearId,
+                description: output.description,
+            }
             if (id) {
                 await updateMilestone({
-                    data: {
-                        name: output.name,
-                        period: output.period,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        schoolYearId: output.schoolYearId,
-                        description: output.description,
-                    },
+                    data,
                     where: {
                         id,
                     },
@@ -60,18 +61,10 @@ const PutMilestoneModal = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createMilestone({
-                    data: {
-                        name: output.name,
-                        period: output.period,
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        schoolYearId: output.schoolYearId,
-                        description: output.description,
-                    },
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['Milestone'],
             })
@@ -83,23 +76,26 @@ const PutMilestoneModal = () => {
         }
     }
 
-    const { data: level } = useFindUniqueMilestone({
-        where: { id },
-    })
+    const { data: initalValue } = useFindUniqueMilestone(
+        {
+            where: { id },
+        },
+        { enabled: !!id }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (level) {
+        if (initalValue) {
             form.setFieldsValue({
-                ...level,
-                startDate: dayjs(level.startDate),
-                endDate: level.endDate ? dayjs(level.endDate) : undefined,
+                ...initalValue,
+                startDate: dayjs(initalValue.startDate),
+                endDate: initalValue.endDate ? dayjs(initalValue.endDate) : undefined,
             })
         } else {
             form.setFieldsValue({
                 period: '12',
             })
         }
-    }, [level])
+    }, [initalValue])
 
     return (
         <PutFormModal
@@ -116,8 +112,18 @@ const PutMilestoneModal = () => {
                     <Input placeholder="Nhập nội dung" />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <FormItem form={form} name="period" label="Số tiết" required>
+            <Col span={12}>
+                <FormItem form={form} name="startPeriod" label="Tiết bắt đầu">
+                    <InputNumber
+                        type="number"
+                        step={1}
+                        placeholder="Nhập tiết bắt đầu"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="period" label="Số tiết">
                     <Input placeholder="Nhập số tiết" />
                 </FormItem>
             </Col>

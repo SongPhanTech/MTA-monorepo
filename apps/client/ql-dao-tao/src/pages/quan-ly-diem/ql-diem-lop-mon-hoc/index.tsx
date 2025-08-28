@@ -23,7 +23,7 @@ import {
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
-import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, message, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
@@ -915,16 +915,16 @@ export default function SubjectClassScore() {
                                             typeof currentScore === 'number' &&
                                             (currentScore < 0 || currentScore > 10)
                                         return (
-                                            <Input
+                                            <InputNumber
                                                 type="number"
                                                 id={`score-cc-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.5}
                                                 value={currentScore}
                                                 status={isInvalid ? 'error' : undefined}
-                                                onChange={(e) => {
-                                                    const value = e.target.value
-                                                    let newScore = Number.parseFloat(value)
+                                                onChange={(value) => {
+                                                    if (!value) return
+                                                    let newScore = +value
                                                     if (newScore > 99) newScore = 99
                                                     if (newScore < 0) newScore = 0
 
@@ -989,16 +989,16 @@ export default function SubjectClassScore() {
                                             typeof currentScore === 'number' &&
                                             (currentScore < 0 || currentScore > 10)
                                         return (
-                                            <Input
+                                            <InputNumber
                                                 type="number"
                                                 id={`score-tx-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.5}
                                                 value={currentScore}
                                                 status={isInvalid ? 'error' : undefined}
-                                                onChange={(e) => {
-                                                    const value = e.target.value
-                                                    let newScore = Number.parseFloat(value)
+                                                onChange={(value) => {
+                                                    if (!value) return
+                                                    let newScore = +value
                                                     if (newScore > 99) newScore = 99
                                                     if (newScore < 0) newScore = 0
 
@@ -1068,16 +1068,16 @@ export default function SubjectClassScore() {
                                             typeof currentScore === 'number' &&
                                             (currentScore < 0 || currentScore > 10)
                                         return (
-                                            <Input
+                                            <InputNumber
                                                 type="number"
                                                 id={`score-thi-${record.id}`}
                                                 style={{ width: '100%' }}
                                                 step={0.1}
                                                 value={currentScore}
                                                 status={isInvalid ? 'error' : undefined}
-                                                onChange={(e) => {
-                                                    const value = e.target.value
-                                                    let newScore = Number.parseFloat(value)
+                                                onChange={(value) => {
+                                                    if (!value) return
+                                                    let newScore = +value
                                                     if (newScore > 99) newScore = 99
                                                     if (newScore < 0) newScore = 0
 

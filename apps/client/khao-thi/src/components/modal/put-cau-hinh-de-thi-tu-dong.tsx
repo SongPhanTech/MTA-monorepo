@@ -133,12 +133,22 @@ const PutTestStructureRule = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="questionPoint" label="Điểm câu hỏi" required>
-                    <InputNumber placeholder="Nhập Điểm" step={0.1} className="w-full" />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập Điểm"
+                        step={0.1}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="count" label="Số lượng câu hỏi" required>
-                    <InputNumber placeholder="Nhập số điểm câu hỏi" step={1} className="w-full" />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập số điểm câu hỏi"
+                        step={1}
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

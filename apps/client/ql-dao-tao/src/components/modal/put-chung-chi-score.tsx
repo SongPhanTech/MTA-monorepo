@@ -100,6 +100,7 @@ const PutCertificateScoreModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="finalScore" label="Điểm tương đương">
                     <InputNumber
+                        type="number"
                         placeholder="Nhập điểm tương đương"
                         className="w-full"
                         min={0}

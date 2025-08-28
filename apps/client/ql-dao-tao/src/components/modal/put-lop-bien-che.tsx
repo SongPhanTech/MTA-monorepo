@@ -507,6 +507,7 @@ const PutFixedClassModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="startYear" label="Năm bắt đầu">
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         min={0}
                         step={1}
@@ -517,6 +518,7 @@ const PutFixedClassModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="initSize" label="Sĩ số">
                     <InputNumber
+                        type="number"
                         style={{ width: '100%' }}
                         min={0}
                         step={1}

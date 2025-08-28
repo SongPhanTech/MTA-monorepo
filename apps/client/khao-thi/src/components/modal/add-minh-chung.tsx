@@ -239,7 +239,7 @@ const AddEvidenceToPeriod = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Thêm minh chứng cho tiêu chí'}
+            title={'Gán minh chứng cho phiếu đánh giá'}
             className="w-[700px]"
         >
             <Col span={24}>
@@ -247,7 +247,7 @@ const AddEvidenceToPeriod = () => {
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}
-                        placeholder="Chọn khối kiến thức"
+                        placeholder="Chọn minh chứng"
                         options={listEvidence?.map((i) => {
                             return {
                                 label: i.name,

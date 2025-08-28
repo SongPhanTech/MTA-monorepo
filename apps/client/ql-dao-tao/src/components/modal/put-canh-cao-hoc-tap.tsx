@@ -149,7 +149,12 @@ const PutAcademicWarningRule = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="threshold" label="Giá trị ngưỡng để so sánh" required>
-                    <InputNumber placeholder="Nhập giá trị ngưỡng" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập giá trị ngưỡng"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             {/* <Col span={24}>
@@ -160,6 +165,7 @@ const PutAcademicWarningRule = () => {
             <Col span={12}>
                 <FormItem form={form} name="severity" label="Mức độ cảnh cáo sẽ tăng nếu vi phạm">
                     <InputNumber
+                        type="number"
                         placeholder="Nhập mức độ cảnh cáo sẽ tăng"
                         className="w-full"
                         step={1}
@@ -168,7 +174,12 @@ const PutAcademicWarningRule = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="yearCondition" label="Áp dụng cho sinh viên năm thứ...">
-                    <InputNumber placeholder="Nhập thứ tự" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập thứ tự"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -177,7 +188,12 @@ const PutAcademicWarningRule = () => {
                     name="semesterCondition"
                     label="Áp dụng cho học kỳ thứ ... trong năm"
                 >
-                    <InputNumber placeholder="Nhập thứ tự" className="w-full" step={1} />
+                    <InputNumber
+                        type="number"
+                        placeholder="Nhập thứ tự"
+                        className="w-full"
+                        step={1}
+                    />
                 </FormItem>
             </Col>
             {input?.academicWarningRuleId && (

@@ -104,6 +104,7 @@ export default function PutHocViModal() {
             <Col span={24}>
                 <FormItem label="Năm nhận" name="year" required form={form}>
                     <InputNumber
+                        type="number"
                         precision={0}
                         style={{ width: '100%' }}
                         max={new Date().getFullYear()}
