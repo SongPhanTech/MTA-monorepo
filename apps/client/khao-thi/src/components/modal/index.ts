@@ -10,6 +10,7 @@ import PutKnowledgeBlock from './put-chuong-muc'
 import PutSurveyExamModal from './put-create-survey-exam'
 import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
+import PutEvaluationCouncilMember from './put-evaluation-council-member'
 import PutExamBankQuestion from './put-exam-bank-question'
 import PutEvidence from './put-minh-chung'
 import PutSurveyModal from './put-modal-survey'
@@ -53,4 +54,5 @@ export {
     PutEvidence,
     AddEvidenceToPeriod,
     PinEvidenceToPeriod,
+    PutEvaluationCouncilMember,
 }
