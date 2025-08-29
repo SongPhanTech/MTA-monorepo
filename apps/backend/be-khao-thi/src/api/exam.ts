@@ -474,7 +474,7 @@ app.openapi(saveExamSessions, async (c) => {
         await tx.$executeRaw`
             UPDATE "khao-thi"."ExamSession"
             SET
-                "fax" = ${faxCaseSql}
+                "examFaxId" = ${faxCaseSql}
             WHERE
                 "id" IN (${Prisma.join(ids)})
             `

@@ -15,8 +15,10 @@ enum SurveyQuestionType {
 }
 
 enum  SurveyObject {
-  STUDENT
+  MILITARY_STUDENT
+  CIVILIAN_STUDENT
   LECTURER
+  STAFF
 
   @@schema("khao-thi")
 }
@@ -58,10 +60,13 @@ model Survey extends Base {
   startDate            DateTime
   endDate              DateTime?
 
+  isPublic             Boolean            @default(false)
+  anonymous            Boolean            @default(true)
+
   surveyObjectType     SurveyObjectType[]
 
   lectureId            String?           // ID giảng viên phụ trách khảo sát
-  lecture              Lecturer?         @relation(fields: [lectureId], references: [id])
+  lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
 
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
@@ -101,12 +106,13 @@ model SurveyQuestion extends Base {
 
 /// Lựa chọn của câu hỏi khảo sát
 model SurveyChoice extends Base {
-  answer          String
+  answer             String
+  requireExplanation Boolean
 
-  survey          Survey           @relation(fields: [surveyId], references: [id])
-  surveyId        String
+  survey             Survey           @relation(fields: [surveyId], references: [id])
+  surveyId           String
 
-  surveyResponses SurveyResponse[]  // Thêm relation mới
+  surveyResponses    SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")
 }
@@ -141,6 +147,7 @@ model SurveyResponse extends Base {
 
   // Câu trả lời của học viên
   answerText       String?        // Câu trả lời dạng text
+  explanation      String?
   surveyChoice     SurveyChoice?  @relation(fields: [surveyChoiceId], references: [id])
   surveyChoiceId   String?
 

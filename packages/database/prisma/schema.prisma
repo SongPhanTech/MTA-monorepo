@@ -485,8 +485,10 @@ enum SurveyQuestionType {
 }
 
 enum SurveyObject {
-  STUDENT
+  MILITARY_STUDENT
+  CIVILIAN_STUDENT
   LECTURER
+  STAFF
 
   @@schema("khao-thi")
 }
@@ -3460,6 +3462,8 @@ model ThesisProject {
   roomId             String?
   /// Ngày bảo vệ
   defenseDate        DateTime?
+  defenseSession     DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
+  defenseSessionId   String?
   registrationStart  DateTime?
   registrationEnd    DateTime?
   projectStart       DateTime?
@@ -3475,14 +3479,15 @@ model ThesisProject {
 
 /// Ca bảo vệ
 model DefenseSession {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  startTime   DateTime  @db.Time(0)
+  id            String          @id() @default(cuid())
+  code          String?         @unique()
+  active        Boolean         @default(true)
+  description   String?         @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt()
+  startTime     DateTime        @db.Time(0)
+  thesisProject ThesisProject[]
 
   @@schema("ql-dao-tao")
 }
@@ -4591,6 +4596,8 @@ model Survey {
   name                 String
   startDate            DateTime
   endDate              DateTime?
+  isPublic             Boolean            @default(false)
+  anonymous            Boolean            @default(true)
   surveyObjectType     SurveyObjectType[]
   lectureId            String?
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
@@ -4625,17 +4632,18 @@ model SurveyQuestion {
 
 /// Lựa chọn của câu hỏi khảo sát
 model SurveyChoice {
-  id              String           @id() @default(cuid())
-  code            String?          @unique()
-  active          Boolean          @default(true)
-  description     String?          @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @default(now()) @updatedAt()
-  answer          String
-  survey          Survey           @relation(fields: [surveyId], references: [id])
-  surveyId        String
-  surveyResponses SurveyResponse[]
+  id                 String           @id() @default(cuid())
+  code               String?          @unique()
+  active             Boolean          @default(true)
+  description        String?          @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt()
+  answer             String
+  requireExplanation Boolean
+  survey             Survey           @relation(fields: [surveyId], references: [id])
+  surveyId           String
+  surveyResponses    SurveyResponse[]
 
   @@schema("khao-thi")
 }
@@ -4677,6 +4685,7 @@ model SurveyResponse {
   surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id])
   surveyQuestionId String
   answerText       String?
+  explanation      String?
   surveyChoice     SurveyChoice?  @relation(fields: [surveyChoiceId], references: [id])
   surveyChoiceId   String?
   answeredAt       DateTime       @default(now())

@@ -63,7 +63,9 @@ model ThesisProject extends Base {
   roomId             String?
 
   /// Ngày bảo vệ
-  defenseDate        DateTime? 
+  defenseDate        DateTime?
+  defenseSession     DefenseSession?             @relation(fields: [defenseSessionId], references: [id])
+  defenseSessionId   String?
   
   // Thời gian
   registrationStart  DateTime?                      // Thời gian mở đăng ký
@@ -83,7 +85,8 @@ model ThesisProject extends Base {
 
 /// Ca bảo vệ
 model DefenseSession extends Base {
-  startTime DateTime @db.Time(0)
+  startTime     DateTime        @db.Time(0)
+  thesisProject ThesisProject[]
 
   @@schema("ql-dao-tao")
 }
