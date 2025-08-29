@@ -1,13 +1,18 @@
-// @ts-nocheck
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { emptyObjectIf } from '@workspace/constant'
 import { ExamStatus } from '@workspace/db'
-import { useCountExamSession, useFindManyExamSession, useFindUniqueExam } from '@workspace/db/hooks'
+import {
+    useCountExamSession,
+    useFindManyExamFax,
+    useFindManyExamSession,
+    useFindUniqueExam,
+} from '@workspace/db/hooks'
 import { useSaveExamSessions } from '@workspace/libs/api/exam'
-import { Button, Col, Flex, Input, message, Row } from 'antd'
-import { Edit, Shuffle } from 'lucide-react'
+import { Button, Col, Flex, message, Row, Select } from 'antd'
+import { Edit, Eye, EyeOff } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 interface ExamSessionProps {
@@ -22,10 +27,10 @@ export default function ExamSession({ id }: ExamSessionProps) {
         name: '',
         code: '',
         fax: '',
+        score: undefined,
     })
-    const [editedData, setEditedData] = useState<Record<string, { fax?: string; score?: number }>>(
-        {}
-    )
+    const [editedData, setEditedData] = useState<Record<string, { fax?: string }>>({})
+    const [showScores, setShowScores] = useState(false)
 
     const where = useMemo(
         () => ({
@@ -54,9 +59,11 @@ export default function ExamSession({ id }: ExamSessionProps) {
                 : {}),
             ...(filters.fax && filters.fax !== ''
                 ? {
-                      fax: {
-                          contains: filters.fax,
-                          mode: 'insensitive' as const,
+                      examFax: {
+                          fax: {
+                              contains: filters.fax,
+                              mode: 'insensitive' as const,
+                          },
                       },
                   }
                 : {}),
@@ -73,14 +80,27 @@ export default function ExamSession({ id }: ExamSessionProps) {
                         userProfile: true,
                     },
                 },
+                examFax: true,
             },
-            orderBy: {
-                student: {
-                    userProfile: {
-                        firstName: 'asc',
+            orderBy: [
+                ...emptyObjectIf(
+                    [
+                        {
+                            examFax: {
+                                score: filters.score,
+                            },
+                        },
+                    ],
+                    !!filters.score
+                ),
+                {
+                    student: {
+                        userProfile: {
+                            firstName: 'asc',
+                        },
                     },
                 },
-            },
+            ],
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
@@ -97,20 +117,15 @@ export default function ExamSession({ id }: ExamSessionProps) {
         { enabled: !!id }
     )
 
-    const { mutateAsync: updateManyExamSession } = useSaveExamSessions()
+    const { mutateAsync: saveExamSessions } = useSaveExamSessions()
     async function handleUpdateExamSession() {
         try {
             showSpinner()
 
             const updates = Object.entries(editedData).map(([id, values]) => {
-                const original = data.find((d) => d.id === id)
-
-                const scoreValue = values.score ?? original?.score ?? null
-
                 return {
                     id,
-                    fax: values.fax ?? original?.fax ?? null,
-                    score: scoreValue !== null ? Number(scoreValue) : null,
+                    examFaxId: values.fax ?? null,
                 }
             })
 
@@ -119,7 +134,7 @@ export default function ExamSession({ id }: ExamSessionProps) {
                 return
             }
 
-            const res = await updateManyExamSession({ data: updates })
+            const res = await saveExamSessions({ data: updates })
 
             if (res.status === 400) {
                 message.error(`${res.data.message}`)
@@ -143,43 +158,34 @@ export default function ExamSession({ id }: ExamSessionProps) {
         { enabled: !!id }
     )
 
+    const { data: faxData } = useFindManyExamFax(
+        {
+            where: {
+                examId: id,
+            },
+        },
+        { enabled: !!id }
+    )
+
     const isFinished = useMemo(() => {
         if (!id) return true
         return initialValue?.status === ExamStatus.FINISHED
     }, [id, initialValue?.status])
 
-    const handleAutoGenerateFax = () => {
-        if (!data.length) {
-            message.warning('Không có sinh viên nào trong bảng')
-            return
-        }
+    const usedFaxIds = useMemo(() => {
+        return data
+            .map((d) => {
+                if (d.id in editedData) {
+                    return editedData[d.id]?.fax ?? null
+                }
+                return d.examFax?.id
+            })
+            .filter(Boolean)
+    }, [data, editedData])
 
-        const usedFax = new Set<string>()
-        const newEditedData: Record<string, { fax?: string; score?: number }> = {}
-
-        data.forEach((s) => {
-            const existingFax = editedData[s.id]?.fax ?? s.fax
-            if (existingFax) usedFax.add(existingFax)
-        })
-
-        data.forEach((s) => {
-            let fax = editedData[s.id]?.fax ?? s.fax
-            if (!fax) {
-                do {
-                    fax = Math.floor(100000 + Math.random() * 900000).toString()
-                } while (usedFax.has(fax))
-                usedFax.add(fax)
-            }
-
-            newEditedData[s.id] = {
-                ...editedData[s.id],
-                fax,
-            }
-        })
-
-        setEditedData(newEditedData)
-        message.success('Đã sinh phách tự động, vui lòng nhấn Cập nhật để lưu')
-    }
+    const availableFax = useMemo(() => {
+        return faxData?.filter((f) => !usedFaxIds.includes(f.id)) ?? []
+    }, [faxData, usedFaxIds])
 
     return (
         <div>
@@ -187,10 +193,22 @@ export default function ExamSession({ id }: ExamSessionProps) {
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={12}>
+                            <strong>
+                                {!isFinished &&
+                                    'Chỉ có thể sửa khi kỳ thi ở trạng thái: Đã kết thúc'}
+                            </strong>
+                        </Col>
+                        <Col span={12}>
                             <Flex justify="end" gap={4}>
-                                <Button disabled={!isFinished} onClick={handleAutoGenerateFax}>
-                                    <Shuffle />
-                                    Sinh phách tự động
+                                <Button
+                                    onClick={() => setShowScores((prev) => !prev)}
+                                    disabled={
+                                        data.length === 0 ||
+                                        !data.some((item) => item.examFax && item.examFax)
+                                    }
+                                >
+                                    {showScores ? <EyeOff /> : <Eye />}
+                                    {showScores ? 'Ẩn điểm' : 'Xem điểm'}
                                 </Button>
                                 <Button
                                     type="primary"
@@ -198,7 +216,7 @@ export default function ExamSession({ id }: ExamSessionProps) {
                                     disabled={!isFinished}
                                 >
                                     <Edit />
-                                    Cập nhật
+                                    Lưu
                                 </Button>
                             </Flex>
                         </Col>
@@ -240,21 +258,46 @@ export default function ExamSession({ id }: ExamSessionProps) {
                                 width: 120,
                                 align: 'center',
                                 type: 'input',
-                                render: (_, record) => (
-                                    <Input
-                                        value={editedData[record.id]?.fax ?? record.fax ?? ''}
-                                        onChange={(e) =>
-                                            setEditedData((prev) => ({
-                                                ...prev,
-                                                [record.id]: {
-                                                    ...prev[record.id],
-                                                    fax: e.target.value,
-                                                },
-                                            }))
-                                        }
-                                        disabled={!isFinished}
-                                    />
-                                ),
+                                render: (_, record) => {
+                                    const hasEdited = record.id in editedData
+                                    const currentFaxId = hasEdited
+                                        ? editedData[record.id]?.fax
+                                        : record.examFax?.id
+
+                                    const currentFaxLabel =
+                                        faxData?.find((f) => f.id === currentFaxId)?.fax ||
+                                        record.examFax?.fax
+
+                                    const options = [
+                                        ...(currentFaxId &&
+                                        !availableFax.find((f) => f.id === currentFaxId)
+                                            ? [{ value: currentFaxId, label: currentFaxLabel }]
+                                            : []),
+                                        ...availableFax.map((f) => ({
+                                            value: f.id,
+                                            label: f.fax,
+                                        })),
+                                    ]
+
+                                    return (
+                                        <Select
+                                            className="w-full"
+                                            value={currentFaxId ?? undefined}
+                                            options={options}
+                                            onChange={(value) =>
+                                                setEditedData((prev) => ({
+                                                    ...prev,
+                                                    [record.id]: {
+                                                        ...prev[record.id],
+                                                        fax: value ?? null,
+                                                    },
+                                                }))
+                                            }
+                                            disabled={!isFinished}
+                                            allowClear
+                                        />
+                                    )
+                                },
                             },
                             {
                                 title: 'Điểm',
@@ -262,22 +305,8 @@ export default function ExamSession({ id }: ExamSessionProps) {
                                 width: 120,
                                 align: 'center',
                                 type: 'order',
-                                render: (_, record) => (
-                                    <Input
-                                        type="number"
-                                        value={editedData[record.id]?.score ?? record.score ?? ''}
-                                        onChange={(e) =>
-                                            setEditedData((prev) => ({
-                                                ...prev,
-                                                [record.id]: {
-                                                    ...prev[record.id],
-                                                    score: Number(e.target.value),
-                                                },
-                                            }))
-                                        }
-                                        disabled={!isFinished}
-                                    />
-                                ),
+                                render: (_, record) =>
+                                    showScores ? (record?.examFax?.score?.toString() ?? '') : '***',
                             },
                         ]}
                         data={data}

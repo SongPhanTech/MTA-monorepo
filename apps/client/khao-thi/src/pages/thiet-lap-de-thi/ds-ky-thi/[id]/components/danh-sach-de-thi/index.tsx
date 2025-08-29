@@ -208,6 +208,12 @@ export default function ExamBank({ id }: ExamBankProps) {
                         <Col span={24}>
                             <Row gutter={[16, 16]} align="top" justify="end">
                                 <Col span={12}>
+                                    <strong>
+                                        {!isDraft &&
+                                            'Chỉ có thể sửa khi kỳ thi ở trạng thái: Bản nháp'}
+                                    </strong>
+                                </Col>
+                                <Col span={12}>
                                     <Flex justify="end" gap={4}>
                                         <Button
                                             onClick={() => onOpenModalSinhDeThiTuDong(id)}
