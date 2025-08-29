@@ -603,8 +603,6 @@ export default function SettingClass() {
         >
     )
 
-    console.log(selectedDefenseSessionIds)
-
     return (
         <Col span={24}>
             <Col span={24} className="flex justify-end">
