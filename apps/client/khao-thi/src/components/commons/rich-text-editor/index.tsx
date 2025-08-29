@@ -21,7 +21,7 @@ import { env } from '@/env'
 import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
 import 'katex/dist/katex.min.css'
-import Color from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
 import { CustomTextStyle } from './CustomTextStyle'
 
 // import Mention from '@tiptap/extension-mention'
@@ -61,7 +61,7 @@ export function RichTextEditor({
             }),
             Highlight,
             CustomTextStyle,
-            Color,
+            Color.configure({ types: ['textStyle'] }),
             // ExportDocx.configure({
             //     onCompleteExport: (result: ArrayBuffer) => {
             //         setIsLoading(false)

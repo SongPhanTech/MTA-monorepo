@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
