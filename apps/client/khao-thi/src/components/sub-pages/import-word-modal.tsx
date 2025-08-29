@@ -66,7 +66,7 @@ const WordImportModal: React.FC<WordImportModalProps> = ({
                     const imagePath = `word/${relMap.get(relId)}`
                     const file = zip.file(imagePath)
                     if (file) {
-                        const blob = new Blob([file.asUint8Array()], { type: 'image/png' })
+                        const blob = new Blob([file.asArrayBuffer()], { type: 'image/png' })
                         const placeholder = `{img_${imgIndex}}`
                         paragraphText += ` ${placeholder} `
                         images.push({ name: placeholder, blob })

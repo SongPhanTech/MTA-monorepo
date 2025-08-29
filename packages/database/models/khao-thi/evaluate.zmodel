@@ -187,9 +187,9 @@ model EvaluationCouncil extends Base {
 }
 
 model EvaluationCouncilMember extends Base {
-  evaluationCouncil   EvaluationCouncil    @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
+  evaluationCouncil   EvaluationCouncil      @relation(fields: [evaluationCouncilId], references: [id], onDelete: Cascade)
   evaluationCouncilId String
-  lecturer            Lecturer             @relation(fields: [lecturerId], references: [id])
+  lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId          String
   role                EvaluationMemberRole[]
 
