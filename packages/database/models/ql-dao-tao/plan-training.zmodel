@@ -334,17 +334,6 @@ model Subject extends Base {
   @@schema("ql-dao-tao")
 }
 
-enum SubjectEquivalentType { // loại môn học tương đương
-  NONE // không tương đương
-  OneByOne // tương đương 1-1
-  TwoByOne // hai môn tương đương 1
-  ThreeByOne // ba môn tương đương 1
-  FourByOne // bốn môn tương đương 1
-  OneByTwo // một môn tương đương hai
-  OneByThree // một môn tương đương ba
-  @@schema("ql-dao-tao")
-}
-
 /// loại hình thi
 // bảo đảm tối thiếu có 02 mã đề thi đối với hình thức thi tự luận
 // và gấp 1,5 lần số học viên dự thi đối với hình thức thi vấn đáp, thực hành.
@@ -372,7 +361,6 @@ model SubjectVersion extends Base {
   name                     String
   examType                 ExamType
   type                     SubjectVersionType     @default(Normal) // loại môn học
-  subjectEquivalentType    SubjectEquivalentType  @default(NONE) // loại môn học tương đương
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
   period                   Int                    @default(0) // số tiết
@@ -410,11 +398,46 @@ model SubjectVersion extends Base {
   coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
 
+  // Nhóm môn tương đương
+  equivalencyGroups        SubjectInGroup[]
+
+
   knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
   questionBanks            QuestionBank[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Đại diện cho MỘT quy tắc tương đương, ví dụ: (A + B) <=> (C)
+model EquivalencyGroup extends Base {
+  subjects SubjectInGroup[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Bảng liên kết giữa Môn học và Nhóm tương đương
+model SubjectInGroup extends Base {
+  subject            SubjectVersion   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId          String
+  equivalencyGroup   EquivalencyGroup @relation(fields: [equivalencyGroupId], references: [id], onDelete: Cascade)
+  equivalencyGroupId String
+
+  /// Xác định môn học này nằm ở vế nào của quy tắc tương đương
+  /// SOURCE: Vế nguồn (bên trái)
+  /// TARGET: Vế đích (bên phải)
+  side               EquivalencySide
+
+  @@unique([subjectId, equivalencyGroupId])
+  @@schema("ql-dao-tao")
+}
+
+/// Enum để định nghĩa các vế của một quy tắc
+enum EquivalencySide {
+  SOURCE
+  TARGET
 
   @@schema("ql-dao-tao")
 }
