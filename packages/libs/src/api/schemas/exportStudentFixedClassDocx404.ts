@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentFixedClassDocx404 = {
-  message: string;
-};
+    message: string
+}

@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExamSessionsItem } from './examSessionsItem';
+import type { ExamSessionsItem } from './examSessionsItem'
 
-export type ExamSessions = ExamSessionsItem[];
+export type ExamSessions = ExamSessionsItem[]

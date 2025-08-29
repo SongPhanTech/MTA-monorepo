@@ -49,19 +49,19 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type SaoLuuDuLieu = BaseEntity & {
-  Id?: number;
-  /** @nullable */
-  iKhoiTaoDuLieu?: string | null;
-  dThoiGianSaoLuu?: string;
-  /** @nullable */
-  sDescription?: string | null;
-  /** @nullable */
-  sNguoiThucHien?: string | null;
-  rDungLuong?: number;
-  iTrangThai?: number;
-  /** @nullable */
-  sPhienBan?: string | null;
-};
+    Id?: number
+    /** @nullable */
+    iKhoiTaoDuLieu?: string | null
+    dThoiGianSaoLuu?: string
+    /** @nullable */
+    sDescription?: string | null
+    /** @nullable */
+    sNguoiThucHien?: string | null
+    rDungLuong?: number
+    iTrangThai?: number
+    /** @nullable */
+    sPhienBan?: string | null
+}

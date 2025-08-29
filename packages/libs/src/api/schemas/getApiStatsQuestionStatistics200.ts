@@ -4,15 +4,16 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetApiStatsQuestionStatistics200ByQuestionBankItem } from './getApiStatsQuestionStatistics200ByQuestionBankItem';
-import type { GetApiStatsQuestionStatistics200BySubjectVersionItem } from './getApiStatsQuestionStatistics200BySubjectVersionItem';
-import type { GetApiStatsQuestionStatistics200ByDifficultyItem } from './getApiStatsQuestionStatistics200ByDifficultyItem';
-import type { GetApiStatsQuestionStatistics200ByKnowledgeBlockItem } from './getApiStatsQuestionStatistics200ByKnowledgeBlockItem';
+
+import type { GetApiStatsQuestionStatistics200ByDifficultyItem } from './getApiStatsQuestionStatistics200ByDifficultyItem'
+import type { GetApiStatsQuestionStatistics200ByKnowledgeBlockItem } from './getApiStatsQuestionStatistics200ByKnowledgeBlockItem'
+import type { GetApiStatsQuestionStatistics200ByQuestionBankItem } from './getApiStatsQuestionStatistics200ByQuestionBankItem'
+import type { GetApiStatsQuestionStatistics200BySubjectVersionItem } from './getApiStatsQuestionStatistics200BySubjectVersionItem'
 
 export type GetApiStatsQuestionStatistics200 = {
-  totalQuestions: number;
-  byQuestionBank: GetApiStatsQuestionStatistics200ByQuestionBankItem[];
-  bySubjectVersion: GetApiStatsQuestionStatistics200BySubjectVersionItem[];
-  byDifficulty: GetApiStatsQuestionStatistics200ByDifficultyItem[];
-  byKnowledgeBlock: GetApiStatsQuestionStatistics200ByKnowledgeBlockItem[];
-};
+    totalQuestions: number
+    byQuestionBank: GetApiStatsQuestionStatistics200ByQuestionBankItem[]
+    bySubjectVersion: GetApiStatsQuestionStatistics200BySubjectVersionItem[]
+    byDifficulty: GetApiStatsQuestionStatistics200ByDifficultyItem[]
+    byKnowledgeBlock: GetApiStatsQuestionStatistics200ByKnowledgeBlockItem[]
+}

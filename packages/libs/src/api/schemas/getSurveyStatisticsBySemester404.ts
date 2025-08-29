@@ -6,5 +6,5 @@
  */
 
 export type GetSurveyStatisticsBySemester404 = {
-  message: string;
-};
+    message: string
+}

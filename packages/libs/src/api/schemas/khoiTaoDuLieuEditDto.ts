@@ -49,11 +49,11 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { KhoiTaoDuLieu } from './khoiTaoDuLieu';
-import type { KhoiTaoDuLieuEditDtoState } from './khoiTaoDuLieuEditDtoState';
+import type { KhoiTaoDuLieu } from './khoiTaoDuLieu'
+import type { KhoiTaoDuLieuEditDtoState } from './khoiTaoDuLieuEditDtoState'
 
 export type KhoiTaoDuLieuEditDto = KhoiTaoDuLieu & {
-  /** @nullable */
-  State?: KhoiTaoDuLieuEditDtoState;
-  bDefaultWorking?: boolean;
-};
+    /** @nullable */
+    State?: KhoiTaoDuLieuEditDtoState
+    bDefaultWorking?: boolean
+}

@@ -6,5 +6,5 @@
  */
 
 export type GetApiStatsExamParticipantsBySemester200 = {
-  totalParticipants: number;
-};
+    totalParticipants: number
+}

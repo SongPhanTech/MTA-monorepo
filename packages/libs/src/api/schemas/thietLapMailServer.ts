@@ -49,28 +49,28 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type ThietLapMailServer = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  iNhaCungCapMail?: number | null;
-  /** @nullable */
-  sMayChuMail?: string | null;
-  /** @nullable */
-  iPort?: number | null;
-  /** @nullable */
-  iPhuongThucBaoMat?: number | null;
-  /** @nullable */
-  sTenDangNhap?: string | null;
-  /** @nullable */
-  sPassword?: string | null;
-  /** @nullable */
-  sDiaChiMailGui?: string | null;
-  /** @nullable */
-  sDiaChiEmailHienThi?: string | null;
-  /** @nullable */
-  sTenHienThi?: string | null;
-  /** @nullable */
-  iDictionaryKey?: number | null;
-};
+    Id?: string
+    /** @nullable */
+    iNhaCungCapMail?: number | null
+    /** @nullable */
+    sMayChuMail?: string | null
+    /** @nullable */
+    iPort?: number | null
+    /** @nullable */
+    iPhuongThucBaoMat?: number | null
+    /** @nullable */
+    sTenDangNhap?: string | null
+    /** @nullable */
+    sPassword?: string | null
+    /** @nullable */
+    sDiaChiMailGui?: string | null
+    /** @nullable */
+    sDiaChiEmailHienThi?: string | null
+    /** @nullable */
+    sTenHienThi?: string | null
+    /** @nullable */
+    iDictionaryKey?: number | null
+}

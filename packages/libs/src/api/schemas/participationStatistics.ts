@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ParticipationStatisticsItem } from './participationStatisticsItem';
+import type { ParticipationStatisticsItem } from './participationStatisticsItem'
 
-export type ParticipationStatistics = ParticipationStatisticsItem[];
+export type ParticipationStatistics = ParticipationStatisticsItem[]

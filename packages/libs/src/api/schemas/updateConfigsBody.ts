@@ -6,6 +6,6 @@
  */
 
 export type UpdateConfigsBody = {
-  idleSessionTimeoutPeriod?: string;
-  rememberMePeriod?: string;
-};
+    idleSessionTimeoutPeriod?: string
+    rememberMePeriod?: string
+}

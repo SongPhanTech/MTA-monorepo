@@ -49,17 +49,17 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type AttachmentBaseEntity = BaseEntity & {
-  /** @nullable */
-  sOriginFileName?: string | null;
-  /** @nullable */
-  sFileName?: string | null;
-  /** @nullable */
-  sFileType?: string | null;
-  /** @nullable */
-  sFileSize?: string | null;
-  /** @nullable */
-  sUId?: string | null;
-};
+    /** @nullable */
+    sOriginFileName?: string | null
+    /** @nullable */
+    sFileName?: string | null
+    /** @nullable */
+    sFileType?: string | null
+    /** @nullable */
+    sFileSize?: string | null
+    /** @nullable */
+    sUId?: string | null
+}

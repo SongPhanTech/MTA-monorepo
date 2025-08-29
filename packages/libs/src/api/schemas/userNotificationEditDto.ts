@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { UserNotification } from './userNotification';
-import type { UserNotificationEditDtoState } from './userNotificationEditDtoState';
+import type { UserNotification } from './userNotification'
+import type { UserNotificationEditDtoState } from './userNotificationEditDtoState'
 
 export type UserNotificationEditDto = UserNotification & {
-  /** @nullable */
-  State?: UserNotificationEditDtoState;
-};
+    /** @nullable */
+    State?: UserNotificationEditDtoState
+}

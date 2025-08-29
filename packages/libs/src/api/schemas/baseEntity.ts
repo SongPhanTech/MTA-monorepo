@@ -51,20 +51,20 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface BaseEntity {
-  /** @nullable */
-  sNguoiTao?: string | null;
-  /** @nullable */
-  sNguoiSua?: string | null;
-  /** @nullable */
-  dNgayTao?: string | null;
-  /** @nullable */
-  dNgaySua?: string | null;
-  /** @nullable */
-  sThietBiTao?: string | null;
-  /** @nullable */
-  sThietBiSua?: string | null;
-  /** @nullable */
-  RowStatus?: number | null;
-  /** @nullable */
-  RowIndex?: number | null;
+    /** @nullable */
+    sNguoiTao?: string | null
+    /** @nullable */
+    sNguoiSua?: string | null
+    /** @nullable */
+    dNgayTao?: string | null
+    /** @nullable */
+    dNgaySua?: string | null
+    /** @nullable */
+    sThietBiTao?: string | null
+    /** @nullable */
+    sThietBiSua?: string | null
+    /** @nullable */
+    RowStatus?: number | null
+    /** @nullable */
+    RowIndex?: number | null
 }

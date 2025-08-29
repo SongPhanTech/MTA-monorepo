@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMTinh } from './dMTinh';
-import type { DMTinhEditDtoState } from './dMTinhEditDtoState';
+import type { DMTinh } from './dMTinh'
+import type { DMTinhEditDtoState } from './dMTinhEditDtoState'
 
 export type DMTinhEditDto = DMTinh & {
-  /** @nullable */
-  State?: DMTinhEditDtoState;
-  /** @nullable */
-  sTenQuocGia?: string | null;
-};
+    /** @nullable */
+    State?: DMTinhEditDtoState
+    /** @nullable */
+    sTenQuocGia?: string | null
+}

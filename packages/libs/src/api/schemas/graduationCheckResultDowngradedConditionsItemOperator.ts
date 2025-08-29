@@ -5,15 +5,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GraduationCheckResultDowngradedConditionsItemOperator = typeof GraduationCheckResultDowngradedConditionsItemOperator[keyof typeof GraduationCheckResultDowngradedConditionsItemOperator];
-
+export type GraduationCheckResultDowngradedConditionsItemOperator =
+    (typeof GraduationCheckResultDowngradedConditionsItemOperator)[keyof typeof GraduationCheckResultDowngradedConditionsItemOperator]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GraduationCheckResultDowngradedConditionsItemOperator = {
-  GT: 'GT',
-  GTE: 'GTE',
-  LT: 'LT',
-  LTE: 'LTE',
-  EQ: 'EQ',
-  IN: 'IN',
-} as const;
+    GT: 'GT',
+    GTE: 'GTE',
+    LT: 'LT',
+    LTE: 'LTE',
+    EQ: 'EQ',
+    IN: 'IN',
+} as const

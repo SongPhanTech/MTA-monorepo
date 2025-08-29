@@ -6,6 +6,6 @@
  */
 
 export interface GenExamFaxResult {
-  success: boolean;
-  message: string;
+    success: boolean
+    message: string
 }

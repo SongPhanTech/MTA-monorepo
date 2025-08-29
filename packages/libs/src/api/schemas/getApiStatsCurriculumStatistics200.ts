@@ -6,6 +6,6 @@
  */
 
 export type GetApiStatsCurriculumStatistics200 = {
-  activeCurricula: number;
-  activeCurriculumVersions: number;
-};
+    activeCurricula: number
+    activeCurriculumVersions: number
+}

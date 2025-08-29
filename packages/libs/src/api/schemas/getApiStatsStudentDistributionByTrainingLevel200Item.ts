@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsStudentDistributionByTrainingLevel200Item = {
-  trainingLevelId: string;
-  name: string;
-  count: number;
-};
+    trainingLevelId: string
+    name: string
+    count: number
+}

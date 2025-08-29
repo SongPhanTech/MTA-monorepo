@@ -49,31 +49,31 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type DMDonVi = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sMa?: string | null;
-  /** @nullable */
-  sTen?: string | null;
-  /** @nullable */
-  sParentId?: string | null;
-  /** @nullable */
-  sTruongDonVi?: string | null;
-  /** @nullable */
-  sTenVietTat?: string | null;
-  /** @nullable */
-  sChucNangNhiemVu?: string | null;
-  /** @nullable */
-  sDiaChi?: string | null;
-  /** @nullable */
-  iSTT?: number | null;
-  bActive?: boolean;
-  bDeleted?: boolean;
-  bSystem?: boolean;
-  /** @nullable */
-  iDictionaryKey?: number | null;
-  /** @nullable */
-  sCode?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sMa?: string | null
+    /** @nullable */
+    sTen?: string | null
+    /** @nullable */
+    sParentId?: string | null
+    /** @nullable */
+    sTruongDonVi?: string | null
+    /** @nullable */
+    sTenVietTat?: string | null
+    /** @nullable */
+    sChucNangNhiemVu?: string | null
+    /** @nullable */
+    sDiaChi?: string | null
+    /** @nullable */
+    iSTT?: number | null
+    bActive?: boolean
+    bDeleted?: boolean
+    bSystem?: boolean
+    /** @nullable */
+    iDictionaryKey?: number | null
+    /** @nullable */
+    sCode?: string | null
+}

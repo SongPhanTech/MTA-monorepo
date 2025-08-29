@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsStudentsOfInterestParams = {
-warningLevel?: string;
-debtCredits?: string;
-gpaThreshold?: string;
-};
+    warningLevel?: string
+    debtCredits?: string
+    gpaThreshold?: string
+}

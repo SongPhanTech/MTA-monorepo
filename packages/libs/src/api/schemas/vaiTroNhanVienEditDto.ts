@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { VaiTroNhanVien } from './vaiTroNhanVien';
-import type { VaiTroNhanVienEditDtoState } from './vaiTroNhanVienEditDtoState';
+import type { VaiTroNhanVien } from './vaiTroNhanVien'
+import type { VaiTroNhanVienEditDtoState } from './vaiTroNhanVienEditDtoState'
 
 export type VaiTroNhanVienEditDto = VaiTroNhanVien & {
-  /** @nullable */
-  State?: VaiTroNhanVienEditDtoState;
-  /** @nullable */
-  sTenNhanVien?: string | null;
-};
+    /** @nullable */
+    State?: VaiTroNhanVienEditDtoState
+    /** @nullable */
+    sTenNhanVien?: string | null
+}

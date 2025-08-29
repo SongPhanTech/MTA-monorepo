@@ -49,21 +49,21 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type ThietLapKetNoiAPI = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sTenantCode?: string | null;
-  /** @nullable */
-  sMa?: string | null;
-  /** @nullable */
-  sTen?: string | null;
-  /** @nullable */
-  sClientId?: string | null;
-  /** @nullable */
-  sClientSecret?: string | null;
-  /** @nullable */
-  sGhiChu?: string | null;
-  bActive?: boolean;
-};
+    Id?: string
+    /** @nullable */
+    sTenantCode?: string | null
+    /** @nullable */
+    sMa?: string | null
+    /** @nullable */
+    sTen?: string | null
+    /** @nullable */
+    sClientId?: string | null
+    /** @nullable */
+    sClientSecret?: string | null
+    /** @nullable */
+    sGhiChu?: string | null
+    bActive?: boolean
+}

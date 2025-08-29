@@ -6,8 +6,8 @@
  */
 
 export type GetApiStatsSubjectPassFailRate200Item = {
-  subjectVersionId: string;
-  name: string;
-  passed: number;
-  failed: number;
-};
+    subjectVersionId: string
+    name: string
+    passed: number
+    failed: number
+}

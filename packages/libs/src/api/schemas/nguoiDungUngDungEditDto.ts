@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { NguoiDungUngDung } from './nguoiDungUngDung';
-import type { NguoiDungUngDungEditDtoState } from './nguoiDungUngDungEditDtoState';
+import type { NguoiDungUngDung } from './nguoiDungUngDung'
+import type { NguoiDungUngDungEditDtoState } from './nguoiDungUngDungEditDtoState'
 
 export type NguoiDungUngDungEditDto = NguoiDungUngDung & {
-  /** @nullable */
-  State?: NguoiDungUngDungEditDtoState;
-  /** @nullable */
-  sTenNhanVien?: string | null;
-};
+    /** @nullable */
+    State?: NguoiDungUngDungEditDtoState
+    /** @nullable */
+    sTenNhanVien?: string | null
+}

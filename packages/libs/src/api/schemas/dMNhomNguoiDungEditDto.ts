@@ -49,18 +49,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMNhomNguoiDung } from './dMNhomNguoiDung';
-import type { DMNhomNguoiDungEditDtoState } from './dMNhomNguoiDungEditDtoState';
-import type { NguoiDungTrongNhomEditDto } from './nguoiDungTrongNhomEditDto';
-import type { GanVaiTroVaoNhomEditDto } from './ganVaiTroVaoNhomEditDto';
+import type { DMNhomNguoiDung } from './dMNhomNguoiDung'
+import type { DMNhomNguoiDungEditDtoState } from './dMNhomNguoiDungEditDtoState'
+import type { GanVaiTroVaoNhomEditDto } from './ganVaiTroVaoNhomEditDto'
+import type { NguoiDungTrongNhomEditDto } from './nguoiDungTrongNhomEditDto'
 
 export type DMNhomNguoiDungEditDto = DMNhomNguoiDung & {
-  /** @nullable */
-  State?: DMNhomNguoiDungEditDtoState;
-  /** @nullable */
-  sTenCha?: string | null;
-  /** @nullable */
-  NguoiDungTrongNhomDetails?: NguoiDungTrongNhomEditDto[] | null;
-  /** @nullable */
-  GanVaiTroVaoNhomDetails?: GanVaiTroVaoNhomEditDto[] | null;
-};
+    /** @nullable */
+    State?: DMNhomNguoiDungEditDtoState
+    /** @nullable */
+    sTenCha?: string | null
+    /** @nullable */
+    NguoiDungTrongNhomDetails?: NguoiDungTrongNhomEditDto[] | null
+    /** @nullable */
+    GanVaiTroVaoNhomDetails?: GanVaiTroVaoNhomEditDto[] | null
+}

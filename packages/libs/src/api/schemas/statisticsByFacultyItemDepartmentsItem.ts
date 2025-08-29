@@ -6,7 +6,7 @@
  */
 
 export type StatisticsByFacultyItemDepartmentsItem = {
-  id: string;
-  organizationName: string;
-  lecturerSurveyCount: number;
-};
+    id: string
+    organizationName: string
+    lecturerSurveyCount: number
+}

@@ -6,5 +6,5 @@
  */
 
 export type GetAnswerStatisticsByLevelParams = {
-surveyId: string;
-};
+    surveyId: string
+}

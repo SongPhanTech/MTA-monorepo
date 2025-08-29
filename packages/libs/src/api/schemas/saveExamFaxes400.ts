@@ -6,5 +6,5 @@
  */
 
 export type SaveExamFaxes400 = {
-  message: string;
-};
+    message: string
+}

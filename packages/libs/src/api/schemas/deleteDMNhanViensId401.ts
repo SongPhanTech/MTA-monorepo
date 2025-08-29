@@ -49,7 +49,8 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { ProblemDetails } from './problemDetails';
-import type { HttpValidationProblemDetails } from './httpValidationProblemDetails';
 
-export type DeleteDMNhanViensId401 = ProblemDetails | HttpValidationProblemDetails;
+import type { HttpValidationProblemDetails } from './httpValidationProblemDetails'
+import type { ProblemDetails } from './problemDetails'
+
+export type DeleteDMNhanViensId401 = ProblemDetails | HttpValidationProblemDetails

@@ -6,8 +6,8 @@
  */
 
 export type ConfigsProvisioningInboundScim = {
-  /** User store domain name to inbound provision users and groups. This property becomes only applicable if the enableProxyMode config is set to false */
-  provisioningUserstore?: string;
-  /** If this property is set to true, Users/Groups are not provisioned to the user store. They are only outbound provisioned */
-  enableProxyMode?: boolean;
-};
+    /** User store domain name to inbound provision users and groups. This property becomes only applicable if the enableProxyMode config is set to false */
+    provisioningUserstore?: string
+    /** If this property is set to true, Users/Groups are not provisioned to the user store. They are only outbound provisioned */
+    enableProxyMode?: boolean
+}

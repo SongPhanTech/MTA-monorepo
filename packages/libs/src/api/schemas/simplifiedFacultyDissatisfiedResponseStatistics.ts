@@ -8,4 +8,4 @@
 /**
  * Đối tượng với key là tên Khoa và value là số lượng.
  */
-export type SimplifiedFacultyDissatisfiedResponseStatistics = {[key: string]: number};
+export type SimplifiedFacultyDissatisfiedResponseStatistics = { [key: string]: number }

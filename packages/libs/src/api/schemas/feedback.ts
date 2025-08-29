@@ -49,32 +49,32 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type Feedback = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sUserName?: string | null;
-  /** @nullable */
-  sFullName?: string | null;
-  /** @nullable */
-  sEmail?: string | null;
-  /** @nullable */
-  sSDT?: string | null;
-  /** @nullable */
-  iMucDoHaiLong?: number | null;
-  /** @nullable */
-  iThaiDoHoTroCuaNhanVien?: number | null;
-  /** @nullable */
-  iGiaoDienTinhNangPM?: number | null;
-  /** @nullable */
-  sDieuCamThayHaiLongNhat?: string | null;
-  /** @nullable */
-  sDieuGiBanMongMuonCaiThien?: string | null;
-  /** @nullable */
-  iThangDiem?: number | null;
-  /** @nullable */
-  bDongYDeDoiNguLienHeLamRo?: boolean | null;
-  /** @nullable */
-  sAppCode?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sUserName?: string | null
+    /** @nullable */
+    sFullName?: string | null
+    /** @nullable */
+    sEmail?: string | null
+    /** @nullable */
+    sSDT?: string | null
+    /** @nullable */
+    iMucDoHaiLong?: number | null
+    /** @nullable */
+    iThaiDoHoTroCuaNhanVien?: number | null
+    /** @nullable */
+    iGiaoDienTinhNangPM?: number | null
+    /** @nullable */
+    sDieuCamThayHaiLongNhat?: string | null
+    /** @nullable */
+    sDieuGiBanMongMuonCaiThien?: string | null
+    /** @nullable */
+    iThangDiem?: number | null
+    /** @nullable */
+    bDongYDeDoiNguLienHeLamRo?: boolean | null
+    /** @nullable */
+    sAppCode?: string | null
+}

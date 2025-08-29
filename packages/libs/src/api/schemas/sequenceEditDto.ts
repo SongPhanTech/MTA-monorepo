@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { Sequence } from './sequence';
-import type { SequenceEditDtoState } from './sequenceEditDtoState';
+import type { Sequence } from './sequence'
+import type { SequenceEditDtoState } from './sequenceEditDtoState'
 
 export type SequenceEditDto = Sequence & {
-  /** @nullable */
-  State?: SequenceEditDtoState;
-  /** @nullable */
-  sDisplayName?: string | null;
-};
+    /** @nullable */
+    State?: SequenceEditDtoState
+    /** @nullable */
+    sDisplayName?: string | null
+}

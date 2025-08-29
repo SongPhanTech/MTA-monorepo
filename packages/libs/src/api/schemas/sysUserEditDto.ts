@@ -49,14 +49,15 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { TaiKhoan } from './taiKhoan';
-import type { SysUserEditDtoState } from './sysUserEditDtoState';
+
+import type { SysUserEditDtoState } from './sysUserEditDtoState'
+import type { TaiKhoan } from './taiKhoan'
 
 export type SysUserEditDto = TaiKhoan & {
-  /** @nullable */
-  State?: SysUserEditDtoState;
-  /** @nullable */
-  sVaiTro_Ten?: string | null;
-  /** @nullable */
-  sDM_DonVi_Ten?: string | null;
-};
+    /** @nullable */
+    State?: SysUserEditDtoState
+    /** @nullable */
+    sVaiTro_Ten?: string | null
+    /** @nullable */
+    sDM_DonVi_Ten?: string | null
+}

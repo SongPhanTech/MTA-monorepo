@@ -49,14 +49,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type DMNhanVienThongTinLienLac = BaseEntity & {
-  Id?: string;
-  sDM_NhanVienId?: string;
-  /** @nullable */
-  sSDT?: string | null;
-  iLoaiSDT?: number;
-  /** @nullable */
-  sEmail?: string | null;
-};
+    Id?: string
+    sDM_NhanVienId?: string
+    /** @nullable */
+    sSDT?: string | null
+    iLoaiSDT?: number
+    /** @nullable */
+    sEmail?: string | null
+}

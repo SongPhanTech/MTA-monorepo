@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { AnswerStatistics } from './answerStatistics';
+import type { AnswerStatistics } from './answerStatistics'
 
 export interface AnswerStatisticsResponse {
-  /** ID của cuộc khảo sát. */
-  surveyId: string;
-  /** Tổng số câu trả lời hợp lệ cho câu hỏi này. */
-  totalAnswers: number;
-  statistics: AnswerStatistics;
+    /** ID của cuộc khảo sát. */
+    surveyId: string
+    /** Tổng số câu trả lời hợp lệ cho câu hỏi này. */
+    totalAnswers: number
+    statistics: AnswerStatistics
 }

@@ -49,18 +49,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type SysMenu = BaseEntity & {
-  Id?: string;
-  iParentId?: string;
-  /** @nullable */
-  sMenuName?: string | null;
-  /** @nullable */
-  sUrl?: string | null;
-  iSortOrder?: number;
-  bActive?: boolean;
-  /** @nullable */
-  sIconCls?: string | null;
-  lMaxPermission?: number;
-};
+    Id?: string
+    iParentId?: string
+    /** @nullable */
+    sMenuName?: string | null
+    /** @nullable */
+    sUrl?: string | null
+    iSortOrder?: number
+    bActive?: boolean
+    /** @nullable */
+    sIconCls?: string | null
+    lMaxPermission?: number
+}

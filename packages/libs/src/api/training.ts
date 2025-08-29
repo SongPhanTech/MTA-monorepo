@@ -4,140 +4,134 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
-import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
 
 import type {
-  CalculateStudentSemesterResultJson200,
-  CalculateStudentSemesterResultJson400,
-  CalculateStudentSemesterResultJson500,
-  CalculateStudentSemesterResultJsonParams,
-  ClassDivision,
-  ClassDivision200Item,
-  EnrollFixedClassOnSubjectClassBody,
-  EnrollStudentOnSubjectClassBody,
-  ExportPhanCongGiangDay400,
-  ExportPhanCongGiangDay404,
-  ExportPhanCongGiangDayParams,
-  ExportStudentFixedClassDocx400,
-  ExportStudentFixedClassDocx404,
-  ExportStudentFixedClassDocxParams,
-  ExportStudentFixedClassExcelTrainingPoint400,
-  ExportStudentFixedClassExcelTrainingPoint404,
-  ExportStudentFixedClassExcelTrainingPointParams,
-  ExportStudentResultSemesterJson200Item,
-  ExportStudentResultSemesterJson404,
-  ExportStudentResultSemesterJsonParams,
-  ExportStudentSubjectClassExcel400,
-  ExportStudentSubjectClassExcel404,
-  ExportStudentSubjectClassExcelParams,
-  FixedClassBySubjectClassSemesterParams,
-  GetApiStatsAcademicPerformanceByYear200Item,
-  GetApiStatsAcademicPerformanceByYearFiltered200Item,
-  GetApiStatsAcademicPerformanceByYearFilteredParams,
-  GetApiStatsAverageEntryScoreByCourse200Item,
-  GetApiStatsAverageEntryScoreByCourseFiltered200Item,
-  GetApiStatsAverageEntryScoreByCourseFilteredParams,
-  GetApiStatsAverageExamScoreTrend200Item,
-  GetApiStatsAverageGpaByCourse200Item,
-  GetApiStatsAverageGpaByCourseFiltered200Item,
-  GetApiStatsAverageGpaByCourseFilteredParams,
-  GetApiStatsAverageGpaByFixedClass200Item,
-  GetApiStatsAverageGpaByTrainingMajor200Item,
-  GetApiStatsCurriculumStatistics200,
-  GetApiStatsDemographics200,
-  GetApiStatsEnrollmentTrend200Item,
-  GetApiStatsExamParticipantsBySemester200,
-  GetApiStatsExamParticipantsBySemesterParams,
-  GetApiStatsGraduationRankingStatistics200Item,
-  GetApiStatsGraduationRateByCourse200Item,
-  GetApiStatsGraduationRateByCourseFiltered200Item,
-  GetApiStatsGraduationRateByCourseFilteredParams,
-  GetApiStatsHighestIncorrectAnswerRateQuestions200Item,
-  GetApiStatsKpiCards200,
-  GetApiStatsLecturerWorkload200Item,
-  GetApiStatsMostUsedQuestions200Item,
-  GetApiStatsQuestionStatistics200,
-  GetApiStatsStudentDistributionByProvince200Item,
-  GetApiStatsStudentDistributionByProvinceFiltered200Item,
-  GetApiStatsStudentDistributionByProvinceFilteredParams,
-  GetApiStatsStudentDistributionByTrainingCourse200Item,
-  GetApiStatsStudentDistributionByTrainingCourseFiltered200Item,
-  GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
-  GetApiStatsStudentDistributionByTrainingLevel200Item,
-  GetApiStatsStudentDistributionByTrainingLevelFiltered200Item,
-  GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
-  GetApiStatsStudentDistributionByTrainingObjectType200Item,
-  GetApiStatsStudentDistributionByTrainingObjectTypeFiltered200Item,
-  GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
-  GetApiStatsStudentsForAcademicAction200Item,
-  GetApiStatsStudentsOfInterest200Item,
-  GetApiStatsStudentsOfInterestParams,
-  GetApiStatsSubjectClassStatistics200,
-  GetApiStatsSubjectClassStatisticsParams,
-  GetApiStatsSubjectPassFailRate200Item,
-  GraduationCheck200,
-  GraduationCheck400,
-  GraduationCheckBody,
-  ImportHeQuanSu,
-  ImportHeQuanSu200,
-  ImportHeQuanSu400,
-  ImportPhanCongGiangDay,
-  ImportPhanCongGiangDay200,
-  ImportPhanCongGiangDay400,
-  ImportPhienBanCTDT200,
-  ImportPhienBanCTDT400,
-  ImportPhienBanCTĐT,
-  ListOfEnrollFixedClassOnSubjectClass,
-  ListOfFixedClassBySubjectClassSemester,
-  ListOfOpenSubjectClass,
-  ListOfStudentClassBySubjectClassSemester,
-  ListOfundefined,
-  OpenSubjectClassParams,
-  PutManySubjectClass200,
-  SerializedFields,
-  StudentBySubjectClassSemesterParams,
-  SubjectClasses,
-  UploadExcelCreateFixedClass,
-  UploadExcelCreateFixedClass200,
-  UploadExcelCreateFixedClass400,
-  UploadExcelCreateUserProfile,
-  UploadExcelCreateUserProfile400,
-  UploadExcelImportScore,
-  UploadExcelImportScore200,
-  UploadExcelImportScore400,
-  UploadExcelImportTrainingScore,
-  UploadExcelImportTrainingScore200,
-  UploadExcelImportTrainingScore400,
-  UploadExcelUpdateUserProfile,
-  UploadExcelUpdateUserProfile400
-} from './schemas';
+    DataTag,
+    DefinedInitialDataOptions,
+    DefinedUseQueryResult,
+    MutationFunction,
+    QueryClient,
+    QueryFunction,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    UseMutationOptions,
+    UseMutationResult,
+    UseQueryOptions,
+    UseQueryResult,
+} from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { customTrainingFetch } from './custom-instance'
+import type {
+    CalculateStudentSemesterResultJson200,
+    CalculateStudentSemesterResultJson400,
+    CalculateStudentSemesterResultJson500,
+    CalculateStudentSemesterResultJsonParams,
+    ClassDivision,
+    ClassDivision200Item,
+    EnrollFixedClassOnSubjectClassBody,
+    EnrollStudentOnSubjectClassBody,
+    ExportPhanCongGiangDay400,
+    ExportPhanCongGiangDay404,
+    ExportPhanCongGiangDayParams,
+    ExportStudentFixedClassDocx400,
+    ExportStudentFixedClassDocx404,
+    ExportStudentFixedClassDocxParams,
+    ExportStudentFixedClassExcelTrainingPoint400,
+    ExportStudentFixedClassExcelTrainingPoint404,
+    ExportStudentFixedClassExcelTrainingPointParams,
+    ExportStudentResultSemesterJson200Item,
+    ExportStudentResultSemesterJson404,
+    ExportStudentResultSemesterJsonParams,
+    ExportStudentSubjectClassExcel400,
+    ExportStudentSubjectClassExcel404,
+    ExportStudentSubjectClassExcelParams,
+    FixedClassBySubjectClassSemesterParams,
+    GetApiStatsAcademicPerformanceByYear200Item,
+    GetApiStatsAcademicPerformanceByYearFiltered200Item,
+    GetApiStatsAcademicPerformanceByYearFilteredParams,
+    GetApiStatsAverageEntryScoreByCourse200Item,
+    GetApiStatsAverageEntryScoreByCourseFiltered200Item,
+    GetApiStatsAverageEntryScoreByCourseFilteredParams,
+    GetApiStatsAverageExamScoreTrend200Item,
+    GetApiStatsAverageGpaByCourse200Item,
+    GetApiStatsAverageGpaByCourseFiltered200Item,
+    GetApiStatsAverageGpaByCourseFilteredParams,
+    GetApiStatsAverageGpaByFixedClass200Item,
+    GetApiStatsAverageGpaByTrainingMajor200Item,
+    GetApiStatsCurriculumStatistics200,
+    GetApiStatsDemographics200,
+    GetApiStatsEnrollmentTrend200Item,
+    GetApiStatsExamParticipantsBySemester200,
+    GetApiStatsExamParticipantsBySemesterParams,
+    GetApiStatsGraduationRankingStatistics200Item,
+    GetApiStatsGraduationRateByCourse200Item,
+    GetApiStatsGraduationRateByCourseFiltered200Item,
+    GetApiStatsGraduationRateByCourseFilteredParams,
+    GetApiStatsHighestIncorrectAnswerRateQuestions200Item,
+    GetApiStatsKpiCards200,
+    GetApiStatsLecturerWorkload200Item,
+    GetApiStatsMostUsedQuestions200Item,
+    GetApiStatsQuestionStatistics200,
+    GetApiStatsStudentDistributionByProvince200Item,
+    GetApiStatsStudentDistributionByProvinceFiltered200Item,
+    GetApiStatsStudentDistributionByProvinceFilteredParams,
+    GetApiStatsStudentDistributionByTrainingCourse200Item,
+    GetApiStatsStudentDistributionByTrainingCourseFiltered200Item,
+    GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
+    GetApiStatsStudentDistributionByTrainingLevel200Item,
+    GetApiStatsStudentDistributionByTrainingLevelFiltered200Item,
+    GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
+    GetApiStatsStudentDistributionByTrainingObjectType200Item,
+    GetApiStatsStudentDistributionByTrainingObjectTypeFiltered200Item,
+    GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
+    GetApiStatsStudentsForAcademicAction200Item,
+    GetApiStatsStudentsOfInterest200Item,
+    GetApiStatsStudentsOfInterestParams,
+    GetApiStatsSubjectClassStatistics200,
+    GetApiStatsSubjectClassStatisticsParams,
+    GetApiStatsSubjectPassFailRate200Item,
+    GraduationCheck200,
+    GraduationCheck400,
+    GraduationCheckBody,
+    ImportHeQuanSu,
+    ImportHeQuanSu200,
+    ImportHeQuanSu400,
+    ImportPhanCongGiangDay,
+    ImportPhanCongGiangDay200,
+    ImportPhanCongGiangDay400,
+    ImportPhienBanCTDT200,
+    ImportPhienBanCTDT400,
+    ImportPhienBanCTĐT,
+    ListOfEnrollFixedClassOnSubjectClass,
+    ListOfFixedClassBySubjectClassSemester,
+    ListOfOpenSubjectClass,
+    ListOfStudentClassBySubjectClassSemester,
+    ListOfundefined,
+    OpenSubjectClassParams,
+    PutManySubjectClass200,
+    SerializedFields,
+    StudentBySubjectClassSemesterParams,
+    SubjectClasses,
+    UploadExcelCreateFixedClass,
+    UploadExcelCreateFixedClass200,
+    UploadExcelCreateFixedClass400,
+    UploadExcelCreateUserProfile,
+    UploadExcelCreateUserProfile400,
+    UploadExcelImportScore,
+    UploadExcelImportScore200,
+    UploadExcelImportScore400,
+    UploadExcelImportTrainingScore,
+    UploadExcelImportTrainingScore200,
+    UploadExcelImportTrainingScore400,
+    UploadExcelUpdateUserProfile,
+    UploadExcelUpdateUserProfile400,
+} from './schemas'
 
-import { customTrainingFetch } from './custom-instance';
-type AwaitedInput<T> = PromiseLike<T> | T;
+type AwaitedInput<T> = PromiseLike<T> | T
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**
  * Thêm mới danh sách học viên/sinh viên 
@@ -146,184 +140,228 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary Upload Excel Create UserProfile
  */
 export type uploadExcelCreateUserProfileResponse200 = {
-  data: ListOfundefined
-  status: 200
+    data: ListOfundefined
+    status: 200
 }
 
 export type uploadExcelCreateUserProfileResponse400 = {
-  data: UploadExcelCreateUserProfile400
-  status: 400
+    data: UploadExcelCreateUserProfile400
+    status: 400
 }
-    
-export type uploadExcelCreateUserProfileResponseComposite = uploadExcelCreateUserProfileResponse200 | uploadExcelCreateUserProfileResponse400;
-    
+
+export type uploadExcelCreateUserProfileResponseComposite =
+    | uploadExcelCreateUserProfileResponse200
+    | uploadExcelCreateUserProfileResponse400
+
 export type uploadExcelCreateUserProfileResponse = uploadExcelCreateUserProfileResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getUploadExcelCreateUserProfileUrl = () => {
-
-
-  
-
-  return `/api/user-profile/upload-excel-create-user-profile`
+    return '/api/user-profile/upload-excel-create-user-profile'
 }
 
-export const uploadExcelCreateUserProfile = async (uploadExcelCreateUserProfile: UploadExcelCreateUserProfile, options?: RequestInit): Promise<uploadExcelCreateUserProfileResponse> => {
-    const formData = new FormData();
-formData.append(`file`, uploadExcelCreateUserProfile.file)
-formData.append(`type`, uploadExcelCreateUserProfile.type)
+export const uploadExcelCreateUserProfile = async (
+    uploadExcelCreateUserProfile: UploadExcelCreateUserProfile,
+    options?: RequestInit
+): Promise<uploadExcelCreateUserProfileResponse> => {
+    const formData = new FormData()
+    formData.append('file', uploadExcelCreateUserProfile.file)
+    formData.append('type', uploadExcelCreateUserProfile.type)
 
-  return customTrainingFetch<uploadExcelCreateUserProfileResponse>(getUploadExcelCreateUserProfileUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
-
-
-
-
-export const getUploadExcelCreateUserProfileMutationOptions = <TError = UploadExcelCreateUserProfile400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, TError,{data: UploadExcelCreateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, TError,{data: UploadExcelCreateUserProfile}, TContext> => {
-
-const mutationKey = ['uploadExcelCreateUserProfile'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, {data: UploadExcelCreateUserProfile}> = (props) => {
-          const {data} = props ?? {};
-
-          return  uploadExcelCreateUserProfile(data,requestOptions)
+    return customTrainingFetch<uploadExcelCreateUserProfileResponse>(
+        getUploadExcelCreateUserProfileUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadExcelCreateUserProfileMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>>
-    export type UploadExcelCreateUserProfileMutationBody = UploadExcelCreateUserProfile
-    export type UploadExcelCreateUserProfileMutationError = UploadExcelCreateUserProfile400
-
-    /**
- * @summary Upload Excel Create UserProfile
- */
-export const useUploadExcelCreateUserProfile = <TError = UploadExcelCreateUserProfile400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>, TError,{data: UploadExcelCreateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadExcelCreateUserProfileMutationOptions = <
+    TError = UploadExcelCreateUserProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
         TError,
-        {data: UploadExcelCreateUserProfile},
+        { data: UploadExcelCreateUserProfile },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+    TError,
+    { data: UploadExcelCreateUserProfile },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelCreateUserProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadExcelCreateUserProfileMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+        { data: UploadExcelCreateUserProfile }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadExcelCreateUserProfile(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelCreateUserProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>
+>
+export type UploadExcelCreateUserProfileMutationBody = UploadExcelCreateUserProfile
+export type UploadExcelCreateUserProfileMutationError = UploadExcelCreateUserProfile400
+
+/**
+ * @summary Upload Excel Create UserProfile
+ */
+export const useUploadExcelCreateUserProfile = <
+    TError = UploadExcelCreateUserProfile400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+            TError,
+            { data: UploadExcelCreateUserProfile },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelCreateUserProfile>>,
+    TError,
+    { data: UploadExcelCreateUserProfile },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelCreateUserProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Cập nhật thông tin học viên/sinh viên
  * @summary Upload Excel Update UserProfile
  */
 export type uploadExcelUpdateUserProfileResponse200 = {
-  data: ListOfundefined
-  status: 200
+    data: ListOfundefined
+    status: 200
 }
 
 export type uploadExcelUpdateUserProfileResponse400 = {
-  data: UploadExcelUpdateUserProfile400
-  status: 400
+    data: UploadExcelUpdateUserProfile400
+    status: 400
 }
-    
-export type uploadExcelUpdateUserProfileResponseComposite = uploadExcelUpdateUserProfileResponse200 | uploadExcelUpdateUserProfileResponse400;
-    
+
+export type uploadExcelUpdateUserProfileResponseComposite =
+    | uploadExcelUpdateUserProfileResponse200
+    | uploadExcelUpdateUserProfileResponse400
+
 export type uploadExcelUpdateUserProfileResponse = uploadExcelUpdateUserProfileResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getUploadExcelUpdateUserProfileUrl = () => {
-
-
-  
-
-  return `/api/user-profile/upload-excel-update-user-profile`
+    return '/api/user-profile/upload-excel-update-user-profile'
 }
 
-export const uploadExcelUpdateUserProfile = async (uploadExcelUpdateUserProfile: UploadExcelUpdateUserProfile, options?: RequestInit): Promise<uploadExcelUpdateUserProfileResponse> => {
-    const formData = new FormData();
-formData.append(`file`, uploadExcelUpdateUserProfile.file)
+export const uploadExcelUpdateUserProfile = async (
+    uploadExcelUpdateUserProfile: UploadExcelUpdateUserProfile,
+    options?: RequestInit
+): Promise<uploadExcelUpdateUserProfileResponse> => {
+    const formData = new FormData()
+    formData.append('file', uploadExcelUpdateUserProfile.file)
 
-  return customTrainingFetch<uploadExcelUpdateUserProfileResponse>(getUploadExcelUpdateUserProfileUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
-
-
-
-
-export const getUploadExcelUpdateUserProfileMutationOptions = <TError = UploadExcelUpdateUserProfile400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, TError,{data: UploadExcelUpdateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, TError,{data: UploadExcelUpdateUserProfile}, TContext> => {
-
-const mutationKey = ['uploadExcelUpdateUserProfile'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, {data: UploadExcelUpdateUserProfile}> = (props) => {
-          const {data} = props ?? {};
-
-          return  uploadExcelUpdateUserProfile(data,requestOptions)
+    return customTrainingFetch<uploadExcelUpdateUserProfileResponse>(
+        getUploadExcelUpdateUserProfileUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadExcelUpdateUserProfileMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>>
-    export type UploadExcelUpdateUserProfileMutationBody = UploadExcelUpdateUserProfile
-    export type UploadExcelUpdateUserProfileMutationError = UploadExcelUpdateUserProfile400
-
-    /**
- * @summary Upload Excel Update UserProfile
- */
-export const useUploadExcelUpdateUserProfile = <TError = UploadExcelUpdateUserProfile400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>, TError,{data: UploadExcelUpdateUserProfile}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadExcelUpdateUserProfileMutationOptions = <
+    TError = UploadExcelUpdateUserProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
         TError,
-        {data: UploadExcelUpdateUserProfile},
+        { data: UploadExcelUpdateUserProfile },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+    TError,
+    { data: UploadExcelUpdateUserProfile },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelUpdateUserProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadExcelUpdateUserProfileMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+        { data: UploadExcelUpdateUserProfile }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadExcelUpdateUserProfile(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelUpdateUserProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>
+>
+export type UploadExcelUpdateUserProfileMutationBody = UploadExcelUpdateUserProfile
+export type UploadExcelUpdateUserProfileMutationError = UploadExcelUpdateUserProfile400
+
+/**
+ * @summary Upload Excel Update UserProfile
+ */
+export const useUploadExcelUpdateUserProfile = <
+    TError = UploadExcelUpdateUserProfile400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+            TError,
+            { data: UploadExcelUpdateUserProfile },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelUpdateUserProfile>>,
+    TError,
+    { data: UploadExcelUpdateUserProfile },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelUpdateUserProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Thêm mới danh sách lớp niên chế 
 
@@ -331,1162 +369,1638 @@ export const useUploadExcelUpdateUserProfile = <TError = UploadExcelUpdateUserPr
  * @summary Upload Excel Create FixedClass
  */
 export type uploadExcelCreateFixedClassResponse200 = {
-  data: UploadExcelCreateFixedClass200
-  status: 200
+    data: UploadExcelCreateFixedClass200
+    status: 200
 }
 
 export type uploadExcelCreateFixedClassResponse400 = {
-  data: UploadExcelCreateFixedClass400
-  status: 400
+    data: UploadExcelCreateFixedClass400
+    status: 400
 }
-    
-export type uploadExcelCreateFixedClassResponseComposite = uploadExcelCreateFixedClassResponse200 | uploadExcelCreateFixedClassResponse400;
-    
+
+export type uploadExcelCreateFixedClassResponseComposite =
+    | uploadExcelCreateFixedClassResponse200
+    | uploadExcelCreateFixedClassResponse400
+
 export type uploadExcelCreateFixedClassResponse = uploadExcelCreateFixedClassResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getUploadExcelCreateFixedClassUrl = () => {
-
-
-  
-
-  return `/api/fixed-class/FixedClass/upload-excel-create-fixed-class`
+    return '/api/fixed-class/FixedClass/upload-excel-create-fixed-class'
 }
 
-export const uploadExcelCreateFixedClass = async (uploadExcelCreateFixedClass: UploadExcelCreateFixedClass, options?: RequestInit): Promise<uploadExcelCreateFixedClassResponse> => {
-    const formData = new FormData();
-formData.append(`file`, uploadExcelCreateFixedClass.file)
-formData.append(`trainingCourseId`, uploadExcelCreateFixedClass.trainingCourseId)
+export const uploadExcelCreateFixedClass = async (
+    uploadExcelCreateFixedClass: UploadExcelCreateFixedClass,
+    options?: RequestInit
+): Promise<uploadExcelCreateFixedClassResponse> => {
+    const formData = new FormData()
+    formData.append('file', uploadExcelCreateFixedClass.file)
+    formData.append('trainingCourseId', uploadExcelCreateFixedClass.trainingCourseId)
 
-  return customTrainingFetch<uploadExcelCreateFixedClassResponse>(getUploadExcelCreateFixedClassUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
-
-
-
-
-export const getUploadExcelCreateFixedClassMutationOptions = <TError = UploadExcelCreateFixedClass400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>, TError,{data: UploadExcelCreateFixedClass}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>, TError,{data: UploadExcelCreateFixedClass}, TContext> => {
-
-const mutationKey = ['uploadExcelCreateFixedClass'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>, {data: UploadExcelCreateFixedClass}> = (props) => {
-          const {data} = props ?? {};
-
-          return  uploadExcelCreateFixedClass(data,requestOptions)
+    return customTrainingFetch<uploadExcelCreateFixedClassResponse>(
+        getUploadExcelCreateFixedClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadExcelCreateFixedClassMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>>
-    export type UploadExcelCreateFixedClassMutationBody = UploadExcelCreateFixedClass
-    export type UploadExcelCreateFixedClassMutationError = UploadExcelCreateFixedClass400
-
-    /**
- * @summary Upload Excel Create FixedClass
- */
-export const useUploadExcelCreateFixedClass = <TError = UploadExcelCreateFixedClass400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>, TError,{data: UploadExcelCreateFixedClass}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadExcelCreateFixedClassMutationOptions = <
+    TError = UploadExcelCreateFixedClass400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>,
         TError,
-        {data: UploadExcelCreateFixedClass},
+        { data: UploadExcelCreateFixedClass },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>,
+    TError,
+    { data: UploadExcelCreateFixedClass },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelCreateFixedClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadExcelCreateFixedClassMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>,
+        { data: UploadExcelCreateFixedClass }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadExcelCreateFixedClass(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelCreateFixedClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>
+>
+export type UploadExcelCreateFixedClassMutationBody = UploadExcelCreateFixedClass
+export type UploadExcelCreateFixedClassMutationError = UploadExcelCreateFixedClass400
+
+/**
+ * @summary Upload Excel Create FixedClass
+ */
+export const useUploadExcelCreateFixedClass = <
+    TError = UploadExcelCreateFixedClass400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>,
+            TError,
+            { data: UploadExcelCreateFixedClass },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelCreateFixedClass>>,
+    TError,
+    { data: UploadExcelCreateFixedClass },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelCreateFixedClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Phân chia học viên vào các lớp
  * @summary Class Division
  */
 export type classDivisionResponse200 = {
-  data: ClassDivision200Item[]
-  status: 200
+    data: ClassDivision200Item[]
+    status: 200
 }
 
 export type classDivisionResponse400 = {
-  data: void
-  status: 400
+    data: undefined
+    status: 400
 }
-    
-export type classDivisionResponseComposite = classDivisionResponse200 | classDivisionResponse400;
-    
+
+export type classDivisionResponseComposite = classDivisionResponse200 | classDivisionResponse400
+
 export type classDivisionResponse = classDivisionResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getClassDivisionUrl = () => {
-
-
-  
-
-  return `/api/fixed-class/upload-excel-update-user-profile`
+    return '/api/fixed-class/upload-excel-update-user-profile'
 }
 
-export const classDivision = async (classDivision: ClassDivision, options?: RequestInit): Promise<classDivisionResponse> => {
-    const formData = new FormData();
-formData.append(`file`, classDivision.file)
+export const classDivision = async (
+    classDivision: ClassDivision,
+    options?: RequestInit
+): Promise<classDivisionResponse> => {
+    const formData = new FormData()
+    formData.append('file', classDivision.file)
 
-  return customTrainingFetch<classDivisionResponse>(getClassDivisionUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
+    return customTrainingFetch<classDivisionResponse>(getClassDivisionUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
 
-
-
-
-export const getClassDivisionMutationOptions = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof classDivision>>, TError,{data: ClassDivision}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof classDivision>>, TError,{data: ClassDivision}, TContext> => {
-
-const mutationKey = ['classDivision'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof classDivision>>, {data: ClassDivision}> = (props) => {
-          const {data} = props ?? {};
-
-          return  classDivision(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
-    export type ClassDivisionMutationBody = ClassDivision
-    export type ClassDivisionMutationError = void
-
-    /**
- * @summary Class Division
- */
-export const useClassDivision = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof classDivision>>, TError,{data: ClassDivision}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getClassDivisionMutationOptions = <TError = void, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof classDivision>>,
         TError,
-        {data: ClassDivision},
+        { data: ClassDivision },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof classDivision>>,
+    TError,
+    { data: ClassDivision },
+    TContext
+> => {
+    const mutationKey = ['classDivision']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getClassDivisionMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof classDivision>>,
+        { data: ClassDivision }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return classDivision(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ClassDivisionMutationResult = NonNullable<Awaited<ReturnType<typeof classDivision>>>
+export type ClassDivisionMutationBody = ClassDivision
+export type ClassDivisionMutationError = undefined
+
+/**
+ * @summary Class Division
+ */
+export const useClassDivision = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof classDivision>>,
+            TError,
+            { data: ClassDivision },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof classDivision>>,
+    TError,
+    { data: ClassDivision },
+    TContext
+> => {
+    const mutationOptions = getClassDivisionMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * @summary Xuất file docx danh sách sinh viên trong lớp niên chế
  */
 export type docxListStudentFixedClassLabelsResponse200 = {
-  data: SerializedFields
-  status: 200
-}
-    
-export type docxListStudentFixedClassLabelsResponseComposite = docxListStudentFixedClassLabelsResponse200;
-    
-export type docxListStudentFixedClassLabelsResponse = docxListStudentFixedClassLabelsResponseComposite & {
-  headers: Headers;
+    data: SerializedFields
+    status: 200
 }
 
-export const getDocxListStudentFixedClassLabelsUrl = () => {
+export type docxListStudentFixedClassLabelsResponseComposite =
+    docxListStudentFixedClassLabelsResponse200
 
-
-  
-
-  return `/api/fixed-class/docx-list-student-fixed-class-labels`
-}
-
-export const docxListStudentFixedClassLabels = async ( options?: RequestInit): Promise<docxListStudentFixedClassLabelsResponse> => {
-  
-  return customTrainingFetch<docxListStudentFixedClassLabelsResponse>(getDocxListStudentFixedClassLabelsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getDocxListStudentFixedClassLabelsQueryKey = () => {
-    return [`/api/fixed-class/docx-list-student-fixed-class-labels`] as const;
+export type docxListStudentFixedClassLabelsResponse =
+    docxListStudentFixedClassLabelsResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getDocxListStudentFixedClassLabelsQueryOptions = <TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getDocxListStudentFixedClassLabelsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>> = ({ signal }) => docxListStudentFixedClassLabels({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getDocxListStudentFixedClassLabelsUrl = () => {
+    return '/api/fixed-class/docx-list-student-fixed-class-labels'
 }
 
-export type DocxListStudentFixedClassLabelsQueryResult = NonNullable<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>>
+export const docxListStudentFixedClassLabels = async (
+    options?: RequestInit
+): Promise<docxListStudentFixedClassLabelsResponse> => {
+    return customTrainingFetch<docxListStudentFixedClassLabelsResponse>(
+        getDocxListStudentFixedClassLabelsUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getDocxListStudentFixedClassLabelsQueryKey = () => {
+    return ['/api/fixed-class/docx-list-student-fixed-class-labels'] as const
+}
+
+export const getDocxListStudentFixedClassLabelsQueryOptions = <
+    TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getDocxListStudentFixedClassLabelsQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>> = ({
+        signal,
+    }) => docxListStudentFixedClassLabels({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DocxListStudentFixedClassLabelsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>
+>
 export type DocxListStudentFixedClassLabelsQueryError = unknown
 
-
-export function useDocxListStudentFixedClassLabels<TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
-          TError,
-          Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDocxListStudentFixedClassLabels<TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
-          TError,
-          Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useDocxListStudentFixedClassLabels<TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDocxListStudentFixedClassLabels<
+    TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+                    TError,
+                    Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDocxListStudentFixedClassLabels<
+    TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+                    TError,
+                    Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDocxListStudentFixedClassLabels<
+    TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xuất file docx danh sách sinh viên trong lớp niên chế
  */
 
-export function useDocxListStudentFixedClassLabels<TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useDocxListStudentFixedClassLabels<
+    TData = Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof docxListStudentFixedClassLabels>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getDocxListStudentFixedClassLabelsQueryOptions(options)
 
-  const queryOptions = getDocxListStudentFixedClassLabelsQueryOptions(options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Xuất file docx danh sách sinh viên trong lớp niên chế
  * @summary Export list of student FixedClass as .docx
  */
 export type exportStudentFixedClassDocxResponse200 = {
-  data: Blob
-  status: 200
+    data: Blob
+    status: 200
 }
 
 export type exportStudentFixedClassDocxResponse400 = {
-  data: ExportStudentFixedClassDocx400
-  status: 400
+    data: ExportStudentFixedClassDocx400
+    status: 400
 }
 
 export type exportStudentFixedClassDocxResponse404 = {
-  data: ExportStudentFixedClassDocx404
-  status: 404
+    data: ExportStudentFixedClassDocx404
+    status: 404
 }
-    
-export type exportStudentFixedClassDocxResponseComposite = exportStudentFixedClassDocxResponse200 | exportStudentFixedClassDocxResponse400 | exportStudentFixedClassDocxResponse404;
-    
+
+export type exportStudentFixedClassDocxResponseComposite =
+    | exportStudentFixedClassDocxResponse200
+    | exportStudentFixedClassDocxResponse400
+    | exportStudentFixedClassDocxResponse404
+
 export type exportStudentFixedClassDocxResponse = exportStudentFixedClassDocxResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
-export const getExportStudentFixedClassDocxUrl = (params: ExportStudentFixedClassDocxParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getExportStudentFixedClassDocxUrl = (params: ExportStudentFixedClassDocxParams) => {
+    const normalizedParams = new URLSearchParams()
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const stringifiedParams = normalizedParams.toString();
+    const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/fixed-class/export-docx-list-student-fixed-class?${stringifiedParams}` : `/api/fixed-class/export-docx-list-student-fixed-class`
+    return stringifiedParams.length > 0
+        ? `/api/fixed-class/export-docx-list-student-fixed-class?${stringifiedParams}`
+        : '/api/fixed-class/export-docx-list-student-fixed-class'
 }
 
-export const exportStudentFixedClassDocx = async (params: ExportStudentFixedClassDocxParams, options?: RequestInit): Promise<exportStudentFixedClassDocxResponse> => {
-  
-  return customTrainingFetch<exportStudentFixedClassDocxResponse>(getExportStudentFixedClassDocxUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export const exportStudentFixedClassDocx = async (
+    params: ExportStudentFixedClassDocxParams,
+    options?: RequestInit
+): Promise<exportStudentFixedClassDocxResponse> => {
+    return customTrainingFetch<exportStudentFixedClassDocxResponse>(
+        getExportStudentFixedClassDocxUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
-
-
-export const getExportStudentFixedClassDocxQueryKey = (params: ExportStudentFixedClassDocxParams,) => {
-    return [`/api/fixed-class/export-docx-list-student-fixed-class`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getExportStudentFixedClassDocxQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404>(params: ExportStudentFixedClassDocxParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getExportStudentFixedClassDocxQueryKey = (
+    params: ExportStudentFixedClassDocxParams
 ) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getExportStudentFixedClassDocxQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>> = ({ signal }) => exportStudentFixedClassDocx(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return [
+        '/api/fixed-class/export-docx-list-student-fixed-class',
+        ...(params ? [params] : []),
+    ] as const
 }
 
-export type ExportStudentFixedClassDocxQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>>
-export type ExportStudentFixedClassDocxQueryError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404
+export const getExportStudentFixedClassDocxQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+    TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404,
+>(
+    params: ExportStudentFixedClassDocxParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
+    const queryKey = queryOptions?.queryKey ?? getExportStudentFixedClassDocxQueryKey(params)
 
-export function useExportStudentFixedClassDocx<TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404>(
- params: ExportStudentFixedClassDocxParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentFixedClassDocx>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentFixedClassDocx<TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404>(
- params: ExportStudentFixedClassDocxParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentFixedClassDocx>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentFixedClassDocx<TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404>(
- params: ExportStudentFixedClassDocxParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>> = ({
+        signal,
+    }) => exportStudentFixedClassDocx(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentFixedClassDocxQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentFixedClassDocx>>
+>
+export type ExportStudentFixedClassDocxQueryError =
+    | ExportStudentFixedClassDocx400
+    | ExportStudentFixedClassDocx404
+
+export function useExportStudentFixedClassDocx<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+    TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404,
+>(
+    params: ExportStudentFixedClassDocxParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentFixedClassDocx>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentFixedClassDocx<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+    TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404,
+>(
+    params: ExportStudentFixedClassDocxParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentFixedClassDocx>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentFixedClassDocx<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+    TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404,
+>(
+    params: ExportStudentFixedClassDocxParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Export list of student FixedClass as .docx
  */
 
-export function useExportStudentFixedClassDocx<TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404>(
- params: ExportStudentFixedClassDocxParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useExportStudentFixedClassDocx<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassDocx>>,
+    TError = ExportStudentFixedClassDocx400 | ExportStudentFixedClassDocx404,
+>(
+    params: ExportStudentFixedClassDocxParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassDocx>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentFixedClassDocxQueryOptions(params, options)
 
-  const queryOptions = getExportStudentFixedClassDocxQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Lấy danh sách lớp môn học đã mở
  * @summary Lấy danh sách lớp môn học đã mở
  */
 export type openSubjectClassResponse200 = {
-  data: ListOfOpenSubjectClass
-  status: 200
+    data: ListOfOpenSubjectClass
+    status: 200
 }
 
 export type openSubjectClassResponse400 = {
-  data: void
-  status: 400
+    data: undefined
+    status: 400
 }
-    
-export type openSubjectClassResponseComposite = openSubjectClassResponse200 | openSubjectClassResponse400;
-    
+
+export type openSubjectClassResponseComposite =
+    | openSubjectClassResponse200
+    | openSubjectClassResponse400
+
 export type openSubjectClassResponse = openSubjectClassResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
-export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getOpenSubjectClassUrl = (params: OpenSubjectClassParams) => {
+    const normalizedParams = new URLSearchParams()
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const stringifiedParams = normalizedParams.toString();
+    const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/subject-class/open-subject-class?${stringifiedParams}` : `/api/subject-class/open-subject-class`
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/open-subject-class?${stringifiedParams}`
+        : '/api/subject-class/open-subject-class'
 }
 
-export const openSubjectClass = async (params: OpenSubjectClassParams, options?: RequestInit): Promise<openSubjectClassResponse> => {
-  
-  return customTrainingFetch<openSubjectClassResponse>(getOpenSubjectClassUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export const openSubjectClass = async (
+    params: OpenSubjectClassParams,
+    options?: RequestInit
+): Promise<openSubjectClassResponse> => {
+    return customTrainingFetch<openSubjectClassResponse>(getOpenSubjectClassUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
 
+export const getOpenSubjectClassQueryKey = (params: OpenSubjectClassParams) => {
+    return ['/api/subject-class/open-subject-class', ...(params ? [params] : [])] as const
+}
 
-
-export const getOpenSubjectClassQueryKey = (params: OpenSubjectClassParams,) => {
-    return [`/api/subject-class/open-subject-class`, ...(params ? [params]: [])] as const;
+export const getOpenSubjectClassQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
     }
-
-    
-export const getOpenSubjectClassQueryOptions = <TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getOpenSubjectClassQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) =>
+        openSubjectClass(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClass>>> = ({ signal }) => openSubjectClass(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof openSubjectClass>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type OpenSubjectClassQueryResult = NonNullable<Awaited<ReturnType<typeof openSubjectClass>>>
-export type OpenSubjectClassQueryError = void
+export type OpenSubjectClassQueryError = undefined
 
-
-export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
- params: OpenSubjectClassParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof openSubjectClass>>,
-          TError,
-          Awaited<ReturnType<typeof openSubjectClass>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
- params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof openSubjectClass>>,
-          TError,
-          Awaited<ReturnType<typeof openSubjectClass>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
- params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClass>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClass>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof openSubjectClass>>,
+                    TError,
+                    Awaited<ReturnType<typeof openSubjectClass>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách lớp môn học đã mở
  */
 
-export function useOpenSubjectClass<TData = Awaited<ReturnType<typeof openSubjectClass>>, TError = void>(
- params: OpenSubjectClassParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useOpenSubjectClass<
+    TData = Awaited<ReturnType<typeof openSubjectClass>>,
+    TError = void,
+>(
+    params: OpenSubjectClassParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClass>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getOpenSubjectClassQueryOptions(params, options)
 
-  const queryOptions = getOpenSubjectClassQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
  * @summary Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
  */
 export type fixedClassBySubjectClassSemesterResponse200 = {
-  data: ListOfFixedClassBySubjectClassSemester
-  status: 200
+    data: ListOfFixedClassBySubjectClassSemester
+    status: 200
 }
 
 export type fixedClassBySubjectClassSemesterResponse400 = {
-  data: void
-  status: 400
-}
-    
-export type fixedClassBySubjectClassSemesterResponseComposite = fixedClassBySubjectClassSemesterResponse200 | fixedClassBySubjectClassSemesterResponse400;
-    
-export type fixedClassBySubjectClassSemesterResponse = fixedClassBySubjectClassSemesterResponseComposite & {
-  headers: Headers;
+    data: undefined
+    status: 400
 }
 
-export const getFixedClassBySubjectClassSemesterUrl = (params: FixedClassBySubjectClassSemesterParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type fixedClassBySubjectClassSemesterResponseComposite =
+    | fixedClassBySubjectClassSemesterResponse200
+    | fixedClassBySubjectClassSemesterResponse400
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/subject-class/fixed-class-by-subject-class-semester?${stringifiedParams}` : `/api/subject-class/fixed-class-by-subject-class-semester`
-}
-
-export const fixedClassBySubjectClassSemester = async (params: FixedClassBySubjectClassSemesterParams, options?: RequestInit): Promise<fixedClassBySubjectClassSemesterResponse> => {
-  
-  return customTrainingFetch<fixedClassBySubjectClassSemesterResponse>(getFixedClassBySubjectClassSemesterUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getFixedClassBySubjectClassSemesterQueryKey = (params: FixedClassBySubjectClassSemesterParams,) => {
-    return [`/api/subject-class/fixed-class-by-subject-class-semester`, ...(params ? [params]: [])] as const;
+export type fixedClassBySubjectClassSemesterResponse =
+    fixedClassBySubjectClassSemesterResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getFixedClassBySubjectClassSemesterQueryOptions = <TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError = void>(params: FixedClassBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getFixedClassBySubjectClassSemesterUrl = (
+    params: FixedClassBySubjectClassSemesterParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getFixedClassBySubjectClassSemesterQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>> = ({ signal }) => fixedClassBySubjectClassSemester(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/fixed-class-by-subject-class-semester?${stringifiedParams}`
+        : '/api/subject-class/fixed-class-by-subject-class-semester'
 }
 
-export type FixedClassBySubjectClassSemesterQueryResult = NonNullable<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>>
-export type FixedClassBySubjectClassSemesterQueryError = void
+export const fixedClassBySubjectClassSemester = async (
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: RequestInit
+): Promise<fixedClassBySubjectClassSemesterResponse> => {
+    return customTrainingFetch<fixedClassBySubjectClassSemesterResponse>(
+        getFixedClassBySubjectClassSemesterUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
+export const getFixedClassBySubjectClassSemesterQueryKey = (
+    params: FixedClassBySubjectClassSemesterParams
+) => {
+    return [
+        '/api/subject-class/fixed-class-by-subject-class-semester',
+        ...(params ? [params] : []),
+    ] as const
+}
 
-export function useFixedClassBySubjectClassSemester<TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError = void>(
- params: FixedClassBySubjectClassSemesterParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
-          TError,
-          Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassBySubjectClassSemester<TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError = void>(
- params: FixedClassBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
-          TError,
-          Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassBySubjectClassSemester<TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError = void>(
- params: FixedClassBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getFixedClassBySubjectClassSemesterQueryOptions = <
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getFixedClassBySubjectClassSemesterQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>> = ({
+        signal,
+    }) => fixedClassBySubjectClassSemester(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type FixedClassBySubjectClassSemesterQueryResult = NonNullable<
+    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+>
+export type FixedClassBySubjectClassSemesterQueryError = undefined
+
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
  */
 
-export function useFixedClassBySubjectClassSemester<TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError = void>(
- params: FixedClassBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useFixedClassBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: FixedClassBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getFixedClassBySubjectClassSemesterQueryOptions(params, options)
 
-  const queryOptions = getFixedClassBySubjectClassSemesterQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Lấy danh sách học sinh theo học kỳ và lớp môn học
  * @summary Lấy danh sách học sinh theo học kỳ và lớp môn học
  */
 export type studentBySubjectClassSemesterResponse200 = {
-  data: ListOfStudentClassBySubjectClassSemester
-  status: 200
+    data: ListOfStudentClassBySubjectClassSemester
+    status: 200
 }
 
 export type studentBySubjectClassSemesterResponse400 = {
-  data: void
-  status: 400
-}
-    
-export type studentBySubjectClassSemesterResponseComposite = studentBySubjectClassSemesterResponse200 | studentBySubjectClassSemesterResponse400;
-    
-export type studentBySubjectClassSemesterResponse = studentBySubjectClassSemesterResponseComposite & {
-  headers: Headers;
+    data: undefined
+    status: 400
 }
 
-export const getStudentBySubjectClassSemesterUrl = (params: StudentBySubjectClassSemesterParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type studentBySubjectClassSemesterResponseComposite =
+    | studentBySubjectClassSemesterResponse200
+    | studentBySubjectClassSemesterResponse400
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/subject-class/student-by-subject-class-semester?${stringifiedParams}` : `/api/subject-class/student-by-subject-class-semester`
-}
-
-export const studentBySubjectClassSemester = async (params: StudentBySubjectClassSemesterParams, options?: RequestInit): Promise<studentBySubjectClassSemesterResponse> => {
-  
-  return customTrainingFetch<studentBySubjectClassSemesterResponse>(getStudentBySubjectClassSemesterUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getStudentBySubjectClassSemesterQueryKey = (params: StudentBySubjectClassSemesterParams,) => {
-    return [`/api/subject-class/student-by-subject-class-semester`, ...(params ? [params]: [])] as const;
+export type studentBySubjectClassSemesterResponse =
+    studentBySubjectClassSemesterResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getStudentBySubjectClassSemesterQueryOptions = <TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError = void>(params: StudentBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getStudentBySubjectClassSemesterUrl = (
+    params: StudentBySubjectClassSemesterParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getStudentBySubjectClassSemesterQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof studentBySubjectClassSemester>>> = ({ signal }) => studentBySubjectClassSemester(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/student-by-subject-class-semester?${stringifiedParams}`
+        : '/api/subject-class/student-by-subject-class-semester'
 }
 
-export type StudentBySubjectClassSemesterQueryResult = NonNullable<Awaited<ReturnType<typeof studentBySubjectClassSemester>>>
-export type StudentBySubjectClassSemesterQueryError = void
+export const studentBySubjectClassSemester = async (
+    params: StudentBySubjectClassSemesterParams,
+    options?: RequestInit
+): Promise<studentBySubjectClassSemesterResponse> => {
+    return customTrainingFetch<studentBySubjectClassSemesterResponse>(
+        getStudentBySubjectClassSemesterUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
+export const getStudentBySubjectClassSemesterQueryKey = (
+    params: StudentBySubjectClassSemesterParams
+) => {
+    return [
+        '/api/subject-class/student-by-subject-class-semester',
+        ...(params ? [params] : []),
+    ] as const
+}
 
-export function useStudentBySubjectClassSemester<TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError = void>(
- params: StudentBySubjectClassSemesterParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
-          TError,
-          Awaited<ReturnType<typeof studentBySubjectClassSemester>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStudentBySubjectClassSemester<TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError = void>(
- params: StudentBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
-          TError,
-          Awaited<ReturnType<typeof studentBySubjectClassSemester>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStudentBySubjectClassSemester<TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError = void>(
- params: StudentBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getStudentBySubjectClassSemesterQueryOptions = <
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getStudentBySubjectClassSemesterQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof studentBySubjectClassSemester>>> = ({
+        signal,
+    }) => studentBySubjectClassSemester(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type StudentBySubjectClassSemesterQueryResult = NonNullable<
+    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+>
+export type StudentBySubjectClassSemesterQueryError = undefined
+
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Lấy danh sách học sinh theo học kỳ và lớp môn học
  */
 
-export function useStudentBySubjectClassSemester<TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError = void>(
- params: StudentBySubjectClassSemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof studentBySubjectClassSemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useStudentBySubjectClassSemester<
+    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+    TError = void,
+>(
+    params: StudentBySubjectClassSemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getStudentBySubjectClassSemesterQueryOptions(params, options)
 
-  const queryOptions = getStudentBySubjectClassSemesterQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Đăng ký lớp môn học cho lớp quản lý
  * @summary Đăng ký lớp môn học cho lớp quản lý
  */
 export type enrollFixedClassOnSubjectClassResponse200 = {
-  data: ListOfEnrollFixedClassOnSubjectClass
-  status: 200
+    data: ListOfEnrollFixedClassOnSubjectClass
+    status: 200
 }
 
 export type enrollFixedClassOnSubjectClassResponse400 = {
-  data: void
-  status: 400
+    data: undefined
+    status: 400
 }
-    
-export type enrollFixedClassOnSubjectClassResponseComposite = enrollFixedClassOnSubjectClassResponse200 | enrollFixedClassOnSubjectClassResponse400;
-    
-export type enrollFixedClassOnSubjectClassResponse = enrollFixedClassOnSubjectClassResponseComposite & {
-  headers: Headers;
-}
+
+export type enrollFixedClassOnSubjectClassResponseComposite =
+    | enrollFixedClassOnSubjectClassResponse200
+    | enrollFixedClassOnSubjectClassResponse400
+
+export type enrollFixedClassOnSubjectClassResponse =
+    enrollFixedClassOnSubjectClassResponseComposite & {
+        headers: Headers
+    }
 
 export const getEnrollFixedClassOnSubjectClassUrl = () => {
-
-
-  
-
-  return `/api/subject-class/enroll-fixed-class-on-subject-class`
+    return '/api/subject-class/enroll-fixed-class-on-subject-class'
 }
 
-export const enrollFixedClassOnSubjectClass = async (enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody, options?: RequestInit): Promise<enrollFixedClassOnSubjectClassResponse> => {
-  
-  return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(getEnrollFixedClassOnSubjectClassUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      enrollFixedClassOnSubjectClassBody,)
-  }
-);}
-
-
-
-
-export const getEnrollFixedClassOnSubjectClassMutationOptions = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, TError,{data: EnrollFixedClassOnSubjectClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, TError,{data: EnrollFixedClassOnSubjectClassBody}, TContext> => {
-
-const mutationKey = ['enrollFixedClassOnSubjectClass'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, {data: EnrollFixedClassOnSubjectClassBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  enrollFixedClassOnSubjectClass(data,requestOptions)
+export const enrollFixedClassOnSubjectClass = async (
+    enrollFixedClassOnSubjectClassBody: EnrollFixedClassOnSubjectClassBody,
+    options?: RequestInit
+): Promise<enrollFixedClassOnSubjectClassResponse> => {
+    return customTrainingFetch<enrollFixedClassOnSubjectClassResponse>(
+        getEnrollFixedClassOnSubjectClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(enrollFixedClassOnSubjectClassBody),
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>>
-    export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
-    export type EnrollFixedClassOnSubjectClassMutationError = void
-
-    /**
- * @summary Đăng ký lớp môn học cho lớp quản lý
- */
-export const useEnrollFixedClassOnSubjectClass = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>, TError,{data: EnrollFixedClassOnSubjectClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getEnrollFixedClassOnSubjectClassMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
         TError,
-        {data: EnrollFixedClassOnSubjectClassBody},
+        { data: EnrollFixedClassOnSubjectClassBody },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationKey = ['enrollFixedClassOnSubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+        { data: EnrollFixedClassOnSubjectClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return enrollFixedClassOnSubjectClass(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EnrollFixedClassOnSubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>
+>
+export type EnrollFixedClassOnSubjectClassMutationBody = EnrollFixedClassOnSubjectClassBody
+export type EnrollFixedClassOnSubjectClassMutationError = undefined
+
+/**
+ * @summary Đăng ký lớp môn học cho lớp quản lý
+ */
+export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+            TError,
+            { data: EnrollFixedClassOnSubjectClassBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof enrollFixedClassOnSubjectClass>>,
+    TError,
+    { data: EnrollFixedClassOnSubjectClassBody },
+    TContext
+> => {
+    const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Đăng ký lớp môn học cho học viên
  * @summary Đăng ký lớp môn học cho học viên
  */
 export type enrollStudentOnSubjectClassResponse200 = {
-  data: ListOfEnrollFixedClassOnSubjectClass
-  status: 200
+    data: ListOfEnrollFixedClassOnSubjectClass
+    status: 200
 }
 
 export type enrollStudentOnSubjectClassResponse400 = {
-  data: void
-  status: 400
+    data: undefined
+    status: 400
 }
-    
-export type enrollStudentOnSubjectClassResponseComposite = enrollStudentOnSubjectClassResponse200 | enrollStudentOnSubjectClassResponse400;
-    
+
+export type enrollStudentOnSubjectClassResponseComposite =
+    | enrollStudentOnSubjectClassResponse200
+    | enrollStudentOnSubjectClassResponse400
+
 export type enrollStudentOnSubjectClassResponse = enrollStudentOnSubjectClassResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getEnrollStudentOnSubjectClassUrl = () => {
-
-
-  
-
-  return `/api/subject-class/enroll-student-on-subject-class`
+    return '/api/subject-class/enroll-student-on-subject-class'
 }
 
-export const enrollStudentOnSubjectClass = async (enrollStudentOnSubjectClassBody: EnrollStudentOnSubjectClassBody, options?: RequestInit): Promise<enrollStudentOnSubjectClassResponse> => {
-  
-  return customTrainingFetch<enrollStudentOnSubjectClassResponse>(getEnrollStudentOnSubjectClassUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      enrollStudentOnSubjectClassBody,)
-  }
-);}
-
-
-
-
-export const getEnrollStudentOnSubjectClassMutationOptions = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>, TError,{data: EnrollStudentOnSubjectClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>, TError,{data: EnrollStudentOnSubjectClassBody}, TContext> => {
-
-const mutationKey = ['enrollStudentOnSubjectClass'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>, {data: EnrollStudentOnSubjectClassBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  enrollStudentOnSubjectClass(data,requestOptions)
+export const enrollStudentOnSubjectClass = async (
+    enrollStudentOnSubjectClassBody: EnrollStudentOnSubjectClassBody,
+    options?: RequestInit
+): Promise<enrollStudentOnSubjectClassResponse> => {
+    return customTrainingFetch<enrollStudentOnSubjectClassResponse>(
+        getEnrollStudentOnSubjectClassUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(enrollStudentOnSubjectClassBody),
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type EnrollStudentOnSubjectClassMutationResult = NonNullable<Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>>
-    export type EnrollStudentOnSubjectClassMutationBody = EnrollStudentOnSubjectClassBody
-    export type EnrollStudentOnSubjectClassMutationError = void
-
-    /**
- * @summary Đăng ký lớp môn học cho học viên
- */
-export const useEnrollStudentOnSubjectClass = <TError = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>, TError,{data: EnrollStudentOnSubjectClassBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getEnrollStudentOnSubjectClassMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
         TError,
-        {data: EnrollStudentOnSubjectClassBody},
+        { data: EnrollStudentOnSubjectClassBody },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+    TError,
+    { data: EnrollStudentOnSubjectClassBody },
+    TContext
+> => {
+    const mutationKey = ['enrollStudentOnSubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getEnrollStudentOnSubjectClassMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+        { data: EnrollStudentOnSubjectClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return enrollStudentOnSubjectClass(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type EnrollStudentOnSubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>
+>
+export type EnrollStudentOnSubjectClassMutationBody = EnrollStudentOnSubjectClassBody
+export type EnrollStudentOnSubjectClassMutationError = undefined
+
+/**
+ * @summary Đăng ký lớp môn học cho học viên
+ */
+export const useEnrollStudentOnSubjectClass = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+            TError,
+            { data: EnrollStudentOnSubjectClassBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
+    TError,
+    { data: EnrollStudentOnSubjectClassBody },
+    TContext
+> => {
+    const mutationOptions = getEnrollStudentOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Cập nhật nhiều lớp môn học
  * @summary Cập nhật nhiều lớp môn học
  */
 export type putManySubjectClassResponse200 = {
-  data: PutManySubjectClass200
-  status: 200
+    data: PutManySubjectClass200
+    status: 200
 }
-    
-export type putManySubjectClassResponseComposite = putManySubjectClassResponse200;
-    
+
+export type putManySubjectClassResponseComposite = putManySubjectClassResponse200
+
 export type putManySubjectClassResponse = putManySubjectClassResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getPutManySubjectClassUrl = () => {
-
-
-  
-
-  return `/api/subject-class`
+    return '/api/subject-class'
 }
 
-export const putManySubjectClass = async (subjectClasses: SubjectClasses[], options?: RequestInit): Promise<putManySubjectClassResponse> => {
-  
-  return customTrainingFetch<putManySubjectClassResponse>(getPutManySubjectClassUrl(),
-  {      
-    ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      subjectClasses,)
-  }
-);}
+export const putManySubjectClass = async (
+    subjectClasses: SubjectClasses[],
+    options?: RequestInit
+): Promise<putManySubjectClassResponse> => {
+    return customTrainingFetch<putManySubjectClassResponse>(getPutManySubjectClassUrl(), {
+        ...options,
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(subjectClasses),
+    })
+}
 
-
-
-
-export const getPutManySubjectClassMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putManySubjectClass>>, TError,{data: SubjectClasses[]}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof putManySubjectClass>>, TError,{data: SubjectClasses[]}, TContext> => {
-
-const mutationKey = ['putManySubjectClass'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putManySubjectClass>>, {data: SubjectClasses[]}> = (props) => {
-          const {data} = props ?? {};
-
-          return  putManySubjectClass(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PutManySubjectClassMutationResult = NonNullable<Awaited<ReturnType<typeof putManySubjectClass>>>
-    export type PutManySubjectClassMutationBody = SubjectClasses[]
-    export type PutManySubjectClassMutationError = unknown
-
-    /**
- * @summary Cập nhật nhiều lớp môn học
- */
-export const usePutManySubjectClass = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putManySubjectClass>>, TError,{data: SubjectClasses[]}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getPutManySubjectClassMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof putManySubjectClass>>,
         TError,
-        {data: SubjectClasses[]},
+        { data: SubjectClasses[] },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof putManySubjectClass>>,
+    TError,
+    { data: SubjectClasses[] },
+    TContext
+> => {
+    const mutationKey = ['putManySubjectClass']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getPutManySubjectClassMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof putManySubjectClass>>,
+        { data: SubjectClasses[] }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return putManySubjectClass(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type PutManySubjectClassMutationResult = NonNullable<
+    Awaited<ReturnType<typeof putManySubjectClass>>
+>
+export type PutManySubjectClassMutationBody = SubjectClasses[]
+export type PutManySubjectClassMutationError = unknown
+
+/**
+ * @summary Cập nhật nhiều lớp môn học
+ */
+export const usePutManySubjectClass = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof putManySubjectClass>>,
+            TError,
+            { data: SubjectClasses[] },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof putManySubjectClass>>,
+    TError,
+    { data: SubjectClasses[] },
+    TContext
+> => {
+    const mutationOptions = getPutManySubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Xuất file xlsx danh sách sinh viên trong lớp môn học
  * @summary Xuất file xlsx danh sách sinh viên trong lớp môn học
  */
 export type exportStudentSubjectClassExcelResponse200 = {
-  data: Blob
-  status: 200
+    data: Blob
+    status: 200
 }
 
 export type exportStudentSubjectClassExcelResponse400 = {
-  data: ExportStudentSubjectClassExcel400
-  status: 400
+    data: ExportStudentSubjectClassExcel400
+    status: 400
 }
 
 export type exportStudentSubjectClassExcelResponse404 = {
-  data: ExportStudentSubjectClassExcel404
-  status: 404
-}
-    
-export type exportStudentSubjectClassExcelResponseComposite = exportStudentSubjectClassExcelResponse200 | exportStudentSubjectClassExcelResponse400 | exportStudentSubjectClassExcelResponse404;
-    
-export type exportStudentSubjectClassExcelResponse = exportStudentSubjectClassExcelResponseComposite & {
-  headers: Headers;
+    data: ExportStudentSubjectClassExcel404
+    status: 404
 }
 
-export const getExportStudentSubjectClassExcelUrl = (params: ExportStudentSubjectClassExcelParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type exportStudentSubjectClassExcelResponseComposite =
+    | exportStudentSubjectClassExcelResponse200
+    | exportStudentSubjectClassExcelResponse400
+    | exportStudentSubjectClassExcelResponse404
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/subject-class/export-xlsx-list-student-subject-class?${stringifiedParams}` : `/api/subject-class/export-xlsx-list-student-subject-class`
-}
-
-export const exportStudentSubjectClassExcel = async (params: ExportStudentSubjectClassExcelParams, options?: RequestInit): Promise<exportStudentSubjectClassExcelResponse> => {
-  
-  return customTrainingFetch<exportStudentSubjectClassExcelResponse>(getExportStudentSubjectClassExcelUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getExportStudentSubjectClassExcelQueryKey = (params: ExportStudentSubjectClassExcelParams,) => {
-    return [`/api/subject-class/export-xlsx-list-student-subject-class`, ...(params ? [params]: [])] as const;
+export type exportStudentSubjectClassExcelResponse =
+    exportStudentSubjectClassExcelResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getExportStudentSubjectClassExcelQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404>(params: ExportStudentSubjectClassExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getExportStudentSubjectClassExcelUrl = (
+    params: ExportStudentSubjectClassExcelParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getExportStudentSubjectClassExcelQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>> = ({ signal }) => exportStudentSubjectClassExcel(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/subject-class/export-xlsx-list-student-subject-class?${stringifiedParams}`
+        : '/api/subject-class/export-xlsx-list-student-subject-class'
 }
 
-export type ExportStudentSubjectClassExcelQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>>
-export type ExportStudentSubjectClassExcelQueryError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404
+export const exportStudentSubjectClassExcel = async (
+    params: ExportStudentSubjectClassExcelParams,
+    options?: RequestInit
+): Promise<exportStudentSubjectClassExcelResponse> => {
+    return customTrainingFetch<exportStudentSubjectClassExcelResponse>(
+        getExportStudentSubjectClassExcelUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
+export const getExportStudentSubjectClassExcelQueryKey = (
+    params: ExportStudentSubjectClassExcelParams
+) => {
+    return [
+        '/api/subject-class/export-xlsx-list-student-subject-class',
+        ...(params ? [params] : []),
+    ] as const
+}
 
-export function useExportStudentSubjectClassExcel<TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404>(
- params: ExportStudentSubjectClassExcelParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentSubjectClassExcel<TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404>(
- params: ExportStudentSubjectClassExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentSubjectClassExcel<TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404>(
- params: ExportStudentSubjectClassExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getExportStudentSubjectClassExcelQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentSubjectClassExcelQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>> = ({
+        signal,
+    }) => exportStudentSubjectClassExcel(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentSubjectClassExcelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
+>
+export type ExportStudentSubjectClassExcelQueryError =
+    | ExportStudentSubjectClassExcel400
+    | ExportStudentSubjectClassExcel404
+
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xuất file xlsx danh sách sinh viên trong lớp môn học
  */
 
-export function useExportStudentSubjectClassExcel<TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404>(
- params: ExportStudentSubjectClassExcelParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useExportStudentSubjectClassExcel<
+    TData = Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+    TError = ExportStudentSubjectClassExcel400 | ExportStudentSubjectClassExcel404,
+>(
+    params: ExportStudentSubjectClassExcelParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentSubjectClassExcel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentSubjectClassExcelQueryOptions(params, options)
 
-  const queryOptions = getExportStudentSubjectClassExcelQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Import điểm lớp môn học 
@@ -1495,524 +2009,755 @@ export function useExportStudentSubjectClassExcel<TData = Awaited<ReturnType<typ
  * @summary Import file nhập điểm
  */
 export type uploadExcelImportScoreResponse200 = {
-  data: UploadExcelImportScore200
-  status: 200
+    data: UploadExcelImportScore200
+    status: 200
 }
 
 export type uploadExcelImportScoreResponse400 = {
-  data: UploadExcelImportScore400
-  status: 400
+    data: UploadExcelImportScore400
+    status: 400
 }
-    
-export type uploadExcelImportScoreResponseComposite = uploadExcelImportScoreResponse200 | uploadExcelImportScoreResponse400;
-    
+
+export type uploadExcelImportScoreResponseComposite =
+    | uploadExcelImportScoreResponse200
+    | uploadExcelImportScoreResponse400
+
 export type uploadExcelImportScoreResponse = uploadExcelImportScoreResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getUploadExcelImportScoreUrl = () => {
-
-
-  
-
-  return `/api/subject-class/upload-excel-import-score`
+    return '/api/subject-class/upload-excel-import-score'
 }
 
-export const uploadExcelImportScore = async (uploadExcelImportScore: UploadExcelImportScore, options?: RequestInit): Promise<uploadExcelImportScoreResponse> => {
-    const formData = new FormData();
-formData.append(`file`, uploadExcelImportScore.file)
-formData.append(`subjectClassId`, uploadExcelImportScore.subjectClassId)
+export const uploadExcelImportScore = async (
+    uploadExcelImportScore: UploadExcelImportScore,
+    options?: RequestInit
+): Promise<uploadExcelImportScoreResponse> => {
+    const formData = new FormData()
+    formData.append('file', uploadExcelImportScore.file)
+    formData.append('subjectClassId', uploadExcelImportScore.subjectClassId)
 
-  return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
+    return customTrainingFetch<uploadExcelImportScoreResponse>(getUploadExcelImportScoreUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
 
-
-
-
-export const getUploadExcelImportScoreMutationOptions = <TError = UploadExcelImportScore400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportScore>>, TError,{data: UploadExcelImportScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportScore>>, TError,{data: UploadExcelImportScore}, TContext> => {
-
-const mutationKey = ['uploadExcelImportScore'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelImportScore>>, {data: UploadExcelImportScore}> = (props) => {
-          const {data} = props ?? {};
-
-          return  uploadExcelImportScore(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadExcelImportScoreMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelImportScore>>>
-    export type UploadExcelImportScoreMutationBody = UploadExcelImportScore
-    export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
-
-    /**
- * @summary Import file nhập điểm
- */
-export const useUploadExcelImportScore = <TError = UploadExcelImportScore400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportScore>>, TError,{data: UploadExcelImportScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadExcelImportScoreMutationOptions = <
+    TError = UploadExcelImportScore400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadExcelImportScore>>,
         TError,
-        {data: UploadExcelImportScore},
+        { data: UploadExcelImportScore },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>,
+    TError,
+    { data: UploadExcelImportScore },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelImportScore']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadExcelImportScoreMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelImportScore>>,
+        { data: UploadExcelImportScore }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadExcelImportScore(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelImportScoreMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>
+>
+export type UploadExcelImportScoreMutationBody = UploadExcelImportScore
+export type UploadExcelImportScoreMutationError = UploadExcelImportScore400
+
+/**
+ * @summary Import file nhập điểm
+ */
+export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelImportScore>>,
+            TError,
+            { data: UploadExcelImportScore },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelImportScore>>,
+    TError,
+    { data: UploadExcelImportScore },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelImportScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Xuất tất cả học viên, sinh viên đủ điều kiện JSON
  * @summary Danh sách học bổng, kỷ luật học tập, lưu ban, thôi học của học viên
  */
 export type exportStudentResultSemesterJsonResponse200 = {
-  data: ExportStudentResultSemesterJson200Item[]
-  status: 200
+    data: ExportStudentResultSemesterJson200Item[]
+    status: 200
 }
 
 export type exportStudentResultSemesterJsonResponse404 = {
-  data: ExportStudentResultSemesterJson404
-  status: 404
-}
-    
-export type exportStudentResultSemesterJsonResponseComposite = exportStudentResultSemesterJsonResponse200 | exportStudentResultSemesterJsonResponse404;
-    
-export type exportStudentResultSemesterJsonResponse = exportStudentResultSemesterJsonResponseComposite & {
-  headers: Headers;
+    data: ExportStudentResultSemesterJson404
+    status: 404
 }
 
-export const getExportStudentResultSemesterJsonUrl = (params: ExportStudentResultSemesterJsonParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type exportStudentResultSemesterJsonResponseComposite =
+    | exportStudentResultSemesterJsonResponse200
+    | exportStudentResultSemesterJsonResponse404
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/student/export-json-list-student-to-check-academic?${stringifiedParams}` : `/api/student/export-json-list-student-to-check-academic`
-}
-
-export const exportStudentResultSemesterJson = async (params: ExportStudentResultSemesterJsonParams, options?: RequestInit): Promise<exportStudentResultSemesterJsonResponse> => {
-  
-  return customTrainingFetch<exportStudentResultSemesterJsonResponse>(getExportStudentResultSemesterJsonUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getExportStudentResultSemesterJsonQueryKey = (params: ExportStudentResultSemesterJsonParams,) => {
-    return [`/api/student/export-json-list-student-to-check-academic`, ...(params ? [params]: [])] as const;
+export type exportStudentResultSemesterJsonResponse =
+    exportStudentResultSemesterJsonResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getExportStudentResultSemesterJsonQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError = ExportStudentResultSemesterJson404>(params: ExportStudentResultSemesterJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getExportStudentResultSemesterJsonUrl = (
+    params: ExportStudentResultSemesterJsonParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getExportStudentResultSemesterJsonQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>> = ({ signal }) => exportStudentResultSemesterJson(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/student/export-json-list-student-to-check-academic?${stringifiedParams}`
+        : '/api/student/export-json-list-student-to-check-academic'
 }
 
-export type ExportStudentResultSemesterJsonQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>>
+export const exportStudentResultSemesterJson = async (
+    params: ExportStudentResultSemesterJsonParams,
+    options?: RequestInit
+): Promise<exportStudentResultSemesterJsonResponse> => {
+    return customTrainingFetch<exportStudentResultSemesterJsonResponse>(
+        getExportStudentResultSemesterJsonUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getExportStudentResultSemesterJsonQueryKey = (
+    params: ExportStudentResultSemesterJsonParams
+) => {
+    return [
+        '/api/student/export-json-list-student-to-check-academic',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getExportStudentResultSemesterJsonQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+    TError = ExportStudentResultSemesterJson404,
+>(
+    params: ExportStudentResultSemesterJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getExportStudentResultSemesterJsonQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>> = ({
+        signal,
+    }) => exportStudentResultSemesterJson(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentResultSemesterJsonQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
+>
 export type ExportStudentResultSemesterJsonQueryError = ExportStudentResultSemesterJson404
 
-
-export function useExportStudentResultSemesterJson<TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError = ExportStudentResultSemesterJson404>(
- params: ExportStudentResultSemesterJsonParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentResultSemesterJson<TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError = ExportStudentResultSemesterJson404>(
- params: ExportStudentResultSemesterJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentResultSemesterJson<TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError = ExportStudentResultSemesterJson404>(
- params: ExportStudentResultSemesterJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentResultSemesterJson<
+    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+    TError = ExportStudentResultSemesterJson404,
+>(
+    params: ExportStudentResultSemesterJsonParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentResultSemesterJson<
+    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+    TError = ExportStudentResultSemesterJson404,
+>(
+    params: ExportStudentResultSemesterJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentResultSemesterJson>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentResultSemesterJson<
+    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+    TError = ExportStudentResultSemesterJson404,
+>(
+    params: ExportStudentResultSemesterJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Danh sách học bổng, kỷ luật học tập, lưu ban, thôi học của học viên
  */
 
-export function useExportStudentResultSemesterJson<TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError = ExportStudentResultSemesterJson404>(
- params: ExportStudentResultSemesterJsonParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentResultSemesterJson>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useExportStudentResultSemesterJson<
+    TData = Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+    TError = ExportStudentResultSemesterJson404,
+>(
+    params: ExportStudentResultSemesterJsonParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentResultSemesterJson>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentResultSemesterJsonQueryOptions(params, options)
 
-  const queryOptions = getExportStudentResultSemesterJsonQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Trả kết quả học kỳ của học viên, sinh viên dưới dạng JSON
  * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
  */
 export type calculateStudentSemesterResultJsonResponse200 = {
-  data: CalculateStudentSemesterResultJson200
-  status: 200
+    data: CalculateStudentSemesterResultJson200
+    status: 200
 }
 
 export type calculateStudentSemesterResultJsonResponse400 = {
-  data: CalculateStudentSemesterResultJson400
-  status: 400
+    data: CalculateStudentSemesterResultJson400
+    status: 400
 }
 
 export type calculateStudentSemesterResultJsonResponse500 = {
-  data: CalculateStudentSemesterResultJson500
-  status: 500
-}
-    
-export type calculateStudentSemesterResultJsonResponseComposite = calculateStudentSemesterResultJsonResponse200 | calculateStudentSemesterResultJsonResponse400 | calculateStudentSemesterResultJsonResponse500;
-    
-export type calculateStudentSemesterResultJsonResponse = calculateStudentSemesterResultJsonResponseComposite & {
-  headers: Headers;
+    data: CalculateStudentSemesterResultJson500
+    status: 500
 }
 
-export const getCalculateStudentSemesterResultJsonUrl = (params: CalculateStudentSemesterResultJsonParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type calculateStudentSemesterResultJsonResponseComposite =
+    | calculateStudentSemesterResultJsonResponse200
+    | calculateStudentSemesterResultJsonResponse400
+    | calculateStudentSemesterResultJsonResponse500
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+export type calculateStudentSemesterResultJsonResponse =
+    calculateStudentSemesterResultJsonResponseComposite & {
+        headers: Headers
     }
-  });
 
-  const stringifiedParams = normalizedParams.toString();
+export const getCalculateStudentSemesterResultJsonUrl = (
+    params: CalculateStudentSemesterResultJsonParams
+) => {
+    const normalizedParams = new URLSearchParams()
 
-  return stringifiedParams.length > 0 ? `/api/student/calculate-student-semester-result-json?${stringifiedParams}` : `/api/student/calculate-student-semester-result-json`
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/calculate-student-semester-result-json?${stringifiedParams}`
+        : '/api/student/calculate-student-semester-result-json'
 }
 
-export const calculateStudentSemesterResultJson = async (params: CalculateStudentSemesterResultJsonParams, options?: RequestInit): Promise<calculateStudentSemesterResultJsonResponse> => {
-  
-  return customTrainingFetch<calculateStudentSemesterResultJsonResponse>(getCalculateStudentSemesterResultJsonUrl(params),
-  {      
-    ...options,
-    method: 'POST'
-    
-    
-  }
-);}
-
-
-
-
-export const getCalculateStudentSemesterResultJsonMutationOptions = <TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, TError,{params: CalculateStudentSemesterResultJsonParams}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, TError,{params: CalculateStudentSemesterResultJsonParams}, TContext> => {
-
-const mutationKey = ['calculateStudentSemesterResultJson'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, {params: CalculateStudentSemesterResultJsonParams}> = (props) => {
-          const {params} = props ?? {};
-
-          return  calculateStudentSemesterResultJson(params,requestOptions)
+export const calculateStudentSemesterResultJson = async (
+    params: CalculateStudentSemesterResultJsonParams,
+    options?: RequestInit
+): Promise<calculateStudentSemesterResultJsonResponse> => {
+    return customTrainingFetch<calculateStudentSemesterResultJsonResponse>(
+        getCalculateStudentSemesterResultJsonUrl(params),
+        {
+            ...options,
+            method: 'POST',
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CalculateStudentSemesterResultJsonMutationResult = NonNullable<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>>
-    
-    export type CalculateStudentSemesterResultJsonMutationError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500
-
-    /**
- * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
- */
-export const useCalculateStudentSemesterResultJson = <TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>, TError,{params: CalculateStudentSemesterResultJsonParams}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getCalculateStudentSemesterResultJsonMutationOptions = <
+    TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
         TError,
-        {params: CalculateStudentSemesterResultJsonParams},
+        { params: CalculateStudentSemesterResultJsonParams },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+    TError,
+    { params: CalculateStudentSemesterResultJsonParams },
+    TContext
+> => {
+    const mutationKey = ['calculateStudentSemesterResultJson']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getCalculateStudentSemesterResultJsonMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+        { params: CalculateStudentSemesterResultJsonParams }
+    > = (props) => {
+        const { params } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return calculateStudentSemesterResultJson(params, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CalculateStudentSemesterResultJsonMutationResult = NonNullable<
+    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>
+>
+
+export type CalculateStudentSemesterResultJsonMutationError =
+    | CalculateStudentSemesterResultJson400
+    | CalculateStudentSemesterResultJson500
+
+/**
+ * @summary Tổng kết kết quả học kỳ của học viên, sinh viên
+ */
+export const useCalculateStudentSemesterResultJson = <
+    TError = CalculateStudentSemesterResultJson400 | CalculateStudentSemesterResultJson500,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+            TError,
+            { params: CalculateStudentSemesterResultJsonParams },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof calculateStudentSemesterResultJson>>,
+    TError,
+    { params: CalculateStudentSemesterResultJsonParams },
+    TContext
+> => {
+    const mutationOptions = getCalculateStudentSemesterResultJsonMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 export type importHeQuanSuResponse200 = {
-  data: ImportHeQuanSu200
-  status: 200
+    data: ImportHeQuanSu200
+    status: 200
 }
 
 export type importHeQuanSuResponse400 = {
-  data: ImportHeQuanSu400
-  status: 400
+    data: ImportHeQuanSu400
+    status: 400
 }
-    
-export type importHeQuanSuResponseComposite = importHeQuanSuResponse200 | importHeQuanSuResponse400;
-    
+
+export type importHeQuanSuResponseComposite = importHeQuanSuResponse200 | importHeQuanSuResponse400
+
 export type importHeQuanSuResponse = importHeQuanSuResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getImportHeQuanSuUrl = () => {
-
-
-  
-
-  return `/api/student/import-he-quan-su`
+    return '/api/student/import-he-quan-su'
 }
 
-export const importHeQuanSu = async (importHeQuanSu: ImportHeQuanSu, options?: RequestInit): Promise<importHeQuanSuResponse> => {
-    const formData = new FormData();
-formData.append(`file`, importHeQuanSu.file)
-if(importHeQuanSu.timeout !== undefined && importHeQuanSu.timeout !== null) {
- formData.append(`timeout`, importHeQuanSu.timeout.toString())
- }
+export const importHeQuanSu = async (
+    importHeQuanSu: ImportHeQuanSu,
+    options?: RequestInit
+): Promise<importHeQuanSuResponse> => {
+    const formData = new FormData()
+    formData.append('file', importHeQuanSu.file)
+    if (importHeQuanSu.timeout !== undefined && importHeQuanSu.timeout !== null) {
+        formData.append('timeout', importHeQuanSu.timeout.toString())
+    }
 
-  return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
+    return customTrainingFetch<importHeQuanSuResponse>(getImportHeQuanSuUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
 
-
-
-
-export const getImportHeQuanSuMutationOptions = <TError = ImportHeQuanSu400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importHeQuanSu>>, TError,{data: ImportHeQuanSu}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof importHeQuanSu>>, TError,{data: ImportHeQuanSu}, TContext> => {
-
-const mutationKey = ['importHeQuanSu'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importHeQuanSu>>, {data: ImportHeQuanSu}> = (props) => {
-          const {data} = props ?? {};
-
-          return  importHeQuanSu(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
-    export type ImportHeQuanSuMutationBody = ImportHeQuanSu
-    export type ImportHeQuanSuMutationError = ImportHeQuanSu400
-
-    export const useImportHeQuanSu = <TError = ImportHeQuanSu400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importHeQuanSu>>, TError,{data: ImportHeQuanSu}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getImportHeQuanSuMutationOptions = <
+    TError = ImportHeQuanSu400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof importHeQuanSu>>,
         TError,
-        {data: ImportHeQuanSu},
+        { data: ImportHeQuanSu },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSu },
+    TContext
+> => {
+    const mutationKey = ['importHeQuanSu']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getImportHeQuanSuMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importHeQuanSu>>,
+        { data: ImportHeQuanSu }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return importHeQuanSu(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportHeQuanSuMutationResult = NonNullable<Awaited<ReturnType<typeof importHeQuanSu>>>
+export type ImportHeQuanSuMutationBody = ImportHeQuanSu
+export type ImportHeQuanSuMutationError = ImportHeQuanSu400
+
+export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importHeQuanSu>>,
+            TError,
+            { data: ImportHeQuanSu },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importHeQuanSu>>,
+    TError,
+    { data: ImportHeQuanSu },
+    TContext
+> => {
+    const mutationOptions = getImportHeQuanSuMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Xuất file xlsx danh sách sinh viên trong lớp biên chế
  * @summary Xuất file xlsx danh sách sinh viên trong lớp biên chế
  */
 export type exportStudentFixedClassExcelTrainingPointResponse200 = {
-  data: Blob
-  status: 200
+    data: Blob
+    status: 200
 }
 
 export type exportStudentFixedClassExcelTrainingPointResponse400 = {
-  data: ExportStudentFixedClassExcelTrainingPoint400
-  status: 400
+    data: ExportStudentFixedClassExcelTrainingPoint400
+    status: 400
 }
 
 export type exportStudentFixedClassExcelTrainingPointResponse404 = {
-  data: ExportStudentFixedClassExcelTrainingPoint404
-  status: 404
-}
-    
-export type exportStudentFixedClassExcelTrainingPointResponseComposite = exportStudentFixedClassExcelTrainingPointResponse200 | exportStudentFixedClassExcelTrainingPointResponse400 | exportStudentFixedClassExcelTrainingPointResponse404;
-    
-export type exportStudentFixedClassExcelTrainingPointResponse = exportStudentFixedClassExcelTrainingPointResponseComposite & {
-  headers: Headers;
+    data: ExportStudentFixedClassExcelTrainingPoint404
+    status: 404
 }
 
-export const getExportStudentFixedClassExcelTrainingPointUrl = (params: ExportStudentFixedClassExcelTrainingPointParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type exportStudentFixedClassExcelTrainingPointResponseComposite =
+    | exportStudentFixedClassExcelTrainingPointResponse200
+    | exportStudentFixedClassExcelTrainingPointResponse400
+    | exportStudentFixedClassExcelTrainingPointResponse404
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/training-score/export-xlsx-list-student-fixed-class-training-point?${stringifiedParams}` : `/api/training-score/export-xlsx-list-student-fixed-class-training-point`
-}
-
-export const exportStudentFixedClassExcelTrainingPoint = async (params: ExportStudentFixedClassExcelTrainingPointParams, options?: RequestInit): Promise<exportStudentFixedClassExcelTrainingPointResponse> => {
-  
-  return customTrainingFetch<exportStudentFixedClassExcelTrainingPointResponse>(getExportStudentFixedClassExcelTrainingPointUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getExportStudentFixedClassExcelTrainingPointQueryKey = (params: ExportStudentFixedClassExcelTrainingPointParams,) => {
-    return [`/api/training-score/export-xlsx-list-student-fixed-class-training-point`, ...(params ? [params]: [])] as const;
+export type exportStudentFixedClassExcelTrainingPointResponse =
+    exportStudentFixedClassExcelTrainingPointResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getExportStudentFixedClassExcelTrainingPointQueryOptions = <TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError = ExportStudentFixedClassExcelTrainingPoint400 | ExportStudentFixedClassExcelTrainingPoint404>(params: ExportStudentFixedClassExcelTrainingPointParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getExportStudentFixedClassExcelTrainingPointUrl = (
+    params: ExportStudentFixedClassExcelTrainingPointParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getExportStudentFixedClassExcelTrainingPointQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>> = ({ signal }) => exportStudentFixedClassExcelTrainingPoint(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/training-score/export-xlsx-list-student-fixed-class-training-point?${stringifiedParams}`
+        : '/api/training-score/export-xlsx-list-student-fixed-class-training-point'
 }
 
-export type ExportStudentFixedClassExcelTrainingPointQueryResult = NonNullable<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>>
-export type ExportStudentFixedClassExcelTrainingPointQueryError = ExportStudentFixedClassExcelTrainingPoint400 | ExportStudentFixedClassExcelTrainingPoint404
+export const exportStudentFixedClassExcelTrainingPoint = async (
+    params: ExportStudentFixedClassExcelTrainingPointParams,
+    options?: RequestInit
+): Promise<exportStudentFixedClassExcelTrainingPointResponse> => {
+    return customTrainingFetch<exportStudentFixedClassExcelTrainingPointResponse>(
+        getExportStudentFixedClassExcelTrainingPointUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
+export const getExportStudentFixedClassExcelTrainingPointQueryKey = (
+    params: ExportStudentFixedClassExcelTrainingPointParams
+) => {
+    return [
+        '/api/training-score/export-xlsx-list-student-fixed-class-training-point',
+        ...(params ? [params] : []),
+    ] as const
+}
 
-export function useExportStudentFixedClassExcelTrainingPoint<TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError = ExportStudentFixedClassExcelTrainingPoint400 | ExportStudentFixedClassExcelTrainingPoint404>(
- params: ExportStudentFixedClassExcelTrainingPointParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentFixedClassExcelTrainingPoint<TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError = ExportStudentFixedClassExcelTrainingPoint400 | ExportStudentFixedClassExcelTrainingPoint404>(
- params: ExportStudentFixedClassExcelTrainingPointParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
-          TError,
-          Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportStudentFixedClassExcelTrainingPoint<TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError = ExportStudentFixedClassExcelTrainingPoint400 | ExportStudentFixedClassExcelTrainingPoint404>(
- params: ExportStudentFixedClassExcelTrainingPointParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export const getExportStudentFixedClassExcelTrainingPointQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+    TError =
+        | ExportStudentFixedClassExcelTrainingPoint400
+        | ExportStudentFixedClassExcelTrainingPoint404,
+>(
+    params: ExportStudentFixedClassExcelTrainingPointParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getExportStudentFixedClassExcelTrainingPointQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>
+    > = ({ signal }) =>
+        exportStudentFixedClassExcelTrainingPoint(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ExportStudentFixedClassExcelTrainingPointQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>
+>
+export type ExportStudentFixedClassExcelTrainingPointQueryError =
+    | ExportStudentFixedClassExcelTrainingPoint400
+    | ExportStudentFixedClassExcelTrainingPoint404
+
+export function useExportStudentFixedClassExcelTrainingPoint<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+    TError =
+        | ExportStudentFixedClassExcelTrainingPoint400
+        | ExportStudentFixedClassExcelTrainingPoint404,
+>(
+    params: ExportStudentFixedClassExcelTrainingPointParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentFixedClassExcelTrainingPoint<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+    TError =
+        | ExportStudentFixedClassExcelTrainingPoint400
+        | ExportStudentFixedClassExcelTrainingPoint404,
+>(
+    params: ExportStudentFixedClassExcelTrainingPointParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportStudentFixedClassExcelTrainingPoint<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+    TError =
+        | ExportStudentFixedClassExcelTrainingPoint400
+        | ExportStudentFixedClassExcelTrainingPoint404,
+>(
+    params: ExportStudentFixedClassExcelTrainingPointParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Xuất file xlsx danh sách sinh viên trong lớp biên chế
  */
 
-export function useExportStudentFixedClassExcelTrainingPoint<TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError = ExportStudentFixedClassExcelTrainingPoint400 | ExportStudentFixedClassExcelTrainingPoint404>(
- params: ExportStudentFixedClassExcelTrainingPointParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useExportStudentFixedClassExcelTrainingPoint<
+    TData = Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+    TError =
+        | ExportStudentFixedClassExcelTrainingPoint400
+        | ExportStudentFixedClassExcelTrainingPoint404,
+>(
+    params: ExportStudentFixedClassExcelTrainingPointParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof exportStudentFixedClassExcelTrainingPoint>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportStudentFixedClassExcelTrainingPointQueryOptions(params, options)
 
-  const queryOptions = getExportStudentFixedClassExcelTrainingPointQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Import điểm rèn luyện lớp biên chế 
@@ -2023,3884 +2768,6050 @@ export function useExportStudentFixedClassExcelTrainingPoint<TData = Awaited<Ret
  * @summary Import file nhập điểm rèn luyện
  */
 export type uploadExcelImportTrainingScoreResponse200 = {
-  data: UploadExcelImportTrainingScore200
-  status: 200
+    data: UploadExcelImportTrainingScore200
+    status: 200
 }
 
 export type uploadExcelImportTrainingScoreResponse400 = {
-  data: UploadExcelImportTrainingScore400
-  status: 400
+    data: UploadExcelImportTrainingScore400
+    status: 400
 }
-    
-export type uploadExcelImportTrainingScoreResponseComposite = uploadExcelImportTrainingScoreResponse200 | uploadExcelImportTrainingScoreResponse400;
-    
-export type uploadExcelImportTrainingScoreResponse = uploadExcelImportTrainingScoreResponseComposite & {
-  headers: Headers;
-}
+
+export type uploadExcelImportTrainingScoreResponseComposite =
+    | uploadExcelImportTrainingScoreResponse200
+    | uploadExcelImportTrainingScoreResponse400
+
+export type uploadExcelImportTrainingScoreResponse =
+    uploadExcelImportTrainingScoreResponseComposite & {
+        headers: Headers
+    }
 
 export const getUploadExcelImportTrainingScoreUrl = () => {
-
-
-  
-
-  return `/api/training-score/upload-excel-import-score`
+    return '/api/training-score/upload-excel-import-score'
 }
 
-export const uploadExcelImportTrainingScore = async (uploadExcelImportTrainingScore: UploadExcelImportTrainingScore, options?: RequestInit): Promise<uploadExcelImportTrainingScoreResponse> => {
-    const formData = new FormData();
-formData.append(`file`, uploadExcelImportTrainingScore.file)
-formData.append(`fixedClassId`, uploadExcelImportTrainingScore.fixedClassId)
-formData.append(`trainingSessionId`, uploadExcelImportTrainingScore.trainingSessionId)
+export const uploadExcelImportTrainingScore = async (
+    uploadExcelImportTrainingScore: UploadExcelImportTrainingScore,
+    options?: RequestInit
+): Promise<uploadExcelImportTrainingScoreResponse> => {
+    const formData = new FormData()
+    formData.append('file', uploadExcelImportTrainingScore.file)
+    formData.append('fixedClassId', uploadExcelImportTrainingScore.fixedClassId)
+    formData.append('trainingSessionId', uploadExcelImportTrainingScore.trainingSessionId)
 
-  return customTrainingFetch<uploadExcelImportTrainingScoreResponse>(getUploadExcelImportTrainingScoreUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
-
-
-
-
-export const getUploadExcelImportTrainingScoreMutationOptions = <TError = UploadExcelImportTrainingScore400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, TError,{data: UploadExcelImportTrainingScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, TError,{data: UploadExcelImportTrainingScore}, TContext> => {
-
-const mutationKey = ['uploadExcelImportTrainingScore'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, {data: UploadExcelImportTrainingScore}> = (props) => {
-          const {data} = props ?? {};
-
-          return  uploadExcelImportTrainingScore(data,requestOptions)
+    return customTrainingFetch<uploadExcelImportTrainingScoreResponse>(
+        getUploadExcelImportTrainingScoreUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UploadExcelImportTrainingScoreMutationResult = NonNullable<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>>
-    export type UploadExcelImportTrainingScoreMutationBody = UploadExcelImportTrainingScore
-    export type UploadExcelImportTrainingScoreMutationError = UploadExcelImportTrainingScore400
-
-    /**
- * @summary Import file nhập điểm rèn luyện
- */
-export const useUploadExcelImportTrainingScore = <TError = UploadExcelImportTrainingScore400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>, TError,{data: UploadExcelImportTrainingScore}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getUploadExcelImportTrainingScoreMutationOptions = <
+    TError = UploadExcelImportTrainingScore400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
         TError,
-        {data: UploadExcelImportTrainingScore},
+        { data: UploadExcelImportTrainingScore },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+    TError,
+    { data: UploadExcelImportTrainingScore },
+    TContext
+> => {
+    const mutationKey = ['uploadExcelImportTrainingScore']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getUploadExcelImportTrainingScoreMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+        { data: UploadExcelImportTrainingScore }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return uploadExcelImportTrainingScore(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UploadExcelImportTrainingScoreMutationResult = NonNullable<
+    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>
+>
+export type UploadExcelImportTrainingScoreMutationBody = UploadExcelImportTrainingScore
+export type UploadExcelImportTrainingScoreMutationError = UploadExcelImportTrainingScore400
+
+/**
+ * @summary Import file nhập điểm rèn luyện
+ */
+export const useUploadExcelImportTrainingScore = <
+    TError = UploadExcelImportTrainingScore400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+            TError,
+            { data: UploadExcelImportTrainingScore },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof uploadExcelImportTrainingScore>>,
+    TError,
+    { data: UploadExcelImportTrainingScore },
+    TContext
+> => {
+    const mutationOptions = getUploadExcelImportTrainingScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 export type importPhienBanCTDTResponse200 = {
-  data: ImportPhienBanCTDT200
-  status: 200
+    data: ImportPhienBanCTDT200
+    status: 200
 }
 
 export type importPhienBanCTDTResponse400 = {
-  data: ImportPhienBanCTDT400
-  status: 400
+    data: ImportPhienBanCTDT400
+    status: 400
 }
-    
-export type importPhienBanCTDTResponseComposite = importPhienBanCTDTResponse200 | importPhienBanCTDTResponse400;
-    
+
+export type importPhienBanCTDTResponseComposite =
+    | importPhienBanCTDTResponse200
+    | importPhienBanCTDTResponse400
+
 export type importPhienBanCTDTResponse = importPhienBanCTDTResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
-export const getImportPhienBanCTDTUrl = (curriculumVersionId: string,) => {
-
-
-  
-
-  return `/api/curriculum/import-phien-ban-ctdt/${curriculumVersionId}`
+export const getImportPhienBanCTDTUrl = (curriculumVersionId: string) => {
+    return `/api/curriculum/import-phien-ban-ctdt/${curriculumVersionId}`
 }
 
-export const importPhienBanCTDT = async (curriculumVersionId: string,
-    importPhienBanCTĐT: ImportPhienBanCTĐT, options?: RequestInit): Promise<importPhienBanCTDTResponse> => {
-    const formData = new FormData();
-formData.append(`file`, importPhienBanCTĐT.file)
-if(importPhienBanCTĐT.timeout !== undefined && importPhienBanCTĐT.timeout !== null) {
- formData.append(`timeout`, importPhienBanCTĐT.timeout.toString())
- }
+export const importPhienBanCTDT = async (
+    curriculumVersionId: string,
+    importPhienBanCTĐT: ImportPhienBanCTĐT,
+    options?: RequestInit
+): Promise<importPhienBanCTDTResponse> => {
+    const formData = new FormData()
+    formData.append('file', importPhienBanCTĐT.file)
+    if (importPhienBanCTĐT.timeout !== undefined && importPhienBanCTĐT.timeout !== null) {
+        formData.append('timeout', importPhienBanCTĐT.timeout.toString())
+    }
 
-  return customTrainingFetch<importPhienBanCTDTResponse>(getImportPhienBanCTDTUrl(curriculumVersionId),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
-
-
-
-
-export const getImportPhienBanCTDTMutationOptions = <TError = ImportPhienBanCTDT400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDT>>, TError,{curriculumVersionId: string;data: ImportPhienBanCTĐT}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDT>>, TError,{curriculumVersionId: string;data: ImportPhienBanCTĐT}, TContext> => {
-
-const mutationKey = ['importPhienBanCTDT'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importPhienBanCTDT>>, {curriculumVersionId: string;data: ImportPhienBanCTĐT}> = (props) => {
-          const {curriculumVersionId,data} = props ?? {};
-
-          return  importPhienBanCTDT(curriculumVersionId,data,requestOptions)
+    return customTrainingFetch<importPhienBanCTDTResponse>(
+        getImportPhienBanCTDTUrl(curriculumVersionId),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
         }
+    )
+}
 
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ImportPhienBanCTDTMutationResult = NonNullable<Awaited<ReturnType<typeof importPhienBanCTDT>>>
-    export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTĐT
-    export type ImportPhienBanCTDTMutationError = ImportPhienBanCTDT400
-
-    export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhienBanCTDT>>, TError,{curriculumVersionId: string;data: ImportPhienBanCTĐT}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getImportPhienBanCTDTMutationOptions = <
+    TError = ImportPhienBanCTDT400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof importPhienBanCTDT>>,
         TError,
-        {curriculumVersionId: string;data: ImportPhienBanCTĐT},
+        { curriculumVersionId: string; data: ImportPhienBanCTĐT },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importPhienBanCTDT>>,
+    TError,
+    { curriculumVersionId: string; data: ImportPhienBanCTĐT },
+    TContext
+> => {
+    const mutationKey = ['importPhienBanCTDT']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getImportPhienBanCTDTMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importPhienBanCTDT>>,
+        { curriculumVersionId: string; data: ImportPhienBanCTĐT }
+    > = (props) => {
+        const { curriculumVersionId, data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return importPhienBanCTDT(curriculumVersionId, data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportPhienBanCTDTMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importPhienBanCTDT>>
+>
+export type ImportPhienBanCTDTMutationBody = ImportPhienBanCTĐT
+export type ImportPhienBanCTDTMutationError = ImportPhienBanCTDT400
+
+export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importPhienBanCTDT>>,
+            TError,
+            { curriculumVersionId: string; data: ImportPhienBanCTĐT },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importPhienBanCTDT>>,
+    TError,
+    { curriculumVersionId: string; data: ImportPhienBanCTĐT },
+    TContext
+> => {
+    const mutationOptions = getImportPhienBanCTDTMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 export type graduationCheckResponse200 = {
-  data: GraduationCheck200
-  status: 200
+    data: GraduationCheck200
+    status: 200
 }
 
 export type graduationCheckResponse400 = {
-  data: GraduationCheck400
-  status: 400
+    data: GraduationCheck400
+    status: 400
 }
-    
-export type graduationCheckResponseComposite = graduationCheckResponse200 | graduationCheckResponse400;
-    
+
+export type graduationCheckResponseComposite =
+    | graduationCheckResponse200
+    | graduationCheckResponse400
+
 export type graduationCheckResponse = graduationCheckResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getGraduationCheckUrl = () => {
-
-
-  
-
-  return `/api/graduation/check`
+    return '/api/graduation/check'
 }
 
-export const graduationCheck = async (graduationCheckBody: GraduationCheckBody, options?: RequestInit): Promise<graduationCheckResponse> => {
-  
-  return customTrainingFetch<graduationCheckResponse>(getGraduationCheckUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      graduationCheckBody,)
-  }
-);}
+export const graduationCheck = async (
+    graduationCheckBody: GraduationCheckBody,
+    options?: RequestInit
+): Promise<graduationCheckResponse> => {
+    return customTrainingFetch<graduationCheckResponse>(getGraduationCheckUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(graduationCheckBody),
+    })
+}
 
-
-
-
-export const getGraduationCheckMutationOptions = <TError = GraduationCheck400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof graduationCheck>>, TError,{data: GraduationCheckBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof graduationCheck>>, TError,{data: GraduationCheckBody}, TContext> => {
-
-const mutationKey = ['graduationCheck'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof graduationCheck>>, {data: GraduationCheckBody}> = (props) => {
-          const {data} = props ?? {};
-
-          return  graduationCheck(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type GraduationCheckMutationResult = NonNullable<Awaited<ReturnType<typeof graduationCheck>>>
-    export type GraduationCheckMutationBody = GraduationCheckBody
-    export type GraduationCheckMutationError = GraduationCheck400
-
-    export const useGraduationCheck = <TError = GraduationCheck400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof graduationCheck>>, TError,{data: GraduationCheckBody}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getGraduationCheckMutationOptions = <
+    TError = GraduationCheck400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof graduationCheck>>,
         TError,
-        {data: GraduationCheckBody},
+        { data: GraduationCheckBody },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof graduationCheck>>,
+    TError,
+    { data: GraduationCheckBody },
+    TContext
+> => {
+    const mutationKey = ['graduationCheck']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getGraduationCheckMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof graduationCheck>>,
+        { data: GraduationCheckBody }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return graduationCheck(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type GraduationCheckMutationResult = NonNullable<Awaited<ReturnType<typeof graduationCheck>>>
+export type GraduationCheckMutationBody = GraduationCheckBody
+export type GraduationCheckMutationError = GraduationCheck400
+
+export const useGraduationCheck = <TError = GraduationCheck400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof graduationCheck>>,
+            TError,
+            { data: GraduationCheckBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof graduationCheck>>,
+    TError,
+    { data: GraduationCheckBody },
+    TContext
+> => {
+    const mutationOptions = getGraduationCheckMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Xuất file excel danh sách phân công giảng dạy
  * @summary Export danh sách phân công giảng dạy
  */
 export type exportPhanCongGiangDayResponse200 = {
-  data: Blob
-  status: 200
+    data: Blob
+    status: 200
 }
 
 export type exportPhanCongGiangDayResponse400 = {
-  data: ExportPhanCongGiangDay400
-  status: 400
+    data: ExportPhanCongGiangDay400
+    status: 400
 }
 
 export type exportPhanCongGiangDayResponse404 = {
-  data: ExportPhanCongGiangDay404
-  status: 404
+    data: ExportPhanCongGiangDay404
+    status: 404
 }
-    
-export type exportPhanCongGiangDayResponseComposite = exportPhanCongGiangDayResponse200 | exportPhanCongGiangDayResponse400 | exportPhanCongGiangDayResponse404;
-    
+
+export type exportPhanCongGiangDayResponseComposite =
+    | exportPhanCongGiangDayResponse200
+    | exportPhanCongGiangDayResponse400
+    | exportPhanCongGiangDayResponse404
+
 export type exportPhanCongGiangDayResponse = exportPhanCongGiangDayResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
-export const getExportPhanCongGiangDayUrl = (params: ExportPhanCongGiangDayParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getExportPhanCongGiangDayUrl = (params: ExportPhanCongGiangDayParams) => {
+    const normalizedParams = new URLSearchParams()
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const stringifiedParams = normalizedParams.toString();
+    const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/plan-training/export-phan-cong-giang-day?${stringifiedParams}` : `/api/plan-training/export-phan-cong-giang-day`
+    return stringifiedParams.length > 0
+        ? `/api/plan-training/export-phan-cong-giang-day?${stringifiedParams}`
+        : '/api/plan-training/export-phan-cong-giang-day'
 }
 
-export const exportPhanCongGiangDay = async (params: ExportPhanCongGiangDayParams, options?: RequestInit): Promise<exportPhanCongGiangDayResponse> => {
-  
-  return customTrainingFetch<exportPhanCongGiangDayResponse>(getExportPhanCongGiangDayUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export const exportPhanCongGiangDay = async (
+    params: ExportPhanCongGiangDayParams,
+    options?: RequestInit
+): Promise<exportPhanCongGiangDayResponse> => {
+    return customTrainingFetch<exportPhanCongGiangDayResponse>(
+        getExportPhanCongGiangDayUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
+export const getExportPhanCongGiangDayQueryKey = (params: ExportPhanCongGiangDayParams) => {
+    return ['/api/plan-training/export-phan-cong-giang-day', ...(params ? [params] : [])] as const
+}
 
-
-export const getExportPhanCongGiangDayQueryKey = (params: ExportPhanCongGiangDayParams,) => {
-    return [`/api/plan-training/export-phan-cong-giang-day`, ...(params ? [params]: [])] as const;
+export const getExportPhanCongGiangDayQueryOptions = <
+    TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+    TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404,
+>(
+    params: ExportPhanCongGiangDayParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
     }
-
-    
-export const getExportPhanCongGiangDayQueryOptions = <TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
 ) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    const queryKey = queryOptions?.queryKey ?? getExportPhanCongGiangDayQueryKey(params)
 
-  const queryKey =  queryOptions?.queryKey ?? getExportPhanCongGiangDayQueryKey(params);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhanCongGiangDay>>> = ({
+        signal,
+    }) => exportPhanCongGiangDay(params, { signal, ...requestOptions })
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof exportPhanCongGiangDay>>> = ({ signal }) => exportPhanCongGiangDay(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ExportPhanCongGiangDayQueryResult = NonNullable<Awaited<ReturnType<typeof exportPhanCongGiangDay>>>
+export type ExportPhanCongGiangDayQueryResult = NonNullable<
+    Awaited<ReturnType<typeof exportPhanCongGiangDay>>
+>
 export type ExportPhanCongGiangDayQueryError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404
 
-
-export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
- params: ExportPhanCongGiangDayParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
-          TError,
-          Awaited<ReturnType<typeof exportPhanCongGiangDay>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
- params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
-          TError,
-          Awaited<ReturnType<typeof exportPhanCongGiangDay>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
- params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhanCongGiangDay<
+    TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+    TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404,
+>(
+    params: ExportPhanCongGiangDayParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportPhanCongGiangDay>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhanCongGiangDay<
+    TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+    TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404,
+>(
+    params: ExportPhanCongGiangDayParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+                    TError,
+                    Awaited<ReturnType<typeof exportPhanCongGiangDay>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useExportPhanCongGiangDay<
+    TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+    TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404,
+>(
+    params: ExportPhanCongGiangDayParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Export danh sách phân công giảng dạy
  */
 
-export function useExportPhanCongGiangDay<TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404>(
- params: ExportPhanCongGiangDayParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useExportPhanCongGiangDay<
+    TData = Awaited<ReturnType<typeof exportPhanCongGiangDay>>,
+    TError = ExportPhanCongGiangDay400 | ExportPhanCongGiangDay404,
+>(
+    params: ExportPhanCongGiangDayParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof exportPhanCongGiangDay>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getExportPhanCongGiangDayQueryOptions(params, options)
 
-  const queryOptions = getExportPhanCongGiangDayQueryOptions(params,options)
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+    query.queryKey = queryOptions.queryKey
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 /**
  * Nhập file excel danh sách phân công giảng dạy
  * @summary Import danh sách phân công giảng dạy
  */
 export type importPhanCongGiangDayResponse200 = {
-  data: ImportPhanCongGiangDay200
-  status: 200
+    data: ImportPhanCongGiangDay200
+    status: 200
 }
 
 export type importPhanCongGiangDayResponse400 = {
-  data: ImportPhanCongGiangDay400
-  status: 400
+    data: ImportPhanCongGiangDay400
+    status: 400
 }
-    
-export type importPhanCongGiangDayResponseComposite = importPhanCongGiangDayResponse200 | importPhanCongGiangDayResponse400;
-    
+
+export type importPhanCongGiangDayResponseComposite =
+    | importPhanCongGiangDayResponse200
+    | importPhanCongGiangDayResponse400
+
 export type importPhanCongGiangDayResponse = importPhanCongGiangDayResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getImportPhanCongGiangDayUrl = () => {
-
-
-  
-
-  return `/api/plan-training/import-phan-cong-giang-day`
+    return '/api/plan-training/import-phan-cong-giang-day'
 }
 
-export const importPhanCongGiangDay = async (importPhanCongGiangDay: ImportPhanCongGiangDay, options?: RequestInit): Promise<importPhanCongGiangDayResponse> => {
-    const formData = new FormData();
-formData.append(`file`, importPhanCongGiangDay.file)
-formData.append(`semesterId`, importPhanCongGiangDay.semesterId)
+export const importPhanCongGiangDay = async (
+    importPhanCongGiangDay: ImportPhanCongGiangDay,
+    options?: RequestInit
+): Promise<importPhanCongGiangDayResponse> => {
+    const formData = new FormData()
+    formData.append('file', importPhanCongGiangDay.file)
+    formData.append('semesterId', importPhanCongGiangDay.semesterId)
 
-  return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    ,
-    body: 
-      formData,
-  }
-);}
+    return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
 
-
-
-
-export const getImportPhanCongGiangDayMutationOptions = <TError = ImportPhanCongGiangDay400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext> => {
-
-const mutationKey = ['importPhanCongGiangDay'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importPhanCongGiangDay>>, {data: ImportPhanCongGiangDay}> = (props) => {
-          const {data} = props ?? {};
-
-          return  importPhanCongGiangDay(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ImportPhanCongGiangDayMutationResult = NonNullable<Awaited<ReturnType<typeof importPhanCongGiangDay>>>
-    export type ImportPhanCongGiangDayMutationBody = ImportPhanCongGiangDay
-    export type ImportPhanCongGiangDayMutationError = ImportPhanCongGiangDay400
-
-    /**
- * @summary Import danh sách phân công giảng dạy
- */
-export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importPhanCongGiangDay>>, TError,{data: ImportPhanCongGiangDay}, TContext>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient): UseMutationResult<
+export const getImportPhanCongGiangDayMutationOptions = <
+    TError = ImportPhanCongGiangDay400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof importPhanCongGiangDay>>,
         TError,
-        {data: ImportPhanCongGiangDay},
+        { data: ImportPhanCongGiangDay },
         TContext
-      > => {
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+    TError,
+    { data: ImportPhanCongGiangDay },
+    TContext
+> => {
+    const mutationKey = ['importPhanCongGiangDay']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
 
-      const mutationOptions = getImportPhanCongGiangDayMutationOptions(options);
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+        { data: ImportPhanCongGiangDay }
+    > = (props) => {
+        const { data } = props ?? {}
 
-      return useMutation(mutationOptions , queryClient);
+        return importPhanCongGiangDay(data, requestOptions)
     }
-    
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportPhanCongGiangDayMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importPhanCongGiangDay>>
+>
+export type ImportPhanCongGiangDayMutationBody = ImportPhanCongGiangDay
+export type ImportPhanCongGiangDayMutationError = ImportPhanCongGiangDay400
+
+/**
+ * @summary Import danh sách phân công giảng dạy
+ */
+export const useImportPhanCongGiangDay = <TError = ImportPhanCongGiangDay400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+            TError,
+            { data: ImportPhanCongGiangDay },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importPhanCongGiangDay>>,
+    TError,
+    { data: ImportPhanCongGiangDay },
+    TContext
+> => {
+    const mutationOptions = getImportPhanCongGiangDayMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 export type getApiStatsStudentDistributionByTrainingObjectTypeResponse200 = {
-  data: GetApiStatsStudentDistributionByTrainingObjectType200Item[]
-  status: 200
+    data: GetApiStatsStudentDistributionByTrainingObjectType200Item[]
+    status: 200
 }
-    
-export type getApiStatsStudentDistributionByTrainingObjectTypeResponseComposite = getApiStatsStudentDistributionByTrainingObjectTypeResponse200;
-    
-export type getApiStatsStudentDistributionByTrainingObjectTypeResponse = getApiStatsStudentDistributionByTrainingObjectTypeResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsStudentDistributionByTrainingObjectTypeResponseComposite =
+    getApiStatsStudentDistributionByTrainingObjectTypeResponse200
+
+export type getApiStatsStudentDistributionByTrainingObjectTypeResponse =
+    getApiStatsStudentDistributionByTrainingObjectTypeResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsStudentDistributionByTrainingObjectTypeUrl = () => {
-
-
-  
-
-  return `/api/stats/student-distribution-by-training-object-type`
+    return '/api/stats/student-distribution-by-training-object-type'
 }
 
-export const getApiStatsStudentDistributionByTrainingObjectType = async ( options?: RequestInit): Promise<getApiStatsStudentDistributionByTrainingObjectTypeResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByTrainingObjectTypeResponse>(getGetApiStatsStudentDistributionByTrainingObjectTypeUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsStudentDistributionByTrainingObjectType = async (
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByTrainingObjectTypeResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByTrainingObjectTypeResponse>(
+        getGetApiStatsStudentDistributionByTrainingObjectTypeUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsStudentDistributionByTrainingObjectTypeQueryKey = () => {
-    return [`/api/stats/student-distribution-by-training-object-type`] as const;
-    }
-
-    
-export const getGetApiStatsStudentDistributionByTrainingObjectTypeQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingObjectTypeQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>> = ({ signal }) => getApiStatsStudentDistributionByTrainingObjectType({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/student-distribution-by-training-object-type'] as const
 }
 
-export type GetApiStatsStudentDistributionByTrainingObjectTypeQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>>
+export const getGetApiStatsStudentDistributionByTrainingObjectTypeQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingObjectTypeQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>
+    > = ({ signal }) =>
+        getApiStatsStudentDistributionByTrainingObjectType({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByTrainingObjectTypeQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>
+>
 export type GetApiStatsStudentDistributionByTrainingObjectTypeQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByTrainingObjectType<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingObjectType<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingObjectType<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByTrainingObjectType<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingObjectType<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingObjectType<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingObjectType<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByTrainingObjectTypeQueryOptions(options)
 
-export function useGetApiStatsStudentDistributionByTrainingObjectType<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectType>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByTrainingObjectTypeQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentDistributionByTrainingLevelResponse200 = {
-  data: GetApiStatsStudentDistributionByTrainingLevel200Item[]
-  status: 200
+    data: GetApiStatsStudentDistributionByTrainingLevel200Item[]
+    status: 200
 }
-    
-export type getApiStatsStudentDistributionByTrainingLevelResponseComposite = getApiStatsStudentDistributionByTrainingLevelResponse200;
-    
-export type getApiStatsStudentDistributionByTrainingLevelResponse = getApiStatsStudentDistributionByTrainingLevelResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsStudentDistributionByTrainingLevelResponseComposite =
+    getApiStatsStudentDistributionByTrainingLevelResponse200
+
+export type getApiStatsStudentDistributionByTrainingLevelResponse =
+    getApiStatsStudentDistributionByTrainingLevelResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsStudentDistributionByTrainingLevelUrl = () => {
-
-
-  
-
-  return `/api/stats/student-distribution-by-training-level`
+    return '/api/stats/student-distribution-by-training-level'
 }
 
-export const getApiStatsStudentDistributionByTrainingLevel = async ( options?: RequestInit): Promise<getApiStatsStudentDistributionByTrainingLevelResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByTrainingLevelResponse>(getGetApiStatsStudentDistributionByTrainingLevelUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsStudentDistributionByTrainingLevel = async (
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByTrainingLevelResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByTrainingLevelResponse>(
+        getGetApiStatsStudentDistributionByTrainingLevelUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsStudentDistributionByTrainingLevelQueryKey = () => {
-    return [`/api/stats/student-distribution-by-training-level`] as const;
-    }
-
-    
-export const getGetApiStatsStudentDistributionByTrainingLevelQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingLevelQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>> = ({ signal }) => getApiStatsStudentDistributionByTrainingLevel({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/student-distribution-by-training-level'] as const
 }
 
-export type GetApiStatsStudentDistributionByTrainingLevelQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>>
+export const getGetApiStatsStudentDistributionByTrainingLevelQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingLevelQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>
+    > = ({ signal }) => getApiStatsStudentDistributionByTrainingLevel({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByTrainingLevelQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>
+>
 export type GetApiStatsStudentDistributionByTrainingLevelQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByTrainingLevel<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingLevel<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingLevel<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByTrainingLevel<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingLevel<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingLevel<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingLevel<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByTrainingLevelQueryOptions(options)
 
-export function useGetApiStatsStudentDistributionByTrainingLevel<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevel>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByTrainingLevelQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentDistributionByTrainingCourseResponse200 = {
-  data: GetApiStatsStudentDistributionByTrainingCourse200Item[]
-  status: 200
+    data: GetApiStatsStudentDistributionByTrainingCourse200Item[]
+    status: 200
 }
-    
-export type getApiStatsStudentDistributionByTrainingCourseResponseComposite = getApiStatsStudentDistributionByTrainingCourseResponse200;
-    
-export type getApiStatsStudentDistributionByTrainingCourseResponse = getApiStatsStudentDistributionByTrainingCourseResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsStudentDistributionByTrainingCourseResponseComposite =
+    getApiStatsStudentDistributionByTrainingCourseResponse200
+
+export type getApiStatsStudentDistributionByTrainingCourseResponse =
+    getApiStatsStudentDistributionByTrainingCourseResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsStudentDistributionByTrainingCourseUrl = () => {
-
-
-  
-
-  return `/api/stats/student-distribution-by-training-course`
+    return '/api/stats/student-distribution-by-training-course'
 }
 
-export const getApiStatsStudentDistributionByTrainingCourse = async ( options?: RequestInit): Promise<getApiStatsStudentDistributionByTrainingCourseResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByTrainingCourseResponse>(getGetApiStatsStudentDistributionByTrainingCourseUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsStudentDistributionByTrainingCourse = async (
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByTrainingCourseResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByTrainingCourseResponse>(
+        getGetApiStatsStudentDistributionByTrainingCourseUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsStudentDistributionByTrainingCourseQueryKey = () => {
-    return [`/api/stats/student-distribution-by-training-course`] as const;
-    }
-
-    
-export const getGetApiStatsStudentDistributionByTrainingCourseQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingCourseQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>> = ({ signal }) => getApiStatsStudentDistributionByTrainingCourse({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/student-distribution-by-training-course'] as const
 }
 
-export type GetApiStatsStudentDistributionByTrainingCourseQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>>
+export const getGetApiStatsStudentDistributionByTrainingCourseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingCourseQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>
+    > = ({ signal }) =>
+        getApiStatsStudentDistributionByTrainingCourse({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByTrainingCourseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>
+>
 export type GetApiStatsStudentDistributionByTrainingCourseQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByTrainingCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByTrainingCourse<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingCourse<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingCourse<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByTrainingCourseQueryOptions(options)
 
-export function useGetApiStatsStudentDistributionByTrainingCourse<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByTrainingCourseQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAverageEntryScoreByCourseResponse200 = {
-  data: GetApiStatsAverageEntryScoreByCourse200Item[]
-  status: 200
+    data: GetApiStatsAverageEntryScoreByCourse200Item[]
+    status: 200
 }
-    
-export type getApiStatsAverageEntryScoreByCourseResponseComposite = getApiStatsAverageEntryScoreByCourseResponse200;
-    
-export type getApiStatsAverageEntryScoreByCourseResponse = getApiStatsAverageEntryScoreByCourseResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsAverageEntryScoreByCourseResponseComposite =
+    getApiStatsAverageEntryScoreByCourseResponse200
+
+export type getApiStatsAverageEntryScoreByCourseResponse =
+    getApiStatsAverageEntryScoreByCourseResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsAverageEntryScoreByCourseUrl = () => {
-
-
-  
-
-  return `/api/stats/average-entry-score-by-course`
+    return '/api/stats/average-entry-score-by-course'
 }
 
-export const getApiStatsAverageEntryScoreByCourse = async ( options?: RequestInit): Promise<getApiStatsAverageEntryScoreByCourseResponse> => {
-  
-  return customTrainingFetch<getApiStatsAverageEntryScoreByCourseResponse>(getGetApiStatsAverageEntryScoreByCourseUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsAverageEntryScoreByCourse = async (
+    options?: RequestInit
+): Promise<getApiStatsAverageEntryScoreByCourseResponse> => {
+    return customTrainingFetch<getApiStatsAverageEntryScoreByCourseResponse>(
+        getGetApiStatsAverageEntryScoreByCourseUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsAverageEntryScoreByCourseQueryKey = () => {
-    return [`/api/stats/average-entry-score-by-course`] as const;
-    }
-
-    
-export const getGetApiStatsAverageEntryScoreByCourseQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAverageEntryScoreByCourseQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>> = ({ signal }) => getApiStatsAverageEntryScoreByCourse({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/average-entry-score-by-course'] as const
 }
 
-export type GetApiStatsAverageEntryScoreByCourseQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>>
+export const getGetApiStatsAverageEntryScoreByCourseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsAverageEntryScoreByCourseQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>
+    > = ({ signal }) => getApiStatsAverageEntryScoreByCourse({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAverageEntryScoreByCourseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>
+>
 export type GetApiStatsAverageEntryScoreByCourseQueryError = unknown
 
+export function useGetApiStatsAverageEntryScoreByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageEntryScoreByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageEntryScoreByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAverageEntryScoreByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageEntryScoreByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageEntryScoreByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageEntryScoreByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAverageEntryScoreByCourseQueryOptions(options)
 
-export function useGetApiStatsAverageEntryScoreByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAverageEntryScoreByCourseQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAverageGpaByCourseResponse200 = {
-  data: GetApiStatsAverageGpaByCourse200Item[]
-  status: 200
+    data: GetApiStatsAverageGpaByCourse200Item[]
+    status: 200
 }
-    
-export type getApiStatsAverageGpaByCourseResponseComposite = getApiStatsAverageGpaByCourseResponse200;
-    
-export type getApiStatsAverageGpaByCourseResponse = getApiStatsAverageGpaByCourseResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsAverageGpaByCourseResponseComposite =
+    getApiStatsAverageGpaByCourseResponse200
+
+export type getApiStatsAverageGpaByCourseResponse =
+    getApiStatsAverageGpaByCourseResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsAverageGpaByCourseUrl = () => {
-
-
-  
-
-  return `/api/stats/average-gpa-by-course`
+    return '/api/stats/average-gpa-by-course'
 }
 
-export const getApiStatsAverageGpaByCourse = async ( options?: RequestInit): Promise<getApiStatsAverageGpaByCourseResponse> => {
-  
-  return customTrainingFetch<getApiStatsAverageGpaByCourseResponse>(getGetApiStatsAverageGpaByCourseUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsAverageGpaByCourse = async (
+    options?: RequestInit
+): Promise<getApiStatsAverageGpaByCourseResponse> => {
+    return customTrainingFetch<getApiStatsAverageGpaByCourseResponse>(
+        getGetApiStatsAverageGpaByCourseUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsAverageGpaByCourseQueryKey = () => {
-    return [`/api/stats/average-gpa-by-course`] as const;
-    }
-
-    
-export const getGetApiStatsAverageGpaByCourseQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAverageGpaByCourseQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>> = ({ signal }) => getApiStatsAverageGpaByCourse({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/average-gpa-by-course'] as const
 }
 
-export type GetApiStatsAverageGpaByCourseQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>>
+export const getGetApiStatsAverageGpaByCourseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsAverageGpaByCourseQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>> = ({
+        signal,
+    }) => getApiStatsAverageGpaByCourse({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAverageGpaByCourseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>
+>
 export type GetApiStatsAverageGpaByCourseQueryError = unknown
 
+export function useGetApiStatsAverageGpaByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAverageGpaByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAverageGpaByCourseQueryOptions(options)
 
-export function useGetApiStatsAverageGpaByCourse<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAverageGpaByCourseQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsGraduationRateByCourseResponse200 = {
-  data: GetApiStatsGraduationRateByCourse200Item[]
-  status: 200
+    data: GetApiStatsGraduationRateByCourse200Item[]
+    status: 200
 }
-    
-export type getApiStatsGraduationRateByCourseResponseComposite = getApiStatsGraduationRateByCourseResponse200;
-    
-export type getApiStatsGraduationRateByCourseResponse = getApiStatsGraduationRateByCourseResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsGraduationRateByCourseResponseComposite =
+    getApiStatsGraduationRateByCourseResponse200
+
+export type getApiStatsGraduationRateByCourseResponse =
+    getApiStatsGraduationRateByCourseResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsGraduationRateByCourseUrl = () => {
-
-
-  
-
-  return `/api/stats/graduation-rate-by-course`
+    return '/api/stats/graduation-rate-by-course'
 }
 
-export const getApiStatsGraduationRateByCourse = async ( options?: RequestInit): Promise<getApiStatsGraduationRateByCourseResponse> => {
-  
-  return customTrainingFetch<getApiStatsGraduationRateByCourseResponse>(getGetApiStatsGraduationRateByCourseUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsGraduationRateByCourse = async (
+    options?: RequestInit
+): Promise<getApiStatsGraduationRateByCourseResponse> => {
+    return customTrainingFetch<getApiStatsGraduationRateByCourseResponse>(
+        getGetApiStatsGraduationRateByCourseUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsGraduationRateByCourseQueryKey = () => {
-    return [`/api/stats/graduation-rate-by-course`] as const;
-    }
-
-    
-export const getGetApiStatsGraduationRateByCourseQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsGraduationRateByCourseQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>> = ({ signal }) => getApiStatsGraduationRateByCourse({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/graduation-rate-by-course'] as const
 }
 
-export type GetApiStatsGraduationRateByCourseQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>>
+export const getGetApiStatsGraduationRateByCourseQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsGraduationRateByCourseQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>> = ({
+        signal,
+    }) => getApiStatsGraduationRateByCourse({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsGraduationRateByCourseQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>
+>
 export type GetApiStatsGraduationRateByCourseQueryError = unknown
 
+export function useGetApiStatsGraduationRateByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRateByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRateByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsGraduationRateByCourse<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsGraduationRateByCourse<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsGraduationRateByCourse<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRateByCourse<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsGraduationRateByCourseQueryOptions(options)
 
-export function useGetApiStatsGraduationRateByCourse<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourse>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetApiStatsGraduationRateByCourseQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export type getApiStatsAcademicPerformanceByYearResponse200 = {
-  data: GetApiStatsAcademicPerformanceByYear200Item[]
-  status: 200
-}
-    
-export type getApiStatsAcademicPerformanceByYearResponseComposite = getApiStatsAcademicPerformanceByYearResponse200;
-    
-export type getApiStatsAcademicPerformanceByYearResponse = getApiStatsAcademicPerformanceByYearResponseComposite & {
-  headers: Headers;
-}
-
-export const getGetApiStatsAcademicPerformanceByYearUrl = () => {
-
-
-  
-
-  return `/api/stats/academic-performance-by-year`
-}
-
-export const getApiStatsAcademicPerformanceByYear = async ( options?: RequestInit): Promise<getApiStatsAcademicPerformanceByYearResponse> => {
-  
-  return customTrainingFetch<getApiStatsAcademicPerformanceByYearResponse>(getGetApiStatsAcademicPerformanceByYearUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsAcademicPerformanceByYearQueryKey = () => {
-    return [`/api/stats/academic-performance-by-year`] as const;
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
     }
 
-    
-export const getGetApiStatsAcademicPerformanceByYearQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
+    query.queryKey = queryOptions.queryKey
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAcademicPerformanceByYearQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>> = ({ signal }) => getApiStatsAcademicPerformanceByYear({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return query
 }
 
-export type GetApiStatsAcademicPerformanceByYearQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>>
+export type getApiStatsAcademicPerformanceByYearResponse200 = {
+    data: GetApiStatsAcademicPerformanceByYear200Item[]
+    status: 200
+}
+
+export type getApiStatsAcademicPerformanceByYearResponseComposite =
+    getApiStatsAcademicPerformanceByYearResponse200
+
+export type getApiStatsAcademicPerformanceByYearResponse =
+    getApiStatsAcademicPerformanceByYearResponseComposite & {
+        headers: Headers
+    }
+
+export const getGetApiStatsAcademicPerformanceByYearUrl = () => {
+    return '/api/stats/academic-performance-by-year'
+}
+
+export const getApiStatsAcademicPerformanceByYear = async (
+    options?: RequestInit
+): Promise<getApiStatsAcademicPerformanceByYearResponse> => {
+    return customTrainingFetch<getApiStatsAcademicPerformanceByYearResponse>(
+        getGetApiStatsAcademicPerformanceByYearUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsAcademicPerformanceByYearQueryKey = () => {
+    return ['/api/stats/academic-performance-by-year'] as const
+}
+
+export const getGetApiStatsAcademicPerformanceByYearQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsAcademicPerformanceByYearQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>
+    > = ({ signal }) => getApiStatsAcademicPerformanceByYear({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAcademicPerformanceByYearQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>
+>
 export type GetApiStatsAcademicPerformanceByYearQueryError = unknown
 
+export function useGetApiStatsAcademicPerformanceByYear<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAcademicPerformanceByYear<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAcademicPerformanceByYear<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAcademicPerformanceByYear<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAcademicPerformanceByYear<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAcademicPerformanceByYear<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAcademicPerformanceByYear<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAcademicPerformanceByYearQueryOptions(options)
 
-export function useGetApiStatsAcademicPerformanceByYear<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYear>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAcademicPerformanceByYearQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsKpiCardsResponse200 = {
-  data: GetApiStatsKpiCards200
-  status: 200
+    data: GetApiStatsKpiCards200
+    status: 200
 }
-    
-export type getApiStatsKpiCardsResponseComposite = getApiStatsKpiCardsResponse200;
-    
+
+export type getApiStatsKpiCardsResponseComposite = getApiStatsKpiCardsResponse200
+
 export type getApiStatsKpiCardsResponse = getApiStatsKpiCardsResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getGetApiStatsKpiCardsUrl = () => {
-
-
-  
-
-  return `/api/stats/kpi-cards`
+    return '/api/stats/kpi-cards'
 }
 
-export const getApiStatsKpiCards = async ( options?: RequestInit): Promise<getApiStatsKpiCardsResponse> => {
-  
-  return customTrainingFetch<getApiStatsKpiCardsResponse>(getGetApiStatsKpiCardsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsKpiCards = async (
+    options?: RequestInit
+): Promise<getApiStatsKpiCardsResponse> => {
+    return customTrainingFetch<getApiStatsKpiCardsResponse>(getGetApiStatsKpiCardsUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetApiStatsKpiCardsQueryKey = () => {
-    return [`/api/stats/kpi-cards`] as const;
-    }
-
-    
-export const getGetApiStatsKpiCardsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsKpiCardsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsKpiCards>>> = ({ signal }) => getApiStatsKpiCards({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/kpi-cards'] as const
 }
 
-export type GetApiStatsKpiCardsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsKpiCards>>>
+export const getGetApiStatsKpiCardsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>>
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsKpiCardsQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsKpiCards>>> = ({ signal }) =>
+        getApiStatsKpiCards({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsKpiCardsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsKpiCards>>
+>
 export type GetApiStatsKpiCardsQueryError = unknown
 
+export function useGetApiStatsKpiCards<
+    TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsKpiCards>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsKpiCards<
+    TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsKpiCards>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsKpiCards<
+    TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsKpiCards<TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsKpiCards>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsKpiCards>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsKpiCards<TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsKpiCards>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsKpiCards>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsKpiCards<TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsKpiCards<
+    TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsKpiCardsQueryOptions(options)
 
-export function useGetApiStatsKpiCards<TData = Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsKpiCards>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsKpiCardsQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentDistributionByProvinceResponse200 = {
-  data: GetApiStatsStudentDistributionByProvince200Item[]
-  status: 200
+    data: GetApiStatsStudentDistributionByProvince200Item[]
+    status: 200
 }
-    
-export type getApiStatsStudentDistributionByProvinceResponseComposite = getApiStatsStudentDistributionByProvinceResponse200;
-    
-export type getApiStatsStudentDistributionByProvinceResponse = getApiStatsStudentDistributionByProvinceResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsStudentDistributionByProvinceResponseComposite =
+    getApiStatsStudentDistributionByProvinceResponse200
+
+export type getApiStatsStudentDistributionByProvinceResponse =
+    getApiStatsStudentDistributionByProvinceResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsStudentDistributionByProvinceUrl = () => {
-
-
-  
-
-  return `/api/stats/student-distribution-by-province`
+    return '/api/stats/student-distribution-by-province'
 }
 
-export const getApiStatsStudentDistributionByProvince = async ( options?: RequestInit): Promise<getApiStatsStudentDistributionByProvinceResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByProvinceResponse>(getGetApiStatsStudentDistributionByProvinceUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsStudentDistributionByProvince = async (
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByProvinceResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByProvinceResponse>(
+        getGetApiStatsStudentDistributionByProvinceUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsStudentDistributionByProvinceQueryKey = () => {
-    return [`/api/stats/student-distribution-by-province`] as const;
-    }
-
-    
-export const getGetApiStatsStudentDistributionByProvinceQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByProvinceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>> = ({ signal }) => getApiStatsStudentDistributionByProvince({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/student-distribution-by-province'] as const
 }
 
-export type GetApiStatsStudentDistributionByProvinceQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>>
+export const getGetApiStatsStudentDistributionByProvinceQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByProvinceQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>
+    > = ({ signal }) => getApiStatsStudentDistributionByProvince({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByProvinceQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>
+>
 export type GetApiStatsStudentDistributionByProvinceQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByProvince<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByProvince<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByProvince<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByProvince<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByProvince<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByProvince<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByProvince<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByProvinceQueryOptions(options)
 
-export function useGetApiStatsStudentDistributionByProvince<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvince>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByProvinceQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200 = {
-  data: GetApiStatsStudentDistributionByTrainingObjectTypeFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseComposite = getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200;
-    
-export type getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse = getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsStudentDistributionByTrainingObjectTypeFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl = (params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseComposite =
+    getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/student-distribution-by-training-object-type-filtered?${stringifiedParams}` : `/api/stats/student-distribution-by-training-object-type-filtered`
-}
-
-export const getApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams, options?: RequestInit): Promise<getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse>(getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryKey = (params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,) => {
-    return [`/api/stats/student-distribution-by-training-object-type-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse =
+    getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError = unknown>(params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl = (
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>> = ({ signal }) => getApiStatsStudentDistributionByTrainingObjectTypeFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/student-distribution-by-training-object-type-filtered?${stringifiedParams}`
+        : '/api/stats/student-distribution-by-training-object-type-filtered'
 }
 
-export type GetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>>
+export const getApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse>(
+        getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryKey = (
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams
+) => {
+    return [
+        '/api/stats/student-distribution-by-training-object-type-filtered',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<
+                    ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>
+                >,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
+    > = ({ signal }) =>
+        getApiStatsStudentDistributionByTrainingObjectTypeFiltered(params, {
+            signal,
+            ...requestOptions,
+        })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
+>
 export type GetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<
+                    ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>
+                >,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<
+                            typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered
+                        >
+                    >,
+                    TError,
+                    Awaited<
+                        ReturnType<
+                            typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered
+                        >
+                    >
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<
+                    ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>
+                >,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<
+                            typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered
+                        >
+                    >,
+                    TError,
+                    Awaited<
+                        ReturnType<
+                            typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered
+                        >
+                    >
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<
+                    ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>
+                >,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<
+                    ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>
+                >,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryOptions(
+        params,
+        options
+    )
 
-export function useGetApiStatsStudentDistributionByTrainingObjectTypeFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingObjectTypeFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingObjectTypeFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByTrainingObjectTypeFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentDistributionByTrainingLevelFilteredResponse200 = {
-  data: GetApiStatsStudentDistributionByTrainingLevelFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsStudentDistributionByTrainingLevelFilteredResponseComposite = getApiStatsStudentDistributionByTrainingLevelFilteredResponse200;
-    
-export type getApiStatsStudentDistributionByTrainingLevelFilteredResponse = getApiStatsStudentDistributionByTrainingLevelFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsStudentDistributionByTrainingLevelFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsStudentDistributionByTrainingLevelFilteredUrl = (params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsStudentDistributionByTrainingLevelFilteredResponseComposite =
+    getApiStatsStudentDistributionByTrainingLevelFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/student-distribution-by-training-level-filtered?${stringifiedParams}` : `/api/stats/student-distribution-by-training-level-filtered`
-}
-
-export const getApiStatsStudentDistributionByTrainingLevelFiltered = async (params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams, options?: RequestInit): Promise<getApiStatsStudentDistributionByTrainingLevelFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByTrainingLevelFilteredResponse>(getGetApiStatsStudentDistributionByTrainingLevelFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryKey = (params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,) => {
-    return [`/api/stats/student-distribution-by-training-level-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsStudentDistributionByTrainingLevelFilteredResponse =
+    getApiStatsStudentDistributionByTrainingLevelFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError = unknown>(params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsStudentDistributionByTrainingLevelFilteredUrl = (
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>> = ({ signal }) => getApiStatsStudentDistributionByTrainingLevelFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/student-distribution-by-training-level-filtered?${stringifiedParams}`
+        : '/api/stats/student-distribution-by-training-level-filtered'
 }
 
-export type GetApiStatsStudentDistributionByTrainingLevelFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>>
+export const getApiStatsStudentDistributionByTrainingLevelFiltered = async (
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByTrainingLevelFilteredResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByTrainingLevelFilteredResponse>(
+        getGetApiStatsStudentDistributionByTrainingLevelFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryKey = (
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams
+) => {
+    return [
+        '/api/stats/student-distribution-by-training-level-filtered',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>
+    > = ({ signal }) =>
+        getApiStatsStudentDistributionByTrainingLevelFiltered(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByTrainingLevelFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>
+>
 export type GetApiStatsStudentDistributionByTrainingLevelFilteredQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>
+                    >,
+                    TError,
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>
+                    >
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>
+                    >,
+                    TError,
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>
+                    >
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryOptions(
+        params,
+        options
+    )
 
-export function useGetApiStatsStudentDistributionByTrainingLevelFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingLevelFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingLevelFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByTrainingLevelFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentDistributionByTrainingCourseFilteredResponse200 = {
-  data: GetApiStatsStudentDistributionByTrainingCourseFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsStudentDistributionByTrainingCourseFilteredResponseComposite = getApiStatsStudentDistributionByTrainingCourseFilteredResponse200;
-    
-export type getApiStatsStudentDistributionByTrainingCourseFilteredResponse = getApiStatsStudentDistributionByTrainingCourseFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsStudentDistributionByTrainingCourseFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsStudentDistributionByTrainingCourseFilteredUrl = (params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsStudentDistributionByTrainingCourseFilteredResponseComposite =
+    getApiStatsStudentDistributionByTrainingCourseFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/student-distribution-by-training-course-filtered?${stringifiedParams}` : `/api/stats/student-distribution-by-training-course-filtered`
-}
-
-export const getApiStatsStudentDistributionByTrainingCourseFiltered = async (params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams, options?: RequestInit): Promise<getApiStatsStudentDistributionByTrainingCourseFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByTrainingCourseFilteredResponse>(getGetApiStatsStudentDistributionByTrainingCourseFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryKey = (params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,) => {
-    return [`/api/stats/student-distribution-by-training-course-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsStudentDistributionByTrainingCourseFilteredResponse =
+    getApiStatsStudentDistributionByTrainingCourseFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError = unknown>(params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsStudentDistributionByTrainingCourseFilteredUrl = (
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>> = ({ signal }) => getApiStatsStudentDistributionByTrainingCourseFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/student-distribution-by-training-course-filtered?${stringifiedParams}`
+        : '/api/stats/student-distribution-by-training-course-filtered'
 }
 
-export type GetApiStatsStudentDistributionByTrainingCourseFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>>
+export const getApiStatsStudentDistributionByTrainingCourseFiltered = async (
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByTrainingCourseFilteredResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByTrainingCourseFilteredResponse>(
+        getGetApiStatsStudentDistributionByTrainingCourseFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryKey = (
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams
+) => {
+    return [
+        '/api/stats/student-distribution-by-training-course-filtered',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>
+    > = ({ signal }) =>
+        getApiStatsStudentDistributionByTrainingCourseFiltered(params, {
+            signal,
+            ...requestOptions,
+        })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByTrainingCourseFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>
+>
 export type GetApiStatsStudentDistributionByTrainingCourseFilteredQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>
+                    >,
+                    TError,
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>
+                    >
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>
+                    >,
+                    TError,
+                    Awaited<
+                        ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>
+                    >
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryOptions(
+        params,
+        options
+    )
 
-export function useGetApiStatsStudentDistributionByTrainingCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByTrainingCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByTrainingCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByTrainingCourseFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAverageEntryScoreByCourseFilteredResponse200 = {
-  data: GetApiStatsAverageEntryScoreByCourseFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsAverageEntryScoreByCourseFilteredResponseComposite = getApiStatsAverageEntryScoreByCourseFilteredResponse200;
-    
-export type getApiStatsAverageEntryScoreByCourseFilteredResponse = getApiStatsAverageEntryScoreByCourseFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsAverageEntryScoreByCourseFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsAverageEntryScoreByCourseFilteredUrl = (params: GetApiStatsAverageEntryScoreByCourseFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsAverageEntryScoreByCourseFilteredResponseComposite =
+    getApiStatsAverageEntryScoreByCourseFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/average-entry-score-by-course-filtered?${stringifiedParams}` : `/api/stats/average-entry-score-by-course-filtered`
-}
-
-export const getApiStatsAverageEntryScoreByCourseFiltered = async (params: GetApiStatsAverageEntryScoreByCourseFilteredParams, options?: RequestInit): Promise<getApiStatsAverageEntryScoreByCourseFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsAverageEntryScoreByCourseFilteredResponse>(getGetApiStatsAverageEntryScoreByCourseFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsAverageEntryScoreByCourseFilteredQueryKey = (params: GetApiStatsAverageEntryScoreByCourseFilteredParams,) => {
-    return [`/api/stats/average-entry-score-by-course-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsAverageEntryScoreByCourseFilteredResponse =
+    getApiStatsAverageEntryScoreByCourseFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsAverageEntryScoreByCourseFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError = unknown>(params: GetApiStatsAverageEntryScoreByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsAverageEntryScoreByCourseFilteredUrl = (
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAverageEntryScoreByCourseFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>> = ({ signal }) => getApiStatsAverageEntryScoreByCourseFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/average-entry-score-by-course-filtered?${stringifiedParams}`
+        : '/api/stats/average-entry-score-by-course-filtered'
 }
 
-export type GetApiStatsAverageEntryScoreByCourseFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>>
+export const getApiStatsAverageEntryScoreByCourseFiltered = async (
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsAverageEntryScoreByCourseFilteredResponse> => {
+    return customTrainingFetch<getApiStatsAverageEntryScoreByCourseFilteredResponse>(
+        getGetApiStatsAverageEntryScoreByCourseFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsAverageEntryScoreByCourseFilteredQueryKey = (
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams
+) => {
+    return [
+        '/api/stats/average-entry-score-by-course-filtered',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getGetApiStatsAverageEntryScoreByCourseFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsAverageEntryScoreByCourseFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>
+    > = ({ signal }) =>
+        getApiStatsAverageEntryScoreByCourseFiltered(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAverageEntryScoreByCourseFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>
+>
 export type GetApiStatsAverageEntryScoreByCourseFilteredQueryError = unknown
 
+export function useGetApiStatsAverageEntryScoreByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageEntryScoreByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageEntryScoreByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAverageEntryScoreByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageEntryScoreByCourseFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageEntryScoreByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageEntryScoreByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageEntryScoreByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageEntryScoreByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageEntryScoreByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageEntryScoreByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAverageEntryScoreByCourseFilteredQueryOptions(
+        params,
+        options
+    )
 
-export function useGetApiStatsAverageEntryScoreByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageEntryScoreByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageEntryScoreByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAverageEntryScoreByCourseFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAverageGpaByCourseFilteredResponse200 = {
-  data: GetApiStatsAverageGpaByCourseFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsAverageGpaByCourseFilteredResponseComposite = getApiStatsAverageGpaByCourseFilteredResponse200;
-    
-export type getApiStatsAverageGpaByCourseFilteredResponse = getApiStatsAverageGpaByCourseFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsAverageGpaByCourseFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsAverageGpaByCourseFilteredUrl = (params: GetApiStatsAverageGpaByCourseFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsAverageGpaByCourseFilteredResponseComposite =
+    getApiStatsAverageGpaByCourseFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/average-gpa-by-course-filtered?${stringifiedParams}` : `/api/stats/average-gpa-by-course-filtered`
-}
-
-export const getApiStatsAverageGpaByCourseFiltered = async (params: GetApiStatsAverageGpaByCourseFilteredParams, options?: RequestInit): Promise<getApiStatsAverageGpaByCourseFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsAverageGpaByCourseFilteredResponse>(getGetApiStatsAverageGpaByCourseFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsAverageGpaByCourseFilteredQueryKey = (params: GetApiStatsAverageGpaByCourseFilteredParams,) => {
-    return [`/api/stats/average-gpa-by-course-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsAverageGpaByCourseFilteredResponse =
+    getApiStatsAverageGpaByCourseFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsAverageGpaByCourseFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError = unknown>(params: GetApiStatsAverageGpaByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsAverageGpaByCourseFilteredUrl = (
+    params: GetApiStatsAverageGpaByCourseFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAverageGpaByCourseFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>> = ({ signal }) => getApiStatsAverageGpaByCourseFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/average-gpa-by-course-filtered?${stringifiedParams}`
+        : '/api/stats/average-gpa-by-course-filtered'
 }
 
-export type GetApiStatsAverageGpaByCourseFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>>
+export const getApiStatsAverageGpaByCourseFiltered = async (
+    params: GetApiStatsAverageGpaByCourseFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsAverageGpaByCourseFilteredResponse> => {
+    return customTrainingFetch<getApiStatsAverageGpaByCourseFilteredResponse>(
+        getGetApiStatsAverageGpaByCourseFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsAverageGpaByCourseFilteredQueryKey = (
+    params: GetApiStatsAverageGpaByCourseFilteredParams
+) => {
+    return ['/api/stats/average-gpa-by-course-filtered', ...(params ? [params] : [])] as const
+}
+
+export const getGetApiStatsAverageGpaByCourseFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageGpaByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsAverageGpaByCourseFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>
+    > = ({ signal }) => getApiStatsAverageGpaByCourseFiltered(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAverageGpaByCourseFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>
+>
 export type GetApiStatsAverageGpaByCourseFilteredQueryError = unknown
 
+export function useGetApiStatsAverageGpaByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageGpaByCourseFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageGpaByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageGpaByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAverageGpaByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageGpaByCourseFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageGpaByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageGpaByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAverageGpaByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAverageGpaByCourseFilteredQueryOptions(params, options)
 
-export function useGetApiStatsAverageGpaByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsAverageGpaByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAverageGpaByCourseFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsGraduationRateByCourseFilteredResponse200 = {
-  data: GetApiStatsGraduationRateByCourseFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsGraduationRateByCourseFilteredResponseComposite = getApiStatsGraduationRateByCourseFilteredResponse200;
-    
-export type getApiStatsGraduationRateByCourseFilteredResponse = getApiStatsGraduationRateByCourseFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsGraduationRateByCourseFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsGraduationRateByCourseFilteredUrl = (params: GetApiStatsGraduationRateByCourseFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsGraduationRateByCourseFilteredResponseComposite =
+    getApiStatsGraduationRateByCourseFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/graduation-rate-by-course-filtered?${stringifiedParams}` : `/api/stats/graduation-rate-by-course-filtered`
-}
-
-export const getApiStatsGraduationRateByCourseFiltered = async (params: GetApiStatsGraduationRateByCourseFilteredParams, options?: RequestInit): Promise<getApiStatsGraduationRateByCourseFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsGraduationRateByCourseFilteredResponse>(getGetApiStatsGraduationRateByCourseFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsGraduationRateByCourseFilteredQueryKey = (params: GetApiStatsGraduationRateByCourseFilteredParams,) => {
-    return [`/api/stats/graduation-rate-by-course-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsGraduationRateByCourseFilteredResponse =
+    getApiStatsGraduationRateByCourseFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsGraduationRateByCourseFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError = unknown>(params: GetApiStatsGraduationRateByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsGraduationRateByCourseFilteredUrl = (
+    params: GetApiStatsGraduationRateByCourseFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsGraduationRateByCourseFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>> = ({ signal }) => getApiStatsGraduationRateByCourseFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/graduation-rate-by-course-filtered?${stringifiedParams}`
+        : '/api/stats/graduation-rate-by-course-filtered'
 }
 
-export type GetApiStatsGraduationRateByCourseFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>>
+export const getApiStatsGraduationRateByCourseFiltered = async (
+    params: GetApiStatsGraduationRateByCourseFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsGraduationRateByCourseFilteredResponse> => {
+    return customTrainingFetch<getApiStatsGraduationRateByCourseFilteredResponse>(
+        getGetApiStatsGraduationRateByCourseFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsGraduationRateByCourseFilteredQueryKey = (
+    params: GetApiStatsGraduationRateByCourseFilteredParams
+) => {
+    return ['/api/stats/graduation-rate-by-course-filtered', ...(params ? [params] : [])] as const
+}
+
+export const getGetApiStatsGraduationRateByCourseFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsGraduationRateByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsGraduationRateByCourseFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>
+    > = ({ signal }) =>
+        getApiStatsGraduationRateByCourseFiltered(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsGraduationRateByCourseFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>
+>
 export type GetApiStatsGraduationRateByCourseFilteredQueryError = unknown
 
+export function useGetApiStatsGraduationRateByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsGraduationRateByCourseFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRateByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsGraduationRateByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRateByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsGraduationRateByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsGraduationRateByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsGraduationRateByCourseFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsGraduationRateByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsGraduationRateByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsGraduationRateByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsGraduationRateByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRateByCourseFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsGraduationRateByCourseFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsGraduationRateByCourseFilteredQueryOptions(params, options)
 
-export function useGetApiStatsGraduationRateByCourseFiltered<TData = Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError = unknown>(
- params: GetApiStatsGraduationRateByCourseFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRateByCourseFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsGraduationRateByCourseFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAcademicPerformanceByYearFilteredResponse200 = {
-  data: GetApiStatsAcademicPerformanceByYearFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsAcademicPerformanceByYearFilteredResponseComposite = getApiStatsAcademicPerformanceByYearFilteredResponse200;
-    
-export type getApiStatsAcademicPerformanceByYearFilteredResponse = getApiStatsAcademicPerformanceByYearFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsAcademicPerformanceByYearFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsAcademicPerformanceByYearFilteredUrl = (params: GetApiStatsAcademicPerformanceByYearFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsAcademicPerformanceByYearFilteredResponseComposite =
+    getApiStatsAcademicPerformanceByYearFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/academic-performance-by-year-filtered?${stringifiedParams}` : `/api/stats/academic-performance-by-year-filtered`
-}
-
-export const getApiStatsAcademicPerformanceByYearFiltered = async (params: GetApiStatsAcademicPerformanceByYearFilteredParams, options?: RequestInit): Promise<getApiStatsAcademicPerformanceByYearFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsAcademicPerformanceByYearFilteredResponse>(getGetApiStatsAcademicPerformanceByYearFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsAcademicPerformanceByYearFilteredQueryKey = (params: GetApiStatsAcademicPerformanceByYearFilteredParams,) => {
-    return [`/api/stats/academic-performance-by-year-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsAcademicPerformanceByYearFilteredResponse =
+    getApiStatsAcademicPerformanceByYearFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsAcademicPerformanceByYearFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError = unknown>(params: GetApiStatsAcademicPerformanceByYearFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsAcademicPerformanceByYearFilteredUrl = (
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAcademicPerformanceByYearFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>> = ({ signal }) => getApiStatsAcademicPerformanceByYearFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/academic-performance-by-year-filtered?${stringifiedParams}`
+        : '/api/stats/academic-performance-by-year-filtered'
 }
 
-export type GetApiStatsAcademicPerformanceByYearFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>>
+export const getApiStatsAcademicPerformanceByYearFiltered = async (
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsAcademicPerformanceByYearFilteredResponse> => {
+    return customTrainingFetch<getApiStatsAcademicPerformanceByYearFilteredResponse>(
+        getGetApiStatsAcademicPerformanceByYearFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsAcademicPerformanceByYearFilteredQueryKey = (
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams
+) => {
+    return [
+        '/api/stats/academic-performance-by-year-filtered',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getGetApiStatsAcademicPerformanceByYearFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsAcademicPerformanceByYearFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>
+    > = ({ signal }) =>
+        getApiStatsAcademicPerformanceByYearFiltered(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAcademicPerformanceByYearFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>
+>
 export type GetApiStatsAcademicPerformanceByYearFilteredQueryError = unknown
 
+export function useGetApiStatsAcademicPerformanceByYearFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAcademicPerformanceByYearFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAcademicPerformanceByYearFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAcademicPerformanceByYearFiltered<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError = unknown>(
- params: GetApiStatsAcademicPerformanceByYearFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAcademicPerformanceByYearFiltered<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError = unknown>(
- params: GetApiStatsAcademicPerformanceByYearFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAcademicPerformanceByYearFiltered<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError = unknown>(
- params: GetApiStatsAcademicPerformanceByYearFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAcademicPerformanceByYearFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsAcademicPerformanceByYearFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAcademicPerformanceByYearFilteredQueryOptions(
+        params,
+        options
+    )
 
-export function useGetApiStatsAcademicPerformanceByYearFiltered<TData = Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError = unknown>(
- params: GetApiStatsAcademicPerformanceByYearFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAcademicPerformanceByYearFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAcademicPerformanceByYearFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentDistributionByProvinceFilteredResponse200 = {
-  data: GetApiStatsStudentDistributionByProvinceFiltered200Item[]
-  status: 200
-}
-    
-export type getApiStatsStudentDistributionByProvinceFilteredResponseComposite = getApiStatsStudentDistributionByProvinceFilteredResponse200;
-    
-export type getApiStatsStudentDistributionByProvinceFilteredResponse = getApiStatsStudentDistributionByProvinceFilteredResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsStudentDistributionByProvinceFiltered200Item[]
+    status: 200
 }
 
-export const getGetApiStatsStudentDistributionByProvinceFilteredUrl = (params: GetApiStatsStudentDistributionByProvinceFilteredParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsStudentDistributionByProvinceFilteredResponseComposite =
+    getApiStatsStudentDistributionByProvinceFilteredResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/student-distribution-by-province-filtered?${stringifiedParams}` : `/api/stats/student-distribution-by-province-filtered`
-}
-
-export const getApiStatsStudentDistributionByProvinceFiltered = async (params: GetApiStatsStudentDistributionByProvinceFilteredParams, options?: RequestInit): Promise<getApiStatsStudentDistributionByProvinceFilteredResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentDistributionByProvinceFilteredResponse>(getGetApiStatsStudentDistributionByProvinceFilteredUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsStudentDistributionByProvinceFilteredQueryKey = (params: GetApiStatsStudentDistributionByProvinceFilteredParams,) => {
-    return [`/api/stats/student-distribution-by-province-filtered`, ...(params ? [params]: [])] as const;
+export type getApiStatsStudentDistributionByProvinceFilteredResponse =
+    getApiStatsStudentDistributionByProvinceFilteredResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsStudentDistributionByProvinceFilteredQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError = unknown>(params: GetApiStatsStudentDistributionByProvinceFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsStudentDistributionByProvinceFilteredUrl = (
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentDistributionByProvinceFilteredQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>> = ({ signal }) => getApiStatsStudentDistributionByProvinceFiltered(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/student-distribution-by-province-filtered?${stringifiedParams}`
+        : '/api/stats/student-distribution-by-province-filtered'
 }
 
-export type GetApiStatsStudentDistributionByProvinceFilteredQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>>
+export const getApiStatsStudentDistributionByProvinceFiltered = async (
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams,
+    options?: RequestInit
+): Promise<getApiStatsStudentDistributionByProvinceFilteredResponse> => {
+    return customTrainingFetch<getApiStatsStudentDistributionByProvinceFilteredResponse>(
+        getGetApiStatsStudentDistributionByProvinceFilteredUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsStudentDistributionByProvinceFilteredQueryKey = (
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams
+) => {
+    return [
+        '/api/stats/student-distribution-by-province-filtered',
+        ...(params ? [params] : []),
+    ] as const
+}
+
+export const getGetApiStatsStudentDistributionByProvinceFilteredQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetApiStatsStudentDistributionByProvinceFilteredQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>
+    > = ({ signal }) =>
+        getApiStatsStudentDistributionByProvinceFiltered(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentDistributionByProvinceFilteredQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>
+>
 export type GetApiStatsStudentDistributionByProvinceFilteredQueryError = unknown
 
+export function useGetApiStatsStudentDistributionByProvinceFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByProvinceFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByProvinceFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentDistributionByProvinceFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByProvinceFilteredParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByProvinceFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByProvinceFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentDistributionByProvinceFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByProvinceFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentDistributionByProvinceFiltered<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+    TError = unknown,
+>(
+    params: GetApiStatsStudentDistributionByProvinceFilteredParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentDistributionByProvinceFilteredQueryOptions(
+        params,
+        options
+    )
 
-export function useGetApiStatsStudentDistributionByProvinceFiltered<TData = Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError = unknown>(
- params: GetApiStatsStudentDistributionByProvinceFilteredParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentDistributionByProvinceFiltered>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentDistributionByProvinceFilteredQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentsOfInterestResponse200 = {
-  data: GetApiStatsStudentsOfInterest200Item[]
-  status: 200
-}
-    
-export type getApiStatsStudentsOfInterestResponseComposite = getApiStatsStudentsOfInterestResponse200;
-    
-export type getApiStatsStudentsOfInterestResponse = getApiStatsStudentsOfInterestResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsStudentsOfInterest200Item[]
+    status: 200
 }
 
-export const getGetApiStatsStudentsOfInterestUrl = (params?: GetApiStatsStudentsOfInterestParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsStudentsOfInterestResponseComposite =
+    getApiStatsStudentsOfInterestResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/students-of-interest?${stringifiedParams}` : `/api/stats/students-of-interest`
-}
-
-export const getApiStatsStudentsOfInterest = async (params?: GetApiStatsStudentsOfInterestParams, options?: RequestInit): Promise<getApiStatsStudentsOfInterestResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentsOfInterestResponse>(getGetApiStatsStudentsOfInterestUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsStudentsOfInterestQueryKey = (params?: GetApiStatsStudentsOfInterestParams,) => {
-    return [`/api/stats/students-of-interest`, ...(params ? [params]: [])] as const;
+export type getApiStatsStudentsOfInterestResponse =
+    getApiStatsStudentsOfInterestResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsStudentsOfInterestQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError = unknown>(params?: GetApiStatsStudentsOfInterestParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsStudentsOfInterestUrl = (
+    params?: GetApiStatsStudentsOfInterestParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentsOfInterestQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>> = ({ signal }) => getApiStatsStudentsOfInterest(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/students-of-interest?${stringifiedParams}`
+        : '/api/stats/students-of-interest'
 }
 
-export type GetApiStatsStudentsOfInterestQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>>
+export const getApiStatsStudentsOfInterest = async (
+    params?: GetApiStatsStudentsOfInterestParams,
+    options?: RequestInit
+): Promise<getApiStatsStudentsOfInterestResponse> => {
+    return customTrainingFetch<getApiStatsStudentsOfInterestResponse>(
+        getGetApiStatsStudentsOfInterestUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsStudentsOfInterestQueryKey = (
+    params?: GetApiStatsStudentsOfInterestParams
+) => {
+    return ['/api/stats/students-of-interest', ...(params ? [params] : [])] as const
+}
+
+export const getGetApiStatsStudentsOfInterestQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+    TError = unknown,
+>(
+    params?: GetApiStatsStudentsOfInterestParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsStudentsOfInterestQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>> = ({
+        signal,
+    }) => getApiStatsStudentsOfInterest(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentsOfInterestQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>
+>
 export type GetApiStatsStudentsOfInterestQueryError = unknown
 
+export function useGetApiStatsStudentsOfInterest<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+    TError = unknown,
+>(
+    params: undefined | GetApiStatsStudentsOfInterestParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentsOfInterest<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+    TError = unknown,
+>(
+    params?: GetApiStatsStudentsOfInterestParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentsOfInterest<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+    TError = unknown,
+>(
+    params?: GetApiStatsStudentsOfInterestParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentsOfInterest<TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError = unknown>(
- params: undefined |  GetApiStatsStudentsOfInterestParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentsOfInterest<TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError = unknown>(
- params?: GetApiStatsStudentsOfInterestParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentsOfInterest<TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError = unknown>(
- params?: GetApiStatsStudentsOfInterestParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentsOfInterest<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+    TError = unknown,
+>(
+    params?: GetApiStatsStudentsOfInterestParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentsOfInterestQueryOptions(params, options)
 
-export function useGetApiStatsStudentsOfInterest<TData = Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError = unknown>(
- params?: GetApiStatsStudentsOfInterestParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsOfInterest>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentsOfInterestQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAverageGpaByFixedClassResponse200 = {
-  data: GetApiStatsAverageGpaByFixedClass200Item[]
-  status: 200
+    data: GetApiStatsAverageGpaByFixedClass200Item[]
+    status: 200
 }
-    
-export type getApiStatsAverageGpaByFixedClassResponseComposite = getApiStatsAverageGpaByFixedClassResponse200;
-    
-export type getApiStatsAverageGpaByFixedClassResponse = getApiStatsAverageGpaByFixedClassResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsAverageGpaByFixedClassResponseComposite =
+    getApiStatsAverageGpaByFixedClassResponse200
+
+export type getApiStatsAverageGpaByFixedClassResponse =
+    getApiStatsAverageGpaByFixedClassResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsAverageGpaByFixedClassUrl = () => {
-
-
-  
-
-  return `/api/stats/average-gpa-by-fixed-class`
+    return '/api/stats/average-gpa-by-fixed-class'
 }
 
-export const getApiStatsAverageGpaByFixedClass = async ( options?: RequestInit): Promise<getApiStatsAverageGpaByFixedClassResponse> => {
-  
-  return customTrainingFetch<getApiStatsAverageGpaByFixedClassResponse>(getGetApiStatsAverageGpaByFixedClassUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsAverageGpaByFixedClass = async (
+    options?: RequestInit
+): Promise<getApiStatsAverageGpaByFixedClassResponse> => {
+    return customTrainingFetch<getApiStatsAverageGpaByFixedClassResponse>(
+        getGetApiStatsAverageGpaByFixedClassUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsAverageGpaByFixedClassQueryKey = () => {
-    return [`/api/stats/average-gpa-by-fixed-class`] as const;
-    }
-
-    
-export const getGetApiStatsAverageGpaByFixedClassQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAverageGpaByFixedClassQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>> = ({ signal }) => getApiStatsAverageGpaByFixedClass({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/average-gpa-by-fixed-class'] as const
 }
 
-export type GetApiStatsAverageGpaByFixedClassQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>>
+export const getGetApiStatsAverageGpaByFixedClassQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsAverageGpaByFixedClassQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>> = ({
+        signal,
+    }) => getApiStatsAverageGpaByFixedClass({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAverageGpaByFixedClassQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>
+>
 export type GetApiStatsAverageGpaByFixedClassQueryError = unknown
 
+export function useGetApiStatsAverageGpaByFixedClass<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByFixedClass<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByFixedClass<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAverageGpaByFixedClass<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByFixedClass<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByFixedClass<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByFixedClass<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAverageGpaByFixedClassQueryOptions(options)
 
-export function useGetApiStatsAverageGpaByFixedClass<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByFixedClass>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAverageGpaByFixedClassQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAverageGpaByTrainingMajorResponse200 = {
-  data: GetApiStatsAverageGpaByTrainingMajor200Item[]
-  status: 200
+    data: GetApiStatsAverageGpaByTrainingMajor200Item[]
+    status: 200
 }
-    
-export type getApiStatsAverageGpaByTrainingMajorResponseComposite = getApiStatsAverageGpaByTrainingMajorResponse200;
-    
-export type getApiStatsAverageGpaByTrainingMajorResponse = getApiStatsAverageGpaByTrainingMajorResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsAverageGpaByTrainingMajorResponseComposite =
+    getApiStatsAverageGpaByTrainingMajorResponse200
+
+export type getApiStatsAverageGpaByTrainingMajorResponse =
+    getApiStatsAverageGpaByTrainingMajorResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsAverageGpaByTrainingMajorUrl = () => {
-
-
-  
-
-  return `/api/stats/average-gpa-by-training-major`
+    return '/api/stats/average-gpa-by-training-major'
 }
 
-export const getApiStatsAverageGpaByTrainingMajor = async ( options?: RequestInit): Promise<getApiStatsAverageGpaByTrainingMajorResponse> => {
-  
-  return customTrainingFetch<getApiStatsAverageGpaByTrainingMajorResponse>(getGetApiStatsAverageGpaByTrainingMajorUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsAverageGpaByTrainingMajor = async (
+    options?: RequestInit
+): Promise<getApiStatsAverageGpaByTrainingMajorResponse> => {
+    return customTrainingFetch<getApiStatsAverageGpaByTrainingMajorResponse>(
+        getGetApiStatsAverageGpaByTrainingMajorUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsAverageGpaByTrainingMajorQueryKey = () => {
-    return [`/api/stats/average-gpa-by-training-major`] as const;
-    }
-
-    
-export const getGetApiStatsAverageGpaByTrainingMajorQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAverageGpaByTrainingMajorQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>> = ({ signal }) => getApiStatsAverageGpaByTrainingMajor({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/average-gpa-by-training-major'] as const
 }
 
-export type GetApiStatsAverageGpaByTrainingMajorQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>>
+export const getGetApiStatsAverageGpaByTrainingMajorQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsAverageGpaByTrainingMajorQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>
+    > = ({ signal }) => getApiStatsAverageGpaByTrainingMajor({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAverageGpaByTrainingMajorQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>
+>
 export type GetApiStatsAverageGpaByTrainingMajorQueryError = unknown
 
+export function useGetApiStatsAverageGpaByTrainingMajor<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByTrainingMajor<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByTrainingMajor<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAverageGpaByTrainingMajor<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByTrainingMajor<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageGpaByTrainingMajor<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageGpaByTrainingMajor<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAverageGpaByTrainingMajorQueryOptions(options)
 
-export function useGetApiStatsAverageGpaByTrainingMajor<TData = Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageGpaByTrainingMajor>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAverageGpaByTrainingMajorQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsSubjectPassFailRateResponse200 = {
-  data: GetApiStatsSubjectPassFailRate200Item[]
-  status: 200
+    data: GetApiStatsSubjectPassFailRate200Item[]
+    status: 200
 }
-    
-export type getApiStatsSubjectPassFailRateResponseComposite = getApiStatsSubjectPassFailRateResponse200;
-    
-export type getApiStatsSubjectPassFailRateResponse = getApiStatsSubjectPassFailRateResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsSubjectPassFailRateResponseComposite =
+    getApiStatsSubjectPassFailRateResponse200
+
+export type getApiStatsSubjectPassFailRateResponse =
+    getApiStatsSubjectPassFailRateResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsSubjectPassFailRateUrl = () => {
-
-
-  
-
-  return `/api/stats/subject-pass-fail-rate`
+    return '/api/stats/subject-pass-fail-rate'
 }
 
-export const getApiStatsSubjectPassFailRate = async ( options?: RequestInit): Promise<getApiStatsSubjectPassFailRateResponse> => {
-  
-  return customTrainingFetch<getApiStatsSubjectPassFailRateResponse>(getGetApiStatsSubjectPassFailRateUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsSubjectPassFailRate = async (
+    options?: RequestInit
+): Promise<getApiStatsSubjectPassFailRateResponse> => {
+    return customTrainingFetch<getApiStatsSubjectPassFailRateResponse>(
+        getGetApiStatsSubjectPassFailRateUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsSubjectPassFailRateQueryKey = () => {
-    return [`/api/stats/subject-pass-fail-rate`] as const;
-    }
-
-    
-export const getGetApiStatsSubjectPassFailRateQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsSubjectPassFailRateQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>> = ({ signal }) => getApiStatsSubjectPassFailRate({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/subject-pass-fail-rate'] as const
 }
 
-export type GetApiStatsSubjectPassFailRateQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>>
+export const getGetApiStatsSubjectPassFailRateQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsSubjectPassFailRateQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>> = ({
+        signal,
+    }) => getApiStatsSubjectPassFailRate({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsSubjectPassFailRateQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>
+>
 export type GetApiStatsSubjectPassFailRateQueryError = unknown
 
+export function useGetApiStatsSubjectPassFailRate<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsSubjectPassFailRate<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsSubjectPassFailRate<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsSubjectPassFailRate<TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsSubjectPassFailRate<TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsSubjectPassFailRate<TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsSubjectPassFailRate<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsSubjectPassFailRateQueryOptions(options)
 
-export function useGetApiStatsSubjectPassFailRate<TData = Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectPassFailRate>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsSubjectPassFailRateQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsCurriculumStatisticsResponse200 = {
-  data: GetApiStatsCurriculumStatistics200
-  status: 200
+    data: GetApiStatsCurriculumStatistics200
+    status: 200
 }
-    
-export type getApiStatsCurriculumStatisticsResponseComposite = getApiStatsCurriculumStatisticsResponse200;
-    
-export type getApiStatsCurriculumStatisticsResponse = getApiStatsCurriculumStatisticsResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsCurriculumStatisticsResponseComposite =
+    getApiStatsCurriculumStatisticsResponse200
+
+export type getApiStatsCurriculumStatisticsResponse =
+    getApiStatsCurriculumStatisticsResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsCurriculumStatisticsUrl = () => {
-
-
-  
-
-  return `/api/stats/curriculum-statistics`
+    return '/api/stats/curriculum-statistics'
 }
 
-export const getApiStatsCurriculumStatistics = async ( options?: RequestInit): Promise<getApiStatsCurriculumStatisticsResponse> => {
-  
-  return customTrainingFetch<getApiStatsCurriculumStatisticsResponse>(getGetApiStatsCurriculumStatisticsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsCurriculumStatistics = async (
+    options?: RequestInit
+): Promise<getApiStatsCurriculumStatisticsResponse> => {
+    return customTrainingFetch<getApiStatsCurriculumStatisticsResponse>(
+        getGetApiStatsCurriculumStatisticsUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsCurriculumStatisticsQueryKey = () => {
-    return [`/api/stats/curriculum-statistics`] as const;
-    }
-
-    
-export const getGetApiStatsCurriculumStatisticsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsCurriculumStatisticsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>> = ({ signal }) => getApiStatsCurriculumStatistics({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/curriculum-statistics'] as const
 }
 
-export type GetApiStatsCurriculumStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>>
+export const getGetApiStatsCurriculumStatisticsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsCurriculumStatisticsQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>> = ({
+        signal,
+    }) => getApiStatsCurriculumStatistics({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsCurriculumStatisticsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>
+>
 export type GetApiStatsCurriculumStatisticsQueryError = unknown
 
+export function useGetApiStatsCurriculumStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsCurriculumStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsCurriculumStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsCurriculumStatistics<TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsCurriculumStatistics<TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsCurriculumStatistics<TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsCurriculumStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsCurriculumStatisticsQueryOptions(options)
 
-export function useGetApiStatsCurriculumStatistics<TData = Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsCurriculumStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsCurriculumStatisticsQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsSubjectClassStatisticsResponse200 = {
-  data: GetApiStatsSubjectClassStatistics200
-  status: 200
-}
-    
-export type getApiStatsSubjectClassStatisticsResponseComposite = getApiStatsSubjectClassStatisticsResponse200;
-    
-export type getApiStatsSubjectClassStatisticsResponse = getApiStatsSubjectClassStatisticsResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsSubjectClassStatistics200
+    status: 200
 }
 
-export const getGetApiStatsSubjectClassStatisticsUrl = (params: GetApiStatsSubjectClassStatisticsParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsSubjectClassStatisticsResponseComposite =
+    getApiStatsSubjectClassStatisticsResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/subject-class-statistics?${stringifiedParams}` : `/api/stats/subject-class-statistics`
-}
-
-export const getApiStatsSubjectClassStatistics = async (params: GetApiStatsSubjectClassStatisticsParams, options?: RequestInit): Promise<getApiStatsSubjectClassStatisticsResponse> => {
-  
-  return customTrainingFetch<getApiStatsSubjectClassStatisticsResponse>(getGetApiStatsSubjectClassStatisticsUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsSubjectClassStatisticsQueryKey = (params: GetApiStatsSubjectClassStatisticsParams,) => {
-    return [`/api/stats/subject-class-statistics`, ...(params ? [params]: [])] as const;
+export type getApiStatsSubjectClassStatisticsResponse =
+    getApiStatsSubjectClassStatisticsResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsSubjectClassStatisticsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError = unknown>(params: GetApiStatsSubjectClassStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsSubjectClassStatisticsUrl = (
+    params: GetApiStatsSubjectClassStatisticsParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsSubjectClassStatisticsQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>> = ({ signal }) => getApiStatsSubjectClassStatistics(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/subject-class-statistics?${stringifiedParams}`
+        : '/api/stats/subject-class-statistics'
 }
 
-export type GetApiStatsSubjectClassStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>>
+export const getApiStatsSubjectClassStatistics = async (
+    params: GetApiStatsSubjectClassStatisticsParams,
+    options?: RequestInit
+): Promise<getApiStatsSubjectClassStatisticsResponse> => {
+    return customTrainingFetch<getApiStatsSubjectClassStatisticsResponse>(
+        getGetApiStatsSubjectClassStatisticsUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsSubjectClassStatisticsQueryKey = (
+    params: GetApiStatsSubjectClassStatisticsParams
+) => {
+    return ['/api/stats/subject-class-statistics', ...(params ? [params] : [])] as const
+}
+
+export const getGetApiStatsSubjectClassStatisticsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+    TError = unknown,
+>(
+    params: GetApiStatsSubjectClassStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsSubjectClassStatisticsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>> = ({
+        signal,
+    }) => getApiStatsSubjectClassStatistics(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsSubjectClassStatisticsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>
+>
 export type GetApiStatsSubjectClassStatisticsQueryError = unknown
 
+export function useGetApiStatsSubjectClassStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+    TError = unknown,
+>(
+    params: GetApiStatsSubjectClassStatisticsParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsSubjectClassStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+    TError = unknown,
+>(
+    params: GetApiStatsSubjectClassStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsSubjectClassStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+    TError = unknown,
+>(
+    params: GetApiStatsSubjectClassStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsSubjectClassStatistics<TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError = unknown>(
- params: GetApiStatsSubjectClassStatisticsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsSubjectClassStatistics<TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError = unknown>(
- params: GetApiStatsSubjectClassStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsSubjectClassStatistics<TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError = unknown>(
- params: GetApiStatsSubjectClassStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsSubjectClassStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+    TError = unknown,
+>(
+    params: GetApiStatsSubjectClassStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsSubjectClassStatisticsQueryOptions(params, options)
 
-export function useGetApiStatsSubjectClassStatistics<TData = Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError = unknown>(
- params: GetApiStatsSubjectClassStatisticsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsSubjectClassStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsSubjectClassStatisticsQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsLecturerWorkloadResponse200 = {
-  data: GetApiStatsLecturerWorkload200Item[]
-  status: 200
+    data: GetApiStatsLecturerWorkload200Item[]
+    status: 200
 }
-    
-export type getApiStatsLecturerWorkloadResponseComposite = getApiStatsLecturerWorkloadResponse200;
-    
+
+export type getApiStatsLecturerWorkloadResponseComposite = getApiStatsLecturerWorkloadResponse200
+
 export type getApiStatsLecturerWorkloadResponse = getApiStatsLecturerWorkloadResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getGetApiStatsLecturerWorkloadUrl = () => {
-
-
-  
-
-  return `/api/stats/lecturer-workload`
+    return '/api/stats/lecturer-workload'
 }
 
-export const getApiStatsLecturerWorkload = async ( options?: RequestInit): Promise<getApiStatsLecturerWorkloadResponse> => {
-  
-  return customTrainingFetch<getApiStatsLecturerWorkloadResponse>(getGetApiStatsLecturerWorkloadUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsLecturerWorkload = async (
+    options?: RequestInit
+): Promise<getApiStatsLecturerWorkloadResponse> => {
+    return customTrainingFetch<getApiStatsLecturerWorkloadResponse>(
+        getGetApiStatsLecturerWorkloadUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsLecturerWorkloadQueryKey = () => {
-    return [`/api/stats/lecturer-workload`] as const;
-    }
-
-    
-export const getGetApiStatsLecturerWorkloadQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsLecturerWorkloadQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>> = ({ signal }) => getApiStatsLecturerWorkload({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/lecturer-workload'] as const
 }
 
-export type GetApiStatsLecturerWorkloadQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>>
+export const getGetApiStatsLecturerWorkloadQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsLecturerWorkloadQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>> = ({
+        signal,
+    }) => getApiStatsLecturerWorkload({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsLecturerWorkloadQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>
+>
 export type GetApiStatsLecturerWorkloadQueryError = unknown
 
+export function useGetApiStatsLecturerWorkload<
+    TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsLecturerWorkload<
+    TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsLecturerWorkload<
+    TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsLecturerWorkload<TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsLecturerWorkload<TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsLecturerWorkload<TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsLecturerWorkload<
+    TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsLecturerWorkloadQueryOptions(options)
 
-export function useGetApiStatsLecturerWorkload<TData = Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsLecturerWorkload>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsLecturerWorkloadQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsGraduationRankingStatisticsResponse200 = {
-  data: GetApiStatsGraduationRankingStatistics200Item[]
-  status: 200
+    data: GetApiStatsGraduationRankingStatistics200Item[]
+    status: 200
 }
-    
-export type getApiStatsGraduationRankingStatisticsResponseComposite = getApiStatsGraduationRankingStatisticsResponse200;
-    
-export type getApiStatsGraduationRankingStatisticsResponse = getApiStatsGraduationRankingStatisticsResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsGraduationRankingStatisticsResponseComposite =
+    getApiStatsGraduationRankingStatisticsResponse200
+
+export type getApiStatsGraduationRankingStatisticsResponse =
+    getApiStatsGraduationRankingStatisticsResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsGraduationRankingStatisticsUrl = () => {
-
-
-  
-
-  return `/api/stats/graduation-ranking-statistics`
+    return '/api/stats/graduation-ranking-statistics'
 }
 
-export const getApiStatsGraduationRankingStatistics = async ( options?: RequestInit): Promise<getApiStatsGraduationRankingStatisticsResponse> => {
-  
-  return customTrainingFetch<getApiStatsGraduationRankingStatisticsResponse>(getGetApiStatsGraduationRankingStatisticsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsGraduationRankingStatistics = async (
+    options?: RequestInit
+): Promise<getApiStatsGraduationRankingStatisticsResponse> => {
+    return customTrainingFetch<getApiStatsGraduationRankingStatisticsResponse>(
+        getGetApiStatsGraduationRankingStatisticsUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsGraduationRankingStatisticsQueryKey = () => {
-    return [`/api/stats/graduation-ranking-statistics`] as const;
-    }
-
-    
-export const getGetApiStatsGraduationRankingStatisticsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsGraduationRankingStatisticsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>> = ({ signal }) => getApiStatsGraduationRankingStatistics({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/graduation-ranking-statistics'] as const
 }
 
-export type GetApiStatsGraduationRankingStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>>
+export const getGetApiStatsGraduationRankingStatisticsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsGraduationRankingStatisticsQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>
+    > = ({ signal }) => getApiStatsGraduationRankingStatistics({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsGraduationRankingStatisticsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>
+>
 export type GetApiStatsGraduationRankingStatisticsQueryError = unknown
 
+export function useGetApiStatsGraduationRankingStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRankingStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRankingStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsGraduationRankingStatistics<TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsGraduationRankingStatistics<TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsGraduationRankingStatistics<TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsGraduationRankingStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsGraduationRankingStatisticsQueryOptions(options)
 
-export function useGetApiStatsGraduationRankingStatistics<TData = Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsGraduationRankingStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsGraduationRankingStatisticsQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsStudentsForAcademicActionResponse200 = {
-  data: GetApiStatsStudentsForAcademicAction200Item[]
-  status: 200
+    data: GetApiStatsStudentsForAcademicAction200Item[]
+    status: 200
 }
-    
-export type getApiStatsStudentsForAcademicActionResponseComposite = getApiStatsStudentsForAcademicActionResponse200;
-    
-export type getApiStatsStudentsForAcademicActionResponse = getApiStatsStudentsForAcademicActionResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsStudentsForAcademicActionResponseComposite =
+    getApiStatsStudentsForAcademicActionResponse200
+
+export type getApiStatsStudentsForAcademicActionResponse =
+    getApiStatsStudentsForAcademicActionResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsStudentsForAcademicActionUrl = () => {
-
-
-  
-
-  return `/api/stats/students-for-academic-action`
+    return '/api/stats/students-for-academic-action'
 }
 
-export const getApiStatsStudentsForAcademicAction = async ( options?: RequestInit): Promise<getApiStatsStudentsForAcademicActionResponse> => {
-  
-  return customTrainingFetch<getApiStatsStudentsForAcademicActionResponse>(getGetApiStatsStudentsForAcademicActionUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsStudentsForAcademicAction = async (
+    options?: RequestInit
+): Promise<getApiStatsStudentsForAcademicActionResponse> => {
+    return customTrainingFetch<getApiStatsStudentsForAcademicActionResponse>(
+        getGetApiStatsStudentsForAcademicActionUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsStudentsForAcademicActionQueryKey = () => {
-    return [`/api/stats/students-for-academic-action`] as const;
-    }
-
-    
-export const getGetApiStatsStudentsForAcademicActionQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsStudentsForAcademicActionQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>> = ({ signal }) => getApiStatsStudentsForAcademicAction({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/students-for-academic-action'] as const
 }
 
-export type GetApiStatsStudentsForAcademicActionQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>>
+export const getGetApiStatsStudentsForAcademicActionQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsStudentsForAcademicActionQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>
+    > = ({ signal }) => getApiStatsStudentsForAcademicAction({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsStudentsForAcademicActionQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>
+>
 export type GetApiStatsStudentsForAcademicActionQueryError = unknown
 
+export function useGetApiStatsStudentsForAcademicAction<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentsForAcademicAction<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentsForAcademicAction<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsStudentsForAcademicAction<TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentsForAcademicAction<TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsStudentsForAcademicAction<TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsStudentsForAcademicAction<
+    TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsStudentsForAcademicActionQueryOptions(options)
 
-export function useGetApiStatsStudentsForAcademicAction<TData = Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsStudentsForAcademicAction>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsStudentsForAcademicActionQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsExamParticipantsBySemesterResponse200 = {
-  data: GetApiStatsExamParticipantsBySemester200
-  status: 200
-}
-    
-export type getApiStatsExamParticipantsBySemesterResponseComposite = getApiStatsExamParticipantsBySemesterResponse200;
-    
-export type getApiStatsExamParticipantsBySemesterResponse = getApiStatsExamParticipantsBySemesterResponseComposite & {
-  headers: Headers;
+    data: GetApiStatsExamParticipantsBySemester200
+    status: 200
 }
 
-export const getGetApiStatsExamParticipantsBySemesterUrl = (params: GetApiStatsExamParticipantsBySemesterParams,) => {
-  const normalizedParams = new URLSearchParams();
+export type getApiStatsExamParticipantsBySemesterResponseComposite =
+    getApiStatsExamParticipantsBySemesterResponse200
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/stats/exam-participants-by-semester?${stringifiedParams}` : `/api/stats/exam-participants-by-semester`
-}
-
-export const getApiStatsExamParticipantsBySemester = async (params: GetApiStatsExamParticipantsBySemesterParams, options?: RequestInit): Promise<getApiStatsExamParticipantsBySemesterResponse> => {
-  
-  return customTrainingFetch<getApiStatsExamParticipantsBySemesterResponse>(getGetApiStatsExamParticipantsBySemesterUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsExamParticipantsBySemesterQueryKey = (params: GetApiStatsExamParticipantsBySemesterParams,) => {
-    return [`/api/stats/exam-participants-by-semester`, ...(params ? [params]: [])] as const;
+export type getApiStatsExamParticipantsBySemesterResponse =
+    getApiStatsExamParticipantsBySemesterResponseComposite & {
+        headers: Headers
     }
 
-    
-export const getGetApiStatsExamParticipantsBySemesterQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError = unknown>(params: GetApiStatsExamParticipantsBySemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
+export const getGetApiStatsExamParticipantsBySemesterUrl = (
+    params: GetApiStatsExamParticipantsBySemesterParams
 ) => {
+    const normalizedParams = new URLSearchParams()
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
 
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsExamParticipantsBySemesterQueryKey(params);
+    const stringifiedParams = normalizedParams.toString()
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>> = ({ signal }) => getApiStatsExamParticipantsBySemester(params, { signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return stringifiedParams.length > 0
+        ? `/api/stats/exam-participants-by-semester?${stringifiedParams}`
+        : '/api/stats/exam-participants-by-semester'
 }
 
-export type GetApiStatsExamParticipantsBySemesterQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>>
+export const getApiStatsExamParticipantsBySemester = async (
+    params: GetApiStatsExamParticipantsBySemesterParams,
+    options?: RequestInit
+): Promise<getApiStatsExamParticipantsBySemesterResponse> => {
+    return customTrainingFetch<getApiStatsExamParticipantsBySemesterResponse>(
+        getGetApiStatsExamParticipantsBySemesterUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsExamParticipantsBySemesterQueryKey = (
+    params: GetApiStatsExamParticipantsBySemesterParams
+) => {
+    return ['/api/stats/exam-participants-by-semester', ...(params ? [params] : [])] as const
+}
+
+export const getGetApiStatsExamParticipantsBySemesterQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+    TError = unknown,
+>(
+    params: GetApiStatsExamParticipantsBySemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsExamParticipantsBySemesterQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>
+    > = ({ signal }) => getApiStatsExamParticipantsBySemester(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsExamParticipantsBySemesterQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>
+>
 export type GetApiStatsExamParticipantsBySemesterQueryError = unknown
 
+export function useGetApiStatsExamParticipantsBySemester<
+    TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+    TError = unknown,
+>(
+    params: GetApiStatsExamParticipantsBySemesterParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsExamParticipantsBySemester<
+    TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+    TError = unknown,
+>(
+    params: GetApiStatsExamParticipantsBySemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsExamParticipantsBySemester<
+    TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+    TError = unknown,
+>(
+    params: GetApiStatsExamParticipantsBySemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsExamParticipantsBySemester<TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError = unknown>(
- params: GetApiStatsExamParticipantsBySemesterParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsExamParticipantsBySemester<TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError = unknown>(
- params: GetApiStatsExamParticipantsBySemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsExamParticipantsBySemester<TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError = unknown>(
- params: GetApiStatsExamParticipantsBySemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsExamParticipantsBySemester<
+    TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+    TError = unknown,
+>(
+    params: GetApiStatsExamParticipantsBySemesterParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsExamParticipantsBySemesterQueryOptions(params, options)
 
-export function useGetApiStatsExamParticipantsBySemester<TData = Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError = unknown>(
- params: GetApiStatsExamParticipantsBySemesterParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsExamParticipantsBySemester>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsExamParticipantsBySemesterQueryOptions(params,options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsAverageExamScoreTrendResponse200 = {
-  data: GetApiStatsAverageExamScoreTrend200Item[]
-  status: 200
+    data: GetApiStatsAverageExamScoreTrend200Item[]
+    status: 200
 }
-    
-export type getApiStatsAverageExamScoreTrendResponseComposite = getApiStatsAverageExamScoreTrendResponse200;
-    
-export type getApiStatsAverageExamScoreTrendResponse = getApiStatsAverageExamScoreTrendResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsAverageExamScoreTrendResponseComposite =
+    getApiStatsAverageExamScoreTrendResponse200
+
+export type getApiStatsAverageExamScoreTrendResponse =
+    getApiStatsAverageExamScoreTrendResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsAverageExamScoreTrendUrl = () => {
-
-
-  
-
-  return `/api/stats/average-exam-score-trend`
+    return '/api/stats/average-exam-score-trend'
 }
 
-export const getApiStatsAverageExamScoreTrend = async ( options?: RequestInit): Promise<getApiStatsAverageExamScoreTrendResponse> => {
-  
-  return customTrainingFetch<getApiStatsAverageExamScoreTrendResponse>(getGetApiStatsAverageExamScoreTrendUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsAverageExamScoreTrend = async (
+    options?: RequestInit
+): Promise<getApiStatsAverageExamScoreTrendResponse> => {
+    return customTrainingFetch<getApiStatsAverageExamScoreTrendResponse>(
+        getGetApiStatsAverageExamScoreTrendUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsAverageExamScoreTrendQueryKey = () => {
-    return [`/api/stats/average-exam-score-trend`] as const;
-    }
-
-    
-export const getGetApiStatsAverageExamScoreTrendQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsAverageExamScoreTrendQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>> = ({ signal }) => getApiStatsAverageExamScoreTrend({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/average-exam-score-trend'] as const
 }
 
-export type GetApiStatsAverageExamScoreTrendQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>>
+export const getGetApiStatsAverageExamScoreTrendQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsAverageExamScoreTrendQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>> = ({
+        signal,
+    }) => getApiStatsAverageExamScoreTrend({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsAverageExamScoreTrendQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>
+>
 export type GetApiStatsAverageExamScoreTrendQueryError = unknown
 
+export function useGetApiStatsAverageExamScoreTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageExamScoreTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageExamScoreTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsAverageExamScoreTrend<TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageExamScoreTrend<TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsAverageExamScoreTrend<TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsAverageExamScoreTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsAverageExamScoreTrendQueryOptions(options)
 
-export function useGetApiStatsAverageExamScoreTrend<TData = Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsAverageExamScoreTrend>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsAverageExamScoreTrendQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsQuestionStatisticsResponse200 = {
-  data: GetApiStatsQuestionStatistics200
-  status: 200
+    data: GetApiStatsQuestionStatistics200
+    status: 200
 }
-    
-export type getApiStatsQuestionStatisticsResponseComposite = getApiStatsQuestionStatisticsResponse200;
-    
-export type getApiStatsQuestionStatisticsResponse = getApiStatsQuestionStatisticsResponseComposite & {
-  headers: Headers;
-}
+
+export type getApiStatsQuestionStatisticsResponseComposite =
+    getApiStatsQuestionStatisticsResponse200
+
+export type getApiStatsQuestionStatisticsResponse =
+    getApiStatsQuestionStatisticsResponseComposite & {
+        headers: Headers
+    }
 
 export const getGetApiStatsQuestionStatisticsUrl = () => {
-
-
-  
-
-  return `/api/stats/question-statistics`
+    return '/api/stats/question-statistics'
 }
 
-export const getApiStatsQuestionStatistics = async ( options?: RequestInit): Promise<getApiStatsQuestionStatisticsResponse> => {
-  
-  return customTrainingFetch<getApiStatsQuestionStatisticsResponse>(getGetApiStatsQuestionStatisticsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsQuestionStatistics = async (
+    options?: RequestInit
+): Promise<getApiStatsQuestionStatisticsResponse> => {
+    return customTrainingFetch<getApiStatsQuestionStatisticsResponse>(
+        getGetApiStatsQuestionStatisticsUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsQuestionStatisticsQueryKey = () => {
-    return [`/api/stats/question-statistics`] as const;
-    }
-
-    
-export const getGetApiStatsQuestionStatisticsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsQuestionStatisticsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>> = ({ signal }) => getApiStatsQuestionStatistics({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/question-statistics'] as const
 }
 
-export type GetApiStatsQuestionStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>>
+export const getGetApiStatsQuestionStatisticsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsQuestionStatisticsQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>> = ({
+        signal,
+    }) => getApiStatsQuestionStatistics({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsQuestionStatisticsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>
+>
 export type GetApiStatsQuestionStatisticsQueryError = unknown
 
+export function useGetApiStatsQuestionStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsQuestionStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsQuestionStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsQuestionStatistics<TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsQuestionStatistics<TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsQuestionStatistics<TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsQuestionStatistics<
+    TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsQuestionStatisticsQueryOptions(options)
 
-export function useGetApiStatsQuestionStatistics<TData = Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsQuestionStatistics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetApiStatsQuestionStatisticsQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export type getApiStatsHighestIncorrectAnswerRateQuestionsResponse200 = {
-  data: GetApiStatsHighestIncorrectAnswerRateQuestions200Item[]
-  status: 200
-}
-    
-export type getApiStatsHighestIncorrectAnswerRateQuestionsResponseComposite = getApiStatsHighestIncorrectAnswerRateQuestionsResponse200;
-    
-export type getApiStatsHighestIncorrectAnswerRateQuestionsResponse = getApiStatsHighestIncorrectAnswerRateQuestionsResponseComposite & {
-  headers: Headers;
-}
-
-export const getGetApiStatsHighestIncorrectAnswerRateQuestionsUrl = () => {
-
-
-  
-
-  return `/api/stats/highest-incorrect-answer-rate-questions`
-}
-
-export const getApiStatsHighestIncorrectAnswerRateQuestions = async ( options?: RequestInit): Promise<getApiStatsHighestIncorrectAnswerRateQuestionsResponse> => {
-  
-  return customTrainingFetch<getApiStatsHighestIncorrectAnswerRateQuestionsResponse>(getGetApiStatsHighestIncorrectAnswerRateQuestionsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
-
-export const getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryKey = () => {
-    return [`/api/stats/highest-incorrect-answer-rate-questions`] as const;
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
     }
 
-    
-export const getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
+    query.queryKey = queryOptions.queryKey
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>> = ({ signal }) => getApiStatsHighestIncorrectAnswerRateQuestions({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return query
 }
 
-export type GetApiStatsHighestIncorrectAnswerRateQuestionsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>>
+export type getApiStatsHighestIncorrectAnswerRateQuestionsResponse200 = {
+    data: GetApiStatsHighestIncorrectAnswerRateQuestions200Item[]
+    status: 200
+}
+
+export type getApiStatsHighestIncorrectAnswerRateQuestionsResponseComposite =
+    getApiStatsHighestIncorrectAnswerRateQuestionsResponse200
+
+export type getApiStatsHighestIncorrectAnswerRateQuestionsResponse =
+    getApiStatsHighestIncorrectAnswerRateQuestionsResponseComposite & {
+        headers: Headers
+    }
+
+export const getGetApiStatsHighestIncorrectAnswerRateQuestionsUrl = () => {
+    return '/api/stats/highest-incorrect-answer-rate-questions'
+}
+
+export const getApiStatsHighestIncorrectAnswerRateQuestions = async (
+    options?: RequestInit
+): Promise<getApiStatsHighestIncorrectAnswerRateQuestionsResponse> => {
+    return customTrainingFetch<getApiStatsHighestIncorrectAnswerRateQuestionsResponse>(
+        getGetApiStatsHighestIncorrectAnswerRateQuestionsUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryKey = () => {
+    return ['/api/stats/highest-incorrect-answer-rate-questions'] as const
+}
+
+export const getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<
+            Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+            TError,
+            TData
+        >
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryKey()
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>
+    > = ({ signal }) =>
+        getApiStatsHighestIncorrectAnswerRateQuestions({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsHighestIncorrectAnswerRateQuestionsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>
+>
 export type GetApiStatsHighestIncorrectAnswerRateQuestionsQueryError = unknown
 
+export function useGetApiStatsHighestIncorrectAnswerRateQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsHighestIncorrectAnswerRateQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsHighestIncorrectAnswerRateQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsHighestIncorrectAnswerRateQuestions<TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsHighestIncorrectAnswerRateQuestions<TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsHighestIncorrectAnswerRateQuestions<TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsHighestIncorrectAnswerRateQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryOptions(options)
 
-export function useGetApiStatsHighestIncorrectAnswerRateQuestions<TData = Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsHighestIncorrectAnswerRateQuestions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsHighestIncorrectAnswerRateQuestionsQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsMostUsedQuestionsResponse200 = {
-  data: GetApiStatsMostUsedQuestions200Item[]
-  status: 200
+    data: GetApiStatsMostUsedQuestions200Item[]
+    status: 200
 }
-    
-export type getApiStatsMostUsedQuestionsResponseComposite = getApiStatsMostUsedQuestionsResponse200;
-    
+
+export type getApiStatsMostUsedQuestionsResponseComposite = getApiStatsMostUsedQuestionsResponse200
+
 export type getApiStatsMostUsedQuestionsResponse = getApiStatsMostUsedQuestionsResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getGetApiStatsMostUsedQuestionsUrl = () => {
-
-
-  
-
-  return `/api/stats/most-used-questions`
+    return '/api/stats/most-used-questions'
 }
 
-export const getApiStatsMostUsedQuestions = async ( options?: RequestInit): Promise<getApiStatsMostUsedQuestionsResponse> => {
-  
-  return customTrainingFetch<getApiStatsMostUsedQuestionsResponse>(getGetApiStatsMostUsedQuestionsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsMostUsedQuestions = async (
+    options?: RequestInit
+): Promise<getApiStatsMostUsedQuestionsResponse> => {
+    return customTrainingFetch<getApiStatsMostUsedQuestionsResponse>(
+        getGetApiStatsMostUsedQuestionsUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsMostUsedQuestionsQueryKey = () => {
-    return [`/api/stats/most-used-questions`] as const;
-    }
-
-    
-export const getGetApiStatsMostUsedQuestionsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsMostUsedQuestionsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>> = ({ signal }) => getApiStatsMostUsedQuestions({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/most-used-questions'] as const
 }
 
-export type GetApiStatsMostUsedQuestionsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>>
+export const getGetApiStatsMostUsedQuestionsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsMostUsedQuestionsQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>> = ({
+        signal,
+    }) => getApiStatsMostUsedQuestions({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsMostUsedQuestionsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>
+>
 export type GetApiStatsMostUsedQuestionsQueryError = unknown
 
+export function useGetApiStatsMostUsedQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsMostUsedQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsMostUsedQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsMostUsedQuestions<TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsMostUsedQuestions<TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsMostUsedQuestions<TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsMostUsedQuestions<
+    TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsMostUsedQuestionsQueryOptions(options)
 
-export function useGetApiStatsMostUsedQuestions<TData = Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsMostUsedQuestions>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsMostUsedQuestionsQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsDemographicsResponse200 = {
-  data: GetApiStatsDemographics200
-  status: 200
+    data: GetApiStatsDemographics200
+    status: 200
 }
-    
-export type getApiStatsDemographicsResponseComposite = getApiStatsDemographicsResponse200;
-    
+
+export type getApiStatsDemographicsResponseComposite = getApiStatsDemographicsResponse200
+
 export type getApiStatsDemographicsResponse = getApiStatsDemographicsResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getGetApiStatsDemographicsUrl = () => {
-
-
-  
-
-  return `/api/stats/demographics`
+    return '/api/stats/demographics'
 }
 
-export const getApiStatsDemographics = async ( options?: RequestInit): Promise<getApiStatsDemographicsResponse> => {
-  
-  return customTrainingFetch<getApiStatsDemographicsResponse>(getGetApiStatsDemographicsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsDemographics = async (
+    options?: RequestInit
+): Promise<getApiStatsDemographicsResponse> => {
+    return customTrainingFetch<getApiStatsDemographicsResponse>(getGetApiStatsDemographicsUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
 
 export const getGetApiStatsDemographicsQueryKey = () => {
-    return [`/api/stats/demographics`] as const;
-    }
-
-    
-export const getGetApiStatsDemographicsQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsDemographics>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsDemographicsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsDemographics>>> = ({ signal }) => getApiStatsDemographics({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/demographics'] as const
 }
 
-export type GetApiStatsDemographicsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsDemographics>>>
+export const getGetApiStatsDemographicsQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsDemographics>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsDemographicsQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsDemographics>>> = ({
+        signal,
+    }) => getApiStatsDemographics({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsDemographics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsDemographicsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsDemographics>>
+>
 export type GetApiStatsDemographicsQueryError = unknown
 
+export function useGetApiStatsDemographics<
+    TData = Awaited<ReturnType<typeof getApiStatsDemographics>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsDemographics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsDemographics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsDemographics<
+    TData = Awaited<ReturnType<typeof getApiStatsDemographics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsDemographics>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsDemographics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsDemographics<
+    TData = Awaited<ReturnType<typeof getApiStatsDemographics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsDemographics<TData = Awaited<ReturnType<typeof getApiStatsDemographics>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsDemographics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsDemographics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsDemographics<TData = Awaited<ReturnType<typeof getApiStatsDemographics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsDemographics>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsDemographics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsDemographics<TData = Awaited<ReturnType<typeof getApiStatsDemographics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsDemographics<
+    TData = Awaited<ReturnType<typeof getApiStatsDemographics>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsDemographicsQueryOptions(options)
 
-export function useGetApiStatsDemographics<TData = Awaited<ReturnType<typeof getApiStatsDemographics>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsDemographics>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsDemographicsQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }
-
-
-
 
 export type getApiStatsEnrollmentTrendResponse200 = {
-  data: GetApiStatsEnrollmentTrend200Item[]
-  status: 200
+    data: GetApiStatsEnrollmentTrend200Item[]
+    status: 200
 }
-    
-export type getApiStatsEnrollmentTrendResponseComposite = getApiStatsEnrollmentTrendResponse200;
-    
+
+export type getApiStatsEnrollmentTrendResponseComposite = getApiStatsEnrollmentTrendResponse200
+
 export type getApiStatsEnrollmentTrendResponse = getApiStatsEnrollmentTrendResponseComposite & {
-  headers: Headers;
+    headers: Headers
 }
 
 export const getGetApiStatsEnrollmentTrendUrl = () => {
-
-
-  
-
-  return `/api/stats/enrollment-trend`
+    return '/api/stats/enrollment-trend'
 }
 
-export const getApiStatsEnrollmentTrend = async ( options?: RequestInit): Promise<getApiStatsEnrollmentTrendResponse> => {
-  
-  return customTrainingFetch<getApiStatsEnrollmentTrendResponse>(getGetApiStatsEnrollmentTrendUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const getApiStatsEnrollmentTrend = async (
+    options?: RequestInit
+): Promise<getApiStatsEnrollmentTrendResponse> => {
+    return customTrainingFetch<getApiStatsEnrollmentTrendResponse>(
+        getGetApiStatsEnrollmentTrendUrl(),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
 
 export const getGetApiStatsEnrollmentTrendQueryKey = () => {
-    return [`/api/stats/enrollment-trend`] as const;
-    }
-
-    
-export const getGetApiStatsEnrollmentTrendQueryOptions = <TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetApiStatsEnrollmentTrendQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>> = ({ signal }) => getApiStatsEnrollmentTrend({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    return ['/api/stats/enrollment-trend'] as const
 }
 
-export type GetApiStatsEnrollmentTrendQueryResult = NonNullable<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>>
+export const getGetApiStatsEnrollmentTrendQueryOptions = <
+    TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+    TError = unknown,
+>(options?: {
+    query?: Partial<
+        UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetApiStatsEnrollmentTrendQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>> = ({
+        signal,
+    }) => getApiStatsEnrollmentTrend({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiStatsEnrollmentTrendQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>
+>
 export type GetApiStatsEnrollmentTrendQueryError = unknown
 
+export function useGetApiStatsEnrollmentTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+    TError = unknown,
+>(
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsEnrollmentTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+                    TError,
+                    Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsEnrollmentTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiStatsEnrollmentTrend<TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsEnrollmentTrend<TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
-          TError,
-          Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiStatsEnrollmentTrend<TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiStatsEnrollmentTrend<
+    TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>,
+    TError = unknown,
+>(
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetApiStatsEnrollmentTrendQueryOptions(options)
 
-export function useGetApiStatsEnrollmentTrend<TData = Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiStatsEnrollmentTrend>>, TError, TData>>, request?: SecondParameter<typeof customTrainingFetch>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
 
-  const queryOptions = getGetApiStatsEnrollmentTrendQueryOptions(options)
+    query.queryKey = queryOptions.queryKey
 
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+    return query
 }

@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { ThietLapMailServer } from './thietLapMailServer';
-import type { ThietLapMailServerEditDtoState } from './thietLapMailServerEditDtoState';
+import type { ThietLapMailServer } from './thietLapMailServer'
+import type { ThietLapMailServerEditDtoState } from './thietLapMailServerEditDtoState'
 
 export type ThietLapMailServerEditDto = ThietLapMailServer & {
-  /** @nullable */
-  State?: ThietLapMailServerEditDtoState;
-  /** @nullable */
-  sMailTest?: string | null;
-};
+    /** @nullable */
+    State?: ThietLapMailServerEditDtoState
+    /** @nullable */
+    sMailTest?: string | null
+}

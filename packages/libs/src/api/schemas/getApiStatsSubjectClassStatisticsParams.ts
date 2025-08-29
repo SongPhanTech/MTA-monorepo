@@ -6,8 +6,8 @@
  */
 
 export type GetApiStatsSubjectClassStatisticsParams = {
-/**
- * Semester.id - ID học kỳ
- */
-semesterId: string;
-};
+    /**
+     * Semester.id - ID học kỳ
+     */
+    semesterId: string
+}

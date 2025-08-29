@@ -5,11 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UserUpdateSystemRole = typeof UserUpdateSystemRole[keyof typeof UserUpdateSystemRole];
-
+export type UserUpdateSystemRole = (typeof UserUpdateSystemRole)[keyof typeof UserUpdateSystemRole]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UserUpdateSystemRole = {
-  ADMIN: 'ADMIN',
-  USER: 'USER',
-} as const;
+    ADMIN: 'ADMIN',
+    USER: 'USER',
+} as const

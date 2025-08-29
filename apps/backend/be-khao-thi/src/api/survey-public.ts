@@ -6,7 +6,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const getPublicSurvey = createRoute({
     operationId: 'get-public-survey',
-    path: '/get-public-survey/{surveyId}',
+    path: '/get-public-survey/{id}',
     tags: ['Survey'],
     summary: 'Thông tin đợt khảo sát công khai',
     description: 'Lấy thông tin đợt khảo sát công khai',

@@ -4,36 +4,37 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GraduationCheckResultRankContext } from './graduationCheckResultRankContext';
-import type { GraduationCheckResultRankBaseScore } from './graduationCheckResultRankBaseScore';
+
+import type { GraduationCheckResultRankBaseScore } from './graduationCheckResultRankBaseScore'
+import type { GraduationCheckResultRankContext } from './graduationCheckResultRankContext'
 
 /**
  * @nullable
  */
 export type GraduationCheckResultRank = {
-  id: string;
-  /** @nullable */
-  code?: string | null;
-  active?: boolean;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt?: string | null;
-  classification: string;
-  context: GraduationCheckResultRankContext;
-  rankOrder: number;
-  baseScore: GraduationCheckResultRankBaseScore;
-  /** @nullable */
-  base10Min?: number | null;
-  /** @nullable */
-  base10Max?: number | null;
-  /** @nullable */
-  base4Min?: number | null;
-  /** @nullable */
-  base4Max?: number | null;
-  graduated: boolean;
-} | null;
+    id: string
+    /** @nullable */
+    code?: string | null
+    active?: boolean
+    /** @nullable */
+    description?: string | null
+    /** @nullable */
+    deletedAt?: string | null
+    /** @nullable */
+    createdAt?: string | null
+    /** @nullable */
+    updatedAt?: string | null
+    classification: string
+    context: GraduationCheckResultRankContext
+    rankOrder: number
+    baseScore: GraduationCheckResultRankBaseScore
+    /** @nullable */
+    base10Min?: number | null
+    /** @nullable */
+    base10Max?: number | null
+    /** @nullable */
+    base4Min?: number | null
+    /** @nullable */
+    base4Max?: number | null
+    graduated: boolean
+} | null

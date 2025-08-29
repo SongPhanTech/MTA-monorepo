@@ -6,11 +6,11 @@
  */
 
 export type GetApiStatsAcademicPerformanceByYear200Item = {
-  schoolYearId: string;
-  name: string;
-  excellent: number;
-  good: number;
-  fair: number;
-  average: number;
-  weak: number;
-};
+    schoolYearId: string
+    name: string
+    excellent: number
+    good: number
+    fair: number
+    average: number
+    weak: number
+}

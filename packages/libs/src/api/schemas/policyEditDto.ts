@@ -49,29 +49,29 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { Policy } from './policy';
-import type { PolicyEditDtoState } from './policyEditDtoState';
-import type { PolicyTaiKhoanEditDto } from './policyTaiKhoanEditDto';
-import type { Policy2FAEditDto } from './policy2FAEditDto';
-import type { PolicyUngDungEditDto } from './policyUngDungEditDto';
-import type { PolicyIPsEditDto } from './policyIPsEditDto';
-import type { PolicyTimeEditDto } from './policyTimeEditDto';
+import type { Policy } from './policy'
+import type { Policy2FAEditDto } from './policy2FAEditDto'
+import type { PolicyEditDtoState } from './policyEditDtoState'
+import type { PolicyIPsEditDto } from './policyIPsEditDto'
+import type { PolicyTaiKhoanEditDto } from './policyTaiKhoanEditDto'
+import type { PolicyTimeEditDto } from './policyTimeEditDto'
+import type { PolicyUngDungEditDto } from './policyUngDungEditDto'
 
 export type PolicyEditDto = Policy & {
-  /** @nullable */
-  State?: PolicyEditDtoState;
-  /** @nullable */
-  Policy_TaiKhoans?: PolicyTaiKhoanEditDto[] | null;
-  /** @nullable */
-  Policy_2FAs?: Policy2FAEditDto[] | null;
-  /** @nullable */
-  Policy_UngDungs?: PolicyUngDungEditDto[] | null;
-  /** @nullable */
-  Policy_IPs?: PolicyIPsEditDto[] | null;
-  /** @nullable */
-  Policy_Time?: PolicyTimeEditDto[] | null;
-  /** @nullable */
-  readonly sTenUngDungs?: string | null;
-  /** @nullable */
-  readonly sDM_UngDungIds?: string | null;
-};
+    /** @nullable */
+    State?: PolicyEditDtoState
+    /** @nullable */
+    Policy_TaiKhoans?: PolicyTaiKhoanEditDto[] | null
+    /** @nullable */
+    Policy_2FAs?: Policy2FAEditDto[] | null
+    /** @nullable */
+    Policy_UngDungs?: PolicyUngDungEditDto[] | null
+    /** @nullable */
+    Policy_IPs?: PolicyIPsEditDto[] | null
+    /** @nullable */
+    Policy_Time?: PolicyTimeEditDto[] | null
+    /** @nullable */
+    readonly sTenUngDungs?: string | null
+    /** @nullable */
+    readonly sDM_UngDungIds?: string | null
+}

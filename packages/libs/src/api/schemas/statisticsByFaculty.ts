@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { StatisticsByFacultyItem } from './statisticsByFacultyItem';
+import type { StatisticsByFacultyItem } from './statisticsByFacultyItem'
 
-export type StatisticsByFaculty = StatisticsByFacultyItem[];
+export type StatisticsByFaculty = StatisticsByFacultyItem[]

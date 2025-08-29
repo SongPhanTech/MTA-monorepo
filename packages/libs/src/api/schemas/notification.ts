@@ -49,60 +49,60 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type Notification = BaseEntity & {
-  Id?: string;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sFromAppCode?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sAppCode?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sUniqueID?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sTenantCode?: string | null;
-  /** @nullable */
-  sUserId?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 255
-   * @nullable
-   */
-  sUserName?: string | null;
-  /** @nullable */
-  dLogTime?: string | null;
-  /** @nullable */
-  sMessage?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 500
-   * @nullable
-   */
-  sLink?: string | null;
-  /** @nullable */
-  sExtraData?: string | null;
-  /** @nullable */
-  iType?: number | null;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sIPAddress?: string | null;
-};
+    Id?: string
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sFromAppCode?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sAppCode?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sUniqueID?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sTenantCode?: string | null
+    /** @nullable */
+    sUserId?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 255
+     * @nullable
+     */
+    sUserName?: string | null
+    /** @nullable */
+    dLogTime?: string | null
+    /** @nullable */
+    sMessage?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 500
+     * @nullable
+     */
+    sLink?: string | null
+    /** @nullable */
+    sExtraData?: string | null
+    /** @nullable */
+    iType?: number | null
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sIPAddress?: string | null
+}

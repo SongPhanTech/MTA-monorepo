@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { Policy2FA } from './policy2FA';
-import type { Policy2FAEditDtoState } from './policy2FAEditDtoState';
+import type { Policy2FA } from './policy2FA'
+import type { Policy2FAEditDtoState } from './policy2FAEditDtoState'
 
 export type Policy2FAEditDto = Policy2FA & {
-  /** @nullable */
-  State?: Policy2FAEditDtoState;
-};
+    /** @nullable */
+    State?: Policy2FAEditDtoState
+}

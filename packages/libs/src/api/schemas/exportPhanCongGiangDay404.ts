@@ -6,5 +6,5 @@
  */
 
 export type ExportPhanCongGiangDay404 = {
-  message: string;
-};
+    message: string
+}

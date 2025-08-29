@@ -49,37 +49,37 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { TaiKhoan } from './taiKhoan';
-import type { TaiKhoanEditDtoState } from './taiKhoanEditDtoState';
-import type { VaiTroNhanVienEditDto } from './vaiTroNhanVienEditDto';
+import type { TaiKhoan } from './taiKhoan'
+import type { TaiKhoanEditDtoState } from './taiKhoanEditDtoState'
+import type { VaiTroNhanVienEditDto } from './vaiTroNhanVienEditDto'
 
 export type TaiKhoanEditDto = TaiKhoan & {
-  /** @nullable */
-  State?: TaiKhoanEditDtoState;
-  /** @nullable */
-  sTenDayDu?: string | null;
-  /** @nullable */
-  sMaNhanVien?: string | null;
-  /** @nullable */
-  sTenDonVi?: string | null;
-  /** @nullable */
-  sDM_DonViId?: string | null;
-  /** @nullable */
-  sDM_ViTriCongViecId?: string | null;
-  /** @nullable */
-  sTenViTriCongViec?: string | null;
-  /** @nullable */
-  sPassword?: string | null;
-  bChangePassword?: boolean;
-  /** @nullable */
-  sCCCD?: string | null;
-  /** @nullable */
-  dNgaySinh?: string | null;
-  iGoiTinh?: number;
-  /** @nullable */
-  sEmail?: string | null;
-  /** @nullable */
-  sSDTDiDong?: string | null;
-  /** @nullable */
-  VaiTro_NhanVienEditDtos?: VaiTroNhanVienEditDto[] | null;
-};
+    /** @nullable */
+    State?: TaiKhoanEditDtoState
+    /** @nullable */
+    sTenDayDu?: string | null
+    /** @nullable */
+    sMaNhanVien?: string | null
+    /** @nullable */
+    sTenDonVi?: string | null
+    /** @nullable */
+    sDM_DonViId?: string | null
+    /** @nullable */
+    sDM_ViTriCongViecId?: string | null
+    /** @nullable */
+    sTenViTriCongViec?: string | null
+    /** @nullable */
+    sPassword?: string | null
+    bChangePassword?: boolean
+    /** @nullable */
+    sCCCD?: string | null
+    /** @nullable */
+    dNgaySinh?: string | null
+    iGoiTinh?: number
+    /** @nullable */
+    sEmail?: string | null
+    /** @nullable */
+    sSDTDiDong?: string | null
+    /** @nullable */
+    VaiTro_NhanVienEditDtos?: VaiTroNhanVienEditDto[] | null
+}

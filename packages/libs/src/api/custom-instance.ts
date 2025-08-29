@@ -22,7 +22,7 @@ const getBody = <T>(c: Response | Request): Promise<T> => {
     if (contentType?.includes('text/')) {
         return c.text() as Promise<T>
     }
-    
+
     return c.blob() as Promise<T>
 }
 

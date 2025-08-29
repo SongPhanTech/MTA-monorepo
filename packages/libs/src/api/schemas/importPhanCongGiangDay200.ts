@@ -6,6 +6,6 @@
  */
 
 export type ImportPhanCongGiangDay200 = {
-  message: string;
-  time: number;
-};
+    message: string
+    time: number
+}

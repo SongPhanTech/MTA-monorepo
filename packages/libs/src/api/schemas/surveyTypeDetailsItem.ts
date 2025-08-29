@@ -6,8 +6,8 @@
  */
 
 export type SurveyTypeDetailsItem = {
-  /** Tên của loại khảo sát. */
-  surveyType: string;
-  /** Số lượng khảo sát thuộc loại này. */
-  count: number;
-};
+    /** Tên của loại khảo sát. */
+    surveyType: string
+    /** Số lượng khảo sát thuộc loại này. */
+    count: number
+}

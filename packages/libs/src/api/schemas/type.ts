@@ -8,13 +8,12 @@
 /**
  * Loại danh sách
  */
-export type Type = typeof Type[keyof typeof Type];
-
+export type Type = (typeof Type)[keyof typeof Type]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const Type = {
-  scholarship: 'scholarship',
-  academicWarning: 'academicWarning',
-  academicAction: 'academicAction',
-  decreaseAcademicWarning: 'decreaseAcademicWarning',
-} as const;
+    scholarship: 'scholarship',
+    academicWarning: 'academicWarning',
+    academicAction: 'academicAction',
+    decreaseAcademicWarning: 'decreaseAcademicWarning',
+} as const

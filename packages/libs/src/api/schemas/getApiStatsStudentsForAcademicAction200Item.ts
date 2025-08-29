@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetApiStatsStudentsForAcademicAction200ItemActionType } from './getApiStatsStudentsForAcademicAction200ItemActionType';
+import type { GetApiStatsStudentsForAcademicAction200ItemActionType } from './getApiStatsStudentsForAcademicAction200ItemActionType'
 
 export type GetApiStatsStudentsForAcademicAction200Item = {
-  studentId: string;
-  studentName: string;
-  actionType: GetApiStatsStudentsForAcademicAction200ItemActionType;
-  reason: string;
-};
+    studentId: string
+    studentName: string
+    actionType: GetApiStatsStudentsForAcademicAction200ItemActionType
+    reason: string
+}

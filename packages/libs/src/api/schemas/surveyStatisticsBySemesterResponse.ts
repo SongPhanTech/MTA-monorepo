@@ -4,14 +4,14 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SurveyTypeDetails } from './surveyTypeDetails';
+import type { SurveyTypeDetails } from './surveyTypeDetails'
 
 export interface SurveyStatisticsBySemesterResponse {
-  /** ID của học kỳ được thống kê. */
-  semesterId: string;
-  /** Tên đầy đủ của học kỳ. */
-  semesterName: string;
-  /** Tổng số cuộc khảo sát trong học kỳ này. */
-  totalSurveyCount: number;
-  details: SurveyTypeDetails;
+    /** ID của học kỳ được thống kê. */
+    semesterId: string
+    /** Tên đầy đủ của học kỳ. */
+    semesterName: string
+    /** Tổng số cuộc khảo sát trong học kỳ này. */
+    totalSurveyCount: number
+    details: SurveyTypeDetails
 }

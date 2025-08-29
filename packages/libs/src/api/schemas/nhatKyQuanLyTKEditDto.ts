@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { NhatKyQuanLyTK } from './nhatKyQuanLyTK';
-import type { NhatKyQuanLyTKEditDtoState } from './nhatKyQuanLyTKEditDtoState';
+import type { NhatKyQuanLyTK } from './nhatKyQuanLyTK'
+import type { NhatKyQuanLyTKEditDtoState } from './nhatKyQuanLyTKEditDtoState'
 
 export type NhatKyQuanLyTKEditDto = NhatKyQuanLyTK & {
-  /** @nullable */
-  State?: NhatKyQuanLyTKEditDtoState;
-};
+    /** @nullable */
+    State?: NhatKyQuanLyTKEditDtoState
+}

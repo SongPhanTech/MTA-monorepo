@@ -6,8 +6,8 @@
  */
 
 export type ParticipationStatisticsItem = {
-  /** Tên loại hình sinh viên. */
-  studentType: string;
-  /** Số lượng sinh viên thuộc loại hình này đã tham gia. */
-  participantCount: number;
-};
+    /** Tên loại hình sinh viên. */
+    studentType: string
+    /** Số lượng sinh viên thuộc loại hình này đã tham gia. */
+    participantCount: number
+}

@@ -6,9 +6,9 @@
  */
 
 export type GetApiStatsKpiCards200 = {
-  totalStudents: number;
-  totalLecturers: number;
-  studentLecturerRatio: number;
-  activeCurricula: number;
-  academicWarningRate: number;
-};
+    totalStudents: number
+    totalLecturers: number
+    studentLecturerRatio: number
+    activeCurricula: number
+    academicWarningRate: number
+}

@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { MenuQuyen } from './menuQuyen';
-import type { MenuQuyenEditDtoState } from './menuQuyenEditDtoState';
+import type { MenuQuyen } from './menuQuyen'
+import type { MenuQuyenEditDtoState } from './menuQuyenEditDtoState'
 
 export type MenuQuyenEditDto = MenuQuyen & {
-  /** @nullable */
-  State?: MenuQuyenEditDtoState;
-  /** @nullable */
-  sTenQuyen?: string | null;
-};
+    /** @nullable */
+    State?: MenuQuyenEditDtoState
+    /** @nullable */
+    sTenQuyen?: string | null
+}

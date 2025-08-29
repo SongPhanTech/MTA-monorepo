@@ -6,6 +6,6 @@
  */
 
 export interface SaveExamSessionsResult {
-  success: boolean;
-  message: string;
+    success: boolean
+    message: string
 }

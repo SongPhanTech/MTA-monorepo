@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { SaoLuuDuLieu } from './saoLuuDuLieu';
-import type { SaoLuuDuLieuEditDtoState } from './saoLuuDuLieuEditDtoState';
+import type { SaoLuuDuLieu } from './saoLuuDuLieu'
+import type { SaoLuuDuLieuEditDtoState } from './saoLuuDuLieuEditDtoState'
 
 export type SaoLuuDuLieuEditDto = SaoLuuDuLieu & {
-  /** @nullable */
-  State?: SaoLuuDuLieuEditDtoState;
-};
+    /** @nullable */
+    State?: SaoLuuDuLieuEditDtoState
+}

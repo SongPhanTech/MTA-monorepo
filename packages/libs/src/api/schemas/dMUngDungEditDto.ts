@@ -49,25 +49,25 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMUngDung } from './dMUngDung';
-import type { DMUngDungEditDtoState } from './dMUngDungEditDtoState';
-import type { NguoiDungUngDungEditDto } from './nguoiDungUngDungEditDto';
-import type { NhomDuocXemUngDungEditDto } from './nhomDuocXemUngDungEditDto';
-import type { DMUngDungNhomUngDungEditDto } from './dMUngDungNhomUngDungEditDto';
+import type { DMUngDung } from './dMUngDung'
+import type { DMUngDungEditDtoState } from './dMUngDungEditDtoState'
+import type { DMUngDungNhomUngDungEditDto } from './dMUngDungNhomUngDungEditDto'
+import type { NguoiDungUngDungEditDto } from './nguoiDungUngDungEditDto'
+import type { NhomDuocXemUngDungEditDto } from './nhomDuocXemUngDungEditDto'
 
 export type DMUngDungEditDto = DMUngDung & {
-  /** @nullable */
-  State?: DMUngDungEditDtoState;
-  /** @nullable */
-  sTenNhomUngDung?: string | null;
-  /** @nullable */
-  NguoiDungUngDungDetails?: NguoiDungUngDungEditDto[] | null;
-  /** @nullable */
-  NhomDuocXemUngDungDetails?: NhomDuocXemUngDungEditDto[] | null;
-  /** @nullable */
-  DM_UngDung_NhomUngDungDetails?: DMUngDungNhomUngDungEditDto[] | null;
-  /** @nullable */
-  readonly sTenNhomUngDungs?: string | null;
-  /** @nullable */
-  readonly sDM_NhomUngDungIds?: string | null;
-};
+    /** @nullable */
+    State?: DMUngDungEditDtoState
+    /** @nullable */
+    sTenNhomUngDung?: string | null
+    /** @nullable */
+    NguoiDungUngDungDetails?: NguoiDungUngDungEditDto[] | null
+    /** @nullable */
+    NhomDuocXemUngDungDetails?: NhomDuocXemUngDungEditDto[] | null
+    /** @nullable */
+    DM_UngDung_NhomUngDungDetails?: DMUngDungNhomUngDungEditDto[] | null
+    /** @nullable */
+    readonly sTenNhomUngDungs?: string | null
+    /** @nullable */
+    readonly sDM_NhomUngDungIds?: string | null
+}

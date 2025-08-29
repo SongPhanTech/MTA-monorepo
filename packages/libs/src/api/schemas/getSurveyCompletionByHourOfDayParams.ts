@@ -6,5 +6,5 @@
  */
 
 export type GetSurveyCompletionByHourOfDayParams = {
-surveyId: string;
-};
+    surveyId: string
+}

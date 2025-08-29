@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsMostUsedQuestions200Item = {
-  questionId: string;
-  content: string;
-  usageCount: number;
-};
+    questionId: string
+    content: string
+    usageCount: number
+}

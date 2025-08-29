@@ -6,5 +6,5 @@
  */
 
 export type GetSurveyStatisticsBySemesterParams = {
-semesterId: string;
-};
+    semesterId: string
+}

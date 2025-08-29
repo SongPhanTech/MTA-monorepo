@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMViTriCongViecDonViCT } from './dMViTriCongViecDonViCT';
-import type { DMViTriCongViecDonViCTEditDtoState } from './dMViTriCongViecDonViCTEditDtoState';
+import type { DMViTriCongViecDonViCT } from './dMViTriCongViecDonViCT'
+import type { DMViTriCongViecDonViCTEditDtoState } from './dMViTriCongViecDonViCTEditDtoState'
 
 export type DMViTriCongViecDonViCTEditDto = DMViTriCongViecDonViCT & {
-  /** @nullable */
-  State?: DMViTriCongViecDonViCTEditDtoState;
-  /** @nullable */
-  sTenDonVi?: string | null;
-};
+    /** @nullable */
+    State?: DMViTriCongViecDonViCTEditDtoState
+    /** @nullable */
+    sTenDonVi?: string | null
+}

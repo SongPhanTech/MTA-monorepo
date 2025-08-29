@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { PolicyTime } from './policyTime';
-import type { PolicyTimeEditDtoState } from './policyTimeEditDtoState';
+import type { PolicyTime } from './policyTime'
+import type { PolicyTimeEditDtoState } from './policyTimeEditDtoState'
 
 export type PolicyTimeEditDto = PolicyTime & {
-  /** @nullable */
-  State?: PolicyTimeEditDtoState;
-};
+    /** @nullable */
+    State?: PolicyTimeEditDtoState
+}

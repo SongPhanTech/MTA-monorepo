@@ -49,17 +49,17 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type ConfigESB = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sAppCode?: string | null;
-  /** @nullable */
-  sBusinessType?: string | null;
-  /** @nullable */
-  sDescription?: string | null;
-  bActive?: boolean;
-  /** @nullable */
-  iDictionaryKey?: number | null;
-};
+    Id?: string
+    /** @nullable */
+    sAppCode?: string | null
+    /** @nullable */
+    sBusinessType?: string | null
+    /** @nullable */
+    sDescription?: string | null
+    bActive?: boolean
+    /** @nullable */
+    iDictionaryKey?: number | null
+}

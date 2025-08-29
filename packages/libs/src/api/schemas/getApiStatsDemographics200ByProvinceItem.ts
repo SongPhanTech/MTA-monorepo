@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsDemographics200ByProvinceItem = {
-  id: string;
-  name: string;
-  count: number;
-};
+    id: string
+    name: string
+    count: number
+}

@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentFixedClassDocx400 = {
-  message: string;
-};
+    message: string
+}

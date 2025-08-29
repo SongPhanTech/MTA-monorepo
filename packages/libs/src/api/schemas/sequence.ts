@@ -49,23 +49,23 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type Sequence = BaseEntity & {
-  Id?: number;
-  /** @nullable */
-  sTableName?: string | null;
-  /** @nullable */
-  sColumnName?: string | null;
-  /** @nullable */
-  sPrefix?: string | null;
-  iCurrentValue?: number;
-  iMaxLength?: number;
-  /** @nullable */
-  sSufix?: string | null;
-  iSequenceType?: number;
-  /** @nullable */
-  sDescription?: string | null;
-  iOrganizationUnitId?: number;
-  iSequenceCategory?: number;
-};
+    Id?: number
+    /** @nullable */
+    sTableName?: string | null
+    /** @nullable */
+    sColumnName?: string | null
+    /** @nullable */
+    sPrefix?: string | null
+    iCurrentValue?: number
+    iMaxLength?: number
+    /** @nullable */
+    sSufix?: string | null
+    iSequenceType?: number
+    /** @nullable */
+    sDescription?: string | null
+    iOrganizationUnitId?: number
+    iSequenceCategory?: number
+}

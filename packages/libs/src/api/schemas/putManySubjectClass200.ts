@@ -6,7 +6,7 @@
  */
 
 export type PutManySubjectClass200 = {
-  success: boolean;
-  failedIds: string[];
-  message?: string;
-};
+    success: boolean
+    failedIds: string[]
+    message?: string
+}

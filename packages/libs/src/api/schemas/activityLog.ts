@@ -49,36 +49,36 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type ActivityLog = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sUserId?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 255
-   * @nullable
-   */
-  sUserName?: string | null;
-  /** @nullable */
-  dLogTime?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sIpAddress?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sAppCode?: string | null;
-  /**
-   * @minLength 0
-   * @maxLength 50
-   * @nullable
-   */
-  sAction?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sUserId?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 255
+     * @nullable
+     */
+    sUserName?: string | null
+    /** @nullable */
+    dLogTime?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sIpAddress?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sAppCode?: string | null
+    /**
+     * @minLength 0
+     * @maxLength 50
+     * @nullable
+     */
+    sAction?: string | null
+}

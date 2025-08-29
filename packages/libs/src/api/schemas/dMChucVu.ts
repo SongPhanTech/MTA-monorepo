@@ -49,23 +49,23 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type DMChucVu = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sMa?: string | null;
-  /** @nullable */
-  sTen?: string | null;
-  /** @nullable */
-  sGhiChu?: string | null;
-  bActive?: boolean;
-  /** @nullable */
-  iSTT?: number | null;
-  /** @nullable */
-  iNhomChucVu?: number | null;
-  bDeleted?: boolean;
-  bSystem?: boolean;
-  /** @nullable */
-  iDictionaryKey?: number | null;
-};
+    Id?: string
+    /** @nullable */
+    sMa?: string | null
+    /** @nullable */
+    sTen?: string | null
+    /** @nullable */
+    sGhiChu?: string | null
+    bActive?: boolean
+    /** @nullable */
+    iSTT?: number | null
+    /** @nullable */
+    iNhomChucVu?: number | null
+    bDeleted?: boolean
+    bSystem?: boolean
+    /** @nullable */
+    iDictionaryKey?: number | null
+}

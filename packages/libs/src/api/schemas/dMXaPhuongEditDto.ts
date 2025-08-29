@@ -49,16 +49,16 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMXaPhuong } from './dMXaPhuong';
-import type { DMXaPhuongEditDtoState } from './dMXaPhuongEditDtoState';
+import type { DMXaPhuong } from './dMXaPhuong'
+import type { DMXaPhuongEditDtoState } from './dMXaPhuongEditDtoState'
 
 export type DMXaPhuongEditDto = DMXaPhuong & {
-  /** @nullable */
-  State?: DMXaPhuongEditDtoState;
-  /** @nullable */
-  sTenQuanHuyen?: string | null;
-  /** @nullable */
-  sTenTinh?: string | null;
-  /** @nullable */
-  sTenQuocGia?: string | null;
-};
+    /** @nullable */
+    State?: DMXaPhuongEditDtoState
+    /** @nullable */
+    sTenQuanHuyen?: string | null
+    /** @nullable */
+    sTenTinh?: string | null
+    /** @nullable */
+    sTenQuocGia?: string | null
+}

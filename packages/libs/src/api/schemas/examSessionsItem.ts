@@ -6,7 +6,7 @@
  */
 
 export type ExamSessionsItem = {
-  id: string;
-  /** @nullable */
-  examFaxId?: string | null;
-};
+    id: string
+    /** @nullable */
+    examFaxId?: string | null
+}

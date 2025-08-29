@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { RolePermission } from './rolePermission';
-import type { RolePermissionEditDtoState } from './rolePermissionEditDtoState';
+import type { RolePermission } from './rolePermission'
+import type { RolePermissionEditDtoState } from './rolePermissionEditDtoState'
 
 export type RolePermissionEditDto = RolePermission & {
-  /** @nullable */
-  State?: RolePermissionEditDtoState;
-};
+    /** @nullable */
+    State?: RolePermissionEditDtoState
+}

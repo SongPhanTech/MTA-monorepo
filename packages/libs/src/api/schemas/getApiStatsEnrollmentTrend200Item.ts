@@ -6,10 +6,10 @@
  */
 
 export type GetApiStatsEnrollmentTrend200Item = {
-  year: number;
-  majorId: string;
-  majorName: string;
-  courseId: string;
-  courseName: string;
-  count: number;
-};
+    year: number
+    majorId: string
+    majorName: string
+    courseId: string
+    courseName: string
+    count: number
+}

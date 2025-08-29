@@ -49,18 +49,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { ThietLapMailServerUngDung } from './thietLapMailServerUngDung';
-import type { ThietLapMailServerUngDungEditDtoState } from './thietLapMailServerUngDungEditDtoState';
+import type { ThietLapMailServerUngDung } from './thietLapMailServerUngDung'
+import type { ThietLapMailServerUngDungEditDtoState } from './thietLapMailServerUngDungEditDtoState'
 
 export type ThietLapMailServerUngDungEditDto = ThietLapMailServerUngDung & {
-  /** @nullable */
-  State?: ThietLapMailServerUngDungEditDtoState;
-  /** @nullable */
-  sMaUngDung?: string | null;
-  /** @nullable */
-  sTenUngDung?: string | null;
-  /** @nullable */
-  sLogoUngDung?: string | null;
-  /** @nullable */
-  sMailTest?: string | null;
-};
+    /** @nullable */
+    State?: ThietLapMailServerUngDungEditDtoState
+    /** @nullable */
+    sMaUngDung?: string | null
+    /** @nullable */
+    sTenUngDung?: string | null
+    /** @nullable */
+    sLogoUngDung?: string | null
+    /** @nullable */
+    sMailTest?: string | null
+}

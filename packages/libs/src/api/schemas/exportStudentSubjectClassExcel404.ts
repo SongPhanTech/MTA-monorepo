@@ -6,5 +6,5 @@
  */
 
 export type ExportStudentSubjectClassExcel404 = {
-  message: string;
-};
+    message: string
+}

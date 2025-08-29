@@ -49,16 +49,16 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMVaiTro } from './dMVaiTro';
-import type { DMVaiTroEditDtoState } from './dMVaiTroEditDtoState';
-import type { VaiTroNhanVienEditDto } from './vaiTroNhanVienEditDto';
-import type { RolePermissionEditDto } from './rolePermissionEditDto';
+import type { DMVaiTro } from './dMVaiTro'
+import type { DMVaiTroEditDtoState } from './dMVaiTroEditDtoState'
+import type { RolePermissionEditDto } from './rolePermissionEditDto'
+import type { VaiTroNhanVienEditDto } from './vaiTroNhanVienEditDto'
 
 export type DMVaiTroEditDto = DMVaiTro & {
-  /** @nullable */
-  State?: DMVaiTroEditDtoState;
-  /** @nullable */
-  VaiTroNhanVienDetails?: VaiTroNhanVienEditDto[] | null;
-  /** @nullable */
-  RolePermissions?: RolePermissionEditDto[] | null;
-};
+    /** @nullable */
+    State?: DMVaiTroEditDtoState
+    /** @nullable */
+    VaiTroNhanVienDetails?: VaiTroNhanVienEditDto[] | null
+    /** @nullable */
+    RolePermissions?: RolePermissionEditDto[] | null
+}

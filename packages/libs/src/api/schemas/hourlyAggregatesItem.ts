@@ -6,14 +6,14 @@
  */
 
 export type HourlyAggregatesItem = {
-  /**
-   * Khung giờ trong ngày (từ 0 đến 23).
-   * @minimum 0
-   * @maximum 23
-   */
-  hour: number;
-  /** Tổng số lượt hoàn thành trong khung giờ này trên tất cả các ngày. */
-  totalCompletionCount: number;
-  /** Số lượt hoàn thành trung bình cho khung giờ này mỗi ngày. */
-  averageCompletionCount: number;
-};
+    /**
+     * Khung giờ trong ngày (từ 0 đến 23).
+     * @minimum 0
+     * @maximum 23
+     */
+    hour: number
+    /** Tổng số lượt hoàn thành trong khung giờ này trên tất cả các ngày. */
+    totalCompletionCount: number
+    /** Số lượt hoàn thành trung bình cho khung giờ này mỗi ngày. */
+    averageCompletionCount: number
+}

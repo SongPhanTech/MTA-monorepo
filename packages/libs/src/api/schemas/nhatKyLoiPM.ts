@@ -49,27 +49,27 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type NhatKyLoiPM = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sUserId?: string | null;
-  /** @nullable */
-  sUserName?: string | null;
-  dLogTime?: string;
-  /** @nullable */
-  sMessage?: string | null;
-  /** @nullable */
-  sErrorCode?: string | null;
-  /** @nullable */
-  sStackTrace?: string | null;
-  /** @nullable */
-  sInnerException?: string | null;
-  /** @nullable */
-  sExceptionType?: string | null;
-  /** @nullable */
-  sIPAdress?: string | null;
-  /** @nullable */
-  sRawUserAgent?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sUserId?: string | null
+    /** @nullable */
+    sUserName?: string | null
+    dLogTime?: string
+    /** @nullable */
+    sMessage?: string | null
+    /** @nullable */
+    sErrorCode?: string | null
+    /** @nullable */
+    sStackTrace?: string | null
+    /** @nullable */
+    sInnerException?: string | null
+    /** @nullable */
+    sExceptionType?: string | null
+    /** @nullable */
+    sIPAdress?: string | null
+    /** @nullable */
+    sRawUserAgent?: string | null
+}
