@@ -45,21 +45,14 @@ const PutSurveyModal = () => {
                         code: output.code,
                         name: output.name,
                         surveyObjectType: {
-                            // connect: {
-                            //     id: output.surveyObjectTypes[0],
-                            // },
-
                             connect: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
                         },
-                        // surveyTopic: {
-                        //     connect: {
-                        //         id: output.surveyTopicId,
-                        //     },
-                        // },
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
                         additionalSuggestion: output.additionalSuggestion,
+                        isPublic: output.isPublic,
+                        anonymous: output.anonymous,
                     },
                     where: {
                         id,
@@ -72,10 +65,6 @@ const PutSurveyModal = () => {
                         code: output.code,
                         name: output.name,
                         surveyObjectType: {
-                            // connect: {
-                            //     id: output.surveyObjectTypes[0],
-                            // },
-
                             connect: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
                         },
                         surveyTopic: {
@@ -86,6 +75,8 @@ const PutSurveyModal = () => {
                         startDate: output.startDate,
                         endDate: output.endDate,
                         description: output.description,
+                        isPublic: output.isPublic,
+                        anonymous: output.anonymous,
                         additionalSuggestion: output.additionalSuggestion,
                     },
                 })
@@ -123,6 +114,8 @@ const PutSurveyModal = () => {
                 endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
                 surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
             })
+        } else {
+            form.setFieldsValue({ isPublic: false, anonymous: true, additionalSuggestion: false })
         }
     }, [survey])
 
@@ -184,13 +177,29 @@ const PutSurveyModal = () => {
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col>
+            <Col span={12}>
                 <FormItem
                     form={form}
                     name={'additionalSuggestion'}
                     label="Có góp ý bổ sung không?"
                     required
                 >
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name={'isPublic'} label="Có công khai không?" required>
+                    <Radio.Group buttonStyle="solid">
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name={'anonymous'} label="Có ẩn danh không?" required>
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Có</Radio>
                         <Radio value={false}>Không</Radio>

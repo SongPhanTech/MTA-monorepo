@@ -2,6 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import { SUBJECT_OBJECT } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import type {
@@ -23,8 +24,8 @@ import {
     useFindUniqueSurveyObjectType,
     useUpdateSurveyObjectType,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
-import { useEffect } from 'react'
+import { Col, Form, Input, message, Row, Tabs, TreeSelect } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSurveyObjectType = SurveyObjectType & {
     Organizations: string[]
@@ -45,10 +46,10 @@ const PutSurveyObjectTypeModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const [activeKey, setActiveKey] = useState('')
     const { mutateAsync: create } = useCreateSurveyObjectType()
     const { mutateAsync: update } = useUpdateSurveyObjectType()
-    const type = Form.useWatch('type', form)
+    const type = Form.useWatch('type', form) || []
     async function onOk(output?: PutSurveyObjectType) {
         if (!output) return
         try {
@@ -125,7 +126,7 @@ const PutSurveyObjectTypeModal = () => {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi(
         {},
         {
-            enabled: type?.length && type?.includes('LECTURER'),
+            enabled: type?.includes('LECTURER') || type?.includes('STAFF'),
         }
     )
     const { data: trainingFieldData = [] } = useFindManyTrainingField(
@@ -133,7 +134,7 @@ const PutSurveyObjectTypeModal = () => {
             orderBy: { name: 'asc' },
         },
         {
-            enabled: type?.length && type?.includes('STUDENT'),
+            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
         }
     )
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor(
@@ -141,7 +142,7 @@ const PutSurveyObjectTypeModal = () => {
             orderBy: { name: 'asc' },
         },
         {
-            enabled: type?.length && type?.includes('STUDENT'),
+            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
         }
     )
 
@@ -150,7 +151,7 @@ const PutSurveyObjectTypeModal = () => {
             orderBy: { name: 'asc' },
         },
         {
-            enabled: type?.length && type?.includes('STUDENT'),
+            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
         }
     )
 
@@ -159,7 +160,7 @@ const PutSurveyObjectTypeModal = () => {
             orderBy: { name: 'asc' },
         },
         {
-            enabled: type?.length && type?.includes('STUDENT'),
+            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
         }
     )
 
@@ -168,7 +169,7 @@ const PutSurveyObjectTypeModal = () => {
             orderBy: { name: 'asc' },
         },
         {
-            enabled: type?.length && type?.includes('STUDENT'),
+            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
         }
     )
     const treeData = buildOrgTree(manageOrgData)
@@ -186,6 +187,121 @@ const PutSurveyObjectTypeModal = () => {
         },
         { enabled: !!id }
     )
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    const items = useMemo(() => {
+        const result = []
+        if (type.includes('CIVILIAN_STUDENT') || type.includes('MILITARY_STUDENT')) {
+            result.push({
+                key: 'STUDENT',
+                label: 'Sinh viên, học viên',
+                children: (
+                    <Row gutter={[16, 16]}>
+                        <Col span={12}>
+                            <FormItem form={form} name="TrainingFields" label="Ngành">
+                                <Select
+                                    mode="multiple"
+                                    maxTagCount={'responsive'}
+                                    placeholder="Chọn ngành"
+                                    options={trainingFieldData.map((i: TrainingField) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    allowClear
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="TrainingMajors" label="Chuyên ngành">
+                                <Select
+                                    mode="multiple"
+                                    maxTagCount={'responsive'}
+                                    placeholder="Chọn ngành"
+                                    options={trainingMajorData.map((i: TrainingMajor) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    allowClear
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="TrainingCourses" label="Khoá">
+                                <Select
+                                    mode="multiple"
+                                    maxTagCount={'responsive'}
+                                    placeholder="Chọn ngành"
+                                    options={trainingCourses.map((i: TrainingCourse) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    allowClear
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="FixedClasses" label="Lớp niên chế">
+                                <Select
+                                    mode="multiple"
+                                    maxTagCount={'responsive'}
+                                    placeholder="Chọn ngành"
+                                    options={fixedClasses.map((i: FixedClass) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    allowClear
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem form={form} name="SubjectClasses" label="Lớp môn học">
+                                <Select
+                                    mode="multiple"
+                                    maxTagCount={'responsive'}
+                                    placeholder="Chọn ngành"
+                                    options={subjectClassData.map((i: SubjectClass) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    allowClear
+                                />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                ),
+            })
+        }
+        if (type.includes('LECTURER') || type.includes('STAFF')) {
+            result.push({
+                key: 'LECTURER',
+                label: 'Giảng viên, CBNV',
+                children: (
+                    <Row gutter={[16, 16]}>
+                        <Col span={24}>
+                            <FormItem form={form} name="Organizations" label="Đơn vị quản lý">
+                                <TreeSelect
+                                    placeholder="Chọn đơn vị quản lý"
+                                    allowClear
+                                    showSearch
+                                    multiple
+                                    maxTagCount={'responsive'}
+                                    treeDefaultExpandAll
+                                    treeData={treeData}
+                                    filterTreeNode={(input, node) =>
+                                        (node?.label as string)
+                                            ?.toLowerCase()
+                                            ?.includes(input?.toLowerCase())
+                                    }
+                                />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                ),
+            })
+        }
+        console.log(result)
+
+        return result
+    }, [type])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -228,113 +344,28 @@ const PutSurveyObjectTypeModal = () => {
                         allowClear
                         mode="multiple"
                         placeholder="Chọn chủ đề khảo sát"
-                        options={[
-                            {
-                                value: 'STUDENT',
-                                label: 'Sinh viên, Học viên',
-                            },
-                            {
-                                value: 'LECTURER',
-                                label: 'Giảng viên',
-                            },
-                        ]}
+                        options={SUBJECT_OBJECT}
+                        onChange={(value) => {
+                            if (
+                                value.includes('MILITARY_STUDENT') ||
+                                value.includes('CIVILIAN_STUDENT')
+                            ) {
+                                setActiveKey('STUDENT')
+                            } else if (value.includes('LECTURER') || value.includes('STAFF')) {
+                                setActiveKey('LECTURER')
+                            }
+                        }}
                     />
                 </FormItem>
             </Col>
-            {type?.length && type?.includes('LECTURER') && (
+            {type?.length > 0 && (
                 <Col span={24}>
-                    <FormItem form={form} name="Organizations" label="Đơn vị quản lý">
-                        <TreeSelect
-                            placeholder="Chọn đơn vị quản lý"
-                            allowClear
-                            showSearch
-                            multiple
-                            maxTagCount={'responsive'}
-                            treeDefaultExpandAll
-                            treeData={treeData}
-                            filterTreeNode={(input, node) =>
-                                (node?.label as string)
-                                    ?.toLowerCase()
-                                    ?.includes(input?.toLowerCase())
-                            }
-                        />
-                    </FormItem>
+                    <Tabs
+                        activeKey={activeKey}
+                        onChange={(key) => setActiveKey(key)}
+                        items={items}
+                    />
                 </Col>
-            )}
-
-            {type?.length && type?.includes('STUDENT') && (
-                <>
-                    <Col span={12}>
-                        <FormItem form={form} name="TrainingFields" label="Ngành">
-                            <Select
-                                mode="multiple"
-                                maxTagCount={'responsive'}
-                                placeholder="Chọn ngành"
-                                options={trainingFieldData.map((i: TrainingField) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
-                                allowClear
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem form={form} name="TrainingMajors" label="Chuyên ngành">
-                            <Select
-                                mode="multiple"
-                                maxTagCount={'responsive'}
-                                placeholder="Chọn ngành"
-                                options={trainingMajorData.map((i: TrainingMajor) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
-                                allowClear
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem form={form} name="TrainingCourses" label="Khoá">
-                            <Select
-                                mode="multiple"
-                                maxTagCount={'responsive'}
-                                placeholder="Chọn ngành"
-                                options={trainingCourses.map((i: TrainingCourse) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
-                                allowClear
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem form={form} name="FixedClasses" label="Lớp niên chế">
-                            <Select
-                                mode="multiple"
-                                maxTagCount={'responsive'}
-                                placeholder="Chọn ngành"
-                                options={fixedClasses.map((i: FixedClass) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
-                                allowClear
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={12}>
-                        <FormItem form={form} name="SubjectClasses" label="Lớp môn học">
-                            <Select
-                                mode="multiple"
-                                maxTagCount={'responsive'}
-                                placeholder="Chọn ngành"
-                                options={subjectClassData.map((i: SubjectClass) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                }))}
-                                allowClear
-                            />
-                        </FormItem>
-                    </Col>
-                </>
             )}
         </PutFormModal>
     )

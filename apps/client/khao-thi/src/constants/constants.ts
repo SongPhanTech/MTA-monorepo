@@ -60,6 +60,24 @@ const EVALUATION_MEMBER_ROLE = [
     { label: 'Thư ký', value: $Enums.EvaluationMemberRole.SECRETARY },
     { label: 'Uỷ viên', value: $Enums.EvaluationMemberRole.MEMBER },
 ]
+const SUBJECT_OBJECT = [
+    {
+        value: $Enums.SurveyObject.MILITARY_STUDENT,
+        label: 'Sinh viên dân sự',
+    },
+    {
+        value: $Enums.SurveyObject.CIVILIAN_STUDENT,
+        label: 'Học viên quân sự',
+    },
+    {
+        value: $Enums.SurveyObject.LECTURER,
+        label: 'Giảng viên',
+    },
+    {
+        value: $Enums.SurveyObject.STAFF,
+        label: 'Cán bộ nhân viên',
+    },
+]
 
 export {
     DEFAULT_PAGINATE_SIZE,
@@ -69,4 +87,5 @@ export {
     DOCUMENT_TYPE,
     API_MODEL_BASE_URL,
     EVALUATION_MEMBER_ROLE,
+    SUBJECT_OBJECT,
 }

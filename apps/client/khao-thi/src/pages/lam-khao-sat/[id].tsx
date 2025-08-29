@@ -1,6 +1,5 @@
 import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
-import TableCollapse from '@components/commons/tableCollapse'
 import useSpinner from '@hooks/spinner'
 import KhaoSatLayout from '@layouts/khao-sat-layout'
 import type { SurveySession } from '@workspace/db'
@@ -12,7 +11,13 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type PutSurveySession = SurveySession & {
-    responses: { surveyQuestionId: string; surveyChoiceId: string }[]
+    responses: {
+        surveyQuestionId: string
+        surveyChoiceId: string
+        answerText?: string
+        explanation?: string
+        requireExplanation?: boolean
+    }[]
     additionalSuggestion: string
 }
 
@@ -30,8 +35,15 @@ function TakeTestPage() {
     const id = router.query.id as string
     const [form] = Form.useForm<PutSurveySession>()
     const [selected, setSelected] = useState<
-        { surveyQuestionId: string; surveyChoiceId: string }[]
+        {
+            surveyQuestionId: string
+            surveyChoiceId: string
+            answerText?: string
+            explanation?: string
+            requireExplanation?: boolean
+        }[]
     >([])
+    const [requireExplanation, setRequireExplanation] = useState<string[]>([])
 
     const { mutateAsync: createSurveySession } = useCreateSurveySession()
 
@@ -52,20 +64,34 @@ function TakeTestPage() {
         }
     )
 
-    const onChange = (SurveyQuestionId: string, value: string) => {
+    const onChange = (SurveyQuestionId: string, value: string, requireExplanation: boolean) => {
         const result = form.getFieldValue('responses').map((i: { surveyQuestionId?: string }) => {
             if (i.surveyQuestionId === SurveyQuestionId) {
+                if (!requireExplanation) {
+                    return {
+                        ...i,
+                        surveyChoiceId: value,
+                        explanation: '',
+                        requireExplanation: false,
+                    }
+                }
                 return {
                     ...i,
                     surveyChoiceId: value,
+                    requireExplanation: true,
                 }
             }
-            return i
+            return { ...i }
         })
+
         form.setFieldsValue({
             responses: result,
         })
         setSelected(result)
+        const listRequireExplanation = result
+            .filter((i: { requireExplanation?: boolean }) => i.requireExplanation === true)
+            .map((j: any) => j.surveyQuestionId)
+        setRequireExplanation(listRequireExplanation)
     }
 
     const checkedQuestion = useCallback(
@@ -183,6 +209,7 @@ function TakeTestPage() {
                 return {
                     surveyQuestionId: i.id,
                     surveyChoiceId: '',
+                    explanation: '',
                 }
             })
             form.setFieldsValue({
@@ -190,11 +217,12 @@ function TakeTestPage() {
                 additionalSuggestion: '',
             })
             setSelected(list)
+            setRequireExplanation([])
         }
     }, [survey])
 
     return (
-        <Form form={form} className="p-6">
+        <Form form={form} className="p-6 max-w-[1100px] w-full mx-auto">
             <div className="text-xl font-bold">{survey?.name}</div>
             {survey?.surveyChoice?.length && (
                 <Row gutter={[16, 16]}>
@@ -204,7 +232,7 @@ function TakeTestPage() {
                             dataSource={[{ id: 'abc' }]}
                             columns={survey.surveyChoice.map((i) => {
                                 return {
-                                    title: i?.description,
+                                    title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
                                     dataIndex: i?.id,
                                     align: 'center',
                                     render: () => (
@@ -219,10 +247,61 @@ function TakeTestPage() {
                             pagination={false}
                         />
                     </Col>
+                    <Col span={24} className="text-base text-[#e80808]">
+                        Nếu ở mức (*), bạn phải ghi rõ lý do
+                    </Col>
 
                     <Col span={24}>
                         <FormItem className="block" form={form} name="responses" label="">
-                            <TableCollapse
+                            {dataTest.map((item, index: number) => {
+                                return (
+                                    <div key={item.id}>
+                                        <div className="font-bold mb-3">{item.name}</div>
+                                        <div className="px-4">
+                                            {item?.children?.map((j, idx: number) => {
+                                                return (
+                                                    <div key={j.id} className="mb-6">
+                                                        <div className="flex justify-between">
+                                                            <div className="mb-3">
+                                                                {index + 1}.{idx + 1}. {j.name}
+                                                            </div>
+                                                            <div className="flex items-center justify-end">
+                                                                {survey?.surveyChoice.map((i) => {
+                                                                    return (
+                                                                        <Button
+                                                                            key={i.id}
+                                                                            onClick={() =>
+                                                                                onChange(
+                                                                                    j?.id,
+                                                                                    i.id,
+                                                                                    i.requireExplanation
+                                                                                )
+                                                                            }
+                                                                            className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-2  ${checkedQuestion(j?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
+                                                                        >
+                                                                            {i.answer}
+                                                                        </Button>
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                        {requireExplanation?.length > 0 &&
+                                                            requireExplanation.includes(j?.id) && (
+                                                                <Col span={24}>
+                                                                    <div className="mb-3">
+                                                                        Lý do :
+                                                                    </div>
+                                                                    <Input.TextArea placeholder="Nhập ý kiến khác" />
+                                                                </Col>
+                                                            )}
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                            {/* <TableCollapse
                                 rowKey="id"
                                 currentPage={1}
                                 headerTitleKey={({ name }) => (
@@ -268,7 +347,7 @@ function TakeTestPage() {
                                 pagination={{
                                     hideOnSinglePage: true,
                                 }}
-                            />
+                            /> */}
                         </FormItem>
                     </Col>
                     {survey.additionalSuggestion && (

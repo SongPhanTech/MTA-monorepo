@@ -10,7 +10,18 @@ import {
     useUpdateSurvey,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Empty, Form, Input, message, Tooltip, Tree, type TreeProps } from 'antd'
+import {
+    Button,
+    Checkbox,
+    type CheckboxChangeEvent,
+    Empty,
+    Form,
+    Input,
+    message,
+    Tooltip,
+    Tree,
+    type TreeProps,
+} from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutSurveyType = Survey & {
@@ -30,6 +41,7 @@ interface Choices {
     answer: string
     description: string
     surveyResponses?: SurveyResponse[]
+    requireExplanation: boolean
 }
 const PutSurveyExamModal = () => {
     const [form] = Form.useForm<PutSurveyType>()
@@ -39,22 +51,27 @@ const PutSurveyExamModal = () => {
         {
             answer: '1',
             description: 'Hoàn toàn đồng ý',
+            requireExplanation: false,
         },
         {
             answer: '2',
             description: 'Đồng ý',
+            requireExplanation: false,
         },
         {
             answer: '3',
             description: 'Không đồng ý',
+            requireExplanation: false,
         },
         {
             answer: '4',
             description: 'Hoàn toàn không đồng ý',
+            requireExplanation: false,
         },
         {
             answer: '0',
             description: 'Không ý kiến',
+            requireExplanation: false,
         },
     ])
 
@@ -100,7 +117,7 @@ const PutSurveyExamModal = () => {
         setInitValue(onlyLeafValues)
     }
 
-    const onChange = (value: string, index: number, name: string) => {
+    const onChange = (value: string | number | boolean, index: number, name: string) => {
         const result = choices.map((choice, i) => {
             if (i === index) {
                 return { ...choice, [name]: value }
@@ -116,7 +133,7 @@ const PutSurveyExamModal = () => {
         setChoices(result)
     }
     const addChoice = () => {
-        setChoices([...choices, { answer: '', description: '' }])
+        setChoices([...choices, { answer: '', description: '', requireExplanation: false }])
     }
 
     const { data: survey } = useFindUniqueSurvey(
@@ -173,6 +190,7 @@ const PutSurveyExamModal = () => {
                             answer: i?.answer,
                             description: i?.description,
                             surveyId: input?.id,
+                            requireExplanation: i?.requireExplanation,
                         })),
                     })
                 }
@@ -223,7 +241,7 @@ const PutSurveyExamModal = () => {
         if (survey) {
             setInitValue(survey?.surveyQuestion.map((i: SurveyQuestion) => i.id))
             if (survey?.surveyChoice?.length) {
-                // @ts-ignore
+                // @ts-expect-error
                 setChoices(survey?.surveyChoice)
             }
             form.setFieldsValue({
@@ -249,7 +267,14 @@ const PutSurveyExamModal = () => {
                 <div>
                     <div className="flex items-center justify-between mb-3">
                         <div className="w-[150px]">Câu trả lời</div>
-                        <div className="w-[calc(100%-164px)]">Mô tả</div>
+                        <div className="w-[calc(100%-250px)]">Mô tả</div>
+                        <Tooltip
+                            className="w-[48px] text-base text-red-600 cursor-pointer"
+                            title="Chọn nếu muốn góp ý thêm"
+                            placement="top"
+                        >
+                            <div>*</div>
+                        </Tooltip>
                     </div>
                     {choices.map((item, index: number) => (
                         <div key={item.answer} className="flex items-center justify-between mb-2">
@@ -262,13 +287,20 @@ const PutSurveyExamModal = () => {
                                 placeholder="Nhập câu trả lời"
                             />
                             <Input
-                                className="w-[calc(100%-200px)]"
+                                className="w-[calc(100%-250px)]"
                                 value={item.description}
                                 onChange={(e) => {
                                     onChange(e.target.value, index, 'description')
                                 }}
                                 placeholder="Nhập mô tả"
                             />
+                            <Checkbox
+                                onChange={(e: CheckboxChangeEvent) => {
+                                    onChange(e.target.checked, index, 'requireExplanation')
+                                }}
+                                checked={item?.requireExplanation}
+                            />
+
                             <Tooltip title="Xóa" placement="top">
                                 <DeleteOutlined
                                     disabled={Number(item?.surveyResponses?.length) > 0}
