@@ -16,6 +16,41 @@ type Props = {
     subjectVersionId: string
 }
 
+type SubjectItem = {
+    id: string
+    fullDisplay: string
+}
+
+function SubjectList({
+    subjects,
+    onRemove,
+}: {
+    subjects: SubjectItem[]
+    onRemove: (id: string) => void
+}) {
+    return (
+        <div className="flex flex-col items-center gap-2 w-full">
+            {subjects.map((subject, i) => (
+                <div
+                    key={`${subject.id}-${i + 1}`}
+                    className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between"
+                >
+                    <span className="whitespace-normal break-words">{subject.fullDisplay}</span>
+                    <Popconfirm
+                        placement="topRight"
+                        title="Bạn có chắc muốn xóa môn học này không?"
+                        okText="Xóa"
+                        cancelText="Hủy"
+                        onConfirm={() => onRemove(subject.id)}
+                    >
+                        <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
+                    </Popconfirm>
+                </div>
+            ))}
+        </div>
+    )
+}
+
 export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props) {
     const { showSpinner, hideSpinner } = useSpinner()
     const { data } = useFindUniqueSubjectVersion(
@@ -41,7 +76,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
         { enabled: !!subjectVersionId }
     )
 
-    const { onOpen, onClose } = useDisclosure<{
+    const { onOpen } = useDisclosure<{
         subjectVersionId: string
         equivalencyGroupId: string
         side: EquivalencySide
@@ -100,32 +135,24 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
         }
     }
 
-    const sortSubjects = (group: any, side: EquivalencySide) => {
-        const result = group?.equivalencyGroup?.subjects
+    const sortSubjects = (group: any, side: EquivalencySide): SubjectItem[] => {
+        return group?.equivalencyGroup?.subjects
             .filter((s: any) => s?.side === side)
-            .map((s: any) => {
-                const subjectData = {
-                    id: s?.id,
-                    code: s?.subject?.code,
-                    name: s?.subject?.name,
-                    fullDisplay: [s?.subject?.code, s?.subject?.name].filter(Boolean).join(' - '),
-                }
-                return subjectData
-            })
-
-        return result
+            .map((s: any) => ({
+                id: s?.id,
+                fullDisplay: [s?.subject?.code, s?.subject?.name].filter(Boolean).join(' - '),
+            }))
     }
 
     return (
         <div className="bg-white rounded-lg shadow-sm p-4">
-            <div>
-                <Flex justify="end" gap={8}>
-                    <Button type="primary" onClick={handleAdd}>
-                        <BookPlus />
-                        Thêm
-                    </Button>
-                </Flex>
-            </div>
+            <Flex justify="end" gap={8}>
+                <Button type="primary" onClick={handleAdd}>
+                    <BookPlus />
+                    Thêm
+                </Button>
+            </Flex>
+
             {data?.equivalencyGroups?.map((group, idx) => (
                 <div key={group?.id}>
                     {idx > 0 && <Divider className="my-0" />}
@@ -142,61 +169,25 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                                     <X />
                                 </Button>
                             </Popconfirm>
+
                             <Col span={24} className="mt-8">
                                 <Row gutter={[16, 16]} justify="center" align="middle">
-                                    <Col span={11} className="flex flex-col items-center gap-2">
-                                        {sortSubjects(group, EquivalencySide.SOURCE).map(
-                                            (subject: any, i: number) => (
-                                                <div
-                                                    key={`${subject?.id}-${i + 1}`}
-                                                    className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between"
-                                                >
-                                                    <span className="whitespace-normal break-words">
-                                                        {subject?.fullDisplay}
-                                                    </span>
-                                                    <Popconfirm
-                                                        placement="topRight"
-                                                        title="Bạn có chắc muốn xóa môn học này không?"
-                                                        okText="Xóa"
-                                                        cancelText="Hủy"
-                                                        onConfirm={() =>
-                                                            handleRemoveSubject(subject?.id)
-                                                        }
-                                                    >
-                                                        <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
-                                                    </Popconfirm>
-                                                </div>
-                                            )
-                                        )}
+                                    <Col span={11}>
+                                        <SubjectList
+                                            subjects={sortSubjects(group, EquivalencySide.SOURCE)}
+                                            onRemove={handleRemoveSubject}
+                                        />
                                     </Col>
                                     <Col span={2} className="flex items-center justify-center">
                                         <ArrowRightLeft />
                                     </Col>
-                                    <Col span={11} className="flex flex-col items-center gap-2">
-                                        {sortSubjects(group, EquivalencySide.TARGET).map(
-                                            (subject: any, i: number) => (
-                                                <div
-                                                    key={`${subject?.id}-${i + 1}`}
-                                                    className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between"
-                                                >
-                                                    <span className="whitespace-normal break-words">
-                                                        {subject?.fullDisplay}
-                                                    </span>
-                                                    <Popconfirm
-                                                        placement="topRight"
-                                                        title="Bạn có chắc muốn xóa môn học này không?"
-                                                        okText="Xóa"
-                                                        cancelText="Hủy"
-                                                        onConfirm={() =>
-                                                            handleRemoveSubject(subject?.id)
-                                                        }
-                                                    >
-                                                        <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
-                                                    </Popconfirm>
-                                                </div>
-                                            )
-                                        )}
+                                    <Col span={11}>
+                                        <SubjectList
+                                            subjects={sortSubjects(group, EquivalencySide.TARGET)}
+                                            onRemove={handleRemoveSubject}
+                                        />
                                     </Col>
+
                                     <Col span={11} className="flex justify-center">
                                         <Button
                                             onClick={() =>
