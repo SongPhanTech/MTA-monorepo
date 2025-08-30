@@ -197,7 +197,6 @@ export default function SubjectClassScore() {
         selectedRowKeys,
         onChange: (selectedKeys: any) => {
             setSelectedRowKeys(selectedKeys)
-            console.log(selectedKeys)
         },
     }
 
