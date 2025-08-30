@@ -8,7 +8,7 @@ import {
     useDeleteSubjectInGroup,
     useFindUniqueSubjectVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, message, Row } from 'antd'
+import { Button, Col, Divider, Flex, message, Popconfirm, Row } from 'antd'
 import { ArrowRightLeft, BookPlus, Plus, X } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -27,7 +27,9 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                         equivalencyGroup: {
                             include: {
                                 subjects: {
-                                    include: { subject: { select: { name: true, id: true } } },
+                                    include: {
+                                        subject: { select: { id: true, name: true, code: true } },
+                                    },
                                 },
                             },
                         },
@@ -74,10 +76,44 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
         }
     }
 
+    const handleDelete = async (id: string) => {
+        try {
+            showSpinner()
+            await deleteEquivalencyGroup({ where: { id } })
+            message.success('Xóa thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleRemoveSubject = async (id: string) => {
+        try {
+            showSpinner()
+            await deleteSubjectInGroup({ where: { id } })
+            message.success('Xóa thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const sortSubjects = (group: any, side: EquivalencySide) => {
-        return group.equivalencyGroup.subjects
-            .filter((s: any) => s.side === side)
-            .map((s: any) => s.subject?.name)
+        const result = group?.equivalencyGroup?.subjects
+            .filter((s: any) => s?.side === side)
+            .map((s: any) => {
+                const subjectData = {
+                    id: s?.id,
+                    code: s?.subject?.code,
+                    name: s?.subject?.name,
+                    fullDisplay: [s?.subject?.code, s?.subject?.name].filter(Boolean).join(' - '),
+                }
+                return subjectData
+            })
+
+        return result
     }
 
     return (
@@ -91,23 +127,44 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                 </Flex>
             </div>
             {data?.equivalencyGroups?.map((group, idx) => (
-                <div key={group.id}>
+                <div key={group?.id}>
                     {idx > 0 && <Divider className="my-0" />}
                     <Row gutter={[16, 0]} align="top" justify="space-between">
                         <div className="border border-primary border-solid p-4 m-4 rounded-lg relative w-full">
-                            <Button className="absolute top-2 right-2 h-8 w-8 p-0">
-                                <X />
-                            </Button>
+                            <Popconfirm
+                                placement="topRight"
+                                title="Bạn có chắc muốn xóa nhóm này không?"
+                                okText="Xóa"
+                                cancelText="Hủy"
+                                onConfirm={() => handleDelete(group?.equivalencyGroupId)}
+                            >
+                                <Button className="absolute top-2 right-2 h-8 w-8 p-0">
+                                    <X />
+                                </Button>
+                            </Popconfirm>
                             <Col span={24} className="mt-8">
                                 <Row gutter={[16, 16]} justify="center" align="middle">
                                     <Col span={11} className="flex flex-col items-center gap-2">
                                         {sortSubjects(group, EquivalencySide.SOURCE).map(
-                                            (name: string, i: number) => (
+                                            (subject: any, i: number) => (
                                                 <div
-                                                    key={`${name}-${i + 1}`}
-                                                    className="p-2 border border-primary border-solid rounded w-full text-center"
+                                                    key={`${subject?.id}-${i + 1}`}
+                                                    className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between"
                                                 >
-                                                    {name}
+                                                    <span className="whitespace-normal break-words">
+                                                        {subject?.fullDisplay}
+                                                    </span>
+                                                    <Popconfirm
+                                                        placement="topRight"
+                                                        title="Bạn có chắc muốn xóa môn học này không?"
+                                                        okText="Xóa"
+                                                        cancelText="Hủy"
+                                                        onConfirm={() =>
+                                                            handleRemoveSubject(subject?.id)
+                                                        }
+                                                    >
+                                                        <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
+                                                    </Popconfirm>
                                                 </div>
                                             )
                                         )}
@@ -117,12 +174,25 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                                     </Col>
                                     <Col span={11} className="flex flex-col items-center gap-2">
                                         {sortSubjects(group, EquivalencySide.TARGET).map(
-                                            (name: string, i: number) => (
+                                            (subject: any, i: number) => (
                                                 <div
-                                                    key={`${name}-${i + 1}`}
-                                                    className="p-2 border border-primary border-solid rounded w-full text-center"
+                                                    key={`${subject?.id}-${i + 1}`}
+                                                    className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between"
                                                 >
-                                                    {name}
+                                                    <span className="whitespace-normal break-words">
+                                                        {subject?.fullDisplay}
+                                                    </span>
+                                                    <Popconfirm
+                                                        placement="topRight"
+                                                        title="Bạn có chắc muốn xóa môn học này không?"
+                                                        okText="Xóa"
+                                                        cancelText="Hủy"
+                                                        onConfirm={() =>
+                                                            handleRemoveSubject(subject?.id)
+                                                        }
+                                                    >
+                                                        <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
+                                                    </Popconfirm>
                                                 </div>
                                             )
                                         )}
@@ -132,7 +202,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                                             onClick={() =>
                                                 onOpen({
                                                     subjectVersionId,
-                                                    equivalencyGroupId: group.id,
+                                                    equivalencyGroupId: group?.equivalencyGroupId,
                                                     side: EquivalencySide.SOURCE,
                                                 })
                                             }
@@ -146,7 +216,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                                             onClick={() =>
                                                 onOpen({
                                                     subjectVersionId,
-                                                    equivalencyGroupId: group.id,
+                                                    equivalencyGroupId: group?.equivalencyGroupId,
                                                     side: EquivalencySide.TARGET,
                                                 })
                                             }

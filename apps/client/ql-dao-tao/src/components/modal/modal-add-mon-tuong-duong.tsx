@@ -25,6 +25,7 @@ const PutMonHocTuongDuong = () => {
         tag: PutMonHocTuongDuong.name,
         onClose: form.resetFields,
     })
+
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: createSubjectInGroup } = useCreateSubjectInGroup()
     async function onOk(output?: PutMonHocTuongDuongFormType) {
@@ -37,8 +38,8 @@ const PutMonHocTuongDuong = () => {
                 return
             }
             const data = {
-                side: input?.side as EquivalencySide,
-                equivalencyGroupId: input?.equivalencyGroupId,
+                side: input.side as EquivalencySide,
+                equivalencyGroupId: input.equivalencyGroupId,
                 subjectId: output?.subjectId,
             }
             await createSubjectInGroup({
@@ -96,7 +97,7 @@ const PutMonHocTuongDuong = () => {
                 .map((sv) => ({
                     key: sv.id,
                     value: sv.id,
-                    title: [subject.code, subject.name].filter(Boolean).join(' - '),
+                    title: [sv.code, sv.name].filter(Boolean).join(' - '),
                 }))
 
             if (children.length === 0) return null
