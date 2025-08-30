@@ -17,34 +17,39 @@ type Props = {
 }
 
 type SubjectItem = {
-    id: string
+    subjectInGroupId: string
     fullDisplay: string
+    subjectId: string
 }
 
 function SubjectList({
     subjects,
     onRemove,
+    disableRemoveForId,
 }: {
     subjects: SubjectItem[]
     onRemove: (id: string) => void
+    disableRemoveForId?: string
 }) {
     return (
         <div className="flex flex-col items-center gap-2 w-full">
             {subjects.map((subject, i) => (
                 <div
-                    key={`${subject.id}-${i + 1}`}
-                    className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between"
+                    key={`${subject.subjectInGroupId}-${i + 1}`}
+                    className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between min-h-[58px]"
                 >
                     <span className="whitespace-normal break-words">{subject.fullDisplay}</span>
-                    <Popconfirm
-                        placement="topRight"
-                        title="Bạn có chắc muốn xóa môn học này không?"
-                        okText="Xóa"
-                        cancelText="Hủy"
-                        onConfirm={() => onRemove(subject.id)}
-                    >
-                        <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
-                    </Popconfirm>
+                    {disableRemoveForId !== subject.subjectId && (
+                        <Popconfirm
+                            placement="topRight"
+                            title="Bạn có chắc muốn xóa môn học này không?"
+                            okText="Xóa"
+                            cancelText="Hủy"
+                            onConfirm={() => onRemove(subject.subjectInGroupId)}
+                        >
+                            <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
+                        </Popconfirm>
+                    )}
                 </div>
             ))}
         </div>
@@ -115,7 +120,6 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
         try {
             showSpinner()
             await deleteEquivalencyGroup({ where: { id } })
-            message.success('Xóa thành công')
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
@@ -127,7 +131,6 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
         try {
             showSpinner()
             await deleteSubjectInGroup({ where: { id } })
-            message.success('Xóa thành công')
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
@@ -139,8 +142,9 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
         return group?.equivalencyGroup?.subjects
             .filter((s: any) => s?.side === side)
             .map((s: any) => ({
-                id: s?.id,
+                subjectInGroupId: s?.id,
                 fullDisplay: [s?.subject?.code, s?.subject?.name].filter(Boolean).join(' - '),
+                subjectId: s?.subjectId,
             }))
     }
 
@@ -176,6 +180,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                                         <SubjectList
                                             subjects={sortSubjects(group, EquivalencySide.SOURCE)}
                                             onRemove={handleRemoveSubject}
+                                            disableRemoveForId={subjectVersionId}
                                         />
                                     </Col>
                                     <Col span={2} className="flex items-center justify-center">
