@@ -650,8 +650,6 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]:
                                             filtersTable[item.dataIndex as keyof FilterProps],
                                     }
-                                    console.log(result)
-
                                     setFilters?.(result)
                                     props.confirm()
                                 }}

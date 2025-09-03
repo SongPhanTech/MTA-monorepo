@@ -5,6 +5,7 @@ import PinEvidenceToPeriod from './ghim-minh-chung'
 import ModalPrintAllExams from './modal-print-all-exam-bank'
 import ModalPrintExamBank from './modal-print-exam-bank'
 import ModalSinhDeThiTuDong from './modal-sinh-de-thi-tu-dong'
+import ModalSinhFax from './modal-sinh-fax'
 import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutKnowledgeBlock from './put-chuong-muc'
 import PutSurveyExamModal from './put-create-survey-exam'
@@ -57,4 +58,5 @@ export {
     PinEvidenceToPeriod,
     PutEvaluationCouncil,
     PutEvaluationCouncilMember,
+    ModalSinhFax,
 }

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import TestStructureRule from './components/cau-hinh-sinh-de'
 import ExamBank from './components/danh-sach-de-thi'
 import ExamSession from './components/ql-bai-thi'
+import ExamFax from './components/ql-fax'
 import Information from './components/thong-tin-ky-thi'
 
 export default function PageId() {
@@ -45,6 +46,11 @@ export default function PageId() {
             children: <ExamBank id={id} />,
         },
         {
+            key: 'fax',
+            label: 'Quản lý fax',
+            children: <ExamFax id={id} />,
+        },
+        {
             key: 'examSession',
             label: 'Quản lý bài thi',
             children: <ExamSession id={id} />,
@@ -60,6 +66,7 @@ export default function PageId() {
                     { label: 'Thông tin kỳ thi', value: 'infor' },
                     { label: 'Cấu hình sinh đề tự động', value: 'sinhDeTuDong' },
                     { label: 'Danh sách đề thi', value: 'examBank' },
+                    { label: 'Quản lý fax', value: 'fax' },
                     { label: 'Quản lý bài thi', value: 'examSession' },
                 ]}
                 style={{ marginBottom: 14 }}

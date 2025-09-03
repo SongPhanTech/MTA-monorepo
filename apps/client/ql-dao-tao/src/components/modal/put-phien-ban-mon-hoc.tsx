@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { type DocumentFile, SubjectEquivalentType, type SubjectVersion } from '@workspace/db'
+import type { DocumentFile, SubjectVersion } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManySubject,
@@ -105,7 +105,6 @@ const PutVersionSubjectModal = () => {
                 description: output.description,
                 active: output.active,
                 examType: output.examType,
-                subjectEquivalentType: SubjectEquivalentType.NONE,
                 numberOfPractical: output.numberOfPractical,
                 numberOfExam: output.numberOfExam,
                 numberOfTheory: output.numberOfTheory,

@@ -133,8 +133,6 @@ export default function StudentGraduationApplication() {
         }
     )
 
-    console.log(initialValue)
-
     const data: Array<
         NonNullable<typeof studentGraduationApplicationData>[number] &
             Partial<Omit<(typeof graduationCheckResults)[number], 'applicationId'>>
