@@ -13,7 +13,7 @@ import {
     useDeleteEvidenceCategory,
     useFindManyEvidenceCategory,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tooltip } from 'antd'
+import { Button, Col, Flex, Input, message, Row, Tooltip } from 'antd'
 import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -116,28 +116,26 @@ export default function EvidenceCategory() {
                         <Col span={12}>
                             <Flex>
                                 <Col span={8}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                setFilters({
-                                                    ...filters,
-                                                    searchText: e.target.value,
-                                                })
-                                            }
-                                            className="py-0 h-8"
-                                            placeholder="Tìm kiếm"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
+                                    <Input
+                                        id="search"
+                                        onChange={(e) =>
+                                            setFilters({
+                                                ...filters,
+                                                searchText: e.target.value,
+                                            })
+                                        }
+                                        className="py-0 h-8"
+                                        placeholder="Tìm kiếm"
+                                        prefix={
+                                            <Search
+                                                size={15}
+                                                style={{
+                                                    color: 'rgba(0, 0, 0, 0.25)',
+                                                }}
+                                            />
+                                        }
+                                        allowClear
+                                    />
                                 </Col>
                             </Flex>
                         </Col>

@@ -8,10 +8,12 @@ import type {
     Evidence,
     RequirementCriterion,
 } from '@workspace/db'
-import { Button, Collapse, Form, InputNumber, Tabs } from 'antd'
+import { Button, Collapse, Form, InputNumber, message, Tabs } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
+import useSpinner from '@hooks/spinner'
+import type { DataIndex } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]'
 import { sqlTransaction } from '@workspace/libs/api/model'
 
 export type PutRequirementCriterion = {
@@ -24,7 +26,7 @@ export default function EvaluatedPage({
     index,
     refetch,
 }: {
-    data: any
+    data: DataIndex
     index: number
     refetch: () => void
 }) {
@@ -36,6 +38,7 @@ export default function EvaluatedPage({
     }>({
         tag: AddEvidenceToPeriod.name,
     })
+    const { showSpinner, hideSpinner } = useSpinner()
 
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
@@ -77,8 +80,15 @@ export default function EvaluatedPage({
                 }),
             ]
         }
-
-        await sqlTransaction(listSqlTransaction)
+        try {
+            showSpinner()
+            await sqlTransaction(listSqlTransaction)
+            message.success('Lưu đánh giá thành công')
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>

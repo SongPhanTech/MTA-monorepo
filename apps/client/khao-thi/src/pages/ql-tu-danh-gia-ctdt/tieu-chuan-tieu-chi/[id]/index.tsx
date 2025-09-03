@@ -31,6 +31,7 @@ export default function RequirementCriterionCatalog() {
 
     const where = useMemo(
         () => ({
+            criterionCatalogId,
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -40,7 +41,7 @@ export default function RequirementCriterionCatalog() {
                   }
                 : {}),
         }),
-        [filters.name]
+        [filters.name, criterionCatalogId]
     )
 
     const { data, refetch } = useFindManyRequirementCriterionCatalog({
@@ -233,7 +234,7 @@ RequirementCriterionCatalog.getLayout = function getLayout(page: React.ReactElem
         <DefaultLayout
             breadcrumbList={[
                 {
-                    title: 'Quản lý đánh giá CTĐT',
+                    title: 'Quản lý Tự đánh giá CTĐT',
                 },
                 {
                     title: 'Tiêu chuẩn, tiêu chí',
