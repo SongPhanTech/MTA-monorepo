@@ -257,7 +257,7 @@ const PutEvaluationPeriod = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa đợt đánh giá CTĐT' : 'Thêm mới đợt đánh giá CTĐT'}
-            className="w-[35vw]"
+            className="w-[700px]"
         >
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt đánh giá" required>
