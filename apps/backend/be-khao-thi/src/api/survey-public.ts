@@ -146,7 +146,7 @@ const savePublicSurvey = createRoute({
                         .object({
                             surveyId: z.string(),
                             additionalSuggestion: z.string(),
-                            startedAt: z.date().optional(),
+                            startedAt: z.string().datetime().optional(),
                             responses: z.array(
                                 z.object({
                                     surveyQuestionId: z.string(),
