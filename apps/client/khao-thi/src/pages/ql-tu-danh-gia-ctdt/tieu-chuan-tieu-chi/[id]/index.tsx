@@ -31,6 +31,7 @@ export default function RequirementCriterionCatalog() {
 
     const where = useMemo(
         () => ({
+            criterionCatalogId,
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -40,7 +41,7 @@ export default function RequirementCriterionCatalog() {
                   }
                 : {}),
         }),
-        [filters.name]
+        [filters.name, criterionCatalogId]
     )
 
     const { data, refetch } = useFindManyRequirementCriterionCatalog({

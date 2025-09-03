@@ -56,6 +56,22 @@ const ModalPrintDotDanhGia = () => {
         tag: 'ModalPrintDotDanhGia',
     })
 
+    const evidenceTags = new Map<string, string>()
+    for (const [o1, standard] of (input?.data?.standards || []).entries()) {
+        for (const [o2, criteria] of (standard?.criteria || []).entries()) {
+            let evidenceCount = 0
+            for (const requirementCriterions of criteria?.requirementCriterions || [])
+                for (const evidences of requirementCriterions?.evidences || []) {
+                    if (evidenceTags.has(evidences.evidenceId)) continue
+                    evidenceCount++
+                    const tag = [o1 + 1, o2 + 1, evidenceCount]
+                        .map((t) => t.toString().padStart(2, '0'))
+                        .join('.')
+                    evidenceTags.set(evidences.evidenceId, `KM.${tag}`)
+                }
+        }
+    }
+
     const printRef = useRef<HTMLDivElement>(null)
 
     const handlePrint = useReactToPrint({

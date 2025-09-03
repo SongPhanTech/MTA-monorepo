@@ -67,7 +67,7 @@ export default function EvaluationPeriod() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountEvaluationPeriod({
+    const { data: count, refetch: refetchCount } = useCountEvaluationPeriod({
         where: {
             ...where,
             deletedAt: null,
@@ -76,6 +76,10 @@ export default function EvaluationPeriod() {
 
     const { onOpen: onOpenPutEvaluationPeriod } = useDisclosure<string>({
         tag: PutEvaluationPeriod.name,
+        onClose() {
+            refetch()
+            refetchCount()
+        },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
