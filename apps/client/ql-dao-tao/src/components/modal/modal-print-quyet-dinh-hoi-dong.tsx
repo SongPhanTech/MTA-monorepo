@@ -159,7 +159,6 @@ const ModalPrintDecision = () => {
                                     Theo đề nghị của đồng chí Trưởng phòng Sau đại học tại tờ trình
                                     số 406/TTr-SĐH ngày 30/5/2025.
                                 </div>
-                                <div className="mt-4 text-[20px]">Quyết định:</div>
                             </div>
                         </div>
                         <div className="text-[18px] mt-8 leading-5">

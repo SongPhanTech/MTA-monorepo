@@ -4,7 +4,12 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { ModalPrintDecision, PutPaymentRecord, PutThesisProject } from '@components/modal'
+import {
+    ModalPrintDecision,
+    ModalPrintInvitation,
+    PutPaymentRecord,
+    PutThesisProject,
+} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -278,6 +283,10 @@ export default function ThesisProject() {
         tag: PutPaymentRecord.name,
     })
 
+    const { onOpen: openModalPrintInvitation } = useDisclosure<{ councilMemberIds: string[] }>({
+        tag: ModalPrintInvitation.name,
+    })
+
     useEffect(() => {
         if (!isOpen) {
             setSelectedRowKeys([])
@@ -351,6 +360,7 @@ export default function ThesisProject() {
             })
 
             message.success('Tạo thư mời thành công')
+            openModalPrintInvitation({ councilMemberIds })
         } catch (error) {
             message.error('Đã xảy ra lỗi khi tạo thư mời')
         } finally {
@@ -506,7 +516,10 @@ export default function ThesisProject() {
                                     title="Thêm mới đề tài"
                                 />
                                 <Tooltip title="Cấu hình lớp đồ án" placement="top">
-                                    <BsGear onClick={() => handleNavigateSetting(id)} />
+                                    <BsGear
+                                        className="cursor-pointer"
+                                        onClick={() => handleNavigateSetting(id)}
+                                    />
                                 </Tooltip>
                             </div>
                         )}
