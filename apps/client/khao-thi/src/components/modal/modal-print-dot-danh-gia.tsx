@@ -2,7 +2,7 @@ import type { DataPrintDotDanhGia } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh
 import type { ScoreScaleCatalog } from '@workspace/db'
 import { Button, Modal } from 'antd'
 import { Printer } from 'lucide-react'
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
 
@@ -56,21 +56,28 @@ const ModalPrintDotDanhGia = () => {
         tag: 'ModalPrintDotDanhGia',
     })
 
-    const evidenceTags = new Map<string, string>()
-    for (const [o1, standard] of (input?.data?.standards || []).entries()) {
-        for (const [o2, criteria] of (standard?.criteria || []).entries()) {
-            let evidenceCount = 0
-            for (const requirementCriterions of criteria?.requirementCriterions || [])
-                for (const evidences of requirementCriterions?.evidences || []) {
-                    if (evidenceTags.has(evidences.evidenceId)) continue
-                    evidenceCount++
-                    const tag = [o1 + 1, o2 + 1, evidenceCount]
-                        .map((t) => t.toString().padStart(2, '0'))
-                        .join('.')
-                    evidenceTags.set(evidences.evidenceId, `KM.${tag}`)
+    const evidenceTags = useMemo(() => {
+        const map = new Map<string, string>()
+
+        for (const [o1, standard] of (input?.data?.standards || []).entries()) {
+            for (const [o2, criteria] of (standard?.criteria || []).entries()) {
+                let evidenceCount = 0
+                for (const requirementCriterions of criteria?.requirementCriterions || []) {
+                    for (const evidences of requirementCriterions?.evidences || []) {
+                        if (map.has(evidences.evidenceId)) continue
+                        evidenceCount++
+                        const tag = [o1 + 1, o2 + 1, evidenceCount]
+                            .map((t) => t.toString().padStart(2, '0'))
+                            .join('.')
+                        map.set(evidences.evidenceId, `KM.${tag}`)
+                    }
                 }
+            }
         }
-    }
+        return map
+    }, [input?.data?.standards])
+
+    console.log('evidenceTags', evidenceTags)
 
     const printRef = useRef<HTMLDivElement>(null)
 
