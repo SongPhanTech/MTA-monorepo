@@ -473,6 +473,14 @@ enum EvaluationMemberRole {
   @@schema("khao-thi")
 }
 
+/// Vai trò của thành viên trong hội đồng thư ký
+enum EvaluationSecretaryMemberRole {
+  HEAD_SECRETARY
+  MEMBER
+
+  @@schema("khao-thi")
+}
+
 enum SurveyQuestionType {
   ESSAY
   SINGLE_CHOICE
@@ -3377,6 +3385,7 @@ model Lecturer {
   reviewedThesisRegistrations StudentThesisRegistration[]
   expertProfile               ExpertProfile[]
   evaluationCouncilMember     EvaluationCouncilMember[]
+  evaluationSecretaryMember   EvaluationSecretaryMember[]
   survey                      Survey[]
 
   @@schema("ql-dao-tao")
@@ -4296,18 +4305,19 @@ model NoteReminder {
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod {
-  id          String               @id() @default(cuid())
-  code        String?              @unique()
-  active      Boolean              @default(true)
-  description String?              @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @default(now()) @updatedAt()
-  name        String
-  startDate   DateTime             @default(now())
-  endDate     DateTime?
-  standards   EvaluationStandard[]
-  councils    EvaluationCouncil[]
+  id                         String                      @id() @default(cuid())
+  code                       String?                     @unique()
+  active                     Boolean                     @default(true)
+  description                String?                     @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                    @default(now())
+  updatedAt                  DateTime                    @default(now()) @updatedAt()
+  name                       String
+  startDate                  DateTime                    @default(now())
+  endDate                    DateTime?
+  standards                  EvaluationStandard[]
+  councils                   EvaluationCouncil[]
+  evaluationSecretarYCouncil EvaluationSecretarYCouncil?
 
   @@schema("khao-thi")
 }
@@ -4492,6 +4502,8 @@ model RequirementCriterion {
   name                  String
   questions             String[]
   evidences             AnalysisFormEvidence[]
+  evidencePlaces        String                 @default("")
+  collectionMethod      String                 @default("")
 
   @@schema("khao-thi")
 }
@@ -4546,6 +4558,40 @@ model EvaluationCouncilMember {
   lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId          String
   role                EvaluationMemberRole[]
+
+  @@schema("khao-thi")
+}
+
+/// Hội đồng thư ký
+model EvaluationSecretarYCouncil {
+  id          String                      @id() @default(cuid())
+  code        String?                     @unique()
+  active      Boolean                     @default(true)
+  description String?                     @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime                    @default(now())
+  updatedAt   DateTime                    @default(now()) @updatedAt()
+  period      EvaluationPeriod            @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId    String                      @unique()
+  name        String
+  members     EvaluationSecretaryMember[]
+
+  @@schema("khao-thi")
+}
+
+model EvaluationSecretaryMember {
+  id                           String                        @id() @default(cuid())
+  code                         String?                       @unique()
+  active                       Boolean                       @default(true)
+  description                  String?                       @db.Text()
+  deletedAt                    DateTime?
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime                      @default(now()) @updatedAt()
+  lecturer                     Lecturer                      @relation(fields: [lecturerId], references: [id])
+  lecturerId                   String
+  evaluationSecretarYCouncil   EvaluationSecretarYCouncil    @relation(fields: [evaluationSecretarYCouncilId], references: [id])
+  evaluationSecretarYCouncilId String
+  role                         EvaluationSecretaryMemberRole
 
   @@schema("khao-thi")
 }

@@ -8,12 +8,13 @@ import '../ql-dao-tao/lecturer'
 
 /// Đợt đánh giá CTDT
 model EvaluationPeriod extends Base {
-  name      String
-  startDate DateTime             @default(now())
-  endDate   DateTime?
+  name                       String
+  startDate                  DateTime                    @default(now())
+  endDate                    DateTime?
 
-  standards EvaluationStandard[]
-  councils  EvaluationCouncil[]
+  standards                  EvaluationStandard[]
+  councils                   EvaluationCouncil[]
+  evaluationSecretarYCouncil EvaluationSecretarYCouncil?
 
   @@schema("khao-thi")
 }
@@ -108,7 +109,7 @@ model EvaluationCriterion extends Base {
   /// 4. Kế hoạch hành động
   actionPlan            String                 @default("")
   /// 5. Tự đánh giá
-    score                 Int?
+  score                 Int?
 
   @@unique([standardId, name])
   @@schema("khao-thi")
@@ -146,6 +147,8 @@ model RequirementCriterion extends Base {
   questions             String[]
 
   evidences             AnalysisFormEvidence[]
+  evidencePlaces        String                 @default("")
+  collectionMethod      String                 @default("")
 
   @@schema("khao-thi")
 }
@@ -170,7 +173,6 @@ enum EvaluationMemberRole {
   SECRETARY // Thư ký
   MEMBER // Uỷ viên
 
-
   @@schema("khao-thi")
 }
 
@@ -192,6 +194,35 @@ model EvaluationCouncilMember extends Base {
   lecturer            Lecturer               @relation(fields: [lecturerId], references: [id])
   lecturerId          String
   role                EvaluationMemberRole[]
+
+  @@schema("khao-thi")
+}
+
+/// Hội đồng thư ký
+model EvaluationSecretarYCouncil extends Base {
+  period   EvaluationPeriod            @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId String                      @unique
+  name     String
+
+  members  EvaluationSecretaryMember[]
+
+  @@schema("khao-thi")
+}
+
+/// Vai trò của thành viên trong hội đồng thư ký
+enum EvaluationSecretaryMemberRole {
+  HEAD_SECRETARY // Trưởng ban thư ký
+  MEMBER // Uỷ viên
+
+  @@schema("khao-thi")
+}
+
+model EvaluationSecretaryMember extends Base {
+  lecturer                     Lecturer                      @relation(fields: [lecturerId], references: [id])
+  lecturerId                   String
+  evaluationSecretarYCouncil   EvaluationSecretarYCouncil    @relation(fields: [evaluationSecretarYCouncilId], references: [id])
+  evaluationSecretarYCouncilId String
+  role                         EvaluationSecretaryMemberRole
 
   @@schema("khao-thi")
 }
