@@ -6,6 +6,6 @@
  */
 
 export interface SaveExamFaxesResult {
-  success: boolean;
-  message: string;
+    success: boolean
+    message: string
 }

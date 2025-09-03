@@ -14,7 +14,7 @@ enum SurveyQuestionType {
   @@schema("khao-thi")
 }
 
-enum  SurveyObject {
+enum SurveyObject {
   MILITARY_STUDENT
   CIVILIAN_STUDENT
   LECTURER

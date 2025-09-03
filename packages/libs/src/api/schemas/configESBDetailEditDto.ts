@@ -49,14 +49,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { ConfigESBDetail } from './configESBDetail';
-import type { ConfigESBDetailEditDtoState } from './configESBDetailEditDtoState';
+import type { ConfigESBDetail } from './configESBDetail'
+import type { ConfigESBDetailEditDtoState } from './configESBDetailEditDtoState'
 
 export type ConfigESBDetailEditDto = ConfigESBDetail & {
-  /** @nullable */
-  State?: ConfigESBDetailEditDtoState;
-  /** @nullable */
-  sBusinessType?: string | null;
-  /** @nullable */
-  sOrginCode?: string | null;
-};
+    /** @nullable */
+    State?: ConfigESBDetailEditDtoState
+    /** @nullable */
+    sBusinessType?: string | null
+    /** @nullable */
+    sOrginCode?: string | null
+}

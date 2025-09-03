@@ -11,6 +11,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 import examApp from './api/exam'
 import surveyApp from './api/survey'
+import surveyPublicApp from './api/survey-public'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -57,6 +58,10 @@ app.use('*', checkIp)
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
+
+// public
+app.route('/api/survey', surveyPublicApp)
+
 // TODO!: uncomment
 // app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 

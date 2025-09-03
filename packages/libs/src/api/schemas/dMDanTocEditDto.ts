@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMDanToc } from './dMDanToc';
-import type { DMDanTocEditDtoState } from './dMDanTocEditDtoState';
+import type { DMDanToc } from './dMDanToc'
+import type { DMDanTocEditDtoState } from './dMDanTocEditDtoState'
 
 export type DMDanTocEditDto = DMDanToc & {
-  /** @nullable */
-  State?: DMDanTocEditDtoState;
-};
+    /** @nullable */
+    State?: DMDanTocEditDtoState
+}

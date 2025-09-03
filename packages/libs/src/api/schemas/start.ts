@@ -8,4 +8,4 @@
 /**
  * Số bắt đầu
  */
-export type Start = number;
+export type Start = number

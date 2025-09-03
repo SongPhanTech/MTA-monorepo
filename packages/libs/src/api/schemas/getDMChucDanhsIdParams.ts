@@ -51,5 +51,5 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export type GetDMChucDanhsIdParams = {
-cols?: string;
-};
+    cols?: string
+}

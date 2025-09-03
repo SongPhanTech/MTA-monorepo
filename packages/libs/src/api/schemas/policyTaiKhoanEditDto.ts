@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { PolicyTaiKhoan } from './policyTaiKhoan';
-import type { PolicyTaiKhoanEditDtoState } from './policyTaiKhoanEditDtoState';
+import type { PolicyTaiKhoan } from './policyTaiKhoan'
+import type { PolicyTaiKhoanEditDtoState } from './policyTaiKhoanEditDtoState'
 
 export type PolicyTaiKhoanEditDto = PolicyTaiKhoan & {
-  /** @nullable */
-  State?: PolicyTaiKhoanEditDtoState;
-};
+    /** @nullable */
+    State?: PolicyTaiKhoanEditDtoState
+}

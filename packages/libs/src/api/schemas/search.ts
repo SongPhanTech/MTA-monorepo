@@ -8,4 +8,4 @@
 /**
  * Từ khóa tìm kiếm
  */
-export type Search = string;
+export type Search = string

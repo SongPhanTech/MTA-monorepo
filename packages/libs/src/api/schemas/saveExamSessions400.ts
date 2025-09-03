@@ -6,5 +6,5 @@
  */
 
 export type SaveExamSessions400 = {
-  message: string;
-};
+    message: string
+}

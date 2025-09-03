@@ -358,9 +358,9 @@ export default function Information({ id, selectedIds }: InformationProps) {
                     <FormItem form={form} name="shuffleAnswers" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Trộn thứ tự đáp án</Checkbox>
                     </FormItem>
-                    <FormItem form={form} name="showResult" valuePropName="checked">
+                    {/* <FormItem form={form} name="showResult" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Hiển thị kết quả ngay sau khi thi</Checkbox>
-                    </FormItem>
+                    </FormItem> */}
                 </Col>
                 <Col span={24}>
                     <Flex justify="end" gap={8}>

@@ -312,7 +312,6 @@ export default function StandardCatalog() {
                                                             id: record?.id,
                                                             standardId: record?.standardId,
                                                         })
-                                                        console.log(record?.lenght)
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />

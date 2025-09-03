@@ -6,5 +6,5 @@
  */
 
 export type GenExamFax404 = {
-  message: string;
-};
+    message: string
+}

@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMPhanLoaiCSKT } from './dMPhanLoaiCSKT';
-import type { DMPhanLoaiCSKTEditDtoState } from './dMPhanLoaiCSKTEditDtoState';
+import type { DMPhanLoaiCSKT } from './dMPhanLoaiCSKT'
+import type { DMPhanLoaiCSKTEditDtoState } from './dMPhanLoaiCSKTEditDtoState'
 
 export type DMPhanLoaiCSKTEditDto = DMPhanLoaiCSKT & {
-  /** @nullable */
-  State?: DMPhanLoaiCSKTEditDtoState;
-};
+    /** @nullable */
+    State?: DMPhanLoaiCSKTEditDtoState
+}

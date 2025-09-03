@@ -1,5 +1,6 @@
 import { DownOutlined } from '@ant-design/icons'
 import MonHocTienQuyetSongHanhPage from '@components/sub-pages/mon-hoc-tien-quyet-song-hanh'
+import MonHocTuongDuong from '@components/sub-pages/mon-hoc-tuong-duong'
 import DefaultLayout from '@layouts/default-layout'
 import { useInfiniteFindManySubject } from '@workspace/db/hooks'
 import { Col, Divider, Input, Segmented, Spin, Tabs, Tree, Typography } from 'antd'
@@ -52,7 +53,7 @@ export default function Subject() {
         {
             key: SubjectType.equivalent,
             label: 'Môn học tương đương',
-            children: <div>Môn học tương đương</div>,
+            children: <MonHocTuongDuong subjectVersionId={selectedVersionId || ''} />,
         },
     ]
 

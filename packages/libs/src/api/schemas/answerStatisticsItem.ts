@@ -6,12 +6,12 @@
  */
 
 export type AnswerStatisticsItem = {
-  /** Mã số của mức độ (0-4). */
-  level: number;
-  /** Tên đầy đủ của mức độ. */
-  levelName: string;
-  /** Số lượng người chọn mức độ này. */
-  count: number;
-  /** Tỷ lệ phần trăm trên tổng số câu trả lời. */
-  percentage: number;
-};
+    /** Mã số của mức độ (0-4). */
+    level: number
+    /** Tên đầy đủ của mức độ. */
+    levelName: string
+    /** Số lượng người chọn mức độ này. */
+    count: number
+    /** Tỷ lệ phần trăm trên tổng số câu trả lời. */
+    percentage: number
+}

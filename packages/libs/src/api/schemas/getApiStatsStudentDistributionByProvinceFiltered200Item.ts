@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsStudentDistributionByProvinceFiltered200Item = {
-  provinceId: string;
-  name: string;
-  count: number;
-};
+    provinceId: string
+    name: string
+    count: number
+}

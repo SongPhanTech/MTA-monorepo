@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { StatisticsByFacultyItemDepartmentsItem } from './statisticsByFacultyItemDepartmentsItem';
+import type { StatisticsByFacultyItemDepartmentsItem } from './statisticsByFacultyItemDepartmentsItem'
 
 export type StatisticsByFacultyItem = {
-  id: string;
-  organizationName: string;
-  lecturerSurveyCount: number;
-  departments: StatisticsByFacultyItemDepartmentsItem[];
-};
+    id: string
+    organizationName: string
+    lecturerSurveyCount: number
+    departments: StatisticsByFacultyItemDepartmentsItem[]
+}

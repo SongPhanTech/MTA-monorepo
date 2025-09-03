@@ -5,4 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface TerminateSessionsByUserId { [key: string]: unknown }
+export interface TerminateSessionsByUserId {
+    [key: string]: unknown
+}

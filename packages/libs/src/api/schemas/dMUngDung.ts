@@ -49,35 +49,35 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type DMUngDung = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sMa?: string | null;
-  /** @nullable */
-  sTen?: string | null;
-  /** @nullable */
-  sMoTa?: string | null;
-  /** @nullable */
-  sIConName?: string | null;
-  /** @nullable */
-  sLink?: string | null;
-  /** @nullable */
-  sTarget?: string | null;
-  bTatCaNguoiDung?: boolean;
-  bTatCaNhanVien?: boolean;
-  /** @nullable */
-  sClientId?: string | null;
-  /** @nullable */
-  sClientSecret?: string | null;
-  /** @nullable */
-  sRedirectDefault?: string | null;
-  bActive?: boolean;
-  bDeleted?: boolean;
-  bSystem?: boolean;
-  /** @nullable */
-  iDictionaryKey?: number | null;
-  /** @nullable */
-  iSTT?: number | null;
-};
+    Id?: string
+    /** @nullable */
+    sMa?: string | null
+    /** @nullable */
+    sTen?: string | null
+    /** @nullable */
+    sMoTa?: string | null
+    /** @nullable */
+    sIConName?: string | null
+    /** @nullable */
+    sLink?: string | null
+    /** @nullable */
+    sTarget?: string | null
+    bTatCaNguoiDung?: boolean
+    bTatCaNhanVien?: boolean
+    /** @nullable */
+    sClientId?: string | null
+    /** @nullable */
+    sClientSecret?: string | null
+    /** @nullable */
+    sRedirectDefault?: string | null
+    bActive?: boolean
+    bDeleted?: boolean
+    bSystem?: boolean
+    /** @nullable */
+    iDictionaryKey?: number | null
+    /** @nullable */
+    iSTT?: number | null
+}

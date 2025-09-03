@@ -6,8 +6,8 @@
  */
 
 export type GetApiStatsStudentDistributionByTrainingCourseFilteredParams = {
-/**
- * DM_DonVi.Id - ID đơn vị quản lý
- */
-managementOrganizationId: string;
-};
+    /**
+     * DM_DonVi.Id - ID đơn vị quản lý
+     */
+    managementOrganizationId: string
+}

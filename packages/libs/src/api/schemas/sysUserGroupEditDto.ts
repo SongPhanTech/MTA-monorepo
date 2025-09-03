@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { NhomNguoiDung } from './nhomNguoiDung';
-import type { SysUserGroupEditDtoState } from './sysUserGroupEditDtoState';
+import type { NhomNguoiDung } from './nhomNguoiDung'
+import type { SysUserGroupEditDtoState } from './sysUserGroupEditDtoState'
 
 export type SysUserGroupEditDto = NhomNguoiDung & {
-  /** @nullable */
-  State?: SysUserGroupEditDtoState;
-};
+    /** @nullable */
+    State?: SysUserGroupEditDtoState
+}

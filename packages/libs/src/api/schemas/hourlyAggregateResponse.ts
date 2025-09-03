@@ -4,14 +4,14 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { HourlyAggregates } from './hourlyAggregates';
+import type { HourlyAggregates } from './hourlyAggregates'
 
 export interface HourlyAggregateResponse {
-  /** ID của cuộc khảo sát. */
-  surveyId: string;
-  /** Tổng số lượt hoàn thành trong toàn bộ khảo sát. */
-  totalCompletions: number;
-  /** Tổng số ngày khảo sát đã diễn ra (dựa trên dữ liệu). */
-  surveyDurationInDays: number;
-  hourlyAggregates: HourlyAggregates;
+    /** ID của cuộc khảo sát. */
+    surveyId: string
+    /** Tổng số lượt hoàn thành trong toàn bộ khảo sát. */
+    totalCompletions: number
+    /** Tổng số ngày khảo sát đã diễn ra (dựa trên dữ liệu). */
+    surveyDurationInDays: number
+    hourlyAggregates: HourlyAggregates
 }

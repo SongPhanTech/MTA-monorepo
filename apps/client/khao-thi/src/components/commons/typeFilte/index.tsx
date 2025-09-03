@@ -127,6 +127,7 @@ export type FilterProps = {
     scoreScalesId?: string[]
     hasExam?: boolean
     fax?: string
+    score?: 'asc' | 'desc'
 }
 
 export type ColumnTypeProps = ColumnsType & {

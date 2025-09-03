@@ -49,30 +49,30 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type PolicyTime = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sPolicyId?: string | null;
-  /** @nullable */
-  bTatCaNgayTrongTuan?: boolean | null;
-  /** @nullable */
-  bT2?: boolean | null;
-  /** @nullable */
-  bT3?: boolean | null;
-  /** @nullable */
-  bT4?: boolean | null;
-  /** @nullable */
-  bT5?: boolean | null;
-  /** @nullable */
-  bT6?: boolean | null;
-  /** @nullable */
-  bT7?: boolean | null;
-  /** @nullable */
-  bCN?: boolean | null;
-  /** @nullable */
-  dTu?: string | null;
-  /** @nullable */
-  dDen?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sPolicyId?: string | null
+    /** @nullable */
+    bTatCaNgayTrongTuan?: boolean | null
+    /** @nullable */
+    bT2?: boolean | null
+    /** @nullable */
+    bT3?: boolean | null
+    /** @nullable */
+    bT4?: boolean | null
+    /** @nullable */
+    bT5?: boolean | null
+    /** @nullable */
+    bT6?: boolean | null
+    /** @nullable */
+    bT7?: boolean | null
+    /** @nullable */
+    bCN?: boolean | null
+    /** @nullable */
+    dTu?: string | null
+    /** @nullable */
+    dDen?: string | null
+}

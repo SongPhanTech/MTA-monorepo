@@ -6,8 +6,8 @@
  */
 
 export type GetApiStatsSubjectClassStatistics200ClassesItem = {
-  id: string;
-  name: string;
-  fillRate: number;
-  failureRate: number;
-};
+    id: string
+    name: string
+    fillRate: number
+    failureRate: number
+}

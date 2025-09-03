@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { GanVaiTroVaoNhom } from './ganVaiTroVaoNhom';
-import type { GanVaiTroVaoNhomEditDtoState } from './ganVaiTroVaoNhomEditDtoState';
+import type { GanVaiTroVaoNhom } from './ganVaiTroVaoNhom'
+import type { GanVaiTroVaoNhomEditDtoState } from './ganVaiTroVaoNhomEditDtoState'
 
 export type GanVaiTroVaoNhomEditDto = GanVaiTroVaoNhom & {
-  /** @nullable */
-  State?: GanVaiTroVaoNhomEditDtoState;
-  /** @nullable */
-  sTenVaiTro?: string | null;
-};
+    /** @nullable */
+    State?: GanVaiTroVaoNhomEditDtoState
+    /** @nullable */
+    sTenVaiTro?: string | null
+}

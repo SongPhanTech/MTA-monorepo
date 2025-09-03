@@ -49,52 +49,52 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type UserProfile = BaseEntity & {
-  /** @nullable */
-  id?: string | null;
-  /** @nullable */
-  code?: string | null;
-  /** @nullable */
-  lastName?: string | null;
-  /** @nullable */
-  firstName?: string | null;
-  /** @nullable */
-  fullname?: string | null;
-  /** @nullable */
-  dateOfBirth?: string | null;
-  /** @nullable */
-  genderId?: string | null;
-  /** @nullable */
-  sDM_DonViId?: string | null;
-  /** @nullable */
-  sDM_ViTriCongViecId?: string | null;
-  /** @nullable */
-  sQuanlyTrucTiepId?: string | null;
-  /** @nullable */
-  nationalId?: string | null;
-  /** @nullable */
-  provinceCurrentAddressId?: string | null;
-  /** @nullable */
-  communeCurrentAddressId?: string | null;
-  /** @nullable */
-  phoneNumber?: string | null;
-  /** @nullable */
-  email?: string | null;
-  /** @nullable */
-  currentAddress?: string | null;
-  /** @nullable */
-  avatar?: string | null;
-  bLaNguoiDung?: boolean;
-  bLaCanBoNhanVien?: boolean;
-  bLaHocVien?: boolean;
-  active?: boolean;
-  /** @nullable */
-  deletedAt?: string | null;
-  bSystem?: boolean;
-  /** @nullable */
-  iDictionaryKey?: number | null;
-  /** @nullable */
-  idCardNumber?: string | null;
-};
+    /** @nullable */
+    id?: string | null
+    /** @nullable */
+    code?: string | null
+    /** @nullable */
+    lastName?: string | null
+    /** @nullable */
+    firstName?: string | null
+    /** @nullable */
+    fullname?: string | null
+    /** @nullable */
+    dateOfBirth?: string | null
+    /** @nullable */
+    genderId?: string | null
+    /** @nullable */
+    sDM_DonViId?: string | null
+    /** @nullable */
+    sDM_ViTriCongViecId?: string | null
+    /** @nullable */
+    sQuanlyTrucTiepId?: string | null
+    /** @nullable */
+    nationalId?: string | null
+    /** @nullable */
+    provinceCurrentAddressId?: string | null
+    /** @nullable */
+    communeCurrentAddressId?: string | null
+    /** @nullable */
+    phoneNumber?: string | null
+    /** @nullable */
+    email?: string | null
+    /** @nullable */
+    currentAddress?: string | null
+    /** @nullable */
+    avatar?: string | null
+    bLaNguoiDung?: boolean
+    bLaCanBoNhanVien?: boolean
+    bLaHocVien?: boolean
+    active?: boolean
+    /** @nullable */
+    deletedAt?: string | null
+    bSystem?: boolean
+    /** @nullable */
+    iDictionaryKey?: number | null
+    /** @nullable */
+    idCardNumber?: string | null
+}

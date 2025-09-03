@@ -4,10 +4,10 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { OrganizationId } from './organizationId';
-import type { SemesterId } from './semesterId';
+import type { OrganizationId } from './organizationId'
+import type { SemesterId } from './semesterId'
 
 export type ExportPhanCongGiangDayParams = {
-organizationId: OrganizationId;
-semesterId: SemesterId;
-};
+    organizationId: OrganizationId
+    semesterId: SemesterId
+}

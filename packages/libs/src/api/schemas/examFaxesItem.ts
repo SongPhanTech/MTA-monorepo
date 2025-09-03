@@ -6,9 +6,9 @@
  */
 
 export type ExamFaxesItem = {
-  id: string;
-  /** @nullable */
-  fax?: string | null;
-  /** @nullable */
-  score?: number | null;
-};
+    id: string
+    /** @nullable */
+    fax?: string | null
+    /** @nullable */
+    score?: number | null
+}

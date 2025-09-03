@@ -157,7 +157,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
                 const trainingBlock = trainingBlocks[trainingBlocks.length - 1]
                 if (trainingBlock) {
                     trainingBlock.electiveCreditsRequired =
-                        Number.parseInt(row[cols.credit] || '') || 0
+                        Number.parseInt(row[cols.credit] || '', 10) || 0
                 }
             } else {
                 isMandatory = true
@@ -174,8 +174,8 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
                 (row[cols.inCurriculum] && row[cols.credit]))
         ) {
             const credit =
-                Number.parseInt(row[cols.credit] || '') ||
-                Number.parseInt(row[cols.structure] || '')
+                Number.parseInt(row[cols.credit] || '', 10) ||
+                Number.parseInt(row[cols.structure] || '', 10)
             if (!Number.isInteger(credit)) {
                 errors.push({
                     sheetRef: sheetName,
@@ -183,7 +183,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
                     message: 'Số tín chỉ không hợp lệ',
                 })
             }
-            const period = Number.parseInt(row[cols.period] || '')
+            const period = Number.parseInt(row[cols.period] || '', 10)
             if (!Number.isInteger(period)) {
                 errors.push({
                     sheetRef: sheetName,

@@ -49,29 +49,29 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type ConfigTemplatePrintDetail = BaseEntity & {
-  Id?: number;
-  /** @nullable */
-  iConfigTemplatePrintId?: number | null;
-  /** @nullable */
-  sTableName?: string | null;
-  iResultIndex?: number;
-  /** @nullable */
-  sKey?: string | null;
-  /** @nullable */
-  sFieldName?: string | null;
-  /** @nullable */
-  sGroupName?: string | null;
-  bIsTextWrapped?: boolean;
-  /** @nullable */
-  iDataType?: number | null;
-  /** @nullable */
-  sStyle?: string | null;
-  /** @nullable */
-  sEnumName?: string | null;
-  /** @nullable */
-  bCotDong?: boolean | null;
-  iCotDongResultIndex?: number;
-};
+    Id?: number
+    /** @nullable */
+    iConfigTemplatePrintId?: number | null
+    /** @nullable */
+    sTableName?: string | null
+    iResultIndex?: number
+    /** @nullable */
+    sKey?: string | null
+    /** @nullable */
+    sFieldName?: string | null
+    /** @nullable */
+    sGroupName?: string | null
+    bIsTextWrapped?: boolean
+    /** @nullable */
+    iDataType?: number | null
+    /** @nullable */
+    sStyle?: string | null
+    /** @nullable */
+    sEnumName?: string | null
+    /** @nullable */
+    bCotDong?: boolean | null
+    iCotDongResultIndex?: number
+}

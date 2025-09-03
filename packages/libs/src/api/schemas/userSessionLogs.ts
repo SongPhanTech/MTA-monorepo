@@ -49,24 +49,24 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type UserSessionLogs = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sEventName?: string | null;
-  /** @nullable */
-  sAppCode?: string | null;
-  /** @nullable */
-  sTenUngDung?: string | null;
-  /** @nullable */
-  sUserId?: string | null;
-  /** @nullable */
-  sUserName?: string | null;
-  /** @nullable */
-  sFullName?: string | null;
-  /** @nullable */
-  dLogTime?: string | null;
-  /** @nullable */
-  sIPAddress?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sEventName?: string | null
+    /** @nullable */
+    sAppCode?: string | null
+    /** @nullable */
+    sTenUngDung?: string | null
+    /** @nullable */
+    sUserId?: string | null
+    /** @nullable */
+    sUserName?: string | null
+    /** @nullable */
+    sFullName?: string | null
+    /** @nullable */
+    dLogTime?: string | null
+    /** @nullable */
+    sIPAddress?: string | null
+}

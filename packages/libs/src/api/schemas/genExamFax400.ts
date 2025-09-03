@@ -6,5 +6,5 @@
  */
 
 export type GenExamFax400 = {
-  message: string;
-};
+    message: string
+}

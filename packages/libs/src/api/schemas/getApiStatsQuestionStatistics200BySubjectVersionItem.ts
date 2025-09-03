@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsQuestionStatistics200BySubjectVersionItem = {
-  id: string;
-  name: string;
-  count: number;
-};
+    id: string
+    name: string
+    count: number
+}

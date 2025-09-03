@@ -6,5 +6,5 @@
  */
 
 export type GetDissatisfiedCountByFacultyParams = {
-surveyId: string;
-};
+    surveyId: string
+}

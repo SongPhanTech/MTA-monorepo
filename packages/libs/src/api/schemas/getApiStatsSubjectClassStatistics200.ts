@@ -4,9 +4,9 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetApiStatsSubjectClassStatistics200ClassesItem } from './getApiStatsSubjectClassStatistics200ClassesItem';
+import type { GetApiStatsSubjectClassStatistics200ClassesItem } from './getApiStatsSubjectClassStatistics200ClassesItem'
 
 export type GetApiStatsSubjectClassStatistics200 = {
-  totalClasses: number;
-  classes: GetApiStatsSubjectClassStatistics200ClassesItem[];
-};
+    totalClasses: number
+    classes: GetApiStatsSubjectClassStatistics200ClassesItem[]
+}

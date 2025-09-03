@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { ManagementDbOption } from './managementDbOption';
-import type { ManagementDbOptionEditDtoState } from './managementDbOptionEditDtoState';
+import type { ManagementDbOption } from './managementDbOption'
+import type { ManagementDbOptionEditDtoState } from './managementDbOptionEditDtoState'
 
 export type ManagementDbOptionEditDto = ManagementDbOption & {
-  /** @nullable */
-  State?: ManagementDbOptionEditDtoState;
-};
+    /** @nullable */
+    State?: ManagementDbOptionEditDtoState
+}

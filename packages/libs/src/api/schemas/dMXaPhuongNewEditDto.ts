@@ -49,12 +49,12 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMXaPhuongNew } from './dMXaPhuongNew';
-import type { DMXaPhuongNewEditDtoState } from './dMXaPhuongNewEditDtoState';
+import type { DMXaPhuongNew } from './dMXaPhuongNew'
+import type { DMXaPhuongNewEditDtoState } from './dMXaPhuongNewEditDtoState'
 
 export type DMXaPhuongNewEditDto = DMXaPhuongNew & {
-  /** @nullable */
-  State?: DMXaPhuongNewEditDtoState;
-  /** @nullable */
-  sTenTinh?: string | null;
-};
+    /** @nullable */
+    State?: DMXaPhuongNewEditDtoState
+    /** @nullable */
+    sTenTinh?: string | null
+}

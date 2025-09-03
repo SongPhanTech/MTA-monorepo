@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SurveyTypeDetailsItem } from './surveyTypeDetailsItem';
+import type { SurveyTypeDetailsItem } from './surveyTypeDetailsItem'
 
-export type SurveyTypeDetails = SurveyTypeDetailsItem[];
+export type SurveyTypeDetails = SurveyTypeDetailsItem[]

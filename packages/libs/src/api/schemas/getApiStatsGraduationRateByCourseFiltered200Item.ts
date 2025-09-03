@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsGraduationRateByCourseFiltered200Item = {
-  trainingCourseId: string;
-  name: string;
-  graduationRate: number;
-};
+    trainingCourseId: string
+    name: string
+    graduationRate: number
+}

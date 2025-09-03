@@ -6,6 +6,6 @@
  */
 
 export type GetFacultyStatisticsByParentUnitParams = {
-surveyId: string;
-organizationId: string;
-};
+    surveyId: string
+    organizationId: string
+}

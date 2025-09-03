@@ -6,6 +6,6 @@
  */
 
 export type GetApiStatsGraduationRankingStatistics200Item = {
-  ranking: string;
-  count: number;
-};
+    ranking: string
+    count: number
+}

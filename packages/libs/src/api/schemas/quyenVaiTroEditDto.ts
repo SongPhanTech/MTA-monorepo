@@ -49,22 +49,22 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { QuyenVaiTro } from './quyenVaiTro';
-import type { QuyenVaiTroEditDtoState } from './quyenVaiTroEditDtoState';
+import type { QuyenVaiTro } from './quyenVaiTro'
+import type { QuyenVaiTroEditDtoState } from './quyenVaiTroEditDtoState'
 
 export type QuyenVaiTroEditDto = QuyenVaiTro & {
-  /** @nullable */
-  State?: QuyenVaiTroEditDtoState;
-  /** @nullable */
-  sTenVaiTro?: string | null;
-  /** @nullable */
-  sTenNhanVien?: string | null;
-  /** @nullable */
-  sUserName?: string | null;
-  /** @nullable */
-  sEmail?: string | null;
-  /** @nullable */
-  sSdt?: string | null;
-  /** @nullable */
-  sCCCD?: string | null;
-};
+    /** @nullable */
+    State?: QuyenVaiTroEditDtoState
+    /** @nullable */
+    sTenVaiTro?: string | null
+    /** @nullable */
+    sTenNhanVien?: string | null
+    /** @nullable */
+    sUserName?: string | null
+    /** @nullable */
+    sEmail?: string | null
+    /** @nullable */
+    sSdt?: string | null
+    /** @nullable */
+    sCCCD?: string | null
+}

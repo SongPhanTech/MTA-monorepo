@@ -6,6 +6,6 @@
  */
 
 export interface ImportPhanCongGiangDay {
-  file: Blob;
-  semesterId: string;
+    file: Blob
+    semesterId: string
 }

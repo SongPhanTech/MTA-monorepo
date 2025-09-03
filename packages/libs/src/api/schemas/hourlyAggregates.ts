@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { HourlyAggregatesItem } from './hourlyAggregatesItem';
+import type { HourlyAggregatesItem } from './hourlyAggregatesItem'
 
-export type HourlyAggregates = HourlyAggregatesItem[];
+export type HourlyAggregates = HourlyAggregatesItem[]

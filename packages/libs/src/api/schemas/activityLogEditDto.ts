@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { ActivityLog } from './activityLog';
-import type { ActivityLogEditDtoState } from './activityLogEditDtoState';
+import type { ActivityLog } from './activityLog'
+import type { ActivityLogEditDtoState } from './activityLogEditDtoState'
 
 export type ActivityLogEditDto = ActivityLog & {
-  /** @nullable */
-  State?: ActivityLogEditDtoState;
-};
+    /** @nullable */
+    State?: ActivityLogEditDtoState
+}

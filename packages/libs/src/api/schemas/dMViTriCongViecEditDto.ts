@@ -49,23 +49,23 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMViTriCongViec } from './dMViTriCongViec';
-import type { DMViTriCongViecEditDtoState } from './dMViTriCongViecEditDtoState';
-import type { DMViTriCongViecDonViCTEditDto } from './dMViTriCongViecDonViCTEditDto';
+import type { DMViTriCongViec } from './dMViTriCongViec'
+import type { DMViTriCongViecDonViCTEditDto } from './dMViTriCongViecDonViCTEditDto'
+import type { DMViTriCongViecEditDtoState } from './dMViTriCongViecEditDtoState'
 
 export type DMViTriCongViecEditDto = DMViTriCongViec & {
-  /** @nullable */
-  State?: DMViTriCongViecEditDtoState;
-  /** @nullable */
-  sTenNhomViTri?: string | null;
-  /** @nullable */
-  sTenChucDanh?: string | null;
-  /** @nullable */
-  sTenDonVi?: string | null;
-  /** @nullable */
-  DM_ViTriCongViec_DonViCTDetails?: DMViTriCongViecDonViCTEditDto[] | null;
-  /** @nullable */
-  readonly sTenDonVis?: string | null;
-  /** @nullable */
-  readonly sDM_DonViIds?: string | null;
-};
+    /** @nullable */
+    State?: DMViTriCongViecEditDtoState
+    /** @nullable */
+    sTenNhomViTri?: string | null
+    /** @nullable */
+    sTenChucDanh?: string | null
+    /** @nullable */
+    sTenDonVi?: string | null
+    /** @nullable */
+    DM_ViTriCongViec_DonViCTDetails?: DMViTriCongViecDonViCTEditDto[] | null
+    /** @nullable */
+    readonly sTenDonVis?: string | null
+    /** @nullable */
+    readonly sDM_DonViIds?: string | null
+}

@@ -49,23 +49,23 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type DMXaPhuongNew = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sDM_TinhId_New?: string | null;
-  /** @nullable */
-  sMa?: string | null;
-  /** @nullable */
-  sTen?: string | null;
-  /** @nullable */
-  iSTT?: number | null;
-  bActive?: boolean;
-  bDeleted?: boolean;
-  bSystem?: boolean;
-  /** @nullable */
-  iDictionaryKey?: number | null;
-  /** @nullable */
-  iDM_DonViHanhChinhId?: number | null;
-};
+    Id?: string
+    /** @nullable */
+    sDM_TinhId_New?: string | null
+    /** @nullable */
+    sMa?: string | null
+    /** @nullable */
+    sTen?: string | null
+    /** @nullable */
+    iSTT?: number | null
+    bActive?: boolean
+    bDeleted?: boolean
+    bSystem?: boolean
+    /** @nullable */
+    iDictionaryKey?: number | null
+    /** @nullable */
+    iDM_DonViHanhChinhId?: number | null
+}

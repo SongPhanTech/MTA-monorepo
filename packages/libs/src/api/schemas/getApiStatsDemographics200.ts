@@ -4,14 +4,15 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetApiStatsDemographics200ByGenderItem } from './getApiStatsDemographics200ByGenderItem';
-import type { GetApiStatsDemographics200ByEthnicityItem } from './getApiStatsDemographics200ByEthnicityItem';
-import type { GetApiStatsDemographics200ByReligionItem } from './getApiStatsDemographics200ByReligionItem';
-import type { GetApiStatsDemographics200ByProvinceItem } from './getApiStatsDemographics200ByProvinceItem';
+
+import type { GetApiStatsDemographics200ByEthnicityItem } from './getApiStatsDemographics200ByEthnicityItem'
+import type { GetApiStatsDemographics200ByGenderItem } from './getApiStatsDemographics200ByGenderItem'
+import type { GetApiStatsDemographics200ByProvinceItem } from './getApiStatsDemographics200ByProvinceItem'
+import type { GetApiStatsDemographics200ByReligionItem } from './getApiStatsDemographics200ByReligionItem'
 
 export type GetApiStatsDemographics200 = {
-  byGender: GetApiStatsDemographics200ByGenderItem[];
-  byEthnicity: GetApiStatsDemographics200ByEthnicityItem[];
-  byReligion: GetApiStatsDemographics200ByReligionItem[];
-  byProvince: GetApiStatsDemographics200ByProvinceItem[];
-};
+    byGender: GetApiStatsDemographics200ByGenderItem[]
+    byEthnicity: GetApiStatsDemographics200ByEthnicityItem[]
+    byReligion: GetApiStatsDemographics200ByReligionItem[]
+    byProvince: GetApiStatsDemographics200ByProvinceItem[]
+}

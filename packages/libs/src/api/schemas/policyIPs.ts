@@ -49,14 +49,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type PolicyIPs = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sPolicyId?: string | null;
-  /** @nullable */
-  sTen?: string | null;
-  /** @nullable */
-  sIPAddress?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sPolicyId?: string | null
+    /** @nullable */
+    sTen?: string | null
+    /** @nullable */
+    sIPAddress?: string | null
+}

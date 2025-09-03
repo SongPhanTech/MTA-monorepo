@@ -8,4 +8,4 @@
 /**
  * Bước nhảy
  */
-export type Step = number;
+export type Step = number

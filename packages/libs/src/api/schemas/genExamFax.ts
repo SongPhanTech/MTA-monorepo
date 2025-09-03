@@ -4,14 +4,15 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExamId } from './examId';
-import type { Start } from './start';
-import type { Count } from './count';
-import type { Step } from './step';
+
+import type { Count } from './count'
+import type { ExamId } from './examId'
+import type { Start } from './start'
+import type { Step } from './step'
 
 export interface GenExamFax {
-  examId: ExamId;
-  start: Start;
-  count: Count;
-  step?: Step;
+    examId: ExamId
+    start: Start
+    count: Count
+    step?: Step
 }

@@ -6,8 +6,8 @@
  */
 
 export type GetApiStatsExamParticipantsBySemesterParams = {
-/**
- * Semester.id - ID học kỳ
- */
-semesterId: string;
-};
+    /**
+     * Semester.id - ID học kỳ
+     */
+    semesterId: string
+}

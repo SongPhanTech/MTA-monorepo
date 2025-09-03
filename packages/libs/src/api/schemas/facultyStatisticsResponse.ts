@@ -4,14 +4,14 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ParentUnitInfo } from './parentUnitInfo';
-import type { StatisticsByFaculty } from './statisticsByFaculty';
+import type { ParentUnitInfo } from './parentUnitInfo'
+import type { StatisticsByFaculty } from './statisticsByFaculty'
 
 export interface FacultyStatisticsResponse {
-  /** ID của cuộc khảo sát được thống kê. */
-  surveyId: string;
-  parentUnitInfo: ParentUnitInfo;
-  /** Tổng số giảng viên được khảo sát trong đơn vị cha. */
-  lecturerSurveyCount: number;
-  statisticsByFaculty: StatisticsByFaculty;
+    /** ID của cuộc khảo sát được thống kê. */
+    surveyId: string
+    parentUnitInfo: ParentUnitInfo
+    /** Tổng số giảng viên được khảo sát trong đơn vị cha. */
+    lecturerSurveyCount: number
+    statisticsByFaculty: StatisticsByFaculty
 }

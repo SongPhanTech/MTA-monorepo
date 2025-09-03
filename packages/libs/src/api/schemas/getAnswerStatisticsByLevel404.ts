@@ -6,5 +6,5 @@
  */
 
 export type GetAnswerStatisticsByLevel404 = {
-  message: string;
-};
+    message: string
+}

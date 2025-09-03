@@ -6,8 +6,8 @@
  */
 
 export type GetApiStatsLecturerWorkload200Item = {
-  lecturerId: string;
-  name: string;
-  classCount: number;
-  totalPeriods: number;
-};
+    lecturerId: string
+    name: string
+    classCount: number
+    totalPeriods: number
+}

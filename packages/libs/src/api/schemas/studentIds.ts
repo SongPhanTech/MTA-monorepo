@@ -8,4 +8,4 @@
 /**
  * Danh sách ID học viên
  */
-export type StudentIds = string[];
+export type StudentIds = string[]

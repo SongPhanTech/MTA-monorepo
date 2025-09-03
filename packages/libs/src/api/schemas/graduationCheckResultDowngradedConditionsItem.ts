@@ -4,25 +4,25 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GraduationCheckResultDowngradedConditionsItemField } from './graduationCheckResultDowngradedConditionsItemField';
-import type { GraduationCheckResultDowngradedConditionsItemOperator } from './graduationCheckResultDowngradedConditionsItemOperator';
+import type { GraduationCheckResultDowngradedConditionsItemField } from './graduationCheckResultDowngradedConditionsItemField'
+import type { GraduationCheckResultDowngradedConditionsItemOperator } from './graduationCheckResultDowngradedConditionsItemOperator'
 
 export type GraduationCheckResultDowngradedConditionsItem = {
-  id: string;
-  /** @nullable */
-  code?: string | null;
-  active?: boolean;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt?: string | null;
-  field: GraduationCheckResultDowngradedConditionsItemField;
-  operator: GraduationCheckResultDowngradedConditionsItemOperator;
-  invert?: boolean;
-  value: number;
-  tuple: string[];
-};
+    id: string
+    /** @nullable */
+    code?: string | null
+    active?: boolean
+    /** @nullable */
+    description?: string | null
+    /** @nullable */
+    deletedAt?: string | null
+    /** @nullable */
+    createdAt?: string | null
+    /** @nullable */
+    updatedAt?: string | null
+    field: GraduationCheckResultDowngradedConditionsItemField
+    operator: GraduationCheckResultDowngradedConditionsItemOperator
+    invert?: boolean
+    value: number
+    tuple: string[]
+}

@@ -6,16 +6,16 @@
  */
 
 export interface Group {
-  id: string;
-  /** @nullable */
-  code?: string | null;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt: string | null;
-  name: string;
+    id: string
+    /** @nullable */
+    code?: string | null
+    /** @nullable */
+    description?: string | null
+    /** @nullable */
+    deletedAt?: string | null
+    /** @nullable */
+    createdAt?: string | null
+    /** @nullable */
+    updatedAt: string | null
+    name: string
 }

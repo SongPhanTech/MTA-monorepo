@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMCapBac } from './dMCapBac';
-import type { DMCapBacEditDtoState } from './dMCapBacEditDtoState';
+import type { DMCapBac } from './dMCapBac'
+import type { DMCapBacEditDtoState } from './dMCapBacEditDtoState'
 
 export type DMCapBacEditDto = DMCapBac & {
-  /** @nullable */
-  State?: DMCapBacEditDtoState;
-};
+    /** @nullable */
+    State?: DMCapBacEditDtoState
+}

@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { UserSessionLogs } from './userSessionLogs';
-import type { UserSessionLogsEditDtoState } from './userSessionLogsEditDtoState';
+import type { UserSessionLogs } from './userSessionLogs'
+import type { UserSessionLogsEditDtoState } from './userSessionLogsEditDtoState'
 
 export type UserSessionLogsEditDto = UserSessionLogs & {
-  /** @nullable */
-  State?: UserSessionLogsEditDtoState;
-};
+    /** @nullable */
+    State?: UserSessionLogsEditDtoState
+}

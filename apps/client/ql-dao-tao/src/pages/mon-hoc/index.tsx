@@ -2,7 +2,7 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { PutSubjectModal } from '@components/modal'
-import { DEFAULT_PAGINATE_SIZE, SUBJECT_EQUIVALENT_TYPE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import {
@@ -194,15 +194,6 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                 dataIndex: 'managementOrganization',
                                 align: 'center',
                                 render: (value) => (value?.name ? value?.name : ''),
-                            },
-                            {
-                                title: 'Loại môn học tương đương',
-                                dataIndex: 'subjectEquivalentType',
-                                align: 'center',
-                                render: (value: any) =>
-                                    SUBJECT_EQUIVALENT_TYPE[
-                                        value as keyof typeof SUBJECT_EQUIVALENT_TYPE
-                                    ],
                             },
                             {
                                 title: 'Tín chỉ',

@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { Feedback } from './feedback';
-import type { FeedbackEditDtoState } from './feedbackEditDtoState';
+import type { Feedback } from './feedback'
+import type { FeedbackEditDtoState } from './feedbackEditDtoState'
 
 export type FeedbackEditDto = Feedback & {
-  /** @nullable */
-  State?: FeedbackEditDtoState;
-};
+    /** @nullable */
+    State?: FeedbackEditDtoState
+}

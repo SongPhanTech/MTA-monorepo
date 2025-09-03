@@ -4,26 +4,26 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GraduationCheckResultDiplomaTypeType } from './graduationCheckResultDiplomaTypeType';
+import type { GraduationCheckResultDiplomaTypeType } from './graduationCheckResultDiplomaTypeType'
 
 /**
  * @nullable
  */
 export type GraduationCheckResultDiplomaType = {
-  id: string;
-  /** @nullable */
-  code?: string | null;
-  active?: boolean;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt?: string | null;
-  name: string;
-  /** @nullable */
-  englishName?: string | null;
-  type: GraduationCheckResultDiplomaTypeType;
-} | null;
+    id: string
+    /** @nullable */
+    code?: string | null
+    active?: boolean
+    /** @nullable */
+    description?: string | null
+    /** @nullable */
+    deletedAt?: string | null
+    /** @nullable */
+    createdAt?: string | null
+    /** @nullable */
+    updatedAt?: string | null
+    name: string
+    /** @nullable */
+    englishName?: string | null
+    type: GraduationCheckResultDiplomaTypeType
+} | null

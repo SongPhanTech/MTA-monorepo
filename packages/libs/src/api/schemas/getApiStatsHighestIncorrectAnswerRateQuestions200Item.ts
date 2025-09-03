@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsHighestIncorrectAnswerRateQuestions200Item = {
-  questionId: string;
-  content: string;
-  incorrectRate: number;
-};
+    questionId: string
+    content: string
+    incorrectRate: number
+}

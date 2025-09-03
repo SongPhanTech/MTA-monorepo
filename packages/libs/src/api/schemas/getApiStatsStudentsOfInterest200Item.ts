@@ -6,9 +6,9 @@
  */
 
 export type GetApiStatsStudentsOfInterest200Item = {
-  id: string;
-  name: string;
-  academicWarningLevel: number;
-  cumulativeDebtCredits: number;
-  gpa: number;
-};
+    id: string
+    name: string
+    academicWarningLevel: number
+    cumulativeDebtCredits: number
+    gpa: number
+}

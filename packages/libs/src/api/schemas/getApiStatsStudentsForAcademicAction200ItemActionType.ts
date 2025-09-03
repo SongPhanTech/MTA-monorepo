@@ -5,12 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetApiStatsStudentsForAcademicAction200ItemActionType = typeof GetApiStatsStudentsForAcademicAction200ItemActionType[keyof typeof GetApiStatsStudentsForAcademicAction200ItemActionType];
-
+export type GetApiStatsStudentsForAcademicAction200ItemActionType =
+    (typeof GetApiStatsStudentsForAcademicAction200ItemActionType)[keyof typeof GetApiStatsStudentsForAcademicAction200ItemActionType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiStatsStudentsForAcademicAction200ItemActionType = {
-  REPEAT_YEAR: 'REPEAT_YEAR',
-  SUSPENSION: 'SUSPENSION',
-  EXPULSION: 'EXPULSION',
-} as const;
+    REPEAT_YEAR: 'REPEAT_YEAR',
+    SUSPENSION: 'SUSPENSION',
+    EXPULSION: 'EXPULSION',
+} as const

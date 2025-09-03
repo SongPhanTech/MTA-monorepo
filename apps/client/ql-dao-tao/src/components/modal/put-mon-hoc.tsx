@@ -2,7 +2,6 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { SUBJECT_EQUIVALENT_TYPE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import type { Subject, SubjectVersion } from '@workspace/db'
@@ -44,7 +43,6 @@ const PutSubjectModal = () => {
                     data: {
                         name: output.name,
                         managementOrganizationId: output.managementOrganizationId,
-                        subjectEquivalentType: output.subjectEquivalentType,
                         credit: +output.credit,
                         period: +output.period,
                         // numberOfTheory: +output.numberOfTheory,
@@ -65,7 +63,6 @@ const PutSubjectModal = () => {
                 //         name: output.name,
                 //         managementOrganizationId:
                 //             output.managementOrganizationId,
-                //         subjectEquivalentType: output.subjectEquivalentType,
                 //         credit: +output.credit,
                 //         period: +output.period,
                 //         numberOfTheory: +output.numberOfTheory,
@@ -152,26 +149,6 @@ const PutSubjectModal = () => {
                             return {
                                 value: item.id,
                                 label: item.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="subjectEquivalentType"
-                    label="Loại môn học tương đương"
-                    normalize={(value) => (value === undefined ? null : value)}
-                    required
-                >
-                    <Select
-                        allowClear
-                        placeholder="Chọn loại môn học tương đương"
-                        options={Object.entries(SUBJECT_EQUIVALENT_TYPE).map(([key, value_]) => {
-                            return {
-                                label: value_,
-                                value: key,
                             }
                         })}
                     />

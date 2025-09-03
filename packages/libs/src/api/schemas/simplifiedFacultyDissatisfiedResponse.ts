@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SimplifiedFacultyDissatisfiedResponseStatistics } from './simplifiedFacultyDissatisfiedResponseStatistics';
+import type { SimplifiedFacultyDissatisfiedResponseStatistics } from './simplifiedFacultyDissatisfiedResponseStatistics'
 
 export interface SimplifiedFacultyDissatisfiedResponse {
-  surveyId: string;
-  universityName: string;
-  /** Đối tượng với key là tên Khoa và value là số lượng. */
-  statistics: SimplifiedFacultyDissatisfiedResponseStatistics;
+    surveyId: string
+    universityName: string
+    /** Đối tượng với key là tên Khoa và value là số lượng. */
+    statistics: SimplifiedFacultyDissatisfiedResponseStatistics
 }

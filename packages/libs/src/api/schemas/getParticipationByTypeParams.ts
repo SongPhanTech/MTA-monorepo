@@ -6,5 +6,5 @@
  */
 
 export type GetParticipationByTypeParams = {
-surveyId: string;
-};
+    surveyId: string
+}

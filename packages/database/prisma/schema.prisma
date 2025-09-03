@@ -66,18 +66,6 @@ enum TrainingLanguage {
   @@schema("ql-dao-tao")
 }
 
-enum SubjectEquivalentType {
-  NONE
-  OneByOne
-  TwoByOne
-  ThreeByOne
-  FourByOne
-  OneByTwo
-  OneByThree
-
-  @@schema("ql-dao-tao")
-}
-
 /// loại hình thi
 enum ExamType {
   OfflineWritten
@@ -95,6 +83,14 @@ enum ExamType {
 enum SubjectVersionType {
   Normal
   Project
+
+  @@schema("ql-dao-tao")
+}
+
+/// Enum để định nghĩa các vế của một quy tắc
+enum EquivalencySide {
+  SOURCE
+  TARGET
 
   @@schema("ql-dao-tao")
 }
@@ -1120,7 +1116,6 @@ model SubjectVersion {
   name                     String
   examType                 ExamType
   type                     SubjectVersionType     @default(Normal)
-  subjectEquivalentType    SubjectEquivalentType  @default(NONE)
   credit                   Int
   week                     Int?
   period                   Int                    @default(0)
@@ -1149,12 +1144,49 @@ model SubjectVersion {
   dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
   coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
   depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  equivalencyGroups        SubjectInGroup[]
   knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
   questionBanks            QuestionBank[]
 
+  @@schema("ql-dao-tao")
+}
+
+/// Đại diện cho MỘT quy tắc tương đương, ví dụ: (A + B) <=> (C)
+model EquivalencyGroup {
+  id          String           @id() @default(cuid())
+  code        String?          @unique()
+  active      Boolean          @default(true)
+  description String?          @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @default(now()) @updatedAt()
+  subjects    SubjectInGroup[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Bảng liên kết giữa Môn học và Nhóm tương đương
+model SubjectInGroup {
+  id                 String           @id() @default(cuid())
+  code               String?          @unique()
+  active             Boolean          @default(true)
+  description        String?          @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt()
+  subject            SubjectVersion   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId          String
+  equivalencyGroup   EquivalencyGroup @relation(fields: [equivalencyGroupId], references: [id], onDelete: Cascade)
+  equivalencyGroupId String
+  /// Xác định môn học này nằm ở vế nào của quy tắc tương đương
+  /// SOURCE: Vế nguồn (bên trái)
+  /// TARGET: Vế đích (bên phải)
+  side               EquivalencySide
+
+  @@unique([subjectId, equivalencyGroupId])
   @@schema("ql-dao-tao")
 }
 

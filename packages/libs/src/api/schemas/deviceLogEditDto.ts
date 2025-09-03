@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DeviceLog } from './deviceLog';
-import type { DeviceLogEditDtoState } from './deviceLogEditDtoState';
+import type { DeviceLog } from './deviceLog'
+import type { DeviceLogEditDtoState } from './deviceLogEditDtoState'
 
 export type DeviceLogEditDto = DeviceLog & {
-  /** @nullable */
-  State?: DeviceLogEditDtoState;
-};
+    /** @nullable */
+    State?: DeviceLogEditDtoState
+}

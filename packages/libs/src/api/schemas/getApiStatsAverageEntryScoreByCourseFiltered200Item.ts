@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsAverageEntryScoreByCourseFiltered200Item = {
-  trainingCourseId: string;
-  name: string;
-  avgEntryScore: number;
-};
+    trainingCourseId: string
+    name: string
+    avgEntryScore: number
+}

@@ -6,5 +6,5 @@
  */
 
 export type GetSessionsByUserId400 = {
-  message: string;
-};
+    message: string
+}

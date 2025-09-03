@@ -6,6 +6,6 @@
  */
 
 export type GetApiStatsDemographics200ByGenderItem = {
-  gender: number;
-  count: number;
-};
+    gender: number
+    count: number
+}

@@ -49,14 +49,14 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMQuanHuyen } from './dMQuanHuyen';
-import type { DMQuanHuyenEditDtoState } from './dMQuanHuyenEditDtoState';
+import type { DMQuanHuyen } from './dMQuanHuyen'
+import type { DMQuanHuyenEditDtoState } from './dMQuanHuyenEditDtoState'
 
 export type DMQuanHuyenEditDto = DMQuanHuyen & {
-  /** @nullable */
-  State?: DMQuanHuyenEditDtoState;
-  /** @nullable */
-  sTenTinh?: string | null;
-  /** @nullable */
-  sTenQuocGia?: string | null;
-};
+    /** @nullable */
+    State?: DMQuanHuyenEditDtoState
+    /** @nullable */
+    sTenTinh?: string | null
+    /** @nullable */
+    sTenQuocGia?: string | null
+}

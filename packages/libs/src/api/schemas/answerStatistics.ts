@@ -4,6 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { AnswerStatisticsItem } from './answerStatisticsItem';
+import type { AnswerStatisticsItem } from './answerStatisticsItem'
 
-export type AnswerStatistics = AnswerStatisticsItem[];
+export type AnswerStatistics = AnswerStatisticsItem[]

@@ -8,4 +8,4 @@
 /**
  * Số lượng
  */
-export type Count = number;
+export type Count = number

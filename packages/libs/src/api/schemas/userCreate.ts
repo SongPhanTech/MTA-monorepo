@@ -4,30 +4,30 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { UserCreateSystemRole } from './userCreateSystemRole';
+import type { UserCreateSystemRole } from './userCreateSystemRole'
 
 export interface UserCreate {
-  id?: string;
-  /** @nullable */
-  code?: string | null;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  deletedAt?: string | null;
-  /** @nullable */
-  createdAt?: string | null;
-  /** @nullable */
-  updatedAt?: string | null;
-  email: string;
-  userName: string;
-  name: string;
-  systemRole?: UserCreateSystemRole;
-  /** @nullable */
-  ssoId?: string | null;
-  /** @nullable */
-  phone?: string | null;
-  /** @nullable */
-  role?: string | null;
-  password: string;
-  groupIds: string[];
+    id?: string
+    /** @nullable */
+    code?: string | null
+    /** @nullable */
+    description?: string | null
+    /** @nullable */
+    deletedAt?: string | null
+    /** @nullable */
+    createdAt?: string | null
+    /** @nullable */
+    updatedAt?: string | null
+    email: string
+    userName: string
+    name: string
+    systemRole?: UserCreateSystemRole
+    /** @nullable */
+    ssoId?: string | null
+    /** @nullable */
+    phone?: string | null
+    /** @nullable */
+    role?: string | null
+    password: string
+    groupIds: string[]
 }

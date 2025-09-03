@@ -49,29 +49,29 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { BaseEntity } from './baseEntity';
+import type { BaseEntity } from './baseEntity'
 
 export type UnitInfo = BaseEntity & {
-  Id?: string;
-  /** @nullable */
-  sTenDayDu?: string | null;
-  /** @nullable */
-  sTenGiaoDich?: string | null;
-  /** @nullable */
-  sMaDonVi?: string | null;
-  /** @nullable */
-  sMaSoThue?: string | null;
-  dNgayThanhLap?: string;
-  /** @nullable */
-  sPathLogo?: string | null;
-  /** @nullable */
-  sDiaChi?: string | null;
-  /** @nullable */
-  sEmail?: string | null;
-  /** @nullable */
-  sWebsite?: string | null;
-  /** @nullable */
-  sFax?: string | null;
-  /** @nullable */
-  sDienThoai?: string | null;
-};
+    Id?: string
+    /** @nullable */
+    sTenDayDu?: string | null
+    /** @nullable */
+    sTenGiaoDich?: string | null
+    /** @nullable */
+    sMaDonVi?: string | null
+    /** @nullable */
+    sMaSoThue?: string | null
+    dNgayThanhLap?: string
+    /** @nullable */
+    sPathLogo?: string | null
+    /** @nullable */
+    sDiaChi?: string | null
+    /** @nullable */
+    sEmail?: string | null
+    /** @nullable */
+    sWebsite?: string | null
+    /** @nullable */
+    sFax?: string | null
+    /** @nullable */
+    sDienThoai?: string | null
+}

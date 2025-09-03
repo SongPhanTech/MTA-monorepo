@@ -49,21 +49,21 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { DMMenu } from './dMMenu';
-import type { DMMenuEditDtoState } from './dMMenuEditDtoState';
-import type { MenuQuyenEditDto } from './menuQuyenEditDto';
+import type { DMMenu } from './dMMenu'
+import type { DMMenuEditDtoState } from './dMMenuEditDtoState'
+import type { MenuQuyenEditDto } from './menuQuyenEditDto'
 
 export type DMMenuEditDto = DMMenu & {
-  /** @nullable */
-  State?: DMMenuEditDtoState;
-  /** @nullable */
-  sTenCha?: string | null;
-  /** @nullable */
-  sTenUngDung?: string | null;
-  /** @nullable */
-  Menu_QuyenDetails?: MenuQuyenEditDto[] | null;
-  /** @nullable */
-  readonly sTenQuyens?: string | null;
-  /** @nullable */
-  readonly sDM_QuyenIds?: string | null;
-};
+    /** @nullable */
+    State?: DMMenuEditDtoState
+    /** @nullable */
+    sTenCha?: string | null
+    /** @nullable */
+    sTenUngDung?: string | null
+    /** @nullable */
+    Menu_QuyenDetails?: MenuQuyenEditDto[] | null
+    /** @nullable */
+    readonly sTenQuyens?: string | null
+    /** @nullable */
+    readonly sDM_QuyenIds?: string | null
+}

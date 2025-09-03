@@ -53,4 +53,4 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 /**
  * @nullable
  */
-export type HttpValidationProblemDetailsErrors = {[key: string]: string[]} | null;
+export type HttpValidationProblemDetailsErrors = { [key: string]: string[] } | null

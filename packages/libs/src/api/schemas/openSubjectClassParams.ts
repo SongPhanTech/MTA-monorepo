@@ -4,18 +4,19 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SemesterId } from './semesterId';
-import type { TrainingCourseId } from './trainingCourseId';
-import type { TrainingMajorId } from './trainingMajorId';
-import type { Search } from './search';
-import type { Page } from './page';
-import type { PageSize } from './pageSize';
+
+import type { Page } from './page'
+import type { PageSize } from './pageSize'
+import type { Search } from './search'
+import type { SemesterId } from './semesterId'
+import type { TrainingCourseId } from './trainingCourseId'
+import type { TrainingMajorId } from './trainingMajorId'
 
 export type OpenSubjectClassParams = {
-semesterId: SemesterId;
-trainingCourseId?: TrainingCourseId;
-trainingMajorId?: TrainingMajorId;
-search?: Search;
-page: Page;
-pageSize: PageSize;
-};
+    semesterId: SemesterId
+    trainingCourseId?: TrainingCourseId
+    trainingMajorId?: TrainingMajorId
+    search?: Search
+    page: Page
+    pageSize: PageSize
+}

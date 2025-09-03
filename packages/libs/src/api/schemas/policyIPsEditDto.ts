@@ -49,10 +49,10 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 5. Kiểm tra phản hồi từ API để đảm bảo request thành công
  * OpenAPI spec version: v1.0
  */
-import type { PolicyIPs } from './policyIPs';
-import type { PolicyIPsEditDtoState } from './policyIPsEditDtoState';
+import type { PolicyIPs } from './policyIPs'
+import type { PolicyIPsEditDtoState } from './policyIPsEditDtoState'
 
 export type PolicyIPsEditDto = PolicyIPs & {
-  /** @nullable */
-  State?: PolicyIPsEditDtoState;
-};
+    /** @nullable */
+    State?: PolicyIPsEditDtoState
+}

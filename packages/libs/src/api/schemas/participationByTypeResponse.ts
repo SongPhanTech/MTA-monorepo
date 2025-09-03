@@ -4,12 +4,12 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ParticipationStatistics } from './participationStatistics';
+import type { ParticipationStatistics } from './participationStatistics'
 
 export interface ParticipationByTypeResponse {
-  /** ID của cuộc khảo sát được thống kê. */
-  surveyId: string;
-  /** Tổng số sinh viên đã tham gia. */
-  totalParticipants: number;
-  statistics: ParticipationStatistics;
+    /** ID của cuộc khảo sát được thống kê. */
+    surveyId: string
+    /** Tổng số sinh viên đã tham gia. */
+    totalParticipants: number
+    statistics: ParticipationStatistics
 }

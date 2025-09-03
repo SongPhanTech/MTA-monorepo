@@ -6,7 +6,7 @@
  */
 
 export type GetApiStatsAverageGpaByFixedClass200Item = {
-  fixedClassId: string;
-  name: string;
-  avgGpa: number;
-};
+    fixedClassId: string
+    name: string
+    avgGpa: number
+}
