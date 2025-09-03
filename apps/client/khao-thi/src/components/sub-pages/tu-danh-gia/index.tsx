@@ -8,19 +8,12 @@ import type {
     Evidence,
     RequirementCriterion,
 } from '@workspace/db'
-import { Button, Collapse, Form, Tabs } from 'antd'
+import { Button, Collapse, Form, InputNumber, Tabs } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
-import { useUpdateEvaluationCriterion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 
-interface SubmitForm {
-    currentSituation: string
-    strengths: string
-    weakness: string
-    actionPlan: string
-}
 export type PutRequirementCriterion = {
     opening: string
     conclusion: string
@@ -43,8 +36,6 @@ export default function EvaluatedPage({
     }>({
         tag: AddEvidenceToPeriod.name,
     })
-
-    const { mutateAsync: UpdateEvaluationCriterion } = useUpdateEvaluationCriterion()
 
     const handleSubmit = async () => {
         const dataSubmit = form.getFieldsValue()
@@ -79,6 +70,7 @@ export default function EvaluatedPage({
                                 strengths: i?.strengths,
                                 weakness: i?.weakness,
                                 actionPlan: i?.actionPlan,
+                                score: i?.score,
                             },
                         },
                     }
@@ -338,6 +330,56 @@ export default function EvaluatedPage({
                                                                         >
                                                                             <RichTextEditor
                                                                                 id={item.id}
+                                                                            />
+                                                                        </Form.Item>
+                                                                        <div className="mb-3 font-bold">
+                                                                            5. Tự đánh giá
+                                                                        </div>
+                                                                        <div className="mb-1">
+                                                                            Điểm tối thiểu:{' '}
+                                                                            <span className="font-bold">
+                                                                                {
+                                                                                    item?.scoreScale
+                                                                                        ?.minValue
+                                                                                }
+                                                                                ,{' '}
+                                                                            </span>{' '}
+                                                                            Điểm tối đa:{' '}
+                                                                            <span className="font-bold">
+                                                                                {
+                                                                                    item?.scoreScale
+                                                                                        ?.maxValue
+                                                                                }
+                                                                                ,{' '}
+                                                                            </span>{' '}
+                                                                            Điểm đạt:{' '}
+                                                                            <span className="font-bold">
+                                                                                {
+                                                                                    item?.scoreScale
+                                                                                        ?.passFrom
+                                                                                }
+                                                                            </span>
+                                                                        </div>
+                                                                        <Form.Item
+                                                                            label=""
+                                                                            name={[name, 'score']}
+                                                                        >
+                                                                            <InputNumber
+                                                                                precision={0}
+                                                                                min={
+                                                                                    item?.scoreScale
+                                                                                        ?.minValue ||
+                                                                                    1
+                                                                                }
+                                                                                max={
+                                                                                    item?.scoreScale
+                                                                                        ?.maxValue ||
+                                                                                    7
+                                                                                }
+                                                                                type="number"
+                                                                                placeholder="Nhập điểm tự đánh giá"
+                                                                                step={1}
+                                                                                className="w-full"
                                                                             />
                                                                         </Form.Item>
                                                                     </>

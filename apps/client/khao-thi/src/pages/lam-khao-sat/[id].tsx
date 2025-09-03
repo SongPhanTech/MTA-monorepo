@@ -327,8 +327,7 @@ function TakeTestPage() {
                                                             requireExplanation.includes(j?.id) && (
                                                                 <Col span={24}>
                                                                     <div className="mb-2">
-                                                                        {index + 1}.{idx + 1}.{' '}
-                                                                        {j.name}
+                                                                        Lý do :
                                                                     </div>
                                                                     <Form.Item
                                                                         name={[
@@ -338,7 +337,7 @@ function TakeTestPage() {
                                                                         ]}
                                                                         label=""
                                                                     >
-                                                                        <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                                        <Input.TextArea placeholder="Nhập lý do" />
                                                                     </Form.Item>
                                                                 </Col>
                                                             )}
@@ -346,7 +345,9 @@ function TakeTestPage() {
                                                 ) : (
                                                     <div key={j.id} className="mb-6">
                                                         <Col span={24}>
-                                                            <div className="mb-2">:</div>
+                                                            <div className="mb-2">
+                                                                {index + 1}.{idx + 1}. {j.name}
+                                                            </div>
                                                             <Form.Item
                                                                 name={[
                                                                     'responses',
@@ -355,7 +356,7 @@ function TakeTestPage() {
                                                                 ]}
                                                                 label=""
                                                             >
-                                                                <Input.TextArea placeholder="Nhập lý do" />
+                                                                <Input.TextArea placeholder="Nhập câu trả lời" />
                                                             </Form.Item>
                                                         </Col>
                                                     </div>
