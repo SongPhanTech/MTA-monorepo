@@ -2,8 +2,11 @@ import type { Editor } from '@tiptap/react'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import {
     Button as AntdButton,
+    Checkbox,
     Col,
+    Form,
     Input,
+    InputNumber,
     List,
     Modal,
     message,
@@ -34,6 +37,7 @@ import {
 import { env } from '@/env'
 import 'katex/dist/katex.min.css'
 import { PinEvidenceToPeriod } from '@components/modal'
+import { Columns, Merge, Plus, Rows, Split, Table, TableProperties, Trash2 } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Title } = Typography
@@ -77,6 +81,8 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
     const [mathModalVisible, setMathModalVisible] = useState(false)
     const [mathInput, setMathInput] = useState('')
     const [isBlockMath, setIsBlockMath] = useState(false)
+    const [tableModalVisible, setTableModalVisible] = useState(false)
+    const [tableForm] = Form.useForm()
     const { onOpen: onOpenPinEvidenceToPeriod } = useDisclosure<{
         id: string
         changeValue: (value: { value: string; label: string }) => void
@@ -281,6 +287,32 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
         [editor]
     )
 
+    const insertTable = () => {
+        if (!editor) return
+
+        tableForm
+            .validateFields()
+            .then((values) => {
+                const { rows, cols, withHeaderRow } = values
+
+                editor
+                    .chain()
+                    .focus()
+                    .insertTable({
+                        rows: Number.parseInt(rows, 10),
+                        cols: Number.parseInt(cols, 10),
+                        withHeaderRow: withHeaderRow,
+                    })
+                    .run()
+
+                setTableModalVisible(false)
+                tableForm.resetFields()
+            })
+            .catch((error) => {
+                console.error('Validation failed:', error)
+            })
+    }
+
     if (!editor) return null
 
     const groupedButtons: MenuButton[][] = [
@@ -422,6 +454,88 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
                 description: 'Thêm minh chứng',
             },
         ],
+        [
+            {
+                id: 'insertTable',
+                icon: <Table className="size-5" />,
+                onClick: () => setTableModalVisible(true),
+                isActive: editor.isActive('table'),
+                disabled: false,
+                description: 'Chèn bảng',
+            },
+            {
+                id: 'addColumnBefore',
+                icon: <Columns className="size-5" />,
+                onClick: () => editor.chain().focus().addColumnBefore().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addColumnBefore().run(),
+                description: 'Thêm cột trước',
+            },
+            {
+                id: 'addColumnAfter',
+                icon: <Plus className="size-5" />,
+                onClick: () => editor.chain().focus().addColumnAfter().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addColumnAfter().run(),
+                description: 'Thêm cột sau',
+            },
+            {
+                id: 'deleteColumn',
+                icon: <Trash2 className="size-5" />,
+                onClick: () => editor.chain().focus().deleteColumn().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().deleteColumn().run(),
+                description: 'Xóa cột',
+            },
+            {
+                id: 'addRowBefore',
+                icon: <Rows className="size-5" />,
+                onClick: () => editor.chain().focus().addRowBefore().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addRowBefore().run(),
+                description: 'Thêm hàng trước',
+            },
+            {
+                id: 'addRowAfter',
+                icon: <Plus className="size-5" />,
+                onClick: () => editor.chain().focus().addRowAfter().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addRowAfter().run(),
+                description: 'Thêm hàng sau',
+            },
+            {
+                id: 'deleteRow',
+                icon: <Trash2 className="size-5" />,
+                onClick: () => editor.chain().focus().deleteRow().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().deleteRow().run(),
+                description: 'Xóa hàng',
+            },
+            {
+                id: 'mergeCells',
+                icon: <Merge className="size-5" />,
+                onClick: () => editor.chain().focus().mergeCells().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().mergeCells().run(),
+                description: 'Gộp ô',
+            },
+            {
+                id: 'splitCell',
+                icon: <Split className="size-5" />,
+                onClick: () => editor.chain().focus().splitCell().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().splitCell().run(),
+                description: 'Tách ô',
+            },
+            {
+                id: 'deleteTable',
+                icon: <TableProperties className="size-5" />,
+                onClick: () => editor.chain().focus().deleteTable().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().deleteTable().run(),
+                description: 'Xóa bảng',
+            },
+        ],
         // [
         //     { icon: <AiOutlineUndo className="size-5" />, onClick: () => editor.chain().focus().undo().run(), isActive: false, disabled: !editor.can().chain().focus().undo().run() },
         //     { icon: <AiOutlineRedo className="size-5" />, onClick: () => editor.chain().focus().redo().run(), isActive: false, disabled: !editor.can().chain().focus().redo().run() },
@@ -458,6 +572,53 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
                     </div>
                 ))}
             </div>
+            <Modal
+                title="Chèn bảng"
+                open={tableModalVisible}
+                onOk={insertTable}
+                onCancel={() => {
+                    setTableModalVisible(false)
+                    tableForm.resetFields()
+                }}
+                footer={[
+                    <AntdButton
+                        key="back"
+                        onClick={() => {
+                            setTableModalVisible(false)
+                            tableForm.resetFields()
+                        }}
+                    >
+                        Hủy
+                    </AntdButton>,
+                    <AntdButton key="submit" type="primary" onClick={insertTable}>
+                        Chèn
+                    </AntdButton>,
+                ]}
+            >
+                <Form
+                    form={tableForm}
+                    layout="vertical"
+                    initialValues={{ rows: 3, cols: 3, withHeaderRow: true }}
+                >
+                    <Form.Item
+                        label="Số hàng"
+                        name="rows"
+                        rules={[{ required: true, message: 'Vui lòng nhập số hàng' }]}
+                    >
+                        <InputNumber min={1} className="w-full" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Số cột"
+                        name="cols"
+                        rules={[{ required: true, message: 'Vui lòng nhập số cột' }]}
+                    >
+                        <InputNumber min={1} className="w-full" />
+                    </Form.Item>
+                    <Form.Item name="withHeaderRow" valuePropName="checked">
+                        <Checkbox>Hàng tiêu đề</Checkbox>
+                    </Form.Item>
+                </Form>
+            </Modal>
             <Modal
                 title={`Nhập công thức toán học ${isBlockMath ? '(khối)' : '(nội dòng)'}`}
                 open={mathModalVisible}

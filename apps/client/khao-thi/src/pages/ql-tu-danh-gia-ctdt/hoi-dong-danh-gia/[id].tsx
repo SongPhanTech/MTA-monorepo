@@ -11,6 +11,7 @@ import {
     useFindUniqueEvaluationCouncil,
     useUpdateEvaluationCouncilMember,
 } from '@workspace/db/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -200,7 +201,11 @@ EvaluationCouncil.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
-                { title: 'Hội đồng đánh giá' },
+                { title: 'Quản lý Tự đánh giá CTĐT' },
+                {
+                    title: 'Hội đồng đánh giá',
+                    href: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                },
                 { title: 'Chi tiết hội đồng đánh giá' },
             ]}
         >

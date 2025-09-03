@@ -3,6 +3,7 @@ import AddTaiLieu from './add-tai-lieu'
 import ConfirmModal from './confirm-dialog'
 import PinEvidenceToPeriod from './ghim-minh-chung'
 import ModalPrintAllExams from './modal-print-all-exam-bank'
+import ModalPrintDotDanhGia from './modal-print-dot-danh-gia'
 import ModalPrintExamBank from './modal-print-exam-bank'
 import ModalSinhDeThiTuDong from './modal-sinh-de-thi-tu-dong'
 import ModalSinhFax from './modal-sinh-fax'
@@ -59,4 +60,5 @@ export {
     PutEvaluationCouncil,
     PutEvaluationCouncilMember,
     ModalSinhFax,
+    ModalPrintDotDanhGia,
 }

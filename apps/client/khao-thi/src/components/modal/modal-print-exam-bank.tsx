@@ -33,6 +33,8 @@ export const ModalPrintExamBank = () => {
         documentTitle: `De_thi_mon_${input?.subjectVersionName}_${input?.examCode}.pdf`,
     })
 
+    console.log(input?.data)
+
     // Xử lý xuất file Word
     const exportToWord = async () => {
         if (!input?.data) return
@@ -49,13 +51,25 @@ export const ModalPrintExamBank = () => {
                 errorLogging: true,
             })
 
+            function handleConvertHtmlToDocx(html: string) {
+                if (!html) return ''
+
+                const div = document.createElement('div')
+                div.innerHTML = renderWithMath(html)
+                let textContent = div.textContent || div.innerText || ''
+
+                textContent = textContent.replace(/\s+/g, ' ').trim()
+
+                return textContent
+            }
+
             // Format dữ liệu cho template
             const templateData = {
                 currentDate: formatDateVN(dayjs()),
                 lop: input?.subject,
                 hocPhan: input?.subjectVersionName,
                 duration: input?.duration,
-                semester: input?.semester,
+                semester: handleConvertHtmlToDocx(input?.semester || ''),
                 examCode: input?.examCode,
 
                 questions:
@@ -63,8 +77,8 @@ export const ModalPrintExamBank = () => {
                         index: index + 1,
                         point: item?.question?.point,
                         content: item.question.content
-                            ? renderWithMath(item.question.content)
-                            : '<i>Chưa có nội dung</i>',
+                            ? handleConvertHtmlToDocx(item.question.content)
+                            : 'Chưa có nội dung',
                     })) || [],
             }
             console.log(templateData)

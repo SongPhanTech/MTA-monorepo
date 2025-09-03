@@ -21,16 +21,17 @@ import { env } from '@/env'
 import { type MentionType, suggestion } from './mention'
 import TextEditorMenuBar from './TextEditorMenuBar'
 import 'katex/dist/katex.min.css'
+import Color from '@tiptap/extension-color'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import { CustomTextStyle } from './CustomTextStyle'
 
 // import Mention from '@tiptap/extension-mention'
 // import Link from '@tiptap/extension-link'
-// import Table from '@tiptap/extension-table'
-// import TableCell from '@tiptap/extension-table-cell'
-// import TableRow from '@tiptap/extension-table-row'
-// import TableHeader from '@tiptap/extension-table-header'
 // import TextStyle from '@tiptap/extension-text-style'
 // import ExportDocx from '@tiptap/extension-export-docx'
-// import Color from '@tiptap/extension-color'
 // import FontFamily from '@tiptap/font-family'
 
 type TextEditorProps = {
@@ -39,6 +40,7 @@ type TextEditorProps = {
     className?: string
     mentions?: Array<MentionType>
     editorProps?: Omit<EditorContentProps, 'ref' | 'editor'>
+    id?: string
 }
 
 export function RichTextEditor({
@@ -47,15 +49,18 @@ export function RichTextEditor({
     className,
     mentions = [],
     editorProps,
+    id,
 }: TextEditorProps) {
     const editor = useEditor({
         extensions: [
             StarterKit,
             Underline,
             TextAlign.configure({
-                types: ['heading', 'paragraph'],
+                types: ['heading', 'paragraph', 'textStyle', 'image'],
             }),
             Highlight,
+            CustomTextStyle,
+            Color.configure({ types: ['textStyle'] }),
             // ExportDocx.configure({
             //     onCompleteExport: (result: ArrayBuffer) => {
             //         setIsLoading(false)
@@ -102,6 +107,27 @@ export function RichTextEditor({
                 },
                 katexOptions: {
                     output: 'html',
+                },
+            }),
+            Table.configure({
+                resizable: true,
+                HTMLAttributes: {
+                    class: 'table-auto border-collapse w-full my-4',
+                },
+            }),
+            TableRow.configure({
+                HTMLAttributes: {
+                    class: 'table-row',
+                },
+            }),
+            TableHeader.configure({
+                HTMLAttributes: {
+                    class: 'bg-gray-100 font-semibold text-left p-2 border',
+                },
+            }),
+            TableCell.configure({
+                HTMLAttributes: {
+                    class: 'p-2 border',
                 },
             }),
             // TextStyle.configure({ mergeNestedSpanStyles: true }),
@@ -298,7 +324,7 @@ export function RichTextEditor({
 
     return (
         <div>
-            <TextEditorMenuBar editor={editor} />
+            <TextEditorMenuBar editor={editor} id={id} />
             <EditorContent editor={editor} {...editorProps} />
         </div>
     )

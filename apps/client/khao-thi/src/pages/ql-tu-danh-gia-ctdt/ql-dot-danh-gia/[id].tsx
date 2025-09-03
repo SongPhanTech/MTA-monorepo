@@ -1,46 +1,87 @@
+import { ModalPrintDotDanhGia } from '@components/modal'
 import EvaluatedPage from '@components/sub-pages/tu-danh-gia'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { EvaluationStandard } from '@workspace/db'
+import type {
+    AnalysisFormEvidence,
+    EvaluationCriterion,
+    EvaluationPeriod,
+    EvaluationStandard,
+    Evidence,
+    RequirementCriterion,
+    ScoreScaleCatalog,
+} from '@workspace/db'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
-import { Col, Row, Tabs } from 'antd'
+import { ROUTER_PATH } from '@workspace/router'
+import { Button, Col, Flex, Row, Tabs } from 'antd'
+import { Printer } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
+export type DataPrintDotDanhGia = EvaluationPeriod & {
+    standards: DataIndex[]
+}
+
+export type DataIndex = EvaluationStandard & {
+    criteria: (EvaluationCriterion & {
+        requirementCriterions: (RequirementCriterion & {
+            evidences: (AnalysisFormEvidence & {
+                evidence: Evidence
+            })[]
+        })[]
+        scoreScale: ScoreScaleCatalog
+    })[]
+}
 
 export default function EvaluationPeriodPage() {
     const router = useRouter()
-
     const id = router.query.id as string
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data, refetch } = useFindUniqueEvaluationPeriod({
-        where: { id },
-        include: {
-            standards: {
-                include: {
-                    criteria: {
-                        include: {
-                            requirementCriterions: {
-                                include: {
-                                    evidences: {
-                                        include: {
-                                            evidence: true,
+    const { data, refetch } = useFindUniqueEvaluationPeriod(
+        {
+            where: { id },
+            include: {
+                standards: {
+                    include: {
+                        criteria: {
+                            include: {
+                                requirementCriterions: {
+                                    include: {
+                                        evidences: {
+                                            include: {
+                                                evidence: true,
+                                            },
+                                            orderBy: {
+                                                order: 'asc',
+                                            },
                                         },
                                     },
+                                    orderBy: {
+                                        order: 'asc',
+                                    },
                                 },
+                                scoreScale: true,
                             },
-                            scoreScale: true,
+                            orderBy: {
+                                order: 'asc',
+                            },
                         },
+                    },
+                    orderBy: {
+                        order: 'asc',
                     },
                 },
             },
         },
-    })
+        { enabled: !!id }
+    )
 
     const dataTab = useMemo(() => {
         if (data) {
-            return data.standards.map((i: EvaluationStandard, index: number) => {
+            return data.standards.map((i: DataIndex, index: number) => {
                 return {
                     key: i.id,
                     label: `Tiêu chuẩn ${index + 1}`,
@@ -52,11 +93,31 @@ export default function EvaluationPeriodPage() {
         }
     }, [data, refetch])
 
+    const { onOpen: onOpenModalPrntDotDanhGia } = useDisclosure<{ data: DataPrintDotDanhGia }>({
+        tag: ModalPrintDotDanhGia.name,
+    })
+
     return (
         <div className="h-full">
             <Row gutter={[16, 0]}>
                 <Col span={24} className="font-bold text-xl mb-6 px-8">
-                    {data?.name}
+                    <Flex justify="space-between">
+                        <Col span={12}>{data?.name}</Col>
+                        <Col span={12} className="text-right">
+                            <Button
+                                type="primary"
+                                onClick={() => {
+                                    if (data) {
+                                        onOpenModalPrntDotDanhGia({
+                                            data,
+                                        })
+                                    }
+                                }}
+                            >
+                                <Printer /> In
+                            </Button>
+                        </Col>
+                    </Flex>
                 </Col>
                 <Col span={24}>
                     <Tabs
@@ -75,8 +136,12 @@ EvaluationPeriodPage.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
-                { title: 'Quản lý đợt tự đánh giá' },
-                { title: 'Chi tiết đượt tự đánh giá' },
+                { title: 'Quản lý Tự đánh giá CTĐT' },
+                {
+                    title: 'Quản lý đợt tự đánh giá',
+                    href: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                },
+                { title: 'Chi tiết đợt tự đánh giá' },
             ]}
         >
             {page}

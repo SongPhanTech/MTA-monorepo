@@ -2,8 +2,11 @@ import type { Editor } from '@tiptap/react'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import {
     Button as AntdButton,
+    Checkbox,
     Col,
+    Form,
     Input,
+    InputNumber,
     List,
     Modal,
     message,
@@ -32,10 +35,12 @@ import {
 } from 'react-icons/ri'
 import { env } from '@/env'
 import 'katex/dist/katex.min.css'
+import { Columns, Merge, Plus, Rows, Split, Table, TableProperties, Trash2 } from 'lucide-react'
 
 const { Title } = Typography
 
 type MenuButton = {
+    id: string
     icon: React.ReactNode
     onClick: () => void
     isActive: boolean
@@ -68,11 +73,13 @@ const Button = ({
     </Tooltip>
 )
 
-export default function TextEditorMenuBar({ editor }: { editor: Editor | null }) {
+export default function TextEditorMenuBar({ editor, id }: { editor: Editor | null; id?: string }) {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [mathModalVisible, setMathModalVisible] = useState(false)
     const [mathInput, setMathInput] = useState('')
     const [isBlockMath, setIsBlockMath] = useState(false)
+    const [tableModalVisible, setTableModalVisible] = useState(false)
+    const [tableForm] = Form.useForm()
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -102,11 +109,38 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 })
                 .run()
         } catch (error) {
-            console.error('Image upload failed:', error)
-            message.error('Image upload failed. Please try again.')
+            message.error('Tải ảnh lên không thành công. Vui lòng thử lại.')
         } finally {
             if (event.target) {
                 event.target.value = ''
+            }
+        }
+    }
+
+    const insertPinFormula = (value: { value: string; label: string }) => {
+        if (!editor) return
+        console.log(value)
+        if (value) {
+            try {
+                editor
+                    .chain()
+                    .focus()
+                    .insertContent({
+                        type: 'text',
+                        text: `[${value.label}]`,
+                        marks: [
+                            {
+                                type: 'textStyle',
+                                attrs: {
+                                    id: value.value,
+                                    color: '#c89f08',
+                                },
+                            },
+                        ],
+                    })
+                    .run()
+            } catch (error) {
+                message.error('Lỗi ghim dữ liệu')
             }
         }
     }
@@ -134,7 +168,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 setMathInput('')
                 setMathModalVisible(false)
             } catch (error) {
-                message.error('Failed to insert math formula')
+                message.error('Không chèn được công thức toán học')
             }
         }
     }
@@ -232,27 +266,57 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         [editor]
     )
 
+    const insertTable = () => {
+        if (!editor) return
+
+        tableForm
+            .validateFields()
+            .then((values) => {
+                const { rows, cols, withHeaderRow } = values
+
+                editor
+                    .chain()
+                    .focus()
+                    .insertTable({
+                        rows: Number.parseInt(rows, 10),
+                        cols: Number.parseInt(cols, 10),
+                        withHeaderRow: withHeaderRow,
+                    })
+                    .run()
+
+                setTableModalVisible(false)
+                tableForm.resetFields()
+            })
+            .catch((error) => {
+                console.error('Validation failed:', error)
+            })
+    }
+
     if (!editor) return null
 
     const groupedButtons: MenuButton[][] = [
         [
             {
+                id: 'RiBold',
                 icon: <RiBold className="size-5" />,
                 onClick: () => editor.chain().focus().toggleBold().run(),
                 isActive: editor.isActive('bold'),
             },
             {
+                id: 'BsTypeUnderline',
                 icon: <BsTypeUnderline className="size-5" />,
                 onClick: () => editor.chain().focus().toggleUnderline().run(),
                 isActive: editor.isActive('underline'),
             },
             {
+                id: 'RiItalic',
                 icon: <RiItalic className="size-5" />,
                 onClick: () => editor.chain().focus().toggleItalic().run(),
                 isActive: editor.isActive('italic'),
                 disabled: !editor.can().chain().focus().toggleItalic().run(),
             },
             {
+                id: 'RiStrikethrough',
                 icon: <RiStrikethrough className="size-5" />,
                 onClick: () => editor.chain().focus().toggleStrike().run(),
                 isActive: editor.isActive('strike'),
@@ -261,12 +325,14 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'RiMarkPenFill',
                 icon: <RiMarkPenFill className="size-5" />,
                 onClick: () => editor.chain().focus().toggleHighlight().run(),
                 isActive: editor.isActive('highlight'),
                 disabled: !editor.can().chain().focus().toggleHighlight().run(),
             },
             {
+                id: 'RiCodeSSlashLine',
                 icon: <RiCodeSSlashLine className="size-5" />,
                 onClick: () => editor.chain().focus().toggleCode().run(),
                 isActive: editor.isActive('code'),
@@ -275,18 +341,21 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'RiAlignLeft',
                 icon: <RiAlignLeft className="size-5" />,
                 onClick: () => editor.chain().focus().setTextAlign('left').run(),
                 isActive: editor.isActive({ textAlign: 'left' }),
                 disabled: !editor.can().chain().focus().unsetTextAlign().run(),
             },
             {
+                id: 'RiAlignJustify',
                 icon: <RiAlignJustify className="size-5" />,
                 onClick: () => editor.chain().focus().setTextAlign('center').run(),
                 isActive: editor.isActive({ textAlign: 'center' }),
                 disabled: !editor.can().chain().focus().unsetTextAlign().run(),
             },
             {
+                id: 'RiAlignRight',
                 icon: <RiAlignRight className="size-5" />,
                 onClick: () => editor.chain().focus().setTextAlign('right').run(),
                 isActive: editor.isActive({ textAlign: 'right' }),
@@ -295,6 +364,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'IoListOutline',
                 icon: <IoListOutline className="size-5" />,
                 onClick: () => editor.chain().focus().toggleBulletList().run(),
                 isActive: editor.isActive('bulletList'),
@@ -303,6 +373,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                     !editor.can().chain().focus().toggleBulletList().run(),
             },
             {
+                id: 'RiListOrdered2',
                 icon: <RiListOrdered2 className="size-5" />,
                 onClick: () => editor.chain().focus().toggleOrderedList().run(),
                 isActive: editor.isActive('orderedList'),
@@ -311,6 +382,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                     !editor.can().chain().focus().toggleOrderedList().run(),
             },
             {
+                id: 'RiImage2Line',
                 icon: (
                     <>
                         <RiImage2Line className="size-5" />
@@ -330,12 +402,14 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
         ],
         [
             {
+                id: 'RiFunctions',
                 icon: <RiFunctions className="size-5" />,
                 onClick: toggleMathFormula,
                 isActive: editor.isActive('math'),
                 disabled: false,
             },
             {
+                id: 'RiMoneyDollarCircleLine',
                 icon: <RiMoneyDollarCircleLine className="size-5" />,
                 onClick: () => wrapSelectionWith('$', '$'),
                 isActive: false,
@@ -343,11 +417,94 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                 description: 'Math latex span',
             },
             {
+                id: 'RiMoneyDollarBoxLine',
                 icon: <RiMoneyDollarBoxLine className="size-5" />,
                 onClick: () => wrapSelectionWith('$$', '$$'),
                 isActive: false,
                 disabled: false,
                 description: 'Math latex div',
+            },
+        ],
+        [
+            {
+                id: 'insertTable',
+                icon: <Table className="size-5" />,
+                onClick: () => setTableModalVisible(true),
+                isActive: editor.isActive('table'),
+                disabled: false,
+                description: 'Chèn bảng',
+            },
+            {
+                id: 'addColumnBefore',
+                icon: <Columns className="size-5" />,
+                onClick: () => editor.chain().focus().addColumnBefore().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addColumnBefore().run(),
+                description: 'Thêm cột trước',
+            },
+            {
+                id: 'addColumnAfter',
+                icon: <Plus className="size-5" />,
+                onClick: () => editor.chain().focus().addColumnAfter().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addColumnAfter().run(),
+                description: 'Thêm cột sau',
+            },
+            {
+                id: 'deleteColumn',
+                icon: <Trash2 className="size-5" />,
+                onClick: () => editor.chain().focus().deleteColumn().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().deleteColumn().run(),
+                description: 'Xóa cột',
+            },
+            {
+                id: 'addRowBefore',
+                icon: <Rows className="size-5" />,
+                onClick: () => editor.chain().focus().addRowBefore().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addRowBefore().run(),
+                description: 'Thêm hàng trước',
+            },
+            {
+                id: 'addRowAfter',
+                icon: <Plus className="size-5" />,
+                onClick: () => editor.chain().focus().addRowAfter().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().addRowAfter().run(),
+                description: 'Thêm hàng sau',
+            },
+            {
+                id: 'deleteRow',
+                icon: <Trash2 className="size-5" />,
+                onClick: () => editor.chain().focus().deleteRow().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().deleteRow().run(),
+                description: 'Xóa hàng',
+            },
+            {
+                id: 'mergeCells',
+                icon: <Merge className="size-5" />,
+                onClick: () => editor.chain().focus().mergeCells().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().mergeCells().run(),
+                description: 'Gộp ô',
+            },
+            {
+                id: 'splitCell',
+                icon: <Split className="size-5" />,
+                onClick: () => editor.chain().focus().splitCell().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().splitCell().run(),
+                description: 'Tách ô',
+            },
+            {
+                id: 'deleteTable',
+                icon: <TableProperties className="size-5" />,
+                onClick: () => editor.chain().focus().deleteTable().run(),
+                isActive: false,
+                disabled: !editor.can().chain().focus().deleteTable().run(),
+                description: 'Xóa bảng',
             },
         ],
         // [
@@ -361,7 +518,7 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
             <div className="flex space-x-2 bg-[#FAFAFA] rounded-t-md flex-wrap">
                 {groupedButtons.map((group, index) => (
                     <div
-                        key={`group-${group.map((btn) => btn.icon).join('-')}`}
+                        key={`group-${group.map((btn) => btn.id).join('-')}`}
                         className="flex items-center space-x-2"
                     >
                         {group.map(
@@ -386,6 +543,53 @@ export default function TextEditorMenuBar({ editor }: { editor: Editor | null })
                     </div>
                 ))}
             </div>
+            <Modal
+                title="Chèn bảng"
+                open={tableModalVisible}
+                onOk={insertTable}
+                onCancel={() => {
+                    setTableModalVisible(false)
+                    tableForm.resetFields()
+                }}
+                footer={[
+                    <AntdButton
+                        key="back"
+                        onClick={() => {
+                            setTableModalVisible(false)
+                            tableForm.resetFields()
+                        }}
+                    >
+                        Hủy
+                    </AntdButton>,
+                    <AntdButton key="submit" type="primary" onClick={insertTable}>
+                        Chèn
+                    </AntdButton>,
+                ]}
+            >
+                <Form
+                    form={tableForm}
+                    layout="vertical"
+                    initialValues={{ rows: 3, cols: 3, withHeaderRow: true }}
+                >
+                    <Form.Item
+                        label="Số hàng"
+                        name="rows"
+                        rules={[{ required: true, message: 'Vui lòng nhập số hàng' }]}
+                    >
+                        <InputNumber min={1} className="w-full" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Số cột"
+                        name="cols"
+                        rules={[{ required: true, message: 'Vui lòng nhập số cột' }]}
+                    >
+                        <InputNumber min={1} className="w-full" />
+                    </Form.Item>
+                    <Form.Item name="withHeaderRow" valuePropName="checked">
+                        <Checkbox>Hàng tiêu đề</Checkbox>
+                    </Form.Item>
+                </Form>
+            </Modal>
             <Modal
                 title={`Nhập công thức toán học ${isBlockMath ? '(khối)' : '(nội dòng)'}`}
                 open={mathModalVisible}
