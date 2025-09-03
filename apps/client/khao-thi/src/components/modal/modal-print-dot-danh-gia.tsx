@@ -45,10 +45,31 @@ const EvaluationResult = ({
     const evaluation = evaluateScore(score, scoreScale)
 
     return (
-        <span style={{ color: evaluation.color }}>
+        <span style={{ color: evaluation.color }} className="!font-time-news-roman">
             {evaluation.displayText} {evaluation.scoreText && `(${evaluation.scoreText})`}
         </span>
     )
+}
+
+const processHtmlContent = (html: string, evidenceTags: Map<string, string>): string => {
+    if (!html) return ''
+
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, 'text/html')
+
+    const spans = doc.querySelectorAll('span[id]')
+
+    spans.forEach((span) => {
+        const id = span.getAttribute('id')
+        if (id && evidenceTags.has(id)) {
+            span.textContent = evidenceTags.get(id) || ''
+            ;(span as HTMLElement).style.color = 'red'
+            span.removeAttribute('style')
+            span.setAttribute('style', 'color: red;')
+        }
+    })
+
+    return doc.body.innerHTML
 }
 
 const ModalPrintDotDanhGia = () => {
@@ -69,15 +90,13 @@ const ModalPrintDotDanhGia = () => {
                         const tag = [o1 + 1, o2 + 1, evidenceCount]
                             .map((t) => t.toString().padStart(2, '0'))
                             .join('.')
-                        map.set(evidences.evidenceId, `KM.${tag}`)
+                        map.set(evidences.evidenceId, `[KM.${tag}]`)
                     }
                 }
             }
         }
         return map
     }, [input?.data?.standards])
-
-    console.log('evidenceTags', evidenceTags)
 
     const printRef = useRef<HTMLDivElement>(null)
 
@@ -108,8 +127,6 @@ const ModalPrintDotDanhGia = () => {
     `,
     })
 
-    console.log('input', input?.data)
-
     return (
         <Modal
             title="Báo cáo đợt đánh giá"
@@ -124,7 +141,6 @@ const ModalPrintDotDanhGia = () => {
                     <Button type="primary" onClick={() => handlePrint()} icon={<Printer />}>
                         In báo cáo
                     </Button>
-                    {/* <Button onClick={handleExportWord}>Xuất Word</Button> */}
                 </div>
 
                 <div
@@ -143,7 +159,10 @@ const ModalPrintDotDanhGia = () => {
                                     className="normal-case"
                                     style={{ display: 'inline' }}
                                     dangerouslySetInnerHTML={{
-                                        __html: standard?.opening || '',
+                                        __html: processHtmlContent(
+                                            standard?.opening || '',
+                                            evidenceTags
+                                        ),
                                     }}
                                 />
                             </div>
@@ -157,7 +176,10 @@ const ModalPrintDotDanhGia = () => {
                                             className="normal-case"
                                             style={{ display: 'inline' }}
                                             dangerouslySetInnerHTML={{
-                                                __html: criteria?.name || '',
+                                                __html: processHtmlContent(
+                                                    criteria?.name || '',
+                                                    evidenceTags
+                                                ),
                                             }}
                                         />
                                         <div>
@@ -168,7 +190,10 @@ const ModalPrintDotDanhGia = () => {
                                                 className="normal-case"
                                                 style={{ display: 'inline' }}
                                                 dangerouslySetInnerHTML={{
-                                                    __html: criteria?.currentSituation || '',
+                                                    __html: processHtmlContent(
+                                                        criteria?.currentSituation || '',
+                                                        evidenceTags
+                                                    ),
                                                 }}
                                             />
                                         </div>
@@ -178,7 +203,10 @@ const ModalPrintDotDanhGia = () => {
                                                 className="normal-case"
                                                 style={{ display: 'inline' }}
                                                 dangerouslySetInnerHTML={{
-                                                    __html: criteria?.strengths || '',
+                                                    __html: processHtmlContent(
+                                                        criteria?.strengths || '',
+                                                        evidenceTags
+                                                    ),
                                                 }}
                                             />
                                         </div>
@@ -190,7 +218,10 @@ const ModalPrintDotDanhGia = () => {
                                                 className="normal-case"
                                                 style={{ display: 'inline' }}
                                                 dangerouslySetInnerHTML={{
-                                                    __html: criteria?.weakness || '',
+                                                    __html: processHtmlContent(
+                                                        criteria?.weakness || '',
+                                                        evidenceTags
+                                                    ),
                                                 }}
                                             />
                                         </div>
@@ -202,7 +233,10 @@ const ModalPrintDotDanhGia = () => {
                                                 className="normal-case"
                                                 style={{ display: 'inline' }}
                                                 dangerouslySetInnerHTML={{
-                                                    __html: criteria?.actionPlan || '',
+                                                    __html: processHtmlContent(
+                                                        criteria?.actionPlan || '',
+                                                        evidenceTags
+                                                    ),
                                                 }}
                                             />
                                         </div>
@@ -232,7 +266,10 @@ const ModalPrintDotDanhGia = () => {
                                     className="normal-case"
                                     style={{ display: 'inline' }}
                                     dangerouslySetInnerHTML={{
-                                        __html: standard?.conclusion || '',
+                                        __html: processHtmlContent(
+                                            standard?.conclusion || '',
+                                            evidenceTags
+                                        ),
                                     }}
                                 />
                             </div>
