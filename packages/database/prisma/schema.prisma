@@ -1277,8 +1277,10 @@ model ClassSchedule {
   classDate           DateTime       @db.Date()
   room                Room?          @relation(fields: [roomId], references: [id])
   roomId              String?
-  lecturer            Lecturer?      @relation(fields: [lecturerId], references: [id])
+  lecturer            Lecturer?      @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId          String?
+  extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId     String?
   notes               String?
   isReplacement       Boolean        @default(false)
   originalSchedule    ClassSchedule? @relation("ReplacementSchedule", fields: [originalScheduleId], references: [id])
@@ -1286,7 +1288,9 @@ model ClassSchedule {
   replacementSchedule ClassSchedule? @relation("ReplacementSchedule")
   cancelReason        String?
 
-  @@unique([subjectClassId, classDate, startPeriod])
+  @@index([subjectClassId])
+  @@index([roomId])
+  @@index([lecturerId])
   @@schema("ql-dao-tao")
 }
 
@@ -3366,7 +3370,8 @@ model Lecturer {
   extraSubjectClasses         SubjectClass[]                @relation("ExtraLecturer")
   enterGradeClasses           SubjectClass[]                @relation("EnterGradeLecturer")
   manageFixedClass            FixedClass[]                  @relation("ManageLecturer")
-  classSchedules              ClassSchedule[]
+  classSchedules              ClassSchedule[]               @relation("MainLecturer")
+  extraClassSchedules         ClassSchedule[]               @relation("ExtraLecturer")
   researchProjects            ResearchProject[]
   reviewedRegistrations       StudentResearchRegistration[]
   reviewedThesisRegistrations StudentThesisRegistration[]

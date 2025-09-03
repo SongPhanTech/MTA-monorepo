@@ -565,8 +565,10 @@ model ClassSchedule extends Base {
   // Phòng học và giảng viên
   room                Room?          @relation(fields: [roomId], references: [id])
   roomId              String?
-  lecturer            Lecturer?      @relation(fields: [lecturerId], references: [id])
+  lecturer            Lecturer?      @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId          String?
+  extraLecturer       Lecturer?      @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId     String?
 
   notes               String?         
 
@@ -578,6 +580,9 @@ model ClassSchedule extends Base {
 
   cancelReason        String?          // Lý do hủy
 
-  @@unique([subjectClassId, classDate, startPeriod])
+  @@index([subjectClassId])
+  @@index([roomId])
+  @@index([lecturerId])
+
   @@schema("ql-dao-tao")
 }

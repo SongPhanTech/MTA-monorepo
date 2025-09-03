@@ -30,7 +30,8 @@ model Lecturer extends Base {
   extraSubjectClasses         SubjectClass[]                @relation("ExtraLecturer")
   enterGradeClasses           SubjectClass[]                @relation("EnterGradeLecturer")
   manageFixedClass            FixedClass[]                  @relation("ManageLecturer")
-  classSchedules              ClassSchedule[]
+  classSchedules              ClassSchedule[]               @relation("MainLecturer")
+  extraClassSchedules         ClassSchedule[]               @relation("ExtraLecturer")
   researchProjects            ResearchProject[]         // Đề tài đang hướng dẫn
   reviewedRegistrations       StudentResearchRegistration[] // Đăng ký đã phê duyệt
   reviewedThesisRegistrations StudentThesisRegistration[] // Đăng ký đã phê duyệt
