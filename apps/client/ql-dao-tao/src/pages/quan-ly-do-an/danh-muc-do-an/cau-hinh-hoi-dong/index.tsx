@@ -17,6 +17,7 @@ import {
 import { Button, Col, Form, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import DatePicker from '@components/commons/date-picker'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -29,6 +30,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 export type PutSettingClass = SubjectClass & {
     roomIds?: string[]
     defenseSessionIds?: string[]
+    defenseDate: Date
 }
 dayjs.locale('vi')
 
@@ -165,7 +167,18 @@ export default function SettingClass() {
                 .filter((id): id is string => !!id)
                 .filter((id, index, self) => self.indexOf(id) === index)
 
-            form.setFieldsValue({ roomIds })
+            const defenseSessionIds = subjectClass.thesisProjects
+                .map((item) => item.defenseSession?.id)
+                .filter((id): id is string => !!id)
+                .filter((id, index, self) => self.indexOf(id) === index)
+
+            form.setFieldsValue({
+                roomIds,
+                defenseSessionIds,
+                defenseDate: subjectClass.thesisProjects[0].defenseDate
+                    ? dayjs(subjectClass.thesisProjects[0].defenseDate)
+                    : undefined,
+            })
         }
     }, [subjectClass, form])
 
@@ -454,7 +467,6 @@ export default function SettingClass() {
     }
 
     /* ---------- Run example ---------- */
-    //TODO: tính toán khi chia ca, kíp
     function getCouncilMember() {
         const thesisProjects = subjectClass?.thesisProjects ?? []
         const perBatch = Math.ceil(thesisProjects.length / selectedDefenseSessionIds.length)
@@ -476,6 +488,7 @@ export default function SettingClass() {
         }
         try {
             const batches = getCouncilMember()
+            const defenseDate = form.getFieldValue('defenseDate')
 
             showSpinner()
             const councilsData = batches.flatMap((batch, batchIndex) =>
@@ -537,6 +550,7 @@ export default function SettingClass() {
                             data: {
                                 defenseSessionId,
                                 roomId,
+                                defenseDate,
                             },
                         })
                     })
@@ -654,6 +668,17 @@ export default function SettingClass() {
                             onChange={(values: string[]) => {
                                 setSelectedRoomIds(values)
                             }}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={12}>
+                    <FormItem form={form} name="defenseDate" label="Thời gian bảo vệ">
+                        <DatePicker
+                            format={{
+                                format: 'DD/MM/YYYY',
+                                type: 'mask',
+                            }}
+                            className="w-full"
                         />
                     </FormItem>
                 </Col>
@@ -878,10 +903,19 @@ export default function SettingClass() {
                                             {idx + 1}
                                         </td>
                                         <td rowSpan={6} style={cell}>
-                                            {new Date(ds.session.startTime).toLocaleTimeString(
-                                                'vi-VN',
-                                                { hour: '2-digit', minute: '2-digit' }
-                                            )}
+                                            <div>
+                                                {new Date(ds.session.startTime).toLocaleTimeString(
+                                                    'vi-VN',
+                                                    { hour: '2-digit', minute: '2-digit' }
+                                                )}
+                                            </div>
+                                            <div>
+                                                {subjectClass?.thesisProjects[0].defenseDate
+                                                    ? dayjs(
+                                                          subjectClass.thesisProjects[0].defenseDate
+                                                      ).format('DD/MM/YYYY')
+                                                    : ''}
+                                            </div>
                                         </td>
 
                                         {Object.values(ds.rooms).map((r, index) => (
