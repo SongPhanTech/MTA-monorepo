@@ -8,6 +8,7 @@ import {
 } from '@workspace/db'
 import {
     useCreateManyCouncil,
+    useFindManyDefenseSession,
     useFindManyExpertProfile,
     useFindManyRoom,
     useFindUniqueSubjectClass,
@@ -23,10 +24,11 @@ import DefaultLayout from '@layouts/default-layout'
 import { ROUTER_PATH } from '@workspace/router'
 import { debounce } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 export type PutSettingClass = SubjectClass & {
     roomIds?: string[]
+    defenseSessionIds?: string[]
 }
 dayjs.locale('vi')
 
@@ -37,6 +39,7 @@ export default function SettingClass() {
     const [selectedLeftKeys, setSelectedLeftKeys] = useState<React.Key[]>([])
     const [selectedRightKeys, setSelectedRightKeys] = useState<React.Key[]>([])
     const [selectedRoomIds, setSelectedRoomIds] = useState<string[]>([])
+    const [selectedDefenseSessionIds, setSelectedDefenseSessionIds] = useState<string[]>([])
     const [leftData, setLeftData] = useState<ExpertProfile[]>([])
     const [rightData, setRightData] = useState<ExpertProfile[]>([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -127,6 +130,7 @@ export default function SettingClass() {
                         supervisor: true,
                         room: true,
                         council: { include: { members: { include: { expert: true } } } },
+                        defenseSession: true,
                     },
                 },
             },
@@ -139,6 +143,8 @@ export default function SettingClass() {
             ...(searchRoom ? { name: { contains: searchRoom, mode: 'insensitive' } } : {}),
         },
     })
+
+    const { data: defenseSession } = useFindManyDefenseSession({})
 
     const debouncedRefetch = useCallback(
         debounce(() => {
@@ -156,7 +162,8 @@ export default function SettingClass() {
         if (subjectClass) {
             const roomIds = subjectClass.thesisProjects
                 .map((item) => item.room?.id)
-                .filter((id): id is string => id !== undefined && id !== null && id !== '')
+                .filter((id): id is string => !!id)
+                .filter((id, index, self) => self.indexOf(id) === index)
 
             form.setFieldsValue({ roomIds })
         }
@@ -189,23 +196,6 @@ export default function SettingClass() {
 
     type Batch = Committee[]
 
-    /* ---------- Utilities & sample data ---------- */
-
-    function generateSamplePeople(): Person[] {
-        const people: Person[] = []
-        for (let i = 0; i < 40; i++) {
-            const internal = i < 16
-            people.push({
-                id: i,
-                name: `P${i + 1}`,
-                internal,
-                eligiblePresident: internal, // only internal eligible
-                eligibleSecretary: internal,
-            })
-        }
-        return people
-    }
-
     function shuffle<T>(arr: T[]): T[] {
         const a = arr.slice()
         for (let i = a.length - 1; i > 0; i--) {
@@ -228,12 +218,12 @@ export default function SettingClass() {
 
         const eligibleDirectorsCount = people.filter((p) => p.eligiblePresident).length
         if (eligibleDirectorsCount < perBatch) {
-            throw new Error('Số Chủ tịch không dủ')
+            message.warning('Số Chủ tịch không dủ')
         }
 
         const eligibleSecretariesCount = people.filter((p) => p.eligibleSecretary).length
         if (eligibleSecretariesCount < perBatch) {
-            throw new Error('Số Thư ký không dủ')
+            message.warning('Số Thư ký không dủ')
         }
 
         const eligibleBothCount = people.filter((p) => p.eligiblePresident || p.eligibleSecretary)
@@ -241,11 +231,11 @@ export default function SettingClass() {
             eligibleDirectorsCount + eligibleSecretariesCount - eligibleBothCount.length <
             perBatch * 2
         ) {
-            throw new Error('Tổng số Chủ tịch và Thư ký không đủ')
+            message.warning('Tổng số Chủ tịch và Thư ký không đủ')
         }
 
         if (people.length < 5 * perBatch) {
-            throw new Error('Số người không đủ')
+            message.warning('Số người không đủ')
         }
 
         const pairCount: number[][] = Array.from({ length: n }, () => Array(n).fill(0))
@@ -466,10 +456,12 @@ export default function SettingClass() {
     /* ---------- Run example ---------- */
     //TODO: tính toán khi chia ca, kíp
     function getCouncilMember() {
+        const thesisProjects = subjectClass?.thesisProjects ?? []
+        const perBatch = Math.ceil(thesisProjects.length / selectedDefenseSessionIds.length)
         const batches = generateBatchesWithLookahead(
             listExperts,
             subjectClass?.thesisProjects.length,
-            1,
+            perBatch,
             4000
         )
         return batches
@@ -482,19 +474,20 @@ export default function SettingClass() {
             message.info('Vui lòng chọn chuyên gia để tạo hội đồng')
             return
         }
-        if (
-            subjectClass?.thesisProjects &&
-            rightData.length < subjectClass?.thesisProjects.length * 5
-        ) {
-            message.info('Chưa đủ chuyên gia để tạo hội đồng')
-            return
-        }
-        const thesisIds = subjectClass?.thesisProjects.map((tp) => tp.id) ?? []
         try {
             const batches = getCouncilMember()
+
             showSpinner()
             const councilsData = batches.flatMap((batch, batchIndex) =>
                 batch.map((committee, committeeIndex) => {
+                    let globalIndex = 0
+                    for (let i = 0; i < batchIndex; i++) {
+                        globalIndex += batches[i].length
+                    }
+                    globalIndex += committeeIndex
+
+                    const thesisId = subjectClass?.thesisProjects[globalIndex]?.id
+
                     const membersData = [
                         { ...committee.director, role: CouncilRole.CHAIRMAN },
                         { ...committee.secretary, role: CouncilRole.SECRETARY },
@@ -508,13 +501,7 @@ export default function SettingClass() {
 
                     return {
                         members: { create: membersData },
-                        thesis: {
-                            connect: {
-                                id: subjectClass?.thesisProjects[
-                                    batchIndex * batch.length + committeeIndex
-                                ].id,
-                            },
-                        },
+                        thesis: { connect: { id: thesisId } },
                         proposedDate: new Date(),
                         status: CouncilProposalStatus.PENDING,
                     }
@@ -526,17 +513,35 @@ export default function SettingClass() {
                 skipDuplicates: true,
             })
 
-            if (selectedRoomIds?.length && thesisIds.length) {
-                await Promise.all(
-                    thesisIds.map((thesisId, index) => {
-                        const roomId = selectedRoomIds[index % selectedRoomIds.length]
+            await Promise.all(
+                batches.flatMap((batch, batchIndex) =>
+                    batch.map((committee, committeeIndex) => {
+                        let globalIndex = 0
+                        for (let i = 0; i < batchIndex; i++) {
+                            globalIndex += batches[i].length
+                        }
+                        globalIndex += committeeIndex
+
+                        const thesisProject = subjectClass?.thesisProjects[globalIndex]
+
+                        const defenseSessionId =
+                            selectedDefenseSessionIds[batchIndex] ??
+                            selectedDefenseSessionIds[selectedDefenseSessionIds.length - 1]
+
+                        const roomId =
+                            selectedRoomIds[committeeIndex] ??
+                            selectedRoomIds[selectedRoomIds.length - 1]
+
                         return updateThesisProject({
-                            where: { id: thesisId },
-                            data: { roomId },
+                            where: { id: thesisProject?.id },
+                            data: {
+                                defenseSessionId,
+                                roomId,
+                            },
                         })
                     })
                 )
-            }
+            )
 
             message.success('Tạo hội đồng thành công')
             setRightData([])
@@ -564,6 +569,40 @@ export default function SettingClass() {
         setSelectedRightKeys([])
     }
 
+    const defenseSessions = subjectClass?.thesisProjects.reduce(
+        (acc, tp) => {
+            const dsId = tp.defenseSession?.id
+            if (!dsId) return acc
+            if (!acc[dsId]) {
+                acc[dsId] = {
+                    session: tp.defenseSession,
+                    rooms: {},
+                }
+            }
+            const roomId = tp.room?.id
+            if (roomId) {
+                if (!acc[dsId].rooms[roomId]) {
+                    acc[dsId].rooms[roomId] = {
+                        room: tp.room,
+                        thesisProjects: [],
+                    }
+                }
+                acc[dsId].rooms[roomId].thesisProjects.push(tp)
+            }
+            return acc
+        },
+        {} as Record<
+            string,
+            {
+                session: any
+                rooms: Record<
+                    string,
+                    { room: any; thesisProjects: typeof subjectClass.thesisProjects }
+                >
+            }
+        >
+    )
+
     return (
         <Col span={24}>
             <Col span={24} className="flex justify-end">
@@ -572,8 +611,35 @@ export default function SettingClass() {
                 </Button>
             </Col>
             <Form form={form}>
+                <Col span={12}>
+                    <FormItem form={form} name="defenseSessionIds" label="Danh sách ca bảo vệ">
+                        <Select
+                            mode="multiple"
+                            placeholder="Chọn danh sách ca bảo vệ"
+                            options={defenseSession?.map((item) => ({
+                                label: `${
+                                    item.startTime ? dayjs(item.startTime).format('HH:mm') : ''
+                                }`,
+                                value: item.id,
+                            }))}
+                            showSearch
+                            allowClear
+                            onChange={(values: string[]) => {
+                                setSelectedDefenseSessionIds(values)
+                            }}
+                        />
+                    </FormItem>
+                </Col>
                 <Col span={12} className="mt-4">
-                    <FormItem form={form} name="roomIds" label="Danh sách phòng">
+                    <FormItem
+                        form={form}
+                        name="roomIds"
+                        label={`Danh sách phòng ${
+                            selectedDefenseSessionIds.length
+                                ? `(Cần ít nhất ${Math.ceil((subjectClass?.thesisProjects.length || 0) / selectedDefenseSessionIds.length)} phòng)`
+                                : ''
+                        }`}
+                    >
                         <Select
                             mode="multiple"
                             placeholder="Chọn danh sách phòng"
@@ -694,7 +760,10 @@ export default function SettingClass() {
                             fontWeight: 'bold',
                         }}
                     >
-                        Danh sách chuyên gia hội đồng
+                        Danh sách chuyên gia hội đồng{' '}
+                        {selectedDefenseSessionIds.length
+                            ? `(Cần ít nhất ${Math.ceil((subjectClass?.thesisProjects.length || 0) / selectedDefenseSessionIds.length) * 5} chuyên gia)`
+                            : ''}
                     </div>
                     <Table
                         rowKey="id"
@@ -759,8 +828,7 @@ export default function SettingClass() {
                     />
                 </Col>
             </Col>
-            {
-                // TODO: ghép ca, kíp bảo vệ
+            {Object.values(defenseSessions ?? {}).length > 0 && (
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12 }}>
                         <thead>
@@ -768,207 +836,154 @@ export default function SettingClass() {
                                 <th rowSpan={2} style={{ ...cell, width: '50px' }}>
                                     TT
                                 </th>
-                                <th rowSpan={2} style={{ ...cell, width: '100px' }}>
+                                <th rowSpan={2} style={{ ...cell, width: '120px' }}>
                                     Thời gian bắt đầu
                                 </th>
-                                {subjectClass?.thesisProjects.map((tp) => (
-                                    <th key={tp.id} colSpan={3} style={{ ...cell, height: '25px' }}>
-                                        {tp.room?.name}
+
+                                {Array.from(
+                                    new Map(
+                                        Object.values(defenseSessions ?? {})
+                                            .flatMap((ds) => Object.values(ds.rooms))
+                                            .map((r) => [r.room.id, r])
+                                    ).values()
+                                ).map((r) => (
+                                    <th key={r.room.id} colSpan={3} style={cell}>
+                                        {r.room?.name}
                                     </th>
                                 ))}
                             </tr>
+
                             <tr>
-                                {subjectClass?.thesisProjects.map((tp) => (
-                                    <>
+                                {Array.from(
+                                    new Map(
+                                        Object.values(defenseSessions ?? {})
+                                            .flatMap((ds) => Object.values(ds.rooms))
+                                            .map((r) => [r.room.id, r])
+                                    ).values()
+                                ).map((r, index) => (
+                                    <React.Fragment key={`${r.room.id} ${index}-em`}>
                                         <th style={cell}>CD</th>
                                         <th style={cell}>Hội đồng</th>
                                         <th style={cell}>PB</th>
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </tr>
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <th rowSpan={6} style={cell}>
-                                    1
-                                </th>
-                                <th rowSpan={6} style={cell}>
-                                    7:30 ... 15/11/2025
-                                </th>
-                                {subjectClass?.thesisProjects.map((tp) => (
-                                    <td colSpan={3} style={cell}>
-                                        {tp.registrations.map((registration) => (
-                                            <div>{registration.student.userProfile.fullname}</div>
-                                        ))}
-                                        <div>GVHD:{tp.supervisor.name}</div>
-                                    </td>
-                                ))}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.CHAIRMAN
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>CT</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}> </td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
+                            {Object.values(defenseSessions ?? {}).map((ds, idx) => (
+                                <React.Fragment key={ds.session.id}>
+                                    <tr>
+                                        <td rowSpan={6} style={cell}>
+                                            {idx + 1}
+                                        </td>
+                                        <td rowSpan={6} style={cell}>
+                                            {new Date(ds.session.startTime).toLocaleTimeString(
+                                                'vi-VN',
+                                                { hour: '2-digit', minute: '2-digit' }
+                                            )}
+                                        </td>
 
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.SECRETARY
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>TK</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}> </td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.REVIEWER_1
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>UV</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}>PB1</td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.REVIEWER_2
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>UV</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}>PB2</td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.MEMBER
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>UV</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}> </td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
-                        </tbody>
-                        <tbody>
-                            <tr>
-                                <th rowSpan={6} style={cell}>
-                                    2
-                                </th>
-                                <th rowSpan={6} style={cell}>
-                                    9:00 ... 15/11/2025
-                                </th>
-                                {subjectClass?.thesisProjects.map((tp) => (
-                                    <td colSpan={3} style={cell}>
-                                        {tp.registrations.map((registration) => (
-                                            <div>{registration.student.userProfile.fullname}</div>
+                                        {Object.values(ds.rooms).map((r, index) => (
+                                            <td
+                                                colSpan={3}
+                                                style={cell}
+                                                key={`${r.room.id}-${index}-tt`}
+                                            >
+                                                {r.thesisProjects.map((tp) => (
+                                                    <React.Fragment key={tp.id}>
+                                                        {tp.registrations.map((reg) => (
+                                                            <div key={reg.id}>
+                                                                {reg.student.userProfile.fullname}
+                                                            </div>
+                                                        ))}
+                                                        <div>GVHD: {tp.supervisor?.name}</div>
+                                                    </React.Fragment>
+                                                ))}
+                                            </td>
                                         ))}
-                                        <div>GVHD:{tp.supervisor.name}</div>
-                                    </td>
-                                ))}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.CHAIRMAN
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>CT</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}> </td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
+                                    </tr>
 
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.SECRETARY
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>TK</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}> </td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.REVIEWER_1
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>UV</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}>PB1</td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.REVIEWER_2
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>UV</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}>PB2</td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
-                            <tr>
-                                {subjectClass?.thesisProjects?.map((thesis) => {
-                                    const chairman = thesis.council?.members.find(
-                                        (m) => m.role === CouncilRole.MEMBER
-                                    )
-                                    return (
-                                        <>
-                                            <td style={cell}>UV</td>
-                                            <td style={cell}>{chairman?.expert.name || ''}</td>
-                                            <td style={cell}> </td>
-                                        </>
-                                    )
-                                })}
-                            </tr>
+                                    <tr>
+                                        {Object.values(ds.rooms).map((r, index) => {
+                                            const ct = r.thesisProjects[0]?.council?.members.find(
+                                                (m) => m.role === 'CHAIRMAN'
+                                            )
+                                            return (
+                                                <React.Fragment key={`${r.room.id}-${index}-ch`}>
+                                                    <td style={cell}>CT</td>
+                                                    <td style={cell}>{ct?.expert?.name || ''}</td>
+                                                    <td style={cell}> </td>
+                                                </React.Fragment>
+                                            )
+                                        })}
+                                    </tr>
+
+                                    <tr>
+                                        {Object.values(ds.rooms).map((r, index) => {
+                                            const tk = r.thesisProjects[0]?.council?.members.find(
+                                                (m) => m.role === 'SECRETARY'
+                                            )
+                                            return (
+                                                <React.Fragment key={`${r.room.id} ${index} se`}>
+                                                    <td style={cell}>TK</td>
+                                                    <td style={cell}>{tk?.expert?.name || ''}</td>
+                                                    <td style={cell}> </td>
+                                                </React.Fragment>
+                                            )
+                                        })}
+                                    </tr>
+
+                                    <tr>
+                                        {Object.values(ds.rooms).map((r, index) => {
+                                            const pb1 = r.thesisProjects[0]?.council?.members.find(
+                                                (m) => m.role === 'REVIEWER_1'
+                                            )
+                                            return (
+                                                <React.Fragment key={`${r.room.id} ${index} rv1`}>
+                                                    <td style={cell}>UV</td>
+                                                    <td style={cell}>{pb1?.expert?.name || ''}</td>
+                                                    <td style={cell}>PB1</td>
+                                                </React.Fragment>
+                                            )
+                                        })}
+                                    </tr>
+
+                                    <tr>
+                                        {Object.values(ds.rooms).map((r, index) => {
+                                            const pb2 = r.thesisProjects[0]?.council?.members.find(
+                                                (m) => m.role === 'REVIEWER_2'
+                                            )
+                                            return (
+                                                <React.Fragment key={`${r.room.id}-${index}-rv2`}>
+                                                    <td style={cell}>UV</td>
+                                                    <td style={cell}>{pb2?.expert?.name || ''}</td>
+                                                    <td style={cell}>PB2</td>
+                                                </React.Fragment>
+                                            )
+                                        })}
+                                    </tr>
+
+                                    <tr>
+                                        {Object.values(ds.rooms).map((r, index) => {
+                                            const uv = r.thesisProjects[0]?.council?.members.find(
+                                                (m) => m.role === 'MEMBER'
+                                            )
+                                            return (
+                                                <React.Fragment key={`${r.room.id} ${index}-me`}>
+                                                    <td style={cell}>UV</td>
+                                                    <td style={cell}>{uv?.expert?.name || ''}</td>
+                                                    <td style={cell}> </td>
+                                                </React.Fragment>
+                                            )
+                                        })}
+                                    </tr>
+                                </React.Fragment>
+                            ))}
                         </tbody>
                     </table>
                 </div>
-            }
+            )}
         </Col>
     )
 }
