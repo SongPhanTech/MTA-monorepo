@@ -309,7 +309,7 @@ const PutPaymentRecord = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="supervisor" label="Giảng viên hướng dẫn">
+                <FormItem form={form} name="supervisor" label="Giảng viên hướng dẫn" required>
                     <InputNumber
                         type="number"
                         className="w-full"
