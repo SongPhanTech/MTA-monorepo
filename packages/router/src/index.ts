@@ -772,6 +772,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Hội đồng đánh giá',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
                     },
+                    {
+                        id: 'hoi-dong-thu-ky',
+                        label: 'Hội đồng thư ký',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                    },
                 ],
             },
         ],

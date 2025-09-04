@@ -5,6 +5,12 @@ import { prisma } from '..'
 
 const app = new OpenAPIHono({ strict: false })
 
+const StatBaseSchema = z.object({
+    summary: z.record(z.string(), z.any()),
+    count: z.number(),
+    preview: z.boolean().default(false),
+})
+
 // Ban Giám đốc (BGĐ)
 app.openapi(
     createRoute({
@@ -16,20 +22,22 @@ app.openapi(
                 description: 'Phân bổ theo Hệ đào tạo',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingObjectTypeId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingObjectTypeId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingObjectTypeId: string; name: string; count: number }>
         >`
             SELECT
@@ -48,7 +56,12 @@ app.openapi(
                 "TOT"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -62,20 +75,22 @@ app.openapi(
                 description: 'Phân bổ theo Trình độ đào tạo',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingLevelId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingLevelId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingLevelId: string; name: string; count: number }>
         >`
             SELECT
@@ -94,7 +109,12 @@ app.openapi(
                 "TL"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -108,20 +128,22 @@ app.openapi(
                 description: 'Phân bổ theo Khoá học',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; count: number }>
         >`
             SELECT
@@ -140,7 +162,12 @@ app.openapi(
                 "T"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -154,20 +181,22 @@ app.openapi(
                 description: 'Điểm trúng tuyển trung bình qua các Khoá',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                avgEntryScore: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    avgEntryScore: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgEntryScore: number }>
         >`
             SELECT
@@ -188,7 +217,12 @@ app.openapi(
                 "TC"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -202,20 +236,22 @@ app.openapi(
                 description: 'Điểm GPA tích lũy trung bình của sinh viên tốt nghiệp qua các Khoá',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                avgGpa: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    avgGpa: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgGpa: number }>
         >`
             SELECT
@@ -238,7 +274,12 @@ app.openapi(
                 "TC"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -252,20 +293,22 @@ app.openapi(
                 description: 'Tỷ lệ tốt nghiệp',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                graduationRate: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    graduationRate: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; graduationRate: number }>
         >`
             SELECT
@@ -284,7 +327,12 @@ app.openapi(
                 "TC"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -298,24 +346,26 @@ app.openapi(
                 description: 'Thống kê kết quả học tập toàn Học viện',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                schoolYearId: z.string(),
-                                name: z.string(),
-                                excellent: z.number(),
-                                good: z.number(),
-                                fair: z.number(),
-                                average: z.number(),
-                                weak: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    schoolYearId: z.string(),
+                                    name: z.string(),
+                                    excellent: z.number(),
+                                    good: z.number(),
+                                    fair: z.number(),
+                                    average: z.number(),
+                                    weak: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{
                 schoolYearId: string
                 name: string
@@ -344,7 +394,12 @@ app.openapi(
                 "SY"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -416,20 +471,22 @@ app.openapi(
                 description: 'Phân bổ địa lý của sinh viên',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                provinceId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    provinceId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ provinceId: string; name: string; count: number }>
         >`
             SELECT
@@ -450,7 +507,12 @@ app.openapi(
                 "P"."sTen";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -473,13 +535,15 @@ app.openapi(
                 description: 'Phân bổ theo Hệ đào tạo (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingObjectTypeId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingObjectTypeId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -503,7 +567,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingObjectTypeId: string; name: string; count: number }>
         >`
             SELECT
@@ -525,7 +589,12 @@ app.openapi(
                 "TOT"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -547,13 +616,15 @@ app.openapi(
                 description: 'Phân bổ theo Trình độ đào tạo (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingLevelId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingLevelId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -577,7 +648,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingLevelId: string; name: string; count: number }>
         >`
             SELECT
@@ -599,7 +670,12 @@ app.openapi(
                 "TL"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -621,13 +697,15 @@ app.openapi(
                 description: 'Phân bổ theo Khoá học (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -651,7 +729,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; count: number }>
         >`
             SELECT
@@ -671,7 +749,12 @@ app.openapi(
                 "TC"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -693,13 +776,15 @@ app.openapi(
                 description: 'Điểm trúng tuyển trung bình qua các Khoá (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                avgEntryScore: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    avgEntryScore: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -723,7 +808,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgEntryScore: number }>
         >`
             SELECT
@@ -745,7 +830,12 @@ app.openapi(
                 "TC"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -768,13 +858,15 @@ app.openapi(
                     'Điểm GPA tích lũy trung bình của sinh viên tốt nghiệp qua các Khoá (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                avgGpa: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    avgGpa: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -798,7 +890,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgGpa: number }>
         >`
             SELECT
@@ -823,7 +915,12 @@ app.openapi(
                 "TC"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -845,13 +942,15 @@ app.openapi(
                 description: 'Tỷ lệ tốt nghiệp (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingCourseId: z.string(),
-                                name: z.string(),
-                                graduationRate: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingCourseId: z.string(),
+                                    name: z.string(),
+                                    graduationRate: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -875,7 +974,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; graduationRate: number }>
         >`
             SELECT
@@ -895,7 +994,12 @@ app.openapi(
                 "TC"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -917,17 +1021,19 @@ app.openapi(
                 description: 'Thống kê kết quả học tập toàn Học viện (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                schoolYearId: z.string(),
-                                name: z.string(),
-                                excellent: z.number(),
-                                good: z.number(),
-                                fair: z.number(),
-                                average: z.number(),
-                                weak: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    schoolYearId: z.string(),
+                                    name: z.string(),
+                                    excellent: z.number(),
+                                    good: z.number(),
+                                    fair: z.number(),
+                                    average: z.number(),
+                                    weak: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -951,7 +1057,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{
                 schoolYearId: string
                 name: string
@@ -985,7 +1091,12 @@ app.openapi(
                 "SY"."name";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1007,13 +1118,15 @@ app.openapi(
                 description: 'Phân bổ địa lý của sinh viên (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                provinceId: z.string(),
-                                name: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    provinceId: z.string(),
+                                    name: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -1037,7 +1150,7 @@ app.openapi(
             SELECT ARRAY_AGG("Id") AS all_ids FROM org_tree;
             `
 
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ provinceId: string; name: string; count: number }>
         >`
             SELECT
@@ -1061,7 +1174,12 @@ app.openapi(
                 "P"."sTen";
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1082,15 +1200,17 @@ app.openapi(
                 description: 'Danh sách SV cần quan tâm',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                id: z.string(),
-                                name: z.string(),
-                                academicWarningLevel: z.number(),
-                                cumulativeDebtCredits: z.number(),
-                                gpa: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    id: z.string(),
+                                    name: z.string(),
+                                    academicWarningLevel: z.number(),
+                                    cumulativeDebtCredits: z.number(),
+                                    gpa: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
@@ -1102,12 +1222,12 @@ app.openapi(
         const conditions = []
         if (warningLevel) {
             conditions.push(
-                Prisma.sql`"S"."academicWarningLevel" > ${Number.parseInt(warningLevel)}`
+                Prisma.sql`"S"."academicWarningLevel" > ${Number.parseInt(warningLevel, 10)}`
             )
         }
         if (debtCredits) {
             conditions.push(
-                Prisma.sql`"SSR"."cumulativeDebtCredits" > ${Number.parseInt(debtCredits)}`
+                Prisma.sql`"SSR"."cumulativeDebtCredits" > ${Number.parseInt(debtCredits, 10)}`
             )
         }
         if (gpaThreshold) {
@@ -1117,12 +1237,12 @@ app.openapi(
         }
 
         if (conditions.length === 0) {
-            return c.json([])
+            return c.json({ data: [], count: 0, summary: {}, preview: false })
         }
 
         const where = Prisma.join(conditions, ' OR ')
 
-        const students = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{
                 id: string
                 name: string
@@ -1146,7 +1266,12 @@ app.openapi(
             WHERE ${where}
         `
 
-        return c.json(students)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1160,20 +1285,22 @@ app.openapi(
                 description: 'Điểm GPA trung bình theo Lớp niên chế',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                fixedClassId: z.string(),
-                                name: z.string(),
-                                avgGpa: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    fixedClassId: z.string(),
+                                    name: z.string(),
+                                    avgGpa: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ fixedClassId: string; name: string; avgGpa: number }>
         >`
             SELECT
@@ -1186,7 +1313,12 @@ app.openapi(
             GROUP BY "FC"."id", "FC"."name"
         `
 
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1200,20 +1332,22 @@ app.openapi(
                 description: 'Điểm GPA trung bình theo Ngành',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                trainingMajorId: z.string(),
-                                name: z.string(),
-                                avgGpa: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    trainingMajorId: z.string(),
+                                    name: z.string(),
+                                    avgGpa: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ trainingMajorId: string; name: string; avgGpa: number }>
         >`
             SELECT
@@ -1227,7 +1361,12 @@ app.openapi(
             JOIN "ql-dao-tao"."TrainingMajor" "TM" ON "TM"."id" = "C"."trainingMajorId"
             GROUP BY "TM"."id", "TM"."name"
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1241,21 +1380,23 @@ app.openapi(
                 description: 'Tỷ lệ % sinh viên qua môn/rớt môn của các học phần',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                subjectVersionId: z.string(),
-                                name: z.string(),
-                                passed: z.number(),
-                                failed: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    subjectVersionId: z.string(),
+                                    name: z.string(),
+                                    passed: z.number(),
+                                    failed: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ subjectVersionId: string; name: string; passed: number; failed: number }>
         >`
             SELECT
@@ -1267,7 +1408,12 @@ app.openapi(
             JOIN "ql-dao-tao"."SubjectVersion" "SV" ON "SV"."id" = "SSS"."subjectVersionId"
             GROUP BY "SV"."id", "SV"."name"
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1382,21 +1528,23 @@ app.openapi(
                 description: 'Tải giảng dạy của Giảng viên',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                lecturerId: z.string(),
-                                name: z.string(),
-                                classCount: z.number(),
-                                totalPeriods: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    lecturerId: z.string(),
+                                    name: z.string(),
+                                    classCount: z.number(),
+                                    totalPeriods: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ lecturerId: string; name: string; classCount: number; totalPeriods: number }>
         >`
             SELECT
@@ -1410,7 +1558,12 @@ app.openapi(
             LEFT JOIN "ql-dao-tao"."SubjectVersion" "SV" ON "SV"."id" = "SC"."subjectId"
             GROUP BY "L"."id", "UP"."fullname"
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1424,19 +1577,21 @@ app.openapi(
                 description: 'Thống kê xếp hạng tốt nghiệp',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                ranking: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    ranking: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<Array<{ ranking: string; count: number }>>`
+        const data = await prisma.$queryRaw<Array<{ ranking: string; count: number }>>`
             SELECT
                 "AR"."classification" as "ranking",
                 CAST(COUNT("S"."id") AS INTEGER) as "count"
@@ -1445,7 +1600,12 @@ app.openapi(
             JOIN "ql-dao-tao"."AcademicRankingConvert" "AR" ON "AR"."id" = "GD"."finalRankingId"
             GROUP BY "AR"."classification"
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1459,21 +1619,23 @@ app.openapi(
                 description: 'Danh sách SV bị đề nghị xử lý',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                studentId: z.string(),
-                                studentName: z.string(),
-                                actionType: z.nativeEnum($Enums.AcademicActionType),
-                                reason: z.string(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    studentId: z.string(),
+                                    studentName: z.string(),
+                                    actionType: z.nativeEnum($Enums.AcademicActionType),
+                                    reason: z.string(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{
                 studentId: string
                 studentName: string
@@ -1490,7 +1652,12 @@ app.openapi(
             JOIN "ql-dao-tao"."Student" "S" ON "S"."id" = "SAD"."studentId"
             JOIN "ql-nguoi-dung"."UserProfile" "UP" ON "UP"."id" = "S"."userProfileId"
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1543,22 +1710,24 @@ app.openapi(
                 description: 'Điểm thi trung bình của các học phần qua các học kỳ',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                semesterId: z.string(),
-                                semesterName: z.string(),
-                                subjectVersionId: z.string(),
-                                subjectName: z.string(),
-                                averageScore: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    semesterId: z.string(),
+                                    semesterName: z.string(),
+                                    subjectVersionId: z.string(),
+                                    subjectName: z.string(),
+                                    averageScore: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{
                 semesterId: string
                 semesterName: string
@@ -1580,7 +1749,12 @@ app.openapi(
             WHERE "SSS"."examScore" IS NOT NULL
             GROUP BY "SEM"."id", "SEM"."name", "SV"."id", "SV"."name"
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1674,20 +1848,22 @@ app.openapi(
                 description: 'Danh sách câu hỏi có tỷ lệ trả lời sai cao nhất',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                questionId: z.string(),
-                                content: z.string(),
-                                incorrectRate: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    questionId: z.string(),
+                                    content: z.string(),
+                                    incorrectRate: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ questionId: string; content: string; incorrectRate: number }>
         >`
             SELECT
@@ -1699,7 +1875,12 @@ app.openapi(
             GROUP BY "Q"."id", "Q"."content"
             ORDER BY "incorrectRate" DESC
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1713,20 +1894,22 @@ app.openapi(
                 description: 'Danh sách câu hỏi được sử dụng nhiều nhất trong các kỳ thi',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                questionId: z.string(),
-                                content: z.string(),
-                                usageCount: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    questionId: z.string(),
+                                    content: z.string(),
+                                    usageCount: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{ questionId: string; content: string; usageCount: number }>
         >`
             SELECT
@@ -1738,7 +1921,12 @@ app.openapi(
             GROUP BY "Q"."id", "Q"."content"
             ORDER BY "usageCount" DESC
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -1754,7 +1942,7 @@ app.openapi(
                 content: {
                     'application/json': {
                         schema: z.object({
-                            byGender: z.array(z.object({ gender: z.number(), count: z.number() })),
+                            byGender: z.array(z.object({ name: z.string(), count: z.number() })),
                             byEthnicity: z.array(
                                 z.object({ id: z.string(), name: z.string(), count: z.number() })
                             ),
@@ -1771,8 +1959,8 @@ app.openapi(
         },
     }),
     async (c) => {
-        const byGender = await prisma.$queryRaw<Array<{ gender: number; count: number }>>`
-            SELECT "sTen" as "gender", CAST(COUNT("S"."id") AS INTEGER) as "count"
+        const byGender = await prisma.$queryRaw<Array<{ name: string; count: number }>>`
+            SELECT "sTen" as "name", CAST(COUNT("S"."id") AS INTEGER) as "count"
             FROM "mta"."DM_GioiTinh" "G"
             JOIN "ql-nguoi-dung"."UserProfile" "UP" ON "G"."Id" = "UP"."genderId"
             JOIN "ql-dao-tao"."Student" "S" ON "UP"."id" = "S"."userProfileId"
@@ -1828,23 +2016,25 @@ app.openapi(
                 description: 'Xu hướng tuyển sinh',
                 content: {
                     'application/json': {
-                        schema: z.array(
-                            z.object({
-                                year: z.number(),
-                                majorId: z.string(),
-                                majorName: z.string(),
-                                courseId: z.string(),
-                                courseName: z.string(),
-                                count: z.number(),
-                            })
-                        ),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    year: z.number(),
+                                    majorId: z.string(),
+                                    majorName: z.string(),
+                                    courseId: z.string(),
+                                    courseName: z.string(),
+                                    count: z.number(),
+                                })
+                            ),
+                        }),
                     },
                 },
             },
         },
     }),
     async (c) => {
-        const result = await prisma.$queryRaw<
+        const data = await prisma.$queryRaw<
             Array<{
                 year: number
                 majorId: string
@@ -1870,7 +2060,12 @@ app.openapi(
             GROUP BY "year", "majorId", "majorName", "courseId", "courseName"
             ORDER BY "year" DESC
         `
-        return c.json(result)
+        return c.json({
+            data,
+            count: data.length,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
