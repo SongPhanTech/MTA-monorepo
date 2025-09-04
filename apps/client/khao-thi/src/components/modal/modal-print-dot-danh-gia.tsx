@@ -127,7 +127,7 @@ const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Para
                 const runs: TextRun[] = []
                 el.childNodes.forEach(async (child) => {
                     if (child.nodeType === Node.TEXT_NODE) {
-                        runs.push(new TextRun({ text: child.textContent || '' }))
+                        runs.push(new TextRun({ text: child.textContent || '', size: 28 }))
                     } else if (child.nodeType === Node.ELEMENT_NODE) {
                         const c = child as HTMLElement
                         runs.push(
@@ -136,7 +136,7 @@ const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Para
                                 bold: c.tagName === 'B' || c.tagName === 'STRONG',
                                 italics: c.tagName === 'I' || c.tagName === 'EM',
                                 color: normalizeColor(c.style.color),
-                                size: 30,
+                                size: 28,
                             })
                         )
                     }
@@ -161,7 +161,7 @@ const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Para
                                 color: el.style.color || undefined,
                                 bold: el.style.fontWeight === 'bold',
                                 italics: el.style.fontStyle === 'italic',
-                                size: 30,
+                                size: 28,
                             }),
                         ],
                     })
@@ -213,7 +213,7 @@ const EvaluationResult = ({
 
     return (
         <span style={{ color: evaluation.color }} className="!font-time-news-roman">
-            {evaluation.displayText} {evaluation.scoreText && `(${evaluation.scoreText})`}
+            {evaluation.displayText}, {evaluation.scoreText && `(${evaluation.scoreText})`}
         </span>
     )
 }
@@ -415,7 +415,7 @@ const ModalPrintDotDanhGia = () => {
                             new TextRun({
                                 text: `Tiêu chuẩn ${idx + 1}: ${standard.name}`,
                                 bold: true,
-                                size: 32,
+                                size: 28,
                                 color: '000000',
                             }),
                         ],
@@ -433,7 +433,7 @@ const ModalPrintDotDanhGia = () => {
                                 text: 'Mở đầu:',
                                 bold: true,
                                 italics: true,
-                                size: 32,
+                                size: 28,
                                 color: '000000',
                             }),
                         ],
@@ -455,7 +455,7 @@ const ModalPrintDotDanhGia = () => {
                             children: [
                                 new TextRun({
                                     text: `Tiêu chí ${idx + 1}.${cIdx + 1}: ${criterion.name}`,
-                                    size: 32,
+                                    size: 28,
                                     italics: true,
                                     color: '000000',
                                 }),
@@ -471,7 +471,7 @@ const ModalPrintDotDanhGia = () => {
                                 new TextRun({
                                     text: '1. Mô tả hiện trạng',
                                     italics: true,
-                                    size: 30,
+                                    size: 28,
                                 }),
                             ],
                         })
@@ -487,7 +487,7 @@ const ModalPrintDotDanhGia = () => {
                             indent: { firstLine: 720 },
                             alignment: AlignmentType.JUSTIFIED,
                             children: [
-                                new TextRun({ text: '2. Điểm mạnh', italics: true, size: 30 }),
+                                new TextRun({ text: '2. Điểm mạnh', italics: true, size: 28 }),
                             ],
                         })
                     )
@@ -502,7 +502,7 @@ const ModalPrintDotDanhGia = () => {
                             indent: { firstLine: 720 },
                             alignment: AlignmentType.JUSTIFIED,
                             children: [
-                                new TextRun({ text: '3. Điểm tồn tại', italics: true, size: 30 }),
+                                new TextRun({ text: '3. Điểm tồn tại', italics: true, size: 28 }),
                             ],
                         })
                     )
@@ -520,7 +520,7 @@ const ModalPrintDotDanhGia = () => {
                                 new TextRun({
                                     text: '4. Kế hoạch hành động',
                                     italics: true,
-                                    size: 30,
+                                    size: 28,
                                 }),
                             ],
                         })
@@ -536,7 +536,7 @@ const ModalPrintDotDanhGia = () => {
                             indent: { firstLine: 720 },
                             alignment: AlignmentType.JUSTIFIED,
                             children: [
-                                new TextRun({ text: '5. Tự đánh giá', italics: true, size: 30 }),
+                                new TextRun({ text: '5. Tự đánh giá', italics: true, size: 28 }),
                             ],
                         })
                     )
@@ -547,11 +547,11 @@ const ModalPrintDotDanhGia = () => {
                             children: [
                                 new TextRun({ text: 'Tự đánh giá tiêu chí: ', size: 28 }),
                                 new TextRun({
-                                    text: `${evaluateScore(criterion?.score, criterion?.scoreScale).displayText}, ${evaluateScore(criterion?.score, criterion?.scoreScale).scoreText}`,
+                                    text: `${evaluateScore(criterion?.score, criterion?.scoreScale).displayText} ${evaluateScore(criterion?.score, criterion?.scoreScale).scoreText && `, ${evaluateScore(criterion?.score, criterion?.scoreScale).scoreText}`}`,
                                     color: normalizeColor(
                                         evaluateScore(criterion?.score, criterion?.scoreScale).color
                                     ),
-                                    size: 30,
+                                    size: 28,
                                 }),
                             ],
                         })
@@ -569,7 +569,7 @@ const ModalPrintDotDanhGia = () => {
                                 text: `Kết luận về Tiêu chuẩn ${idx + 1}:`,
                                 bold: true,
                                 italics: true,
-                                size: 32,
+                                size: 28,
                                 color: '000000',
                             }),
                         ],
@@ -593,7 +593,7 @@ const ModalPrintDotDanhGia = () => {
                             children: [
                                 new TextRun({
                                     text: 'Mục lục',
-                                    size: 32,
+                                    size: 28,
                                     color: '000000',
                                 }),
                             ],
@@ -604,11 +604,10 @@ const ModalPrintDotDanhGia = () => {
                         }),
                     ],
                 },
-                ...sections, // các section còn lại của bạn
+                ...sections,
             ],
         })
 
-        // const doc = new Document({ sections })
         const blob = await Packer.toBlob(doc)
         saveAs(blob, `bao_cao_dot_danh_gia_${input.data.name}.docx`)
     }
