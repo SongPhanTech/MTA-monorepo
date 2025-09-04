@@ -93,7 +93,7 @@ export default function EvaluationPeriodPage() {
         }
     }, [data, refetch])
 
-    const { onOpen: onOpenModalPrntDotDanhGia } = useDisclosure<{ data: DataPrintDotDanhGia }>({
+    const { onOpen: onOpenModalPrintDotDanhGia } = useDisclosure<{ data: DataPrintDotDanhGia }>({
         tag: ModalPrintDotDanhGia.name,
     })
 
@@ -108,7 +108,7 @@ export default function EvaluationPeriodPage() {
                                 type="primary"
                                 onClick={() => {
                                     if (data) {
-                                        onOpenModalPrntDotDanhGia({
+                                        onOpenModalPrintDotDanhGia({
                                             data,
                                         })
                                     }
@@ -121,7 +121,7 @@ export default function EvaluationPeriodPage() {
                 </Col>
                 <Col span={24}>
                     <Tabs
-                        className="h-[calc(100vh-200px)] oveflow-y-auto"
+                        className="h-[calc(100vh-200px)] overflow-y-auto"
                         tabPosition={'left'}
                         items={dataTab}
                         tabBarStyle={{ height: '100%', overflow: 'auto', width: '175px' }}
