@@ -1,7 +1,10 @@
-import type { DataPrintDotDanhGia } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]'
+import type {
+    DataIndex,
+    DataPrintDotDanhGia,
+} from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]'
 import type { ScoreScaleCatalog } from '@workspace/db'
 import { Button, Modal } from 'antd'
-import { Printer } from 'lucide-react'
+import { Bookmark, Printer } from 'lucide-react'
 import { useMemo, useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useReactToPrint } from 'react-to-print'
@@ -72,6 +75,99 @@ const processHtmlContent = (html: string, evidenceTags: Map<string, string>): st
     return doc.body.innerHTML
 }
 
+const NavigationSidebar = ({
+    standards,
+    onNavigate,
+}: {
+    standards: DataIndex[]
+    onNavigate: (id: string) => void
+}) => {
+    return (
+        <div className="fixed left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg p-4 rounded-lg z-10 hidden print:hidden md:block max-h-max overflow-y-auto">
+            <div className="font-bold mb-2 flex items-center gap-2 text-[15px]">
+                <Bookmark size={16} />
+                Điều hướng
+            </div>
+            <div className="flex flex-col space-y-2">
+                {standards.map((standard, index) => (
+                    <div key={standard.id} className="pl-2 border-l-2 border-blue-200">
+                        <Button
+                            onClick={() => onNavigate(`standard-${standard.id}`)}
+                            className="text-left text-[15px] font-medium w-full"
+                        >
+                            Tiêu chuẩn {index + 1}
+                        </Button>
+
+                        <div className="mt-1 ml-2 flex flex-col space-y-1">
+                            {standard?.criteria?.map((criterion, idx) => (
+                                <Button
+                                    key={criterion.id}
+                                    onClick={() => onNavigate(`criterion-${criterion.id}`)}
+                                    className="text-left text-sm w-full text-gray-700"
+                                >
+                                    Tiêu chí {index + 1}.{idx + 1}
+                                </Button>
+                            ))}
+
+                            <Button
+                                onClick={() => onNavigate(`conclusion-${standard.id}`)}
+                                className="text-left text-sm w-full mt-1"
+                            >
+                                Kết luận {index + 1}
+                            </Button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+const TableOfContents = ({
+    standards,
+    onNavigate,
+}: {
+    standards: DataIndex[]
+    onNavigate: (id: string) => void
+}) => {
+    return (
+        <div className="p-4 mb-4 print:break-after-page">
+            <h2 className="text-xl font-bold text-center mb-4">Mục lục</h2>
+            <div className="grid grid-cols-1 gap-2">
+                {standards.map((standard, index) => (
+                    <div key={standard.id} className="pl-4">
+                        <div
+                            onClick={() => onNavigate(`standard-${standard.id}`)}
+                            className="text-left font-bold w-full text-base cursor-pointer"
+                        >
+                            Tiêu chuẩn {index + 1}: {standard.name}
+                        </div>
+
+                        <div className="mt-1 ml-4 flex flex-col space-y-1">
+                            {standard?.criteria?.map((criterion, idx) => (
+                                <div
+                                    key={criterion.id}
+                                    onClick={() => onNavigate(`criterion-${criterion.id}`)}
+                                    className="text-left w-full text-[15px] cursor-pointer"
+                                >
+                                    Tiêu chí {index + 1}.{idx + 1}
+                                </div>
+                            ))}
+
+                            <div
+                                onClick={() => onNavigate(`conclusion-${standard.id}`)}
+                                className="text-left w-full mt-1 text-[15px] cursor-pointer"
+                            >
+                                Kết luận về Tiêu chuẩn {index + 1}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
 const ModalPrintDotDanhGia = () => {
     const { isOpen, onClose, input } = useDisclosure<{ data: DataPrintDotDanhGia }>({
         tag: 'ModalPrintDotDanhGia',
@@ -96,7 +192,7 @@ const ModalPrintDotDanhGia = () => {
             }
         }
         return map
-    }, [input?.data?.standards])
+    }, [input?.data])
 
     const printRef = useRef<HTMLDivElement>(null)
 
@@ -123,9 +219,21 @@ const ModalPrintDotDanhGia = () => {
           white-space: normal !important;
           word-wrap: break-word !important;
         }
+        .navigation-sidebar {
+          display: none;
+        }
+        .table-of-contents {
+          page-break-after: always;
+        }
       }
     `,
     })
+    const scrollToSection = (id: string) => {
+        const element = document.getElementById(id)
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' })
+        }
+    }
 
     return (
         <Modal
@@ -135,7 +243,13 @@ const ModalPrintDotDanhGia = () => {
             width="80vw"
             style={{ maxWidth: '1200px' }}
             footer={null}
+            className="relative"
         >
+            <NavigationSidebar
+                standards={input?.data?.standards || []}
+                onNavigate={scrollToSection}
+            />
+
             <div className="space-y-4">
                 <div className="flex justify-end w-full mb-4 space-x-2">
                     <Button type="primary" onClick={() => handlePrint()} icon={<Printer />}>
@@ -148,13 +262,22 @@ const ModalPrintDotDanhGia = () => {
                     className="!font-time-news-roman text-black bg-white flex flex-col gap-2"
                     style={{ whiteSpace: 'normal', textAlign: 'justify' }}
                 >
+                    <TableOfContents
+                        standards={input?.data?.standards || []}
+                        onNavigate={scrollToSection}
+                    />
+
                     {input?.data?.standards.map((standard, index) => (
-                        <div key={standard.id} className="page-break paragraph flex flex-col gap-2">
+                        <div
+                            key={standard.id}
+                            id={`standard-${standard.id}`}
+                            className="page-break paragraph flex flex-col gap-2 scroll-mt-16"
+                        >
                             <strong className="text-base block">
                                 Tiêu chuẩn {index + 1}: {standard?.name}
                             </strong>
                             <div className="content-wrapper">
-                                <span className="font-bold italic text-[15px]">Mở đầu: </span>
+                                <span className="font-bold italic text-base">Mở đầu: </span>
                                 <span
                                     className="normal-case"
                                     style={{ display: 'inline' }}
@@ -168,12 +291,16 @@ const ModalPrintDotDanhGia = () => {
                             </div>
                             <div className="content-wrapper">
                                 {standard?.criteria?.map((criteria, idx) => (
-                                    <div key={criteria?.id} className="content-wrapper mb-2">
+                                    <div
+                                        id={`criterion-${criteria.id}`}
+                                        key={criteria?.id}
+                                        className="content-wrapper mb-2 scroll-mt-16"
+                                    >
                                         <span className="italic text-base">
                                             Tiêu chí {index + 1}.{idx + 1}:{' '}
                                         </span>
                                         <span
-                                            className="normal-case"
+                                            className="normal-case italic text-base"
                                             style={{ display: 'inline' }}
                                             dangerouslySetInnerHTML={{
                                                 __html: processHtmlContent(
@@ -258,8 +385,11 @@ const ModalPrintDotDanhGia = () => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="content-wrapper">
-                                <span className="font-bold italic text-[15px]">
+                            <div
+                                id={`conclusion-${standard.id}`}
+                                className="content-wrapper scroll-mt-16"
+                            >
+                                <span className="font-bold italic text-base">
                                     Kết luận về Tiêu chuẩn {index + 1}:
                                 </span>
                                 <span
