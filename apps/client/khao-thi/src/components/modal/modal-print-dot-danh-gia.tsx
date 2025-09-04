@@ -127,7 +127,7 @@ const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Para
                 const runs: TextRun[] = []
                 el.childNodes.forEach(async (child) => {
                     if (child.nodeType === Node.TEXT_NODE) {
-                        runs.push(new TextRun({ text: child.textContent || '' }))
+                        runs.push(new TextRun({ text: child.textContent || '', size: 28 }))
                     } else if (child.nodeType === Node.ELEMENT_NODE) {
                         const c = child as HTMLElement
                         runs.push(
@@ -213,7 +213,7 @@ const EvaluationResult = ({
 
     return (
         <span style={{ color: evaluation.color }} className="!font-time-news-roman">
-            {evaluation.displayText} {evaluation.scoreText && `(${evaluation.scoreText})`}
+            {evaluation.displayText}, {evaluation.scoreText && `(${evaluation.scoreText})`}
         </span>
     )
 }
@@ -547,7 +547,7 @@ const ModalPrintDotDanhGia = () => {
                             children: [
                                 new TextRun({ text: 'Tự đánh giá tiêu chí: ', size: 28 }),
                                 new TextRun({
-                                    text: `${evaluateScore(criterion?.score, criterion?.scoreScale).displayText}, ${evaluateScore(criterion?.score, criterion?.scoreScale).scoreText}`,
+                                    text: `${evaluateScore(criterion?.score, criterion?.scoreScale).displayText} ${evaluateScore(criterion?.score, criterion?.scoreScale).scoreText && `, ${evaluateScore(criterion?.score, criterion?.scoreScale).scoreText}`}`,
                                     color: normalizeColor(
                                         evaluateScore(criterion?.score, criterion?.scoreScale).color
                                     ),
@@ -604,11 +604,10 @@ const ModalPrintDotDanhGia = () => {
                         }),
                     ],
                 },
-                ...sections, // các section còn lại của bạn
+                ...sections,
             ],
         })
 
-        // const doc = new Document({ sections })
         const blob = await Packer.toBlob(doc)
         saveAs(blob, `bao_cao_dot_danh_gia_${input.data.name}.docx`)
     }

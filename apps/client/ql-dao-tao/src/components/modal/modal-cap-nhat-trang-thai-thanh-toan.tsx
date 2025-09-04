@@ -13,12 +13,14 @@ import {
     useUpdateManySupervisorPaymentRecord,
 } from '@workspace/db/hooks'
 import { Col, Form, message } from 'antd'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutUpdatePaymentStatus = PaymentRecord
 
 const PutUpdatePaymentStatus = () => {
     const [form] = Form.useForm<PutUpdatePaymentStatus>()
+    const [totalAmount, setTotalAmount] = useState(0)
     const { isOpen, onClose, input } = useDisclosure<{
         paymentRecordIds: string[]
         isSupervisor: boolean
@@ -60,6 +62,23 @@ const PutUpdatePaymentStatus = () => {
             enabled: !!paymentRecordIds?.length && input?.isSupervisor,
         }
     )
+
+    useEffect(() => {
+        let total = 0
+
+        if (paymentRecord?.length) {
+            total = paymentRecord.reduce((acc, record) => acc + Number(record.amount ?? 0), 0)
+        }
+
+        if (supervisorPaymentData?.length) {
+            total = supervisorPaymentData.reduce(
+                (acc, record) => acc + Number(record.amount ?? 0),
+                0
+            )
+        }
+
+        setTotalAmount(total)
+    }, [paymentRecord, supervisorPaymentData])
 
     const { mutateAsync: update } = useUpdateManyPaymentRecord()
     const { mutateAsync: updateSupervisorPayment } = useUpdateManySupervisorPaymentRecord()
@@ -181,7 +200,8 @@ const PutUpdatePaymentStatus = () => {
                     }}
                 />
             )}
-            <Col span={12}>
+            <Col span={24}>Tông tiền thanh toán: {totalAmount}</Col>
+            <Col span={12} className="mt-4">
                 <FormItem form={form} name="status" label="Trạng thái">
                     <Select
                         placeholder="Chọn trạng thái"

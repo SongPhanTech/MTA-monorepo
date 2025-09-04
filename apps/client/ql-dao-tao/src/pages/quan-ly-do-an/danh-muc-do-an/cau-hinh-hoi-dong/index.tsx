@@ -140,6 +140,18 @@ export default function SettingClass() {
         { enabled: !!subjectClassIdStr }
     )
 
+    const experts = useMemo(() => {
+        if (!subjectClass) return []
+
+        const allExperts = subjectClass.thesisProjects.flatMap(
+            (thesis) => thesis.council?.members.filter((m) => m.expert).map((m) => m.expert) || []
+        )
+
+        const uniqueExperts = Array.from(new Map(allExperts.map((exp) => [exp.id, exp])).values())
+
+        return uniqueExperts
+    }, [subjectClass])
+
     const { data: room = [], refetch } = useFindManyRoom({
         where: {
             ...(searchRoom ? { name: { contains: searchRoom, mode: 'insensitive' } } : {}),
@@ -566,8 +578,17 @@ export default function SettingClass() {
     }
 
     useEffect(() => {
-        setLeftData(expertProfileData || [])
-    }, [expertProfileData])
+        if (experts.length) {
+            setRightData(experts)
+
+            const filtered = (expertProfileData || []).filter(
+                (item) => !experts.some((exp) => exp.id === item.id)
+            )
+            setLeftData(filtered)
+        } else {
+            setLeftData(expertProfileData || [])
+        }
+    }, [expertProfileData, experts])
 
     const moveRight = () => {
         const selectedItems = leftData.filter((item) => selectedLeftKeys.includes(item.id))

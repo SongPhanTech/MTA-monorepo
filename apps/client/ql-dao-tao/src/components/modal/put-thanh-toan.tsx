@@ -259,7 +259,7 @@ const PutPaymentRecord = () => {
                 }}
             />
             <Col span={12}>
-                <FormItem form={form} name="chairman" label="Chủ tịch">
+                <FormItem form={form} name="chairman" label="Chủ tịch" required>
                     <InputNumber
                         type="number"
                         className="w-full"
@@ -269,7 +269,7 @@ const PutPaymentRecord = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="secretary" label="Thư kí">
+                <FormItem form={form} name="secretary" label="Thư kí" required>
                     <InputNumber
                         type="number"
                         className="w-full"
@@ -279,7 +279,7 @@ const PutPaymentRecord = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="reviewer1" label="Phản biện 1">
+                <FormItem form={form} name="reviewer1" label="Phản biện 1" required>
                     <InputNumber
                         type="number"
                         className="w-full"
@@ -289,7 +289,7 @@ const PutPaymentRecord = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="reviewer2" label="Phản biện 2">
+                <FormItem form={form} name="reviewer2" label="Phản biện 2" required>
                     <InputNumber
                         type="number"
                         className="w-full"
@@ -299,7 +299,7 @@ const PutPaymentRecord = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="member" label="Ủy viên">
+                <FormItem form={form} name="member" label="Ủy viên" required>
                     <InputNumber
                         type="number"
                         className="w-full"
@@ -309,7 +309,7 @@ const PutPaymentRecord = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="supervisor" label="Giảng viên hướng dẫn">
+                <FormItem form={form} name="supervisor" label="Giảng viên hướng dẫn" required>
                     <InputNumber
                         type="number"
                         className="w-full"
