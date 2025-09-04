@@ -544,8 +544,8 @@ model SubjectClass extends Base {
   thesisProjects             ThesisProject[] // DS đồ án
   expertProfile              ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
   defenseRooms               Room[]                @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
-
   surveyObjectTypes          SurveyObjectType[]
+
   @@schema("ql-dao-tao")
 }
 

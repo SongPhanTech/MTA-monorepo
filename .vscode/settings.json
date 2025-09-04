@@ -15,6 +15,9 @@
     "Quanly",
     "SCIM"
   ],
+   "files.associations": {
+    "*.zmodel": "zmodel"
+  },
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
