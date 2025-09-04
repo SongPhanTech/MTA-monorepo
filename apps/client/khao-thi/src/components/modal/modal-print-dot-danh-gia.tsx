@@ -38,6 +38,21 @@ const rgbToHex = (rgb: string): string | undefined => {
         .toUpperCase()
 }
 
+const normalizeColor = (color: string): string | undefined => {
+    if (!color) return undefined
+    const map: Record<string, string> = {
+        gray: '808080',
+        red: 'FF0000',
+        green: '008000',
+        blue: '0000FF',
+        orange: 'FFA500',
+    }
+    if (map[color.toLowerCase()]) return map[color.toLowerCase()]
+    if (color.startsWith('rgb')) return rgbToHex(color)
+    if (color.startsWith('#')) return color.replace('#', '').toUpperCase()
+    return color
+}
+
 const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Paragraph)[]> => {
     const parser = new DOMParser()
     const doc = parser.parseFromString(html, 'text/html')
@@ -120,7 +135,7 @@ const htmlToParagraphs = async (html: string): Promise<(Paragraph | Table | Para
                                 text: c.textContent || '',
                                 bold: c.tagName === 'B' || c.tagName === 'STRONG',
                                 italics: c.tagName === 'I' || c.tagName === 'EM',
-                                color: rgbToHex(el.style.color) || undefined,
+                                color: normalizeColor(c.style.color),
                                 size: 30,
                             })
                         )
@@ -385,17 +400,6 @@ const ModalPrintDotDanhGia = () => {
     }
     const exportToWord = async () => {
         if (!input?.data) return
-
-        const normalizeColor = (color: string) => {
-            const map: Record<string, string> = {
-                gray: '808080',
-                red: 'FF0000',
-                green: '008000',
-                blue: '0000FF',
-                orange: 'FFA500',
-            }
-            return map[color] || color
-        }
 
         const sections = await Promise.all(
             input.data.standards.map(async (standard, idx) => {
