@@ -33,8 +33,6 @@ export const ModalPrintExamBank = () => {
         documentTitle: `De_thi_mon_${input?.subjectVersionName}_${input?.examCode}.pdf`,
     })
 
-    console.log(input?.data)
-
     // Xử lý xuất file Word
     const exportToWord = async () => {
         if (!input?.data) return
