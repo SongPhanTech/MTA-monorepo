@@ -4,7 +4,7 @@ import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@work
 import { useFindManyEvidence, useFindUniqueRequirementCriterion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { diffArrays, type ItemProps } from '@workspace/libs/utils'
-import { Col, Form, message, Select } from 'antd'
+import { Col, Form, Input, message, Select } from 'antd'
 import { GripVertical } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
@@ -107,6 +107,19 @@ const AddEvidenceToPeriod = () => {
                             },
                         }
                     }),
+                    {
+                        model: 'RequirementCriterion',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: input?.id,
+                            },
+                            data: {
+                                evidencePlaces: output?.evidencePlaces,
+                                collectionMethod: output?.collectionMethod,
+                            },
+                        },
+                    },
                 ]
                 if (listTransition?.length) {
                     await sqlTransaction(listTransition)
@@ -131,6 +144,7 @@ const AddEvidenceToPeriod = () => {
                     include: {
                         evidence: true,
                     },
+                    orderBy: { order: 'asc' },
                 },
             },
         },
@@ -286,6 +300,16 @@ const AddEvidenceToPeriod = () => {
                             ))}
                         </div>
                     </DndProvider>
+                </Col>
+                <Col span={24} className="mt-6">
+                    <Form.Item name="evidencePlaces" label="Nơi thu thập">
+                        <Input.TextArea placeholder="Nhập nơi thu thập" />
+                    </Form.Item>
+                </Col>
+                <Col span={24}>
+                    <Form.Item name="collectionMethod" label="Phương pháp thu thập">
+                        <Input.TextArea placeholder="Nhập phương pháp thu thập" />
+                    </Form.Item>
                 </Col>
             </Col>
         </PutFormModal>

@@ -36,7 +36,7 @@ type SurveyType = GetSurveyResult
 function TakeTestPage() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const [startAt, setStartAt] = useState<Date>(new Date())
     const id = router.query.id as string
     const [form] = Form.useForm<PutSurveySession>()
     const [survey, setSurvey] = useState<SurveyType>()
@@ -159,7 +159,7 @@ function TakeTestPage() {
             const res = await createSavePublicSurvey({
                 data: {
                     additionalSuggestion: dataSubmit.additionalSuggestion,
-                    startedAt: new Date().toISOString(),
+                    startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
                     responses: dataSubmit?.responses?.map((i) => {
                         return {
@@ -219,6 +219,7 @@ function TakeTestPage() {
         const response = await getPublicSurvey(id)
         if (response?.status === 200) {
             setSurvey(response?.data)
+            setStartAt(new Date())
             const list = response?.data?.surveyQuestion?.map((i) => {
                 return {
                     surveyQuestionId: i.id,

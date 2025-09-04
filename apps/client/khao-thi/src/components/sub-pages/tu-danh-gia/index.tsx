@@ -101,6 +101,7 @@ export default function EvaluatedPage({
             })
         }
     }, [data, activeKey])
+
     const items = useMemo(() => {
         return [
             {
@@ -219,12 +220,27 @@ export default function EvaluatedPage({
                                                             {
                                                                 title: 'Nơi thu thập',
                                                                 width: 150,
-                                                                align: 'left',
+                                                                align: 'center',
+                                                                render: (
+                                                                    record: RequirementCriterion
+                                                                ) => {
+                                                                    return (
+                                                                        record?.evidencePlaces || ''
+                                                                    )
+                                                                },
                                                             },
                                                             {
                                                                 title: 'Phương pháp thu thập',
                                                                 width: 150,
                                                                 align: 'center',
+                                                                render: (
+                                                                    record: RequirementCriterion
+                                                                ) => {
+                                                                    return (
+                                                                        record?.collectionMethod ||
+                                                                        ''
+                                                                    )
+                                                                },
                                                             },
                                                         ],
                                                     },
