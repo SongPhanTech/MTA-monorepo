@@ -66,6 +66,7 @@ catalog:
   crypto-browserify: ^3.12.1
   dayjs: ^1.11.13
   decimal.js: 10.6.0
+  docx: 9.5.1
   docxtemplater: 3.65.2
   dotenv: ^16.4.7
   easy-peasy: 6.0.5

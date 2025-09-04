@@ -10,8 +10,9 @@ import {
     useFindUniqueRequirementCriterionCatalog,
     useUpdateRequirementCriterionCatalog,
 } from '@workspace/db/hooks'
+import type { InputRef } from 'antd'
 import { Button, Col, Form, Input, InputNumber, message } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutRequirementCriterionCatalogType = RequirementCriterionCatalog
 const PutRequirementCriterionCatalog = () => {
@@ -29,6 +30,8 @@ const PutRequirementCriterionCatalog = () => {
         useCreateRequirementCriterionCatalog()
     const { mutateAsync: updateRequirementCriterionCatalog } =
         useUpdateRequirementCriterionCatalog()
+    const lastInputRef = useRef<InputRef | null>(null)
+
     async function onOk(output?: PutRequirementCriterionCatalogType) {
         if (!output) return
         try {
@@ -124,7 +127,7 @@ const PutRequirementCriterionCatalog = () => {
                     <Form.List name="questions">
                         {(fields, { add, remove }) => (
                             <>
-                                {fields.map(({ key, name, ...restField }) => (
+                                {fields.map(({ key, name, ...restField }, index) => (
                                     <div key={key} className="flex items-center gap-2 mb-2">
                                         <Form.Item
                                             {...restField}
@@ -132,7 +135,15 @@ const PutRequirementCriterionCatalog = () => {
                                             rules={[{ required: true, message: 'Nhập câu hỏi' }]}
                                             className="flex-1 mb-0"
                                         >
-                                            <Input placeholder="Nhập mô tả" className="w-full" />
+                                            <Input
+                                                placeholder="Nhập mô tả"
+                                                className="w-full"
+                                                ref={
+                                                    index === fields.length - 1
+                                                        ? lastInputRef
+                                                        : null
+                                                }
+                                            />
                                         </Form.Item>
                                         <DeleteOutlined
                                             onClick={() => remove(name)}
@@ -143,7 +154,14 @@ const PutRequirementCriterionCatalog = () => {
                                 <Form.Item>
                                     <Button
                                         type="dashed"
-                                        onClick={() => add()}
+                                        onClick={() => {
+                                            add()
+                                            setTimeout(() => {
+                                                if (lastInputRef.current) {
+                                                    lastInputRef.current.focus()
+                                                }
+                                            }, 0)
+                                        }}
                                         block
                                         icon={<PlusOutlined />}
                                     >
