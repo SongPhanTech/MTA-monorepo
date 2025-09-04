@@ -14,7 +14,7 @@ const StatBaseSchema = z.object({
 // Ban Giám đốc (BGĐ)
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-training-object-type',
         tags: ['Stats'],
         responses: {
@@ -67,7 +67,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-training-level',
         tags: ['Stats'],
         responses: {
@@ -120,7 +120,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-training-course',
         tags: ['Stats'],
         responses: {
@@ -173,7 +173,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/average-entry-score-by-course',
         tags: ['Stats'],
         responses: {
@@ -228,7 +228,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/average-gpa-by-course',
         tags: ['Stats'],
         responses: {
@@ -285,7 +285,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/graduation-rate-by-course',
         tags: ['Stats'],
         responses: {
@@ -338,9 +338,20 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/academic-performance-by-year',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Thống kê kết quả học tập toàn Học viện',
@@ -365,6 +376,7 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
         const data = await prisma.$queryRaw<
             Array<{
                 schoolYearId: string
@@ -394,6 +406,23 @@ app.openapi(
                 "SY"."name";
         `
 
+        if (preview) {
+            return c.json({
+                data: data.map(({ schoolYearId, name }) => ({
+                    schoolYearId,
+                    name,
+                    excellent: Math.round(Math.random() * 100),
+                    good: Math.round(Math.random() * 100),
+                    fair: Math.round(Math.random() * 100),
+                    average: Math.round(Math.random() * 100),
+                    weak: Math.round(Math.random() * 100),
+                })),
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
+
         return c.json({
             data,
             count: data.length,
@@ -405,7 +434,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/kpi-cards',
         tags: ['Stats'],
         responses: {
@@ -463,7 +492,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-province',
         tags: ['Stats'],
         responses: {
@@ -519,7 +548,7 @@ app.openapi(
 // Trưởng phòng Đào tạo
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-training-object-type-filtered',
         tags: ['Stats'],
         request: {
@@ -600,7 +629,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-training-level-filtered',
         tags: ['Stats'],
         request: {
@@ -681,7 +710,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-training-course-filtered',
         tags: ['Stats'],
         request: {
@@ -760,7 +789,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/average-entry-score-by-course-filtered',
         tags: ['Stats'],
         request: {
@@ -841,7 +870,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/average-gpa-by-course-filtered',
         tags: ['Stats'],
         request: {
@@ -926,7 +955,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/graduation-rate-by-course-filtered',
         tags: ['Stats'],
         request: {
@@ -1005,7 +1034,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/academic-performance-by-year-filtered',
         tags: ['Stats'],
         request: {
@@ -1102,7 +1131,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/student-distribution-by-province-filtered',
         tags: ['Stats'],
         request: {
@@ -1185,7 +1214,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/students-of-interest',
         tags: ['Stats'],
         request: {
@@ -1277,7 +1306,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/average-gpa-by-fixed-class',
         tags: ['Stats'],
         responses: {
@@ -1324,7 +1353,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/average-gpa-by-training-major',
         tags: ['Stats'],
         responses: {
@@ -1372,7 +1401,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/subject-pass-fail-rate',
         tags: ['Stats'],
         responses: {
@@ -1419,7 +1448,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/curriculum-statistics',
         tags: ['Stats'],
         responses: {
@@ -1454,7 +1483,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/subject-class-statistics',
         tags: ['Stats'],
         request: {
@@ -1520,7 +1549,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/lecturer-workload',
         tags: ['Stats'],
         responses: {
@@ -1569,7 +1598,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/graduation-ranking-statistics',
         tags: ['Stats'],
         responses: {
@@ -1611,7 +1640,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/students-for-academic-action',
         tags: ['Stats'],
         responses: {
@@ -1664,7 +1693,7 @@ app.openapi(
 // Trưởng phòng Khảo thí
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/exam-participants-by-semester',
         tags: ['Stats'],
         request: {
@@ -1702,7 +1731,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/average-exam-score-trend',
         tags: ['Stats'],
         responses: {
@@ -1760,7 +1789,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/question-statistics',
         tags: ['Stats'],
         responses: {
@@ -1840,7 +1869,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/highest-incorrect-answer-rate-questions',
         tags: ['Stats'],
         responses: {
@@ -1886,7 +1915,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/most-used-questions',
         tags: ['Stats'],
         responses: {
@@ -1933,7 +1962,7 @@ app.openapi(
 // Trưởng phòng Hồ sơ
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/demographics',
         tags: ['Stats'],
         responses: {
@@ -2008,7 +2037,7 @@ app.openapi(
 
 app.openapi(
     createRoute({
-        method: 'get',
+        method: 'post',
         path: '/enrollment-trend',
         tags: ['Stats'],
         responses: {
