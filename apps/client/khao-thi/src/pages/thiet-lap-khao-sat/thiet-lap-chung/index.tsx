@@ -1,7 +1,7 @@
 import {
     TabChuDeKhaoSat,
     TabDoiTuongKhaoSat,
-    TabDotKhaoSat,
+    TabNhomCauHoi
 } from '@components/features/thiet-lap-khao-sat'
 import DefaultLayout from '@layouts/default-layout'
 import { Tabs, type TabsProps } from 'antd'
@@ -14,18 +14,18 @@ function Page() {
     const items: TabsProps['items'] = [
         {
             key: '1',
-            label: 'Đợt khảo sát',
-            children: <TabDotKhaoSat />,
-        },
-        {
-            key: '2',
             label: 'Chủ đề khảo sát',
             children: <TabChuDeKhaoSat />,
         },
         {
-            key: '3',
+            key: '2',
             label: 'Đối tượng khảo sát',
             children: <TabDoiTuongKhaoSat />,
+        },
+           {
+            key: '3',
+            label: 'Nhóm câu hỏi khảo sát',
+            children: <TabNhomCauHoi />,
         },
     ]
     return <Tabs defaultActiveKey="1" items={items} onChange={onChange} type="card" />

@@ -731,14 +731,14 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                     },
                     {
-                        id: 'nhom-cau-hoi-khao-sat',
-                        label: 'Nhóm câu hỏi khảo sát',
-                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT,
-                    },
-                    {
                         id: 'cau-hoi-khao-sat',
                         label: 'Câu hỏi khảo sát',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                    },
+                    {
+                        id: 'dot-khao-sat',
+                        label: 'Đợt khảo sát',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                     },
                 ],
             },
@@ -822,6 +822,12 @@ const NAVIGATION: NavigationType = {
         ],
     },
 }
-export { ROUTER_PATH }
+
+
+const PUBLIC_ROUTER=[
+    ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace('[id]',''),
+]
+
+export { ROUTER_PATH ,PUBLIC_ROUTER }
 export type { MenuItem, NavigationType }
 export default NAVIGATION
