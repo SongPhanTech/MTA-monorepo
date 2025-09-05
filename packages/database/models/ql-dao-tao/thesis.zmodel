@@ -102,25 +102,29 @@ enum StudentThesisRegistrationStatus {
 
 // Bảng đăng ký đồ án của học viên
 model StudentThesisRegistration extends Base {
-  student         Student                         @relation(fields: [studentId], references: [id])
-  studentId       String
+  // keep this for backward compatibility
+  student               Student                         @relation(fields: [studentId], references: [id])
+  studentId             String
 
-  thesisProject   ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
-  thesisProjectId String
+  studentSubjectScore   StudentSubjectScore             @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String
+
+  thesisProject         ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
+  thesisProjectId       String
   
   // Thông tin đăng ký
-  registeredAt    DateTime                        @default(now()) // Thời gian đăng ký
-  motivation      String?                         @db.Text() // Lý do muốn tham gia
-  experience      String?                         @db.Text() // Kinh nghiệm liên quan
-  proposedIdeas   String?                         @db.Text() // Ý tưởng đóng góp
+  registeredAt          DateTime                        @default(now()) // Thời gian đăng ký
+  motivation            String?                         @db.Text() // Lý do muốn tham gia
+  experience            String?                         @db.Text() // Kinh nghiệm liên quan
+  proposedIdeas         String?                         @db.Text() // Ý tưởng đóng góp
 
-  status          StudentThesisRegistrationStatus @default(PENDING)
-  reviewedAt      DateTime?                   // Thời gian phê duyệt
-  reviewedBy      Lecturer?                       @relation(fields: [reviewedById], references: [id])
-  reviewedById    String?
-  reviewNote      String?                         @db.Text() // Ghi chú của giáo viên
+  status                StudentThesisRegistrationStatus @default(PENDING)
+  reviewedAt            DateTime?                   // Thời gian phê duyệt
+  reviewedBy            Lecturer?                       @relation(fields: [reviewedById], references: [id])
+  reviewedById          String?
+  reviewNote            String?                         @db.Text() // Ghi chú của giáo viên
 
-  council         Council?
+  council               Council?
 
   @@unique([studentId, thesisProjectId])
   @@schema("ql-dao-tao")

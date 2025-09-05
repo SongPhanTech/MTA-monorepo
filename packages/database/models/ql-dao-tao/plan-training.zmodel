@@ -22,18 +22,18 @@ import "../khao-thi/survey"
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
 // Lấy bản ghi có finalScore cao nhất làm kết quả cuối cùng
 model StudentSubjectScore extends Base {
-  subjectClass     SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
-  subjectClassId   String?
+  subjectClass              SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
+  subjectClassId            String?
 
-  subjectVersion   SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
+  subjectVersion            SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId          String
 
-  student          Student                                    @relation(fields: [studentId], references: [id])
-  studentId        String
+  student                   Student                                    @relation(fields: [studentId], references: [id])
+  studentId                 String
 
-  attendanceScore  Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm chuyên cần
-  midtermScore     Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
-  examScore        Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ
+  attendanceScore           Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm chuyên cần
+  midtermScore              Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
+  examScore                 Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ
 
   // dùng hàm `calcFinalScore` từ @workspace/libs/utils
   // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
@@ -42,31 +42,32 @@ model StudentSubjectScore extends Base {
   // maxCertFinalScore = Math.max(.certificates.archivedCertificate.finalScore)
   // bonusScore = sum(.awards.archivedAward.bonusScore)
   // finalScore = Math.max(computedFinalScore, maxCertFinalScore) + bonusScore
-  finalScore       Decimal?                                   @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
+  finalScore                Decimal?                                   @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
   // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp manualFinalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
-  manualFinalScore Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết chuyển trường
+  manualFinalScore          Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết chuyển trường
 
   // Điểm I là điểm sử dụng trong trường hợp học viên không thể dự thi kết thúc học phần do bị ốm,
   // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26).
-  examPostponed    Boolean                                    @default(false) // hoãn thi
+  examPostponed             Boolean                                    @default(false) // hoãn thi
 
   // Điểm R là điểm áp dụng cho học phần mà học viên được phép miễn học và
   // bảo lưu kết quả khi học viên chuyển từ trường khác đến hoặc chuyển đổi giữa các CTĐT. 
-  exempted         Boolean                                    @default(false) // được miễn học
+  exempted                  Boolean                                    @default(false) // được miễn học
 
   // Điểm W được sử dụng để ghi chú cho học phần mà học viên
   // đã làm đơn xin rút khỏi danh sách đăng ký đúng hạn và được chấp nhận.
-  withdrew         Boolean                                    @default(false) // rút khỏi
+  withdrew                  Boolean                                    @default(false) // rút khỏi
 
   // Điểm X được sử dụng đối với những học phần
   // mà Phòng Đào tạo chưa nhận được kết quả học tập của học viên.
   // ~ if finalScore === null
 
-  examBanned       Boolean                                    @default(false) // cấm thi
-  suspended        Boolean                                    @default(false) // đình chỉ
+  examBanned                Boolean                                    @default(false) // cấm thi
+  suspended                 Boolean                                    @default(false) // đình chỉ
 
-  certificates     ArchivedCertificateOnStudentSubjectScore[]
-  awards           ArchivedAwardOnStudentSubjectScore[]
+  certificates              ArchivedCertificateOnStudentSubjectScore[]
+  awards                    ArchivedAwardOnStudentSubjectScore[]
+  studentThesisRegistration StudentThesisRegistration[]
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }

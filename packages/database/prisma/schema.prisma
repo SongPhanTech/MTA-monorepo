@@ -779,31 +779,32 @@ model ExamSession {
 
 /// Điểm môn học SV - lớp môn học
 model StudentSubjectScore {
-  id               String                                     @id() @default(cuid())
-  code             String?                                    @unique()
-  active           Boolean                                    @default(true)
-  description      String?                                    @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime                                   @default(now())
-  updatedAt        DateTime                                   @default(now()) @updatedAt()
-  subjectClass     SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
-  subjectClassId   String?
-  subjectVersion   SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
-  student          Student                                    @relation(fields: [studentId], references: [id])
-  studentId        String
-  attendanceScore  Float?
-  midtermScore     Float?
-  examScore        Float?
-  finalScore       Decimal?                                   @db.Decimal(5, 1)
-  manualFinalScore Float?
-  examPostponed    Boolean                                    @default(false)
-  exempted         Boolean                                    @default(false)
-  withdrew         Boolean                                    @default(false)
-  examBanned       Boolean                                    @default(false)
-  suspended        Boolean                                    @default(false)
-  certificates     ArchivedCertificateOnStudentSubjectScore[]
-  awards           ArchivedAwardOnStudentSubjectScore[]
+  id                        String                                     @id() @default(cuid())
+  code                      String?                                    @unique()
+  active                    Boolean                                    @default(true)
+  description               String?                                    @db.Text()
+  deletedAt                 DateTime?
+  createdAt                 DateTime                                   @default(now())
+  updatedAt                 DateTime                                   @default(now()) @updatedAt()
+  subjectClass              SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
+  subjectClassId            String?
+  subjectVersion            SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId          String
+  student                   Student                                    @relation(fields: [studentId], references: [id])
+  studentId                 String
+  attendanceScore           Float?
+  midtermScore              Float?
+  examScore                 Float?
+  finalScore                Decimal?                                   @db.Decimal(5, 1)
+  manualFinalScore          Float?
+  examPostponed             Boolean                                    @default(false)
+  exempted                  Boolean                                    @default(false)
+  withdrew                  Boolean                                    @default(false)
+  examBanned                Boolean                                    @default(false)
+  suspended                 Boolean                                    @default(false)
+  certificates              ArchivedCertificateOnStudentSubjectScore[]
+  awards                    ArchivedAwardOnStudentSubjectScore[]
+  studentThesisRegistration StudentThesisRegistration[]
 
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
@@ -3539,27 +3540,29 @@ model DefenseSession {
 }
 
 model StudentThesisRegistration {
-  id              String                          @id() @default(cuid())
-  code            String?                         @unique()
-  active          Boolean                         @default(true)
-  description     String?                         @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime                        @default(now())
-  updatedAt       DateTime                        @default(now()) @updatedAt()
-  student         Student                         @relation(fields: [studentId], references: [id])
-  studentId       String
-  thesisProject   ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
-  thesisProjectId String
-  registeredAt    DateTime                        @default(now())
-  motivation      String?                         @db.Text()
-  experience      String?                         @db.Text()
-  proposedIdeas   String?                         @db.Text()
-  status          StudentThesisRegistrationStatus @default(PENDING)
-  reviewedAt      DateTime?
-  reviewedBy      Lecturer?                       @relation(fields: [reviewedById], references: [id])
-  reviewedById    String?
-  reviewNote      String?                         @db.Text()
-  council         Council?
+  id                    String                          @id() @default(cuid())
+  code                  String?                         @unique()
+  active                Boolean                         @default(true)
+  description           String?                         @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime                        @default(now())
+  updatedAt             DateTime                        @default(now()) @updatedAt()
+  student               Student                         @relation(fields: [studentId], references: [id])
+  studentId             String
+  studentSubjectScore   StudentSubjectScore             @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String
+  thesisProject         ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
+  thesisProjectId       String
+  registeredAt          DateTime                        @default(now())
+  motivation            String?                         @db.Text()
+  experience            String?                         @db.Text()
+  proposedIdeas         String?                         @db.Text()
+  status                StudentThesisRegistrationStatus @default(PENDING)
+  reviewedAt            DateTime?
+  reviewedBy            Lecturer?                       @relation(fields: [reviewedById], references: [id])
+  reviewedById          String?
+  reviewNote            String?                         @db.Text()
+  council               Council?
 
   @@unique([studentId, thesisProjectId])
   @@schema("ql-dao-tao")
