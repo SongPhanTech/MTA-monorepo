@@ -214,44 +214,49 @@ const PutStudentThesisRegistration = () => {
                     return
                 }
 
-                const payload = await Promise.all(
-                    selectedStudents.map(async (studentId) => {
-                        const res = await sqlTransaction([
-                            {
-                                model: 'StudentSubjectScore',
-                                operation: 'findUnique',
-                                data: {
-                                    where: {
-                                        subjectClassId_studentId: {
-                                            subjectClassId: thesisProject?.subjectClassId,
-                                            studentId,
+                const payload = (
+                    await Promise.all(
+                        selectedStudents.map(async (studentId) => {
+                            const res = await sqlTransaction([
+                                {
+                                    model: 'StudentSubjectScore',
+                                    operation: 'findUnique',
+                                    data: {
+                                        where: {
+                                            subjectClassId_studentId: {
+                                                subjectClassId: thesisProject?.subjectClassId,
+                                                studentId,
+                                            },
                                         },
-                                    },
-                                    select: {
-                                        id: true,
+                                        select: { id: true },
                                     },
                                 },
-                            },
-                        ])
-                        const studentSubjectScore = Array.isArray(res?.data)
-                            ? (res.data[0] as { id?: string })
-                            : undefined
+                            ])
 
-                        return {
-                            status: output.status,
-                            thesisProjectId: input?.thesisProjectId || '',
-                            studentId,
-                            registeredAt: output.registeredAt,
-                            motivation: output.motivation,
-                            experience: output.experience,
-                            proposedIdeas: output.proposedIdeas,
-                            reviewedAt: output.reviewedAt,
-                            reviewedById: output.reviewedById,
-                            reviewNote: output.reviewNote,
-                            studentSubjectScoreId: studentSubjectScore?.id,
-                        }
-                    })
-                )
+                            const studentSubjectScore = Array.isArray(res?.data)
+                                ? (res.data[0] as { id?: string })
+                                : undefined
+
+                            if (!studentSubjectScore?.id) {
+                                return null
+                            }
+
+                            return {
+                                status: output.status,
+                                thesisProjectId: input?.thesisProjectId || '',
+                                studentId,
+                                registeredAt: output.registeredAt,
+                                motivation: output.motivation,
+                                experience: output.experience,
+                                proposedIdeas: output.proposedIdeas,
+                                reviewedAt: output.reviewedAt,
+                                reviewedById: output.reviewedById,
+                                reviewNote: output.reviewNote,
+                                studentSubjectScoreId: studentSubjectScore.id,
+                            }
+                        })
+                    )
+                ).filter((x): x is NonNullable<typeof x> => !!x)
 
                 await createManyStudentThesisRegistration({
                     data: payload,
