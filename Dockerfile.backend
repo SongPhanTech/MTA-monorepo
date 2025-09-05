@@ -42,7 +42,8 @@ ENV PACKAGE="${PACKAGE}"
 WORKDIR /app
 RUN apt update && apt install -y libssl3
 RUN bun add @opentelemetry/exporter-trace-otlp-http
-COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
+# COPY --from=builder /app/packages/database/node_modules/prisma/*.node /tmp/prisma-engines/
+COPY --from=builder /app/packages/database/generated/prisma-client/*.node /tmp/prisma-engines/
 COPY --from=builder /app/apps/backend/${PACKAGE}/dist .
 USER bun
 
