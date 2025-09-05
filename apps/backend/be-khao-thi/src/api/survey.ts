@@ -10,6 +10,7 @@ import {
     SimplifiedResponseSchema,
     SurveyStatisticsBySemesterResponseSchema,
 } from '../dto/survey.dto'
+import { SurveyStatisticSchema } from '../dto/survey-statistic.dto'
 import { getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
 
@@ -647,6 +648,112 @@ app.openapi(getCompletionByHourOfDay, (c) => {
         totalCompletions: allRecords.length,
         surveyDurationInDays: surveyDurationInDays,
         hourlyAggregates: hourlyAggregates,
+    }
+
+    return c.json(responseData, 200)
+})
+
+const getSurveyStatistics = createRoute({
+    operationId: 'get-survey-statistics',
+    path: '/surveys/{id}/statistics',
+    method: 'get',
+    tags: ['Statistics'],
+    summary: 'Thống kê câu trả lời cho từng câu hỏi trong một đợt khảo sát',
+    request: {
+        params: z.object({
+            id: z.string().openapi({
+                description: 'ID của khảo sát cần xem thống kê.',
+            }),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Lấy dữ liệu thống kê thành công.',
+            content: {
+                'application/json': {
+                    schema: SurveyStatisticSchema,
+                },
+            },
+        },
+        404: {
+            description: 'Không tìm thấy khảo sát.',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(getSurveyStatistics, async (c) => {
+    const { id } = c.req.valid('param')
+
+    const survey = await prisma.survey.findUnique({
+        where: { id },
+        include: {
+            surveyQuestion: {
+                where: {
+                    type: 'SINGLE_CHOICE',
+                },
+            },
+            surveyChoice: true,
+        },
+    })
+
+    if (!survey) {
+        return c.json({ message: 'Không tìm thấy khảo sát' }, 404)
+    }
+
+    const questionIds = survey.surveyQuestion.map((q) => q.id)
+
+    const answerCounts = await prisma.surveyResponse.groupBy({
+        by: ['surveyQuestionId', 'surveyChoiceId'],
+        where: {
+            surveyQuestionId: {
+                in: questionIds,
+            },
+            surveyChoiceId: {
+                not: null,
+            },
+        },
+        _count: {
+            surveyChoiceId: true,
+        },
+    })
+
+    const answerCountMap = answerCounts.reduce(
+        (acc, curr) => {
+            if (curr.surveyChoiceId) {
+                const key = `${curr.surveyQuestionId}-${curr.surveyChoiceId}`
+                acc[key] = curr._count.surveyChoiceId
+            }
+            return acc
+        },
+        {} as Record<string, number>
+    )
+
+    const questions = survey.surveyQuestion.map((question) => {
+        const answers = survey.surveyChoice.map((choice) => {
+            const key = `${question.id}-${choice.id}`
+            return {
+                id: choice.id,
+                answer: choice.answer,
+                description: choice.description,
+                count: answerCountMap[key] || 0,
+            }
+        })
+        return {
+            id: question.id,
+            name: question.name,
+            answers,
+        }
+    })
+
+    const responseData = {
+        surveyId: survey.id,
+        surveyName: survey.name,
+        questions,
     }
 
     return c.json(responseData, 200)
