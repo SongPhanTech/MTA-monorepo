@@ -32,11 +32,11 @@ export default function EvaluatedPage({
 }) {
     const [activeKey, setActiveKey] = useState('infor')
     const [form] = Form.useForm<PutRequirementCriterion>()
-    const { onOpen: onOpenAddEvaluationPeriod } = useDisclosure<{
-        id: string
-        refetch: () => void
-    }>({
+    const { onOpen: onOpenAddEvaluationPeriod } = useDisclosure<string>({
         tag: AddEvidenceToPeriod.name,
+        onClose() {
+            refetch()
+        },
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -255,10 +255,7 @@ export default function EvaluatedPage({
                                                                         onClick={(e) => {
                                                                             e.stopPropagation()
                                                                             onOpenAddEvaluationPeriod(
-                                                                                {
-                                                                                    id,
-                                                                                    refetch,
-                                                                                }
+                                                                                id
                                                                             )
                                                                         }}
                                                                         className="text-sm text-blue-700 cursor-pointer"
@@ -439,7 +436,7 @@ export default function EvaluatedPage({
                 ),
             },
         ]
-    }, [data, index, onOpenAddEvaluationPeriod, refetch, handleSubmit, form])
+    }, [data, index, onOpenAddEvaluationPeriod, handleSubmit, form])
 
     return (
         <div className="h-[calc(100vh-200px)] overflow-y-auto">

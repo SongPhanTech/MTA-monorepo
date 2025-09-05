@@ -67,7 +67,7 @@ model StudentSubjectScore extends Base {
 
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]
-  studentThesisRegistration StudentThesisRegistration[]
+  studentThesisRegistration StudentThesisRegistration[]                @relation("ScoreToRegistration")
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
 }

@@ -18,6 +18,7 @@ import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import Tabs from '@components/commons/tabar'
 import { useStudentThesisRegistrationStatusOptions } from '@hooks/studentThesisRegistrationStatus'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -48,74 +49,84 @@ const PutStudentThesisRegistration = () => {
         { enabled: !!input?.studentThesisId }
     )
 
-    const { data: thesisProject } = useFindUniqueThesisProject({
-        where: {
-            id: input?.thesisProjectId,
+    const { data: thesisProject } = useFindUniqueThesisProject(
+        {
+            where: {
+                id: input?.thesisProjectId,
+            },
         },
-    })
+        {
+            enabled: !!input?.thesisProjectId,
+        }
+    )
 
-    const { data: studentData, refetch } = useFindUniqueSubjectClass({
-        where: {
-            id: thesisProject?.subjectClassId,
-        },
-        include: {
-            subjectClassStudent: {
-                where: {
-                    student: {
-                        AND: [
-                            {
-                                OR: [
-                                    {
-                                        ...(searchText
-                                            ? {
-                                                  code: {
-                                                      contains: searchText,
-                                                      mode: 'insensitive',
-                                                  },
-                                              }
-                                            : {}),
-                                    },
-                                    {
-                                        ...(searchText
-                                            ? {
-                                                  userProfile: {
-                                                      fullname: {
+    const { data: studentData, refetch } = useFindUniqueSubjectClass(
+        {
+            where: {
+                id: thesisProject?.subjectClassId,
+            },
+            include: {
+                subjectClassStudent: {
+                    where: {
+                        student: {
+                            AND: [
+                                {
+                                    OR: [
+                                        {
+                                            ...(searchText
+                                                ? {
+                                                      code: {
                                                           contains: searchText,
                                                           mode: 'insensitive',
                                                       },
-                                                  },
-                                              }
-                                            : {}),
-                                    },
-                                ],
-                            },
-                            {
-                                OR: [
-                                    {
-                                        thesisRegistrations: {
-                                            none: {
-                                                thesisProjectId: input?.thesisProjectId,
+                                                  }
+                                                : {}),
+                                        },
+                                        {
+                                            ...(searchText
+                                                ? {
+                                                      userProfile: {
+                                                          fullname: {
+                                                              contains: searchText,
+                                                              mode: 'insensitive',
+                                                          },
+                                                      },
+                                                  }
+                                                : {}),
+                                        },
+                                    ],
+                                },
+                                {
+                                    OR: [
+                                        {
+                                            thesisRegistrations: {
+                                                none: {
+                                                    thesisProjectId: input?.thesisProjectId,
+                                                },
                                             },
                                         },
-                                    },
-                                    ...(input?.studentThesisId
-                                        ? [{ id: studentThesisRegistration?.studentId }]
-                                        : []),
-                                ],
-                            },
-                        ],
+                                        ...(input?.studentThesisId
+                                            ? [{ id: studentThesisRegistration?.studentId }]
+                                            : []),
+                                    ],
+                                },
+                            ],
+                        },
                     },
-                },
-                include: {
-                    student: {
-                        include: {
-                            userProfile: true,
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                            },
                         },
                     },
                 },
             },
         },
-    })
+        {
+            enabled: !!input?.thesisProjectId,
+        }
+    )
 
     const { data: reviewer = [] } = useFindManyLecturer({
         where: {
@@ -203,18 +214,44 @@ const PutStudentThesisRegistration = () => {
                     return
                 }
 
-                const payload = selectedStudents.map((studentId) => ({
-                    status: output.status,
-                    thesisProjectId: input?.thesisProjectId || '',
-                    studentId,
-                    registeredAt: output.registeredAt,
-                    motivation: output.motivation,
-                    experience: output.experience,
-                    proposedIdeas: output.proposedIdeas,
-                    reviewedAt: output.reviewedAt,
-                    reviewedById: output.reviewedById,
-                    reviewNote: output.reviewNote,
-                }))
+                const payload = await Promise.all(
+                    selectedStudents.map(async (studentId) => {
+                        const res = await sqlTransaction([
+                            {
+                                model: 'StudentSubjectScore',
+                                operation: 'findUnique',
+                                data: {
+                                    where: {
+                                        subjectClassId_studentId: {
+                                            subjectClassId: thesisProject?.subjectClassId,
+                                            studentId,
+                                        },
+                                    },
+                                    select: {
+                                        id: true,
+                                    },
+                                },
+                            },
+                        ])
+                        const studentSubjectScore = Array.isArray(res?.data)
+                            ? (res.data[0] as { id?: string })
+                            : undefined
+
+                        return {
+                            status: output.status,
+                            thesisProjectId: input?.thesisProjectId || '',
+                            studentId,
+                            registeredAt: output.registeredAt,
+                            motivation: output.motivation,
+                            experience: output.experience,
+                            proposedIdeas: output.proposedIdeas,
+                            reviewedAt: output.reviewedAt,
+                            reviewedById: output.reviewedById,
+                            reviewNote: output.reviewNote,
+                            studentSubjectScoreId: studentSubjectScore?.id,
+                        }
+                    })
+                )
 
                 await createManyStudentThesisRegistration({
                     data: payload,
@@ -266,6 +303,7 @@ const PutStudentThesisRegistration = () => {
                         filterOption={false}
                         allowClear
                         onChange={handleStudentChange}
+                        disabled={!!input?.studentThesisId}
                     />
                 </FormItem>
             </Col>

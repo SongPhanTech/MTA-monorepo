@@ -805,7 +805,7 @@ model StudentSubjectScore {
   suspended                 Boolean                                    @default(false)
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]
-  studentThesisRegistration StudentThesisRegistration[]
+  studentThesisRegistration StudentThesisRegistration[]                @relation("ScoreToRegistration")
 
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
@@ -3550,7 +3550,7 @@ model StudentThesisRegistration {
   updatedAt             DateTime                        @default(now()) @updatedAt()
   student               Student                         @relation(fields: [studentId], references: [id])
   studentId             String
-  studentSubjectScore   StudentSubjectScore             @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScore   StudentSubjectScore             @relation("ScoreToRegistration", fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
   thesisProject         ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
   thesisProjectId       String

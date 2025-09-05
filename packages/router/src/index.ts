@@ -578,6 +578,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
                         description: 'Danh sách thanh toán GVHD',
                     },
+                    {
+                        id: 'thong-ke-ket-qua-bao-ve',
+                        label: 'Thống kê kết quả bảo vệ',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_THONG_KE,
+                        description: 'Thống kê kết quả bảo vệ',
+                    },
                 ],
             },
             {
@@ -823,11 +829,8 @@ const NAVIGATION: NavigationType = {
     },
 }
 
+const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace('[id]', '')]
 
-const PUBLIC_ROUTER=[
-    ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace('[id]',''),
-]
-
-export { ROUTER_PATH ,PUBLIC_ROUTER }
+export { ROUTER_PATH, PUBLIC_ROUTER }
 export type { MenuItem, NavigationType }
 export default NAVIGATION

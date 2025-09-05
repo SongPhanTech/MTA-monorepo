@@ -92,6 +92,7 @@ export default {
     "QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA": "/quan-ly-do-an/danh-sach-chuyen-gia",
     "QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD": "/quan-ly-do-an/danh-sach-thanh-toan-gvhd",
     "QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN": "/quan-ly-do-an/danh-sach-thanh-toan",
+    "QUAN_LY_DO_AN_THONG_KE": "/quan-ly-do-an/thong-ke",
     "QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN_ID": "/quan-ly-ho-so/danh-sach-giang-vien/[id]",
     "QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN": "/quan-ly-ho-so/danh-sach-giang-vien",
     "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",

@@ -106,7 +106,7 @@ model StudentThesisRegistration extends Base {
   student               Student                         @relation(fields: [studentId], references: [id])
   studentId             String
 
-  studentSubjectScore   StudentSubjectScore             @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScore   StudentSubjectScore             @relation("ScoreToRegistration", fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
 
   thesisProject         ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
