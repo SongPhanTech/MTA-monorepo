@@ -10,6 +10,12 @@ generator client {
   provider = "prisma-client-js"
   previewFeatures = ["multiSchema", "typedSql","fullTextSearchPostgres"]
   binaryTargets = ["native"]
+  output = "../generated/prisma-client"
+}
+
+plugin enhance {
+  provider = "@core/enhancer"
+  output = "./generated/zenstack"
 }
 
 // generator dbml {

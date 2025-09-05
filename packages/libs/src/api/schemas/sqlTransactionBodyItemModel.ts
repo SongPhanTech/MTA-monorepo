@@ -180,6 +180,8 @@ export const SqlTransactionBodyItemModel = {
     AnalysisFormEvidence: 'AnalysisFormEvidence',
     EvaluationCouncil: 'EvaluationCouncil',
     EvaluationCouncilMember: 'EvaluationCouncilMember',
+    EvaluationSecretarYCouncil: 'EvaluationSecretarYCouncil',
+    EvaluationSecretaryMember: 'EvaluationSecretaryMember',
     EvidenceFile: 'EvidenceFile',
     SurveyObjectType: 'SurveyObjectType',
     SurveyTopic: 'SurveyTopic',

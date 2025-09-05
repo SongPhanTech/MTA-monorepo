@@ -5,7 +5,7 @@ import {
     type Prisma,
     PrismaClient,
     type TrainingCourse,
-} from '@prisma/client'
+} from '../../generated/prisma-client'
 
 const prisma = new PrismaClient()
 

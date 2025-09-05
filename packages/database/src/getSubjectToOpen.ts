@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
+import { PrismaClient } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
@@ -10,7 +10,6 @@ const semester = await prisma.semester.findUniqueOrThrow({
     select: {
         id: true,
         semesterType: true,
-        order: true,
         schoolYear: {
             select: { startDate: true },
         },
@@ -64,11 +63,7 @@ const classes = await prisma.fixedClass.findMany({
 // 3. Tính offset học kỳ cho mỗi lớp
 const classWithOffset = classes.map(({ trainingCourse, ...cls }) => {
     const semesterOrder =
-        semester.semesterType === 'FIRST'
-            ? 1
-            : semester.semesterType === 'SECOND'
-              ? 2
-              : semester.order
+        semester.semesterType === 'FIRST' ? 1 : semester.semesterType === 'SECOND' ? 2 : 3
 
     const offset =
         (semester.schoolYear.startDate.getFullYear() -

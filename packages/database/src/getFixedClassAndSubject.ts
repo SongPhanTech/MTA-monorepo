@@ -1,5 +1,5 @@
-import { $Enums, PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
+import { $Enums, PrismaClient } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 async function getSubjectsToOpen(semesterId: string) {
@@ -10,7 +10,6 @@ async function getSubjectsToOpen(semesterId: string) {
             code: true,
             name: true,
             semesterType: true,
-            order: true,
             schoolYear: {
                 select: { startDate: true },
             },
@@ -70,7 +69,7 @@ async function getSubjectsToOpen(semesterId: string) {
                 ? 1
                 : semester.semesterType === $Enums.SemesterType.SECOND
                   ? 2
-                  : semester.order
+                  : 3
 
         const semesterOffset =
             (semester.schoolYear.startDate.getFullYear() -

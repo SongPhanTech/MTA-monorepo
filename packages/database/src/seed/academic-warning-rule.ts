@@ -1,4 +1,9 @@
-import { CriteriaField, CriteriaOperator, PrismaClient, type TrainingCourse } from '@prisma/client'
+import {
+    CriteriaField,
+    CriteriaOperator,
+    PrismaClient,
+    type TrainingCourse,
+} from '../../generated/prisma-client'
 
 const prisma = new PrismaClient()
 

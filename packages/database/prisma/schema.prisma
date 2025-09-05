@@ -13,6 +13,7 @@ generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema", "typedSql", "fullTextSearchPostgres"]
   binaryTargets   = ["native"]
+  output          = "../generated/prisma-client"
 }
 
 enum ConfigKey {

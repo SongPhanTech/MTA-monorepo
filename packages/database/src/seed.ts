@@ -1,4 +1,9 @@
-import { $Enums, AcademicRankingBaseType, ConfigKey, PrismaClient } from '@prisma/client'
+import {
+    $Enums,
+    AcademicRankingBaseType,
+    ConfigKey,
+    PrismaClient,
+} from '../generated/prisma-client'
 import {
     academicRankingGraduationCivilian,
     academicRankingGraduationMilitary,

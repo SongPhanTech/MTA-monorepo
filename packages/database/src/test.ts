@@ -1,4 +1,4 @@
-import { AcademicRankingBaseType, PrismaClient } from '@prisma/client'
+import { AcademicRankingBaseType, PrismaClient } from '../generated/prisma-client'
 import {
     academicRankingGraduationCivilian,
     academicRankingGraduationMilitary,

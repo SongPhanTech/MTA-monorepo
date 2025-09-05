@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
-import { CriteriaField, CriteriaOperator, PrismaClient } from '@prisma/client'
+import { CriteriaField, CriteriaOperator, PrismaClient } from '../../generated/prisma-client'
 
 const prisma = new PrismaClient()
 

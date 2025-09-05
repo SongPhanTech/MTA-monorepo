@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../../generated/prisma-client'
 import { scoreConversions } from './score-convert'
 
 const prisma = new PrismaClient()

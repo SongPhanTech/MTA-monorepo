@@ -1,4 +1,4 @@
-import { ExamType, PrismaClient, SubjectClassSchedule, UserType } from '@prisma/client'
+import { ExamType, PrismaClient, SubjectClassSchedule, UserType } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
