@@ -23,7 +23,11 @@ interface MyTreeNode {
 const AddEvidenceToPeriod = () => {
     const [items, setItems] = useState<ItemProps[] | []>([])
     const [form] = Form.useForm<PutEvidenceType>()
-    const { isOpen, onClose, input } = useDisclosure<{ id: string; refetch: () => void }>({
+    const {
+        isOpen,
+        onClose,
+        input: id,
+    } = useDisclosure<string>({
         tag: AddEvidenceToPeriod.name,
         onClose: form.resetFields,
     })
@@ -35,7 +39,7 @@ const AddEvidenceToPeriod = () => {
         try {
             showSpinner()
 
-            if (input?.id) {
+            if (id) {
                 const { onlyInA: onlyInNew, onlyInB: onlyInOld } = diffArrays(
                     items,
                     initialValue?.evidences?.length
@@ -60,7 +64,7 @@ const AddEvidenceToPeriod = () => {
                                 data: {
                                     where: {
                                         requirementCriterionId_evidenceId: {
-                                            requirementCriterionId: input?.id,
+                                            requirementCriterionId: id,
                                             evidenceId: i.value,
                                         },
                                     },
@@ -78,7 +82,7 @@ const AddEvidenceToPeriod = () => {
                                 operation: 'create',
                                 data: {
                                     data: {
-                                        requirementCriterionId: input?.id,
+                                        requirementCriterionId: id,
                                         evidenceId: i.value,
                                         order: 1,
                                     },
@@ -97,7 +101,7 @@ const AddEvidenceToPeriod = () => {
                             data: {
                                 where: {
                                     requirementCriterionId_evidenceId: {
-                                        requirementCriterionId: input?.id,
+                                        requirementCriterionId: id,
                                         evidenceId: i.value,
                                     },
                                 },
@@ -112,7 +116,7 @@ const AddEvidenceToPeriod = () => {
                         operation: 'update',
                         data: {
                             where: {
-                                id: input?.id,
+                                id,
                             },
                             data: {
                                 evidencePlaces: output?.evidencePlaces,
@@ -127,7 +131,6 @@ const AddEvidenceToPeriod = () => {
 
                 message.success('Cập nhật thành công')
             }
-            input?.refetch()
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -138,7 +141,7 @@ const AddEvidenceToPeriod = () => {
     const { data: listEvidence } = useFindManyEvidence()
     const { data: initialValue } = useFindUniqueRequirementCriterion(
         {
-            where: { id: input?.id },
+            where: { id },
             include: {
                 evidences: {
                     include: {
@@ -149,7 +152,7 @@ const AddEvidenceToPeriod = () => {
             },
         },
         {
-            enabled: !!input?.id,
+            enabled: !!id,
         }
     )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>

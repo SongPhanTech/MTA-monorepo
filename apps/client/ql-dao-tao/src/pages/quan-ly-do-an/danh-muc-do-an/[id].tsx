@@ -17,13 +17,13 @@ import useSpinner from '@hooks/spinner'
 import { useStudentThesisRegistrationStatusOptions } from '@hooks/studentThesisRegistrationStatus'
 import DefaultLayout from '@layouts/default-layout'
 import {
+    useDeleteStudentThesisRegistration,
     useFindManyCouncil,
     useFindManyDecision,
     useFindManyStudentThesisRegistration,
     useUpdateCouncil,
     useUpdateCouncilMember,
     useUpdateDecision,
-    useUpdateStudentThesisRegistration,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
@@ -142,16 +142,13 @@ export default function ThesisProjectDetail() {
         }
     }
 
-    const { mutateAsync: updateStudentThesisRegistration } = useUpdateStudentThesisRegistration()
+    const { mutateAsync: updateStudentThesisRegistration } = useDeleteStudentThesisRegistration()
     async function handleDeleteStudentThesisRegistration(id: string) {
         try {
             showSpinner()
             await updateStudentThesisRegistration({
                 where: {
                     id,
-                },
-                data: {
-                    deletedAt: new Date(),
                 },
             })
             message.success('Xóa thành công')
