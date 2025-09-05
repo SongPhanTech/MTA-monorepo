@@ -9,7 +9,7 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["multiSchema", "typedSql","fullTextSearchPostgres"]
-  binaryTargets = ["native"]
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x", "darwin", "darwin-arm64", "windows"]
   output = "../generated/prisma-client"
 }
 
