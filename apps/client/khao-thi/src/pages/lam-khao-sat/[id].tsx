@@ -135,7 +135,10 @@ function TakeTestPage() {
             (i: { surveyQuestionId?: string; surveyChoiceId?: string }) =>
                 !i.surveyQuestionId || !i.surveyChoiceId
         )
-        if (!dataSubmit.additionalSuggestion || responses?.length) {
+        if (
+            (!dataSubmit.additionalSuggestion && survey?.additionalSuggestion === true) ||
+            responses?.length
+        ) {
             message.error('Bạn chưa hoàn thành mẫu khảo sát')
             return
         }
@@ -158,7 +161,7 @@ function TakeTestPage() {
             showSpinner()
             const res = await createSavePublicSurvey({
                 data: {
-                    additionalSuggestion: dataSubmit.additionalSuggestion,
+                    additionalSuggestion: dataSubmit.additionalSuggestion || '',
                     startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
                     responses: dataSubmit?.responses?.map((i) => {
@@ -254,7 +257,14 @@ function TakeTestPage() {
             <div className="text-2xl mb-6 text-[#0d7101]">
                 Xin chúc mừng bạn đã hoàn thành khảo sát
             </div>
-            <Button type="primary" size="large" className="mb-20">
+            <Button
+                type="primary"
+                onClick={() => {
+                    router.push('/home')
+                }}
+                size="large"
+                className="mb-20"
+            >
                 Quay về trang chủ
             </Button>
             <Confetti width={window?.innerWidth || 1000} height={window?.innerHeight || 1000} />

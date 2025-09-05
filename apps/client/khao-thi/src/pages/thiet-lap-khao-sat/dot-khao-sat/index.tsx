@@ -1,4 +1,4 @@
-import { EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { BarChartOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
@@ -218,12 +218,28 @@ function TabDotKhaoSat() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 110,
+                                width: 170,
                                 align: 'center',
                                 render: (_, { id, surveyTopicId, surveyQuestion }) => (
                                     <Row className="justify-end gap-2">
+                                        <Tooltip
+                                            className="mr-2"
+                                            title={'Báo cáo khảo sát'}
+                                            placement="top"
+                                        >
+                                            <BarChartOutlined
+                                                onClick={() => {
+                                                    router.push(`/bao-cao-khao-sat/${id}`)
+                                                }}
+                                                style={{ fontSize: '16px' }}
+                                            />
+                                        </Tooltip>
                                         {surveyQuestion?.length > 0 && (
-                                            <Tooltip title={'Xem đề khảo sát'} placement="top">
+                                            <Tooltip
+                                                className="mr-2"
+                                                title={'Xem đề khảo sát'}
+                                                placement="top"
+                                            >
                                                 <EyeOutlined
                                                     onClick={() => {
                                                         router.push(`/lam-khao-sat/${id}`)
@@ -232,7 +248,11 @@ function TabDotKhaoSat() {
                                                 />
                                             </Tooltip>
                                         )}
-                                        <Tooltip title={'Tạo đề khảo sát'} placement="top">
+                                        <Tooltip
+                                            className="mr-2"
+                                            title={'Tạo đề khảo sát'}
+                                            placement="top"
+                                        >
                                             <PlusCircleOutlined
                                                 onClick={() =>
                                                     handleModalCreateExam({ id, surveyTopicId })
@@ -241,7 +261,7 @@ function TabDotKhaoSat() {
                                         </Tooltip>
                                         <EditIcon
                                             onClick={onOpen.bind(null, id)}
-                                            className="text-sm text-blue-700 cursor-pointer"
+                                            className="text-sm text-blue-700 cursor-pointer mr-2"
                                         />
                                         <DeleteIcon
                                             popConfirm={{
@@ -277,4 +297,3 @@ export default TabDotKhaoSat
 TabDotKhaoSat.getLayout = function getLayout(page: React.ReactNode) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
-

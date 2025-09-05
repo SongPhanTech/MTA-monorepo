@@ -1,27 +1,26 @@
 import { Pie } from '@ant-design/plots'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 
+interface DataItem {
+    type: string
+    value: number
+}
 interface ChartProps {
     className?: string
+    dataMap?: DataItem[]
 }
 
-const PieChart: React.FC<ChartProps> = ({ className }) => {
-    interface DataItem {
-        type: string
-        value: number
-    }
-
-    const [data, setData] = useState<DataItem[]>([])
-
-    useEffect(() => {
-        setTimeout(() => {
-            setData([
-                { type: 'Học viên quân sự', value: 2000 },
-                { type: 'Học viên dân sự', value: 400 },
-            ])
-        }, 1000)
-    }, [])
+const PieChart: React.FC<ChartProps> = ({ className, dataMap }) => {
+    const data = useMemo(() => {
+        if (dataMap) {
+            return dataMap
+        }
+        return [
+            { type: 'Học viên quân sự', value: 2000 },
+            { type: 'Học viên dân sự', value: 400 },
+        ]
+    }, [dataMap])
 
     const config = {
         data,

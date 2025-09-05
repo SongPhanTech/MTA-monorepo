@@ -1,5 +1,6 @@
 export default {
   "KHAO_THI": {
+    "BAO_CAO_KHAO_SAT_ID": "/bao-cao-khao-sat/[id]",
     "DANH_MUC_DANH_MUC_CHUONG_MUC": "/danh-muc/danh-muc-chuong-muc",
     "DANH_MUC_MUC_DO_KHO": "/danh-muc/muc-do-kho",
     "HOME": "/home",
