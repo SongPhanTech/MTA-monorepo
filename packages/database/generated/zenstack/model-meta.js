@@ -1213,6 +1213,7 @@ const metadata = {
                     type: "StudentThesisRegistration",
                     isDataModel: true,
                     isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ScoreToRegistration" }] }],
                     backLink: 'studentSubjectScore',
                 },
             }, uniqueConstraints: {
@@ -13246,7 +13247,7 @@ const metadata = {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ScoreToRegistration" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentThesisRegistration',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentSubjectScoreId" },

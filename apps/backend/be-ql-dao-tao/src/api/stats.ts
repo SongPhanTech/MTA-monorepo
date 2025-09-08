@@ -17,6 +17,17 @@ app.openapi(
         method: 'post',
         path: '/student-distribution-by-training-object-type',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Phân bổ theo Hệ đào tạo',
@@ -37,6 +48,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            return c.json({
+                data: Array.from({ length: 10 }, (_, i) => ({
+                    trainingObjectTypeId: i.toString(),
+                    name: `Hệ đào tạo ${i}`,
+                    count: Math.round(Math.random() * 100),
+                })),
+                count: 10,
+                summary: {},
+                preview: true,
+            })
+        }
+
         const data = await prisma.$queryRaw<
             Array<{ trainingObjectTypeId: string; name: string; count: number }>
         >`
@@ -70,6 +95,17 @@ app.openapi(
         method: 'post',
         path: '/student-distribution-by-training-level',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Phân bổ theo Trình độ đào tạo',
@@ -90,6 +126,32 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            return c.json({
+                data: [
+                    {
+                        trainingLevelId: '1',
+                        name: 'Đại học',
+                        count: Math.round(Math.random() * 100),
+                    },
+                    {
+                        trainingLevelId: '2',
+                        name: 'Thạc sĩ',
+                        count: Math.round(Math.random() * 100),
+                    },
+                    {
+                        trainingLevelId: '2',
+                        name: 'Tiến sĩ',
+                        count: Math.round(Math.random() * 100),
+                    },
+                ],
+                count: 3,
+                summary: {},
+                preview: true,
+            })
+        }
+
         const data = await prisma.$queryRaw<
             Array<{ trainingLevelId: string; name: string; count: number }>
         >`
@@ -123,6 +185,17 @@ app.openapi(
         method: 'post',
         path: '/student-distribution-by-training-course',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Phân bổ theo Khoá học',
@@ -143,6 +216,19 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            return c.json({
+                data: Array.from({ length: 10 }, (_, i) => ({
+                    trainingCourseId: i.toString(),
+                    name: `Khoá học ${i}`,
+                    count: Math.round(Math.random() * 100),
+                })),
+                count: 10,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; count: number }>
         >`

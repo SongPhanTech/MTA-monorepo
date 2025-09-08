@@ -2281,6 +2281,13 @@ declare const metadata: {
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
                     backLink: string;
                 };
             };
@@ -23586,10 +23593,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
                             name: string;
                             value: null[];
-                        }[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
