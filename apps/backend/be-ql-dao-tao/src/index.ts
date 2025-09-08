@@ -13,9 +13,11 @@ import CurriculumApp from './api/curriculum'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import PlanTraining from './api/plan-training'
+import RoomApp from './api/room'
 import Stats from './api/stats'
 import StudentApp from './api/student'
 import SubjectClassApp from './api/subject-class'
+import TrainingFieldApp from './api/training-field'
 import TrainingScoreApp from './api/training-score'
 import UserProfileApp from './api/user-profile'
 import { checkIp } from './middlewares/check-ip'
@@ -79,6 +81,8 @@ app.route('/api/curriculum', CurriculumApp)
 app.route('/api/graduation', GraduationApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
+app.route('/api/training-field', TrainingFieldApp)
+app.route('/api/room', RoomApp)
 
 const nv = await prisma.dM_NhanVien.findFirstOrThrow()
 
