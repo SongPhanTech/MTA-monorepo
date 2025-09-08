@@ -31,7 +31,9 @@ const PinEvidenceToPeriod = () => {
             maskClosable={true}
             title={'Thêm minh chứng cho tiêu chí'}
             className="w-[700px]"
-        ></AntdModal>
+        >
+            <div className="flex flex-col gap-2">123</div>
+        </AntdModal>
     )
 }
 
