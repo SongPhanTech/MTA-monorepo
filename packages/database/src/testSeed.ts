@@ -1,8 +1,437 @@
-import { ExamType, PrismaClient, SubjectClassSchedule, UserType } from '../generated/prisma-client'
+import {
+    AcademicRankingBaseType,
+    ExamType,
+    PrismaClient,
+    SubjectClassSchedule,
+    UserType,
+} from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
 async function main() {
+    // Seed Organization
+    await prisma.dM_DonVi.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                Id: '550e8400-1234-41d4-a716-446655440000',
+                sTen: 'Học viện Kỹ thuật Quân sự',
+                sMa: 'MTA',
+                sGhiChu: 'Học viện Kỹ thuật Quân sự',
+                sParentId: null,
+            },
+            {
+                Id: '550e8400-1234-41d4-a716-446655440001',
+                sTen: 'Khoa Công nghệ thông tin',
+                sMa: 'K58',
+                sGhiChu: 'Khoa Công nghệ thông tin',
+                sParentId: '550e8400-1234-41d4-a716-446655440000',
+            },
+            {
+                Id: '550e8400-1234-41d4-a716-446655440002',
+                sTen: 'Khoa Vũ Khí',
+                sMa: 'K1',
+                sGhiChu: 'Khoa Vũ Khí',
+                sParentId: '550e8400-1234-41d4-a716-446655440000',
+            },
+        ],
+    })
+
+    // Seed SchoolYear
+    await prisma.schoolYear.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8408-e29b-41d4-a716-446655440000',
+                name: '2025-2026',
+                code: '2025-2026',
+                startDate: new Date('2025-04-03T12:58:40.507Z'),
+                endDate: new Date('2026-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:10.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440001',
+                name: '2026-2027',
+                code: '2026-2027',
+                startDate: new Date('2026-04-03T12:58:40.507Z'),
+                endDate: new Date('2027-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:11.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440002',
+                name: '2027-2028',
+                code: '2027-2028',
+                startDate: new Date('2027-04-03T12:58:40.507Z'),
+                endDate: new Date('2028-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:12.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440003',
+                name: '2028-2029',
+                code: '2028-2029',
+                startDate: new Date('2028-04-03T12:58:40.507Z'),
+                endDate: new Date('2029-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:12.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8408-e29b-41d4-a716-446655440004',
+                name: '2029-2030',
+                code: '2029-2030',
+                startDate: new Date('2029-04-03T12:58:40.507Z'),
+                endDate: new Date('2030-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:13.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+        ],
+    })
+
+    // Seed Semester
+    await prisma.semester.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8409-e29b-41d4-a716-446655440000',
+                name: 'Học kỳ 1',
+                shortName: 'HK1',
+                semesterType: $Enums.SemesterType.FIRST,
+                startDate: new Date('2025-04-03T12:58:40.507Z'),
+                endDate: new Date('2025-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:13.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440000',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440001',
+                name: 'Học kỳ 2',
+                shortName: 'HK2',
+                semesterType: $Enums.SemesterType.SECOND,
+                startDate: new Date('2025-10-03T12:58:40.507Z'),
+                endDate: new Date('2026-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:14.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440000',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440002',
+                name: 'Học kỳ hè',
+                shortName: 'HKHE',
+                startDate: new Date('2026-04-03T12:58:40.507Z'),
+                endDate: new Date('2026-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:15.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440000',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440003',
+                name: 'Học kỳ 1',
+                shortName: 'HK1',
+                semesterType: $Enums.SemesterType.FIRST,
+                startDate: new Date('2026-04-03T12:58:40.507Z'),
+                endDate: new Date('2026-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:16.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440001',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440004',
+                name: 'Học kỳ 2',
+                shortName: 'HK2',
+                semesterType: $Enums.SemesterType.SECOND,
+                startDate: new Date('2026-10-03T12:58:40.507Z'),
+                endDate: new Date('2027-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:17.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440001',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440005',
+                name: 'Học kỳ hè',
+                shortName: 'HKHE',
+                startDate: new Date('2027-04-03T12:58:40.507Z'),
+                endDate: new Date('2027-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:18.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440001',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440006',
+                name: 'Học kỳ 1',
+                shortName: 'HK1',
+                semesterType: $Enums.SemesterType.FIRST,
+                startDate: new Date('2027-04-03T12:58:40.507Z'),
+                endDate: new Date('2027-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:19.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440002',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440007',
+                name: 'Học kỳ 2',
+                shortName: 'HK2',
+                semesterType: $Enums.SemesterType.SECOND,
+                startDate: new Date('2027-10-03T12:58:40.507Z'),
+                endDate: new Date('2028-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:20.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440002',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440008',
+                name: 'Học kỳ hè',
+                shortName: 'HKHE',
+                startDate: new Date('2028-04-03T12:58:40.507Z'),
+                endDate: new Date('2028-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:21.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440002',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440009',
+                name: 'Học kỳ 1',
+                shortName: 'HK1',
+                semesterType: $Enums.SemesterType.FIRST,
+                startDate: new Date('2028-04-03T12:58:40.507Z'),
+                endDate: new Date('2028-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:22.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440003',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440010',
+                name: 'Học kỳ 2',
+                shortName: 'HK2',
+                semesterType: $Enums.SemesterType.SECOND,
+                startDate: new Date('2028-10-03T12:58:40.507Z'),
+                endDate: new Date('2029-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:23.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440003',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440011',
+                name: 'Học kỳ hè',
+                shortName: 'HKHE',
+                startDate: new Date('2029-04-03T12:58:40.507Z'),
+                endDate: new Date('2029-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:24.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440003',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440012',
+                name: 'Học kỳ 1',
+                shortName: 'HK1',
+                semesterType: $Enums.SemesterType.FIRST,
+                startDate: new Date('2029-04-03T12:58:40.507Z'),
+                endDate: new Date('2029-10-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:25.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440004',
+            },
+            {
+                id: '550e8409-e29b-41d4-a716-446655440013',
+                name: 'Học kỳ 2',
+                shortName: 'HK2',
+                semesterType: $Enums.SemesterType.SECOND,
+                startDate: new Date('2029-10-03T12:58:40.507Z'),
+                endDate: new Date('2030-04-03T12:58:40.507Z'),
+                createdAt: new Date('2025-04-03T12:59:26.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                schoolYearId: '550e8408-e29b-41d4-a716-446655440004',
+            },
+        ],
+    })
+
+    // Seed TrainingCourse
+    const trainingCourses = await prisma.trainingCourse.createManyAndReturn({
+        select: { id: true, baseScore: true },
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8406-e29b-41d4-a716-446655440000',
+                baseScore: AcademicRankingBaseType.Base10,
+                code: 'K58',
+                name: 'Khóa 58',
+                description: 'Khóa 58',
+                semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
+                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
+                createdAt: new Date('2025-04-03T12:58:40.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+            },
+            {
+                id: '550e8406-e29b-41d4-a716-446655440001',
+                baseScore: AcademicRankingBaseType.Base10,
+                code: 'K59',
+                name: 'Khóa 59',
+                description: 'Khóa 59',
+                semesterStartId: '550e8409-e29b-41d4-a716-446655440000',
+                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440001',
+                createdAt: new Date('2025-04-03T12:58:41.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
+            },
+        ],
+    })
+
+    // Seed FixedClass
+    await prisma.fixedClass.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                id: '550e8407-e29b-41d4-a716-446655440000',
+                name: 'CNTT',
+                code: 'CNTT_K58',
+                createdAt: new Date('2025-04-03T12:58:40.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:40.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
+            },
+            {
+                id: '550e8407-e29b-41d4-a716-446655440001',
+                name: 'VK',
+                code: 'VK_K58',
+                createdAt: new Date('2025-04-03T12:58:41.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:41.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440000',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440002',
+            },
+            {
+                id: '550e8407-e29b-41d4-a716-446655440002',
+                name: 'CNTT',
+                code: 'CNTT_K59',
+                createdAt: new Date('2025-04-03T12:58:42.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:42.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440000',
+            },
+            {
+                id: '550e8407-e29b-41d4-a716-446655440003',
+                name: 'VK',
+                code: 'VK_K59',
+                createdAt: new Date('2025-04-03T12:58:43.507Z'),
+                updatedAt: new Date('2025-04-03T12:58:43.507Z'),
+                trainingCourseId: '550e8406-e29b-41d4-a716-446655440001',
+                managementOrganizationId: '550e8400-1234-41d4-a716-446655440002',
+            },
+        ],
+    })
+
+    // Seed RegistrationArea
+    await prisma.dM_KhuVuc_DiaLy.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                Id: '550e840a-e29b-41d4-a716-446655440000',
+                sTen: 'Khu vực 1',
+                sMa: 'KV1',
+            },
+            {
+                Id: '550e840a-e29b-41d4-a716-446655440001',
+                sTen: 'Khu vực 2',
+                sMa: 'KV2',
+            },
+            {
+                Id: '550e840a-e29b-41d4-a716-446655440002',
+                sTen: 'Khu vực 3',
+                sMa: 'KV3',
+            },
+        ],
+    })
+
+    // Seed Nationality
+    await prisma.dM_QuocGia.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                Id: '550e840b-e29b-41d4-a716-446655440000',
+                sTen: 'Việt Nam',
+                sMa: 'VN',
+            },
+            {
+                Id: '550e840b-e29b-41d4-a716-446655440001',
+                sTen: 'Lào',
+                sMa: 'LAO',
+            },
+            {
+                Id: '550e840b-e29b-41d4-a716-446655440002',
+                sTen: 'Campuchia',
+                sMa: 'CAM',
+            },
+            {
+                Id: '550e840b-e29b-41d4-a716-446655440003',
+                sTen: 'Khác',
+                sMa: 'Khac',
+            },
+        ],
+    })
+
+    // Seed Religion
+    await prisma.dM_TonGiao.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                Id: '550e840c-e29b-41d4-a716-446655440000',
+                sTen: 'Phật giáo',
+                sMa: 'PG',
+            },
+            {
+                Id: '550e840c-e29b-41d4-a716-446655440001',
+                sTen: 'Thiên chúa giáo',
+                sMa: 'TCC',
+            },
+            {
+                Id: '550e840c-e29b-41d4-a716-446655440002',
+                sTen: 'Hồi giáo',
+                sMa: 'HG',
+            },
+        ],
+    })
+
+    // Seed Ethnicity
+    await prisma.dM_DanToc.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                Id: '550e840d-e29b-41d4-a716-446655440000',
+                sTen: 'Kinh',
+                sMa: 'K',
+            },
+            {
+                Id: '550e840d-e29b-41d4-a716-446655440001',
+                sTen: 'Thái',
+                sMa: 'T',
+            },
+            {
+                Id: '550e840d-e29b-41d4-a716-446655440002',
+                sTen: 'Khmer',
+                sMa: 'KHM',
+            },
+            {
+                Id: '550e840d-e29b-41d4-a716-446655440003',
+                sTen: 'Mường',
+                sMa: 'M',
+            },
+            {
+                Id: '550e840d-e29b-41d4-a716-446655440004',
+                sTen: 'Tày',
+                sMa: 'TAY',
+            },
+            {
+                Id: '550e840d-e29b-41d4-a716-446655440005',
+                sTen: 'Thổ',
+                sMa: 'THO',
+            },
+            {
+                Id: '550e840d-e29b-41d4-a716-446655440006',
+                sTen: 'Khác',
+                sMa: 'Khac',
+            },
+        ],
+    })
+
     await prisma.dM_DonVi.createMany({
         skipDuplicates: true,
         data: [

@@ -134,7 +134,7 @@ const militaryWarningRules = [
 async function seedRulesForCourses(courses: TrainingCourse[], rules: any[]) {
     if (courses.length === 0) return
 
-    // Xóa tất cả các quy tắc cũ thuộc các khóa học này
+    // Xóa tất cả các quy tắc cũ thuộc các khoá học này
     await prisma.academicWarningRule.deleteMany({
         where: {
             trainingCourseId: {
@@ -157,7 +157,7 @@ async function seedRulesForCourses(courses: TrainingCourse[], rules: any[]) {
     })
 
     console.log(
-        `Đã seed ${dataToCreate.length} quy tắc Cảnh báo học tập cho ${courses.length} khóa học.`
+        `Đã seed ${dataToCreate.length} quy tắc Cảnh báo học tập cho ${courses.length} khoá học.`
     )
 }
 
@@ -165,7 +165,7 @@ async function seedRulesForCourses(courses: TrainingCourse[], rules: any[]) {
 async function main() {
     console.log('Bắt đầu seed quy tắc Cảnh báo học tập...')
     try {
-        // Lấy tất cả các khóa học dân sự và quân sự
+        // Lấy tất cả các khoá học dân sự và quân sự
         const civilianCourses = await prisma.trainingCourse.findMany({
             where: { trainingObjectType: { type: 'CIVILIAN' } },
         })

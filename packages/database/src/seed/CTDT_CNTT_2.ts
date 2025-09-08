@@ -25,6 +25,7 @@ async function main() {
                 coef_3: 0.6,
                 scoreToPass: 4,
                 scoreToTakeExam: 4,
+                baseScore: 'Base10',
             },
         ],
     })
