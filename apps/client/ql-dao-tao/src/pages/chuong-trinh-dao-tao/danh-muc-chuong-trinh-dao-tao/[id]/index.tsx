@@ -133,7 +133,7 @@ export default function TrainingProgramSubjects() {
         [filters, isFiltering]
     )
 
-    const { data = [] } = useFindManyTrainingBlockOnCurriculumVersion({
+    const { data = [], refetch } = useFindManyTrainingBlockOnCurriculumVersion({
         where: {
             curriculumVersionId: id,
             curriculumVersion: {
@@ -299,6 +299,9 @@ export default function TrainingProgramSubjects() {
         curriculumVersionId: string
     }>({
         tag: PutTrainingBlockOnCurriculumVersion.name,
+        onClose() {
+            refetch()
+        },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

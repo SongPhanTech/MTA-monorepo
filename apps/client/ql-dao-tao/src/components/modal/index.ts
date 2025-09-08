@@ -76,6 +76,7 @@ import PutCouncilMember from './put-thanh-vien-hoi-dong'
 import PutBuildingModal from './put-toa-nha'
 import PutTrainingFormModal from './put-training-form'
 import PutTrainingTimeModal from './put-training-time'
+import PutTrainingLevel from './put-trinh-do-dao-tao'
 import PutUpdateProfileModal from './put-update-profile'
 import PutUploadProfileModal from './put-upload-profile'
 import PutAcademicRanking from './put-xep-loai-hoc-luc'
@@ -169,4 +170,5 @@ export {
     PutSubjectTienQuyetSongHanh,
     PutMonHocTuongDuong,
     ModalPrintInvitation,
+    PutTrainingLevel,
 }

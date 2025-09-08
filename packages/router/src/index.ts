@@ -448,6 +448,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Loại hình đào tạo',
                     },
                     {
+                        id: 'trinh-do-dao-tao',
+                        label: 'Trình độ đào tạo',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_TRINH_DO_DAO_TAO,
+                        description: 'Trình độ đào tạo',
+                    },
+                    {
                         id: 'danh-muc-nganh',
                         label: 'Danh mục ngành',
                         icon: PieChartOutlined,

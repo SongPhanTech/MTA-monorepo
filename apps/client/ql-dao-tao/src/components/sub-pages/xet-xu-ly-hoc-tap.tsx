@@ -26,8 +26,8 @@ import {
     useFindManyFixedClass,
     useFindManyStudentAcademicDecision,
     useFindManyTrainingCourse,
-    useUpsertStudentAcademicDecision,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -297,8 +297,6 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         },
     }
 
-    const { mutateAsync: upsertStudentAcademicDecision } = useUpsertStudentAcademicDecision()
-
     const handleApprove = async () => {
         if (!semesterId) {
             message.error('Vui lòng chọn học kỳ')
@@ -334,10 +332,13 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     reason: student.reason || undefined,
                 },
             }))
+            const queries = decisionsToUpsert.map((decision) => ({
+                model: 'StudentAcademicDecision' as const,
+                operation: 'upsert' as const,
+                data: decision,
+            }))
 
-            await Promise.all(
-                decisionsToUpsert.map((decision: any) => upsertStudentAcademicDecision(decision))
-            )
+            await sqlTransaction(queries)
 
             message.success(`Đã duyệt thành công cho ${selectedStudents.length} sinh viên`)
             setSelectedStudents([])

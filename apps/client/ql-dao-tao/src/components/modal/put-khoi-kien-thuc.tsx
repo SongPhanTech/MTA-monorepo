@@ -7,12 +7,12 @@ import {
     useFindManyTrainingBlock,
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
-    useUpdateTrainingBlockOnCurriculumVersion,
 } from '@workspace/db/hooks'
 import { Col, Form, message, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { diffArrays, type ItemProps } from '@workspace/libs/utils'
 import { GripVertical } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -78,8 +78,6 @@ const PutTrainingBlockOnCurriculumVersion = () => {
     }, [initialValue, form.setFieldsValue])
 
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
-    const { mutateAsync: updateTrainingBlockOnCurriculumVersion } =
-        useUpdateTrainingBlockOnCurriculumVersion()
 
     async function onOk(output?: PutTrainingBlockOnCurriculumVersion) {
         if (!output) return
@@ -120,20 +118,20 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                     },
                 })
             }
-            await Promise.all(
-                items.map((item: ItemProps, index: number) => {
-                    updateTrainingBlockOnCurriculumVersion({
-                        where: {
-                            trainingBlockId_curriculumVersionId: {
-                                trainingBlockId: item.value,
-                                curriculumVersionId: input?.curriculumVersionId as string,
-                            },
+            const queries = items.map((item, index) => ({
+                model: 'TrainingBlockOnCurriculumVersion' as const,
+                operation: 'update' as const,
+                data: {
+                    where: {
+                        trainingBlockId_curriculumVersionId: {
+                            trainingBlockId: item.value,
+                            curriculumVersionId: input?.curriculumVersionId as string,
                         },
-                        data: { priority: index + 1 },
-                    })
-                })
-            )
-
+                    },
+                    data: { priority: index + 1 },
+                },
+            }))
+            await sqlTransaction(queries)
             message.success('Cập nhật thông tin khối kiến thức thành công')
             queryClient.invalidateQueries({
                 queryKey: ['TrainingBlock'],

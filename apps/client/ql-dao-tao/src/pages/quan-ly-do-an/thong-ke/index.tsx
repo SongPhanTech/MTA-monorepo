@@ -6,13 +6,45 @@ import DefaultLayout from '@layouts/default-layout'
 import { StudentThesisRegistrationStatus, SubjectVersionType } from '@workspace/db'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { Col, Flex, Input, Row, Segmented, Tabs } from 'antd'
-import { Search } from 'lucide-react'
+import {
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    Title,
+    Tooltip,
+} from 'chart.js'
+import { Award, Calculator, Search, Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { Bar } from 'react-chartjs-2'
 
-export enum SubjectType {
-    prerequisite = 'prerequisite',
-    parallel = 'parallel',
-    equivalent = 'equivalent',
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+const StatCard = ({
+    title,
+    icon,
+    value,
+    totalItems = 1,
+}: {
+    title: string
+    icon: React.ReactNode
+    value: string | number | React.ReactNode
+    totalItems?: number
+}) => {
+    const span = Math.floor(24 / totalItems)
+
+    return (
+        <Col span={span}>
+            <div className="bg-white rounded-lg shadow-sm py-4 px-5 flex flex-col gap-4">
+                <div className="flex justify-between items-center">
+                    <strong className="text-base">{title}</strong>
+                    {icon}
+                </div>
+                <span className="text-primary text-xl">{value}</span>
+            </div>
+        </Col>
+    )
 }
 
 export default function ThongKe() {
@@ -161,7 +193,22 @@ export default function ThongKe() {
         })
     }, [data])
 
-    console.log(projects)
+    const totalStudents = useMemo(() => {
+        return projects.reduce((sum, sc) => sum + sc.students.length, 0)
+    }, [projects])
+
+    const averageScore = useMemo(() => {
+        const allScores = projects
+            .flatMap((sc) =>
+                sc.students.map((st) => (st.finalScore ? Number(st.finalScore) : null))
+            )
+            .filter((s): s is number => s !== null)
+
+        if (allScores.length === 0) return 0
+
+        const total = allScores.reduce((sum, s) => sum + s, 0)
+        return (total / allScores.length).toFixed(2)
+    }, [projects])
 
     const { data: count } = useCountSubjectClass({
         where: {
@@ -169,6 +216,64 @@ export default function ThongKe() {
             deletedAt: null,
         },
     })
+
+    const scoreDistribution = useMemo(() => {
+        const allScores = projects
+            .flatMap((sc) =>
+                sc.students.map((st) => (st.finalScore ? Number(st.finalScore) : null))
+            )
+            .filter((s): s is number => s !== null)
+
+        const step = 0.25
+        const bins = Array.from({ length: Math.ceil(10 / step) }, (_, i) => ({
+            range: (i * step).toFixed(2),
+            count: 0,
+        }))
+
+        allScores.forEach((score) => {
+            const idx = Math.floor(score / step)
+            if (idx >= 0 && idx < bins.length) {
+                bins[idx].count++
+            }
+        })
+
+        return bins
+    }, [projects])
+
+    const chartData = {
+        labels: scoreDistribution.map((b) => b.range),
+        datasets: [
+            {
+                label: 'Số lượng SV',
+                data: scoreDistribution.map((b) => b.count),
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+            },
+        ],
+    }
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' as const },
+            // title: { display: true, text: 'Phổ điểm' },
+        },
+        scales: {
+            x: {
+                title: { display: true, text: 'Điểm' },
+                min: 0,
+                max: 10,
+                ticks: {
+                    stepSize: 0.25,
+                },
+            },
+            y: {
+                title: { display: true, text: 'Số lượng SV' },
+                beginAtZero: true,
+            },
+        },
+    }
 
     const items = [
         {
@@ -239,7 +344,38 @@ export default function ThongKe() {
         {
             key: 'thong-ke',
             label: 'Thống kê',
-            children: <div className="bg-white rounded-lg shadow-sm p-4">1123123</div>,
+            children: (
+                <div>
+                    <Row gutter={[16, 16]}>
+                        {[
+                            {
+                                title: 'Tổng số bảo vệ',
+                                icon: <Users />,
+                                value: totalStudents,
+                            },
+                            {
+                                title: 'Điểm trung bình',
+                                icon: <Calculator />,
+                                value: averageScore,
+                            },
+                        ].map((item, _, arr) => (
+                            <StatCard
+                                key={item.title}
+                                title={item.title}
+                                icon={item.icon}
+                                value={item.value}
+                                totalItems={arr.length}
+                            />
+                        ))}
+                        <StatCard
+                            title="Phổ điểm"
+                            icon={<Award />}
+                            value={<Bar data={chartData} options={chartOptions} />}
+                            totalItems={1}
+                        />
+                    </Row>
+                </div>
+            ),
         },
     ]
 
@@ -302,7 +438,7 @@ export default function ThongKe() {
 
                     <Tabs
                         activeKey={activeKey}
-                        onChange={(key) => setActiveKey(key as SubjectType)}
+                        onChange={(key) => setActiveKey(key)}
                         items={items}
                         tabBarStyle={{ display: 'none' }}
                     />
