@@ -57,7 +57,7 @@ const AddEvidenceToPeriod = () => {
                 if (onlyInOld.length) {
                     listTransition = [
                         ...listTransition,
-                        ...items.map((i) => {
+                        ...onlyInOld.map((i) => {
                             return {
                                 model: 'AnalysisFormEvidence',
                                 operation: 'delete',
@@ -94,7 +94,7 @@ const AddEvidenceToPeriod = () => {
 
                 listTransition = [
                     ...listTransition,
-                    ...onlyInNew.map((i, index: number) => {
+                    ...items.map((i, index: number) => {
                         return {
                             model: 'AnalysisFormEvidence',
                             operation: 'update',

@@ -1,4 +1,3 @@
-import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
@@ -99,43 +98,71 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                     : [],
                 'value'
             )
+            let listTransition: any = []
 
-            if (onlyInOld.length || onlyInNew.length) {
-                await updateCurriculumVersion({
-                    where: { id: input?.curriculumVersionId },
-                    data: {
-                        trainingBlocks: {
-                            deleteMany: {
-                                trainingBlockId: { in: onlyInOld.map((item) => item.value) },
+            if (onlyInOld.length) {
+                listTransition = [
+                    ...listTransition,
+                    ...onlyInOld.map((i) => {
+                        return {
+                            model: 'TrainingBlockOnCurriculumVersion',
+                            operation: 'delete',
+                            data: {
+                                where: {
+                                    trainingBlockId_curriculumVersionId: {
+                                        trainingBlockId: i.value,
+                                        curriculumVersionId: input?.curriculumVersionId as string,
+                                    },
+                                },
                             },
-                            createMany: {
-                                data: onlyInNew.map(({ value }) => ({
-                                    trainingBlockId: value,
-                                    priority: 1,
-                                })),
-                            },
-                        },
-                    },
-                })
+                        }
+                    }),
+                ]
             }
-            const queries = items.map((item, index) => ({
-                model: 'TrainingBlockOnCurriculumVersion' as const,
-                operation: 'update' as const,
-                data: {
-                    where: {
-                        trainingBlockId_curriculumVersionId: {
-                            trainingBlockId: item.value,
-                            curriculumVersionId: input?.curriculumVersionId as string,
+            if (onlyInNew.length) {
+                listTransition = [
+                    ...listTransition,
+                    ...onlyInNew.map((i) => {
+                        return {
+                            model: 'TrainingBlockOnCurriculumVersion',
+                            operation: 'create',
+                            data: {
+                                data: {
+                                    curriculumVersionId: input?.curriculumVersionId as string,
+                                    trainingBlockId: i.value,
+                                    priority: 1,
+                                },
+                            },
+                        }
+                    }),
+                ]
+            }
+
+            listTransition = [
+                ...listTransition,
+                ...items.map((i, index: number) => {
+                    return {
+                        model: 'TrainingBlockOnCurriculumVersion',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                trainingBlockId_curriculumVersionId: {
+                                    trainingBlockId: i.value,
+                                    curriculumVersionId: input?.curriculumVersionId as string,
+                                },
+                            },
+                            data: {
+                                priority: index + 1,
+                            },
                         },
-                    },
-                    data: { priority: index + 1 },
-                },
-            }))
-            await sqlTransaction(queries)
+                    }
+                }),
+            ]
+            if (listTransition?.length) {
+                await sqlTransaction(listTransition)
+            }
+
             message.success('Cập nhật thông tin khối kiến thức thành công')
-            queryClient.invalidateQueries({
-                queryKey: ['TrainingBlock'],
-            })
             onClose()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')

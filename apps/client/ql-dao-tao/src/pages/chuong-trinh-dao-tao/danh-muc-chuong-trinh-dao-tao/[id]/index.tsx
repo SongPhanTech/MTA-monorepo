@@ -299,7 +299,7 @@ export default function TrainingProgramSubjects() {
         curriculumVersionId: string
     }>({
         tag: PutTrainingBlockOnCurriculumVersion.name,
-        onClose() {
+        onClose: () => {
             refetch()
         },
     })
