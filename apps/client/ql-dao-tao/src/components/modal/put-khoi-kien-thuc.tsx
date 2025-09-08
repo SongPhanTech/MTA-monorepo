@@ -2,11 +2,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { TrainingBlock, TrainingBlockOnCurriculumVersion } from '@workspace/db'
-import {
-    useFindManyTrainingBlock,
-    useFindUniqueCurriculumVersion,
-    useUpdateCurriculumVersion,
-} from '@workspace/db/hooks'
+import { useFindManyTrainingBlock, useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { Col, Form, message, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -75,8 +71,6 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             })
         }
     }, [initialValue, form.setFieldsValue])
-
-    const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
 
     async function onOk(output?: PutTrainingBlockOnCurriculumVersion) {
         if (!output) return
