@@ -1,10 +1,11 @@
+import BarChart from '@components/dashboard/bar-chart'
 import PieChart from '@components/dashboard/org-structure'
-import StaffByOrg from '@components/dashboard/staff-by-org'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useGetAnswerStatisticsByLevel, useGetParticipationByType } from '@workspace/libs/api/exam'
+import { useGetParticipationByType, useGetSurveyStatistics } from '@workspace/libs/api/exam'
 import { Col, Empty, Row, Typography } from 'antd'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 
 const { Title } = Typography
 function Page() {
@@ -15,9 +16,57 @@ function Page() {
         surveyId: router.query.id as string,
     })
 
-    const { data: dataLevel } = useGetAnswerStatisticsByLevel({
-        surveyId: router.query.id as string,
-    })
+    const { data: dataLevel } = useGetSurveyStatistics(router.query.id as string)
+
+    const dataBarchart = useMemo(() => {
+        const result = []
+        if (dataLevel?.status === 200 && dataLevel?.data?.questions?.length) {
+            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+            for (const i of dataLevel?.data?.questions) {
+                // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                for (const j of i?.answers) {
+                    result.push({
+                        label: i?.name,
+                        state: j?.answer,
+                        value: j?.count,
+                    })
+                }
+            }
+        }
+        return result
+    }, [dataLevel])
+
+    const renderQuestionReport = (item: {
+        name: string
+        answers: { answer: string; count: number }[]
+    }) => {
+        let total = 0
+        if (item?.answers?.length) {
+            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+            for (const i of item?.answers) {
+                total += i?.count
+            }
+        }
+
+        return (
+            <div className="flex items-center justify-between">
+                <div>{item?.name}</div>
+                <div className="flex items-center justify-end">
+                    {item?.answers.map((j) => {
+                        return (
+                            <div className="mr-1">
+                                {j?.answer}:
+                                {total > 0
+                                    ? Number.parseFloat(((j?.count * 100) / total).toFixed(2))
+                                    : 0}
+                                %
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -25,16 +74,17 @@ function Page() {
                 <Col span={24}>
                     <div className="bg-white rounded shadow h-full flex flex-col">
                         <div className="p-4">
-                            <Title level={4}>Thống kê số lượng giảng viên theo đầu mối</Title>
+                            <Title level={4}>Thống kê số lượng người tham gia</Title>
                         </div>
                         <div className="flex-1">
                             {data?.status === 200 && data?.data?.statistics?.length > 0 ? (
-                                <StaffByOrg
+                                <PieChart
+                                    className="h-full"
                                     dataMap={data?.data?.statistics.map(
                                         (i: { studentType: string; participantCount: number }) => {
                                             return {
-                                                letter: i.studentType,
-                                                frequency: i.participantCount,
+                                                type: i.studentType,
+                                                value: i.participantCount,
                                             }
                                         }
                                     )}
@@ -45,25 +95,15 @@ function Page() {
                         </div>
                     </div>
                 </Col>
+
                 <Col span={24}>
-                    <div className="bg-white rounded shadow h-96 flex flex-col">
+                    <div className="bg-white rounded shadow h-full flex flex-col">
                         <div className="p-4">
-                            <Title level={4}>Thống kê đối tượng đào tạo</Title>
+                            <Title level={4}>Thống kê theo từng câu hỏi</Title>
                         </div>
                         <div className="flex-1">
-                            {dataLevel?.status === 200 &&
-                            dataLevel?.data?.statistics?.length > 0 ? (
-                                <PieChart
-                                    className="h-full"
-                                    dataMap={dataLevel?.data?.statistics.map(
-                                        (i: { levelName: string; count: number }) => {
-                                            return {
-                                                type: i.levelName,
-                                                value: i.count,
-                                            }
-                                        }
-                                    )}
-                                />
+                            {dataLevel?.status === 200 && dataLevel?.data?.questions?.length > 0 ? (
+                                <BarChart className="h-full" dataMap={dataBarchart} />
                             ) : (
                                 <Empty />
                             )}
