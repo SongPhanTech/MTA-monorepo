@@ -1,6 +1,8 @@
 import {
     ApartmentOutlined,
     BookOutlined,
+    FileOutlined,
+    HomeOutlined,
     MessageOutlined,
     PieChartOutlined,
     ReadOutlined,
@@ -125,6 +127,43 @@ const NAVIGATION: NavigationType = {
             },
         ],
         label: 'Quản lý người dùng',
+    },
+    PORTAL: {
+        label: 'Cổng thông tin sinh viên',
+        menus: [
+            {
+                id: 'home',
+                label: 'Trang chủ',
+                icon: HomeOutlined,
+                path: ROUTER_PATH.PORTAL.HOME,
+                description: 'Thông tin thời khoá biểu, lịch thi, thông báo...',
+            },
+            {
+                id: 'ket-qua-hoc-tap',
+                label: 'Kết quả học tập',
+                icon: FileOutlined,
+                path: ROUTER_PATH.PORTAL.KET_QUA_HOC_TAP,
+            },
+            {
+                id: 'dang-ky-hoc',
+                label: 'Đăng ký học',
+                icon: FileOutlined,
+                path: ROUTER_PATH.PORTAL.DANG_KY_HOC,
+            },
+            {
+                id: 'khao-sat',
+                label: 'Khảo sát',
+                icon: FileOutlined,
+                path: ROUTER_PATH.PORTAL.KHAO_SAT,
+            },
+
+            {
+                id: 'chuong-trinh-dao-tao',
+                label: 'Chương trình đào tạo',
+                icon: UserOutlined,
+                path: ROUTER_PATH.PORTAL.CHUONG_TRINH_DAO_TAO,
+            },
+        ],
     },
     // QL_DANH_MUC: {
     //     menus: [

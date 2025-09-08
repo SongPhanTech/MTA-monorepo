@@ -33,6 +33,14 @@ export default {
     "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
+  "PORTAL": {
+    "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
+    "DANG_KY_HOC": "/dang-ky-hoc",
+    "HOME": "/home",
+    "INDEX": "/",
+    "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
+    "KHAO_SAT": "/khao-sat"
+  },
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
