@@ -10,9 +10,7 @@ const IndexPage: NextPage = () => {
     const { status, goToLastPage } = useSession()
     const router = useRouter()
     useEffect(() => {
-        
         if (status === 'authenticated') {
-
             if (goToLastPage('ems')) return
             const firstMenu = menus.flat()
             if (firstMenu.length > 0 && firstMenu[0].path) {
