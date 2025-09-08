@@ -1,0 +1,40 @@
+{
+  "name": "@backend/be-portal",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts",
+    "build": "bun build.ts",
+    "compile": "bun build --compile --sourcemap -e @opentelemetry/exporter-trace-otlp-http --bytecode src/index.ts --outfile dist/myapp",
+    "postcompile": "rm -f .*.bun-build",
+    "start": "bun dist/index.js"
+  },
+  "dependencies": {
+    "@hono/oidc-auth": "catalog:",
+    "@hono/zod-openapi": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "@opentelemetry/exporter-trace-otlp-http": "catalog:",
+    "@opentelemetry/resources": "catalog:",
+    "@opentelemetry/sdk-trace-base": "catalog:",
+    "@opentelemetry/sdk-trace-web": "catalog:",
+    "@scalar/hono-api-reference": "catalog:",
+    "@workspace/db": "workspace:*",
+    "@workspace/libs": "workspace:*",
+    "axios": "catalog:",
+    "decimal.js": "catalog:",
+    "docxtemplater": "catalog:",
+    "exceljs": "catalog:",
+    "hono": "catalog:",
+    "pizzip": "catalog:",
+    "prom-client": "catalog:",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+    "xlsx-style": "catalog:",
+    "xlsx-template": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@workspace/auth": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "orval": "catalog:"
+  }
+}
