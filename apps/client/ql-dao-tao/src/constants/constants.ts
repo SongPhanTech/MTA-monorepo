@@ -158,7 +158,7 @@ const CUSTOM_VI_LOCALE = {
 }
 const TRAINING_OBJECT_TYPE = {
     MILITARY: 'Học viên quân sự',
-    CIVILIAN: 'Học viên dân sự',
+    CIVILIAN: 'Sinh viên dân sự',
     INTERNATIONAL_MILITARY: 'Học viên quân sự quốc tế',
 }
 

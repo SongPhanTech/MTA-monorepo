@@ -13,7 +13,7 @@ import "../khao-thi/survey"
 
 enum TrainingObjectTypes {
   MILITARY // Học viên quân sự
-  CIVILIAN // Học viên dân sự
+  CIVILIAN // Sinh viên dân sự
   INTERNATIONAL_MILITARY // Học viên quân sự quốc tế
 
   @@schema("ql-dao-tao")

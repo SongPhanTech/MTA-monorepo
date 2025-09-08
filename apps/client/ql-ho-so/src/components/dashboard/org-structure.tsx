@@ -18,7 +18,7 @@ const PieChart: React.FC<ChartProps> = ({ className }) => {
         setTimeout(() => {
             setData([
                 { type: 'Học viên quân sự', value: 2000 },
-                { type: 'Học viên dân sự', value: 400 },
+                { type: 'Sinh viên dân sự', value: 400 },
             ])
         }, 1000)
     }, [])
