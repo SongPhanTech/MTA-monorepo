@@ -20,6 +20,7 @@ import {
     useUpdateStudentGraduationApplication,
     useUpsertGraduationDecision,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import type { GraduationCheckResult } from '@workspace/libs/api/schemas/graduationCheckResult'
 import { useGraduationCheck } from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
@@ -327,7 +328,7 @@ export default function StudentGraduationApplication() {
             onOk: async () => {
                 try {
                     showSpinner()
-                    const createDecisionPromises = selectedRecords
+                    const createDecision = selectedRecords
                         .filter(
                             (record) =>
                                 record.id &&
@@ -348,19 +349,20 @@ export default function StudentGraduationApplication() {
                                     : {}),
                             }
 
-                            return upsertGraduationDecision({
-                                where: {
-                                    applicationId: record.id,
-                                    studentId: record.student.id,
+                            return {
+                                model: 'GraduationDecision' as const,
+                                operation: 'upsert' as const,
+                                data: {
+                                    where: {
+                                        applicationId: record.id,
+                                        studentId: record.student.id,
+                                    },
+                                    create: createData,
+                                    update: createData,
                                 },
-                                create: {
-                                    ...createData,
-                                },
-                                update: createData,
-                            })
+                            }
                         })
-
-                    await Promise.all(createDecisionPromises)
+                    await sqlTransaction(createDecision)
                     await updateManyStudentGraduationApplication({
                         where: { id: { in: selectedRowKeys } },
                         data: { status: ApplicationStatus.APPROVED },

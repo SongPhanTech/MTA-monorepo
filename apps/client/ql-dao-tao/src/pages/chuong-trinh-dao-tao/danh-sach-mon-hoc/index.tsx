@@ -21,7 +21,7 @@ import { Button, Col, Flex, Form, message, Row, Tag, Tooltip, TreeSelect } from 
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function SubjectList() {
@@ -49,14 +49,17 @@ export default function SubjectList() {
     const { data: organization = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(organization)
 
-    const { data: SubjectData, refetch } = useFindManySubject({
-        where: {
-            subjectVersion: {
-                some: {
-                    name: { contains: filters.name, mode: 'insensitive' },
-                    code: { contains: filters.code, mode: 'insensitive' },
-                },
-            },
+    const where = useMemo(() => {
+        const subjectVersionFilter = {
+            ...(filters.name && {
+                name: { contains: filters.name, mode: 'insensitive' as const },
+            }),
+            ...(filters.code && {
+                code: { contains: filters.code, mode: 'insensitive' as const },
+            }),
+        }
+
+        return {
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
@@ -72,7 +75,20 @@ export default function SubjectList() {
                       },
                   }
                 : {}),
-        },
+            ...(Object.keys(subjectVersionFilter).length > 0 && {
+                subjectVersion: { some: subjectVersionFilter },
+            }),
+        }
+    }, [
+        filters.active,
+        filters.code,
+        filters.examType,
+        filters.managementOrganizationId,
+        filters.name,
+    ])
+
+    const { data: SubjectData, refetch } = useFindManySubject({
+        where,
         include: {
             _count: true,
             subjectVersion: {
@@ -124,27 +140,8 @@ export default function SubjectList() {
 
     const { data: count } = useCountSubject({
         where: {
-            subjectVersion: {
-                some: {
-                    name: { contains: filters.name, mode: 'insensitive' },
-                    code: { contains: filters.code, mode: 'insensitive' },
-                },
-            },
-            ...(filters.managementOrganizationId
-                ? { managementOrganizationId: filters.managementOrganizationId }
-                : {}),
-            ...(filters.examType
-                ? {
-                      subjectVersion: { some: { examType: { in: filters.examType } } },
-                  }
-                : {}),
-            ...(filters.active?.length === 1
-                ? {
-                      subjectVersion: {
-                          some: { active: filters.active[0] },
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 

@@ -59,89 +59,64 @@ export default function TrainingProgramCatalog() {
         managementOrganizationId: undefined,
     })
 
-    const where = useMemo(
-        () => ({
+    const where = useMemo(() => {
+        const curriculumVersionFilter = {
+            ...(filters.name && {
+                name: { contains: filters.name, mode: 'insensitive' as const },
+            }),
+            ...(filters.code && {
+                code: { contains: filters.code, mode: 'insensitive' as const },
+            }),
+            ...(filters.trainingObjectTypes && {
+                trainingObjectTypeId: { in: filters.trainingObjectTypes },
+            }),
+            ...(filters.trainingCourses && {
+                fixedClasses: {
+                    some: { trainingCourseId: { in: filters.trainingCourses } },
+                },
+            }),
+            ...(filters.trainingTime && {
+                trainingTimeId: { in: filters.trainingTime },
+            }),
+        }
+
+        return {
             ...(filters.managementOrganizationId && {
                 managementOrganizationId: filters.managementOrganizationId,
             }),
             ...(filters.trainingMajorId && {
                 trainingMajorId: filters.trainingMajorId,
             }),
-            ...(filters.searchText
-                ? {
-                      OR: [
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive' as const,
-                              },
-                          },
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive' as const,
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            curriculumVersion: {
-                some: {
-                    ...(filters.name
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.code
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive' as const,
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingObjectTypes
-                        ? {
-                              trainingObjectTypeId: {
-                                  in: filters.trainingObjectTypes,
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingCourses
-                        ? {
-                              fixedClasses: {
-                                  some: {
-                                      trainingCourseId: {
-                                          in: filters.trainingCourses,
-                                      },
-                                  },
-                              },
-                          }
-                        : {}),
-                    ...(filters.trainingTime
-                        ? {
-                              trainingTimeId: {
-                                  in: filters.trainingTime,
-                              },
-                          }
-                        : {}),
-                },
-            },
-        }),
-        [
-            filters.searchText,
-            filters.trainingObjectTypes,
-            filters.name,
-            filters.trainingTime,
-            filters.trainingCourses,
-            filters.code,
-            filters.managementOrganizationId,
-            filters.trainingMajorId,
-        ]
-    )
+            ...(filters.searchText && {
+                OR: [
+                    {
+                        code: {
+                            contains: filters.searchText,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                    {
+                        name: {
+                            contains: filters.searchText,
+                            mode: 'insensitive' as const,
+                        },
+                    },
+                ],
+            }),
+            ...(Object.keys(curriculumVersionFilter).length > 0 && {
+                curriculumVersion: { some: curriculumVersionFilter },
+            }),
+        }
+    }, [
+        filters.searchText,
+        filters.trainingObjectTypes,
+        filters.name,
+        filters.trainingTime,
+        filters.trainingCourses,
+        filters.code,
+        filters.managementOrganizationId,
+        filters.trainingMajorId,
+    ])
 
     const { data = [], refetch } = useFindManyCurriculum({
         where,

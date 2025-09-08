@@ -214,54 +214,57 @@ const PutStudentThesisRegistration = () => {
                     return
                 }
 
-                const payload = (
-                    await Promise.all(
-                        selectedStudents.map(async (studentId) => {
-                            const res = await sqlTransaction([
-                                {
-                                    model: 'StudentSubjectScore',
-                                    operation: 'findUnique',
-                                    data: {
-                                        where: {
-                                            subjectClassId_studentId: {
-                                                subjectClassId: thesisProject?.subjectClassId,
-                                                studentId,
-                                            },
-                                        },
-                                        select: { id: true },
+                const queries = selectedStudents.flatMap((studentId) => {
+                    return [
+                        {
+                            model: 'StudentSubjectScore' as const,
+                            operation: 'findUnique' as const,
+                            data: {
+                                where: {
+                                    subjectClassId_studentId: {
+                                        subjectClassId: thesisProject?.subjectClassId,
+                                        studentId,
                                     },
                                 },
-                            ])
+                                select: { id: true },
+                            },
+                        },
+                    ]
+                })
+                const res = await sqlTransaction(queries)
+                const studentSubjectScore = res?.data as unknown as Record<
+                    string,
+                    { id?: string } | undefined
+                >
+                const payload = selectedStudents
+                    .map((studentId, index) => {
+                        const sss = studentSubjectScore[index]
+                        if (!sss?.id) return null
 
-                            const studentSubjectScore = Array.isArray(res?.data)
-                                ? (res.data[0] as { id?: string })
-                                : undefined
-
-                            if (!studentSubjectScore?.id) {
-                                return null
-                            }
-
-                            return {
-                                status: output.status,
-                                thesisProjectId: input?.thesisProjectId || '',
-                                studentId,
-                                registeredAt: output.registeredAt,
-                                motivation: output.motivation,
-                                experience: output.experience,
-                                proposedIdeas: output.proposedIdeas,
-                                reviewedAt: output.reviewedAt,
-                                reviewedById: output.reviewedById,
-                                reviewNote: output.reviewNote,
-                                studentSubjectScoreId: studentSubjectScore.id,
-                            }
-                        })
-                    )
-                ).filter((x): x is NonNullable<typeof x> => !!x)
+                        return {
+                            status: output.status,
+                            thesisProjectId: input?.thesisProjectId || '',
+                            studentId,
+                            registeredAt: output.registeredAt,
+                            motivation: output.motivation,
+                            experience: output.experience,
+                            proposedIdeas: output.proposedIdeas,
+                            reviewedAt: output.reviewedAt,
+                            reviewedById: output.reviewedById,
+                            reviewNote: output.reviewNote,
+                            studentSubjectScoreId: sss.id,
+                        }
+                    })
+                    .filter((x): x is NonNullable<typeof x> => !!x)
+                if (payload.length === 0) {
+                    message.error('Không tìm thấy StudentSubjectScore hợp lệ')
+                    return
+                }
 
                 await createManyStudentThesisRegistration({
                     data: payload,
                 })
-                message.success(`Đã thêm ${selectedStudents.length} sinh viên`)
+                message.success(`Đã thêm ${payload.length} sinh viên`)
             }
 
             queryClient.invalidateQueries({

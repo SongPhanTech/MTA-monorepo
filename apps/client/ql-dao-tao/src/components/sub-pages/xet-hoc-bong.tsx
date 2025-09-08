@@ -17,8 +17,8 @@ import {
     useDeleteScholarshipAward,
     useFindManyScholarship,
     useFindManyTrainingCourse,
-    useUpsertScholarshipAward,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
@@ -335,10 +335,9 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
     const handleTransferData = () => {
         const dataToTransfer = selectedStudents.filter((s) => s.isSelected)
         setRightPanelData(dataToTransfer)
+        setIsModalVisible(true)
         message.success(`Đã chuyển ${dataToTransfer.length} sinh viên`)
     }
-
-    const { mutateAsync: upsertScholarshipAward } = useUpsertScholarshipAward()
 
     const handleSaveScholarshipAward = async () => {
         if (!semesterId) {
@@ -357,30 +356,33 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                 scholarshipId: student.scholarshipId,
                 semesterId: semesterId,
                 amount: student.amount,
-                gpaAtAward: student.gpaAtAward,
+                gpaAtAward: student.gpaAtAward ? Number(student.gpaAtAward) : null,
                 priorityRank: student.priorityRank,
             }))
 
-            await Promise.all(
-                awardsToAdd.map((award) =>
-                    upsertScholarshipAward({
-                        where: {
-                            studentId_scholarshipId_semesterId: {
-                                studentId: award.studentId,
-                                scholarshipId: award.scholarshipId,
-                                semesterId: award.semesterId,
-                            },
+            const queries = awardsToAdd.map((award) => ({
+                model: 'ScholarshipAward' as const,
+                operation: 'upsert' as const,
+                data: {
+                    where: {
+                        studentId_scholarshipId_semesterId: {
+                            studentId: award.studentId,
+                            scholarshipId: award.scholarshipId,
+                            semesterId: award.semesterId,
                         },
-                        create: award,
-                        update: award,
-                    })
-                )
-            )
+                    },
+                    create: award,
+                    update: award,
+                },
+            }))
+
+            await sqlTransaction(queries)
 
             message.success('Lưu học bổng thành công')
             setSelectedStudents([])
             setRightPanelData([])
             setSelectedRowKeys([])
+            setIsModalVisible(false)
             refetch()
             refetchAward()
         } catch (error) {

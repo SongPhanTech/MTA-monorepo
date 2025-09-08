@@ -8,7 +8,7 @@ import {
     type TrainingBlockSubject,
 } from '@workspace/db'
 import {
-    useCreateTrainingBlockSubject,
+    useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,
     useFindManySubjectVersion,
     useFindUniqueTrainingBlockSubject,
@@ -84,7 +84,7 @@ const PutTrainingBlockSubject = () => {
         }
     }, [initialValue, form])
 
-    const { mutateAsync: createTrainingBlockSubject } = useCreateTrainingBlockSubject()
+    const { mutateAsync: createManyTrainingBlockSubject } = useCreateManyTrainingBlockSubject()
     const { mutateAsync: updateTrainingBlockSubject } = useUpdateTrainingBlockSubject()
     async function onOk(output?: PutTrainingBlockSubject) {
         if (!input || !output) return
@@ -114,16 +114,12 @@ const PutTrainingBlockSubject = () => {
                     ? payload.subjectId
                     : [payload.subjectId]
 
-                await Promise.all(
-                    ids.map((subjectId) =>
-                        createTrainingBlockSubject({
-                            data: {
-                                ...payload,
-                                subjectId: subjectId,
-                            },
-                        })
-                    )
-                )
+                await createManyTrainingBlockSubject({
+                    data: ids.map((subjectId) => ({
+                        ...payload,
+                        subjectId,
+                    })),
+                })
 
                 message.success('Thêm mới thành công')
             }
