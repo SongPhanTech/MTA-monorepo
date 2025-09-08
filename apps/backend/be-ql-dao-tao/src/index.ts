@@ -67,6 +67,8 @@ app.use('*', checkIp)
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
+app.route('/api/training-field', TrainingFieldApp)
+app.route('/api/room', RoomApp)
 // TODO!: uncomment
 // app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 
@@ -81,8 +83,6 @@ app.route('/api/curriculum', CurriculumApp)
 app.route('/api/graduation', GraduationApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
-app.route('/api/training-field', TrainingFieldApp)
-app.route('/api/room', RoomApp)
 
 const nv = await prisma.dM_NhanVien.findFirstOrThrow()
 
