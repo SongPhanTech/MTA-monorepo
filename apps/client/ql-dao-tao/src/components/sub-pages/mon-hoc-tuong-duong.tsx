@@ -190,6 +190,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                                         <SubjectList
                                             subjects={sortSubjects(group, EquivalencySide.TARGET)}
                                             onRemove={handleRemoveSubject}
+                                            disableRemoveForId={subjectVersionId}
                                         />
                                     </Col>
 

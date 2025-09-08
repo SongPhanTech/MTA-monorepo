@@ -25,11 +25,13 @@ function Page() {
             for (const i of dataLevel?.data?.questions) {
                 // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
                 for (const j of i?.answers) {
-                    result.push({
-                        label: i?.name,
-                        state: j?.answer,
-                        value: j?.count,
-                    })
+                    if (j?.count > 0) {
+                        result.push({
+                            label: i?.name,
+                            state: j?.answer,
+                            value: j?.count,
+                        })
+                    }
                 }
             }
         }
@@ -71,9 +73,14 @@ function Page() {
     return (
         <div>
             <Row gutter={[16, 16]}>
+                <Col span={24} className="px-6 mt-3 mb-0">
+                    <Title level={3}>
+                        {(dataLevel?.status === 200 && dataLevel?.data?.surveyName) || ''}
+                    </Title>
+                </Col>
                 <Col span={24}>
-                    <div className="bg-white rounded shadow h-full flex flex-col">
-                        <div className="p-4">
+                    <div className="bg-white h-full flex flex-col">
+                        <div className="px-4 pb-4">
                             <Title level={4}>Thống kê số lượng người tham gia</Title>
                         </div>
                         <div className="flex-1">
@@ -97,7 +104,7 @@ function Page() {
                 </Col>
 
                 <Col span={24}>
-                    <div className="bg-white rounded shadow h-full flex flex-col">
+                    <div className="bg-white h-full flex flex-col">
                         <div className="p-4">
                             <Title level={4}>Thống kê theo từng câu hỏi</Title>
                         </div>
