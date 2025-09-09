@@ -45,7 +45,7 @@ export const ModalPhuLucThacSi = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: ModalPhuLucThacSi.name,
+        tag: 'ModalPhuLucThacSi',
     })
     const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
 

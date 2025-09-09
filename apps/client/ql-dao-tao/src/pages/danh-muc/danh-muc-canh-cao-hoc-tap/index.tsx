@@ -9,7 +9,7 @@ import type { FilterProps } from '@constants/type'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma, TrainingCourse, TrainingObjectType } from '@workspace/db'
+import type { TrainingCourse, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,
@@ -17,9 +17,8 @@ import {
     useUpdateAcademicWarningRule,
 } from '@workspace/db/hooks'
 import { Col, Flex, message, Row, Tag, Tooltip } from 'antd'
-import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
@@ -41,54 +40,54 @@ export default function AcademicWarningRule() {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
 
-    const where: Prisma.TrainingCourseWhereInput = useMemo(
-        () =>
-            isFiltering
-                ? {
-                      ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                          ? {
-                                id: filters.trainingCourseId,
-                            }
-                          : {}),
-                      ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                          ? {
-                                trainingObjectTypeId: filters.trainingObjectId,
-                            }
-                          : {}),
-                      academicWarningRule: {
-                          some: {
-                              ...(filters.field
-                                  ? Array.isArray(filters.field)
-                                      ? {
-                                            field: {
-                                                in: filters.field,
-                                            },
-                                        }
-                                      : {
-                                            field: {
-                                                equals: filters.field,
-                                            },
-                                        }
-                                  : {}),
-                              ...(filters.operator
-                                  ? Array.isArray(filters.operator)
-                                      ? {
-                                            operator: {
-                                                in: filters.operator,
-                                            },
-                                        }
-                                      : {
-                                            operator: {
-                                                equals: filters.operator,
-                                            },
-                                        }
-                                  : {}),
+    const where = useMemo(() => {
+        const academicWarningRuleFilter = {
+            ...(filters.field
+                ? Array.isArray(filters.field)
+                    ? {
+                          field: {
+                              in: filters.field,
                           },
-                      },
+                      }
+                    : {
+                          field: {
+                              equals: filters.field,
+                          },
+                      }
+                : {}),
+            ...(filters.operator
+                ? Array.isArray(filters.operator)
+                    ? {
+                          operator: {
+                              in: filters.operator,
+                          },
+                      }
+                    : {
+                          operator: {
+                              equals: filters.operator,
+                          },
+                      }
+                : {}),
+        }
+
+        return {
+            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                ? {
+                      id: filters.trainingCourseId,
                   }
-                : {},
-        [filters, isFiltering]
-    )
+                : {}),
+            ...(filters.trainingObjectId && filters.trainingObjectId !== ''
+                ? {
+                      trainingObjectTypeId: filters.trainingObjectId,
+                  }
+                : {}),
+            ...(Object.keys(academicWarningRuleFilter).length > 0 && {
+                academicWarningRule: {
+                    some: academicWarningRuleFilter,
+                },
+            }),
+        }
+    }, [filters.trainingCourseId, filters.trainingObjectId, filters.field, filters.operator])
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where,
@@ -102,15 +101,11 @@ export default function AcademicWarningRule() {
     })
 
     const { data: count } = useCountTrainingCourse({
-        where,
+        where: {
+            ...where,
+            deletedAt: null,
+        },
     })
-
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
 
     const { onOpen: onOpenAcademicWarningRule } = useDisclosure<{
         trainingCourseId: string
@@ -136,19 +131,12 @@ export default function AcademicWarningRule() {
         }
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
         orderBy: { name: 'asc' },
     })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        where: { active: true },
         orderBy: { name: 'asc' },
     })
 
@@ -168,7 +156,9 @@ export default function AcademicWarningRule() {
                                         }
                                     })}
                                     className="w-[300px]"
-                                    onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                                    onChange={(val) =>
+                                        setFilters((prev) => ({ ...prev, trainingCourseId: val }))
+                                    }
                                     allowClear
                                 />
                             </Col>
@@ -182,7 +172,9 @@ export default function AcademicWarningRule() {
                                         }
                                     })}
                                     className="w-[300px]"
-                                    onChange={(val) => handleFilterChange('trainingObjectId', val)}
+                                    onChange={(val) =>
+                                        setFilters((prev) => ({ ...prev, trainingObjectId: val }))
+                                    }
                                     allowClear
                                 />
                             </Col>

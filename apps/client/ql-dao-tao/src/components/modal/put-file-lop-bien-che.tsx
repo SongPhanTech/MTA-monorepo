@@ -21,7 +21,7 @@ const PutUploadFixedClassModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutUploadFixedClassModal.name,
+        tag: 'PutUploadFixedClassModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

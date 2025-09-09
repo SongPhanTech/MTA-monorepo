@@ -24,7 +24,7 @@ const PutCouncil = () => {
     const [form] = Form.useForm<PutCouncil>()
     const { councilProposalStatusOptions } = useCouncilProposalStatusOptions()
     const { isOpen, onClose, input } = useDisclosure<CouncilInput>({
-        tag: PutCouncil.name,
+        tag: 'PutCouncil',
         onClose: form.resetFields,
     })
 

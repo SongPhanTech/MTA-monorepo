@@ -790,25 +790,25 @@ export default function TeachingAssignment() {
                                 type: 'tree_select',
                                 options: treeData,
                                 render: (value) =>
-                                    value?.managementOrganization?.name
-                                        ? value?.managementOrganization?.name
+                                    value?.managementOrganization?.sTen
+                                        ? value?.managementOrganization?.sTen
                                         : '',
                             },
-                            {
-                                title: 'Điểm bằng nhau',
-                                dataIndex: 'subject',
-                                width: 150,
-                                align: 'center',
-                                render: (value) => (
-                                    <Checkbox checked={value.subjectEquivalentType} disabled />
-                                ),
-                            },
-                            {
-                                title: 'Lớp liên kết',
-                                dataIndex: 'lopLienKet',
-                                width: 150,
-                                align: 'center',
-                            },
+                            // {
+                            //     title: 'Điểm bằng nhau',
+                            //     dataIndex: 'subject',
+                            //     width: 150,
+                            //     align: 'center',
+                            //     render: (value) => (
+                            //         <Checkbox checked={value.subjectEquivalentType} disabled />
+                            //     ),
+                            // },
+                            // {
+                            //     title: 'Lớp liên kết',
+                            //     dataIndex: 'lopLienKet',
+                            //     width: 150,
+                            //     align: 'center',
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,

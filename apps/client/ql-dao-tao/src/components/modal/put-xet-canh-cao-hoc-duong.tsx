@@ -29,7 +29,7 @@ dayjs.locale('vi')
 const PutDisciplinaryWarning = () => {
     const [form] = Form.useForm<PutDisciplinaryWarningFromType>()
     const { isOpen, onClose, input } = useDisclosure<DisciplinaryWarningInput>({
-        tag: PutDisciplinaryWarning.name,
+        tag: 'PutDisciplinaryWarning',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

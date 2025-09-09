@@ -42,7 +42,7 @@ const PutFixedClassModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutFixedClassModal.name,
+        tag: 'PutFixedClassModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -533,7 +533,7 @@ const PutFixedClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name={'graduated'} label="Tình trạng tốt nghiệp" required>
+                <FormItem form={form} name={'graduated'} label="Tình trạng tốt nghiệp">
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Đã tốt nghiệp</Radio>
                         <Radio value={false}>Chưa tốt nghiệp</Radio>

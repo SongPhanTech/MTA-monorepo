@@ -25,7 +25,7 @@ type TrainingBlockOnCurriculumVersionInput = {
 const PutTrainingBlockOnCurriculumVersion = () => {
     const [form] = Form.useForm<PutTrainingBlockOnCurriculumVersion>()
     const { isOpen, onClose, input } = useDisclosure<TrainingBlockOnCurriculumVersionInput>({
-        tag: PutTrainingBlockOnCurriculumVersion.name,
+        tag: 'PutTrainingBlockOnCurriculumVersion',
         onClose: form.resetFields,
     })
 

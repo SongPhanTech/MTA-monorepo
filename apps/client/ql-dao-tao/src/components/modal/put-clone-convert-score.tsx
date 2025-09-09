@@ -16,7 +16,7 @@ const PutCloneConvertScore = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         record: TrainingCourse & { scoreConverts: ScoreConvert[] }
     }>({
-        tag: PutCloneConvertScore.name,
+        tag: 'PutCloneConvertScore',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

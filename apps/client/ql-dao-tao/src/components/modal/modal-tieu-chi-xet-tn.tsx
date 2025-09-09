@@ -33,7 +33,7 @@ const ModalGraduationCriteria = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: ModalGraduationCriteria.name,
+        tag: 'ModalGraduationCriteria',
         onClose: form.resetFields,
     })
     const { getCriteriaFieldLabel } = useCriteriaFieldOptions()

@@ -44,7 +44,7 @@ const AddStudentToFixedClassModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: AddStudentToFixedClassModal.name,
+        tag: 'AddStudentToFixedClassModal',
         onClose: form.resetFields,
     })
 

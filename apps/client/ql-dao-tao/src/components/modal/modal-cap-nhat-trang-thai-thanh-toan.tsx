@@ -25,7 +25,7 @@ const PutUpdatePaymentStatus = () => {
         paymentRecordIds: string[]
         isSupervisor: boolean
     }>({
-        tag: PutUpdatePaymentStatus.name,
+        tag: 'PutUpdatePaymentStatus',
         onClose: form.resetFields,
     })
 

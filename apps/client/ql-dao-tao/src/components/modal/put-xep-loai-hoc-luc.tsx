@@ -26,7 +26,7 @@ const academicRankingBaseTypeOptions = [
 const PutAcademicRanking = () => {
     const [form] = Form.useForm<PutAcademicRankingFormType>()
     const { isOpen, onClose, input } = useDisclosure<{ id: string; type: string }>({
-        tag: PutAcademicRanking.name,
+        tag: 'PutAcademicRanking',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -60,7 +60,7 @@ const PutAcademicRanking = () => {
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
-                queryKey: ['SchoolYear'],
+                queryKey: ['AcademicRankingConvert'],
             })
             onClose()
         } catch (_error) {
@@ -76,12 +76,12 @@ const PutAcademicRanking = () => {
         },
         { enabled: !!input?.id }
     )
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
         }
-    }, [level, form])
+    }, [level])
 
     return (
         <PutFormModal
@@ -109,51 +109,6 @@ const PutAcademicRanking = () => {
                     <Input placeholder="Xuất sắc..." />
                 </FormItem>
             </Col>
-
-            <Col span={12}>
-                <FormItem form={form} name="base10Min" label="Hệ 10 từ" required>
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        placeholder="Nhập điểm"
-                        step={0.1}
-                        min={0}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="base10Max" label="Hệ 10 đến" required>
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        placeholder="Nhập điểm"
-                        step={0.1}
-                        min={0}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="base4Min" label="Điểm hệ 4 từ">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        placeholder="Nhập điểm"
-                        step={0.1}
-                        min={0}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="base4Max" label="Điểm hệ 4 đến">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        placeholder="Nhập điểm"
-                        step={0.1}
-                        min={0}
-                    />
-                </FormItem>
-            </Col>
             <Col span={12}>
                 <FormItem form={form} name="baseScore" label="Loại hệ điểm" required>
                     <Select
@@ -163,6 +118,142 @@ const PutAcademicRanking = () => {
                             value: item.value,
                         }))}
                         allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="graduated" label="Qua môn" required>
+                    <Radio.Group>
+                        <Radio value={true}>Có</Radio>
+                        <Radio value={false}>Không</Radio>
+                    </Radio.Group>
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="base10Min"
+                    label="Hệ 10 từ"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập điểm hệ 10',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const base10Max = getFieldValue('base10Max')
+                                if (
+                                    base10Max &&
+                                    Number.parseFloat(value) >= Number.parseFloat(base10Max)
+                                ) {
+                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                }
+                                return Promise.resolve()
+                            },
+                        }),
+                    ]}
+                >
+                    <InputNumber
+                        type="number"
+                        style={{ width: '100%' }}
+                        placeholder="Nhập điểm"
+                        step={0.1}
+                        min={0}
+                        max={10}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="base10Max"
+                    label="Hệ 10 đến"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng nhập điểm hệ 10',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const base10Min = getFieldValue('base10Min')
+                                if (
+                                    base10Min &&
+                                    Number.parseFloat(value) <= Number.parseFloat(base10Min)
+                                ) {
+                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                }
+                                return Promise.resolve()
+                            },
+                        }),
+                    ]}
+                >
+                    <InputNumber
+                        type="number"
+                        style={{ width: '100%' }}
+                        placeholder="Nhập điểm"
+                        step={0.1}
+                        min={0}
+                        max={10}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="base4Min"
+                    label="Điểm hệ 4 từ"
+                    rules={[
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const base4Max = getFieldValue('base4Max')
+                                if (
+                                    base4Max &&
+                                    Number.parseFloat(value) >= Number.parseFloat(base4Max)
+                                ) {
+                                    message.error('Điểm hệ 4 từ phải nhỏ hơn điểm hệ 4 đến')
+                                }
+                                return Promise.resolve()
+                            },
+                        }),
+                    ]}
+                >
+                    <InputNumber
+                        type="number"
+                        style={{ width: '100%' }}
+                        placeholder="Nhập điểm"
+                        step={0.1}
+                        min={0}
+                        max={4}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="base4Max"
+                    label="Điểm hệ 4 đến"
+                    rules={[
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const base4Min = getFieldValue('base4Min')
+                                if (
+                                    base4Min &&
+                                    Number.parseFloat(value) <= Number.parseFloat(base4Min)
+                                ) {
+                                    message.error('Điểm hệ 4 từ phải nhỏ hơn điểm hệ 4 đến')
+                                }
+                                return Promise.resolve()
+                            },
+                        }),
+                    ]}
+                >
+                    <InputNumber
+                        type="number"
+                        style={{ width: '100%' }}
+                        placeholder="Nhập điểm"
+                        step={0.1}
+                        min={0}
+                        max={4}
                     />
                 </FormItem>
             </Col>
@@ -179,14 +270,6 @@ const PutAcademicRanking = () => {
                     </FormItem>
                 </Col>
             )}
-            <Col span={12}>
-                <FormItem form={form} name="graduated" label="Qua môn" required>
-                    <Radio.Group>
-                        <Radio value={true}>Có</Radio>
-                        <Radio value={false}>Không</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
             <Col span={12}>
                 <FormItem form={form} name="active" label="Kích hoạt" valuePropName="checked">
                     <Switch defaultValue={true} />

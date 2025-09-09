@@ -17,7 +17,7 @@ const PutCloneAcademicRanking = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         record: TrainingCourse & { academicRankingConvert: AcademicRankingConvert[] }
     }>({
-        tag: PutCloneAcademicRanking.name,
+        tag: 'PutCloneAcademicRanking',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

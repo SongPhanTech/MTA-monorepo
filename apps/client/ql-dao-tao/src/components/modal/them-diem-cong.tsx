@@ -29,7 +29,7 @@ const PutAddOlympicScoreModal = () => {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { isOpen, onClose, input } = useDisclosure<any>({
-        tag: PutAddOlympicScoreModal.name,
+        tag: 'PutAddOlympicScoreModal',
         onClose: form.resetFields,
     })
     const [filters, setFilters] = useState<FilterProps>({

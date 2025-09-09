@@ -24,7 +24,7 @@ const ModalPrintToKQHT = () => {
     const [gpaScore, setGpaScore] = useState(0)
 
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
-        tag: ModalPrintToKQHT.name,
+        tag: 'ModalPrintToKQHT',
     })
 
     const { data: subjectScoreData } = useFindUniqueCurriculumVersion(

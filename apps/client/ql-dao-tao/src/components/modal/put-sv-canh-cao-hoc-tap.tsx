@@ -27,7 +27,7 @@ const PutAcademicWarning = () => {
     const [form] = Form.useForm<PutAcademicWarning>()
 
     const { isOpen, onClose, input } = useDisclosure<AcademicWarningInput>({
-        tag: PutAcademicWarning.name,
+        tag: 'PutAcademicWarning',
         onClose: form.resetFields,
     })
 

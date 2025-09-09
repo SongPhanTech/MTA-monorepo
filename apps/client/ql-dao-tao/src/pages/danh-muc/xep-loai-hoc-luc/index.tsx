@@ -13,7 +13,7 @@ import {
     useDeleteManyAcademicRankingConvert,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Copy, Search } from 'lucide-react'
 import type React from 'react'
@@ -77,7 +77,7 @@ export default function AcademicRankingConvertPage() {
             },
         },
         orderBy: {
-            name: 'asc',
+            createdAt: 'desc',
         },
     })
 
@@ -152,48 +152,44 @@ export default function AcademicRankingConvertPage() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                <Form.Item name="searchText">
-                                    <Input
-                                        id="search"
-                                        type="number"
-                                        min={0}
-                                        max={10}
-                                        step={0.1}
-                                        onChange={(e) =>
-                                            handleFilterChange('searchText', e.target.value)
-                                        }
-                                        placeholder="Tìm kiếm điểm"
-                                        style={{
-                                            width: 300,
-                                            marginRight: 8,
-                                            height: 32,
-                                        }}
-                                        prefix={
-                                            <Search
-                                                size={16}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    />
-                                </Form.Item>
-                                <Form.Item name="active" initialValue="true">
-                                    <Select
-                                        id="active"
-                                        placeholder="Chọn trạng thái"
-                                        style={{ width: 200 }}
-                                        options={DataActive.map((item) => ({
-                                            label: item.name,
-                                            value:
-                                                item.value === undefined
-                                                    ? undefined
-                                                    : item.value.toString(),
-                                        }))}
-                                        onChange={(value) => handleFilterChange('active', value)}
-                                    />
-                                </Form.Item>
+                                <Input
+                                    id="search"
+                                    type="number"
+                                    min={0}
+                                    max={10}
+                                    step={0.1}
+                                    onChange={(e) =>
+                                        handleFilterChange('searchText', e.target.value)
+                                    }
+                                    placeholder="Tìm kiếm điểm"
+                                    style={{
+                                        width: 300,
+                                        marginRight: 8,
+                                        height: 32,
+                                    }}
+                                    prefix={
+                                        <Search
+                                            size={16}
+                                            style={{
+                                                color: 'rgba(0, 0, 0, 0.25)',
+                                            }}
+                                        />
+                                    }
+                                    allowClear
+                                />
+                                <Select
+                                    id="active"
+                                    placeholder="Chọn trạng thái"
+                                    style={{ width: 200 }}
+                                    options={DataActive.map((item) => ({
+                                        label: item.name,
+                                        value:
+                                            item.value === undefined
+                                                ? undefined
+                                                : item.value.toString(),
+                                    }))}
+                                    onChange={(value) => handleFilterChange('active', value)}
+                                />
                             </Flex>
                         </Col>
                         <Col span={6}>

@@ -19,6 +19,7 @@ enum TrainingObjectTypes {
   @@schema("ql-dao-tao")
 }
 
+/// Đối tượng đào tạo
 model TrainingObjectType extends Base {
   name                 String                              @unique
   type                 TrainingObjectTypes

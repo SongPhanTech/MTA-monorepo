@@ -16,7 +16,7 @@ const ModalLearningResult = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: ModalLearningResult.name,
+        tag: 'ModalLearningResult',
         onClose: form.resetFields,
     })
 

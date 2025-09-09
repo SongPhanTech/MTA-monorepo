@@ -29,7 +29,7 @@ const PutPaymentRecord = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         selectedRowKeys: string[]
     }>({
-        tag: PutPaymentRecord.name,
+        tag: 'PutPaymentRecord',
         onClose: form.resetFields,
     })
 

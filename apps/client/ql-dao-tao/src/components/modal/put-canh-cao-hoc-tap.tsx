@@ -31,7 +31,7 @@ const PutAcademicWarningRule = () => {
     const { options: criteriaOperatorOptions } = useCriteriaOperatorOptions()
 
     const { isOpen, onClose, input } = useDisclosure<AcademicWarningRuleInput>({
-        tag: PutAcademicWarningRule.name,
+        tag: 'PutAcademicWarningRule',
         onClose: form.resetFields,
     })
 
@@ -154,6 +154,7 @@ const PutAcademicWarningRule = () => {
                         placeholder="Nhập giá trị ngưỡng"
                         className="w-full"
                         step={1}
+                        min={0}
                     />
                 </FormItem>
             </Col>
@@ -169,6 +170,7 @@ const PutAcademicWarningRule = () => {
                         placeholder="Nhập mức độ cảnh cáo sẽ tăng"
                         className="w-full"
                         step={1}
+                        min={1}
                     />
                 </FormItem>
             </Col>
@@ -179,6 +181,7 @@ const PutAcademicWarningRule = () => {
                         placeholder="Nhập thứ tự"
                         className="w-full"
                         step={1}
+                        min={1}
                     />
                 </FormItem>
             </Col>
@@ -193,6 +196,7 @@ const PutAcademicWarningRule = () => {
                         placeholder="Nhập thứ tự"
                         className="w-full"
                         step={1}
+                        min={1}
                     />
                 </FormItem>
             </Col>

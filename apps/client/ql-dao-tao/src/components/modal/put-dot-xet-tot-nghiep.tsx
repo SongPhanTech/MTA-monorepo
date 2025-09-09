@@ -26,7 +26,7 @@ const PutGraduationSession = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutGraduationSession.name,
+        tag: 'PutGraduationSession',
         onClose: form.resetFields,
     })
 
@@ -113,13 +113,19 @@ const PutGraduationSession = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="sessionDate" label="Ngày họp dội đồng" required>
+                <FormItem form={form} name="sessionDate" label="Ngày họp hội đồng" required>
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = dayjs()
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
+                        placeholder="Chọn ngày họp hội đồng"
                     />
                 </FormItem>
             </Col>

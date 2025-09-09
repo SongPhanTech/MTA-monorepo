@@ -23,7 +23,7 @@ const PutStatusQLTraCuuVanBang = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutStatusQLTraCuuVanBang.name,
+        tag: 'PutStatusQLTraCuuVanBang',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

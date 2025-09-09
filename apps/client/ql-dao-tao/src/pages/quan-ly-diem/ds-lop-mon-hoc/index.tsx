@@ -533,7 +533,7 @@ export default function ClassSubject() {
                                 render: (text, record) => {
                                     return (
                                         <span>
-                                            {record.subject?.managementOrganization?.name ||
+                                            {record.subject?.managementOrganization?.sTen ||
                                                 'Chưa có bộ môn'}
                                         </span>
                                     )

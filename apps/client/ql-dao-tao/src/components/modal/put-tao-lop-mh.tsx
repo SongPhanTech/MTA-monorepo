@@ -40,7 +40,7 @@ const PutOpenSubjectClassModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutOpenSubjectClassModal.name,
+        tag: 'PutOpenSubjectClassModal',
         onClose: form.resetFields,
     })
     const { options, getExamTypeLabel } = useExamTypeOptions()
@@ -419,6 +419,7 @@ const PutOpenSubjectClassModal = () => {
                                             disabledDate={(date) =>
                                                 date && date < dayjs().startOf('day')
                                             }
+                                            placeholder="Chọn ngày hạn PCGD"
                                         />
                                     </Form.Item>
                                 ),
@@ -443,6 +444,7 @@ const PutOpenSubjectClassModal = () => {
                                                 date && date < dayjs().startOf('day')
                                             }
                                             onChange={(date) => handleChangeDateExam(date, index)}
+                                            placeholder="Chọn ngày thi"
                                         />
                                     </Form.Item>
                                 ),
@@ -466,6 +468,7 @@ const PutOpenSubjectClassModal = () => {
                                             disabledDate={(date) =>
                                                 date && date < dayjs().startOf('day')
                                             }
+                                            placeholder="Chọn ngày hạn nhập điểm CC/TX"
                                         />
                                     </Form.Item>
                                 ),
@@ -489,6 +492,7 @@ const PutOpenSubjectClassModal = () => {
                                             disabledDate={(date) =>
                                                 date && date < dayjs().startOf('day')
                                             }
+                                            placeholder="Chọn ngày hạn nhập điểm"
                                         />
                                     </Form.Item>
                                 ),
@@ -517,7 +521,7 @@ const PutOpenSubjectClassModal = () => {
                                 render: (record, __, index) => (
                                     <Form.Item
                                         className="w-full mb-0"
-                                        name={['list', index, 'rooomId']}
+                                        name={['list', index, 'roomId']}
                                         label=""
                                     >
                                         <Select

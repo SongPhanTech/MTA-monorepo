@@ -42,7 +42,7 @@ const PutStudentAcademicDecision = () => {
     const { options: decisionStatusOptions } = useDecisionStatusOptions()
 
     const { isOpen, onClose, input } = useDisclosure<StudentAcademicDecisionInput>({
-        tag: PutStudentAcademicDecision.name,
+        tag: 'PutStudentAcademicDecision',
         onClose: form.resetFields,
     })
 

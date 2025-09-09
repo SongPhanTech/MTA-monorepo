@@ -35,7 +35,7 @@ const PutOneSubjectClassModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutOneSubjectClassModal.name,
+        tag: 'PutOneSubjectClassModal',
         onClose: form.resetFields,
     })
     const { options, getExamTypeLabel } = useExamTypeOptions()

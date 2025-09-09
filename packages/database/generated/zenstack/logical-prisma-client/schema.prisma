@@ -1409,6 +1409,7 @@ model ClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+/// Đối tượng đào tạo
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)

@@ -22,7 +22,7 @@ const PutPaymentRecordDetail = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         paymentRecordId: string
     }>({
-        tag: PutPaymentRecordDetail.name,
+        tag: 'PutPaymentRecordDetail',
         onClose: form.resetFields,
     })
 

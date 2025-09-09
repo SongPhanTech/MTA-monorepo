@@ -232,8 +232,8 @@ export default function StudentDetailPage() {
                                     width: 200,
                                     align: 'center',
                                     render: (value) =>
-                                        value?.managementOrganization?.name
-                                            ? value?.managementOrganization?.name
+                                        value?.managementOrganization?.sTen
+                                            ? value?.managementOrganization?.sTen
                                             : '',
                                 },
                             ]}
@@ -303,8 +303,8 @@ export default function StudentDetailPage() {
                                     width: 200,
                                     align: 'center',
                                     render: (value) =>
-                                        value?.managementOrganization?.name
-                                            ? value?.managementOrganization?.name
+                                        value?.managementOrganization?.sTen
+                                            ? value?.managementOrganization?.sTen
                                             : '',
                                 },
                             ]}

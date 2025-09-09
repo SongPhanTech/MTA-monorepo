@@ -28,7 +28,7 @@ const PutGraduationApplication = () => {
     const { applicationStatusOptions } = useApplicationStatusOptions()
     const [form] = Form.useForm<PutGraduationApplication>()
     const { isOpen, onClose, input } = useDisclosure<{ id: string; graduationSessionId: string }>({
-        tag: PutGraduationApplication.name,
+        tag: 'PutGraduationApplication',
         onClose: form.resetFields,
     })
     const [searchText, setSearchText] = useState('')

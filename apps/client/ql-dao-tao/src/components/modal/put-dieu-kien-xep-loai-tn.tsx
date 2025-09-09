@@ -30,7 +30,7 @@ const PutRankingCondition = () => {
     const { options: criteriaOperatorOptions } = useCriteriaOperatorOptions()
 
     const { isOpen, onClose, input } = useDisclosure<RankingConditionInput>({
-        tag: PutRankingCondition.name,
+        tag: 'PutRankingCondition',
         onClose: form.resetFields,
     })
 

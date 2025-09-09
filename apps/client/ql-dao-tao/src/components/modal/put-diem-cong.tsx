@@ -23,7 +23,7 @@ const PutOlympicScoreModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutOlympicScoreModal.name,
+        tag: 'PutOlympicScoreModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

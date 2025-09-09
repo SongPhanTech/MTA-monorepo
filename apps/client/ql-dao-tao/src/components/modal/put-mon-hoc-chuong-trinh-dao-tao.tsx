@@ -37,7 +37,7 @@ const PutTrainingBlockSubject = () => {
     const [form] = Form.useForm<PutTrainingBlockSubject>()
     const { options: subjectRequirementTypeOptions } = useSubjectRequirementTypeOptions()
     const { isOpen, onClose, input } = useDisclosure<TrainingBlockOnCurriculumVersionInput>({
-        tag: PutTrainingBlockSubject.name,
+        tag: 'PutTrainingBlockSubject',
         onClose: form.resetFields,
     })
 

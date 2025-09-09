@@ -36,7 +36,7 @@ const PutVersionSubjectModal = () => {
         subjectId: string
         subjectVersionId?: string
     }>({
-        tag: PutVersionSubjectModal.name,
+        tag: 'PutVersionSubjectModal',
         onClose: form.resetFields,
     })
 

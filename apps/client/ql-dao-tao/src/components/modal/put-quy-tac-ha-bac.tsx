@@ -30,7 +30,7 @@ const PutRankDowngradeCondition = () => {
     const { options: criteriaOperatorOptions } = useCriteriaOperatorOptions()
 
     const { isOpen, onClose, input } = useDisclosure<GraduationRankDowngradeConditionInput>({
-        tag: PutRankDowngradeCondition.name,
+        tag: 'PutRankDowngradeCondition',
         onClose: form.resetFields,
     })
 

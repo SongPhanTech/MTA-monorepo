@@ -17,7 +17,7 @@ const ModalTraCuuVanBang = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         data: DiplomaVerificationApplication
     }>({
-        tag: ModalTraCuuVanBang.name,
+        tag: 'ModalTraCuuVanBang',
     })
 
     const { data: searchData } = useFindManyGraduationDecision(

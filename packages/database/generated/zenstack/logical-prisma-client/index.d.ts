@@ -347,6 +347,7 @@ export type SubjectClass = $Result.DefaultSelection<Prisma.$SubjectClassPayload>
 export type ClassSchedule = $Result.DefaultSelection<Prisma.$ClassSchedulePayload>;
 /**
  * Model TrainingObjectType
+ * Đối tượng đào tạo
  * @
  * @allow ('all', auth() != null)
  * @

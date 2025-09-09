@@ -13,7 +13,7 @@ const ModalPrintInvitation = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         councilMemberIds: string[]
     }>({
-        tag: ModalPrintInvitation.name,
+        tag: 'ModalPrintInvitation',
     })
 
     const { data: invitationData = [] } = useFindManyInvitation(

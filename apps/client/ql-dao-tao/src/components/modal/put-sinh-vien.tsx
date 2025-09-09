@@ -31,7 +31,7 @@ export type StudentModalProps = {
 const PutStudentModal = () => {
     const [form] = Form.useForm<PutStudentProfile>()
     const { isOpen, onClose, input } = useDisclosure<StudentModalProps>({
-        tag: PutStudentModal.name,
+        tag: 'PutStudentModal',
         onClose: form.resetFields,
     })
     const { id } = input ?? {}

@@ -28,7 +28,7 @@ type SemesterModalInput = {
 const PutSemesterModal = () => {
     const [form] = Form.useForm<PutSemester>()
     const { isOpen, onClose, input } = useDisclosure<SemesterModalInput>({
-        tag: PutSemesterModal.name,
+        tag: 'PutSemesterModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

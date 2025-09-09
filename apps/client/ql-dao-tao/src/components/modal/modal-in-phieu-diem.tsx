@@ -86,7 +86,7 @@ const ModalPrintStudentSubjectScore = () => {
     const { convert } = useScoreToWords()
 
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
-        tag: ModalPrintStudentSubjectScore.name,
+        tag: 'ModalPrintStudentSubjectScore',
     })
 
     const { data } = useFindUniqueSubjectClass(

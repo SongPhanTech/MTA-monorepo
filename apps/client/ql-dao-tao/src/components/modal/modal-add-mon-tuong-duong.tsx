@@ -22,7 +22,7 @@ const PutMonHocTuongDuong = () => {
         equivalencyGroupId: string
         side: EquivalencySide
     }>({
-        tag: PutMonHocTuongDuong.name,
+        tag: 'PutMonHocTuongDuong',
         onClose: form.resetFields,
     })
 

@@ -170,7 +170,7 @@ export type SubjectClass = $Result.DefaultSelection<Prisma.$SubjectClassPayload>
 export type ClassSchedule = $Result.DefaultSelection<Prisma.$ClassSchedulePayload>
 /**
  * Model TrainingObjectType
- * 
+ * Đối tượng đào tạo
  */
 export type TrainingObjectType = $Result.DefaultSelection<Prisma.$TrainingObjectTypePayload>
 /**

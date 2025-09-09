@@ -19,7 +19,7 @@ const PutTrainingLevel = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingLevel.name,
+        tag: 'PutTrainingLevel',
         onClose: form.resetFields,
     })
 
