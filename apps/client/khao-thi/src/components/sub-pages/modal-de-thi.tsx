@@ -118,7 +118,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data } = useFindManyExamBankQuestion(
+    const { data, refetch } = useFindManyExamBankQuestion(
         {
             where,
             include: {
@@ -167,6 +167,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
             await deleteExamBankQuestion({
                 where: { id },
             })
+            refetch()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {

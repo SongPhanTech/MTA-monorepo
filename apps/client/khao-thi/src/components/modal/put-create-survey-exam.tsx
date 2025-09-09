@@ -157,6 +157,10 @@ const PutSurveyExamModal = () => {
             message.error('Bạn phải thêm lựa chọn của đáp án')
             return
         }
+        if (output?.surveyQuestion?.length <= 0) {
+            message.error('Bạn phải thêm câu hỏi cho đợt khảo sát')
+            return
+        }
         console.log('output', output, choices)
 
         try {

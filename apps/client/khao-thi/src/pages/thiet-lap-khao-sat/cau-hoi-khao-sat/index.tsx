@@ -26,7 +26,7 @@ function Page() {
         code: '',
         name: '',
         surveyQuestionType: undefined,
-        surveyId: undefined,
+        surveyQuestionGroupId: undefined,
     })
 
     const where = useMemo(
@@ -47,10 +47,8 @@ function Page() {
                       },
                   }
                 : {}),
-            ...(filters.surveyId
-                ? Array.isArray(filters.surveyId)
-                    ? { surveyId: { in: filters.surveyId } }
-                    : { surveyId: filters.surveyId }
+            ...(filters.surveyQuestionGroupId
+                ? { surveyQuestionGroupId: { in: filters.surveyQuestionGroupId } }
                 : {}),
             ...(filters.surveyQuestionType && filters.surveyQuestionType.length > 0
                 ? {
@@ -58,7 +56,7 @@ function Page() {
                   }
                 : {}),
         }),
-        [filters.code, filters.name, filters.surveyId, filters.surveyQuestionType]
+        [filters.code, filters.name, filters.surveyQuestionType, filters.surveyQuestionGroupId]
     )
 
     const { data = [], refetch } = useFindManySurveyQuestion({
@@ -140,7 +138,7 @@ function Page() {
                             },
                             {
                                 title: 'Nhóm câu hỏi khảo sát',
-                                dataIndex: 'surveyId',
+                                dataIndex: 'surveyQuestionGroupId',
                                 type: 'select',
                                 options: surveyQuestionGroupData?.map(({ id, name }) => ({
                                     value: id,

@@ -74,7 +74,9 @@ function TabNhomCauHoi() {
     const handleModal = () => {
         onOpen()
     }
-    const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
+    const { data: surveyTopicData, refetch } = useFindManySurveyTopic({
+        orderBy: { createdAt: 'desc' },
+    })
     const { mutateAsync: updateSurveyQuestionGroup } = useUpdateSurveyQuestionGroup()
 
     async function handleDelete(id: string) {
@@ -88,6 +90,7 @@ function TabNhomCauHoi() {
                     deletedAt: new Date(),
                 },
             })
+            refetch()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
@@ -149,7 +152,7 @@ function TabNhomCauHoi() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id }) => (
+                                render: (_, { id, surveyQuestion }) => (
                                     <Row className="justify-center gap-2">
                                         <Tooltip title={'Xem danh sách câu hỏi'} placement="top">
                                             <EyeOutlined
@@ -168,6 +171,7 @@ function TabNhomCauHoi() {
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon
+                                            disabled={surveyQuestion.length > 0}
                                             popConfirm={{
                                                 onConfirm: (e) => {
                                                     handleDelete(id)
