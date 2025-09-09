@@ -57,7 +57,7 @@ const PutOpenClassModal = () => {
         onClose,
         input: dataClass,
     } = useDisclosure<OpenSubjectClassType>({
-        tag: PutOpenClassModal.name,
+        tag: 'PutOpenClassModal',
         onClose: form.resetFields,
     })
     const { options, getExamTypeLabel } = useExamTypeOptions()
@@ -542,7 +542,7 @@ const PutOpenClassModal = () => {
                                 render: (record, __, index) => (
                                     <Form.Item
                                         className="w-full mb-0"
-                                        name={['list', index, 'rooomId']}
+                                        name={['list', index, 'roomId']}
                                         label=""
                                     >
                                         <Select

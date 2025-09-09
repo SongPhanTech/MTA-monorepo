@@ -29,7 +29,7 @@ const PutTrainingFieldModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingFieldModal.name,
+        tag: 'PutTrainingFieldModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -208,14 +208,16 @@ const PutTrainingFieldModal = () => {
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
-            <Col span={24}>
-                <FormItem form={form} name={'active'} label="Trạng thái" required>
-                    <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>Đang hoạt động</Radio>
-                        <Radio value={false}>Ngừng hoạt động</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
+            {id && (
+                <Col span={24}>
+                    <FormItem form={form} name={'active'} label="Trạng thái">
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }

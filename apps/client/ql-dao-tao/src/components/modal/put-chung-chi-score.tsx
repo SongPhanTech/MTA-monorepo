@@ -24,7 +24,7 @@ const PutCertificateScoreModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutCertificateScoreModal.name,
+        tag: 'PutCertificateScoreModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

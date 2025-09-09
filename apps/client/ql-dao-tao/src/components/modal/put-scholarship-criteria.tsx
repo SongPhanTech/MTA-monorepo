@@ -31,7 +31,7 @@ const PutScholarshipCriteria = () => {
     const { options: criteriaOperatorOptions } = useCriteriaOperatorOptions()
 
     const { isOpen, onClose, input } = useDisclosure<ScholarshipCriteriaInput>({
-        tag: PutScholarshipCriteria.name,
+        tag: 'PutScholarshipCriteria',
         onClose: form.resetFields,
     })
 
@@ -157,6 +157,7 @@ const PutScholarshipCriteria = () => {
                         placeholder="Nhập giá trị ngưỡng"
                         className="w-full"
                         step={1}
+                        min={0}
                     />
                 </FormItem>
             </Col>
@@ -173,6 +174,7 @@ const PutScholarshipCriteria = () => {
                         placeholder="Nhập điểm cộng nếu đúng tiêu chí"
                         className="w-full"
                         step={0.1}
+                        min={0}
                     />
                 </FormItem>
             </Col>

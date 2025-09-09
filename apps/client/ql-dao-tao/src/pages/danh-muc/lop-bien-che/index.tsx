@@ -23,11 +23,10 @@ import {
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
-import _ from 'lodash'
 import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const [currentPage, setCurrentPage] = useState(1)
@@ -46,12 +45,51 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     })
 
     const router = useRouter()
-    const { data = [], refetch } = useFindManyFixedClass({
-        where: {
-            OR: [
-                { name: { contains: filters.name, mode: 'insensitive' } },
-                { code: { contains: filters.code, mode: 'insensitive' } },
-            ],
+
+    const where = useMemo(() => {
+        const curriculumVersionFilter = {
+            ...(filters.trainingMajors
+                ? {
+                      curriculum: {
+                          trainingMajorId: {
+                              in: filters.trainingMajors,
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingObjectTypeId: {
+                          in: filters.trainingObjectTypes,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingLevel
+                ? {
+                      trainingLevelId: {
+                          in: filters.trainingLevel,
+                      },
+                  }
+                : {}),
+        }
+
+        return {
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
             ...(filters.managementOrganization
                 ? {
                       managementOrganizationId: {
@@ -73,33 +111,23 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                       },
                   }
                 : {}),
+            ...(Object.keys(curriculumVersionFilter).length > 0 && {
+                curriculumVersion: curriculumVersionFilter,
+            }),
+        }
+    }, [
+        filters.code,
+        filters.name,
+        filters.trainingCourses,
+        filters.managementOrganization,
+        filters.curriculumVersion,
+        filters.trainingObjectTypes,
+        filters.trainingMajors,
+        filters.trainingLevel,
+    ])
 
-            curriculumVersion: {
-                ...(filters.trainingMajors
-                    ? {
-                          curriculum: {
-                              trainingMajorId: {
-                                  in: filters.trainingMajors,
-                              },
-                          },
-                      }
-                    : {}),
-                ...(filters.trainingObjectTypes
-                    ? {
-                          trainingObjectTypeId: {
-                              in: filters.trainingObjectTypes,
-                          },
-                      }
-                    : {}),
-                ...(filters.trainingLevel
-                    ? {
-                          trainingLevelId: {
-                              in: filters.trainingLevel,
-                          },
-                      }
-                    : {}),
-            },
-        },
+    const { data = [], refetch } = useFindManyFixedClass({
+        where,
         include: {
             students: {
                 include: {
@@ -161,58 +189,18 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
 
     const { data: count } = useCountFixedClass({
         where: {
-            OR: [
-                { name: { contains: filters.name, mode: 'insensitive' } },
-                { code: { contains: filters.code, mode: 'insensitive' } },
-            ],
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
-                      },
-                  }
-                : {}),
-            ...(filters.managementOrganization
-                ? {
-                      managementOrganizationId: {
-                          in: filters.managementOrganization,
-                      },
-                  }
-                : {}),
-            ...(filters.trainingCourses
-                ? {
-                      trainingCourseId: {
-                          in: filters.trainingCourses,
-                      },
-                  }
-                : {}),
-            ...(filters.curriculumVersion
-                ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 
     const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData)
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
+
     const { onOpen } = useDisclosure<string>({
         tag: PutFixedClassModal.name,
     })
-    // const { onOpen: onOpenFixedClass } = useDisclosure<string>({
-    //     tag: PutUploadFixedClassModal.name,
-    // })
-    // const { onOpen: onOpenDivision } = useDisclosure<string>({
-    //     tag: PutUploadDivisionModal.name,
-    // })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {

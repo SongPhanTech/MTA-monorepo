@@ -47,7 +47,7 @@ const PutCurriculumVersion = () => {
     const { options: trainingLanguageOptions } = useTrainingLanguageOptions()
 
     const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
-        tag: PutCurriculumVersion.name,
+        tag: 'PutCurriculumVersion',
         onClose: form.resetFields,
     })
 

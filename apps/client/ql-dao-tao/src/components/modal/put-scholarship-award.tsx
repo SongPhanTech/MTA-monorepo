@@ -30,7 +30,7 @@ const PutScholarshipAward = () => {
     const [form] = Form.useForm<PutScholarshipAward>()
 
     const { isOpen, onClose, input } = useDisclosure<ScholarshipAwardInput>({
-        tag: PutScholarshipAward.name,
+        tag: 'PutScholarshipAward',
         onClose: form.resetFields,
     })
 

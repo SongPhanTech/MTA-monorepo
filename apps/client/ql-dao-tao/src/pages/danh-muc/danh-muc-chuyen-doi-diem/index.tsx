@@ -307,18 +307,6 @@ export default function TrainingFieldPage() {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
                                                 <EditIcon
                                                     onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -351,8 +339,6 @@ export default function TrainingFieldPage() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

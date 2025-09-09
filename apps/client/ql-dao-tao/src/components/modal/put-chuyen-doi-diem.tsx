@@ -4,7 +4,6 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { ScoreConvert } from '@workspace/db'
 import {
-    useCountScoreConvert,
     useCreateScoreConvert,
     useFindManyTrainingCourse,
     useFindUniqueScoreConvert,
@@ -25,7 +24,7 @@ const PutConvertScore = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutConvertScore.name,
+        tag: 'PutConvertScore',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -53,9 +52,8 @@ const PutConvertScore = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['SchoolYear'],
+                queryKey: ['ScoreConvert'],
             })
             onClose()
         } catch (_error) {
@@ -65,11 +63,14 @@ const PutConvertScore = () => {
         }
     }
 
-    const { data: scoreConvertCount = 0 } = useCountScoreConvert()
-
-    const { data: level } = useFindUniqueScoreConvert({
-        where: { id },
-    })
+    const { data: level } = useFindUniqueScoreConvert(
+        {
+            where: { id },
+        },
+        {
+            enabled: !!id,
+        }
+    )
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (level) {
@@ -114,6 +115,18 @@ const PutConvertScore = () => {
                             required: true,
                             message: 'Vui lòng nhập điểm hệ 10',
                         },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const base10Max = getFieldValue('base10Max')
+                                if (
+                                    base10Max &&
+                                    Number.parseFloat(value) >= Number.parseFloat(base10Max)
+                                ) {
+                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                }
+                                return Promise.resolve()
+                            },
+                        }),
                     ]}
                 >
                     <InputNumber
@@ -122,6 +135,7 @@ const PutConvertScore = () => {
                         placeholder="Nhập điểm"
                         step={0.1}
                         min={0}
+                        max={10}
                     />
                 </FormItem>
             </Col>
@@ -135,6 +149,18 @@ const PutConvertScore = () => {
                             required: true,
                             message: 'Vui lòng nhập điểm hệ 10',
                         },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const base10Min = getFieldValue('base10Min')
+                                if (
+                                    base10Min &&
+                                    Number.parseFloat(value) <= Number.parseFloat(base10Min)
+                                ) {
+                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                }
+                                return Promise.resolve()
+                            },
+                        }),
                     ]}
                 >
                     <InputNumber
@@ -143,6 +169,7 @@ const PutConvertScore = () => {
                         placeholder="Nhập điểm"
                         step={0.1}
                         min={0}
+                        max={10}
                     />
                 </FormItem>
             </Col>
@@ -154,6 +181,7 @@ const PutConvertScore = () => {
                         placeholder="Nhập điểm"
                         step={0.1}
                         min={0}
+                        max={4}
                     />
                 </FormItem>
             </Col>

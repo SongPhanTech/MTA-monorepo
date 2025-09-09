@@ -19,7 +19,7 @@ const PutTrainingTimeModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingTimeModal.name,
+        tag: 'PutTrainingTimeModal',
         onClose: form.resetFields,
     })
 

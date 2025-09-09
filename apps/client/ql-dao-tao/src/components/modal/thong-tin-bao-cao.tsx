@@ -7,7 +7,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 const ThongTinBaoCaoModal = () => {
     const [labels, _setLabels] = useState<any[]>([])
     const { isOpen, onClose } = useDisclosure<string>({
-        tag: ThongTinBaoCaoModal.name,
+        tag: 'ThongTinBaoCaoModal',
     })
     const { showSpinner, hideSpinner } = useSpinner()
 

@@ -34,7 +34,7 @@ const PutStudentThesisRegistration = () => {
         studentThesisId: string
         thesisProjectId: string
     }>({
-        tag: PutStudentThesisRegistration.name,
+        tag: 'PutStudentThesisRegistration',
         onClose: form.resetFields,
     })
     const [searchText, setSearchText] = useState('')

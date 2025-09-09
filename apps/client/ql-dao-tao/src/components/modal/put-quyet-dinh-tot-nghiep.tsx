@@ -30,7 +30,7 @@ const PutGraduationDecision = () => {
     const [documentBack, setDocumentBack] = useState<DocumentFile | null>(null)
     const [form] = Form.useForm<PutGraduationDecisionFormValues>()
     const { isOpen, onClose, input } = useDisclosure<{ id: string; trainingCourseId: string }>({
-        tag: PutGraduationDecision.name,
+        tag: 'PutGraduationDecision',
         onClose: form.resetFields,
     })
 

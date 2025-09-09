@@ -30,7 +30,7 @@ const PutTrainingMajorModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingMajorModal.name,
+        tag: 'PutTrainingMajorModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

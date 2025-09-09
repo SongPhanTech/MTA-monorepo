@@ -25,12 +25,13 @@ const PutHocBong = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutHocBong.name,
+        tag: 'PutHocBong',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        where: { active: true },
         orderBy: { name: 'asc' },
     })
 
@@ -130,12 +131,12 @@ const PutHocBong = () => {
                         type="number"
                         placeholder="Nhập số tiền"
                         className="w-full"
-                        min={0}
+                        min={1}
                         max={1000000000}
                         step={1}
                         precision={2}
                         decimalSeparator="."
-                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        // formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={(value) => {
                             const parsedValue = Number.parseFloat(value?.replace(/,/g, '') || '0')
                             return Math.min(Math.max(parsedValue, 0), 1000000000) as 0 | 1000000000
@@ -174,6 +175,11 @@ const PutHocBong = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('effectiveFrom')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
                     />
                 </FormItem>
             </Col>

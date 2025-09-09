@@ -28,7 +28,7 @@ const PutDecision = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const { decisionTypeOptions } = useDecisionTypeOptions()
     const { isOpen, onClose, input } = useDisclosure<DecisionInput>({
-        tag: PutDecision.name,
+        tag: 'PutDecision',
         onClose: form.resetFields,
     })
 
@@ -153,7 +153,7 @@ const PutDecision = () => {
             title={input?.decisionId ? 'Sửa quyết định' : 'Thêm quyết định'}
         >
             <Col span={12}>
-                <FormItem form={form} name="issueDate" label="Ngày họp dội đồng" required>
+                <FormItem form={form} name="issueDate" label="Ngày họp hội đồng" required>
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',

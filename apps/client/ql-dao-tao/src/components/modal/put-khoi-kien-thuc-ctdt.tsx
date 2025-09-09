@@ -22,7 +22,7 @@ const PutTrainingBlock = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingBlock.name,
+        tag: 'PutTrainingBlock',
         onClose: form.resetFields,
     })
 
@@ -139,8 +139,8 @@ const PutTrainingBlock = () => {
                 <Col span={24}>
                     <FormItem form={form} name={'active'} label="Trạng thái" required>
                         <Radio.Group buttonStyle="solid">
-                            <Radio value={true}>Đang hoạt động</Radio>
-                            <Radio value={false}>Ngừng hoạt động</Radio>
+                            <Radio value={true}>Đang đào tạo</Radio>
+                            <Radio value={false}>Ngừng đào tạo</Radio>
                         </Radio.Group>
                     </FormItem>
                 </Col>

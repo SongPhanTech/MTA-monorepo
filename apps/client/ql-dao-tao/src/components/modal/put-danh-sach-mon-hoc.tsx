@@ -24,7 +24,7 @@ const PutSubjectListModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutSubjectListModal.name,
+        tag: 'PutSubjectListModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

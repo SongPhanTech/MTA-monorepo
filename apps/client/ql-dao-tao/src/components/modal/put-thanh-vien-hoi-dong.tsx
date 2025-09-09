@@ -29,7 +29,7 @@ const PutCouncilMember = () => {
     const [searchExpert, setSearchExpert] = useState('')
     const { councilRoleOptions } = useCouncilRoleOptions()
     const { isOpen, onClose, input } = useDisclosure<CouncilInput>({
-        tag: PutCouncilMember.name,
+        tag: 'PutCouncilMember',
         onClose: form.resetFields,
     })
     const { data: council } = useFindUniqueCouncilMember(

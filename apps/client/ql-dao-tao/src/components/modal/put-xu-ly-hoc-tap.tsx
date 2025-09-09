@@ -26,7 +26,7 @@ const PutAcademicActionConfig = () => {
     const [form] = Form.useForm<PutAcademicActionConfigFromType>()
     const { options: academicActionTypeOptions } = useAcademicActionTypeOption()
     const { isOpen, onClose, input } = useDisclosure<AcademicActionConfigInput>({
-        tag: PutAcademicActionConfig.name,
+        tag: 'PutAcademicActionConfig',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

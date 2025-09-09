@@ -27,7 +27,7 @@ const HanNhapDiem = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: HanNhapDiem.name,
+        tag: 'HanNhapDiem',
         onClose: form.resetFields,
     })
 

@@ -22,7 +22,7 @@ const PutDisciplinaryWarningReason = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutDisciplinaryWarningReason.name,
+        tag: 'PutDisciplinaryWarningReason',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -53,9 +53,8 @@ const PutDisciplinaryWarningReason = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['SchoolYear'],
+                queryKey: ['DisciplinaryWarningReason'],
             })
             onClose()
         } catch (_error) {
@@ -105,7 +104,7 @@ const PutDisciplinaryWarningReason = () => {
                         type="number"
                         placeholder="Nhập mức nâng"
                         className="w-full"
-                        min={0}
+                        min={1}
                         max={4}
                         step={1}
                     />

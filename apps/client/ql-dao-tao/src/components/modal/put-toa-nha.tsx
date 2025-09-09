@@ -14,7 +14,7 @@ const PutBuildingModal = () => {
         trainingLocationId: string
         id?: string
     }>({
-        tag: PutBuildingModal.name,
+        tag: 'PutBuildingModal',
         onClose: form.resetFields,
     })
 

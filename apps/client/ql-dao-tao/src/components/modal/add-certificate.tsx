@@ -29,7 +29,7 @@ const PutAddCertificateScoreModal = () => {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { isOpen, onClose, input } = useDisclosure<any>({
-        tag: PutAddCertificateScoreModal.name,
+        tag: 'PutAddCertificateScoreModal',
         onClose: form.resetFields,
     })
     const [filters, setFilters] = useState<FilterProps>({

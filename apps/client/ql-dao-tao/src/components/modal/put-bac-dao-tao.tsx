@@ -23,7 +23,7 @@ const PutDiplomaType = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutDiplomaType.name,
+        tag: 'PutDiplomaType',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

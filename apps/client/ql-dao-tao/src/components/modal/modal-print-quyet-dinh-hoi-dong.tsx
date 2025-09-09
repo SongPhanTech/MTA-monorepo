@@ -50,7 +50,7 @@ const ModalPrintDecision = () => {
         subjecClassData: ModalPrintDecisionInput
         isCopy?: boolean
     }>({
-        tag: ModalPrintDecision.name,
+        tag: 'ModalPrintDecision',
     })
     const { getCouncilRoleLabel } = useCouncilRoleOptions()
 

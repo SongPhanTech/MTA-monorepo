@@ -28,7 +28,7 @@ const PutAcademicActionCondition = () => {
     const { options: criteriaFieldOptions } = useCriteriaFieldOptions()
     const { options: criteriaOperatorOptions } = useCriteriaOperatorOptions()
     const { isOpen, onClose, input } = useDisclosure<AcademicActionConditionInput>({
-        tag: PutAcademicActionCondition.name,
+        tag: 'PutAcademicActionCondition',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

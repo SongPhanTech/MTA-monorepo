@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import useSpinner from '@hooks/spinner'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
-import { Button, Col, Form, message, Space, Tag, Upload } from 'antd'
+import { Button, Col, Form, message, Space, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -13,8 +13,6 @@ interface FilterProps {
     semesterId?: string
 }
 
-const { Dragger } = Upload
-
 const ModalNhapTKB = () => {
     const [form] = Form.useForm<Record<string, unknown>>()
     const {
@@ -22,7 +20,7 @@ const ModalNhapTKB = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: ModalNhapTKB.name,
+        tag: 'ModalNhapTKB',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

@@ -25,7 +25,7 @@ const PutMilestoneModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutMilestoneModal.name,
+        tag: 'PutMilestoneModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

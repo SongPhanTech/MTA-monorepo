@@ -23,7 +23,7 @@ const ModalPrintToDSHV = () => {
     const printRef = useRef<HTMLDivElement>(null)
 
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToDSHVInput>({
-        tag: ModalPrintToDSHV.name,
+        tag: 'ModalPrintToDSHV',
     })
 
     const handlePrint = useReactToPrint({

@@ -22,7 +22,7 @@ const PutTrainingTypeModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingTypeModal.name,
+        tag: 'PutTrainingTypeModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -48,7 +48,6 @@ const PutTrainingTypeModal = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['TrainingType'],
             })
@@ -87,23 +86,24 @@ const PutTrainingTypeModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa chuyên ngành' : 'Thêm mới chuyên ngành'}
-            className="w-[900px]"
+            title={id ? 'Chỉnh sửa loại hình đào tạo' : 'Thêm mới loại hình đào tạo'}
+            className="w-[30vw]"
         >
-            <Col span={12}>
-                <FormItem form={form} name="name" label="Tên đối đượng đào tạo" required>
-                    <Input placeholder="Nhập tên đối đượng đào tạo" />
+            <Col span={24}>
+                <FormItem form={form} name="name" label="Tên loại hình đào tạo" required>
+                    <Input placeholder="Nhập tên loại hình đào tạo" />
                 </FormItem>
             </Col>
-
-            <Col span={12}>
-                <FormItem form={form} name={'active'} label="Trạng thái" required>
-                    <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>Đang hoạt động</Radio>
-                        <Radio value={false}>Ngừng hoạt động</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
+            {id && (
+                <Col span={24}>
+                    <FormItem form={form} name={'active'} label="Trạng thái">
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            )}
         </PutFormModal>
     )
 }

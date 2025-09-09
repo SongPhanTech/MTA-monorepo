@@ -15,7 +15,7 @@ const PutUploadDivisionModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutUploadDivisionModal.name,
+        tag: 'PutUploadDivisionModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

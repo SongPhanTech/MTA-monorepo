@@ -15,9 +15,8 @@ import {
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
-import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingCoursePage() {
@@ -31,12 +30,24 @@ export default function TrainingCoursePage() {
         semesterStart: undefined,
     })
 
-    const { data = [], refetch } = useFindManyTrainingCourse({
-        where: {
-            OR: [
-                { name: { contains: filters.name, mode: 'insensitive' } },
-                { code: { contains: filters.code, mode: 'insensitive' } },
-            ],
+    const where = useMemo(
+        () => ({
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
             ...(filters.trainingObjectTypes
                 ? {
                       trainingObjectTypeId: {
@@ -51,7 +62,12 @@ export default function TrainingCoursePage() {
                       },
                   }
                 : {}),
-        },
+        }),
+        [filters.code, filters.name, filters.trainingObjectTypes, filters.semesterStart]
+    )
+
+    const { data = [], refetch } = useFindManyTrainingCourse({
+        where,
         include: {
             trainingObjectType: true,
             semesterStart: {
@@ -78,26 +94,11 @@ export default function TrainingCoursePage() {
 
     const { data: count } = useCountTrainingCourse({
         where: {
-            OR: [
-                { name: { contains: filters.name, mode: 'insensitive' } },
-                { code: { contains: filters.code, mode: 'insensitive' } },
-            ],
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
     const { onOpen, onClose } = useDisclosure<string>({
         tag: PutTrainingCourseModal.name,
     })
@@ -127,7 +128,7 @@ export default function TrainingCoursePage() {
     }
     const { data: schoolYearData = [] } = useFindManySchoolYear({
         orderBy: {
-            name: 'asc',
+            createdAt: 'desc',
         },
     })
 
@@ -305,18 +306,6 @@ export default function TrainingCoursePage() {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
                                                 <EditIcon
                                                     onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -346,8 +335,6 @@ export default function TrainingCoursePage() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

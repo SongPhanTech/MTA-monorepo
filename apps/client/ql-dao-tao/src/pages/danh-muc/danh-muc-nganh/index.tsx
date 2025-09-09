@@ -17,9 +17,8 @@ import {
 } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingFieldPage() {
@@ -33,16 +32,32 @@ export default function TrainingFieldPage() {
         publishDate: undefined,
     })
 
-    const { data = [], refetch } = useFindManyTrainingField({
-        where: {
-            OR: [
-                { name: { contains: filters.name, mode: 'insensitive' } },
-                { code: { contains: filters.code, mode: 'insensitive' } },
-            ],
+    const where = useMemo(
+        () => ({
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
             ...(filters.trainingObjectTypes
                 ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
+                      trainingObjectTypes: {
+                          some: {
+                              trainingObjectTypeId: {
+                                  in: filters.trainingObjectTypes,
+                              },
+                          },
                       },
                   }
                 : {}),
@@ -61,7 +76,17 @@ export default function TrainingFieldPage() {
                       },
                   }
                 : {}),
-        },
+        }),
+        [
+            filters.code,
+            filters.name,
+            filters.trainingObjectTypes,
+            filters.organization,
+            filters.publishDate,
+        ]
+    )
+    const { data = [], refetch } = useFindManyTrainingField({
+        where,
         include: {
             organization: true,
             trainingObjectTypes: {
@@ -79,41 +104,11 @@ export default function TrainingFieldPage() {
 
     const { data: count } = useCountTrainingField({
         where: {
-            OR: [
-                { name: { contains: filters.name, mode: 'insensitive' } },
-                { code: { contains: filters.code, mode: 'insensitive' } },
-            ],
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
-                      },
-                  }
-                : {}),
-            ...(filters.organization
-                ? {
-                      organizationId: {
-                          in: filters.organization,
-                      },
-                  }
-                : {}),
-            ...(filters.publishDate?.length === 2
-                ? {
-                      publishDate: {
-                          gte: dayjs(filters.publishDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.publishDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
     const { onOpen } = useDisclosure<string>({
         tag: PutTrainingFieldModal.name,
     })
@@ -326,18 +321,6 @@ export default function TrainingFieldPage() {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                </Tooltip> */}
                                                 <EditIcon
                                                     onClick={onOpen.bind(null, id)}
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -366,8 +349,6 @@ export default function TrainingFieldPage() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

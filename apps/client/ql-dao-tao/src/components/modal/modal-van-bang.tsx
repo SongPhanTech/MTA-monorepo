@@ -15,7 +15,7 @@ export const ModalVanBang = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: ModalVanBang.name,
+        tag: 'ModalVanBang',
     })
     const [signerName, setSignerName] = useState('Đại tá Trần Ngọc Châu')
     const [checkedItems, setCheckedItems] = useState({

@@ -231,10 +231,7 @@ export default function StudentDetailPage() {
                                     dataIndex: 'subject',
                                     width: 200,
                                     align: 'center',
-                                    render: (value) =>
-                                        value?.managementOrganization?.name
-                                            ? value?.managementOrganization?.name
-                                            : '',
+                                    render: (value) => value?.managementOrganization?.sTen || '',
                                 },
                             ]}
                             data={lecturerData?.mainSubjectClasses || []}
@@ -302,10 +299,7 @@ export default function StudentDetailPage() {
                                     dataIndex: 'subject',
                                     width: 200,
                                     align: 'center',
-                                    render: (value) =>
-                                        value?.managementOrganization?.name
-                                            ? value?.managementOrganization?.name
-                                            : '',
+                                    render: (value) => value?.managementOrganization?.sTen || '',
                                 },
                             ]}
                             data={lecturerData?.extraSubjectClasses || []}

@@ -23,7 +23,7 @@ const PutSchoolYearModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutSchoolYearModal.name,
+        tag: 'PutSchoolYearModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

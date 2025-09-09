@@ -34,7 +34,7 @@ const PutThesisProject = () => {
         subjectClassId: string
         thesisProjectId: string
     }>({
-        tag: PutThesisProject.name,
+        tag: 'PutThesisProject',
         onClose: form.resetFields,
     })
 
@@ -271,6 +271,7 @@ const PutThesisProject = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        placeholder="Chọn thời gian mở đăng ký"
                     />
                 </FormItem>
             </Col>
@@ -282,6 +283,12 @@ const PutThesisProject = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                        disabledDate={(current) => {
+                            const startTime = form.getFieldValue('registrationStart')
+                            if (!startTime) return false
+                            return current && current < dayjs(startTime).startOf('day')
+                        }}
+                        placeholder="Chọn thời gian đóng đăng ký"
                     />
                 </FormItem>
             </Col>

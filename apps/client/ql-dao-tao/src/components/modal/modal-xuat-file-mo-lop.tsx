@@ -26,7 +26,7 @@ const ModalExportFileSubjectClass = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: ModalExportFileSubjectClass.name,
+        tag: 'ModalExportFileSubjectClass',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

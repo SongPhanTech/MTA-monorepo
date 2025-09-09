@@ -15,7 +15,7 @@ const PutRoomModal = () => {
         buildingCode: string
         id?: string
     }>({
-        tag: PutRoomModal.name,
+        tag: 'PutRoomModal',
         onClose: form.resetFields,
     })
 

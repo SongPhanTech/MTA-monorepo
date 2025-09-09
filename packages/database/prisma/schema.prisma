@@ -1304,6 +1304,7 @@ model ClassSchedule {
   @@schema("ql-dao-tao")
 }
 
+/// Đối tượng đào tạo
 model TrainingObjectType {
   id                   String                              @id() @default(cuid())
   code                 String?                             @unique()

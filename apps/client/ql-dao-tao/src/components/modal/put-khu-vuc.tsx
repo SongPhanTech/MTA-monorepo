@@ -19,7 +19,7 @@ const PutTrainingLocationModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingLocationModal.name,
+        tag: 'PutTrainingLocationModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

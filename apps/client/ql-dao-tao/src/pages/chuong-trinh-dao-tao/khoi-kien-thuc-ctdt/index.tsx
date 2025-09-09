@@ -125,6 +125,7 @@ export default function TrainingBlock() {
                         id="training-block"
                         filters={filters}
                         setFilters={setFilters}
+                        scroll={{ y: '75vh' }}
                         columns={[
                             {
                                 title: 'STT',

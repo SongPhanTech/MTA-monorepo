@@ -24,7 +24,7 @@ const PutSubjectTienQuyetSongHanh = () => {
         keyEnum: string
         type: 'above' | 'below'
     }>({
-        tag: PutSubjectTienQuyetSongHanh.name,
+        tag: 'PutSubjectTienQuyetSongHanh',
     })
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { showSpinner, hideSpinner } = useSpinner()

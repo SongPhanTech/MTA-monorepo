@@ -3,7 +3,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ConfirmModal = () => {
     const { isOpen, onClose, onOk, input } = useDisclosure<string>({
-        tag: ConfirmModal.name,
+        tag: 'ConfirmModal',
     })
 
     return (

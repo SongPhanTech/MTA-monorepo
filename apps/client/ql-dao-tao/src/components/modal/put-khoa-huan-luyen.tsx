@@ -15,7 +15,7 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 export type PutTrainingCourse = TrainingCourse & {
@@ -30,11 +30,12 @@ const PutTrainingCourseModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutTrainingCourseModal.name,
+        tag: 'PutTrainingCourseModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const [selectedId, setSelectedId] = useState<string | undefined>(undefined)
+    const [isValidating, setIsValidating] = useState(false)
 
     const { data: trainingCourse = [] } = useFindManyTrainingCourse()
 
@@ -114,6 +115,53 @@ const PutTrainingCourseModal = () => {
     const handleSelectChange = async (value: string) => {
         setSelectedId(value)
     }
+    const validateCoefficientSum = useCallback(
+        (_: any, value: any) => {
+            const coef1 = form.getFieldValue('coef_1') || 0
+            const coef2 = form.getFieldValue('coef_2') || 0
+            const coef3 = form.getFieldValue('coef_3') || 0
+
+            const sum =
+                Number.parseFloat(coef1) + Number.parseFloat(coef2) + Number.parseFloat(coef3)
+
+            const roundedSum = Math.round(sum * 10) / 10
+
+            if (roundedSum !== 1) {
+                return Promise.reject(new Error('Tổng các hệ số phải bằng 1'))
+            }
+
+            return Promise.resolve()
+        },
+        [form]
+    )
+
+    const validateCoefficient = useCallback(
+        (fieldName: string) => (_: any, value: any) => {
+            if (value === undefined || value === null) {
+                return Promise.resolve()
+            }
+            const numValue = Number.parseFloat(value)
+            if (Number.isNaN(numValue) || numValue < 0 || numValue > 1) {
+                return Promise.reject(new Error('Hệ số phải nằm trong khoảng 0 đến 1'))
+            }
+
+            return Promise.resolve()
+        },
+        []
+    )
+
+    // Hàm debounce để tránh gọi validate quá nhiều lần
+    const debouncedValidate = useCallback(
+        (fields: string[]) => {
+            if (isValidating) return
+
+            setIsValidating(true)
+            form.validateFields(fields).finally(() => {
+                setIsValidating(false)
+            })
+        },
+        [form, isValidating]
+    )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -268,7 +316,16 @@ const PutTrainingCourseModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="coef_1" label="Hệ số điểm chuyên cần">
+                <FormItem
+                    form={form}
+                    name="coef_1"
+                    label="Hệ số điểm chuyên cần"
+                    rules={[
+                        {
+                            validator: validateCoefficient('coef_1'),
+                        },
+                    ]}
+                >
                     <InputNumber
                         type="number"
                         min={0}
@@ -276,11 +333,23 @@ const PutTrainingCourseModal = () => {
                         step={0.1}
                         placeholder="Nhập hệ số điểm chuyên cần"
                         className="w-full"
+                        onChange={() => {
+                            setTimeout(() => debouncedValidate(['coef_2', 'coef_3']), 300)
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="coef_2" label="Hệ số điểm thường xuyên">
+                <FormItem
+                    form={form}
+                    name="coef_2"
+                    label="Hệ số điểm thường xuyên"
+                    rules={[
+                        {
+                            validator: validateCoefficient('coef_2'),
+                        },
+                    ]}
+                >
                     <InputNumber
                         type="number"
                         min={0}
@@ -288,11 +357,26 @@ const PutTrainingCourseModal = () => {
                         step={0.1}
                         placeholder="Nhập hệ số điểm thường xuyên"
                         className="w-full"
+                        onChange={() => {
+                            setTimeout(() => debouncedValidate(['coef_1', 'coef_3']), 300)
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="coef_3" label="Hệ số điểm điểm thi">
+                <FormItem
+                    form={form}
+                    name="coef_3"
+                    label="Hệ số điểm điểm thi"
+                    rules={[
+                        {
+                            validator: validateCoefficient('coef_3'),
+                        },
+                        {
+                            validator: validateCoefficientSum,
+                        },
+                    ]}
+                >
                     <InputNumber
                         type="number"
                         min={0}
@@ -300,6 +384,9 @@ const PutTrainingCourseModal = () => {
                         step={0.1}
                         placeholder="Nhập hệ số điểm điểm thi"
                         className="w-full"
+                        onChange={() => {
+                            setTimeout(() => debouncedValidate(['coef_1', 'coef_2']), 300)
+                        }}
                     />
                 </FormItem>
             </Col>

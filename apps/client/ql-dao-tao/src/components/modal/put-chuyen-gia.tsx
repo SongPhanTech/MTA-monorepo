@@ -25,7 +25,7 @@ const PutExpertProfile = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutExpertProfile.name,
+        tag: 'PutExpertProfile',
         onClose: form.resetFields,
     })
     const [selectedLecturerId, setSelectedLecturerId] = useState<string | undefined>()
