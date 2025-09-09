@@ -789,10 +789,7 @@ export default function TeachingAssignment() {
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
-                                render: (value) =>
-                                    value?.managementOrganization?.sTen
-                                        ? value?.managementOrganization?.sTen
-                                        : '',
+                                render: (value) => value?.managementOrganization?.sTen || '',
                             },
                             // {
                             //     title: 'Điểm bằng nhau',

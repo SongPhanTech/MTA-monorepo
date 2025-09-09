@@ -96,7 +96,7 @@ export default function TrainingFieldPage() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            name: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
