@@ -105,7 +105,7 @@ const PutEvaluationSecretaryMember = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa hội đồng đánh giá' : 'Thêm mới hội đồng đánh giá'}
+            title={id ? 'Chỉnh sửa hội đồng thư ký' : 'Thêm mới hội đồng thư ký'}
             className="w-[600px]"
         >
             <Col span={24}>

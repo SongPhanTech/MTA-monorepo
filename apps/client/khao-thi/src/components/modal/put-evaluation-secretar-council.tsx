@@ -96,7 +96,7 @@ const PutEvaluationSecretarYCouncil = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa hội đồng đánh giá' : 'Thêm mới hội đồng đánh giá'}
+            title={id ? 'Chỉnh sửa hội đồng thư ký' : 'Thêm mới hội đồng thư ký'}
             className="w-[600px]"
         >
             <Col span={24}>
@@ -106,8 +106,8 @@ const PutEvaluationSecretarYCouncil = () => {
             </Col>
 
             <Col span={24}>
-                <FormItem form={form} name="name" label="Tên hội đồng đánh giá" required>
-                    <Input placeholder="Nhập mã hội đồng đánh giá" />
+                <FormItem form={form} name="name" label="Tên hội đồng thư ký" required>
+                    <Input placeholder="Nhập mã hội đồng thư ký" />
                 </FormItem>
             </Col>
             <Col span={24}>

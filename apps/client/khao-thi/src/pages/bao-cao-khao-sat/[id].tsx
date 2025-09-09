@@ -3,7 +3,7 @@ import PieChart from '@components/dashboard/org-structure'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useGetParticipationByType, useGetSurveyStatistics } from '@workspace/libs/api/exam'
-import { Col, Empty, Row, Typography } from 'antd'
+import { Button, Col, Empty, Flex, Row, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
@@ -74,9 +74,12 @@ function Page() {
         <div>
             <Row gutter={[16, 16]}>
                 <Col span={24} className="px-6 mt-3 mb-0">
-                    <Title level={3}>
-                        {(dataLevel?.status === 200 && dataLevel?.data?.surveyName) || ''}
-                    </Title>
+                    <Flex justify="space-between">
+                        <Title level={3}>
+                            {(dataLevel?.status === 200 && dataLevel?.data?.surveyName) || ''}
+                        </Title>
+                        <Button type="primary">Xuat bao cao</Button>
+                    </Flex>
                 </Col>
                 <Col span={24}>
                     <div className="bg-white h-full flex flex-col">
