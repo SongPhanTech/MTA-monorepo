@@ -598,6 +598,34 @@ exports.Prisma.TrainingBlockSubjectScalarFieldEnum = {
   print: 'print'
 };
 
+exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  classRegisterSessionId: 'classRegisterSessionId',
+  studentId: 'studentId',
+  status: 'status',
+  reason: 'reason'
+};
+
 exports.Prisma.SubjectClassScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3954,6 +3982,23 @@ exports.Prisma.TrainingBlockSubjectOrderByRelevanceFieldEnum = {
   trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId'
 };
 
+exports.Prisma.ClassRegisterSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  classRegisterSessionId: 'classRegisterSessionId',
+  studentId: 'studentId',
+  reason: 'reason'
+};
+
 exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5891,6 +5936,13 @@ exports.SubjectRequirementType = exports.$Enums.SubjectRequirementType = {
   Optional: 'Optional'
 };
 
+exports.ClassRegisterStatus = exports.$Enums.ClassRegisterStatus = {
+  PENDING: 'PENDING',
+  CANCELLED: 'CANCELLED',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
+
 exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
@@ -6233,6 +6285,8 @@ exports.Prisma.ModelName = {
   EquivalencyGroup: 'EquivalencyGroup',
   SubjectInGroup: 'SubjectInGroup',
   TrainingBlockSubject: 'TrainingBlockSubject',
+  ClassRegisterSession: 'ClassRegisterSession',
+  ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
   ClassSchedule: 'ClassSchedule',
   TrainingObjectType: 'TrainingObjectType',

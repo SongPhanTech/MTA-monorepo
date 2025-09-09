@@ -1,15 +1,15 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { context, SpanKind, trace } from '@opentelemetry/api'
-import { enhance, Prisma, PrismaClient } from '@workspace/db'
-import { createHonoHandler } from '@workspace/db/hono'
-import type { Context } from 'hono'
+import { jwtAuth } from '@workspace/auth/hono'
+import { Prisma, PrismaClient } from '@workspace/db'
 import { contextStorage, getContext } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
-import surveyPublicApp from './api/survey-public'
+import ClassRegisterApp from './api/class-register'
+import SurveyPublicApp from './api/survey-public'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -33,8 +33,8 @@ app.use(
     cors({
         origin: [
             'http://localhost:3000',
-            'https://user.mta.swantech.vn',
             'https://mta.swantech.vn',
+            'https://user.mta.swantech.vn',
             'https://am.swantech.vn',
             'https://*.swantech.vn',
         ],
@@ -52,31 +52,16 @@ const config = {
 app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
+setupOpenApi(app)
 
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 
-// public
+app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 
-// TODO!: uncomment
-// app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
-
-setupOpenApi(app)
-
-app.route('/api/survey', surveyPublicApp)
-
-const nv = await prisma.dM_NhanVien.findFirstOrThrow()
-
-app.use(
-    '/api/model/*',
-    createHonoHandler({
-        getPrisma: async (ctx: Context) => {
-            return enhance(prisma, { user: nv })
-            // return enhance(prisma, { user: ctx.get('user') })
-        },
-    })
-)
+app.route('/api/survey', SurveyPublicApp)
+app.route('/api/class-register', ClassRegisterApp)
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {

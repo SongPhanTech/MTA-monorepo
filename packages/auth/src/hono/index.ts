@@ -4,6 +4,19 @@ import { getCookie } from 'hono/cookie'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import type { Session } from '..'
 
+declare module 'hono' {
+    interface ContextVariableMap {
+        user: {
+            userName: string
+            fullName: string
+            sessionId: string
+            sub: string
+            id: string
+            organizationUnitId?: string | null
+        }
+    }
+}
+
 export const jwtAuth = (
     jwksUri: string,
     audience: string,
@@ -29,23 +42,24 @@ export const jwtAuth = (
                 userName: payload.preferred_username || payload.name,
                 fullName: payload.name,
                 sessionId: payload.sid,
-                ssoId: payload.sub,
-                Id: payload.sDM_NhanVienId,
+                sub: payload.sub,
+                id: payload.sDM_NhanVienId,
                 organizationUnitId: payload.sDM_DonViId,
             })
-            const existedUser = await prisma.dM_NhanVien.findFirst({
+            const existedUser = await prisma.userProfile.findFirst({
                 where: {
-                    Id: payload.sDM_NhanVienId,
+                    id: payload.sDM_NhanVienId,
                 },
             })
             if (!existedUser) {
                 // Create user if not exists
-                await prisma.dM_NhanVien.create({
+                await prisma.userProfile.create({
                     data: {
-                        Id: payload.sDM_NhanVienId,
-                        // userName: payload.preferred_username || payload.name,
-                        sTenDayDu: payload.email,
-                        sHoVaDem: payload.name,
+                        id: payload.sDM_NhanVienId,
+                        firstName: payload.name,
+                        lastName: payload.family_name,
+                        fullname: payload.name,
+                        idCardNumber: payload.sDM_NhanVienId, // TODO: use idCardNumber
                         // ssoId: payload.sub,
                     },
                 })
