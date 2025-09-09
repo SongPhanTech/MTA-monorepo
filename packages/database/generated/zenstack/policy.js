@@ -383,6 +383,32 @@ const policy = {
                 update: {},
             },
         },
+        classRegisterSession: {
+            modelLevel: {
+                read: { guard: ClassRegisterSession_read, },
+                create: { guard: ClassRegisterSession_create, inputChecker: ClassRegisterSession_create_input, },
+                update: { guard: ClassRegisterSession_update, },
+                postUpdate: { guard: ClassRegisterSession_postUpdate, },
+                delete: { guard: ClassRegisterSession_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        classRegisterLogs: {
+            modelLevel: {
+                read: { guard: ClassRegisterLogs_read, },
+                create: { guard: ClassRegisterLogs_create, inputChecker: ClassRegisterLogs_create_input, },
+                update: { guard: ClassRegisterLogs_update, },
+                postUpdate: { guard: ClassRegisterLogs_postUpdate, },
+                delete: { guard: ClassRegisterLogs_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         subjectClass: {
             modelLevel: {
                 read: { guard: SubjectClass_read, },
@@ -2871,6 +2897,8 @@ const policy = {
         equivalencyGroup: { hasValidation: false },
         subjectInGroup: { hasValidation: false },
         trainingBlockSubject: { hasValidation: false },
+        classRegisterSession: { hasValidation: false },
+        classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
         classSchedule: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
@@ -5317,6 +5345,162 @@ function TrainingBlockSubject_delete(context, db) {
     return { OR: [] };
 }
 function $check_TrainingBlockSubject_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSession_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ClassRegisterSession_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSession_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterSession_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSession_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ClassRegisterSession_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterSession_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSession_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ClassRegisterSession_postUpdate(input, context) {
+    return true;
+}
+function ClassRegisterSession_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterSession_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ClassRegisterLogs_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterLogs_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ClassRegisterLogs_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterLogs_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ClassRegisterLogs_postUpdate(input, context) {
+    return true;
+}
+function ClassRegisterLogs_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterLogs_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

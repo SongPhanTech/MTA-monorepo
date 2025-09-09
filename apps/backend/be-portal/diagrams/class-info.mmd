@@ -1,0 +1,19 @@
+sequenceDiagram
+    participant SV as Sinh viên (Client)
+    participant LB as Load Balancer
+    participant APIGW as API Gateway
+    participant CourseSvc as Course Service
+    participant Redis
+    participant PostgreSQL
+
+    SV->>LB: 1. GET /api/subject-classes?search=...
+    LB->>APIGW: 2. Chuyển tiếp yêu cầu
+    APIGW->>CourseSvc: 3. Xác thực & Định tuyến
+    CourseSvc->>PostgreSQL: 4a. Lấy dữ liệu tĩnh của lớp (lịch học, GV, tín chỉ...) theo filter & pagination
+    PostgreSQL-->>CourseSvc: Phản hồi danh sách lớp
+    CourseSvc->>Redis: 4b. Lấy sĩ số còn lại của các lớp hiển thị
+    Redis-->>CourseSvc: Phản hồi sĩ số
+    CourseSvc->>CourseSvc: 5. Tổng hợp dữ liệu
+    CourseSvc-->>APIGW: 6. Phản hồi dữ liệu đã tổng hợp
+    APIGW-->>LB: 7. Chuyển tiếp phản hồi
+    LB-->>SV: 8. Hiển thị danh sách lớp
