@@ -4,7 +4,6 @@ import { fetchCreateUser, fetchUpdateUser, useListUsers } from '@api/open-api/ap
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import LockIcon from '@components/icons/lock'
-import { PutNguoiDungModal } from '@components/modal'
 import type { PutUserFormType } from '@components/modal/put-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -30,7 +29,7 @@ export default function Page() {
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string, PutUserFormType>({
-        tag: PutNguoiDungModal.name,
+        tag: 'PutNguoiDungModal',
         onOk,
     })
 

@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutKhenThuongModal from '@components/modal/quan-ly-ho-so/modals/put-thong-tin-khen-thuong'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -17,7 +16,7 @@ export default function ThongTinKhenThuongForm({ expland, setExpland }: DomProps
     const khenThuongList: KhenThuong[] = Form.useWatch('khenThuong', form)
 
     const { onOpen } = useDisclosure<Partial<KhenThuong> & { onSave: (val: KhenThuong) => void }>({
-        tag: PutKhenThuongModal.name,
+        tag: 'PutKhenThuongModal',
     })
 
     const handleSave = (data: KhenThuong) => {

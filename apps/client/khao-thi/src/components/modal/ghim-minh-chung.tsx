@@ -15,7 +15,7 @@ const PinEvidenceToPeriod = () => {
         id: string
         changeValue: (value: { value: string; label: string }) => void
     }>({
-        tag: PinEvidenceToPeriod.name,
+        tag: 'PinEvidenceToPeriod',
         onClose: form.resetFields,
     })
 

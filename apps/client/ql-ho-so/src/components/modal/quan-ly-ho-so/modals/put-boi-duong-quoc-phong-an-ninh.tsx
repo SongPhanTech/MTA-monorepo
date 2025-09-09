@@ -13,7 +13,7 @@ export default function PutBoiDuongQuocPhongModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<BoiDuongQuocPhongAnNinh> & { onSave: (val: BoiDuongQuocPhongAnNinh) => void }
     >({
-        tag: PutBoiDuongQuocPhongModal.name,
+        tag: 'PutBoiDuongQuocPhongModal',
         onClose: form.resetFields,
     })
 

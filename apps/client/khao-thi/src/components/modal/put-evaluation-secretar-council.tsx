@@ -21,7 +21,7 @@ const PutEvaluationSecretarYCouncil = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutEvaluationSecretarYCouncil.name,
+        tag: 'PutEvaluationSecretarYCouncil',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

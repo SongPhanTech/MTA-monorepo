@@ -11,7 +11,7 @@ export default function TinhTrangHonNhanModal() {
     const [form] = Form.useForm<DM_TinhTrangHonNhan>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_TinhTrangHonNhan>>({
-        tag: TinhTrangHonNhanModal.name,
+        tag: 'TinhTrangHonNhanModal',
         onClose: form.resetFields,
     })
 

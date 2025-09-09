@@ -18,7 +18,7 @@ const PutKnowledgeBlock = () => {
         id: string
         subjectVersionId: string
     }>({
-        tag: PutKnowledgeBlock.name,
+        tag: 'PutKnowledgeBlock',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

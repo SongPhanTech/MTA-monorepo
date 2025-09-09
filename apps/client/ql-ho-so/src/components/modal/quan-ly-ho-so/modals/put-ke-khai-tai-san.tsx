@@ -15,7 +15,7 @@ export default function PutKeKhaiTaiSanModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<KeKhaiTaiSan> & { onSave: (val: KeKhaiTaiSan) => void }
     >({
-        tag: PutKeKhaiTaiSanModal.name,
+        tag: 'PutKeKhaiTaiSanModal',
         onClose: form.resetFields,
     })
 

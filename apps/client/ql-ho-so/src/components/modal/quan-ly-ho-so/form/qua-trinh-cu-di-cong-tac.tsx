@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutQuaTrinhCuDiCongTacModal from '@components/modal/quan-ly-ho-so/modals/put-qua-trinh-cu-di-cong-tac'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -20,7 +19,7 @@ export default function QuaTrinhCuDiCongTacForm({ expland, setExpland }: DomProp
     const { onOpen } = useDisclosure<
         Partial<QuaTrinhCuDiCongTac> & { onSave: (val: QuaTrinhCuDiCongTac) => void }
     >({
-        tag: PutQuaTrinhCuDiCongTacModal.name,
+        tag: 'PutQuaTrinhCuDiCongTacModal',
     })
 
     const { data: chucVuList = [] } = useFindManyDM_ChucVu(

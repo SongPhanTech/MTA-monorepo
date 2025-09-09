@@ -2,9 +2,6 @@ import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DeleteIcon from '@components/icons/delete'
-import { PheDuyetTaiLieu, PreviewTaiLieu, PutCauHoi } from '@components/modal'
-import PheDuyetCauHoiThuongGap from '@components/modal/phe-duyet-cau-hoi-thuong-gap'
-import ThemTaiLieu from '@components/modal/them-tai-lieu'
 import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
@@ -45,23 +42,23 @@ function Page() {
         status: $Enums.DocumentStatus.APPROVE,
     })
     const { onOpen: openAddTaiLieu } = useDisclosure({
-        tag: ThemTaiLieu.name,
+        tag: 'ThemTaiLieu',
     })
 
     const { onOpen: openPheDuyetTaiLieu } = useDisclosure<string>({
-        tag: PheDuyetTaiLieu.name,
+        tag: 'PheDuyetTaiLieu',
     })
 
     const { onOpen: openPheDuyetCauHoiThuongGap } = useDisclosure<string>({
-        tag: PheDuyetCauHoiThuongGap.name,
+        tag: 'PheDuyetCauHoiThuongGap',
     })
 
     const { onOpen: openPutCauHoi } = useDisclosure<string>({
-        tag: PutCauHoi.name,
+        tag: 'PutCauHoi',
     })
 
     const { onOpen: openPreviewTaiLieu } = useDisclosure<string>({
-        tag: PreviewTaiLieu.name,
+        tag: 'PreviewTaiLieu',
     })
     const { data: totalCountDocument = 0 } = useCountDocument()
     // Count pending documents

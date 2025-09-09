@@ -2,8 +2,6 @@ import { UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-// import ViewIcon from '@components/icons/view'
-import { PutStudentModal } from '@components/modal'
 import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
@@ -284,14 +282,14 @@ export default function UserProfilePageDs() {
         }
         id?: string | null
     }>({
-        tag: PutStudentModal.name,
+        tag: 'PutStudentModal',
     })
 
     const { onOpen: onOpenUpdate } = useDisclosure<{
         tag?: string
         id: string | null
     }>({
-        tag: PutStudentModal.name,
+        tag: 'PutStudentModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

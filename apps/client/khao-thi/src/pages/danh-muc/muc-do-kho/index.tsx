@@ -2,7 +2,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutDifficulty } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -72,7 +71,7 @@ export default function Difficulty() {
         id: string
         subjectVersionId: string
     }>({
-        tag: PutDifficulty.name,
+        tag: 'PutDifficulty',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

@@ -57,7 +57,7 @@ const PutEvaluationPeriod = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutEvaluationPeriod.name,
+        tag: 'PutEvaluationPeriod',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

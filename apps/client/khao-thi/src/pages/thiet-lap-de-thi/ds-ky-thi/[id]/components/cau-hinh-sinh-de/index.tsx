@@ -3,7 +3,6 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import NoExamBank from '@components/icons/icon-no-exambank'
-import { ModalSinhDeThiTuDong, PutTestStructureRule } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
@@ -42,11 +41,11 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
         examId: string
         subjectVersionId: string
     }>({
-        tag: PutTestStructureRule.name,
+        tag: 'PutTestStructureRule',
     })
 
     const { onOpen: onOpenModalSinhDeThiTuDong } = useDisclosure<string>({
-        tag: ModalSinhDeThiTuDong.name,
+        tag: 'ModalSinhDeThiTuDong',
     })
 
     const { data: initialValue } = useFindUniqueExam(

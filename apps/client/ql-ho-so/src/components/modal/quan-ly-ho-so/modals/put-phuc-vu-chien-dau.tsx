@@ -14,7 +14,7 @@ export default function PutChienDauModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<ChienDau> & { onSave: (val: ChienDau) => void }
     >({
-        tag: PutChienDauModal.name,
+        tag: 'PutChienDauModal',
         onClose: () => {
             form.resetFields()
         },

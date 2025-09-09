@@ -14,7 +14,7 @@ export default function XepLoaiDanhGiaCanBoModal() {
     const [form] = Form.useForm<DM_XepLoaiDanhGiaCanBo>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_XepLoaiDanhGiaCanBo>>({
-        tag: XepLoaiDanhGiaCanBoModal.name,
+        tag: 'XepLoaiDanhGiaCanBoModal',
         onClose: form.resetFields,
     })
 

@@ -1,7 +1,6 @@
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutVaiTroModal } from '@components/modal'
 import type { PutVaiTroFormType } from '@components/modal/put-vai-tro'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -31,7 +30,7 @@ export default function Page() {
 
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string, PutVaiTroFormType>({
-        tag: PutVaiTroModal.name,
+        tag: 'PutVaiTroModal',
         onOk,
     })
     const { mutateAsync: mutateUpdateRole } = useUpdateRole()

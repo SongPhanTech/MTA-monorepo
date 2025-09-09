@@ -2,7 +2,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyTopicModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
@@ -53,7 +52,7 @@ function TabChuDeKhaoSat() {
     const { data: count } = useCountSurveyTopic({ where: { ...where, deletedAt: null } })
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutSurveyTopicModal.name,
+        tag: 'PutSurveyTopicModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

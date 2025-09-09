@@ -22,7 +22,7 @@ const PutUserProfileStaffModal = () => {
     const [form] = Form.useForm<PutStaffProfile>()
 
     const { isOpen, onClose, input } = useDisclosure<PutUserProfileLectureProps>({
-        tag: PutUserProfileStaffModal.name,
+        tag: 'PutUserProfileStaffModal',
         onClose: form.resetFields,
     })
 

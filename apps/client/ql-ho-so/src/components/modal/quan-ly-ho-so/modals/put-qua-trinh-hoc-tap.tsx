@@ -20,7 +20,7 @@ export default function PutQuaTrinhHocTapModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<QuaTrinhHocTap> & { onSave: (val: QuaTrinhHocTap) => void }
     >({
-        tag: PutQuaTrinhHocTapModal.name,
+        tag: 'PutQuaTrinhHocTapModal',
         onClose: () => {
             form.resetFields()
         },

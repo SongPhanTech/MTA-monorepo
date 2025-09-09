@@ -4,7 +4,6 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { PutDisciplinaryWarning } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
@@ -145,7 +144,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
         id: string
         semesterId: string
     }>({
-        tag: PutDisciplinaryWarning.name,
+        tag: 'PutDisciplinaryWarning',
     })
 
     const { mutateAsync: updateDisciplinaryWarning } = useUpdateDisciplinaryWarning()

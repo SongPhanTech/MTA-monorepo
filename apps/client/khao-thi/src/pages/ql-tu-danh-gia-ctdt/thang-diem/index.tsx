@@ -2,7 +2,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutScoreScaleCatalog } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -52,7 +51,7 @@ export default function ScoreScaleCatalog() {
     })
 
     const { onOpen: onOpenPutScoreScaleCatalog } = useDisclosure<string>({
-        tag: PutScoreScaleCatalog.name,
+        tag: 'PutScoreScaleCatalog',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

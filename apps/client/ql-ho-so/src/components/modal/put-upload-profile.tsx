@@ -17,7 +17,7 @@ const PutUploadProfileModal = () => {
         onClose,
         input: code,
     } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
+        tag: 'PutUploadProfileModal',
         onClose: form.resetFields,
     })
     const [typeId, _setTypeId] = useState<string>()

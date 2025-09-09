@@ -1,7 +1,6 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSubjectListModal, PutVersionSubjectModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -152,14 +151,14 @@ export default function SubjectList() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: PutSubjectListModal.name,
+        tag: 'PutSubjectListModal',
     })
 
     const { onOpen: onOpenSubjectVersion } = useDisclosure<{
         subjectId: string
         subjectVersionId?: string
     }>({
-        tag: PutVersionSubjectModal.name,
+        tag: 'PutVersionSubjectModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

@@ -11,7 +11,7 @@ export default function ChucDanhNgachKySuModal() {
     const [form] = Form.useForm<DM_ChucDanhCMNVKySu>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_ChucDanhCMNVKySu>>({
-        tag: ChucDanhNgachKySuModal.name,
+        tag: 'ChucDanhNgachKySuModal',
         onClose: form.resetFields,
     })
 

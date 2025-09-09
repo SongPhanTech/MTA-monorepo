@@ -11,7 +11,7 @@ export default function LoaiHinhDiHocTapModal() {
     const [form] = Form.useForm<DM_LoaiHinhDiHocTap>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_LoaiHinhDiHocTap>>({
-        tag: LoaiHinhDiHocTapModal.name,
+        tag: 'LoaiHinhDiHocTapModal',
         onClose: form.resetFields,
     })
 

@@ -4,12 +4,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    ModalPrintDecision,
-    ModalPrintInvitation,
-    PutPaymentRecord,
-    PutThesisProject,
-} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -269,22 +263,22 @@ export default function ThesisProject() {
     })
 
     const { onOpen } = useDisclosure<{ subjectClassId: string; thesisProjectId: string }>({
-        tag: PutThesisProject.name,
+        tag: 'PutThesisProject',
     })
 
     const { onOpen: openModalPrintDecision } = useDisclosure<{
         subjecClassData: any
         isCopy?: boolean
     }>({
-        tag: ModalPrintDecision.name,
+        tag: 'ModalPrintDecision',
     })
 
     const { onOpen: openPaymentRecord, isOpen } = useDisclosure<{ selectedRowKeys: string[] }>({
-        tag: PutPaymentRecord.name,
+        tag: 'PutPaymentRecord',
     })
 
     const { onOpen: openModalPrintInvitation } = useDisclosure<{ councilMemberIds: string[] }>({
-        tag: ModalPrintInvitation.name,
+        tag: 'ModalPrintInvitation',
     })
 
     useEffect(() => {

@@ -1,6 +1,5 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutSubjectTienQuyetSongHanh } from '@components/modal'
 import { SubjectType } from '@pages/chuong-trinh-dao-tao/ql-mon-hoc'
 import { useFindUniqueSubjectVersion, useUpdateSubjectVersion } from '@workspace/db/hooks'
 import { Button, Col, Flex, message, Row } from 'antd'
@@ -20,7 +19,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
         keyEnum: string
         type: 'above' | 'below'
     }>({
-        tag: PutSubjectTienQuyetSongHanh.name,
+        tag: 'PutSubjectTienQuyetSongHanh',
     })
     const { data } = useFindUniqueSubjectVersion(
         {

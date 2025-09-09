@@ -11,7 +11,7 @@ export default function NhomMauModal() {
     const [form] = Form.useForm<DM_NhomMau>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_NhomMau>>({
-        tag: NhomMauModal.name,
+        tag: 'NhomMauModal',
         onClose: form.resetFields,
     })
 

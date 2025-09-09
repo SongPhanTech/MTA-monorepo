@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutExpertProfile } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -95,7 +94,7 @@ export default function ExpertProfile() {
     })
 
     const { onOpen } = useDisclosure<string>({
-        tag: PutExpertProfile.name,
+        tag: 'PutExpertProfile',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

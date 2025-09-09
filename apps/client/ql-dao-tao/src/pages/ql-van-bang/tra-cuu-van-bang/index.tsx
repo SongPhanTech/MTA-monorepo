@@ -2,12 +2,6 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
-import {
-    ModalPhuLucThacSi,
-    ModalPrintToKQHT,
-    ModalVanBang,
-    PutGraduationDecision,
-} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
@@ -267,10 +261,10 @@ export default function GraduationDecisionDiploma() {
         id: string
         trainingCourseId: string
     }>({
-        tag: PutGraduationDecision.name,
+        tag: 'PutGraduationDecision',
     })
     const { onOpen: onOpenVanBang } = useDisclosure<string>({
-        tag: ModalVanBang.name,
+        tag: 'ModalVanBang',
     })
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data: organization = [] } = useFindManyDM_DonVi({
@@ -298,11 +292,11 @@ export default function GraduationDecisionDiploma() {
         dataTable: any
         dataStudent: any
     }>({
-        tag: ModalPrintToKQHT.name,
+        tag: 'ModalPrintToKQHT',
     })
 
     const { onOpen: onOpenPhuLucThacSi } = useDisclosure<string>({
-        tag: ModalPhuLucThacSi.name,
+        tag: 'ModalPhuLucThacSi',
     })
 
     const { data: dataTable } = useFindManySemester(

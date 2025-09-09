@@ -14,7 +14,7 @@ export default function PutTiengDanTocModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<TiengDanToc> & { onSave: (val: TiengDanToc) => void }
     >({
-        tag: PutTiengDanTocModal.name,
+        tag: 'PutTiengDanTocModal',
         onClose: () => {
             form.resetFields()
         },

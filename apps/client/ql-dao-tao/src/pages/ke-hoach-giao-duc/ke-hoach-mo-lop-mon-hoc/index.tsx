@@ -4,7 +4,6 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { ModalExportFileSubjectClass, ModalNhapTKB, PutOpenClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse, TrainingMajor } from '@workspace/db'
@@ -61,16 +60,16 @@ export default function SubjectOpeningPlan() {
     )
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutOpenClassModal.name,
+        tag: 'PutOpenClassModal',
         onClose: refetch,
     })
 
     const { onOpen: onOpenXuatFileMoLop } = useDisclosure<string>({
-        tag: ModalExportFileSubjectClass.name,
+        tag: 'ModalExportFileSubjectClass',
     })
 
     const { onOpen: onOpenModalNhapTKB } = useDisclosure<string>({
-        tag: ModalNhapTKB.name,
+        tag: 'ModalNhapTKB',
     })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({

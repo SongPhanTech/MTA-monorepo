@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutGraduationSession } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useGraduationSessionStatusOptions } from '@hooks/graduationSessionStatus'
@@ -140,7 +139,7 @@ export default function GraduationSession() {
     })
 
     const { onOpen } = useDisclosure<string>({
-        tag: PutGraduationSession.name,
+        tag: 'PutGraduationSession',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

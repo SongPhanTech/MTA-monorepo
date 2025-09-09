@@ -2,9 +2,7 @@ import { EyeOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import PutGioiHanDiaChiMangDungModal, {
-    type PutGioiHanDiaChiMangFormType,
-} from '@components/modal/put-gioi-han-dia-chi-mang'
+import type { PutGioiHanDiaChiMangFormType } from '@components/modal/put-gioi-han-dia-chi-mang'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -52,7 +50,7 @@ export default function Page() {
     })
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string, PutGioiHanDiaChiMangFormType>({
-        tag: PutGioiHanDiaChiMangDungModal.name,
+        tag: 'PutGioiHanDiaChiMangDungModal',
         onOk,
     })
 

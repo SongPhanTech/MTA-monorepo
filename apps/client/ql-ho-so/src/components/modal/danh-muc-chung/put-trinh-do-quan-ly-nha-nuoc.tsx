@@ -14,7 +14,7 @@ export default function TrinhDoQuanLyNhaNuocModal() {
     const [form] = Form.useForm<DM_TrinhDoQuanLyNhaNuoc>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_TrinhDoQuanLyNhaNuoc>>({
-        tag: TrinhDoQuanLyNhaNuocModal.name,
+        tag: 'TrinhDoQuanLyNhaNuocModal',
         onClose: form.resetFields,
     })
 

@@ -2,11 +2,6 @@ import { UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-    PutUserProfileLectureModal,
-} from '@components/modal'
 import type { PutUserProfileLectureProps } from '@components/modal/put-giang-vien'
 import ExportTemplateLecturer from '@components/modal/quan-ly-ho-so/modals/export-template-lecturer'
 import ImportLecturerModal from '@components/modal/quan-ly-ho-so/modals/import-excel-lecturer'
@@ -167,18 +162,18 @@ export default function UserProfilePageLecture() {
         []
     )
     const { onOpen, onClose } = useDisclosure<PutUserProfileLectureProps>({
-        tag: PutUserProfileLectureModal.name,
+        tag: 'PutUserProfileLectureModal',
     })
 
     const { onOpen: onOpenModalAdd } = useDisclosure({
-        tag: PutUserProfileLectureModal.name,
+        tag: 'PutUserProfileLectureModal',
     })
 
     const { onOpen: onOpenUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
+        tag: 'PutUploadProfileModal',
     })
     const { onOpen: onOpenUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
+        tag: 'PutUpdateProfileModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

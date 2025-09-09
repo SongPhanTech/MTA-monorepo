@@ -11,7 +11,7 @@ export default function NgachModal() {
     const [form] = Form.useForm<DM_Ngach>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_Ngach>>({
-        tag: NgachModal.name,
+        tag: 'NgachModal',
         onClose: form.resetFields,
     })
 

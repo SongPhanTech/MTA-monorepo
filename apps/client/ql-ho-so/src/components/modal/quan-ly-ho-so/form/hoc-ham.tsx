@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutHocHamModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-ham'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -23,7 +22,7 @@ export default function HocHamForm({ expland, setExpland }: DomProps) {
             onSave: (val: HocHam) => void
         }
     >({
-        tag: PutHocHamModal.name,
+        tag: 'PutHocHamModal',
     })
 
     const { data: hocHamData = [] } = useFindManyDM_HocHam(

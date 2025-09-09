@@ -2,7 +2,6 @@ import { EyeOutlined } from '@ant-design/icons'
 import { fetchCreateGroup, fetchUpdateGroup } from '@api/open-api/appComponents'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { PutNhomNguoiDungModal } from '@components/modal'
 import type { PutNhomNguoiDungFormType } from '@components/modal/put-nhom-nguoi-dung'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -23,7 +22,7 @@ export default function Page() {
     const _router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure({
-        tag: PutNhomNguoiDungModal.name,
+        tag: 'PutNhomNguoiDungModal',
         onOk,
     })
     const { data = [], refetch } = useFindManyGroup({

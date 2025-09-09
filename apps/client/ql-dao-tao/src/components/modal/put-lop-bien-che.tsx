@@ -1,7 +1,6 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
-import { ConfirmModal } from '@components/modal'
 import useSpinner from '@hooks/spinner'
 import type {
     CurriculumVersion,
@@ -49,7 +48,7 @@ const PutFixedClassModal = () => {
     const [dataOutput, setDataOutput] = useState<PutFixedClass>()
     const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
     const { onOpen: onOpenModalConfirm } = useDisclosure<string>({
-        tag: ConfirmModal.name,
+        tag: 'ConfirmModal',
         onOk: (value: any) => {
             updateFixedClassWithStudent()
         },

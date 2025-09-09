@@ -1,7 +1,6 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { ModalPrintToKQHT, PutGraduationDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -213,7 +212,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     })
 
     const { onOpen } = useDisclosure<{ id: string; trainingCourseId: string }>({
-        tag: PutGraduationDecision.name,
+        tag: 'PutGraduationDecision',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -244,7 +243,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
         dataTable: any
         dataStudent: any
     }>({
-        tag: ModalPrintToKQHT.name,
+        tag: 'ModalPrintToKQHT',
     })
 
     const { data: dataTable } = useFindManySemester(

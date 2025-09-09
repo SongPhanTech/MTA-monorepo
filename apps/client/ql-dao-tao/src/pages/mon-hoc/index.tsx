@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSubjectModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
@@ -54,7 +53,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
 
     const _debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutSubjectModal.name,
+        tag: 'PutSubjectModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

@@ -17,7 +17,7 @@ const PutUpdateProfileModal = () => {
         onClose,
         input: code,
     } = useDisclosure<any>({
-        tag: PutUpdateProfileModal.name,
+        tag: 'PutUpdateProfileModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

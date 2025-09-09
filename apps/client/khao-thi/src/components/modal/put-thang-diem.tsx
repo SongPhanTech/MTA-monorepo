@@ -19,7 +19,7 @@ const PutScoreScaleCatalog = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutScoreScaleCatalog.name,
+        tag: 'PutScoreScaleCatalog',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

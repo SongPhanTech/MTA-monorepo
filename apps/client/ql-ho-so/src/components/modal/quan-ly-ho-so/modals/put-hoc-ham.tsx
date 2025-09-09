@@ -16,7 +16,7 @@ export default function PutHocHamModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<HocHam> & { onSave: (val: HocHam) => void }
     >({
-        tag: PutHocHamModal.name,
+        tag: 'PutHocHamModal',
         onClose: form.resetFields,
     })
 

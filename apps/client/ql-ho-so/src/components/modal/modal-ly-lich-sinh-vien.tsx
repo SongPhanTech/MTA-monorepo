@@ -22,7 +22,7 @@ const ModalTomTatLyLich = () => {
     const [signerName, setSignerName] = useState('Đại úy Đào Văn Thắng')
 
     const { isOpen, onClose, input } = useDisclosure<ModalTomTatLyLichInput>({
-        tag: ModalTomTatLyLich.name,
+        tag: 'ModalTomTatLyLich',
     })
 
     const GENDER_TO_SPOUSE_MAP = {
@@ -36,7 +36,8 @@ const ModalTomTatLyLich = () => {
         return (
             Object.entries(GENDER_TO_SPOUSE_MAP).find(([key, value]) => {
                 if (genderName.toLocaleLowerCase().includes(key.toLocaleLowerCase())) return value
-            })?.[1] || 'vợ/chồng'
+                return 'Vợ(Chồng)'
+            })?.[1] || 'Vợ(Chồng)'
         )
     }
 

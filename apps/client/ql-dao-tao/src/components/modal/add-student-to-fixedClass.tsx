@@ -1,5 +1,4 @@
 import PutFormModal from '@components/commons/put-modal'
-import { ConfirmModal } from '@components/modal'
 import {
     DEFAULT_PAGINATE_SIZE,
     FIXED_CLASS_STUDENT_STATUS,
@@ -49,7 +48,7 @@ const AddStudentToFixedClassModal = () => {
     })
 
     const { onOpen: onOpenModalConfirm, onClose: onCloseModalConfirm } = useDisclosure<string>({
-        tag: ConfirmModal.name,
+        tag: 'ConfirmModal',
         onOk: (value: any) => {
             updateStudent()
         },

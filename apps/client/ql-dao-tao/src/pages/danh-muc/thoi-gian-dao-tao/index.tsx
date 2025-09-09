@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutTrainingTimeModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -55,7 +54,7 @@ export default function TrainingTimePage() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: PutTrainingTimeModal.name,
+        tag: 'PutTrainingTimeModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

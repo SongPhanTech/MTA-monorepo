@@ -6,7 +6,6 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import EditIcon from '@components/icons/edit'
-import { PutStudentAcademicDecision } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
@@ -193,7 +192,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         semesterId: string
         actionTaken: AcademicActionType
     }>({
-        tag: PutStudentAcademicDecision.name,
+        tag: 'PutStudentAcademicDecision',
     })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({

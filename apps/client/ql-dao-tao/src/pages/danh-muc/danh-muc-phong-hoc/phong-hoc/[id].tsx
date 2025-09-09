@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutRoomModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -102,7 +101,7 @@ export default function BuildingPage() {
         buildingCode: string
         id?: string
     }>({
-        tag: PutRoomModal.name,
+        tag: 'PutRoomModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

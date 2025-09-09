@@ -11,7 +11,7 @@ export default function CacTruongDaoTaoBacDHModal() {
     const [form] = Form.useForm<DM_TruongDaoTaoBacDH>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_TruongDaoTaoBacDH>>({
-        tag: CacTruongDaoTaoBacDHModal.name,
+        tag: 'CacTruongDaoTaoBacDHModal',
         onClose: form.resetFields,
     })
 

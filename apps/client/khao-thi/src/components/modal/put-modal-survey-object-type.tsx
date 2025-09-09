@@ -42,7 +42,7 @@ const PutSurveyObjectTypeModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutSurveyObjectTypeModal.name,
+        tag: 'PutSurveyObjectTypeModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

@@ -14,7 +14,7 @@ export default function TrinhDoLyLuanChinhTriModal() {
     const [form] = Form.useForm<DM_TrinhDoLyLuanChinhTri>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_TrinhDoLyLuanChinhTri>>({
-        tag: TrinhDoLyLuanChinhTriModal.name,
+        tag: 'TrinhDoLyLuanChinhTriModal',
         onClose: form.resetFields,
     })
 

@@ -11,7 +11,7 @@ export default function ChuyenMonKyThuatModal() {
     const [form] = Form.useForm<DM_ChuyenMonKyThuat>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_ChuyenMonKyThuat>>({
-        tag: ChuyenMonKyThuatModal.name,
+        tag: 'ChuyenMonKyThuatModal',
         onClose: form.resetFields,
     })
 

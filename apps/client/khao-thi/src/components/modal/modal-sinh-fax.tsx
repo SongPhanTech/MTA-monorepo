@@ -19,7 +19,7 @@ const ModalSinhFax = () => {
         onClose,
         input: examId,
     } = useDisclosure<string>({
-        tag: ModalSinhFax.name,
+        tag: 'ModalSinhFax',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

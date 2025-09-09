@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutHocViModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-vi'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { HocVi } from '@workspace/db'
@@ -26,7 +25,7 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
             onSave: (val: HocVi) => void
         }
     >({
-        tag: PutHocViModal.name,
+        tag: 'PutHocViModal',
     })
 
     const { data: quocGiaData = [] } = useFindManyDM_QuocGia(

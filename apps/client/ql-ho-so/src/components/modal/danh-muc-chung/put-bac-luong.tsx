@@ -11,7 +11,7 @@ export default function BacLuongModal() {
     const [form] = Form.useForm<DM_BacLuong>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_BacLuong>>({
-        tag: BacLuongModal.name,
+        tag: 'BacLuongModal',
         onClose: form.resetFields,
     })
 

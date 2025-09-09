@@ -11,7 +11,7 @@ export default function LoaiThuongTatModal() {
     const [form] = Form.useForm<DM_LoaiThuongTat>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_LoaiThuongTat>>({
-        tag: LoaiThuongTatModal.name,
+        tag: 'LoaiThuongTatModal',
         onClose: form.resetFields,
     })
 

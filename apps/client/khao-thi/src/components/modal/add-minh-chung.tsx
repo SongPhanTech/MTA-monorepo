@@ -28,7 +28,7 @@ const AddEvidenceToPeriod = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: AddEvidenceToPeriod.name,
+        tag: 'AddEvidenceToPeriod',
         onClose: form.resetFields,
     })
 

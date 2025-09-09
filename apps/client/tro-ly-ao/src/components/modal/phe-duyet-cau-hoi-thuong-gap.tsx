@@ -17,7 +17,7 @@ const PheDuyetCauHoiThuongGap = () => {
         onClose,
         input: documentId,
     } = useDisclosure<string>({
-        tag: PheDuyetCauHoiThuongGap.name,
+        tag: 'PheDuyetCauHoiThuongGap',
     })
     const { mutateAsync: update } = useUpdateFAQ()
 

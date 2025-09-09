@@ -14,7 +14,7 @@ export default function PutDoiTuongChinhSachModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<DoiTuongChinhSach> & { onSave: (val: DoiTuongChinhSach) => void }
     >({
-        tag: PutDoiTuongChinhSachModal.name,
+        tag: 'PutDoiTuongChinhSachModal',
         onClose: form.resetFields,
     })
 

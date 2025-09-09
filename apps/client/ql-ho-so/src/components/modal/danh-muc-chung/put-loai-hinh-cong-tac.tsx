@@ -11,7 +11,7 @@ export default function LoaiHinhCongTacModal() {
     const [form] = Form.useForm<DM_LoaiHinhCongTac>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_LoaiHinhCongTac>>({
-        tag: LoaiHinhCongTacModal.name,
+        tag: 'LoaiHinhCongTacModal',
         onClose: form.resetFields,
     })
 

@@ -15,7 +15,7 @@ export default function PutThuongTatModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<ThuongTat> & { onSave: (val: ThuongTat) => void }
     >({
-        tag: PutThuongTatModal.name,
+        tag: 'PutThuongTatModal',
         onClose: () => {
             form.resetFields()
         },

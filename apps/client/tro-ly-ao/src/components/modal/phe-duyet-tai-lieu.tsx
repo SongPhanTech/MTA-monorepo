@@ -17,7 +17,7 @@ const PheDuyetTaiLieu = () => {
         onClose,
         input: documentId,
     } = useDisclosure<string>({
-        tag: PheDuyetTaiLieu.name,
+        tag: 'PheDuyetTaiLieu',
     })
     const { mutateAsync: update } = useUpdateDocument()
 

@@ -3,7 +3,6 @@ import CopyPlusIcon from '@components/icons/copyPlus'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutCurriculum, PutCurriculumVersion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
@@ -246,14 +245,14 @@ export default function TrainingProgramCatalog() {
     })
 
     const { onOpen: onOpenCurriculum, onClose: onCloseCurriculum } = useDisclosure<string>({
-        tag: PutCurriculum.name,
+        tag: 'PutCurriculum',
     })
 
     const { onOpen: onOpenCurriculumVersion, onClose: onCloseCurriculumVersion } = useDisclosure<{
         curriculumId: string
         versionId: string
     }>({
-        tag: PutCurriculumVersion.name,
+        tag: 'PutCurriculumVersion',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

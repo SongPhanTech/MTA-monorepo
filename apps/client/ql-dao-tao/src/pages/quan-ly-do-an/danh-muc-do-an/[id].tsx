@@ -3,12 +3,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    PutCouncil,
-    PutCouncilMember,
-    PutDecision,
-    PutStudentThesisRegistration,
-} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useCouncilRoleOptions } from '@hooks/councilRole'
@@ -98,7 +92,7 @@ export default function ThesisProjectDetail() {
 
     const { onOpen: openDecision } = useDisclosure<{ thesisProjectId: string; decisionId: string }>(
         {
-            tag: PutDecision.name,
+            tag: 'PutDecision',
         }
     )
 
@@ -106,18 +100,18 @@ export default function ThesisProjectDetail() {
         studentThesisId: string
         thesisProjectId: string
     }>({
-        tag: PutStudentThesisRegistration.name,
+        tag: 'PutStudentThesisRegistration',
     })
 
     const { onOpen: openCouncil } = useDisclosure<{ councilId: string; thesisProjectId: string }>({
-        tag: PutCouncil.name,
+        tag: 'PutCouncil',
     })
 
     const { onOpen: openCouncilMember } = useDisclosure<{
         councilId: string
         councilMemberId: string
     }>({
-        tag: PutCouncilMember.name,
+        tag: 'PutCouncilMember',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

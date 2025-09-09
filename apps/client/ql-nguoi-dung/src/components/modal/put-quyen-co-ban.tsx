@@ -12,7 +12,7 @@ export type PutNhomNguoiDungFormType = {
 const PutQuyenCoBanModal = () => {
     const [form] = Form.useForm<PutNhomNguoiDungFormType>()
     const { isOpen, onClose, onOk, input } = useDisclosure<string>({
-        tag: PutQuyenCoBanModal.name,
+        tag: 'PutQuyenCoBanModal',
         onClose: form.resetFields,
     })
     const { data: group } = useFindFirstGroup({

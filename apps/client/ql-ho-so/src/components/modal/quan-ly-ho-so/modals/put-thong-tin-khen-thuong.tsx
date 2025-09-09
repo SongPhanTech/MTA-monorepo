@@ -17,7 +17,7 @@ export default function PutKhenThuongModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<KhenThuong> & { onSave: (val: KhenThuong) => void }
     >({
-        tag: PutKhenThuongModal.name,
+        tag: 'PutKhenThuongModal',
         onClose: form.resetFields,
     })
 

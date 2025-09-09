@@ -11,7 +11,7 @@ export default function TrinhDoHocVanModal() {
     const [form] = Form.useForm<DM_TrinhDoHocVan>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_TrinhDoHocVan>>({
-        tag: TrinhDoHocVanModal.name,
+        tag: 'TrinhDoHocVanModal',
         onClose: form.resetFields,
     })
 

@@ -1,7 +1,6 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { AddEvidenceToPeriod } from '@components/modal'
 import type {
     AnalysisFormEvidence,
     EvaluationCriterion,
@@ -33,7 +32,7 @@ export default function EvaluatedPage({
     const [activeKey, setActiveKey] = useState('infor')
     const [form] = Form.useForm<PutRequirementCriterion>()
     const { onOpen: onOpenAddEvaluationPeriod } = useDisclosure<string>({
-        tag: AddEvidenceToPeriod.name,
+        tag: 'AddEvidenceToPeriod',
         onClose() {
             refetch()
         },
@@ -102,6 +101,7 @@ export default function EvaluatedPage({
         }
     }, [data, activeKey])
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     const items = useMemo(() => {
         return [
             {
@@ -436,7 +436,7 @@ export default function EvaluatedPage({
                 ),
             },
         ]
-    }, [data, index, onOpenAddEvaluationPeriod, handleSubmit, form])
+    }, [data, index, onOpenAddEvaluationPeriod, form])
 
     return (
         <div className="h-[calc(100vh-200px)] overflow-y-auto">

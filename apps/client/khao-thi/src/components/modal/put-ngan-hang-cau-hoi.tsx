@@ -21,7 +21,7 @@ const PutQuestionBank = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutQuestionBank.name,
+        tag: 'PutQuestionBank',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

@@ -3,7 +3,6 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutOneSubjectClassModal, PutOpenSubjectClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -397,12 +396,12 @@ export default function TeachingAssignment() {
     }
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutOpenSubjectClassModal.name,
+        tag: 'PutOpenSubjectClassModal',
     })
 
     const { onOpen: onOpenEditSubjectClass, onClose: onCloseEditSubjectClass } =
         useDisclosure<string>({
-            tag: PutOneSubjectClassModal.name,
+            tag: 'PutOneSubjectClassModal',
         })
 
     const handleModal = () => {

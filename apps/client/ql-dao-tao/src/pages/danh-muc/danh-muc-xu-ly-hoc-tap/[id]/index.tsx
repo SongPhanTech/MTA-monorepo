@@ -3,7 +3,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutAcademicActionCondition } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
@@ -170,7 +169,7 @@ export default function AcademicActionCondition() {
         id: string
         ruleSetId: string
     }>({
-        tag: PutAcademicActionCondition.name,
+        tag: 'PutAcademicActionCondition',
     })
 
     return (

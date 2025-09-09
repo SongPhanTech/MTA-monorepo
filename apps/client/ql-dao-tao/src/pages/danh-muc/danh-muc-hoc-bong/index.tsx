@@ -3,7 +3,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutHocBong, PutScholarshipCriteria } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
@@ -113,14 +112,14 @@ export default function Scholarship() {
         []
     )
     const { onOpen: onOpenPutHocBong } = useDisclosure<string>({
-        tag: PutHocBong.name,
+        tag: 'PutHocBong',
     })
 
     const { onOpen: onOpenPutScholarshipCriteria } = useDisclosure<{
         scholarshipId: string
         scholarshipCriteriaId: string
     }>({
-        tag: PutScholarshipCriteria.name,
+        tag: 'PutScholarshipCriteria',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

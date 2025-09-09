@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutMilestoneModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -98,7 +97,7 @@ export default function MilestonePage() {
     })
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutMilestoneModal.name,
+        tag: 'PutMilestoneModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

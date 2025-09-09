@@ -3,7 +3,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyQuestionGroupModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
@@ -67,7 +66,7 @@ function TabNhomCauHoi() {
     })
 
     const { onOpen } = useDisclosure<string>({
-        tag: PutSurveyQuestionGroupModal.name,
+        tag: 'PutSurveyQuestionGroupModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

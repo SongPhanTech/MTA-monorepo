@@ -1,6 +1,5 @@
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
-import { ModalSinhFax } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
@@ -29,7 +28,7 @@ export default function ExamFax({ id }: ExamFaxProps) {
     )
 
     const { onOpen: onOpenModaLSinhFax } = useDisclosure<string>({
-        tag: ModalSinhFax.name,
+        tag: 'ModalSinhFax',
         onClose: () => {
             refetch()
             refetchCount()

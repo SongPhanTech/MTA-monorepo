@@ -1,10 +1,5 @@
 import { SafetyCertificateOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
-import {
-    ModalPrintToKQHT,
-    PutAddCertificateScoreModal,
-    PutAddOlympicScoreModal,
-} from '@components/modal'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db'
@@ -30,7 +25,7 @@ export default function StudentScoreClassPage() {
         dataTable: any
         dataStudent: any
     }>({
-        tag: ModalPrintToKQHT.name,
+        tag: 'ModalPrintToKQHT',
     })
 
     const { onOpen: onOpenModalAddScore } = useDisclosure<{
@@ -39,7 +34,7 @@ export default function StudentScoreClassPage() {
         studentId: string
         subjectClassStudent: StudentSubjectScore
     }>({
-        tag: PutAddOlympicScoreModal.name,
+        tag: 'PutAddOlympicScoreModal',
     })
 
     const { onOpen: onOpenModalAddCertificate } = useDisclosure<{
@@ -48,7 +43,7 @@ export default function StudentScoreClassPage() {
         studentId: string
         subjectClassStudent: StudentSubjectScore
     }>({
-        tag: PutAddCertificateScoreModal.name,
+        tag: 'PutAddCertificateScoreModal',
     })
 
     const { data: student } = useFindUniqueStudent(

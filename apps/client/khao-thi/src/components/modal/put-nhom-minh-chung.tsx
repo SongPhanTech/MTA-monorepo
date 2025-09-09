@@ -19,7 +19,7 @@ const PutEvidenceCategory = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutEvidenceCategory.name,
+        tag: 'PutEvidenceCategory',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

@@ -17,7 +17,7 @@ export default function PutKyLuatModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<KyLuat> & { onSave: (val: KyLuat) => void }
     >({
-        tag: PutKyLuatModal.name,
+        tag: 'PutKyLuatModal',
         onClose: form.resetFields,
     })
 

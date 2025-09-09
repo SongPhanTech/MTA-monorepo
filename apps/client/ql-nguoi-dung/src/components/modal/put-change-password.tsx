@@ -16,7 +16,7 @@ const PutChangePasswordModal = () => {
     }
     const [form] = Form.useForm<PutChangePasswordFormType>()
     const { isOpen, onClose, onOk, input } = useDisclosure<string>({
-        tag: PutChangePasswordModal.name,
+        tag: 'PutChangePasswordModal',
         onClose: form.resetFields,
     })
 

@@ -2,7 +2,6 @@ import { renderWithMath } from '@components/commons/rich-text-editor/renderWithM
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
-import { ModalPrintExamBank, PutExamBankQuestion } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
@@ -101,7 +100,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
         examBankId: string
         questionBankId: string
     }>({
-        tag: PutExamBankQuestion.name,
+        tag: 'PutExamBankQuestion',
     })
 
     const { onOpen: onOpenModalPrintExamBank } = useDisclosure<{
@@ -114,7 +113,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
         duration: number
         explanation: boolean
     }>({
-        tag: ModalPrintExamBank.name,
+        tag: 'ModalPrintExamBank',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

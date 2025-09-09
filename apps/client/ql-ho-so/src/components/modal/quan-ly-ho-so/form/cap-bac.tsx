@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutCapBacModal from '@components/modal/quan-ly-ho-so/modals/put-cap-bac'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -24,7 +23,7 @@ export default function CapBacForm({ expland, setExpland }: DomProps) {
     )
 
     const { onOpen } = useDisclosure<Partial<CapBac> & { onSave: (val: CapBac) => void }>({
-        tag: PutCapBacModal.name,
+        tag: 'PutCapBacModal',
     })
 
     const handleSave = (data: CapBac) => {

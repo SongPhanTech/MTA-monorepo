@@ -14,7 +14,7 @@ export default function HinhThucKhenThuongCuaDangModal() {
     const [form] = Form.useForm<DM_HinhThucKhenThuongDang>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_HinhThucKhenThuongDang>>({
-        tag: HinhThucKhenThuongCuaDangModal.name,
+        tag: 'HinhThucKhenThuongCuaDangModal',
         onClose: form.resetFields,
     })
 

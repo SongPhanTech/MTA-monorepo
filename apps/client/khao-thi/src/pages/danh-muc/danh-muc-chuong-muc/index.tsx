@@ -3,7 +3,6 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutKnowledgeBlock } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -118,7 +117,7 @@ export default function KnowledgeBlock() {
         id: string
         subjectVersionId: string
     }>({
-        tag: PutKnowledgeBlock.name,
+        tag: 'PutKnowledgeBlock',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

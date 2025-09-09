@@ -6,7 +6,6 @@ import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutAcademicWarning } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
@@ -168,7 +167,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         id: string
         semesterId: string
     }>({
-        tag: PutAcademicWarning.name,
+        tag: 'PutAcademicWarning',
     })
 
     const rowSelection = {
@@ -221,8 +220,9 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                 },
                                 level:
                                     Number.parseInt(
-                                        record.studentSemesterResult.academicWarningLevel
-                                    ) + Number.parseInt(record.academicWarningSeverity),
+                                        record.studentSemesterResult.academicWarningLevel,
+                                        10
+                                    ) + Number.parseInt(record.academicWarningSeverity, 10),
                                 increasedFrom: record.studentSemesterResult.academicWarningLevel,
                             }
 
@@ -232,8 +232,9 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                     semesterId: record.studentSemesterResult.semesterId,
                                     level:
                                         Number.parseInt(
-                                            record.studentSemesterResult.academicWarningLevel
-                                        ) + Number.parseInt(record.academicWarningSeverity),
+                                            record.studentSemesterResult.academicWarningLevel,
+                                            10
+                                        ) + Number.parseInt(record.academicWarningSeverity, 10),
                                     code: '',
                                     increasedFrom:
                                         record.studentSemesterResult.academicWarningLevel,

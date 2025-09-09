@@ -4,7 +4,6 @@ import type { FilterProps } from '@components/commons/typeFilte'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutCriterionCatalog, PutStandardCatalog } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -119,14 +118,14 @@ export default function StandardCatalog() {
     const { data: scoreScales } = useFindManyScoreScaleCatalog()
 
     const { onOpen: onOpenPutStandardCatalog } = useDisclosure<{ id: string; count: number }>({
-        tag: PutStandardCatalog.name,
+        tag: 'PutStandardCatalog',
     })
 
     const { onOpen: onOpenPutCriterionCatalog } = useDisclosure<{
         id: string
         standardId: string
     }>({
-        tag: PutCriterionCatalog.name,
+        tag: 'PutCriterionCatalog',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

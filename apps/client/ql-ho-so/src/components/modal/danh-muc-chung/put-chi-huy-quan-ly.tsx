@@ -11,7 +11,7 @@ export default function ChiHuyQuanLyModal() {
     const [form] = Form.useForm<DM_ChiHuyQuanLy>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_ChiHuyQuanLy>>({
-        tag: ChiHuyQuanLyModal.name,
+        tag: 'ChiHuyQuanLyModal',
         onClose: form.resetFields,
     })
 
