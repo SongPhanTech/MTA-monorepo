@@ -276,7 +276,28 @@ const PutThesisProject = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem form={form} name="registrationEnd" label="Thời gian đóng đăng ký">
+                <FormItem
+                    form={form}
+                    name="registrationEnd"
+                    label="Thời gian đóng đăng ký"
+                    dependencies={['registrationStart']}
+                    rules={[
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                const start = getFieldValue('registrationStart')
+                                if (!value || !start) {
+                                    return Promise.resolve()
+                                }
+                                if (value.isBefore(start, 'day')) {
+                                    return Promise.reject(
+                                        new Error('Ngày đóng không được trước ngày mở')
+                                    )
+                                }
+                                return Promise.resolve()
+                            },
+                        }),
+                    ]}
+                >
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',

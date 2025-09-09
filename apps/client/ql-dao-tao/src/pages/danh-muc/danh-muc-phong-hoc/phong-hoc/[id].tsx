@@ -276,7 +276,7 @@ BuildingPage.getLayout = function getLayout(page: React.ReactElement) {
             breadcrumbList={[
                 { title: 'Danh mục' },
                 {
-                    title: 'Danh mục phòng học',
+                    title: 'Danh mục tòa nhà',
                     href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
                 },
                 { title: 'Danh sách phòng học' },

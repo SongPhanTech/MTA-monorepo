@@ -167,7 +167,7 @@ const PutCouncilMember = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="role" label="Vai trò">
+                <FormItem form={form} name="role" label="Vai trò" required>
                     <Select
                         placeholder="Chọn trạng thái"
                         options={councilRoleOptions?.map((item) => ({
