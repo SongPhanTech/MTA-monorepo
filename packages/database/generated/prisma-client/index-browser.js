@@ -621,6 +621,7 @@ exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   classRegisterSessionId: 'classRegisterSessionId',
+  subjectClassId: 'subjectClassId',
   studentId: 'studentId',
   status: 'status',
   reason: 'reason'
@@ -3995,6 +3996,7 @@ exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   classRegisterSessionId: 'classRegisterSessionId',
+  subjectClassId: 'subjectClassId',
   studentId: 'studentId',
   reason: 'reason'
 };

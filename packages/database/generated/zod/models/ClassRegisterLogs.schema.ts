@@ -22,11 +22,13 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     classRegisterSession: z.record(z.unknown()),
+    subjectClass: z.record(z.unknown()),
     student: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
     classRegisterSessionId: z.string(),
+    subjectClassId: z.string(),
     studentId: z.string(),
 }
 );

@@ -265,7 +265,7 @@ app.openapi(importHeQuanSu, async (c) => {
                 })),
             })
 
-            const fixedClass = await prisma.fixedClass.findMany({
+            const fixedClass = await tx.fixedClass.findMany({
                 where: {
                     OR: data.students.map(({ fixedClass, curriculum }) => ({
                         name: fixedClass,
