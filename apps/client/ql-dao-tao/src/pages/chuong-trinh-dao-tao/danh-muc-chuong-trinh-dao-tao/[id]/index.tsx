@@ -1,7 +1,6 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutTrainingBlockOnCurriculumVersion, PutTrainingBlockSubject } from '@components/modal'
 import ImportCurriculumVersionModal from '@components/modal/import-ctdt'
 import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
@@ -292,13 +291,13 @@ export default function TrainingProgramSubjects() {
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
     }>({
-        tag: PutTrainingBlockSubject.name,
+        tag: 'PutTrainingBlockSubject',
     })
 
     const { onOpen: onOpenTrainingBlock, onClose: onCloseTrainingBlock } = useDisclosure<{
         curriculumVersionId: string
     }>({
-        tag: PutTrainingBlockOnCurriculumVersion.name,
+        tag: 'PutTrainingBlockOnCurriculumVersion',
         onClose: () => {
             refetch()
         },

@@ -11,7 +11,7 @@ export default function CacNuocCuDiHocTapModal() {
     const [form] = Form.useForm<DM_NuocCuDiHocTap>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_NuocCuDiHocTap>>({
-        tag: CacNuocCuDiHocTapModal.name,
+        tag: 'CacNuocCuDiHocTapModal',
         onClose: form.resetFields,
     })
 

@@ -4,7 +4,6 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import NoExamBank from '@components/icons/icon-no-exambank'
 import ViewIcon from '@components/icons/view'
-import { ModalPrintAllExams, ModalSinhDeThiTuDong, PutExamBank } from '@components/modal'
 import { ModalExamBank } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -46,7 +45,7 @@ export default function ExamBank({ id }: ExamBankProps) {
         examId: string
         id: string
     }>({
-        tag: PutExamBank.name,
+        tag: 'PutExamBank',
     })
 
     const { onOpen: onOpenModalPrintAllExams } = useDisclosure<{
@@ -61,7 +60,7 @@ export default function ExamBank({ id }: ExamBankProps) {
         }[]
         explanation: boolean
     }>({
-        tag: ModalPrintAllExams.name,
+        tag: 'ModalPrintAllExams',
     })
 
     const openExamBankModal = (examBankId: string, questionBankId: string, examCode: string) => {
@@ -152,7 +151,7 @@ export default function ExamBank({ id }: ExamBankProps) {
     }
 
     const { onOpen: onOpenModalSinhDeThiTuDong } = useDisclosure<string>({
-        tag: ModalSinhDeThiTuDong.name,
+        tag: 'ModalSinhDeThiTuDong',
         onClose: () => {
             refetch()
             refetchCount()

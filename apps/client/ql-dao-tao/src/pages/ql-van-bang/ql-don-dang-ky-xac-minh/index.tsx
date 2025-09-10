@@ -1,6 +1,5 @@
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
-import { ModalTraCuuVanBang, PutStatusQLTraCuuVanBang } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useDiplomaVerificationStatusOptions } from '@hooks/diplomaVerificationStatus'
@@ -165,11 +164,11 @@ export default function QLDONDANGKY() {
     const { onOpen: onOpenModalTraCuuVanBang } = useDisclosure<{
         data: DiplomaVerificationApplication
     }>({
-        tag: ModalTraCuuVanBang.name,
+        tag: 'ModalTraCuuVanBang',
     })
 
     const { onOpen: onOpenPutStatusQLTraCuuVanBang } = useDisclosure<string>({
-        tag: PutStatusQLTraCuuVanBang.name,
+        tag: 'PutStatusQLTraCuuVanBang',
     })
 
     return (

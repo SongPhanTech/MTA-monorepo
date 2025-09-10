@@ -76,7 +76,7 @@ const PutSurveyExamModal = () => {
     ])
 
     const { isOpen, onClose, input } = useDisclosure<{ id: string; surveyTopicId: string }>({
-        tag: PutSurveyExamModal.name,
+        tag: 'PutSurveyExamModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -155,6 +155,10 @@ const PutSurveyExamModal = () => {
         if (!output) return
         if (choices?.length <= 0) {
             message.error('Bạn phải thêm lựa chọn của đáp án')
+            return
+        }
+        if (output?.surveyQuestion?.length <= 0) {
+            message.error('Bạn phải thêm câu hỏi cho đợt khảo sát')
             return
         }
         console.log('output', output, choices)

@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutTrinhDoLyLuanChinhTriModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-ly-luan-chinh-tri'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -23,7 +22,7 @@ export default function TrinhDoLyLuanChinhTriForm({ expland, setExpland }: DomPr
             onSave: (val: TrinhDoLyLuanChinhTri) => void
         }
     >({
-        tag: PutTrinhDoLyLuanChinhTriModal.name,
+        tag: 'PutTrinhDoLyLuanChinhTriModal',
     })
 
     const { data: chinhTriData = [] } = useFindManyDM_TrinhDoLyLuanChinhTri(

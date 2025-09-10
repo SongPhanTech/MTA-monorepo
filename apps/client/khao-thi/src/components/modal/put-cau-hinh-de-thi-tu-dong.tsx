@@ -23,7 +23,7 @@ const PutTestStructureRule = () => {
         examId: string
         subjectVersionId: string
     }>({
-        tag: PutTestStructureRule.name,
+        tag: 'PutTestStructureRule',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

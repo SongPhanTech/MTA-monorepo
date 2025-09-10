@@ -2,7 +2,6 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSupervisorPaymentRecord, PutUpdatePaymentStatus } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
@@ -103,14 +102,14 @@ export default function SupervisorPaymentRecordPage() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen: openPaymentRecord } = useDisclosure<{ paymentRecordId: string }>({
-        tag: PutSupervisorPaymentRecord.name,
+        tag: 'PutSupervisorPaymentRecord',
     })
 
     const { onOpen: openUpdatePaymentStatus, isOpen } = useDisclosure<{
         paymentRecordIds: string[]
         isSupervisor: boolean
     }>({
-        tag: PutUpdatePaymentStatus.name,
+        tag: 'PutUpdatePaymentStatus',
     })
 
     useEffect(() => {

@@ -34,6 +34,8 @@ export * from './SubjectVersion.schema';
 export * from './EquivalencyGroup.schema';
 export * from './SubjectInGroup.schema';
 export * from './TrainingBlockSubject.schema';
+export * from './ClassRegisterSession.schema';
+export * from './ClassRegisterLogs.schema';
 export * from './SubjectClass.schema';
 export * from './ClassSchedule.schema';
 export * from './TrainingObjectType.schema';

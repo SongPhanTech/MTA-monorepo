@@ -19,7 +19,7 @@ const PutCauHoi = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutCauHoi.name,
+        tag: 'PutCauHoi',
     })
     const { mutateAsync: create } = useCreateFAQ()
     const { mutateAsync: update } = useUpdateFAQ()

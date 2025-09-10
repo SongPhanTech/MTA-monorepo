@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutTrinhDoQuanLyNhaNuocModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-nha-nuoc'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -29,7 +28,7 @@ export default function TrinhDoQuanLyNhaNuocForm({ expland, setExpland }: DomPro
             onSave: (val: TrinhDoQuanLyNhaNuoc) => void
         }
     >({
-        tag: PutTrinhDoQuanLyNhaNuocModal.name,
+        tag: 'PutTrinhDoQuanLyNhaNuocModal',
     })
 
     const handleSave = (data: TrinhDoQuanLyNhaNuoc) => {

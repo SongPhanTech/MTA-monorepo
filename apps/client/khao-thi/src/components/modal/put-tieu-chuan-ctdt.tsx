@@ -15,7 +15,7 @@ export type PutStandardCatalogType = StandardCatalog
 const PutStandardCatalog = () => {
     const [form] = Form.useForm<PutStandardCatalogType>()
     const { isOpen, onClose, input } = useDisclosure<{ id: string; count: number }>({
-        tag: PutStandardCatalog.name,
+        tag: 'PutStandardCatalog',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

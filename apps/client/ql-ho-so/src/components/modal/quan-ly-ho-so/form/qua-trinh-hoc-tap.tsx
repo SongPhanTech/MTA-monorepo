@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutQuaTrinhHocTapModal from '@components/modal/quan-ly-ho-so/modals/put-qua-trinh-hoc-tap'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -27,7 +26,7 @@ export default function QuaTrinhHocTapForm({ expland, setExpland }: DomProps) {
             onSave: (val: QuaTrinhHocTap) => void
         }
     >({
-        tag: PutQuaTrinhHocTapModal.name,
+        tag: 'PutQuaTrinhHocTapModal',
     })
 
     const { data: truongList = [] } = useFindManyDM_TruongDaoTaoBacDH()

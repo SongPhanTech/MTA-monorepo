@@ -14,7 +14,7 @@ export default function ChuyenNganhDaoTaoModal() {
     const [form] = Form.useForm<DM_ChuyenNganhDaoTaoBacDH>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_ChuyenNganhDaoTaoBacDH>>({
-        tag: ChuyenNganhDaoTaoModal.name,
+        tag: 'ChuyenNganhDaoTaoModal',
         onClose: form.resetFields,
     })
 

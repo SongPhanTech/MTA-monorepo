@@ -2,7 +2,6 @@ import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutCloneConvertScore, PutConvertScore } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -128,11 +127,11 @@ export default function TrainingFieldPage() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: PutConvertScore.name,
+        tag: 'PutConvertScore',
     })
 
     const { onOpen: onOpenCopy } = useDisclosure<{ record: TrainingCourse }>({
-        tag: PutCloneConvertScore.name,
+        tag: 'PutCloneConvertScore',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

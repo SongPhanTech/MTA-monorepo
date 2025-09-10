@@ -15,7 +15,7 @@ export default function PutToChucXaHoiModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<ToChucXaHoi> & { onSave: (val: ToChucXaHoi) => void }
     >({
-        tag: PutToChucXaHoiModal.name,
+        tag: 'PutToChucXaHoiModal',
         onClose: () => {
             form.resetFields()
         },

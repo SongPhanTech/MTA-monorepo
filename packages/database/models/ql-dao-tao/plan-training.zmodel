@@ -154,6 +154,7 @@ model Semester extends Base {
   academicWarning         AcademicWarning[]
   disciplinaryWarning     DisciplinaryWarning[]
   studentAcademicDecision StudentAcademicDecision[]
+  classRegisterSession    ClassRegisterSession[]
 
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
@@ -206,6 +207,7 @@ model TrainingCourse extends Base {
   academicActionConfig   AcademicActionConfig[]
   notifications          Notification[]  // Thông báo cho khoá
   surveyObjectTypes      SurveyObjectType[]
+  classRegisterSession   ClassRegisterSession[]
   @@schema("ql-dao-tao")
 }
 /// lớp niên chế
@@ -469,6 +471,40 @@ model TrainingBlockSubject extends Base {
   @@schema("ql-dao-tao")
 }
 
+model ClassRegisterSession extends Base {
+  name              String
+  startDate         DateTime
+  endDate           DateTime
+  semester          Semester            @relation(fields: [semesterId], references: [id])
+  semesterId        String
+
+  trainingCourses   TrainingCourse[]
+  classRegisterLogs ClassRegisterLogs[]
+  @@schema("ql-dao-tao")
+}
+
+enum ClassRegisterStatus {
+  PENDING
+  CANCELLED
+  SUCCESS
+  FAILED
+
+  @@schema("ql-dao-tao")
+}
+
+model ClassRegisterLogs extends Base {
+  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String
+  subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
+  subjectClassId         String
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+  status                 ClassRegisterStatus  @default(PENDING)
+  reason                 String?
+
+  @@schema("ql-dao-tao")
+}
+
 enum SubjectClassSchedule {
   MORNING
   AFTERNOON
@@ -476,7 +512,6 @@ enum SubjectClassSchedule {
 
   @@schema("ql-dao-tao")
 }
-
 
 // Enum cho loại tiết học
 enum PeriodType {
@@ -545,7 +580,9 @@ model SubjectClass extends Base {
   thesisProjects             ThesisProject[] // DS đồ án
   expertProfile              ExpertProfile[] // DS chuyên gia hướng dẫn -> tạo hội đồng tự động
   defenseRooms               Room[]                @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
+
   surveyObjectTypes          SurveyObjectType[]
+  classRegisterLogs          ClassRegisterLogs[]
 
   @@schema("ql-dao-tao")
 }

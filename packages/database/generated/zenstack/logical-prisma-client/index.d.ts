@@ -325,6 +325,26 @@ export type SubjectInGroup = $Result.DefaultSelection<Prisma.$SubjectInGroupPayl
  */
 export type TrainingBlockSubject = $Result.DefaultSelection<Prisma.$TrainingBlockSubjectPayload>;
 /**
+ * Model ClassRegisterSession
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ClassRegisterSession = $Result.DefaultSelection<Prisma.$ClassRegisterSessionPayload>;
+/**
+ * Model ClassRegisterLogs
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ClassRegisterLogs = $Result.DefaultSelection<Prisma.$ClassRegisterLogsPayload>;
+/**
  * Model SubjectClass
  * Lớp môn học
  * @
@@ -2296,6 +2316,7 @@ export type ExamType = $Enums.ExamType;
 export type SubjectVersionType = $Enums.SubjectVersionType;
 export type EquivalencySide = $Enums.EquivalencySide;
 export type SubjectRequirementType = $Enums.SubjectRequirementType;
+export type ClassRegisterStatus = $Enums.ClassRegisterStatus;
 export type SubjectClassSchedule = $Enums.SubjectClassSchedule;
 export type PeriodType = $Enums.PeriodType;
 export type TrainingObjectTypes = $Enums.TrainingObjectTypes;
@@ -2631,6 +2652,24 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get trainingBlockSubject(): Prisma.TrainingBlockSubjectDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.classRegisterSession`: Exposes CRUD operations for the **ClassRegisterSession** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ClassRegisterSessions
+     * const classRegisterSessions = await prisma.classRegisterSession.findMany()
+     * ```
+     */
+    get classRegisterSession(): Prisma.ClassRegisterSessionDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.classRegisterLogs`: Exposes CRUD operations for the **ClassRegisterLogs** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ClassRegisterLogs
+     * const classRegisterLogs = await prisma.classRegisterLogs.findMany()
+     * ```
+     */
+    get classRegisterLogs(): Prisma.ClassRegisterLogsDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.subjectClass`: Exposes CRUD operations for the **SubjectClass** model.
      * Example usage:
@@ -4425,6 +4464,7 @@ export const ExamType: typeof $Enums.ExamType;
 export const SubjectVersionType: typeof $Enums.SubjectVersionType;
 export const EquivalencySide: typeof $Enums.EquivalencySide;
 export const SubjectRequirementType: typeof $Enums.SubjectRequirementType;
+export const ClassRegisterStatus: typeof $Enums.ClassRegisterStatus;
 export const SubjectClassSchedule: typeof $Enums.SubjectClassSchedule;
 export const PeriodType: typeof $Enums.PeriodType;
 export const TrainingObjectTypes: typeof $Enums.TrainingObjectTypes;
@@ -4536,6 +4576,13 @@ export namespace $Enums {
         Optional: 'Optional'
     };
     export type SubjectRequirementType = (typeof SubjectRequirementType)[keyof typeof SubjectRequirementType];
+    export const ClassRegisterStatus: {
+        PENDING: 'PENDING',
+        CANCELLED: 'CANCELLED',
+        SUCCESS: 'SUCCESS',
+        FAILED: 'FAILED'
+    };
+    export type ClassRegisterStatus = (typeof ClassRegisterStatus)[keyof typeof ClassRegisterStatus];
     export const SubjectClassSchedule: {
         MORNING: 'MORNING',
         AFTERNOON: 'AFTERNOON',
@@ -5045,6 +5092,8 @@ export namespace Prisma {
         EquivalencyGroup: 'EquivalencyGroup',
         SubjectInGroup: 'SubjectInGroup',
         TrainingBlockSubject: 'TrainingBlockSubject',
+        ClassRegisterSession: 'ClassRegisterSession',
+        ClassRegisterLogs: 'ClassRegisterLogs',
         SubjectClass: 'SubjectClass',
         ClassSchedule: 'ClassSchedule',
         TrainingObjectType: 'TrainingObjectType',
@@ -5693,6 +5742,32 @@ export namespace Prisma {
         graduation: 'graduation',
         project: 'project',
         print: 'print'
+    };
+    export const ClassRegisterSessionScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        name: 'name',
+        startDate: 'startDate',
+        endDate: 'endDate',
+        semesterId: 'semesterId'
+    };
+    export const ClassRegisterLogsScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        classRegisterSessionId: 'classRegisterSessionId',
+        studentId: 'studentId',
+        status: 'status',
+        reason: 'reason'
     };
     export const SubjectClassScalarFieldEnum: {
         id: 'id',
@@ -8828,6 +8903,21 @@ export namespace Prisma {
         description: 'description',
         subjectId: 'subjectId',
         trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId'
+    };
+    export const ClassRegisterSessionOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        name: 'name',
+        semesterId: 'semesterId'
+    };
+    export const ClassRegisterLogsOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        classRegisterSessionId: 'classRegisterSessionId',
+        studentId: 'studentId',
+        reason: 'reason'
     };
     export const SubjectClassOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -17860,6 +17950,7 @@ export namespace Prisma {
         academicWarning<T extends Semester$academicWarningArgs<ExtArgs> = {}>(args?: Subset<T, Semester$academicWarningArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AcademicWarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         disciplinaryWarning<T extends Semester$disciplinaryWarningArgs<ExtArgs> = {}>(args?: Subset<T, Semester$disciplinaryWarningArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DisciplinaryWarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentAcademicDecision<T extends Semester$studentAcademicDecisionArgs<ExtArgs> = {}>(args?: Subset<T, Semester$studentAcademicDecisionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentAcademicDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        classRegisterSession<T extends Semester$classRegisterSessionArgs<ExtArgs> = {}>(args?: Subset<T, Semester$classRegisterSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18639,6 +18730,7 @@ export namespace Prisma {
         academicActionConfig<T extends TrainingCourse$academicActionConfigArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$academicActionConfigArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AcademicActionConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         notifications<T extends TrainingCourse$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveyObjectTypes<T extends TrainingCourse$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        classRegisterSession<T extends TrainingCourse$classRegisterSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$classRegisterSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21837,6 +21929,775 @@ export namespace Prisma {
         readonly graduation: FieldRef<"TrainingBlockSubject", 'Boolean'>;
         readonly project: FieldRef<"TrainingBlockSubject", 'Boolean'>;
         readonly print: FieldRef<"TrainingBlockSubject", 'Boolean'>;
+    }
+
+    export interface ClassRegisterSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassRegisterSession'], meta: { name: 'ClassRegisterSession' } };
+        /**
+         * Fields of the ClassRegisterSession model
+         */
+        readonly fields: ClassRegisterSessionFieldRefs;
+        /**
+         * Find zero or one ClassRegisterSession that matches the filter.
+         * @param {ClassRegisterSessionFindUniqueArgs} args - Arguments to find a ClassRegisterSession
+         * @example
+         * // Get one ClassRegisterSession
+         * const classRegisterSession = await prisma.classRegisterSession.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ClassRegisterSessionFindUniqueArgs>(args: SelectSubset<T, ClassRegisterSessionFindUniqueArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ClassRegisterSession that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ClassRegisterSessionFindUniqueOrThrowArgs} args - Arguments to find a ClassRegisterSession
+         * @example
+         * // Get one ClassRegisterSession
+         * const classRegisterSession = await prisma.classRegisterSession.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ClassRegisterSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassRegisterSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterSession that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionFindFirstArgs} args - Arguments to find a ClassRegisterSession
+         * @example
+         * // Get one ClassRegisterSession
+         * const classRegisterSession = await prisma.classRegisterSession.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ClassRegisterSessionFindFirstArgs>(args?: SelectSubset<T, ClassRegisterSessionFindFirstArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterSession that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionFindFirstOrThrowArgs} args - Arguments to find a ClassRegisterSession
+         * @example
+         * // Get one ClassRegisterSession
+         * const classRegisterSession = await prisma.classRegisterSession.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ClassRegisterSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassRegisterSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ClassRegisterSessions that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ClassRegisterSessions
+         * const classRegisterSessions = await prisma.classRegisterSession.findMany()
+         *
+         * // Get first 10 ClassRegisterSessions
+         * const classRegisterSessions = await prisma.classRegisterSession.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const classRegisterSessionWithIdOnly = await prisma.classRegisterSession.findMany({ select: { id: true } })
+         */
+        findMany<T extends ClassRegisterSessionFindManyArgs>(args?: SelectSubset<T, ClassRegisterSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ClassRegisterSession.
+         * @param {ClassRegisterSessionCreateArgs} args - Arguments to create a ClassRegisterSession.
+         * @example
+         * // Create one ClassRegisterSession
+         * const ClassRegisterSession = await prisma.classRegisterSession.create({
+         *   data: {
+         *     // ... data to create a ClassRegisterSession
+         *   }
+         * })
+         */
+        create<T extends ClassRegisterSessionCreateArgs>(args: SelectSubset<T, ClassRegisterSessionCreateArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ClassRegisterSessions.
+         * @param {ClassRegisterSessionCreateManyArgs} args - Arguments to create many ClassRegisterSessions.
+         * @example
+         * // Create many ClassRegisterSessions
+         * const classRegisterSession = await prisma.classRegisterSession.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ClassRegisterSessionCreateManyArgs>(args?: SelectSubset<T, ClassRegisterSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ClassRegisterSessions and returns the data saved in the database.
+         * @param {ClassRegisterSessionCreateManyAndReturnArgs} args - Arguments to create many ClassRegisterSessions.
+         * @example
+         * // Create many ClassRegisterSessions
+         * const classRegisterSession = await prisma.classRegisterSession.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ClassRegisterSessions and only return the `id`
+         * const classRegisterSessionWithIdOnly = await prisma.classRegisterSession.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ClassRegisterSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassRegisterSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ClassRegisterSession.
+         * @param {ClassRegisterSessionDeleteArgs} args - Arguments to delete one ClassRegisterSession.
+         * @example
+         * // Delete one ClassRegisterSession
+         * const ClassRegisterSession = await prisma.classRegisterSession.delete({
+         *   where: {
+         *     // ... filter to delete one ClassRegisterSession
+         *   }
+         * })
+         */
+        delete<T extends ClassRegisterSessionDeleteArgs>(args: SelectSubset<T, ClassRegisterSessionDeleteArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ClassRegisterSession.
+         * @param {ClassRegisterSessionUpdateArgs} args - Arguments to update one ClassRegisterSession.
+         * @example
+         * // Update one ClassRegisterSession
+         * const classRegisterSession = await prisma.classRegisterSession.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ClassRegisterSessionUpdateArgs>(args: SelectSubset<T, ClassRegisterSessionUpdateArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ClassRegisterSessions.
+         * @param {ClassRegisterSessionDeleteManyArgs} args - Arguments to filter ClassRegisterSessions to delete.
+         * @example
+         * // Delete a few ClassRegisterSessions
+         * const { count } = await prisma.classRegisterSession.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ClassRegisterSessionDeleteManyArgs>(args?: SelectSubset<T, ClassRegisterSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterSessions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ClassRegisterSessions
+         * const classRegisterSession = await prisma.classRegisterSession.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ClassRegisterSessionUpdateManyArgs>(args: SelectSubset<T, ClassRegisterSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterSessions and returns the data updated in the database.
+         * @param {ClassRegisterSessionUpdateManyAndReturnArgs} args - Arguments to update many ClassRegisterSessions.
+         * @example
+         * // Update many ClassRegisterSessions
+         * const classRegisterSession = await prisma.classRegisterSession.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ClassRegisterSessions and only return the `id`
+         * const classRegisterSessionWithIdOnly = await prisma.classRegisterSession.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ClassRegisterSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassRegisterSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ClassRegisterSession.
+         * @param {ClassRegisterSessionUpsertArgs} args - Arguments to update or create a ClassRegisterSession.
+         * @example
+         * // Update or create a ClassRegisterSession
+         * const classRegisterSession = await prisma.classRegisterSession.upsert({
+         *   create: {
+         *     // ... data to create a ClassRegisterSession
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ClassRegisterSession we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ClassRegisterSessionUpsertArgs>(args: SelectSubset<T, ClassRegisterSessionUpsertArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ClassRegisterSessions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCountArgs} args - Arguments to filter ClassRegisterSessions to count.
+         * @example
+         * // Count the number of ClassRegisterSessions
+         * const count = await prisma.classRegisterSession.count({
+         *   where: {
+         *     // ... the filter for the ClassRegisterSessions we want to count
+         *   }
+         * })
+         */
+        count<T extends ClassRegisterSessionCountArgs>(args?: Subset<T, ClassRegisterSessionCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ClassRegisterSessionCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ClassRegisterSession.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ClassRegisterSessionAggregateArgs>(args: Subset<T, ClassRegisterSessionAggregateArgs>): Prisma.PrismaPromise<GetClassRegisterSessionAggregateType<T>>;
+        /**
+         * Group by ClassRegisterSession.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ClassRegisterSessionGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassRegisterSessionGroupByArgs['orderBy'] }
+        : { orderBy?: ClassRegisterSessionGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ClassRegisterSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassRegisterSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ClassRegisterSession.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ClassRegisterSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        semester<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        trainingCourses<T extends ClassRegisterSession$trainingCoursesArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$trainingCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        classRegisterLogs<T extends ClassRegisterSession$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ClassRegisterSession model
+     */
+    interface ClassRegisterSessionFieldRefs {
+        readonly id: FieldRef<"ClassRegisterSession", 'String'>;
+        readonly code: FieldRef<"ClassRegisterSession", 'String'>;
+        readonly active: FieldRef<"ClassRegisterSession", 'Boolean'>;
+        readonly description: FieldRef<"ClassRegisterSession", 'String'>;
+        readonly deletedAt: FieldRef<"ClassRegisterSession", 'DateTime'>;
+        readonly createdAt: FieldRef<"ClassRegisterSession", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ClassRegisterSession", 'DateTime'>;
+        readonly name: FieldRef<"ClassRegisterSession", 'String'>;
+        readonly startDate: FieldRef<"ClassRegisterSession", 'DateTime'>;
+        readonly endDate: FieldRef<"ClassRegisterSession", 'DateTime'>;
+        readonly semesterId: FieldRef<"ClassRegisterSession", 'String'>;
+    }
+
+    export interface ClassRegisterLogsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassRegisterLogs'], meta: { name: 'ClassRegisterLogs' } };
+        /**
+         * Fields of the ClassRegisterLogs model
+         */
+        readonly fields: ClassRegisterLogsFieldRefs;
+        /**
+         * Find zero or one ClassRegisterLogs that matches the filter.
+         * @param {ClassRegisterLogsFindUniqueArgs} args - Arguments to find a ClassRegisterLogs
+         * @example
+         * // Get one ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ClassRegisterLogsFindUniqueArgs>(args: SelectSubset<T, ClassRegisterLogsFindUniqueArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ClassRegisterLogs that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ClassRegisterLogsFindUniqueOrThrowArgs} args - Arguments to find a ClassRegisterLogs
+         * @example
+         * // Get one ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ClassRegisterLogsFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassRegisterLogsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterLogs that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterLogsFindFirstArgs} args - Arguments to find a ClassRegisterLogs
+         * @example
+         * // Get one ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ClassRegisterLogsFindFirstArgs>(args?: SelectSubset<T, ClassRegisterLogsFindFirstArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterLogs that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterLogsFindFirstOrThrowArgs} args - Arguments to find a ClassRegisterLogs
+         * @example
+         * // Get one ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ClassRegisterLogsFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassRegisterLogsFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ClassRegisterLogs that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterLogsFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.findMany()
+         *
+         * // Get first 10 ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const classRegisterLogsWithIdOnly = await prisma.classRegisterLogs.findMany({ select: { id: true } })
+         */
+        findMany<T extends ClassRegisterLogsFindManyArgs>(args?: SelectSubset<T, ClassRegisterLogsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ClassRegisterLogs.
+         * @param {ClassRegisterLogsCreateArgs} args - Arguments to create a ClassRegisterLogs.
+         * @example
+         * // Create one ClassRegisterLogs
+         * const ClassRegisterLogs = await prisma.classRegisterLogs.create({
+         *   data: {
+         *     // ... data to create a ClassRegisterLogs
+         *   }
+         * })
+         */
+        create<T extends ClassRegisterLogsCreateArgs>(args: SelectSubset<T, ClassRegisterLogsCreateArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ClassRegisterLogs.
+         * @param {ClassRegisterLogsCreateManyArgs} args - Arguments to create many ClassRegisterLogs.
+         * @example
+         * // Create many ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ClassRegisterLogsCreateManyArgs>(args?: SelectSubset<T, ClassRegisterLogsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ClassRegisterLogs and returns the data saved in the database.
+         * @param {ClassRegisterLogsCreateManyAndReturnArgs} args - Arguments to create many ClassRegisterLogs.
+         * @example
+         * // Create many ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ClassRegisterLogs and only return the `id`
+         * const classRegisterLogsWithIdOnly = await prisma.classRegisterLogs.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ClassRegisterLogsCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassRegisterLogsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ClassRegisterLogs.
+         * @param {ClassRegisterLogsDeleteArgs} args - Arguments to delete one ClassRegisterLogs.
+         * @example
+         * // Delete one ClassRegisterLogs
+         * const ClassRegisterLogs = await prisma.classRegisterLogs.delete({
+         *   where: {
+         *     // ... filter to delete one ClassRegisterLogs
+         *   }
+         * })
+         */
+        delete<T extends ClassRegisterLogsDeleteArgs>(args: SelectSubset<T, ClassRegisterLogsDeleteArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ClassRegisterLogs.
+         * @param {ClassRegisterLogsUpdateArgs} args - Arguments to update one ClassRegisterLogs.
+         * @example
+         * // Update one ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ClassRegisterLogsUpdateArgs>(args: SelectSubset<T, ClassRegisterLogsUpdateArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ClassRegisterLogs.
+         * @param {ClassRegisterLogsDeleteManyArgs} args - Arguments to filter ClassRegisterLogs to delete.
+         * @example
+         * // Delete a few ClassRegisterLogs
+         * const { count } = await prisma.classRegisterLogs.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ClassRegisterLogsDeleteManyArgs>(args?: SelectSubset<T, ClassRegisterLogsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterLogs.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterLogsUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ClassRegisterLogsUpdateManyArgs>(args: SelectSubset<T, ClassRegisterLogsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterLogs and returns the data updated in the database.
+         * @param {ClassRegisterLogsUpdateManyAndReturnArgs} args - Arguments to update many ClassRegisterLogs.
+         * @example
+         * // Update many ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ClassRegisterLogs and only return the `id`
+         * const classRegisterLogsWithIdOnly = await prisma.classRegisterLogs.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ClassRegisterLogsUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassRegisterLogsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ClassRegisterLogs.
+         * @param {ClassRegisterLogsUpsertArgs} args - Arguments to update or create a ClassRegisterLogs.
+         * @example
+         * // Update or create a ClassRegisterLogs
+         * const classRegisterLogs = await prisma.classRegisterLogs.upsert({
+         *   create: {
+         *     // ... data to create a ClassRegisterLogs
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ClassRegisterLogs we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ClassRegisterLogsUpsertArgs>(args: SelectSubset<T, ClassRegisterLogsUpsertArgs<ExtArgs>>): Prisma__ClassRegisterLogsClient<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ClassRegisterLogs.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterLogsCountArgs} args - Arguments to filter ClassRegisterLogs to count.
+         * @example
+         * // Count the number of ClassRegisterLogs
+         * const count = await prisma.classRegisterLogs.count({
+         *   where: {
+         *     // ... the filter for the ClassRegisterLogs we want to count
+         *   }
+         * })
+         */
+        count<T extends ClassRegisterLogsCountArgs>(args?: Subset<T, ClassRegisterLogsCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ClassRegisterLogsCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ClassRegisterLogs.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterLogsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ClassRegisterLogsAggregateArgs>(args: Subset<T, ClassRegisterLogsAggregateArgs>): Prisma.PrismaPromise<GetClassRegisterLogsAggregateType<T>>;
+        /**
+         * Group by ClassRegisterLogs.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterLogsGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ClassRegisterLogsGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassRegisterLogsGroupByArgs['orderBy'] }
+        : { orderBy?: ClassRegisterLogsGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ClassRegisterLogsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassRegisterLogsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ClassRegisterLogs.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ClassRegisterLogsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        classRegisterSession<T extends ClassRegisterSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSessionDefaultArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ClassRegisterLogs model
+     */
+    interface ClassRegisterLogsFieldRefs {
+        readonly id: FieldRef<"ClassRegisterLogs", 'String'>;
+        readonly code: FieldRef<"ClassRegisterLogs", 'String'>;
+        readonly active: FieldRef<"ClassRegisterLogs", 'Boolean'>;
+        readonly description: FieldRef<"ClassRegisterLogs", 'String'>;
+        readonly deletedAt: FieldRef<"ClassRegisterLogs", 'DateTime'>;
+        readonly createdAt: FieldRef<"ClassRegisterLogs", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ClassRegisterLogs", 'DateTime'>;
+        readonly classRegisterSessionId: FieldRef<"ClassRegisterLogs", 'String'>;
+        readonly studentId: FieldRef<"ClassRegisterLogs", 'String'>;
+        readonly status: FieldRef<"ClassRegisterLogs", 'ClassRegisterStatus'>;
+        readonly reason: FieldRef<"ClassRegisterLogs", 'String'>;
     }
 
     export interface SubjectClassDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -29921,6 +30782,7 @@ export namespace Prisma {
         thesisRegistrations<T extends Student$thesisRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Student$thesisRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentThesisRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         examSession<T extends Student$examSessionArgs<ExtArgs> = {}>(args?: Subset<T, Student$examSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         diplomaVerificationApplication<T extends Student$diplomaVerificationApplicationArgs<ExtArgs> = {}>(args?: Subset<T, Student$diplomaVerificationApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        classRegisterLogs<T extends Student$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, Student$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         notes<T extends Student$notesArgs<ExtArgs> = {}>(args?: Subset<T, Student$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         noteFolders<T extends Student$noteFoldersArgs<ExtArgs> = {}>(args?: Subset<T, Student$noteFoldersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoteFolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
@@ -95235,7 +96097,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "subjectClass" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -97382,6 +98244,154 @@ export namespace Prisma {
                     count: {
                         args: Prisma.TrainingBlockSubjectCountArgs<ExtArgs>
                         result: $Utils.Optional<TrainingBlockSubjectCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ClassRegisterSession: {
+                payload: Prisma.$ClassRegisterSessionPayload<ExtArgs>
+                fields: Prisma.ClassRegisterSessionFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ClassRegisterSessionFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ClassRegisterSessionFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ClassRegisterSessionFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ClassRegisterSessionFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ClassRegisterSessionFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ClassRegisterSessionCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ClassRegisterSessionCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ClassRegisterSessionCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ClassRegisterSessionDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>
+                    }
+                    update: {
+                        args: Prisma.ClassRegisterSessionUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ClassRegisterSessionDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ClassRegisterSessionUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ClassRegisterSessionUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ClassRegisterSessionUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ClassRegisterSessionAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateClassRegisterSession>
+                    }
+                    groupBy: {
+                        args: Prisma.ClassRegisterSessionGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterSessionGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ClassRegisterSessionCountArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterSessionCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ClassRegisterLogs: {
+                payload: Prisma.$ClassRegisterLogsPayload<ExtArgs>
+                fields: Prisma.ClassRegisterLogsFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ClassRegisterLogsFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ClassRegisterLogsFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ClassRegisterLogsFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ClassRegisterLogsFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ClassRegisterLogsFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ClassRegisterLogsCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ClassRegisterLogsCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ClassRegisterLogsCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ClassRegisterLogsDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>
+                    }
+                    update: {
+                        args: Prisma.ClassRegisterLogsUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ClassRegisterLogsDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ClassRegisterLogsUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ClassRegisterLogsUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ClassRegisterLogsUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterLogsPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ClassRegisterLogsAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateClassRegisterLogs>
+                    }
+                    groupBy: {
+                        args: Prisma.ClassRegisterLogsGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterLogsGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ClassRegisterLogsCountArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterLogsCountAggregateOutputType> | number
                     }
                 }
             }
@@ -111431,6 +112441,8 @@ export namespace Prisma {
         equivalencyGroup?: EquivalencyGroupOmit
         subjectInGroup?: SubjectInGroupOmit
         trainingBlockSubject?: TrainingBlockSubjectOmit
+        classRegisterSession?: ClassRegisterSessionOmit
+        classRegisterLogs?: ClassRegisterLogsOmit
         subjectClass?: SubjectClassOmit
         classSchedule?: ClassScheduleOmit
         trainingObjectType?: TrainingObjectTypeOmit
@@ -112094,6 +113106,7 @@ export namespace Prisma {
         academicWarning: number
         disciplinaryWarning: number
         studentAcademicDecision: number
+        classRegisterSession: number
     };
     export type SemesterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClasses?: boolean | SemesterCountOutputTypeCountSubjectClassesArgs
@@ -112104,6 +113117,7 @@ export namespace Prisma {
         academicWarning?: boolean | SemesterCountOutputTypeCountAcademicWarningArgs
         disciplinaryWarning?: boolean | SemesterCountOutputTypeCountDisciplinaryWarningArgs
         studentAcademicDecision?: boolean | SemesterCountOutputTypeCountStudentAcademicDecisionArgs
+        classRegisterSession?: boolean | SemesterCountOutputTypeCountClassRegisterSessionArgs
     };
     /**
      * SemesterCountOutputType without action
@@ -112163,6 +113177,12 @@ export namespace Prisma {
         where?: StudentAcademicDecisionWhereInput
     };
     /**
+     * SemesterCountOutputType without action
+     */
+    export type SemesterCountOutputTypeCountClassRegisterSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterSessionWhereInput
+    };
+    /**
      * Count Type TrainingCourseCountOutputType
      */
     export type TrainingCourseCountOutputType = {
@@ -112174,6 +113194,7 @@ export namespace Prisma {
         academicActionConfig: number
         notifications: number
         surveyObjectTypes: number
+        classRegisterSession: number
     };
     export type TrainingCourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         fixedClass?: boolean | TrainingCourseCountOutputTypeCountFixedClassArgs
@@ -112184,6 +113205,7 @@ export namespace Prisma {
         academicActionConfig?: boolean | TrainingCourseCountOutputTypeCountAcademicActionConfigArgs
         notifications?: boolean | TrainingCourseCountOutputTypeCountNotificationsArgs
         surveyObjectTypes?: boolean | TrainingCourseCountOutputTypeCountSurveyObjectTypesArgs
+        classRegisterSession?: boolean | TrainingCourseCountOutputTypeCountClassRegisterSessionArgs
     };
     /**
      * TrainingCourseCountOutputType without action
@@ -112241,6 +113263,12 @@ export namespace Prisma {
      */
     export type TrainingCourseCountOutputTypeCountSurveyObjectTypesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SurveyObjectTypeWhereInput
+    };
+    /**
+     * TrainingCourseCountOutputType without action
+     */
+    export type TrainingCourseCountOutputTypeCountClassRegisterSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterSessionWhereInput
     };
     /**
      * Count Type FixedClassCountOutputType
@@ -112521,6 +113549,38 @@ export namespace Prisma {
      */
     export type EquivalencyGroupCountOutputTypeCountSubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SubjectInGroupWhereInput
+    };
+    /**
+     * Count Type ClassRegisterSessionCountOutputType
+     */
+    export type ClassRegisterSessionCountOutputType = {
+        trainingCourses: number
+        classRegisterLogs: number
+    };
+    export type ClassRegisterSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingCourses?: boolean | ClassRegisterSessionCountOutputTypeCountTrainingCoursesArgs
+        classRegisterLogs?: boolean | ClassRegisterSessionCountOutputTypeCountClassRegisterLogsArgs
+    };
+    /**
+     * ClassRegisterSessionCountOutputType without action
+     */
+    export type ClassRegisterSessionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCountOutputType
+         */
+        select?: ClassRegisterSessionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterSessionCountOutputType without action
+     */
+    export type ClassRegisterSessionCountOutputTypeCountTrainingCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: TrainingCourseWhereInput
+    };
+    /**
+     * ClassRegisterSessionCountOutputType without action
+     */
+    export type ClassRegisterSessionCountOutputTypeCountClassRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterLogsWhereInput
     };
     /**
      * Count Type SubjectClassCountOutputType
@@ -113102,6 +114162,7 @@ export namespace Prisma {
         thesisRegistrations: number
         examSession: number
         diplomaVerificationApplication: number
+        classRegisterLogs: number
         notes: number
         noteFolders: number
     };
@@ -113122,6 +114183,7 @@ export namespace Prisma {
         thesisRegistrations?: boolean | StudentCountOutputTypeCountThesisRegistrationsArgs
         examSession?: boolean | StudentCountOutputTypeCountExamSessionArgs
         diplomaVerificationApplication?: boolean | StudentCountOutputTypeCountDiplomaVerificationApplicationArgs
+        classRegisterLogs?: boolean | StudentCountOutputTypeCountClassRegisterLogsArgs
         notes?: boolean | StudentCountOutputTypeCountNotesArgs
         noteFolders?: boolean | StudentCountOutputTypeCountNoteFoldersArgs
     };
@@ -113229,6 +114291,12 @@ export namespace Prisma {
      */
     export type StudentCountOutputTypeCountDiplomaVerificationApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: DiplomaVerificationApplicationWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountClassRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterLogsWhereInput
     };
     /**
      * StudentCountOutputType without action
@@ -129825,6 +130893,7 @@ export namespace Prisma {
         academicWarning?: boolean | Semester$academicWarningArgs<ExtArgs>
         disciplinaryWarning?: boolean | Semester$disciplinaryWarningArgs<ExtArgs>
         studentAcademicDecision?: boolean | Semester$studentAcademicDecisionArgs<ExtArgs>
+        classRegisterSession?: boolean | Semester$classRegisterSessionArgs<ExtArgs>
         _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["semester"]>;
     export type SemesterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -129885,6 +130954,7 @@ export namespace Prisma {
         academicWarning?: boolean | Semester$academicWarningArgs<ExtArgs>
         disciplinaryWarning?: boolean | Semester$disciplinaryWarningArgs<ExtArgs>
         studentAcademicDecision?: boolean | Semester$studentAcademicDecisionArgs<ExtArgs>
+        classRegisterSession?: boolean | Semester$classRegisterSessionArgs<ExtArgs>
         _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SemesterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -129905,6 +130975,7 @@ export namespace Prisma {
             academicWarning: Prisma.$AcademicWarningPayload<ExtArgs>[]
             disciplinaryWarning: Prisma.$DisciplinaryWarningPayload<ExtArgs>[]
             studentAcademicDecision: Prisma.$StudentAcademicDecisionPayload<ExtArgs>[]
+            classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -130487,6 +131558,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentAcademicDecisionScalarFieldEnum | StudentAcademicDecisionScalarFieldEnum[]
+    };
+    /**
+     * Semester.classRegisterSession
+     */
+    export type Semester$classRegisterSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        where?: ClassRegisterSessionWhereInput
+        orderBy?: ClassRegisterSessionOrderByWithRelationInput | ClassRegisterSessionOrderByWithRelationInput[]
+        cursor?: ClassRegisterSessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassRegisterSessionScalarFieldEnum | ClassRegisterSessionScalarFieldEnum[]
     };
     /**
      * Semester without action
@@ -131606,6 +132700,7 @@ export namespace Prisma {
         academicActionConfig?: boolean | TrainingCourse$academicActionConfigArgs<ExtArgs>
         notifications?: boolean | TrainingCourse$notificationsArgs<ExtArgs>
         surveyObjectTypes?: boolean | TrainingCourse$surveyObjectTypesArgs<ExtArgs>
+        classRegisterSession?: boolean | TrainingCourse$classRegisterSessionArgs<ExtArgs>
         _count?: boolean | TrainingCourseCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingCourse"]>;
     export type TrainingCourseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -131702,6 +132797,7 @@ export namespace Prisma {
         academicActionConfig?: boolean | TrainingCourse$academicActionConfigArgs<ExtArgs>
         notifications?: boolean | TrainingCourse$notificationsArgs<ExtArgs>
         surveyObjectTypes?: boolean | TrainingCourse$surveyObjectTypesArgs<ExtArgs>
+        classRegisterSession?: boolean | TrainingCourse$classRegisterSessionArgs<ExtArgs>
         _count?: boolean | TrainingCourseCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingCourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -131725,6 +132821,7 @@ export namespace Prisma {
             academicActionConfig: Prisma.$AcademicActionConfigPayload<ExtArgs>[]
             notifications: Prisma.$NotificationPayload<ExtArgs>[]
             surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
+            classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -132318,6 +133415,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: SurveyObjectTypeScalarFieldEnum | SurveyObjectTypeScalarFieldEnum[]
+    };
+    /**
+     * TrainingCourse.classRegisterSession
+     */
+    export type TrainingCourse$classRegisterSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        where?: ClassRegisterSessionWhereInput
+        orderBy?: ClassRegisterSessionOrderByWithRelationInput | ClassRegisterSessionOrderByWithRelationInput[]
+        cursor?: ClassRegisterSessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassRegisterSessionScalarFieldEnum | ClassRegisterSessionScalarFieldEnum[]
     };
     /**
      * TrainingCourse without action
@@ -139271,6 +140391,1397 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: TrainingBlockSubjectInclude<ExtArgs> | null
+    };
+    /**
+     * Model ClassRegisterSession
+     */
+    export type AggregateClassRegisterSession = {
+        _count: ClassRegisterSessionCountAggregateOutputType | null
+        _min: ClassRegisterSessionMinAggregateOutputType | null
+        _max: ClassRegisterSessionMaxAggregateOutputType | null
+    };
+    export type ClassRegisterSessionMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        startDate: Date | null
+        endDate: Date | null
+        semesterId: string | null
+    };
+    export type ClassRegisterSessionMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        startDate: Date | null
+        endDate: Date | null
+        semesterId: string | null
+    };
+    export type ClassRegisterSessionCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        name: number
+        startDate: number
+        endDate: number
+        semesterId: number
+        _all: number
+    };
+    export type ClassRegisterSessionMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        startDate?: true
+        endDate?: true
+        semesterId?: true
+    };
+    export type ClassRegisterSessionMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        startDate?: true
+        endDate?: true
+        semesterId?: true
+    };
+    export type ClassRegisterSessionCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        startDate?: true
+        endDate?: true
+        semesterId?: true
+        _all?: true
+    };
+    export type ClassRegisterSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterSession to aggregate.
+         */
+        where?: ClassRegisterSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessions to fetch.
+         */
+        orderBy?: ClassRegisterSessionOrderByWithRelationInput | ClassRegisterSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ClassRegisterSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ClassRegisterSessions
+        **/
+        _count?: true | ClassRegisterSessionCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ClassRegisterSessionMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ClassRegisterSessionMaxAggregateInputType
+    };
+    export type GetClassRegisterSessionAggregateType<T extends ClassRegisterSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateClassRegisterSession]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClassRegisterSession[P]>
+        : GetScalarType<T[P], AggregateClassRegisterSession[P]>
+    };
+    export type ClassRegisterSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterSessionWhereInput
+        orderBy?: ClassRegisterSessionOrderByWithAggregationInput | ClassRegisterSessionOrderByWithAggregationInput[]
+        by: ClassRegisterSessionScalarFieldEnum[] | ClassRegisterSessionScalarFieldEnum
+        having?: ClassRegisterSessionScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ClassRegisterSessionCountAggregateInputType | true
+        _min?: ClassRegisterSessionMinAggregateInputType
+        _max?: ClassRegisterSessionMaxAggregateInputType
+    };
+    export type ClassRegisterSessionGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        name: string
+        startDate: Date
+        endDate: Date
+        semesterId: string
+        _count: ClassRegisterSessionCountAggregateOutputType | null
+        _min: ClassRegisterSessionMinAggregateOutputType | null
+        _max: ClassRegisterSessionMaxAggregateOutputType | null
+    };
+    type GetClassRegisterSessionGroupByPayload<T extends ClassRegisterSessionGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ClassRegisterSessionGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ClassRegisterSessionGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ClassRegisterSessionGroupByOutputType[P]>
+                : GetScalarType<T[P], ClassRegisterSessionGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ClassRegisterSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        semesterId?: boolean
+        semester?: boolean | SemesterDefaultArgs<ExtArgs>
+        trainingCourses?: boolean | ClassRegisterSession$trainingCoursesArgs<ExtArgs>
+        classRegisterLogs?: boolean | ClassRegisterSession$classRegisterLogsArgs<ExtArgs>
+        _count?: boolean | ClassRegisterSessionCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterSession"]>;
+    export type ClassRegisterSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        semesterId?: boolean
+        semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterSession"]>;
+    export type ClassRegisterSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        semesterId?: boolean
+        semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterSession"]>;
+    export type ClassRegisterSessionSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        semesterId?: boolean
+    };
+    export type ClassRegisterSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "startDate" | "endDate" | "semesterId", ExtArgs["result"]["classRegisterSession"]>;
+    export type ClassRegisterSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        semester?: boolean | SemesterDefaultArgs<ExtArgs>
+        trainingCourses?: boolean | ClassRegisterSession$trainingCoursesArgs<ExtArgs>
+        classRegisterLogs?: boolean | ClassRegisterSession$classRegisterLogsArgs<ExtArgs>
+        _count?: boolean | ClassRegisterSessionCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type ClassRegisterSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    };
+    export type ClassRegisterSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        semester?: boolean | SemesterDefaultArgs<ExtArgs>
+    };
+    export type $ClassRegisterSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ClassRegisterSession"
+        objects: {
+            semester: Prisma.$SemesterPayload<ExtArgs>
+            trainingCourses: Prisma.$TrainingCoursePayload<ExtArgs>[]
+            classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            name: string
+            startDate: Date
+            endDate: Date
+            semesterId: string
+        }, ExtArgs["result"]["classRegisterSession"]>
+        composites: {}
+    };
+    type ClassRegisterSessionGetPayload<S extends boolean | null | undefined | ClassRegisterSessionDefaultArgs> = $Result.GetResult<Prisma.$ClassRegisterSessionPayload, S>;
+    type ClassRegisterSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ClassRegisterSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ClassRegisterSessionCountAggregateInputType | true
+    };
+    /**
+     * ClassRegisterSession findUnique
+     */
+    export type ClassRegisterSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSession to fetch.
+         */
+        where: ClassRegisterSessionWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSession findUniqueOrThrow
+     */
+    export type ClassRegisterSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSession to fetch.
+         */
+        where: ClassRegisterSessionWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSession findFirst
+     */
+    export type ClassRegisterSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSession to fetch.
+         */
+        where?: ClassRegisterSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessions to fetch.
+         */
+        orderBy?: ClassRegisterSessionOrderByWithRelationInput | ClassRegisterSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterSessions.
+         */
+        cursor?: ClassRegisterSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterSessions.
+         */
+        distinct?: ClassRegisterSessionScalarFieldEnum | ClassRegisterSessionScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSession findFirstOrThrow
+     */
+    export type ClassRegisterSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSession to fetch.
+         */
+        where?: ClassRegisterSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessions to fetch.
+         */
+        orderBy?: ClassRegisterSessionOrderByWithRelationInput | ClassRegisterSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterSessions.
+         */
+        cursor?: ClassRegisterSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterSessions.
+         */
+        distinct?: ClassRegisterSessionScalarFieldEnum | ClassRegisterSessionScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSession findMany
+     */
+    export type ClassRegisterSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSessions to fetch.
+         */
+        where?: ClassRegisterSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessions to fetch.
+         */
+        orderBy?: ClassRegisterSessionOrderByWithRelationInput | ClassRegisterSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ClassRegisterSessions.
+         */
+        cursor?: ClassRegisterSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessions.
+         */
+        skip?: number
+        distinct?: ClassRegisterSessionScalarFieldEnum | ClassRegisterSessionScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSession create
+     */
+    export type ClassRegisterSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ClassRegisterSession.
+         */
+        data: XOR<ClassRegisterSessionCreateInput, ClassRegisterSessionUncheckedCreateInput>
+    };
+    /**
+     * ClassRegisterSession createMany
+     */
+    export type ClassRegisterSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ClassRegisterSessions.
+         */
+        data: ClassRegisterSessionCreateManyInput | ClassRegisterSessionCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ClassRegisterSession createManyAndReturn
+     */
+    export type ClassRegisterSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * The data used to create many ClassRegisterSessions.
+         */
+        data: ClassRegisterSessionCreateManyInput | ClassRegisterSessionCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterSession update
+     */
+    export type ClassRegisterSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ClassRegisterSession.
+         */
+        data: XOR<ClassRegisterSessionUpdateInput, ClassRegisterSessionUncheckedUpdateInput>
+        /**
+         * Choose, which ClassRegisterSession to update.
+         */
+        where: ClassRegisterSessionWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSession updateMany
+     */
+    export type ClassRegisterSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ClassRegisterSessions.
+         */
+        data: XOR<ClassRegisterSessionUpdateManyMutationInput, ClassRegisterSessionUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterSessions to update
+         */
+        where?: ClassRegisterSessionWhereInput
+        /**
+         * Limit how many ClassRegisterSessions to update.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterSession updateManyAndReturn
+     */
+    export type ClassRegisterSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * The data used to update ClassRegisterSessions.
+         */
+        data: XOR<ClassRegisterSessionUpdateManyMutationInput, ClassRegisterSessionUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterSessions to update
+         */
+        where?: ClassRegisterSessionWhereInput
+        /**
+         * Limit how many ClassRegisterSessions to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterSession upsert
+     */
+    export type ClassRegisterSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ClassRegisterSession to update in case it exists.
+         */
+        where: ClassRegisterSessionWhereUniqueInput
+        /**
+         * In case the ClassRegisterSession found by the `where` argument doesn't exist, create a new ClassRegisterSession with this data.
+         */
+        create: XOR<ClassRegisterSessionCreateInput, ClassRegisterSessionUncheckedCreateInput>
+        /**
+         * In case the ClassRegisterSession was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ClassRegisterSessionUpdateInput, ClassRegisterSessionUncheckedUpdateInput>
+    };
+    /**
+     * ClassRegisterSession delete
+     */
+    export type ClassRegisterSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+        /**
+         * Filter which ClassRegisterSession to delete.
+         */
+        where: ClassRegisterSessionWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSession deleteMany
+     */
+    export type ClassRegisterSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterSessions to delete
+         */
+        where?: ClassRegisterSessionWhereInput
+        /**
+         * Limit how many ClassRegisterSessions to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterSession.trainingCourses
+     */
+    export type ClassRegisterSession$trainingCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingCourse
+         */
+        select?: TrainingCourseSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingCourse
+         */
+        omit?: TrainingCourseOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingCourseInclude<ExtArgs> | null
+        where?: TrainingCourseWhereInput
+        orderBy?: TrainingCourseOrderByWithRelationInput | TrainingCourseOrderByWithRelationInput[]
+        cursor?: TrainingCourseWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: TrainingCourseScalarFieldEnum | TrainingCourseScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSession.classRegisterLogs
+     */
+    export type ClassRegisterSession$classRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        where?: ClassRegisterLogsWhereInput
+        orderBy?: ClassRegisterLogsOrderByWithRelationInput | ClassRegisterLogsOrderByWithRelationInput[]
+        cursor?: ClassRegisterLogsWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSession without action
+     */
+    export type ClassRegisterSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSession
+         */
+        select?: ClassRegisterSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSession
+         */
+        omit?: ClassRegisterSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionInclude<ExtArgs> | null
+    };
+    /**
+     * Model ClassRegisterLogs
+     */
+    export type AggregateClassRegisterLogs = {
+        _count: ClassRegisterLogsCountAggregateOutputType | null
+        _min: ClassRegisterLogsMinAggregateOutputType | null
+        _max: ClassRegisterLogsMaxAggregateOutputType | null
+    };
+    export type ClassRegisterLogsMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        classRegisterSessionId: string | null
+        studentId: string | null
+        status: $Enums.ClassRegisterStatus | null
+        reason: string | null
+    };
+    export type ClassRegisterLogsMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        classRegisterSessionId: string | null
+        studentId: string | null
+        status: $Enums.ClassRegisterStatus | null
+        reason: string | null
+    };
+    export type ClassRegisterLogsCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        classRegisterSessionId: number
+        studentId: number
+        status: number
+        reason: number
+        _all: number
+    };
+    export type ClassRegisterLogsMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        classRegisterSessionId?: true
+        studentId?: true
+        status?: true
+        reason?: true
+    };
+    export type ClassRegisterLogsMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        classRegisterSessionId?: true
+        studentId?: true
+        status?: true
+        reason?: true
+    };
+    export type ClassRegisterLogsCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        classRegisterSessionId?: true
+        studentId?: true
+        status?: true
+        reason?: true
+        _all?: true
+    };
+    export type ClassRegisterLogsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterLogs to aggregate.
+         */
+        where?: ClassRegisterLogsWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterLogs to fetch.
+         */
+        orderBy?: ClassRegisterLogsOrderByWithRelationInput | ClassRegisterLogsOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ClassRegisterLogsWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterLogs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterLogs.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ClassRegisterLogs
+        **/
+        _count?: true | ClassRegisterLogsCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ClassRegisterLogsMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ClassRegisterLogsMaxAggregateInputType
+    };
+    export type GetClassRegisterLogsAggregateType<T extends ClassRegisterLogsAggregateArgs> = {
+        [P in keyof T & keyof AggregateClassRegisterLogs]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClassRegisterLogs[P]>
+        : GetScalarType<T[P], AggregateClassRegisterLogs[P]>
+    };
+    export type ClassRegisterLogsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterLogsWhereInput
+        orderBy?: ClassRegisterLogsOrderByWithAggregationInput | ClassRegisterLogsOrderByWithAggregationInput[]
+        by: ClassRegisterLogsScalarFieldEnum[] | ClassRegisterLogsScalarFieldEnum
+        having?: ClassRegisterLogsScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ClassRegisterLogsCountAggregateInputType | true
+        _min?: ClassRegisterLogsMinAggregateInputType
+        _max?: ClassRegisterLogsMaxAggregateInputType
+    };
+    export type ClassRegisterLogsGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        classRegisterSessionId: string
+        studentId: string
+        status: $Enums.ClassRegisterStatus
+        reason: string | null
+        _count: ClassRegisterLogsCountAggregateOutputType | null
+        _min: ClassRegisterLogsMinAggregateOutputType | null
+        _max: ClassRegisterLogsMaxAggregateOutputType | null
+    };
+    type GetClassRegisterLogsGroupByPayload<T extends ClassRegisterLogsGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ClassRegisterLogsGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ClassRegisterLogsGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ClassRegisterLogsGroupByOutputType[P]>
+                : GetScalarType<T[P], ClassRegisterLogsGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ClassRegisterLogsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        status?: boolean
+        reason?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterLogs"]>;
+    export type ClassRegisterLogsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        status?: boolean
+        reason?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterLogs"]>;
+    export type ClassRegisterLogsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        status?: boolean
+        reason?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterLogs"]>;
+    export type ClassRegisterLogsSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        studentId?: boolean
+        status?: boolean
+        reason?: boolean
+    };
+    export type ClassRegisterLogsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "classRegisterSessionId" | "studentId" | "status" | "reason", ExtArgs["result"]["classRegisterLogs"]>;
+    export type ClassRegisterLogsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type ClassRegisterLogsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type ClassRegisterLogsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type $ClassRegisterLogsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ClassRegisterLogs"
+        objects: {
+            classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>
+            student: Prisma.$StudentPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            classRegisterSessionId: string
+            studentId: string
+            status: $Enums.ClassRegisterStatus
+            reason: string | null
+        }, ExtArgs["result"]["classRegisterLogs"]>
+        composites: {}
+    };
+    type ClassRegisterLogsGetPayload<S extends boolean | null | undefined | ClassRegisterLogsDefaultArgs> = $Result.GetResult<Prisma.$ClassRegisterLogsPayload, S>;
+    type ClassRegisterLogsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ClassRegisterLogsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ClassRegisterLogsCountAggregateInputType | true
+    };
+    /**
+     * ClassRegisterLogs findUnique
+     */
+    export type ClassRegisterLogsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterLogs to fetch.
+         */
+        where: ClassRegisterLogsWhereUniqueInput
+    };
+    /**
+     * ClassRegisterLogs findUniqueOrThrow
+     */
+    export type ClassRegisterLogsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterLogs to fetch.
+         */
+        where: ClassRegisterLogsWhereUniqueInput
+    };
+    /**
+     * ClassRegisterLogs findFirst
+     */
+    export type ClassRegisterLogsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterLogs to fetch.
+         */
+        where?: ClassRegisterLogsWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterLogs to fetch.
+         */
+        orderBy?: ClassRegisterLogsOrderByWithRelationInput | ClassRegisterLogsOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterLogs.
+         */
+        cursor?: ClassRegisterLogsWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterLogs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterLogs.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterLogs.
+         */
+        distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterLogs findFirstOrThrow
+     */
+    export type ClassRegisterLogsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterLogs to fetch.
+         */
+        where?: ClassRegisterLogsWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterLogs to fetch.
+         */
+        orderBy?: ClassRegisterLogsOrderByWithRelationInput | ClassRegisterLogsOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterLogs.
+         */
+        cursor?: ClassRegisterLogsWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterLogs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterLogs.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterLogs.
+         */
+        distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterLogs findMany
+     */
+    export type ClassRegisterLogsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterLogs to fetch.
+         */
+        where?: ClassRegisterLogsWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterLogs to fetch.
+         */
+        orderBy?: ClassRegisterLogsOrderByWithRelationInput | ClassRegisterLogsOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ClassRegisterLogs.
+         */
+        cursor?: ClassRegisterLogsWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterLogs from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterLogs.
+         */
+        skip?: number
+        distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterLogs create
+     */
+    export type ClassRegisterLogsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ClassRegisterLogs.
+         */
+        data: XOR<ClassRegisterLogsCreateInput, ClassRegisterLogsUncheckedCreateInput>
+    };
+    /**
+     * ClassRegisterLogs createMany
+     */
+    export type ClassRegisterLogsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ClassRegisterLogs.
+         */
+        data: ClassRegisterLogsCreateManyInput | ClassRegisterLogsCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ClassRegisterLogs createManyAndReturn
+     */
+    export type ClassRegisterLogsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * The data used to create many ClassRegisterLogs.
+         */
+        data: ClassRegisterLogsCreateManyInput | ClassRegisterLogsCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterLogs update
+     */
+    export type ClassRegisterLogsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ClassRegisterLogs.
+         */
+        data: XOR<ClassRegisterLogsUpdateInput, ClassRegisterLogsUncheckedUpdateInput>
+        /**
+         * Choose, which ClassRegisterLogs to update.
+         */
+        where: ClassRegisterLogsWhereUniqueInput
+    };
+    /**
+     * ClassRegisterLogs updateMany
+     */
+    export type ClassRegisterLogsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ClassRegisterLogs.
+         */
+        data: XOR<ClassRegisterLogsUpdateManyMutationInput, ClassRegisterLogsUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterLogs to update
+         */
+        where?: ClassRegisterLogsWhereInput
+        /**
+         * Limit how many ClassRegisterLogs to update.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterLogs updateManyAndReturn
+     */
+    export type ClassRegisterLogsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * The data used to update ClassRegisterLogs.
+         */
+        data: XOR<ClassRegisterLogsUpdateManyMutationInput, ClassRegisterLogsUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterLogs to update
+         */
+        where?: ClassRegisterLogsWhereInput
+        /**
+         * Limit how many ClassRegisterLogs to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterLogs upsert
+     */
+    export type ClassRegisterLogsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ClassRegisterLogs to update in case it exists.
+         */
+        where: ClassRegisterLogsWhereUniqueInput
+        /**
+         * In case the ClassRegisterLogs found by the `where` argument doesn't exist, create a new ClassRegisterLogs with this data.
+         */
+        create: XOR<ClassRegisterLogsCreateInput, ClassRegisterLogsUncheckedCreateInput>
+        /**
+         * In case the ClassRegisterLogs was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ClassRegisterLogsUpdateInput, ClassRegisterLogsUncheckedUpdateInput>
+    };
+    /**
+     * ClassRegisterLogs delete
+     */
+    export type ClassRegisterLogsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        /**
+         * Filter which ClassRegisterLogs to delete.
+         */
+        where: ClassRegisterLogsWhereUniqueInput
+    };
+    /**
+     * ClassRegisterLogs deleteMany
+     */
+    export type ClassRegisterLogsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterLogs to delete
+         */
+        where?: ClassRegisterLogsWhereInput
+        /**
+         * Limit how many ClassRegisterLogs to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterLogs without action
+     */
+    export type ClassRegisterLogsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
     };
     /**
      * Model SubjectClass
@@ -154511,6 +157022,7 @@ export namespace Prisma {
         thesisRegistrations?: boolean | Student$thesisRegistrationsArgs<ExtArgs>
         examSession?: boolean | Student$examSessionArgs<ExtArgs>
         diplomaVerificationApplication?: boolean | Student$diplomaVerificationApplicationArgs<ExtArgs>
+        classRegisterLogs?: boolean | Student$classRegisterLogsArgs<ExtArgs>
         notes?: boolean | Student$notesArgs<ExtArgs>
         noteFolders?: boolean | Student$noteFoldersArgs<ExtArgs>
         _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
@@ -154659,6 +157171,7 @@ export namespace Prisma {
         thesisRegistrations?: boolean | Student$thesisRegistrationsArgs<ExtArgs>
         examSession?: boolean | Student$examSessionArgs<ExtArgs>
         diplomaVerificationApplication?: boolean | Student$diplomaVerificationApplicationArgs<ExtArgs>
+        classRegisterLogs?: boolean | Student$classRegisterLogsArgs<ExtArgs>
         notes?: boolean | Student$notesArgs<ExtArgs>
         noteFolders?: boolean | Student$noteFoldersArgs<ExtArgs>
         _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
@@ -154719,6 +157232,7 @@ export namespace Prisma {
             thesisRegistrations: Prisma.$StudentThesisRegistrationPayload<ExtArgs>[]
             examSession: Prisma.$ExamSessionPayload<ExtArgs>[]
             diplomaVerificationApplication: Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>[]
+            classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
             notes: Prisma.$NotePayload<ExtArgs>[]
             noteFolders: Prisma.$NoteFolderPayload<ExtArgs>[]
         }
@@ -155702,6 +158216,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: DiplomaVerificationApplicationScalarFieldEnum | DiplomaVerificationApplicationScalarFieldEnum[]
+    };
+    /**
+     * Student.classRegisterLogs
+     */
+    export type Student$classRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterLogs
+         */
+        select?: ClassRegisterLogsSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterLogs
+         */
+        omit?: ClassRegisterLogsOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterLogsInclude<ExtArgs> | null
+        where?: ClassRegisterLogsWhereInput
+        orderBy?: ClassRegisterLogsOrderByWithRelationInput | ClassRegisterLogsOrderByWithRelationInput[]
+        cursor?: ClassRegisterLogsWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
     };
     /**
      * Student.notes
@@ -280714,6 +283251,8 @@ export namespace Prisma {
     export type EquivalencyGroupScalarFieldEnum = (typeof EquivalencyGroupScalarFieldEnum)[keyof typeof EquivalencyGroupScalarFieldEnum];
     export type SubjectInGroupScalarFieldEnum = (typeof SubjectInGroupScalarFieldEnum)[keyof typeof SubjectInGroupScalarFieldEnum];
     export type TrainingBlockSubjectScalarFieldEnum = (typeof TrainingBlockSubjectScalarFieldEnum)[keyof typeof TrainingBlockSubjectScalarFieldEnum];
+    export type ClassRegisterSessionScalarFieldEnum = (typeof ClassRegisterSessionScalarFieldEnum)[keyof typeof ClassRegisterSessionScalarFieldEnum];
+    export type ClassRegisterLogsScalarFieldEnum = (typeof ClassRegisterLogsScalarFieldEnum)[keyof typeof ClassRegisterLogsScalarFieldEnum];
     export type SubjectClassScalarFieldEnum = (typeof SubjectClassScalarFieldEnum)[keyof typeof SubjectClassScalarFieldEnum];
     export type ClassScheduleScalarFieldEnum = (typeof ClassScheduleScalarFieldEnum)[keyof typeof ClassScheduleScalarFieldEnum];
     export type TrainingObjectTypeScalarFieldEnum = (typeof TrainingObjectTypeScalarFieldEnum)[keyof typeof TrainingObjectTypeScalarFieldEnum];
@@ -280935,6 +283474,8 @@ export namespace Prisma {
     export type EquivalencyGroupOrderByRelevanceFieldEnum = (typeof EquivalencyGroupOrderByRelevanceFieldEnum)[keyof typeof EquivalencyGroupOrderByRelevanceFieldEnum];
     export type SubjectInGroupOrderByRelevanceFieldEnum = (typeof SubjectInGroupOrderByRelevanceFieldEnum)[keyof typeof SubjectInGroupOrderByRelevanceFieldEnum];
     export type TrainingBlockSubjectOrderByRelevanceFieldEnum = (typeof TrainingBlockSubjectOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockSubjectOrderByRelevanceFieldEnum];
+    export type ClassRegisterSessionOrderByRelevanceFieldEnum = (typeof ClassRegisterSessionOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterSessionOrderByRelevanceFieldEnum];
+    export type ClassRegisterLogsOrderByRelevanceFieldEnum = (typeof ClassRegisterLogsOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterLogsOrderByRelevanceFieldEnum];
     export type SubjectClassOrderByRelevanceFieldEnum = (typeof SubjectClassOrderByRelevanceFieldEnum)[keyof typeof SubjectClassOrderByRelevanceFieldEnum];
     export type ClassScheduleOrderByRelevanceFieldEnum = (typeof ClassScheduleOrderByRelevanceFieldEnum)[keyof typeof ClassScheduleOrderByRelevanceFieldEnum];
     export type TrainingObjectTypeOrderByRelevanceFieldEnum = (typeof TrainingObjectTypeOrderByRelevanceFieldEnum)[keyof typeof TrainingObjectTypeOrderByRelevanceFieldEnum];
@@ -281251,6 +283792,14 @@ export namespace Prisma {
      * Reference to a field of type 'SubjectRequirementType[]'
      */
     export type ListEnumSubjectRequirementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectRequirementType[]'>;
+    /**
+     * Reference to a field of type 'ClassRegisterStatus'
+     */
+    export type EnumClassRegisterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassRegisterStatus'>;
+    /**
+     * Reference to a field of type 'ClassRegisterStatus[]'
+     */
+    export type ListEnumClassRegisterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClassRegisterStatus[]'>;
     /**
      * Reference to a field of type 'SubjectClassSchedule'
      */
@@ -283217,6 +285766,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningListRelationFilter
         disciplinaryWarning?: DisciplinaryWarningListRelationFilter
         studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
+        classRegisterSession?: ClassRegisterSessionListRelationFilter
     };
     export type SemesterOrderByWithRelationInput = {
         id?: SortOrder
@@ -283241,6 +285791,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningOrderByRelationAggregateInput
         disciplinaryWarning?: DisciplinaryWarningOrderByRelationAggregateInput
         studentAcademicDecision?: StudentAcademicDecisionOrderByRelationAggregateInput
+        classRegisterSession?: ClassRegisterSessionOrderByRelationAggregateInput
         _relevance?: SemesterOrderByRelevanceInput
     };
     export type SemesterWhereUniqueInput = Prisma.AtLeast<{
@@ -283270,6 +285821,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningListRelationFilter
         disciplinaryWarning?: DisciplinaryWarningListRelationFilter
         studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
+        classRegisterSession?: ClassRegisterSessionListRelationFilter
     }, "id" | "code" | "schoolYearId_semesterType">;
     export type SemesterOrderByWithAggregationInput = {
         id?: SortOrder
@@ -283438,6 +285990,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigListRelationFilter
         notifications?: NotificationListRelationFilter
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+        classRegisterSession?: ClassRegisterSessionListRelationFilter
     };
     export type TrainingCourseOrderByWithRelationInput = {
         id?: SortOrder
@@ -283474,6 +286027,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigOrderByRelationAggregateInput
         notifications?: NotificationOrderByRelationAggregateInput
         surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
+        classRegisterSession?: ClassRegisterSessionOrderByRelationAggregateInput
         _relevance?: TrainingCourseOrderByRelevanceInput
     };
     export type TrainingCourseWhereUniqueInput = Prisma.AtLeast<{
@@ -283514,6 +286068,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigListRelationFilter
         notifications?: NotificationListRelationFilter
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+        classRegisterSession?: ClassRegisterSessionListRelationFilter
     }, "id" | "code">;
     export type TrainingCourseOrderByWithAggregationInput = {
         id?: SortOrder
@@ -284580,6 +287135,177 @@ export namespace Prisma {
         graduation?: BoolWithAggregatesFilter<"TrainingBlockSubject"> | boolean
         project?: BoolWithAggregatesFilter<"TrainingBlockSubject"> | boolean
         print?: BoolWithAggregatesFilter<"TrainingBlockSubject"> | boolean
+    };
+    export type ClassRegisterSessionWhereInput = {
+        AND?: ClassRegisterSessionWhereInput | ClassRegisterSessionWhereInput[]
+        OR?: ClassRegisterSessionWhereInput[]
+        NOT?: ClassRegisterSessionWhereInput | ClassRegisterSessionWhereInput[]
+        id?: StringFilter<"ClassRegisterSession"> | string
+        code?: StringNullableFilter<"ClassRegisterSession"> | string | null
+        active?: BoolFilter<"ClassRegisterSession"> | boolean
+        description?: StringNullableFilter<"ClassRegisterSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        name?: StringFilter<"ClassRegisterSession"> | string
+        startDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        endDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        semesterId?: StringFilter<"ClassRegisterSession"> | string
+        semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+        trainingCourses?: TrainingCourseListRelationFilter
+        classRegisterLogs?: ClassRegisterLogsListRelationFilter
+    };
+    export type ClassRegisterSessionOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        semesterId?: SortOrder
+        semester?: SemesterOrderByWithRelationInput
+        trainingCourses?: TrainingCourseOrderByRelationAggregateInput
+        classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
+        _relevance?: ClassRegisterSessionOrderByRelevanceInput
+    };
+    export type ClassRegisterSessionWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: ClassRegisterSessionWhereInput | ClassRegisterSessionWhereInput[]
+        OR?: ClassRegisterSessionWhereInput[]
+        NOT?: ClassRegisterSessionWhereInput | ClassRegisterSessionWhereInput[]
+        active?: BoolFilter<"ClassRegisterSession"> | boolean
+        description?: StringNullableFilter<"ClassRegisterSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        name?: StringFilter<"ClassRegisterSession"> | string
+        startDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        endDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        semesterId?: StringFilter<"ClassRegisterSession"> | string
+        semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+        trainingCourses?: TrainingCourseListRelationFilter
+        classRegisterLogs?: ClassRegisterLogsListRelationFilter
+    }, "id" | "code">;
+    export type ClassRegisterSessionOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        semesterId?: SortOrder
+        _count?: ClassRegisterSessionCountOrderByAggregateInput
+        _max?: ClassRegisterSessionMaxOrderByAggregateInput
+        _min?: ClassRegisterSessionMinOrderByAggregateInput
+    };
+    export type ClassRegisterSessionScalarWhereWithAggregatesInput = {
+        AND?: ClassRegisterSessionScalarWhereWithAggregatesInput | ClassRegisterSessionScalarWhereWithAggregatesInput[]
+        OR?: ClassRegisterSessionScalarWhereWithAggregatesInput[]
+        NOT?: ClassRegisterSessionScalarWhereWithAggregatesInput | ClassRegisterSessionScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ClassRegisterSession"> | string
+        code?: StringNullableWithAggregatesFilter<"ClassRegisterSession"> | string | null
+        active?: BoolWithAggregatesFilter<"ClassRegisterSession"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ClassRegisterSession"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ClassRegisterSession"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ClassRegisterSession"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ClassRegisterSession"> | Date | string
+        name?: StringWithAggregatesFilter<"ClassRegisterSession"> | string
+        startDate?: DateTimeWithAggregatesFilter<"ClassRegisterSession"> | Date | string
+        endDate?: DateTimeWithAggregatesFilter<"ClassRegisterSession"> | Date | string
+        semesterId?: StringWithAggregatesFilter<"ClassRegisterSession"> | string
+    };
+    export type ClassRegisterLogsWhereInput = {
+        AND?: ClassRegisterLogsWhereInput | ClassRegisterLogsWhereInput[]
+        OR?: ClassRegisterLogsWhereInput[]
+        NOT?: ClassRegisterLogsWhereInput | ClassRegisterLogsWhereInput[]
+        id?: StringFilter<"ClassRegisterLogs"> | string
+        code?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+        active?: BoolFilter<"ClassRegisterLogs"> | boolean
+        description?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterLogs"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
+        classRegisterSessionId?: StringFilter<"ClassRegisterLogs"> | string
+        studentId?: StringFilter<"ClassRegisterLogs"> | string
+        status?: EnumClassRegisterStatusFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
+        reason?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+        classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    };
+    export type ClassRegisterLogsOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        status?: SortOrder
+        reason?: SortOrderInput | SortOrder
+        classRegisterSession?: ClassRegisterSessionOrderByWithRelationInput
+        student?: StudentOrderByWithRelationInput
+        _relevance?: ClassRegisterLogsOrderByRelevanceInput
+    };
+    export type ClassRegisterLogsWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: ClassRegisterLogsWhereInput | ClassRegisterLogsWhereInput[]
+        OR?: ClassRegisterLogsWhereInput[]
+        NOT?: ClassRegisterLogsWhereInput | ClassRegisterLogsWhereInput[]
+        active?: BoolFilter<"ClassRegisterLogs"> | boolean
+        description?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterLogs"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
+        classRegisterSessionId?: StringFilter<"ClassRegisterLogs"> | string
+        studentId?: StringFilter<"ClassRegisterLogs"> | string
+        status?: EnumClassRegisterStatusFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
+        reason?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+        classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+    }, "id" | "code">;
+    export type ClassRegisterLogsOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        status?: SortOrder
+        reason?: SortOrderInput | SortOrder
+        _count?: ClassRegisterLogsCountOrderByAggregateInput
+        _max?: ClassRegisterLogsMaxOrderByAggregateInput
+        _min?: ClassRegisterLogsMinOrderByAggregateInput
+    };
+    export type ClassRegisterLogsScalarWhereWithAggregatesInput = {
+        AND?: ClassRegisterLogsScalarWhereWithAggregatesInput | ClassRegisterLogsScalarWhereWithAggregatesInput[]
+        OR?: ClassRegisterLogsScalarWhereWithAggregatesInput[]
+        NOT?: ClassRegisterLogsScalarWhereWithAggregatesInput | ClassRegisterLogsScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ClassRegisterLogs"> | string
+        code?: StringNullableWithAggregatesFilter<"ClassRegisterLogs"> | string | null
+        active?: BoolWithAggregatesFilter<"ClassRegisterLogs"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ClassRegisterLogs"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ClassRegisterLogs"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ClassRegisterLogs"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ClassRegisterLogs"> | Date | string
+        classRegisterSessionId?: StringWithAggregatesFilter<"ClassRegisterLogs"> | string
+        studentId?: StringWithAggregatesFilter<"ClassRegisterLogs"> | string
+        status?: EnumClassRegisterStatusWithAggregatesFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
+        reason?: StringNullableWithAggregatesFilter<"ClassRegisterLogs"> | string | null
     };
     export type SubjectClassWhereInput = {
         AND?: SubjectClassWhereInput | SubjectClassWhereInput[]
@@ -286450,6 +289176,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationListRelationFilter
         examSession?: ExamSessionListRelationFilter
         diplomaVerificationApplication?: DiplomaVerificationApplicationListRelationFilter
+        classRegisterLogs?: ClassRegisterLogsListRelationFilter
         notes?: NoteListRelationFilter
         noteFolders?: NoteFolderListRelationFilter
     };
@@ -286512,6 +289239,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationOrderByRelationAggregateInput
         examSession?: ExamSessionOrderByRelationAggregateInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationOrderByRelationAggregateInput
+        classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
         notes?: NoteOrderByRelationAggregateInput
         noteFolders?: NoteFolderOrderByRelationAggregateInput
         _relevance?: StudentOrderByRelevanceInput
@@ -286578,6 +289306,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationListRelationFilter
         examSession?: ExamSessionListRelationFilter
         diplomaVerificationApplication?: DiplomaVerificationApplicationListRelationFilter
+        classRegisterLogs?: ClassRegisterLogsListRelationFilter
         notes?: NoteListRelationFilter
         noteFolders?: NoteFolderListRelationFilter
     }, "id" | "code">;
@@ -304999,6 +307728,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateInput = {
         id?: string
@@ -305022,6 +307752,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -305045,6 +307776,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -305068,6 +307800,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterCreateManyInput = {
         id?: string
@@ -305250,6 +307983,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateInput = {
         id?: string
@@ -305284,6 +308018,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -305318,6 +308053,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -305352,6 +308088,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseCreateManyInput = {
         id?: string
@@ -306563,6 +309300,193 @@ export namespace Prisma {
         graduation?: BoolFieldUpdateOperationsInput | boolean
         project?: BoolFieldUpdateOperationsInput | boolean
         print?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type ClassRegisterSessionCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semesterId: string
+        trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semesterId: string
+    };
+    export type ClassRegisterSessionUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type ClassRegisterSessionUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ClassRegisterLogsCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+        classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutClassRegisterLogsInput
+        student: StudentCreateNestedOneWithoutClassRegisterLogsInput
+    };
+    export type ClassRegisterLogsUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classRegisterSessionId: string
+        studentId: string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+    };
+    export type ClassRegisterLogsUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+        student?: StudentUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+    };
+    export type ClassRegisterLogsUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ClassRegisterLogsCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classRegisterSessionId: string
+        studentId: string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+    };
+    export type ClassRegisterLogsUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ClassRegisterLogsUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SubjectClassCreateInput = {
         id?: string
@@ -308616,6 +311540,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -308669,6 +311594,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -308722,6 +311648,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -308775,6 +311702,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -329072,6 +332000,11 @@ export namespace Prisma {
         some?: DisciplinaryWarningWhereInput
         none?: DisciplinaryWarningWhereInput
     };
+    export type ClassRegisterSessionListRelationFilter = {
+        every?: ClassRegisterSessionWhereInput
+        some?: ClassRegisterSessionWhereInput
+        none?: ClassRegisterSessionWhereInput
+    };
     export type TrainingCourseOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -329088,6 +332021,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type DisciplinaryWarningOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ClassRegisterSessionOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SemesterOrderByRelevanceInput = {
@@ -330220,6 +333156,121 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumSubjectRequirementTypeFilter<$PrismaModel>
         _max?: NestedEnumSubjectRequirementTypeFilter<$PrismaModel>
+    };
+    export type ClassRegisterLogsListRelationFilter = {
+        every?: ClassRegisterLogsWhereInput
+        some?: ClassRegisterLogsWhereInput
+        none?: ClassRegisterLogsWhereInput
+    };
+    export type ClassRegisterLogsOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ClassRegisterSessionOrderByRelevanceInput = {
+        fields: ClassRegisterSessionOrderByRelevanceFieldEnum | ClassRegisterSessionOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ClassRegisterSessionCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        semesterId?: SortOrder
+    };
+    export type ClassRegisterSessionMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        semesterId?: SortOrder
+    };
+    export type ClassRegisterSessionMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        semesterId?: SortOrder
+    };
+    export type EnumClassRegisterStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterStatus | EnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterStatusFilter<$PrismaModel> | $Enums.ClassRegisterStatus
+    };
+    export type ClassRegisterSessionScalarRelationFilter = {
+        is?: ClassRegisterSessionWhereInput
+        isNot?: ClassRegisterSessionWhereInput
+    };
+    export type ClassRegisterLogsOrderByRelevanceInput = {
+        fields: ClassRegisterLogsOrderByRelevanceFieldEnum | ClassRegisterLogsOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ClassRegisterLogsCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        status?: SortOrder
+        reason?: SortOrder
+    };
+    export type ClassRegisterLogsMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        status?: SortOrder
+        reason?: SortOrder
+    };
+    export type ClassRegisterLogsMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        studentId?: SortOrder
+        status?: SortOrder
+        reason?: SortOrder
+    };
+    export type EnumClassRegisterStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterStatus | EnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterStatusWithAggregatesFilter<$PrismaModel> | $Enums.ClassRegisterStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
+        _max?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
     };
     export type EnumSubjectClassScheduleFilter<$PrismaModel = never> = {
         equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel>
@@ -343854,6 +346905,12 @@ export namespace Prisma {
         createMany?: StudentAcademicDecisionCreateManySemesterInputEnvelope
         connect?: StudentAcademicDecisionWhereUniqueInput | StudentAcademicDecisionWhereUniqueInput[]
     };
+    export type ClassRegisterSessionCreateNestedManyWithoutSemesterInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutSemesterInput, ClassRegisterSessionUncheckedCreateWithoutSemesterInput> | ClassRegisterSessionCreateWithoutSemesterInput[] | ClassRegisterSessionUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutSemesterInput | ClassRegisterSessionCreateOrConnectWithoutSemesterInput[]
+        createMany?: ClassRegisterSessionCreateManySemesterInputEnvelope
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+    };
     export type SubjectClassUncheckedCreateNestedManyWithoutSemesterInput = {
         create?: XOR<SubjectClassCreateWithoutSemesterInput, SubjectClassUncheckedCreateWithoutSemesterInput> | SubjectClassCreateWithoutSemesterInput[] | SubjectClassUncheckedCreateWithoutSemesterInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutSemesterInput | SubjectClassCreateOrConnectWithoutSemesterInput[]
@@ -343901,6 +346958,12 @@ export namespace Prisma {
         connectOrCreate?: StudentAcademicDecisionCreateOrConnectWithoutSemesterInput | StudentAcademicDecisionCreateOrConnectWithoutSemesterInput[]
         createMany?: StudentAcademicDecisionCreateManySemesterInputEnvelope
         connect?: StudentAcademicDecisionWhereUniqueInput | StudentAcademicDecisionWhereUniqueInput[]
+    };
+    export type ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutSemesterInput, ClassRegisterSessionUncheckedCreateWithoutSemesterInput> | ClassRegisterSessionCreateWithoutSemesterInput[] | ClassRegisterSessionUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutSemesterInput | ClassRegisterSessionCreateOrConnectWithoutSemesterInput[]
+        createMany?: ClassRegisterSessionCreateManySemesterInputEnvelope
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
     };
     export type NullableEnumSemesterTypeFieldUpdateOperationsInput = {
         set?: $Enums.SemesterType | null
@@ -344016,6 +347079,19 @@ export namespace Prisma {
         updateMany?: StudentAcademicDecisionUpdateManyWithWhereWithoutSemesterInput | StudentAcademicDecisionUpdateManyWithWhereWithoutSemesterInput[]
         deleteMany?: StudentAcademicDecisionScalarWhereInput | StudentAcademicDecisionScalarWhereInput[]
     };
+    export type ClassRegisterSessionUpdateManyWithoutSemesterNestedInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutSemesterInput, ClassRegisterSessionUncheckedCreateWithoutSemesterInput> | ClassRegisterSessionCreateWithoutSemesterInput[] | ClassRegisterSessionUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutSemesterInput | ClassRegisterSessionCreateOrConnectWithoutSemesterInput[]
+        upsert?: ClassRegisterSessionUpsertWithWhereUniqueWithoutSemesterInput | ClassRegisterSessionUpsertWithWhereUniqueWithoutSemesterInput[]
+        createMany?: ClassRegisterSessionCreateManySemesterInputEnvelope
+        set?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        disconnect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        delete?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        update?: ClassRegisterSessionUpdateWithWhereUniqueWithoutSemesterInput | ClassRegisterSessionUpdateWithWhereUniqueWithoutSemesterInput[]
+        updateMany?: ClassRegisterSessionUpdateManyWithWhereWithoutSemesterInput | ClassRegisterSessionUpdateManyWithWhereWithoutSemesterInput[]
+        deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
+    };
     export type SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput = {
         create?: XOR<SubjectClassCreateWithoutSemesterInput, SubjectClassUncheckedCreateWithoutSemesterInput> | SubjectClassCreateWithoutSemesterInput[] | SubjectClassUncheckedCreateWithoutSemesterInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutSemesterInput | SubjectClassCreateOrConnectWithoutSemesterInput[]
@@ -344120,6 +347196,19 @@ export namespace Prisma {
         updateMany?: StudentAcademicDecisionUpdateManyWithWhereWithoutSemesterInput | StudentAcademicDecisionUpdateManyWithWhereWithoutSemesterInput[]
         deleteMany?: StudentAcademicDecisionScalarWhereInput | StudentAcademicDecisionScalarWhereInput[]
     };
+    export type ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutSemesterInput, ClassRegisterSessionUncheckedCreateWithoutSemesterInput> | ClassRegisterSessionCreateWithoutSemesterInput[] | ClassRegisterSessionUncheckedCreateWithoutSemesterInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutSemesterInput | ClassRegisterSessionCreateOrConnectWithoutSemesterInput[]
+        upsert?: ClassRegisterSessionUpsertWithWhereUniqueWithoutSemesterInput | ClassRegisterSessionUpsertWithWhereUniqueWithoutSemesterInput[]
+        createMany?: ClassRegisterSessionCreateManySemesterInputEnvelope
+        set?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        disconnect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        delete?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        update?: ClassRegisterSessionUpdateWithWhereUniqueWithoutSemesterInput | ClassRegisterSessionUpdateWithWhereUniqueWithoutSemesterInput[]
+        updateMany?: ClassRegisterSessionUpdateManyWithWhereWithoutSemesterInput | ClassRegisterSessionUpdateManyWithWhereWithoutSemesterInput[]
+        deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
+    };
     export type SchoolYearCreateNestedOneWithoutMilestoneInput = {
         create?: XOR<SchoolYearCreateWithoutMilestoneInput, SchoolYearUncheckedCreateWithoutMilestoneInput>
         connectOrCreate?: SchoolYearCreateOrConnectWithoutMilestoneInput
@@ -344188,6 +347277,11 @@ export namespace Prisma {
         connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutTrainingCoursesInput | SurveyObjectTypeCreateOrConnectWithoutTrainingCoursesInput[]
         connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
     };
+    export type ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput> | ClassRegisterSessionCreateWithoutTrainingCoursesInput[] | ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput | ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput[]
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+    };
     export type FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput = {
         create?: XOR<FixedClassCreateWithoutTrainingCourseInput, FixedClassUncheckedCreateWithoutTrainingCourseInput> | FixedClassCreateWithoutTrainingCourseInput[] | FixedClassUncheckedCreateWithoutTrainingCourseInput[]
         connectOrCreate?: FixedClassCreateOrConnectWithoutTrainingCourseInput | FixedClassCreateOrConnectWithoutTrainingCourseInput[]
@@ -344233,6 +347327,11 @@ export namespace Prisma {
         create?: XOR<SurveyObjectTypeCreateWithoutTrainingCoursesInput, SurveyObjectTypeUncheckedCreateWithoutTrainingCoursesInput> | SurveyObjectTypeCreateWithoutTrainingCoursesInput[] | SurveyObjectTypeUncheckedCreateWithoutTrainingCoursesInput[]
         connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutTrainingCoursesInput | SurveyObjectTypeCreateOrConnectWithoutTrainingCoursesInput[]
         connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
+    };
+    export type ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput> | ClassRegisterSessionCreateWithoutTrainingCoursesInput[] | ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput | ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput[]
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
     };
     export type EnumAcademicRankingBaseTypeFieldUpdateOperationsInput = {
         set?: $Enums.AcademicRankingBaseType
@@ -344353,6 +347452,18 @@ export namespace Prisma {
         updateMany?: SurveyObjectTypeUpdateManyWithWhereWithoutTrainingCoursesInput | SurveyObjectTypeUpdateManyWithWhereWithoutTrainingCoursesInput[]
         deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
     };
+    export type ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput> | ClassRegisterSessionCreateWithoutTrainingCoursesInput[] | ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput | ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput[]
+        upsert?: ClassRegisterSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput | ClassRegisterSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput[]
+        set?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        disconnect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        delete?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        update?: ClassRegisterSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput | ClassRegisterSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput[]
+        updateMany?: ClassRegisterSessionUpdateManyWithWhereWithoutTrainingCoursesInput | ClassRegisterSessionUpdateManyWithWhereWithoutTrainingCoursesInput[]
+        deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
+    };
     export type FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
         create?: XOR<FixedClassCreateWithoutTrainingCourseInput, FixedClassUncheckedCreateWithoutTrainingCourseInput> | FixedClassCreateWithoutTrainingCourseInput[] | FixedClassUncheckedCreateWithoutTrainingCourseInput[]
         connectOrCreate?: FixedClassCreateOrConnectWithoutTrainingCourseInput | FixedClassCreateOrConnectWithoutTrainingCourseInput[]
@@ -344454,6 +347565,18 @@ export namespace Prisma {
         update?: SurveyObjectTypeUpdateWithWhereUniqueWithoutTrainingCoursesInput | SurveyObjectTypeUpdateWithWhereUniqueWithoutTrainingCoursesInput[]
         updateMany?: SurveyObjectTypeUpdateManyWithWhereWithoutTrainingCoursesInput | SurveyObjectTypeUpdateManyWithWhereWithoutTrainingCoursesInput[]
         deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
+    };
+    export type ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput> | ClassRegisterSessionCreateWithoutTrainingCoursesInput[] | ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput[]
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput | ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput[]
+        upsert?: ClassRegisterSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput | ClassRegisterSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput[]
+        set?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        disconnect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        delete?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+        update?: ClassRegisterSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput | ClassRegisterSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput[]
+        updateMany?: ClassRegisterSessionUpdateManyWithWhereWithoutTrainingCoursesInput | ClassRegisterSessionUpdateManyWithWhereWithoutTrainingCoursesInput[]
+        deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
     };
     export type StudentCreateNestedOneWithoutClassMonitorInput = {
         create?: XOR<StudentCreateWithoutClassMonitorInput, StudentUncheckedCreateWithoutClassMonitorInput>
@@ -345585,6 +348708,117 @@ export namespace Prisma {
         upsert?: TrainingBlockOnCurriculumVersionUpsertWithoutSubjectsInput
         connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput
         update?: XOR<XOR<TrainingBlockOnCurriculumVersionUpdateToOneWithWhereWithoutSubjectsInput, TrainingBlockOnCurriculumVersionUpdateWithoutSubjectsInput>, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutSubjectsInput>
+    };
+    export type SemesterCreateNestedOneWithoutClassRegisterSessionInput = {
+        create?: XOR<SemesterCreateWithoutClassRegisterSessionInput, SemesterUncheckedCreateWithoutClassRegisterSessionInput>
+        connectOrCreate?: SemesterCreateOrConnectWithoutClassRegisterSessionInput
+        connect?: SemesterWhereUniqueInput
+    };
+    export type TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput | TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput[]
+        connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    };
+    export type ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterLogsCreateWithoutClassRegisterSessionInput[] | ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    };
+    export type TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput | TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput[]
+        connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+    };
+    export type ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterLogsCreateWithoutClassRegisterSessionInput[] | ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    };
+    export type SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<SemesterCreateWithoutClassRegisterSessionInput, SemesterUncheckedCreateWithoutClassRegisterSessionInput>
+        connectOrCreate?: SemesterCreateOrConnectWithoutClassRegisterSessionInput
+        upsert?: SemesterUpsertWithoutClassRegisterSessionInput
+        connect?: SemesterWhereUniqueInput
+        update?: XOR<XOR<SemesterUpdateToOneWithWhereWithoutClassRegisterSessionInput, SemesterUpdateWithoutClassRegisterSessionInput>, SemesterUncheckedUpdateWithoutClassRegisterSessionInput>
+    };
+    export type TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput | TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: TrainingCourseUpsertWithWhereUniqueWithoutClassRegisterSessionInput | TrainingCourseUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        set?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        disconnect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        delete?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        update?: TrainingCourseUpdateWithWhereUniqueWithoutClassRegisterSessionInput | TrainingCourseUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: TrainingCourseUpdateManyWithWhereWithoutClassRegisterSessionInput | TrainingCourseUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: TrainingCourseScalarWhereInput | TrainingCourseScalarWhereInput[]
+    };
+    export type ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterLogsCreateWithoutClassRegisterSessionInput[] | ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: ClassRegisterLogsUpsertWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterLogsUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope
+        set?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        disconnect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        delete?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+    };
+    export type TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput | TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: TrainingCourseUpsertWithWhereUniqueWithoutClassRegisterSessionInput | TrainingCourseUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        set?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        disconnect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        delete?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        connect?: TrainingCourseWhereUniqueInput | TrainingCourseWhereUniqueInput[]
+        update?: TrainingCourseUpdateWithWhereUniqueWithoutClassRegisterSessionInput | TrainingCourseUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: TrainingCourseUpdateManyWithWhereWithoutClassRegisterSessionInput | TrainingCourseUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: TrainingCourseScalarWhereInput | TrainingCourseScalarWhereInput[]
+    };
+    export type ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterLogsCreateWithoutClassRegisterSessionInput[] | ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: ClassRegisterLogsUpsertWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterLogsUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope
+        set?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        disconnect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        delete?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+    };
+    export type ClassRegisterSessionCreateNestedOneWithoutClassRegisterLogsInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutClassRegisterLogsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput>
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutClassRegisterLogsInput
+        connect?: ClassRegisterSessionWhereUniqueInput
+    };
+    export type StudentCreateNestedOneWithoutClassRegisterLogsInput = {
+        create?: XOR<StudentCreateWithoutClassRegisterLogsInput, StudentUncheckedCreateWithoutClassRegisterLogsInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutClassRegisterLogsInput
+        connect?: StudentWhereUniqueInput
+    };
+    export type EnumClassRegisterStatusFieldUpdateOperationsInput = {
+        set?: $Enums.ClassRegisterStatus
+    };
+    export type ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterLogsNestedInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutClassRegisterLogsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput>
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutClassRegisterLogsInput
+        upsert?: ClassRegisterSessionUpsertWithoutClassRegisterLogsInput
+        connect?: ClassRegisterSessionWhereUniqueInput
+        update?: XOR<XOR<ClassRegisterSessionUpdateToOneWithWhereWithoutClassRegisterLogsInput, ClassRegisterSessionUpdateWithoutClassRegisterLogsInput>, ClassRegisterSessionUncheckedUpdateWithoutClassRegisterLogsInput>
+    };
+    export type StudentUpdateOneRequiredWithoutClassRegisterLogsNestedInput = {
+        create?: XOR<StudentCreateWithoutClassRegisterLogsInput, StudentUncheckedCreateWithoutClassRegisterLogsInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutClassRegisterLogsInput
+        upsert?: StudentUpsertWithoutClassRegisterLogsInput
+        connect?: StudentWhereUniqueInput
+        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutClassRegisterLogsInput, StudentUpdateWithoutClassRegisterLogsInput>, StudentUncheckedUpdateWithoutClassRegisterLogsInput>
     };
     export type SubjectVersionCreateNestedOneWithoutSubjectClassInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectClassInput, SubjectVersionUncheckedCreateWithoutSubjectClassInput>
@@ -347573,6 +350807,12 @@ export namespace Prisma {
         createMany?: DiplomaVerificationApplicationCreateManyStudentInputEnvelope
         connect?: DiplomaVerificationApplicationWhereUniqueInput | DiplomaVerificationApplicationWhereUniqueInput[]
     };
+    export type ClassRegisterLogsCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutStudentInput, ClassRegisterLogsUncheckedCreateWithoutStudentInput> | ClassRegisterLogsCreateWithoutStudentInput[] | ClassRegisterLogsUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutStudentInput | ClassRegisterLogsCreateOrConnectWithoutStudentInput[]
+        createMany?: ClassRegisterLogsCreateManyStudentInputEnvelope
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    };
     export type NoteCreateNestedManyWithoutStudentInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
         connectOrCreate?: NoteCreateOrConnectWithoutStudentInput | NoteCreateOrConnectWithoutStudentInput[]
@@ -347693,6 +350933,12 @@ export namespace Prisma {
         connectOrCreate?: DiplomaVerificationApplicationCreateOrConnectWithoutStudentInput | DiplomaVerificationApplicationCreateOrConnectWithoutStudentInput[]
         createMany?: DiplomaVerificationApplicationCreateManyStudentInputEnvelope
         connect?: DiplomaVerificationApplicationWhereUniqueInput | DiplomaVerificationApplicationWhereUniqueInput[]
+    };
+    export type ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutStudentInput, ClassRegisterLogsUncheckedCreateWithoutStudentInput> | ClassRegisterLogsCreateWithoutStudentInput[] | ClassRegisterLogsUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutStudentInput | ClassRegisterLogsCreateOrConnectWithoutStudentInput[]
+        createMany?: ClassRegisterLogsCreateManyStudentInputEnvelope
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
     };
     export type NoteUncheckedCreateNestedManyWithoutStudentInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
@@ -348021,6 +351267,19 @@ export namespace Prisma {
         updateMany?: DiplomaVerificationApplicationUpdateManyWithWhereWithoutStudentInput | DiplomaVerificationApplicationUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: DiplomaVerificationApplicationScalarWhereInput | DiplomaVerificationApplicationScalarWhereInput[]
     };
+    export type ClassRegisterLogsUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutStudentInput, ClassRegisterLogsUncheckedCreateWithoutStudentInput> | ClassRegisterLogsCreateWithoutStudentInput[] | ClassRegisterLogsUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutStudentInput | ClassRegisterLogsCreateOrConnectWithoutStudentInput[]
+        upsert?: ClassRegisterLogsUpsertWithWhereUniqueWithoutStudentInput | ClassRegisterLogsUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ClassRegisterLogsCreateManyStudentInputEnvelope
+        set?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        disconnect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        delete?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutStudentInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput | ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+    };
     export type NoteUpdateManyWithoutStudentNestedInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
         connectOrCreate?: NoteCreateOrConnectWithoutStudentInput | NoteCreateOrConnectWithoutStudentInput[]
@@ -348279,6 +351538,19 @@ export namespace Prisma {
         update?: DiplomaVerificationApplicationUpdateWithWhereUniqueWithoutStudentInput | DiplomaVerificationApplicationUpdateWithWhereUniqueWithoutStudentInput[]
         updateMany?: DiplomaVerificationApplicationUpdateManyWithWhereWithoutStudentInput | DiplomaVerificationApplicationUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: DiplomaVerificationApplicationScalarWhereInput | DiplomaVerificationApplicationScalarWhereInput[]
+    };
+    export type ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ClassRegisterLogsCreateWithoutStudentInput, ClassRegisterLogsUncheckedCreateWithoutStudentInput> | ClassRegisterLogsCreateWithoutStudentInput[] | ClassRegisterLogsUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutStudentInput | ClassRegisterLogsCreateOrConnectWithoutStudentInput[]
+        upsert?: ClassRegisterLogsUpsertWithWhereUniqueWithoutStudentInput | ClassRegisterLogsUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ClassRegisterLogsCreateManyStudentInputEnvelope
+        set?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        disconnect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        delete?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+        update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutStudentInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput | ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
     };
     export type NoteUncheckedUpdateManyWithoutStudentNestedInput = {
         create?: XOR<NoteCreateWithoutStudentInput, NoteUncheckedCreateWithoutStudentInput> | NoteCreateWithoutStudentInput[] | NoteUncheckedCreateWithoutStudentInput[]
@@ -360026,6 +363298,21 @@ export namespace Prisma {
         _min?: NestedEnumSubjectRequirementTypeFilter<$PrismaModel>
         _max?: NestedEnumSubjectRequirementTypeFilter<$PrismaModel>
     };
+    export type NestedEnumClassRegisterStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterStatus | EnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterStatusFilter<$PrismaModel> | $Enums.ClassRegisterStatus
+    };
+    export type NestedEnumClassRegisterStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ClassRegisterStatus | EnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumClassRegisterStatusWithAggregatesFilter<$PrismaModel> | $Enums.ClassRegisterStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
+        _max?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
+    };
     export type NestedEnumSubjectClassScheduleFilter<$PrismaModel = never> = {
         equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel>
         in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
@@ -363089,6 +366376,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -363141,6 +366429,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -363400,6 +366689,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -363452,6 +366742,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -363857,6 +367148,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -363909,6 +367201,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -364250,6 +367543,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -364302,6 +367596,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -365027,6 +368322,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutSchoolYearInput = {
         id?: string
@@ -365049,6 +368345,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutSchoolYearInput = {
         where: SemesterWhereUniqueInput
@@ -365486,6 +368783,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutSemesterStartInput = {
         id?: string
@@ -365519,6 +368817,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutSemesterStartInput = {
         where: TrainingCourseWhereUniqueInput
@@ -365798,6 +369097,42 @@ export namespace Prisma {
     };
     export type StudentAcademicDecisionCreateManySemesterInputEnvelope = {
         data: StudentAcademicDecisionCreateManySemesterInput | StudentAcademicDecisionCreateManySemesterInput[]
+        skipDuplicates?: boolean
+    };
+    export type ClassRegisterSessionCreateWithoutSemesterInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionUncheckedCreateWithoutSemesterInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionCreateOrConnectWithoutSemesterInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        create: XOR<ClassRegisterSessionCreateWithoutSemesterInput, ClassRegisterSessionUncheckedCreateWithoutSemesterInput>
+    };
+    export type ClassRegisterSessionCreateManySemesterInputEnvelope = {
+        data: ClassRegisterSessionCreateManySemesterInput | ClassRegisterSessionCreateManySemesterInput[]
         skipDuplicates?: boolean
     };
     export type SchoolYearUpsertWithoutSemestersInput = {
@@ -366083,6 +369418,35 @@ export namespace Prisma {
         where: StudentAcademicDecisionScalarWhereInput
         data: XOR<StudentAcademicDecisionUpdateManyMutationInput, StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterInput>
     };
+    export type ClassRegisterSessionUpsertWithWhereUniqueWithoutSemesterInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        update: XOR<ClassRegisterSessionUpdateWithoutSemesterInput, ClassRegisterSessionUncheckedUpdateWithoutSemesterInput>
+        create: XOR<ClassRegisterSessionCreateWithoutSemesterInput, ClassRegisterSessionUncheckedCreateWithoutSemesterInput>
+    };
+    export type ClassRegisterSessionUpdateWithWhereUniqueWithoutSemesterInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        data: XOR<ClassRegisterSessionUpdateWithoutSemesterInput, ClassRegisterSessionUncheckedUpdateWithoutSemesterInput>
+    };
+    export type ClassRegisterSessionUpdateManyWithWhereWithoutSemesterInput = {
+        where: ClassRegisterSessionScalarWhereInput
+        data: XOR<ClassRegisterSessionUpdateManyMutationInput, ClassRegisterSessionUncheckedUpdateManyWithoutSemesterInput>
+    };
+    export type ClassRegisterSessionScalarWhereInput = {
+        AND?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
+        OR?: ClassRegisterSessionScalarWhereInput[]
+        NOT?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
+        id?: StringFilter<"ClassRegisterSession"> | string
+        code?: StringNullableFilter<"ClassRegisterSession"> | string | null
+        active?: BoolFilter<"ClassRegisterSession"> | boolean
+        description?: StringNullableFilter<"ClassRegisterSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        name?: StringFilter<"ClassRegisterSession"> | string
+        startDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        endDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
+        semesterId?: StringFilter<"ClassRegisterSession"> | string
+    };
     export type SchoolYearCreateWithoutMilestoneInput = {
         id?: string
         code?: string | null
@@ -366177,6 +369541,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutTrainingCoursesStartInput = {
         id?: string
@@ -366199,6 +369564,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutTrainingCoursesStartInput = {
         where: SemesterWhereUniqueInput
@@ -366588,6 +369954,38 @@ export namespace Prisma {
         where: SurveyObjectTypeWhereUniqueInput
         create: XOR<SurveyObjectTypeCreateWithoutTrainingCoursesInput, SurveyObjectTypeUncheckedCreateWithoutTrainingCoursesInput>
     };
+    export type ClassRegisterSessionCreateWithoutTrainingCoursesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semesterId: string
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        create: XOR<ClassRegisterSessionCreateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput>
+    };
     export type SemesterUpsertWithoutTrainingCoursesStartInput = {
         update: XOR<SemesterUpdateWithoutTrainingCoursesStartInput, SemesterUncheckedUpdateWithoutTrainingCoursesStartInput>
         create: XOR<SemesterCreateWithoutTrainingCoursesStartInput, SemesterUncheckedCreateWithoutTrainingCoursesStartInput>
@@ -366618,6 +370016,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutTrainingCoursesStartInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -366640,6 +370039,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type TrainingObjectTypeUpsertWithoutTrainingCourseInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutTrainingCourseInput, TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput>
@@ -366941,6 +370341,19 @@ export namespace Prisma {
         name?: StringFilter<"SurveyObjectType"> | string
         type?: EnumSurveyObjectNullableListFilter<"SurveyObjectType">
     };
+    export type ClassRegisterSessionUpsertWithWhereUniqueWithoutTrainingCoursesInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        update: XOR<ClassRegisterSessionUpdateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedUpdateWithoutTrainingCoursesInput>
+        create: XOR<ClassRegisterSessionCreateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput>
+    };
+    export type ClassRegisterSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        data: XOR<ClassRegisterSessionUpdateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedUpdateWithoutTrainingCoursesInput>
+    };
+    export type ClassRegisterSessionUpdateManyWithWhereWithoutTrainingCoursesInput = {
+        where: ClassRegisterSessionScalarWhereInput
+        data: XOR<ClassRegisterSessionUpdateManyMutationInput, ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesInput>
+    };
     export type StudentCreateWithoutClassMonitorInput = {
         id?: string
         code?: string | null
@@ -366990,6 +370403,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -367042,6 +370456,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -367098,6 +370513,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -367150,6 +370566,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -367189,6 +370606,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutFixedClassInput = {
         id?: string
@@ -367222,6 +370640,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutFixedClassInput = {
         where: TrainingCourseWhereUniqueInput
@@ -367440,6 +370859,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -367492,6 +370912,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -367797,6 +371218,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -367849,6 +371271,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -367910,6 +371333,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -367962,6 +371386,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -368006,6 +371431,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -368039,6 +371465,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type DM_DonViUpsertWithoutFixedClassInput = {
         update: XOR<DM_DonViUpdateWithoutFixedClassInput, DM_DonViUncheckedUpdateWithoutFixedClassInput>
@@ -369199,6 +372626,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -369251,6 +372679,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -371433,6 +374862,551 @@ export namespace Prisma {
         priority?: IntFieldUpdateOperationsInput | number
         electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     };
+    export type SemesterCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        shortName?: string | null
+        semesterType?: $Enums.SemesterType | null
+        startDate: Date | string
+        endDate?: Date | string | null
+        schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
+        trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
+        trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutSemesterInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutSemesterInput
+        scholarshipAward?: ScholarshipAwardCreateNestedManyWithoutSemesterInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+    };
+    export type SemesterUncheckedCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        shortName?: string | null
+        semesterType?: $Enums.SemesterType | null
+        schoolYearId: string
+        startDate: Date | string
+        endDate?: Date | string | null
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
+        trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutSemesterInput
+        scholarshipAward?: ScholarshipAwardUncheckedCreateNestedManyWithoutSemesterInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+    };
+    export type SemesterCreateOrConnectWithoutClassRegisterSessionInput = {
+        where: SemesterWhereUniqueInput
+        create: XOR<SemesterCreateWithoutClassRegisterSessionInput, SemesterUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type TrainingCourseCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startYear?: number | null
+        endYear?: number | null
+        academicYear?: string | null
+        maxTrainingTime?: number | null
+        admissionQuota?: number | null
+        baseScore: $Enums.AcademicRankingBaseType
+        coef_1?: number
+        coef_2?: number
+        coef_3?: number
+        scoreToTakeExam?: number
+        scoreToPass?: number
+        scoreToPassConditional?: number
+        scoreToTakeGraduation?: number
+        scoreToPassGraduation?: number
+        semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+        fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
+        scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
+        academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
+        scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
+        academicWarningRule?: AcademicWarningRuleCreateNestedManyWithoutTrainingCourseInput
+        academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
+        notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+    };
+    export type TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        semesterStartId: string
+        startYear?: number | null
+        endYear?: number | null
+        academicYear?: string | null
+        maxTrainingTime?: number | null
+        admissionQuota?: number | null
+        baseScore: $Enums.AcademicRankingBaseType
+        coef_1?: number
+        coef_2?: number
+        coef_3?: number
+        scoreToTakeExam?: number
+        scoreToPass?: number
+        scoreToPassConditional?: number
+        scoreToTakeGraduation?: number
+        scoreToPassGraduation?: number
+        trainingObjectTypeId: string
+        fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
+        scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+        academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+        scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
+        academicWarningRule?: AcademicWarningRuleUncheckedCreateNestedManyWithoutTrainingCourseInput
+        academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+    };
+    export type TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput = {
+        where: TrainingCourseWhereUniqueInput
+        create: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterLogsCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+        student: StudentCreateNestedOneWithoutClassRegisterLogsInput
+    };
+    export type ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+    };
+    export type ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput = {
+        where: ClassRegisterLogsWhereUniqueInput
+        create: XOR<ClassRegisterLogsCreateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope = {
+        data: ClassRegisterLogsCreateManyClassRegisterSessionInput | ClassRegisterLogsCreateManyClassRegisterSessionInput[]
+        skipDuplicates?: boolean
+    };
+    export type SemesterUpsertWithoutClassRegisterSessionInput = {
+        update: XOR<SemesterUpdateWithoutClassRegisterSessionInput, SemesterUncheckedUpdateWithoutClassRegisterSessionInput>
+        create: XOR<SemesterCreateWithoutClassRegisterSessionInput, SemesterUncheckedCreateWithoutClassRegisterSessionInput>
+        where?: SemesterWhereInput
+    };
+    export type SemesterUpdateToOneWithWhereWithoutClassRegisterSessionInput = {
+        where?: SemesterWhereInput
+        data: XOR<SemesterUpdateWithoutClassRegisterSessionInput, SemesterUncheckedUpdateWithoutClassRegisterSessionInput>
+    };
+    export type SemesterUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
+        semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
+        trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
+        trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutSemesterNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutSemesterNestedInput
+        scholarshipAward?: ScholarshipAwardUpdateManyWithoutSemesterNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+    };
+    export type SemesterUncheckedUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        shortName?: NullableStringFieldUpdateOperationsInput | string | null
+        semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
+        schoolYearId?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
+        trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutSemesterNestedInput
+        scholarshipAward?: ScholarshipAwardUncheckedUpdateManyWithoutSemesterNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+    };
+    export type TrainingCourseUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: TrainingCourseWhereUniqueInput
+        update: XOR<TrainingCourseUpdateWithoutClassRegisterSessionInput, TrainingCourseUncheckedUpdateWithoutClassRegisterSessionInput>
+        create: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type TrainingCourseUpdateWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: TrainingCourseWhereUniqueInput
+        data: XOR<TrainingCourseUpdateWithoutClassRegisterSessionInput, TrainingCourseUncheckedUpdateWithoutClassRegisterSessionInput>
+    };
+    export type TrainingCourseUpdateManyWithWhereWithoutClassRegisterSessionInput = {
+        where: TrainingCourseScalarWhereInput
+        data: XOR<TrainingCourseUpdateManyMutationInput, TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterLogsUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: ClassRegisterLogsWhereUniqueInput
+        update: XOR<ClassRegisterLogsUpdateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedUpdateWithoutClassRegisterSessionInput>
+        create: XOR<ClassRegisterLogsCreateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: ClassRegisterLogsWhereUniqueInput
+        data: XOR<ClassRegisterLogsUpdateWithoutClassRegisterSessionInput, ClassRegisterLogsUncheckedUpdateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput = {
+        where: ClassRegisterLogsScalarWhereInput
+        data: XOR<ClassRegisterLogsUpdateManyMutationInput, ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterLogsScalarWhereInput = {
+        AND?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+        OR?: ClassRegisterLogsScalarWhereInput[]
+        NOT?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+        id?: StringFilter<"ClassRegisterLogs"> | string
+        code?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+        active?: BoolFilter<"ClassRegisterLogs"> | boolean
+        description?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterLogs"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
+        classRegisterSessionId?: StringFilter<"ClassRegisterLogs"> | string
+        studentId?: StringFilter<"ClassRegisterLogs"> | string
+        status?: EnumClassRegisterStatusFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
+        reason?: StringNullableFilter<"ClassRegisterLogs"> | string | null
+    };
+    export type ClassRegisterSessionCreateWithoutClassRegisterLogsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semesterId: string
+        trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionCreateOrConnectWithoutClassRegisterLogsInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        create: XOR<ClassRegisterSessionCreateWithoutClassRegisterLogsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput>
+    };
+    export type StudentCreateWithoutClassRegisterLogsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        entryScore?: number | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
+        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
+        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
+        trainingLevel?: TrainingLevelCreateNestedOneWithoutStudentsInput
+        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
+        trainingType?: TrainingTypeCreateNestedOneWithoutStudentsInput
+        trainingForm?: TrainingFormCreateNestedOneWithoutStudentsInput
+        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
+        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
+        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
+        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        notes?: NoteCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
+    };
+    export type StudentUncheckedCreateWithoutClassRegisterLogsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        entryScore?: number | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        trainingLocationId?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        fixedClassId?: string | null
+        userProfileId: string
+        trainingLevelId?: string | null
+        trainingObjectTypeId?: string | null
+        trainingTypeId?: string | null
+        trainingFormId?: string | null
+        registrationAreaId?: string | null
+        curriculumVersionId?: string | null
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
+    };
+    export type StudentCreateOrConnectWithoutClassRegisterLogsInput = {
+        where: StudentWhereUniqueInput
+        create: XOR<StudentCreateWithoutClassRegisterLogsInput, StudentUncheckedCreateWithoutClassRegisterLogsInput>
+    };
+    export type ClassRegisterSessionUpsertWithoutClassRegisterLogsInput = {
+        update: XOR<ClassRegisterSessionUpdateWithoutClassRegisterLogsInput, ClassRegisterSessionUncheckedUpdateWithoutClassRegisterLogsInput>
+        create: XOR<ClassRegisterSessionCreateWithoutClassRegisterLogsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput>
+        where?: ClassRegisterSessionWhereInput
+    };
+    export type ClassRegisterSessionUpdateToOneWithWhereWithoutClassRegisterLogsInput = {
+        where?: ClassRegisterSessionWhereInput
+        data: XOR<ClassRegisterSessionUpdateWithoutClassRegisterLogsInput, ClassRegisterSessionUncheckedUpdateWithoutClassRegisterLogsInput>
+    };
+    export type ClassRegisterSessionUpdateWithoutClassRegisterLogsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateWithoutClassRegisterLogsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type StudentUpsertWithoutClassRegisterLogsInput = {
+        update: XOR<StudentUpdateWithoutClassRegisterLogsInput, StudentUncheckedUpdateWithoutClassRegisterLogsInput>
+        create: XOR<StudentCreateWithoutClassRegisterLogsInput, StudentUncheckedCreateWithoutClassRegisterLogsInput>
+        where?: StudentWhereInput
+    };
+    export type StudentUpdateToOneWithWhereWithoutClassRegisterLogsInput = {
+        where?: StudentWhereInput
+        data: XOR<StudentUpdateWithoutClassRegisterLogsInput, StudentUncheckedUpdateWithoutClassRegisterLogsInput>
+    };
+    export type StudentUpdateWithoutClassRegisterLogsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
+        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
+        trainingLevel?: TrainingLevelUpdateOneWithoutStudentsNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
+        trainingType?: TrainingTypeUpdateOneWithoutStudentsNestedInput
+        trainingForm?: TrainingFormUpdateOneWithoutStudentsNestedInput
+        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
+        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
+        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        notes?: NoteUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUncheckedUpdateWithoutClassRegisterLogsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
+    };
     export type SubjectVersionCreateWithoutSubjectClassInput = {
         id?: string
         code?: string | null
@@ -371540,6 +375514,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutSubjectClassesInput = {
         id?: string
@@ -371562,6 +375537,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutSubjectClassesInput = {
         where: SemesterWhereUniqueInput
@@ -372348,6 +376324,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -372370,6 +376347,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type ExamUpsertWithoutSubjectClassInput = {
         update: XOR<ExamUpdateWithoutSubjectClassInput, ExamUncheckedUpdateWithoutSubjectClassInput>
@@ -373573,6 +377551,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -373606,6 +377585,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: TrainingCourseWhereUniqueInput
@@ -373802,6 +377782,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -373854,6 +377835,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -374054,6 +378036,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -374106,6 +378089,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -374175,6 +378159,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -374227,6 +378212,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -374382,6 +378368,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -374434,6 +378421,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -374520,6 +378508,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -374572,6 +378561,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -374645,6 +378635,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -374697,6 +378688,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -377230,6 +381222,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutScoreConvertsInput = {
         id?: string
@@ -377263,6 +381256,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutScoreConvertsInput = {
         where: TrainingCourseWhereUniqueInput
@@ -377309,6 +381303,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutScoreConvertsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -377342,6 +381337,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingLocationCreateWithoutStudentsInput = {
         id?: string
@@ -378823,6 +382819,38 @@ export namespace Prisma {
         data: DiplomaVerificationApplicationCreateManyStudentInput | DiplomaVerificationApplicationCreateManyStudentInput[]
         skipDuplicates?: boolean
     };
+    export type ClassRegisterLogsCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+        classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutClassRegisterLogsInput
+    };
+    export type ClassRegisterLogsUncheckedCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classRegisterSessionId: string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+    };
+    export type ClassRegisterLogsCreateOrConnectWithoutStudentInput = {
+        where: ClassRegisterLogsWhereUniqueInput
+        create: XOR<ClassRegisterLogsCreateWithoutStudentInput, ClassRegisterLogsUncheckedCreateWithoutStudentInput>
+    };
+    export type ClassRegisterLogsCreateManyStudentInputEnvelope = {
+        data: ClassRegisterLogsCreateManyStudentInput | ClassRegisterLogsCreateManyStudentInput[]
+        skipDuplicates?: boolean
+    };
     export type NoteCreateWithoutStudentInput = {
         id?: string
         code?: string | null
@@ -380036,6 +384064,19 @@ export namespace Prisma {
         status?: EnumDiplomaVerificationStatusFilter<"DiplomaVerificationApplication"> | $Enums.DiplomaVerificationStatus
         studentId?: StringNullableFilter<"DiplomaVerificationApplication"> | string | null
     };
+    export type ClassRegisterLogsUpsertWithWhereUniqueWithoutStudentInput = {
+        where: ClassRegisterLogsWhereUniqueInput
+        update: XOR<ClassRegisterLogsUpdateWithoutStudentInput, ClassRegisterLogsUncheckedUpdateWithoutStudentInput>
+        create: XOR<ClassRegisterLogsCreateWithoutStudentInput, ClassRegisterLogsUncheckedCreateWithoutStudentInput>
+    };
+    export type ClassRegisterLogsUpdateWithWhereUniqueWithoutStudentInput = {
+        where: ClassRegisterLogsWhereUniqueInput
+        data: XOR<ClassRegisterLogsUpdateWithoutStudentInput, ClassRegisterLogsUncheckedUpdateWithoutStudentInput>
+    };
+    export type ClassRegisterLogsUpdateManyWithWhereWithoutStudentInput = {
+        where: ClassRegisterLogsScalarWhereInput
+        data: XOR<ClassRegisterLogsUpdateManyMutationInput, ClassRegisterLogsUncheckedUpdateManyWithoutStudentInput>
+    };
     export type NoteUpsertWithWhereUniqueWithoutStudentInput = {
         where: NoteWhereUniqueInput
         update: XOR<NoteUpdateWithoutStudentInput, NoteUncheckedUpdateWithoutStudentInput>
@@ -380144,6 +384185,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -380196,6 +384238,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -380224,6 +384267,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutStudentSemesterResultInput = {
         id?: string
@@ -380246,6 +384290,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutStudentSemesterResultInput = {
         where: SemesterWhereUniqueInput
@@ -380309,6 +384354,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -380361,6 +384407,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -380394,6 +384441,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutStudentSemesterResultInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -380416,6 +384464,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type StudentCreateWithoutStudentYearResultInput = {
         id?: string
@@ -380466,6 +384515,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -380518,6 +384568,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -380617,6 +384668,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -380669,6 +384721,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -380743,6 +384796,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleCreateNestedManyWithoutTrainingCourseInput
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutNotificationsInput = {
         id?: string
@@ -380776,6 +384830,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUncheckedCreateNestedManyWithoutTrainingCourseInput
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutNotificationsInput = {
         where: TrainingCourseWhereUniqueInput
@@ -380882,6 +384937,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -380934,6 +384990,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -386371,6 +390428,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -386423,6 +390481,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -396932,6 +400991,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -396984,6 +401044,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -418934,6 +422995,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -418986,6 +423048,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -419161,6 +423224,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -419213,6 +423277,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -420573,6 +424638,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -420625,6 +424691,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -420908,6 +424975,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -420960,6 +425028,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -425082,6 +429151,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutAcademicActionConfigInput = {
         id?: string
@@ -425115,6 +429185,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutAcademicActionConfigInput = {
         where: TrainingCourseWhereUniqueInput
@@ -425233,6 +429304,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutAcademicActionConfigInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -425266,6 +429338,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type AcademicActionRuleSetUpsertWithWhereUniqueWithoutConfigInput = {
         where: AcademicActionRuleSetWhereUniqueInput
@@ -425546,6 +429619,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -425598,6 +429672,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -425626,6 +429701,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardCreateNestedManyWithoutSemesterInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutStudentAcademicDecisionInput = {
         id?: string
@@ -425648,6 +429724,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUncheckedCreateNestedManyWithoutSemesterInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutStudentAcademicDecisionInput = {
         where: SemesterWhereUniqueInput
@@ -425837,6 +429914,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -425889,6 +429967,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -425922,6 +430001,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUpdateManyWithoutSemesterNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutStudentAcademicDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -425944,6 +430024,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUncheckedUpdateManyWithoutSemesterNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SchoolYearUpsertWithoutStudentAcademicDecisionInput = {
         update: XOR<SchoolYearUpdateWithoutStudentAcademicDecisionInput, SchoolYearUncheckedUpdateWithoutStudentAcademicDecisionInput>
@@ -426053,6 +430134,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutTrainingScoreSessionInput = {
         id?: string
@@ -426075,6 +430157,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutTrainingScoreSessionInput = {
         where: SemesterWhereUniqueInput
@@ -426178,6 +430261,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutTrainingScoreSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -426200,6 +430284,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type TrainingObjectTypeUpsertWithoutTrainingScoreSessionInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutTrainingScoreSessionInput, TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput>
@@ -426334,6 +430419,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -426386,6 +430472,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -426486,6 +430573,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -426538,6 +430626,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -426573,6 +430662,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutScholarshipsInput = {
         id?: string
@@ -426606,6 +430696,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutScholarshipsInput = {
         where: TrainingCourseWhereUniqueInput
@@ -426726,6 +430817,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutScholarshipsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -426759,6 +430851,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type ScholarshipCriteriaUpsertWithWhereUniqueWithoutScholarshipInput = {
         where: ScholarshipCriteriaWhereUniqueInput
@@ -426935,6 +431028,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -426987,6 +431081,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -427015,6 +431110,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutScholarshipAwardInput = {
         id?: string
@@ -427037,6 +431133,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutScholarshipAwardInput = {
         where: SemesterWhereUniqueInput
@@ -427138,6 +431235,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -427190,6 +431288,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -427223,6 +431322,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutScholarshipAwardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -427245,6 +431345,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type ScholarshipUpsertWithoutAwardsInput = {
         update: XOR<ScholarshipUpdateWithoutAwardsInput, ScholarshipUncheckedUpdateWithoutAwardsInput>
@@ -427387,6 +431488,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -427439,6 +431541,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -427616,6 +431719,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -427668,6 +431772,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -428013,6 +432118,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -428065,6 +432171,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -428405,6 +432512,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -428457,6 +432565,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -428755,6 +432864,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutAcademicRankingConvertInput = {
         id?: string
@@ -428788,6 +432898,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutAcademicRankingConvertInput = {
         where: TrainingCourseWhereUniqueInput
@@ -428952,6 +433063,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutAcademicRankingConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -428985,6 +433097,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type RankingConditionUpsertWithWhereUniqueWithoutRankingInput = {
         where: RankingConditionWhereUniqueInput
@@ -429642,6 +433755,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -429694,6 +433808,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -429898,6 +434013,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -429950,6 +434066,7 @@ export namespace Prisma {
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -430003,6 +434120,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutNotesInput = {
@@ -430055,6 +434173,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutNotesInput = {
@@ -430280,6 +434399,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutNotesInput = {
@@ -430332,6 +434452,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type NoteFolderUpsertWithoutNotesInput = {
@@ -430495,6 +434616,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
     };
     export type StudentUncheckedCreateWithoutNoteFoldersInput = {
@@ -430547,6 +434669,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
     };
     export type StudentCreateOrConnectWithoutNoteFoldersInput = {
@@ -430722,6 +434845,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
     };
     export type StudentUncheckedUpdateWithoutNoteFoldersInput = {
@@ -430774,6 +434898,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type NoteFolderUpsertWithoutChildrenInput = {
@@ -434024,6 +438149,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleCreateNestedManyWithoutTrainingCourseInput
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutSurveyObjectTypesInput = {
         id?: string
@@ -434057,6 +438183,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUncheckedCreateNestedManyWithoutTrainingCourseInput
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutSurveyObjectTypesInput = {
         where: TrainingCourseWhereUniqueInput
@@ -435384,6 +439511,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -435436,6 +439564,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -435586,6 +439715,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -435638,6 +439768,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -440072,6 +444203,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseUncheckedCreateWithoutAcademicWarningRuleInput = {
         id?: string
@@ -440105,6 +444237,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
     };
     export type TrainingCourseCreateOrConnectWithoutAcademicWarningRuleInput = {
         where: TrainingCourseWhereUniqueInput
@@ -440183,6 +444316,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutAcademicWarningRuleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -440216,6 +444350,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type AcademicWarningUpsertWithWhereUniqueWithoutRulesInput = {
         where: AcademicWarningWhereUniqueInput
@@ -440279,6 +444414,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -440331,6 +444467,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -440359,6 +444496,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutAcademicWarningInput = {
         id?: string
@@ -440381,6 +444519,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUncheckedCreateNestedManyWithoutSemesterInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutAcademicWarningInput = {
         where: SemesterWhereUniqueInput
@@ -440484,6 +444623,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -440536,6 +444676,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -440569,6 +444710,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutAcademicWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -440591,6 +444733,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type AcademicWarningRuleUpsertWithWhereUniqueWithoutAcademicWarningInput = {
         where: AcademicWarningRuleWhereUniqueInput
@@ -440654,6 +444797,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
     };
@@ -440706,6 +444850,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
         examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
         noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
     };
@@ -440734,6 +444879,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardCreateNestedManyWithoutSemesterInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
     };
     export type SemesterUncheckedCreateWithoutDisciplinaryWarningInput = {
         id?: string
@@ -440756,6 +444902,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUncheckedCreateNestedManyWithoutSemesterInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
     };
     export type SemesterCreateOrConnectWithoutDisciplinaryWarningInput = {
         where: SemesterWhereUniqueInput
@@ -440845,6 +444992,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -440897,6 +445045,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -440930,6 +445079,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUpdateManyWithoutSemesterNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutDisciplinaryWarningInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -440952,6 +445102,7 @@ export namespace Prisma {
         scholarshipAward?: ScholarshipAwardUncheckedUpdateManyWithoutSemesterNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type DisciplinaryWarningReasonUpsertWithWhereUniqueWithoutWarningInput = {
         where: DisciplinaryWarningReasonWhereUniqueInput
@@ -442571,6 +446722,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -442593,6 +446745,7 @@ export namespace Prisma {
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
     };
     export type SemesterUncheckedUpdateManyWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -442946,6 +447099,18 @@ export namespace Prisma {
         reason?: string | null
         status?: $Enums.DecisionStatus
     };
+    export type ClassRegisterSessionCreateManySemesterInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+    };
     export type SubjectClassUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -443079,6 +447244,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutSemesterStartInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -443112,6 +447278,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutSemesterStartInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -443469,6 +447636,46 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    };
+    export type ClassRegisterSessionUpdateWithoutSemesterInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateWithoutSemesterInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateManyWithoutSemesterInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     };
     export type FixedClassCreateManyTrainingCourseInput = {
         id?: string
@@ -443984,6 +448191,47 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         type?: SurveyObjectTypeUpdatetypeInput | $Enums.SurveyObject[]
     };
+    export type ClassRegisterSessionUpdateWithoutTrainingCoursesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateWithoutTrainingCoursesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+    };
     export type StudentCreateManyFixedClassInput = {
         id?: string
         code?: string | null
@@ -444064,6 +448312,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -444116,6 +448365,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -444928,6 +449178,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -444980,6 +449231,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -446176,6 +450428,148 @@ export namespace Prisma {
         subjectId?: StringFieldUpdateOperationsInput | string
         side?: EnumEquivalencySideFieldUpdateOperationsInput | $Enums.EquivalencySide
     };
+    export type ClassRegisterLogsCreateManyClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+    };
+    export type TrainingCourseUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        endYear?: NullableIntFieldUpdateOperationsInput | number | null
+        academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+        maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+        admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        coef_1?: FloatFieldUpdateOperationsInput | number
+        coef_2?: FloatFieldUpdateOperationsInput | number
+        coef_3?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        scoreToPass?: FloatFieldUpdateOperationsInput | number
+        scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+        fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
+        scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
+        academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
+        scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
+        academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
+        academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+    };
+    export type TrainingCourseUncheckedUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        semesterStartId?: StringFieldUpdateOperationsInput | string
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        endYear?: NullableIntFieldUpdateOperationsInput | number | null
+        academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+        maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+        admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        coef_1?: FloatFieldUpdateOperationsInput | number
+        coef_2?: FloatFieldUpdateOperationsInput | number
+        coef_3?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        scoreToPass?: FloatFieldUpdateOperationsInput | number
+        scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+    };
+    export type TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        semesterStartId?: StringFieldUpdateOperationsInput | string
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        endYear?: NullableIntFieldUpdateOperationsInput | number | null
+        academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+        maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+        admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        coef_1?: FloatFieldUpdateOperationsInput | number
+        coef_2?: FloatFieldUpdateOperationsInput | number
+        coef_3?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        scoreToPass?: FloatFieldUpdateOperationsInput | number
+        scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ClassRegisterLogsUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        student?: StudentUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+    };
+    export type ClassRegisterLogsUncheckedUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type StudentSubjectScoreCreateManySubjectClassInput = {
         id?: string
         code?: string | null
@@ -446889,6 +451283,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -446922,6 +451317,7 @@ export namespace Prisma {
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -447164,6 +451560,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -447216,6 +451613,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -447337,6 +451735,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -447389,6 +451788,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -447504,6 +451904,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -447556,6 +451957,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -447810,6 +452212,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -447862,6 +452265,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -447976,6 +452380,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -448028,6 +452433,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -448153,6 +452559,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -448205,6 +452612,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -450133,6 +454541,18 @@ export namespace Prisma {
         classification?: string | null
         status?: $Enums.DiplomaVerificationStatus
     };
+    export type ClassRegisterLogsCreateManyStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classRegisterSessionId: string
+        status?: $Enums.ClassRegisterStatus
+        reason?: string | null
+    };
     export type NoteCreateManyStudentInput = {
         id?: string
         code?: string | null
@@ -451047,6 +455467,42 @@ export namespace Prisma {
         classification?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDiplomaVerificationStatusFieldUpdateOperationsInput | $Enums.DiplomaVerificationStatus
     };
+    export type ClassRegisterLogsUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+    };
+    export type ClassRegisterLogsUncheckedUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ClassRegisterLogsUncheckedUpdateManyWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type NoteUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -451191,6 +455647,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -451224,6 +455681,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -451369,6 +455827,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -451421,6 +455880,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -456990,6 +461450,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -457042,6 +461503,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -471422,6 +475884,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
     };
@@ -471474,6 +475937,7 @@ export namespace Prisma {
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
@@ -476911,6 +481375,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
         academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -476944,6 +481409,7 @@ export namespace Prisma {
         academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
         academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string

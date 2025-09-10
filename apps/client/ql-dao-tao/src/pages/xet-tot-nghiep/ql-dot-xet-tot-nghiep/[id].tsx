@@ -2,7 +2,6 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import RejectIcon from '@components/icons/reject'
-import { ModalLearningResult, PutGraduationApplication } from '@components/modal'
 import GraduationDecision from '@components/sub-pages/graduationDecision'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -172,7 +171,7 @@ export default function StudentGraduationApplication() {
         id: string | null
         graduationSessionId: string | undefined
     }>({
-        tag: PutGraduationApplication.name,
+        tag: 'PutGraduationApplication',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -182,7 +181,7 @@ export default function StudentGraduationApplication() {
     }
 
     const { onOpen: onOpenModalLearningResult } = useDisclosure<string>({
-        tag: ModalLearningResult.name,
+        tag: 'ModalLearningResult',
     })
 
     const handleOpenModalLearningResult = (record: any) => {

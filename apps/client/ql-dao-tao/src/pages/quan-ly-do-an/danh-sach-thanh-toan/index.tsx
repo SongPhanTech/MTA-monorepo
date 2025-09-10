@@ -2,7 +2,6 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutPaymentRecordDetail, PutUpdatePaymentStatus } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
@@ -120,13 +119,13 @@ export default function PaymentRecordPage() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen: openPaymentRecord } = useDisclosure<{ paymentRecordId: string }>({
-        tag: PutPaymentRecordDetail.name,
+        tag: 'PutPaymentRecordDetail',
     })
 
     const { onOpen: openUpdatePaymentStatus, isOpen } = useDisclosure<{
         paymentRecordIds: string[]
     }>({
-        tag: PutUpdatePaymentStatus.name,
+        tag: 'PutUpdatePaymentStatus',
     })
 
     useEffect(() => {

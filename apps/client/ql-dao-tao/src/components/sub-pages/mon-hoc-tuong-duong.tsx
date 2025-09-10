@@ -1,4 +1,3 @@
-import { PutMonHocTuongDuong } from '@components/modal'
 import useSpinner from '@hooks/spinner'
 import { EquivalencySide } from '@workspace/db'
 import {
@@ -86,7 +85,7 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
         equivalencyGroupId: string
         side: EquivalencySide
     }>({
-        tag: PutMonHocTuongDuong.name,
+        tag: 'PutMonHocTuongDuong',
     })
 
     const { mutateAsync: createSubjectInGroup } = useCreateSubjectInGroup()

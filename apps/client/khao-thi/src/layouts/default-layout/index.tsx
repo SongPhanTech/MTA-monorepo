@@ -32,6 +32,7 @@ const DefaultLayout = ({
     breadcrumbList?: breadcrumListProps[]
     unLayout?: boolean
 }) => {
+    const menus = useMenuList()
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrum('KHAO_THI', currentPath)
@@ -93,7 +94,6 @@ const DefaultLayout = ({
                     },
                 ]
     }, [breadcrumb, breadcrumbList])
-    const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {

@@ -42,7 +42,7 @@ const PutSurveyObjectTypeModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutSurveyObjectTypeModal.name,
+        tag: 'PutSurveyObjectTypeModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -61,22 +61,40 @@ const PutSurveyObjectTypeModal = () => {
                         name: output.name,
                         type: output.type,
                         organizations: {
-                            connect: output.Organizations.map((item) => ({ Id: item })) || [],
+                            set:
+                                output.Organizations?.length > 0
+                                    ? output.Organizations.map((item) => ({ Id: item }))
+                                    : [],
                         },
                         trainingFields: {
-                            connect: output.TrainingFields.map((item) => ({ id: item })) || [],
+                            set:
+                                output.TrainingFields?.length > 0
+                                    ? output.TrainingFields.map((item) => ({ id: item }))
+                                    : [],
                         },
                         trainingMajors: {
-                            connect: output.TrainingMajors.map((item) => ({ id: item })) || [],
+                            set:
+                                output.TrainingMajors?.length > 0
+                                    ? output.TrainingMajors.map((item) => ({ id: item }))
+                                    : [],
                         },
                         trainingCourses: {
-                            connect: output.TrainingCourses.map((item) => ({ id: item })) || [],
+                            set:
+                                output.TrainingCourses?.length > 0
+                                    ? output.TrainingCourses.map((item) => ({ id: item }))
+                                    : [],
                         },
                         fixedClasses: {
-                            connect: output.FixedClasses.map((item) => ({ id: item })) || [],
+                            set:
+                                output.FixedClasses?.length > 0
+                                    ? output.FixedClasses.map((item) => ({ id: item }))
+                                    : [],
                         },
                         subjectClasses: {
-                            connect: output.SubjectClasses.map((item) => ({ id: item })) || [],
+                            set:
+                                output.SubjectClasses?.length > 0
+                                    ? output.SubjectClasses.map((item) => ({ id: item }))
+                                    : [],
                         },
                     },
                     where: {
@@ -91,22 +109,40 @@ const PutSurveyObjectTypeModal = () => {
                         name: output.name,
                         type: output.type,
                         organizations: {
-                            connect: output.Organizations.map((item) => ({ Id: item })) || [],
+                            connect:
+                                output.Organizations?.length > 0
+                                    ? output.Organizations.map((item) => ({ Id: item }))
+                                    : [],
                         },
                         trainingFields: {
-                            connect: output.TrainingFields.map((item) => ({ id: item })) || [],
+                            connect:
+                                output.TrainingFields?.length > 0
+                                    ? output.TrainingFields.map((item) => ({ id: item }))
+                                    : [],
                         },
                         trainingMajors: {
-                            connect: output.TrainingMajors.map((item) => ({ id: item })) || [],
+                            connect:
+                                output.TrainingMajors?.length > 0
+                                    ? output.TrainingMajors.map((item) => ({ id: item }))
+                                    : [],
                         },
                         trainingCourses: {
-                            connect: output.TrainingCourses.map((item) => ({ id: item })) || [],
+                            connect:
+                                output.TrainingCourses?.length > 0
+                                    ? output.TrainingCourses.map((item) => ({ id: item }))
+                                    : [],
                         },
                         fixedClasses: {
-                            connect: output.FixedClasses.map((item) => ({ id: item })) || [],
+                            connect:
+                                output.FixedClasses?.length > 0
+                                    ? output.FixedClasses.map((item) => ({ id: item }))
+                                    : [],
                         },
                         subjectClasses: {
-                            connect: output.SubjectClasses.map((item) => ({ id: item })) || [],
+                            connect:
+                                output.SubjectClasses?.length > 0
+                                    ? output.SubjectClasses.map((item) => ({ id: item }))
+                                    : [],
                         },
                     },
                 })
@@ -114,65 +150,39 @@ const PutSurveyObjectTypeModal = () => {
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['Level'],
+                queryKey: ['SurveyObjectType'],
             })
             onClose()
         } catch (_error) {
+            console.log(_error, output)
+
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
         }
     }
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi(
-        {},
-        {
-            enabled: type?.includes('LECTURER') || type?.includes('STAFF'),
-        }
-    )
-    const { data: trainingFieldData = [] } = useFindManyTrainingField(
-        {
-            orderBy: { name: 'asc' },
-        },
-        {
-            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
-        }
-    )
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor(
-        {
-            orderBy: { name: 'asc' },
-        },
-        {
-            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
-        }
-    )
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+    const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
 
-    const { data: trainingCourses = [] } = useFindManyTrainingCourse(
-        {
-            orderBy: { name: 'asc' },
-        },
-        {
-            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
-        }
-    )
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
 
-    const { data: fixedClasses = [] } = useFindManyFixedClass(
-        {
-            orderBy: { name: 'asc' },
-        },
-        {
-            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
-        }
-    )
+    const { data: fixedClasses = [] } = useFindManyFixedClass({
+        orderBy: { name: 'asc' },
+    })
 
-    const { data: subjectClassData = [] } = useFindManySubjectClass(
-        {
-            orderBy: { name: 'asc' },
-        },
-        {
-            enabled: type?.includes('MILITARY_STUDENT') || type?.includes('CIVILIAN_STUDENT'),
-        }
-    )
-    const treeData = buildOrgTree(manageOrgData)
+    const { data: subjectClassData = [] } = useFindManySubjectClass({
+        orderBy: { name: 'asc' },
+    })
+    const treeData = useMemo(() => {
+        return buildOrgTree(manageOrgData)
+    }, [manageOrgData])
     const { data: surveyObjectType } = useFindUniqueSurveyObjectType(
         {
             where: { id },
@@ -298,7 +308,6 @@ const PutSurveyObjectTypeModal = () => {
                 ),
             })
         }
-        console.log(result)
 
         return result
     }, [type])
@@ -315,6 +324,17 @@ const PutSurveyObjectTypeModal = () => {
                 FixedClasses: surveyObjectType.fixedClasses.map((item) => item.id),
                 SubjectClasses: surveyObjectType.subjectClasses.map((item) => item.id),
             })
+            if (
+                surveyObjectType?.type.includes('MILITARY_STUDENT') ||
+                surveyObjectType?.type.includes('CIVILIAN_STUDENT')
+            ) {
+                setActiveKey('STUDENT')
+            } else if (
+                surveyObjectType?.type.includes('LECTURER') ||
+                surveyObjectType?.type.includes('STAFF')
+            ) {
+                setActiveKey('LECTURER')
+            }
         }
     }, [surveyObjectType])
 

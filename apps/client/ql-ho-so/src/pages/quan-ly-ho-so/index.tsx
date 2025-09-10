@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { ModalLyLichCanBo, ModalSoYeuLyLich, ModalTomTatLyLich } from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -227,19 +226,19 @@ export default function UserProfilePageDs() {
     const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
         id: string
     }>({
-        tag: ModalTomTatLyLich.name,
+        tag: 'ModalTomTatLyLich',
     })
 
     const { onOpen: onOpenModalLyLichCanBo } = useDisclosure<{
         id: string
     }>({
-        tag: ModalLyLichCanBo.name,
+        tag: 'ModalLyLichCanBo',
     })
 
     const { onOpen: onOpenModalSoYeuLyLich } = useDisclosure<{
         id: string
     }>({
-        tag: ModalSoYeuLyLich.name,
+        tag: 'ModalSoYeuLyLich',
     })
 
     const { mutateAsync: updateUserProfile } = useUpdateStudent()

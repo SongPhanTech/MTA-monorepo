@@ -11,7 +11,7 @@ export default function TrangThaiLamViecModal() {
     const [form] = Form.useForm<DM_TrangThaiLamViec>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_TrangThaiLamViec>>({
-        tag: TrangThaiLamViecModal.name,
+        tag: 'TrangThaiLamViecModal',
         onClose: form.resetFields,
     })
 

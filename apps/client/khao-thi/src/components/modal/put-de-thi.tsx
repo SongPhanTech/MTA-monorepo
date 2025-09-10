@@ -11,7 +11,7 @@ export type PutExamBankType = ExamBank
 const PutExamBank = () => {
     const [form] = Form.useForm<PutExamBankType>()
     const { isOpen, onClose, input } = useDisclosure<{ examId: string; id: string }>({
-        tag: PutExamBank.name,
+        tag: 'PutExamBank',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

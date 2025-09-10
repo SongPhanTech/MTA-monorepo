@@ -1,0 +1,44 @@
+sequenceDiagram
+    participant SV as Sinh viên (Client)
+    participant APIGW as API Gateway
+    participant RegSvc as Registration Service
+    participant StudentSvc as Student Service
+    participant CourseSvc as Course Service
+    participant Redis
+    participant PostgreSQL
+    participant MsgQueue as Message Queue
+    participant NotifSvc as Notification Service
+
+    SV->>APIGW: 1. POST /api/registrations (body: { subjectClassId })
+    APIGW->>RegSvc: 2. Xác thực & Định tuyến
+    
+    RegSvc->>StudentSvc: 3a. Lấy thông tin SV (hạng học lực)
+    StudentSvc-->>RegSvc: Phản hồi
+    
+    RegSvc->>CourseSvc: 3b. Lấy thông tin lớp (tín chỉ, môn tiên quyết)
+    CourseSvc-->>RegSvc: Phản hồi
+
+    RegSvc->>RegSvc: 4. Kiểm tra logic (trùng lịch, tín chỉ, tiên quyết...)
+    
+    alt Kiểm tra logic OK
+        RegSvc->>Redis: 5. [ATOMIC] DECR sĩ số & kiểm tra
+        alt Còn chỗ (Redis trả về >= 0)
+            Redis-->>RegSvc: Hợp lệ
+            RegSvc->>PostgreSQL: 6. [TRANSACTION] Ghi bản ghi đăng ký (StudentSubjectScore)
+            PostgreSQL-->>RegSvc: Ghi thành công
+            RegSvc->>MsgQueue: 7. [ASYNC] Gửi message thông báo thành công
+            RegSvc-->>APIGW: 8. Phản hồi thành công cho Client
+        else Hết chỗ (Redis trả về < 0)
+            Redis-->>RegSvc: Hết chỗ
+            RegSvc->>Redis: Hoàn trả slot (INCR)
+            Redis-->>RegSvc: 
+            RegSvc-->>APIGW: Phản hồi lỗi "Lớp đã đầy"
+        end
+    else Kiểm tra logic thất bại
+        RegSvc-->>APIGW: Phản hồi lỗi nghiệp vụ
+    end
+    
+    APIGW-->>SV: Phản hồi cuối cùng
+    
+    MsgQueue-->>NotifSvc: Nhận message
+    NotifSvc->>NotifSvc: 9. Gửi Email / Notification

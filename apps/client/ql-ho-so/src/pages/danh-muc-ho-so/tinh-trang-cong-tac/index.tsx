@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { TinhTrangCongTacModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -21,7 +20,7 @@ export default function WorkingStatus() {
 
     const { showSpinner, hideSpinner } = useSpinner()
     const { onOpen } = useDisclosure<Partial<DM_TinhTrangCongTac>>({
-        tag: TinhTrangCongTacModal.name,
+        tag: 'TinhTrangCongTacModal',
     })
 
     const { data = [], refetch } = useFindManyDM_TinhTrangCongTac()

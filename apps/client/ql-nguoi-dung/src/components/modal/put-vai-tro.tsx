@@ -25,7 +25,7 @@ export type PutVaiTroFormType = {
 } & PutModalFormType
 const PutVaiTroModal = () => {
     const { isOpen, onClose, onOk, input } = useDisclosure<string>({
-        tag: PutVaiTroModal.name,
+        tag: 'PutVaiTroModal',
     })
     const { data: quyenCoBan, dataFlat: quyenCoBanFlat } = useQuyenCoBan()
     const [form] = Form.useForm<PutVaiTroFormType>()

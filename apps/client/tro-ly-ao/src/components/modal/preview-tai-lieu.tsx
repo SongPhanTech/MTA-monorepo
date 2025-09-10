@@ -13,7 +13,7 @@ const PreviewTaiLieu = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PreviewTaiLieu.name,
+        tag: 'PreviewTaiLieu',
     })
 
     const { data: selectedDocument } = useFindFirstDocument({

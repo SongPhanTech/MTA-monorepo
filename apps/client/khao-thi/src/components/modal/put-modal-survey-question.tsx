@@ -21,7 +21,7 @@ const PutSurveyQuestionModal = () => {
         id: string
         surveyQuestionGroupId?: string
     }>({
-        tag: PutSurveyQuestionModal.name,
+        tag: 'PutSurveyQuestionModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

@@ -6,7 +6,6 @@ import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutScholarshipAward } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -104,7 +103,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
         id: string
         semesterId: string
     }>({
-        tag: PutScholarshipAward.name,
+        tag: 'PutScholarshipAward',
     })
 
     const { data: students = [], refetch } = useExportStudentResultSemesterJson<

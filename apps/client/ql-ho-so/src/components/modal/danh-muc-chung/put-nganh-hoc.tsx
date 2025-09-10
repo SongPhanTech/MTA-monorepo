@@ -11,7 +11,7 @@ export default function NganhHocModal() {
     const [form] = Form.useForm<DM_NganhHoc>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_NganhHoc>>({
-        tag: NganhHocModal.name,
+        tag: 'NganhHocModal',
         onClose: form.resetFields,
     })
 

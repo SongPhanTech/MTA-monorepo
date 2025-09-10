@@ -1,11 +1,6 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    ModalGraduationCriteria,
-    PutAcademicRanking,
-    PutCloneAcademicRanking,
-} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -80,15 +75,15 @@ export default function GraduationRankingPage() {
         []
     )
     const { onOpen } = useDisclosure<{ id: string; type: string }>({
-        tag: PutAcademicRanking.name,
+        tag: 'PutAcademicRanking',
     })
 
     const { onOpen: onOpenCopy } = useDisclosure<{ record: TrainingCourse }>({
-        tag: PutCloneAcademicRanking.name,
+        tag: 'PutCloneAcademicRanking',
     })
 
     const { onOpen: onOpenGraduationCriteria } = useDisclosure<string>({
-        tag: ModalGraduationCriteria.name,
+        tag: 'ModalGraduationCriteria',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

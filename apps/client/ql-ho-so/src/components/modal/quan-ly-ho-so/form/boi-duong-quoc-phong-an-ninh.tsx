@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutBoiDuongQuocPhongAnNinhModal from '@components/modal/quan-ly-ho-so/modals/put-boi-duong-quoc-phong-an-ninh'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -19,7 +18,7 @@ export default function BoiDuongQuocPhongAnNinhForm({ expland, setExpland }: Dom
     const { onOpen } = useDisclosure<
         Partial<BoiDuongQuocPhongAnNinh> & { onSave: (val: BoiDuongQuocPhongAnNinh) => void }
     >({
-        tag: PutBoiDuongQuocPhongAnNinhModal.name,
+        tag: 'PutBoiDuongQuocPhongAnNinhModal',
     })
 
     const handleSave = (data: BoiDuongQuocPhongAnNinh) => {

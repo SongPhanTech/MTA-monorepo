@@ -17,7 +17,7 @@ export default function PutTrinhDoQuanLyNhaNuocModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<TrinhDoQuanLyNhaNuoc> & { onSave: (val: TrinhDoQuanLyNhaNuoc) => void }
     >({
-        tag: PutTrinhDoQuanLyNhaNuocModal.name,
+        tag: 'PutTrinhDoQuanLyNhaNuocModal',
         onClose: form.resetFields,
     })
 

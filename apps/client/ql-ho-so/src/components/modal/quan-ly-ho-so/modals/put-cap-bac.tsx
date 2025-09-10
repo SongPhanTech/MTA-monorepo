@@ -17,7 +17,7 @@ export default function PutCapBacModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<CapBac> & { onSave: (val: CapBac) => void }
     >({
-        tag: PutCapBacModal.name,
+        tag: 'PutCapBacModal',
         onClose: form.resetFields,
     })
 

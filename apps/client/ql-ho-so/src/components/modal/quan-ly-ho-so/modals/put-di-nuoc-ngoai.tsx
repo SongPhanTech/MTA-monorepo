@@ -15,7 +15,7 @@ export default function PutNuocNgoaiModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<NuocNgoai> & { onSave: (val: NuocNgoai) => void }
     >({
-        tag: PutNuocNgoaiModal.name,
+        tag: 'PutNuocNgoaiModal',
         onClose: () => {
             form.resetFields()
         },

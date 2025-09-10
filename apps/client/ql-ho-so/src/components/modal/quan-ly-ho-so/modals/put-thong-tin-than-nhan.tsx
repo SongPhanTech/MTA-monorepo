@@ -14,7 +14,7 @@ export default function PutThongTinThanNhan() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<Relative> & { onSave: (val: Relative) => void }
     >({
-        tag: PutThongTinThanNhan.name,
+        tag: 'PutThongTinThanNhan',
         onClose: form.resetFields,
     })
 

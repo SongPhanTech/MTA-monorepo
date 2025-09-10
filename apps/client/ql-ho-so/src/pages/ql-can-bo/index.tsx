@@ -1,11 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    PutUpdateProfileModal,
-    PutUploadProfileModal,
-    PutUserProfileStaffModal,
-} from '@components/modal'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
@@ -288,17 +283,17 @@ export default function StaffManagement() {
     // )
 
     const { onOpen, onClose } = useDisclosure({
-        tag: PutUserProfileStaffModal.name,
+        tag: 'PutUserProfileStaffModal',
     })
 
     const { onOpen: onOpenModalAdd, onClose: onCloseModalAdd } = useDisclosure({
-        tag: PutUserProfileStaffModal.name,
+        tag: 'PutUserProfileStaffModal',
     })
 
     // const { onOpen: onOpenModalTomTatLyLich } = useDisclosure<{
     //     id: string
     // }>({
-    //     tag: ModalLyLichCanBo.name,
+    //     tag: 'ModalLyLichCanBo',
     // })
 
     const handleModal = () => {
@@ -306,11 +301,11 @@ export default function StaffManagement() {
     }
 
     const { onOpen: onOpenUpload, onClose: onCloseUpload } = useDisclosure<string>({
-        tag: PutUploadProfileModal.name,
+        tag: 'PutUploadProfileModal',
     })
 
     const { onOpen: onOpenUpdateFile, onClose: onCloseUpdateFile } = useDisclosure<string>({
-        tag: PutUpdateProfileModal.name,
+        tag: 'PutUpdateProfileModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

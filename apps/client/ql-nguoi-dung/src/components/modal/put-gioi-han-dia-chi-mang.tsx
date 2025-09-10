@@ -17,7 +17,7 @@ const PutGioiHanDiaChiMangDungModal = () => {
         onOk,
         input: id,
     } = useDisclosure<string>({
-        tag: PutGioiHanDiaChiMangDungModal.name,
+        tag: 'PutGioiHanDiaChiMangDungModal',
         onClose: form.resetFields,
     })
 

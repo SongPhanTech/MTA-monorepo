@@ -4,7 +4,6 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import { ModalPrintStudentSubjectScore } from '@components/modal'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
@@ -77,7 +76,7 @@ export default function SubjectClassScore() {
         dataTable: any
         type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
     }>({
-        tag: ModalPrintStudentSubjectScore.name,
+        tag: 'ModalPrintStudentSubjectScore',
     })
 
     useEffect(() => {

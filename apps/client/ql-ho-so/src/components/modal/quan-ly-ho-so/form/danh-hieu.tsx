@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutDanhHieuModal from '@components/modal/quan-ly-ho-so/modals/put-danh-hieu'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -22,7 +21,7 @@ export default function DanhHieuForm({ expland, setExpland }: DomProps) {
             onSave: (val: DanhHieu) => void
         }
     >({
-        tag: PutDanhHieuModal.name,
+        tag: 'PutDanhHieuModal',
     })
 
     const handleSave = (data: DanhHieu) => {

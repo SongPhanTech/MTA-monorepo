@@ -21,7 +21,7 @@ const ModalLyLichCanBo = () => {
     const printRef = useRef<HTMLDivElement>(null)
 
     const { isOpen, onClose, input } = useDisclosure<ModalLyLichCanBoInput>({
-        tag: ModalLyLichCanBo.name,
+        tag: 'ModalLyLichCanBo',
     })
 
     const handlePrint = useReactToPrint({

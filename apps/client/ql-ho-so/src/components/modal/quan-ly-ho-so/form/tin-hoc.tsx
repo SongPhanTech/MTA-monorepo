@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutTinHocModal from '@components/modal/quan-ly-ho-so/modals/put-tin-hoc'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -23,7 +22,7 @@ export default function TinHocForm({ expland, setExpland }: DomProps) {
             onSave: (val: TinHoc) => void
         }
     >({
-        tag: PutTinHocModal.name,
+        tag: 'PutTinHocModal',
     })
     const { data = [] } = useFindManyDM_TrinhDoTinHoc(
         {},

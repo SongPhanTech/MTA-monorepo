@@ -20,7 +20,7 @@ export default function PutHocViModal() {
             onSave: (val: HocVi) => void
         }
     >({
-        tag: PutHocViModal.name,
+        tag: 'PutHocViModal',
         onClose: form.resetFields,
     })
 

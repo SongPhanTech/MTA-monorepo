@@ -1,5 +1,4 @@
 import Table from '@components/commons/table'
-import { PutQuyenCoBanModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useQuyenCoBan from '@hooks/quyen-co-ban'
 import DefaultLayout from '@layouts/default-layout'
@@ -23,7 +22,7 @@ export default function Page() {
     const _router = useRouter()
     const debouncedSearchText = _.debounce(setSearchText, 500)
     const { onOpen } = useDisclosure({
-        tag: PutQuyenCoBanModal.name,
+        tag: 'PutQuyenCoBanModal',
     })
 
     const handleModal = () => {

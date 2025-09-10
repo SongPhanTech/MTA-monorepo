@@ -3,7 +3,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutEvaluationPeriod } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -75,7 +74,7 @@ export default function EvaluationPeriod() {
     })
 
     const { onOpen: onOpenPutEvaluationPeriod } = useDisclosure<string>({
-        tag: PutEvaluationPeriod.name,
+        tag: 'PutEvaluationPeriod',
         onClose() {
             refetch()
             refetchCount()

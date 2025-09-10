@@ -13,7 +13,7 @@ const PinEvidenceToPeriod = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         data: itemProps
     }>({
-        tag: PinEvidenceToPeriod.name,
+        tag: 'PinEvidenceToPeriod',
     })
 
     const dataRender = useMemo(() => {

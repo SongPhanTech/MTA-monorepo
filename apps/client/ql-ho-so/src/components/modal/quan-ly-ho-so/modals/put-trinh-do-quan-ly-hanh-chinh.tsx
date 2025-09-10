@@ -8,7 +8,7 @@ export default function PutTrinhDoQuanLyHanhChinhModal() {
     const [form] = Form.useForm()
 
     const { isOpen, onClose, input } = useDisclosure({
-        tag: PutTrinhDoQuanLyHanhChinhModal.name,
+        tag: 'PutTrinhDoQuanLyHanhChinhModal',
         onClose: form.resetFields,
     })
 

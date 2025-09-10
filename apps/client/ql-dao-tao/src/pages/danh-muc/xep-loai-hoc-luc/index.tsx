@@ -2,7 +2,6 @@ import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutAcademicRanking, PutCloneAcademicRanking } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -91,11 +90,11 @@ export default function AcademicRankingConvertPage() {
         []
     )
     const { onOpen } = useDisclosure<{ id: string }>({
-        tag: PutAcademicRanking.name,
+        tag: 'PutAcademicRanking',
     })
 
     const { onOpen: onOpenCopy } = useDisclosure<{ record: TrainingCourse }>({
-        tag: PutCloneAcademicRanking.name,
+        tag: 'PutCloneAcademicRanking',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

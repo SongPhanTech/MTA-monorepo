@@ -21,8 +21,7 @@ import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
 import { BookPlus } from 'lucide-react'
-import PutRankingCondition from './put-dieu-kien-xep-loai-tn'
-import PutRankDowngradeCondition from './put-quy-tac-ha-bac'
+
 export type GraduationCriteria = RankingCondition
 dayjs.locale('vi')
 
@@ -68,14 +67,14 @@ const ModalGraduationCriteria = () => {
         rankingId?: string
         rankingConditionId: string
     }>({
-        tag: PutRankingCondition.name,
+        tag: 'PutRankingCondition',
     })
 
     const { onOpen: openRankDowngradeCondition } = useDisclosure<{
         downgradeRuleId: string
         downgradeConditionId: string
     }>({
-        tag: PutRankDowngradeCondition.name,
+        tag: 'PutRankDowngradeCondition',
     })
 
     async function handleDeleteRankingCondition(id: string) {

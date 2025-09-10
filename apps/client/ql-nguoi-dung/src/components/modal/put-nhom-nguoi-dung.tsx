@@ -14,7 +14,7 @@ export type PutNhomNguoiDungFormType = {
 const PutNhomNguoiDungModal = () => {
     const [form] = Form.useForm<PutNhomNguoiDungFormType>()
     const { isOpen, onClose, onOk, input } = useDisclosure<string>({
-        tag: PutNhomNguoiDungModal.name,
+        tag: 'PutNhomNguoiDungModal',
         onClose: form.resetFields,
     })
     const { data: group, isSuccess } = useFindUniqueGroup({

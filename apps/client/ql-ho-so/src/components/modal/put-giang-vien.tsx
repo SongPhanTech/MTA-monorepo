@@ -30,7 +30,7 @@ const PutUserProfileLectureModal = () => {
     const [form] = Form.useForm<PutLecturerProfile & { userProfileId: string }>()
 
     const { isOpen, onClose, input } = useDisclosure<PutUserProfileLectureProps>({
-        tag: PutUserProfileLectureModal.name,
+        tag: 'PutUserProfileLectureModal',
         onClose: form.resetFields,
     })
 

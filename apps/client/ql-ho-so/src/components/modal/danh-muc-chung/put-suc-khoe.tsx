@@ -11,7 +11,7 @@ export default function SucKhoeModal() {
     const [form] = Form.useForm<DM_SucKhoe>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_SucKhoe>>({
-        tag: SucKhoeModal.name,
+        tag: 'SucKhoeModal',
         onClose: form.resetFields,
     })
 

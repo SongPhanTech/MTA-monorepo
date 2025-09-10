@@ -2,7 +2,6 @@ import { CalendarOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
-import { HanNhapDiem } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
@@ -39,7 +38,7 @@ export default function SubjectClassScore() {
     })
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: HanNhapDiem.name,
+        tag: 'HanNhapDiem',
     })
 
     const handleFilterChange = (key: string, value: string) => {

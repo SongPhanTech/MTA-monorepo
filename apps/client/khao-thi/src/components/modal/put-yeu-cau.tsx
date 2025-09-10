@@ -21,7 +21,7 @@ const PutRequirementCriterionCatalog = () => {
         id: string
         criterionCatalogId: string
     }>({
-        tag: PutRequirementCriterionCatalog.name,
+        tag: 'PutRequirementCriterionCatalog',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

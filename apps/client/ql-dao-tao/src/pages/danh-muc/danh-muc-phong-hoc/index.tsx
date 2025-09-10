@@ -1,8 +1,6 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutBuildingModal } from '@components/modal'
-import PutTrainingLocationModal from '@components/modal/put-khu-vuc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -94,14 +92,14 @@ export default function TrainingLocationPage() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: PutTrainingLocationModal.name,
+        tag: 'PutTrainingLocationModal',
     })
 
     const { onOpen: openPutBuilding } = useDisclosure<{
         trainingLocationId: string
         id?: string
     }>({
-        tag: PutBuildingModal.name,
+        tag: 'PutBuildingModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

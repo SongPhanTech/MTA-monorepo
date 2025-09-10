@@ -17,7 +17,7 @@ const ModalSinhDeThiTuDong = () => {
         onClose,
         input: examId,
     } = useDisclosure<string>({
-        tag: ModalSinhDeThiTuDong.name,
+        tag: 'ModalSinhDeThiTuDong',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

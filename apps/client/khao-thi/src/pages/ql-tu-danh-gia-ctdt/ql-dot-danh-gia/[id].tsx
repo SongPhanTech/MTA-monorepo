@@ -1,4 +1,3 @@
-import { ModalPrintDotDanhGia } from '@components/modal'
 import EvaluatedPage from '@components/sub-pages/tu-danh-gia'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -94,7 +93,7 @@ export default function EvaluationPeriodPage() {
     }, [data, refetch])
 
     const { onOpen: onOpenModalPrintDotDanhGia } = useDisclosure<{ data: DataPrintDotDanhGia }>({
-        tag: ModalPrintDotDanhGia.name,
+        tag: 'ModalPrintDotDanhGia',
     })
 
     return (

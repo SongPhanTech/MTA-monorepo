@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutQuaTrinhLuongModal from '@components/modal/quan-ly-ho-so/modals/put-qua-trinh-luong'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -23,7 +22,7 @@ export default function QuaTrinhLuongForm({ expland, setExpland }: DomProps) {
             onSave: (val: QuaTrinhLuong) => void
         }
     >({
-        tag: PutQuaTrinhLuongModal.name,
+        tag: 'PutQuaTrinhLuongModal',
     })
 
     const { data: ngachList = [] } = useFindManyDM_Ngach()

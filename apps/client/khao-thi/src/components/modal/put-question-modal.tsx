@@ -26,7 +26,7 @@ const PutQuestionModal = () => {
         questionBankId: string
         subjectVersionId: string
     }>({
-        tag: PutQuestionModal.name,
+        tag: 'PutQuestionModal',
         onClose: form.resetFields,
     })
 

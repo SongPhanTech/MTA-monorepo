@@ -22,7 +22,7 @@ const PutEvidence = () => {
         id: string
         categoryId: string
     }>({
-        tag: PutEvidence.name,
+        tag: 'PutEvidence',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

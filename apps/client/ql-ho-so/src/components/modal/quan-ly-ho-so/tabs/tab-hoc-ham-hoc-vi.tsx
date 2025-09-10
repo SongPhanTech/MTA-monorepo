@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutHocHamModal from '@components/modal/quan-ly-ho-so/modals/put-hoc-ham'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
@@ -16,7 +15,6 @@ import {
 import { Button, Collapse, Flex, message, Row } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import PutHocViModal from '../modals/put-hoc-vi'
 import type { UserProfileType } from '../type'
 
 const { Panel } = Collapse
@@ -33,11 +31,11 @@ export default function HocHamHocViTab({
     const [_numberOfPages, _setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
     const { onOpen } = useDisclosure<Partial<HocVi>>({
-        tag: PutHocViModal.name,
+        tag: 'PutHocViModal',
     })
 
     const { onOpen: openHocHam } = useDisclosure<Partial<HocHam>>({
-        tag: PutHocHamModal.name,
+        tag: 'PutHocHamModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

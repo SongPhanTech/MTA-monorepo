@@ -25,7 +25,7 @@ type DocumentFormType = {
 }
 const AddTaiLieu = () => {
     const { isOpen, onClose } = useDisclosure<string>({
-        tag: AddTaiLieu.name,
+        tag: 'AddTaiLieu',
     })
     const { mutateAsync: createMany } = useCreateManyDocument()
 

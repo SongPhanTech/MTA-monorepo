@@ -23,7 +23,7 @@ export const ModalPrintExamBank = () => {
         duration: number
         explanation: boolean
     }>({
-        tag: ModalPrintExamBank.name,
+        tag: 'ModalPrintExamBank',
     })
 
     const printRef = useRef<HTMLDivElement>(null)

@@ -1,5 +1,4 @@
 import TableCollapse from '@components/commons/tableCollapse'
-import { ModalPrintToKQHT } from '@components/modal'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedAward, ArchivedCertificate } from '@workspace/db'
@@ -24,7 +23,7 @@ export default function StudentScoreClassPage() {
         dataTable: any
         dataStudent: any
     }>({
-        tag: ModalPrintToKQHT.name,
+        tag: 'ModalPrintToKQHT',
     })
 
     const { data: student } = useFindUniqueStudent(

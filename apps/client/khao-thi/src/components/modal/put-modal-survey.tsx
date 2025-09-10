@@ -24,7 +24,7 @@ const PutSurveyModal = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutSurveyModal.name,
+        tag: 'PutSurveyModal',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -45,7 +45,7 @@ const PutSurveyModal = () => {
                         code: output.code,
                         name: output.name,
                         surveyObjectType: {
-                            connect: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
+                            set: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
                         },
                         startDate: output.startDate,
                         endDate: output.endDate,

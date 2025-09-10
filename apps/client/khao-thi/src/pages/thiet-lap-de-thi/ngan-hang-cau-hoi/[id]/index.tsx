@@ -4,7 +4,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutQuestionModal } from '@components/modal'
 import { WordImportModal } from '@components/sub-pages'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
@@ -52,7 +51,7 @@ export default function QuestionPage() {
         questionBankId: string
         subjectVersionId: string
     }>({
-        tag: PutQuestionModal.name,
+        tag: 'PutQuestionModal',
     })
 
     const { data: initialValue } = useFindUniqueQuestionBank(

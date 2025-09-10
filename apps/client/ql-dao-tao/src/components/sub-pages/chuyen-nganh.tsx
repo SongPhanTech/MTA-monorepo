@@ -1,11 +1,6 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import {
-    PutFixedClassModal,
-    PutUploadDivisionModal,
-    PutUploadFixedClassModal,
-} from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -84,13 +79,13 @@ export default function MajorInforList({ infor }: any) {
         []
     )
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutFixedClassModal.name,
+        tag: 'PutFixedClassModal',
     })
     const { onOpen: onOpenFixedClass, onClose: onCloseFixedClass } = useDisclosure<string>({
-        tag: PutUploadFixedClassModal.name,
+        tag: 'PutUploadFixedClassModal',
     })
     const { onOpen: onOpenDivision, onClose: onCloseDivision } = useDisclosure<string>({
-        tag: PutUploadDivisionModal.name,
+        tag: 'PutUploadDivisionModal',
     })
     const { showSpinner, hideSpinner } = useSpinner()
 

@@ -19,7 +19,7 @@ const PutDifficulty = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutDifficulty.name,
+        tag: 'PutDifficulty',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

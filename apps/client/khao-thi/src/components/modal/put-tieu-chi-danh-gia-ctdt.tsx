@@ -20,7 +20,7 @@ const PutCriterionCatalog = () => {
         id: string
         standardId: string
     }>({
-        tag: PutCriterionCatalog.name,
+        tag: 'PutCriterionCatalog',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

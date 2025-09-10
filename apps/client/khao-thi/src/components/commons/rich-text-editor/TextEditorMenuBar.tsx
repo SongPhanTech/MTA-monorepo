@@ -36,7 +36,6 @@ import {
 } from 'react-icons/ri'
 import { env } from '@/env'
 import 'katex/dist/katex.min.css'
-import { PinEvidenceToPeriod } from '@components/modal'
 import { Columns, Merge, Plus, Rows, Split, Table, TableProperties, Trash2 } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -87,7 +86,7 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
         id: string
         changeValue: (value: { value: string; label: string }) => void
     }>({
-        tag: PinEvidenceToPeriod.name,
+        tag: 'PinEvidenceToPeriod',
     })
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {

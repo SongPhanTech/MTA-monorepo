@@ -13,7 +13,7 @@ export default function PutDanhHieuModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<DanhHieu> & { onSave: (val: DanhHieu) => void }
     >({
-        tag: PutDanhHieuModal.name,
+        tag: 'PutDanhHieuModal',
         onClose: () => {
             form.resetFields()
         },

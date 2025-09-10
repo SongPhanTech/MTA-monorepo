@@ -2,7 +2,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutEvaluationSecretaryMember } from '@components/modal'
 import { EVALUATION_SECRETARY_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -52,7 +51,7 @@ export default function EvaluationCouncil() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { onOpen } = useDisclosure<string>({
-        tag: PutEvaluationSecretaryMember.name,
+        tag: 'PutEvaluationSecretaryMember',
     })
     const { mutateAsync: updateEvaluationSecretaryMember } = useUpdateEvaluationSecretaryMember()
     async function handleDeleteEvaluationSecretaryMember(id: string) {

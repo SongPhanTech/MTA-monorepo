@@ -20,7 +20,7 @@ const ModalSoYeuLyLich = () => {
     const printRef = useRef<HTMLDivElement>(null)
 
     const { isOpen, onClose, input } = useDisclosure<ModalSoYeuLyLichInput>({
-        tag: ModalSoYeuLyLich.name,
+        tag: 'ModalSoYeuLyLich',
     })
 
     const getRelationshipText = (relationType: string, userGender?: string) => {

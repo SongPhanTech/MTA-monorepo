@@ -3,7 +3,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyExamModal, PutSurveyModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { SurveyObjectType } from '@workspace/db'
@@ -99,11 +98,11 @@ function TabDotKhaoSat() {
     const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
 
     const { onOpen } = useDisclosure<string>({
-        tag: PutSurveyModal.name,
+        tag: 'PutSurveyModal',
     })
 
     const { onOpen: onOpenSurveyExamModal } = useDisclosure<{ id: string; surveyTopicId: string }>({
-        tag: PutSurveyExamModal.name,
+        tag: 'PutSurveyExamModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -128,6 +127,7 @@ function TabDotKhaoSat() {
                     deletedAt: new Date(),
                 },
             })
+            refetch()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {

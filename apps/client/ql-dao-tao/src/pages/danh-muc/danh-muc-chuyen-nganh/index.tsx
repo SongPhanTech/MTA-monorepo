@@ -1,7 +1,6 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutTrainingMajorModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -214,7 +213,7 @@ export default function TrainingMajorPage() {
         []
     )
     const { onOpen } = useDisclosure<string>({
-        tag: PutTrainingMajorModal.name,
+        tag: 'PutTrainingMajorModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

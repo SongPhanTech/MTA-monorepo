@@ -108,8 +108,8 @@ const PutTrainingObjectTypeModal = () => {
             </Col>
 
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên đối đượng đào tạo" required>
-                    <Input placeholder="Nhập tên đối đượng đào tạo" />
+                <FormItem form={form} name="name" label="Tên đối tượng đào tạo" required>
+                    <Input placeholder="Nhập tên đối tượng đào tạo" />
                 </FormItem>
             </Col>
             {id && (

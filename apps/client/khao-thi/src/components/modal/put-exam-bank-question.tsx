@@ -27,7 +27,7 @@ const PutExamBankQuestion = () => {
         examBankId: string
         questionBankId: string
     }>({
-        tag: PutExamBankQuestion.name,
+        tag: 'PutExamBankQuestion',
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()

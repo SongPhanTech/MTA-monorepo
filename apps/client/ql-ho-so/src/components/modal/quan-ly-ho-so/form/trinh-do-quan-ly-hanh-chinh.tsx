@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutTrinhDoQuanLyHanhChinhModal from '@components/modal/quan-ly-ho-so/modals/put-trinh-do-quan-ly-hanh-chinh'
 import type { DomProps } from '@constants/type'
 import { Button, Col, Collapse, Flex, Form, Row, Typography } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -15,7 +14,7 @@ export default function TrinhDoQuanLyHanhChinhForm({ expland, setExpland }: DomP
     const hanhChinhList = Form.useWatch('trinhDoQuanLyHanhChinh', form) || []
 
     const { onOpen } = useDisclosure<Partial<any> & { onSave: (val: any) => void }>({
-        tag: PutTrinhDoQuanLyHanhChinhModal.name,
+        tag: 'PutTrinhDoQuanLyHanhChinhModal',
     })
 
     const handleSave = (data: any) => {

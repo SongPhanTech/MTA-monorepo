@@ -15,7 +15,7 @@ export default function PutTinHocModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<TinHoc> & { onSave: (val: TinHoc) => void }
     >({
-        tag: PutTinHocModal.name,
+        tag: 'PutTinHocModal',
         onClose: () => {
             form.resetFields()
         },

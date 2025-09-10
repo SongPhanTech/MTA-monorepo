@@ -2,7 +2,6 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilte'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSurveyTopicModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import {
@@ -46,6 +45,9 @@ function TabChuDeKhaoSat() {
 
     const { data = [], refetch } = useFindManySurveyTopic({
         where,
+        include: {
+            surveyQuestionGroup: true,
+        },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
@@ -53,7 +55,7 @@ function TabChuDeKhaoSat() {
     const { data: count } = useCountSurveyTopic({ where: { ...where, deletedAt: null } })
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutSurveyTopicModal.name,
+        tag: 'PutSurveyTopicModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -74,6 +76,7 @@ function TabChuDeKhaoSat() {
                     deletedAt: new Date(),
                 },
             })
+            refetch()
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
@@ -117,13 +120,14 @@ function TabChuDeKhaoSat() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                render: (_, { id }) => (
+                                render: (_, { id, surveyQuestionGroup }) => (
                                     <Row className="justify-center gap-2">
                                         <EditIcon
                                             onClick={onOpen.bind(null, id)}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon
+                                            disabled={surveyQuestionGroup.length > 0}
                                             popConfirm={{
                                                 onConfirm: () => handleDelete(id),
                                             }}

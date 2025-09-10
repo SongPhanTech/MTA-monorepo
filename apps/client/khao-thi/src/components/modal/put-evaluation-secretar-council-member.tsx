@@ -25,7 +25,7 @@ const PutEvaluationSecretaryMember = () => {
         onClose,
         input: id,
     } = useDisclosure<string>({
-        tag: PutEvaluationSecretaryMember.name,
+        tag: 'PutEvaluationSecretaryMember',
         onClose: form.resetFields,
     })
     const evaluationSecretaryId = router.query.id as string

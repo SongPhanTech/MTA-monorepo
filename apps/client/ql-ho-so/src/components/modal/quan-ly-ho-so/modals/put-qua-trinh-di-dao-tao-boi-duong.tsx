@@ -17,7 +17,7 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
     const { isOpen, onClose, input } = useDisclosure<
         Partial<QuaTrinhCuDiDaoTao> & { onSave: (val: QuaTrinhCuDiDaoTao) => void }
     >({
-        tag: PutQuaTrinhCuDiBoiDuongModal.name,
+        tag: 'PutQuaTrinhCuDiBoiDuongModal',
         onClose: form.resetFields,
     })
 

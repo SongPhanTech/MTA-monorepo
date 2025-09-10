@@ -3,7 +3,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutAcademicWarningRule } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
@@ -111,7 +110,7 @@ export default function AcademicWarningRule() {
         trainingCourseId: string
         academicWarningRuleId: string
     }>({
-        tag: PutAcademicWarningRule.name,
+        tag: 'PutAcademicWarningRule',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

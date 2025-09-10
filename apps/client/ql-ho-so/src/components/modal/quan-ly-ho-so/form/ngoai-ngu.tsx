@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutNgoaiNguModal from '@components/modal/quan-ly-ho-so/modals/put-ngoai-ngu'
 import type { DomProps } from '@constants/type'
 import { formatDate } from '@lib/utils'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -31,7 +30,7 @@ export default function NgoaiNguForm({ expland, setExpland }: DomProps) {
     )
 
     const { onOpen } = useDisclosure<Partial<NgoaiNgu> & { onSave: (val: NgoaiNgu) => void }>({
-        tag: PutNgoaiNguModal.name,
+        tag: 'PutNgoaiNguModal',
     })
 
     const handleSave = (data: NgoaiNgu) => {

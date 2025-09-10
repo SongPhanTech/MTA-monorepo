@@ -3,7 +3,6 @@ import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSe
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutDotRenLuyen } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -37,7 +36,7 @@ export default function SubjectClassScore() {
     })
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutDotRenLuyen.name,
+        tag: 'PutDotRenLuyen',
     })
 
     const where = useMemo(

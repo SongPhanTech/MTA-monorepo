@@ -1,6 +1,5 @@
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { AddStudentToFixedClassModal, ModalPrintToDSHV } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -216,14 +215,14 @@ export default function StudentFixedClassPage() {
     const { onOpen } = useDisclosure<{
         id: string
     }>({
-        tag: AddStudentToFixedClassModal.name,
+        tag: 'AddStudentToFixedClassModal',
     })
 
     const { onOpen: onOpenPrint } = useDisclosure<{
         dataTable: Student[]
         dataFixedClass: any
     }>({
-        tag: ModalPrintToDSHV.name,
+        tag: 'ModalPrintToDSHV',
     })
 
     // TODO!: anh TUẤN sửa
@@ -236,7 +235,7 @@ export default function StudentFixedClassPage() {
     //     }
     //     id: string | null
     // }>({
-    //     tag: PutStudentModal.name,
+    //     tag: 'PutStudentModal',
     // })
 
     const { showSpinner, hideSpinner } = useSpinner()

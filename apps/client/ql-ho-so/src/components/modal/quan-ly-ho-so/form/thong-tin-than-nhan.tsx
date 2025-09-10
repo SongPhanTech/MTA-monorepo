@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutThongTinThanNhan from '@components/modal/quan-ly-ho-so/modals/put-thong-tin-than-nhan'
 import { RELATIONSHIP_TYPE } from '@constants/constants'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -17,7 +16,7 @@ export default function ThongTinThanNhanForm({ expland, setExpland }: DomProps) 
     const thanNhanList: Relative[] = Form.useWatch('relatives', form)
 
     const { onOpen } = useDisclosure<Partial<Relative> & { onSave: (val: Relative) => void }>({
-        tag: PutThongTinThanNhan.name,
+        tag: 'PutThongTinThanNhan',
     })
 
     const handleSave = (data: Relative) => {

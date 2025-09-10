@@ -2,7 +2,6 @@ import { CheckOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutFixedClassModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -198,7 +197,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const treeData = buildOrgTree(manageOrgData)
 
     const { onOpen } = useDisclosure<string>({
-        tag: PutFixedClassModal.name,
+        tag: 'PutFixedClassModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

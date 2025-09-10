@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutVersionSubjectModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -19,7 +18,7 @@ export default function VersionProgramSubject({ record }: Props) {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
     const { onOpen, onClose } = useDisclosure<string>({
-        tag: PutVersionSubjectModal.name,
+        tag: 'PutVersionSubjectModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

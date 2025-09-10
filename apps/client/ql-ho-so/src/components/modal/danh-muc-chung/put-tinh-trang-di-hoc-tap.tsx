@@ -11,7 +11,7 @@ export default function TinhTrangDiHocTapModal() {
     const [form] = Form.useForm<DM_TinhTrangDiHocTap>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_TinhTrangDiHocTap>>({
-        tag: TinhTrangDiHocTapModal.name,
+        tag: 'TinhTrangDiHocTapModal',
         onClose: form.resetFields,
     })
 

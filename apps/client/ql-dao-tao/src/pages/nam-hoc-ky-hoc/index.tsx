@@ -4,7 +4,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutSchoolYearModal, PutSemesterModal } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useSemesterTypeOptions } from '@hooks/semesterType'
@@ -151,14 +150,14 @@ function YearAndSemester() {
         []
     )
     const { onOpen: onOpenSchoolYear, onClose: onCloseSchoolYear } = useDisclosure<string>({
-        tag: PutSchoolYearModal.name,
+        tag: 'PutSchoolYearModal',
     })
 
     const { onOpen: onOpenSemester, onClose: onCloseSemester } = useDisclosure<{
         schoolYearId: string
         semesterId: string
     }>({
-        tag: PutSemesterModal.name,
+        tag: 'PutSemesterModal',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

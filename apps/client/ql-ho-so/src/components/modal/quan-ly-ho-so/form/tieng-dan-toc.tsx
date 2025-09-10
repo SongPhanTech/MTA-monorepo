@@ -2,7 +2,6 @@ import { PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import PutTiengDanTocModal from '@components/modal/quan-ly-ho-so/modals/put-tieng-dan-toc'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
 import type { TiengDanToc } from '@workspace/db'
@@ -22,7 +21,7 @@ export default function TiengDanTocForm({ expland, setExpland }: DomProps) {
             onSave: (val: TiengDanToc) => void
         }
     >({
-        tag: PutTiengDanTocModal.name,
+        tag: 'PutTiengDanTocModal',
     })
 
     const { data = [] } = useFindManyDM_DanToc(

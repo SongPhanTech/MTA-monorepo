@@ -4,7 +4,6 @@ import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { PutAcademicActionConfig } from '@components/modal'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
@@ -153,7 +152,7 @@ export default function AcademicActionConfig() {
         id: string
         trainingCourseId: string
     }>({
-        tag: PutAcademicActionConfig.name,
+        tag: 'PutAcademicActionConfig',
     })
 
     const { showSpinner, hideSpinner } = useSpinner()

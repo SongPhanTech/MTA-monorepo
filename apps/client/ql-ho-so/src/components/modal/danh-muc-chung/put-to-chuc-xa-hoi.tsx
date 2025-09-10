@@ -11,7 +11,7 @@ export default function ToChucXaHoiModal() {
     const [form] = Form.useForm<DM_ToChucXaHoi>()
 
     const { isOpen, onClose, input } = useDisclosure<Partial<DM_ToChucXaHoi>>({
-        tag: ToChucXaHoiModal.name,
+        tag: 'ToChucXaHoiModal',
         onClose: form.resetFields,
     })
 
