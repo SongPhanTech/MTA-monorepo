@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, type AcademicActionType, Prisma } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
@@ -261,6 +262,17 @@ app.openapi(
     createRoute({
         method: 'post',
         path: '/average-entry-score-by-course',
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         tags: ['Stats'],
         responses: {
             200: {
@@ -282,6 +294,22 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                trainingCourseId: faker.string.uuid(),
+                name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
+                avgEntryScore: faker.number.float({ min: 20, max: 30, fractionDigits: 2 }),
+            }))
+
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
+
         const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgEntryScore: number }>
         >`
@@ -317,6 +345,17 @@ app.openapi(
         method: 'post',
         path: '/average-gpa-by-course',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Điểm GPA tích lũy trung bình của sinh viên tốt nghiệp qua các Khoá',
@@ -337,6 +376,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                trainingCourseId: faker.string.uuid(),
+                name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
+                avgGpa: faker.number.float({ min: 2, max: 4, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; avgGpa: number }>
         >`
@@ -374,6 +427,17 @@ app.openapi(
         method: 'post',
         path: '/graduation-rate-by-course',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Tỷ lệ tốt nghiệp',
@@ -394,6 +458,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                trainingCourseId: faker.string.uuid(),
+                name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
+                graduationRate: faker.number.int({ min: 80, max: 100 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ trainingCourseId: string; name: string; graduationRate: number }>
         >`
@@ -463,6 +541,26 @@ app.openapi(
     }),
     async (c) => {
         const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 5 }, (_, i) => {
+                const year = new Date().getFullYear() - i
+                return {
+                    schoolYearId: faker.string.uuid(),
+                    name: `Năm học ${year - 1}-${year}`,
+                    excellent: faker.number.int({ min: 100, max: 500 }),
+                    good: faker.number.int({ min: 500, max: 1000 }),
+                    fair: faker.number.int({ min: 200, max: 500 }),
+                    average: faker.number.int({ min: 50, max: 100 }),
+                    weak: faker.number.int({ min: 10, max: 50 }),
+                }
+            })
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{
                 schoolYearId: string
@@ -492,23 +590,6 @@ app.openapi(
                 "SY"."name";
         `
 
-        if (preview) {
-            return c.json({
-                data: data.map(({ schoolYearId, name }) => ({
-                    schoolYearId,
-                    name,
-                    excellent: Math.round(Math.random() * 100),
-                    good: Math.round(Math.random() * 100),
-                    fair: Math.round(Math.random() * 100),
-                    average: Math.round(Math.random() * 100),
-                    weak: Math.round(Math.random() * 100),
-                })),
-                count: data.length,
-                summary: {},
-                preview: true,
-            })
-        }
-
         return c.json({
             data,
             count: data.length,
@@ -523,17 +604,32 @@ app.openapi(
         method: 'post',
         path: '/kpi-cards',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Các con số tổng quan',
                 content: {
                     'application/json': {
-                        schema: z.object({
-                            totalStudents: z.number(),
-                            totalLecturers: z.number(),
-                            studentLecturerRatio: z.number(),
-                            activeCurricula: z.number(),
-                            academicWarningRate: z.number(),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    totalStudents: z.number(),
+                                    totalLecturers: z.number(),
+                                    studentLecturerRatio: z.number(),
+                                    activeCurricula: z.number(),
+                                    academicWarningRate: z.number(),
+                                })
+                            ),
                         }),
                     },
                 },
@@ -541,6 +637,24 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            return c.json({
+                data: [
+                    {
+                        totalStudents: Math.round(Math.random() * 100),
+                        totalLecturers: Math.round(Math.random() * 100),
+                        studentLecturerRatio: Math.round(Math.random() * 100),
+                        activeCurricula: Math.round(Math.random() * 100),
+                        academicWarningRate: Math.round(Math.random() * 100),
+                    },
+                ],
+                count: 1,
+                summary: {},
+                preview: true,
+            })
+        }
+
         const result = await prisma.$queryRaw<
             Array<{
                 totalStudents: bigint
@@ -566,12 +680,19 @@ app.openapi(
         const academicWarningStudents = Number(stats.academicWarningStudents)
 
         return c.json({
-            totalStudents,
-            totalLecturers,
-            studentLecturerRatio: totalLecturers > 0 ? totalStudents / totalLecturers : 0,
-            activeCurricula,
-            academicWarningRate:
-                totalStudents > 0 ? (academicWarningStudents / totalStudents) * 100 : 0,
+            data: [
+                {
+                    totalStudents,
+                    totalLecturers,
+                    studentLecturerRatio: totalLecturers > 0 ? totalStudents / totalLecturers : 0,
+                    activeCurricula,
+                    academicWarningRate:
+                        totalStudents > 0 ? (academicWarningStudents / totalStudents) * 100 : 0,
+                },
+            ],
+            count: 1,
+            summary: {},
+            preview: false,
         })
     }
 )
@@ -581,6 +702,17 @@ app.openapi(
         method: 'post',
         path: '/student-distribution-by-province',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Phân bổ địa lý của sinh viên',
@@ -601,6 +733,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 63 }, () => ({
+                provinceId: faker.string.uuid(),
+                name: faker.location.state(),
+                count: faker.number.int({ min: 10, max: 200 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ provinceId: string; name: string; count: number }>
         >`
@@ -644,6 +790,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -666,6 +821,21 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+
+        if (preview) {
+            const data = Array.from({ length: 10 }, (_, i) => ({
+                trainingObjectTypeId: i.toString(),
+                name: `Hệ đào tạo ${i}`,
+                count: Math.round(Math.random() * 100),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -725,6 +895,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -747,6 +926,32 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = [
+                {
+                    trainingLevelId: '1',
+                    name: 'Đại học',
+                    count: Math.round(Math.random() * 100),
+                },
+                {
+                    trainingLevelId: '2',
+                    name: 'Thạc sĩ',
+                    count: Math.round(Math.random() * 100),
+                },
+                {
+                    trainingLevelId: '2',
+                    name: 'Tiến sĩ',
+                    count: Math.round(Math.random() * 100),
+                },
+            ]
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -806,6 +1011,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -828,6 +1042,20 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, (_, i) => ({
+                trainingCourseId: i.toString(),
+                name: `Khoá học ${i}`,
+                count: Math.round(Math.random() * 100),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -885,6 +1113,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -907,6 +1144,20 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                trainingCourseId: faker.string.uuid(),
+                name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
+                avgEntryScore: faker.number.float({ min: 20, max: 30, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -966,6 +1217,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -989,6 +1249,20 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                trainingCourseId: faker.string.uuid(),
+                name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
+                avgGpa: faker.number.float({ min: 2, max: 4, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -1051,6 +1325,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -1073,6 +1356,20 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                trainingCourseId: faker.string.uuid(),
+                name: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
+                graduationRate: faker.number.int({ min: 80, max: 100 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -1130,6 +1427,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -1156,6 +1462,27 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 5 }, (_, i) => {
+                const year = new Date().getFullYear() - i
+                return {
+                    schoolYearId: faker.string.uuid(),
+                    name: `Năm học ${year - 1}-${year}`,
+                    excellent: faker.number.int({ min: 100, max: 500 }),
+                    good: faker.number.int({ min: 500, max: 1000 }),
+                    fair: faker.number.int({ min: 200, max: 500 }),
+                    average: faker.number.int({ min: 50, max: 100 }),
+                    weak: faker.number.int({ min: 10, max: 50 }),
+                }
+            })
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -1227,6 +1554,15 @@ app.openapi(
                     .uuid()
                     .describe('DM_DonVi.Id - ID đơn vị quản lý'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -1249,6 +1585,20 @@ app.openapi(
     }),
     async (c) => {
         const { managementOrganizationId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 63 }, () => ({
+                provinceId: faker.string.uuid(),
+                name: faker.location.state(),
+                count: faker.number.int({ min: 10, max: 200 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const [{ all_ids }] = await prisma.$queryRaw<[{ all_ids: string[] }]>`
             WITH RECURSIVE org_tree AS (
@@ -1309,6 +1659,15 @@ app.openapi(
                 debtCredits: z.string().optional(),
                 gpaThreshold: z.string().optional(),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -1333,6 +1692,22 @@ app.openapi(
     }),
     async (c) => {
         const { warningLevel, debtCredits, gpaThreshold } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 20 }, () => ({
+                id: faker.string.uuid(),
+                name: faker.person.fullName(),
+                academicWarningLevel: faker.number.int({ min: 1, max: 3 }),
+                cumulativeDebtCredits: faker.number.int({ min: 1, max: 20 }),
+                gpa: faker.number.float({ min: 1, max: 3, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
 
         const conditions = []
         if (warningLevel) {
@@ -1395,6 +1770,17 @@ app.openapi(
         method: 'post',
         path: '/average-gpa-by-fixed-class',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Điểm GPA trung bình theo Lớp niên chế',
@@ -1415,6 +1801,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 20 }, () => ({
+                fixedClassId: faker.string.uuid(),
+                name: `Lớp ${faker.lorem.word()}${faker.number.int({ min: 1, max: 10 })}`,
+                avgGpa: faker.number.float({ min: 2, max: 4, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ fixedClassId: string; name: string; avgGpa: number }>
         >`
@@ -1442,6 +1842,17 @@ app.openapi(
         method: 'post',
         path: '/average-gpa-by-training-major',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Điểm GPA trung bình theo Ngành',
@@ -1462,6 +1873,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                trainingMajorId: faker.string.uuid(),
+                name: faker.commerce.department(),
+                avgGpa: faker.number.float({ min: 2, max: 4, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ trainingMajorId: string; name: string; avgGpa: number }>
         >`
@@ -1490,6 +1915,17 @@ app.openapi(
         method: 'post',
         path: '/subject-pass-fail-rate',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Tỷ lệ % sinh viên qua môn/rớt môn của các học phần',
@@ -1511,6 +1947,21 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 30 }, () => ({
+                subjectVersionId: faker.string.uuid(),
+                name: faker.lorem.words({ min: 3, max: 7 }),
+                passed: faker.number.int({ min: 50, max: 200 }),
+                failed: faker.number.int({ min: 5, max: 30 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ subjectVersionId: string; name: string; passed: number; failed: number }>
         >`
@@ -1537,14 +1988,29 @@ app.openapi(
         method: 'post',
         path: '/curriculum-statistics',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Thống kê CTĐT',
                 content: {
                     'application/json': {
-                        schema: z.object({
-                            activeCurricula: z.number(),
-                            activeCurriculumVersions: z.number(),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    activeCurricula: z.number(),
+                                    activeCurriculumVersions: z.number(),
+                                })
+                            ),
                         }),
                     },
                 },
@@ -1552,6 +2018,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            return c.json({
+                data: [
+                    {
+                        activeCurricula: Math.round(Math.random() * 100),
+                        activeCurriculumVersions: Math.round(Math.random() * 100),
+                    },
+                ],
+                count: 1,
+                summary: {},
+                preview: true,
+            })
+        }
         const result = await prisma.$queryRaw<
             Array<{ activeCurricula: bigint; activeCurriculumVersions: bigint }>
         >`
@@ -1560,9 +2040,12 @@ app.openapi(
                 (SELECT COUNT(*) FROM "ql-dao-tao"."CurriculumVersion" WHERE "active" = true) AS "activeCurriculumVersions"
         `
         const { activeCurricula, activeCurriculumVersions } = result[0]!
+
         return c.json({
-            activeCurricula: Number(activeCurricula),
-            activeCurriculumVersions: Number(activeCurriculumVersions),
+            data: [{ activeCurricula, activeCurriculumVersions }],
+            count: 1,
+            summary: {},
+            preview: false,
         })
     }
 )
@@ -1576,6 +2059,15 @@ app.openapi(
             query: z.object({
                 semesterId: z.string().describe('Semester.id - ID học kỳ'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -1600,6 +2092,19 @@ app.openapi(
     }),
     async (c) => {
         const { semesterId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const classes = Array.from({ length: 50 }, () => ({
+                id: faker.string.uuid(),
+                name: `Lớp ${faker.lorem.words(2)}`,
+                fillRate: faker.number.float({ min: 70, max: 100, fractionDigits: 2 }),
+                failureRate: faker.number.float({ min: 5, max: 20, fractionDigits: 2 }),
+            }))
+            return c.json({
+                totalClasses: classes.length,
+                classes,
+            })
+        }
 
         const classes = await prisma.$queryRaw<
             Array<{
@@ -1638,6 +2143,17 @@ app.openapi(
         method: 'post',
         path: '/lecturer-workload',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Tải giảng dạy của Giảng viên',
@@ -1659,6 +2175,21 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 40 }, () => ({
+                lecturerId: faker.string.uuid(),
+                name: faker.person.fullName(),
+                classCount: faker.number.int({ min: 1, max: 5 }),
+                totalPeriods: faker.number.int({ min: 10, max: 60 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ lecturerId: string; name: string; classCount: number; totalPeriods: number }>
         >`
@@ -1687,6 +2218,17 @@ app.openapi(
         method: 'post',
         path: '/graduation-ranking-statistics',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Thống kê xếp hạng tốt nghiệp',
@@ -1706,6 +2248,21 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = [
+                { ranking: 'Xuất sắc', count: faker.number.int({ min: 10, max: 50 }) },
+                { ranking: 'Giỏi', count: faker.number.int({ min: 100, max: 300 }) },
+                { ranking: 'Khá', count: faker.number.int({ min: 200, max: 500 }) },
+                { ranking: 'Trung bình', count: faker.number.int({ min: 50, max: 100 }) },
+            ]
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<Array<{ ranking: string; count: number }>>`
             SELECT
                 "AR"."classification" as "ranking",
@@ -1729,6 +2286,17 @@ app.openapi(
         method: 'post',
         path: '/students-for-academic-action',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Danh sách SV bị đề nghị xử lý',
@@ -1750,6 +2318,21 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 15 }, () => ({
+                studentId: faker.string.uuid(),
+                studentName: faker.person.fullName(),
+                actionType: faker.helpers.arrayElement(Object.values($Enums.AcademicActionType)),
+                reason: faker.lorem.sentence(),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{
                 studentId: string
@@ -1786,6 +2369,15 @@ app.openapi(
             query: z.object({
                 semesterId: z.string().describe('Semester.id - ID học kỳ'),
             }),
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
         },
         responses: {
             200: {
@@ -1802,6 +2394,12 @@ app.openapi(
     }),
     async (c) => {
         const { semesterId } = c.req.valid('query')
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            return c.json({
+                totalParticipants: faker.number.int({ min: 5000, max: 10000 }),
+            })
+        }
 
         const result = await prisma.$queryRaw<Array<{ totalParticipants: bigint }>>`
             SELECT COUNT("ES"."id") as "totalParticipants"
@@ -1820,6 +2418,17 @@ app.openapi(
         method: 'post',
         path: '/average-exam-score-trend',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Điểm thi trung bình của các học phần qua các học kỳ',
@@ -1842,6 +2451,24 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 20 }, () => ({
+                semesterId: faker.string.uuid(),
+                semesterName: `Học kỳ ${faker.number.int({ min: 1, max: 3 })} Năm học ${
+                    new Date().getFullYear() - 1
+                }-${new Date().getFullYear()}`,
+                subjectVersionId: faker.string.uuid(),
+                subjectName: faker.lorem.words({ min: 3, max: 7 }),
+                averageScore: faker.number.float({ min: 5, max: 10, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{
                 semesterId: string
@@ -1878,6 +2505,17 @@ app.openapi(
         method: 'post',
         path: '/question-statistics',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Thống kê câu hỏi',
@@ -1904,6 +2542,38 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const byQuestionBank = Array.from({ length: 10 }, () => ({
+                id: faker.string.uuid(),
+                name: `Ngân hàng ${faker.lorem.words(2)}`,
+                count: faker.number.int({ min: 50, max: 200 }),
+            }))
+            const bySubjectVersion = Array.from({ length: 15 }, () => ({
+                id: faker.string.uuid(),
+                name: faker.lorem.words({ min: 3, max: 7 }),
+                count: faker.number.int({ min: 100, max: 400 }),
+            }))
+            const byDifficulty = [
+                { id: '1', name: 'Dễ', count: faker.number.int({ min: 1000, max: 2000 }) },
+                { id: '2', name: 'Trung bình', count: faker.number.int({ min: 2000, max: 5000 }) },
+                { id: '3', name: 'Khó', count: faker.number.int({ min: 500, max: 1000 }) },
+            ]
+            const byKnowledgeBlock = Array.from({ length: 20 }, () => ({
+                id: faker.string.uuid(),
+                name: `Khối kiến thức ${faker.lorem.word()}`,
+                count: faker.number.int({ min: 20, max: 100 }),
+            }))
+            const totalQuestions = byQuestionBank.reduce((acc, item) => acc + item.count, 0)
+
+            return c.json({
+                totalQuestions,
+                byQuestionBank,
+                bySubjectVersion,
+                byDifficulty,
+                byKnowledgeBlock,
+            })
+        }
         const totalQuestions = await prisma.question.count()
 
         const byQuestionBank = await prisma.$queryRaw<
@@ -1958,6 +2628,17 @@ app.openapi(
         method: 'post',
         path: '/highest-incorrect-answer-rate-questions',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Danh sách câu hỏi có tỷ lệ trả lời sai cao nhất',
@@ -1978,6 +2659,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                questionId: faker.string.uuid(),
+                content: faker.lorem.sentence(),
+                incorrectRate: faker.number.float({ min: 50, max: 100, fractionDigits: 2 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ questionId: string; content: string; incorrectRate: number }>
         >`
@@ -2004,6 +2699,17 @@ app.openapi(
         method: 'post',
         path: '/most-used-questions',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Danh sách câu hỏi được sử dụng nhiều nhất trong các kỳ thi',
@@ -2024,6 +2730,20 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 10 }, () => ({
+                questionId: faker.string.uuid(),
+                content: faker.lorem.sentence(),
+                usageCount: faker.number.int({ min: 5, max: 20 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{ questionId: string; content: string; usageCount: number }>
         >`
@@ -2051,6 +2771,17 @@ app.openapi(
         method: 'post',
         path: '/demographics',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Phân bổ HV/SV',
@@ -2074,6 +2805,34 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const byGender = [
+                { name: 'Nam', count: faker.number.int({ min: 4000, max: 6000 }) },
+                { name: 'Nữ', count: faker.number.int({ min: 3000, max: 5000 }) },
+            ]
+            const byEthnicity = Array.from({ length: 10 }, () => ({
+                id: faker.string.uuid(),
+                name: faker.person.bio(),
+                count: faker.number.int({ min: 10, max: 500 }),
+            }))
+            const byReligion = Array.from({ length: 5 }, () => ({
+                id: faker.string.uuid(),
+                name: faker.person.bio(),
+                count: faker.number.int({ min: 100, max: 2000 }),
+            }))
+            const byProvince = Array.from({ length: 63 }, () => ({
+                id: faker.string.uuid(),
+                name: faker.location.state(),
+                count: faker.number.int({ min: 10, max: 200 }),
+            }))
+            return c.json({
+                byGender,
+                byEthnicity,
+                byReligion,
+                byProvince,
+            })
+        }
         const byGender = await prisma.$queryRaw<Array<{ name: string; count: number }>>`
             SELECT "sTen" as "name", CAST(COUNT("S"."id") AS INTEGER) as "count"
             FROM "mta"."DM_GioiTinh" "G"
@@ -2126,6 +2885,17 @@ app.openapi(
         method: 'post',
         path: '/enrollment-trend',
         tags: ['Stats'],
+        request: {
+            body: {
+                content: {
+                    'application/json': {
+                        schema: z.object({
+                            preview: z.boolean().default(false),
+                        }),
+                    },
+                },
+            },
+        },
         responses: {
             200: {
                 description: 'Xu hướng tuyển sinh',
@@ -2149,6 +2919,23 @@ app.openapi(
         },
     }),
     async (c) => {
+        const { preview } = c.req.valid('json')
+        if (preview) {
+            const data = Array.from({ length: 20 }, () => ({
+                year: faker.number.int({ min: 2020, max: 2024 }),
+                majorId: faker.string.uuid(),
+                majorName: faker.commerce.department(),
+                courseId: faker.string.uuid(),
+                courseName: `Khoá ${faker.number.int({ min: 50, max: 60 })}`,
+                count: faker.number.int({ min: 100, max: 500 }),
+            }))
+            return c.json({
+                data,
+                count: data.length,
+                summary: {},
+                preview: true,
+            })
+        }
         const data = await prisma.$queryRaw<
             Array<{
                 year: number
