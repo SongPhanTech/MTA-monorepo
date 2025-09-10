@@ -31,6 +31,7 @@ export default function GraduationRankingPage() {
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
+            active: true,
             academicRankingConvert: {
                 every: {
                     ...(filters.searchText && filters.searchText.trim() !== ''
@@ -279,18 +280,26 @@ export default function GraduationRankingPage() {
                         ]}
                         headerRight={(record) => (
                             <Row className="justify-center gap-2 mr-2">
-                                <Tooltip title="Nhân bản">
+                                {record.academicRankingConvert.length > 0 ? (
+                                    <Tooltip title="Nhân bản">
+                                        <Copy
+                                            onClick={onOpenCopy.bind(null, { record })}
+                                            size={16}
+                                            strokeWidth={1.5}
+                                            className="text-sm cursor-pointer"
+                                        />
+                                    </Tooltip>
+                                ) : (
                                     <Copy
-                                        onClick={onOpenCopy.bind(null, {
-                                            record,
-                                        })}
                                         size={16}
                                         strokeWidth={1.5}
-                                        className="text-sm cursor-pointer"
+                                        className="text-sm text-gray-400 cursor-not-allowed"
                                     />
-                                </Tooltip>
+                                )}
 
                                 <DeleteIcon
+                                    title="Xóa xếp loại của khóa"
+                                    disabled={!record.academicRankingConvert.length}
                                     popConfirm={{
                                         onConfirm: () => handleDeleteMultil(record),
                                     }}

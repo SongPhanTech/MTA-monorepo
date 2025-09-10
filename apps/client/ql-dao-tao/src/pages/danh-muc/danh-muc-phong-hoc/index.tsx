@@ -268,7 +268,7 @@ export default function TrainingLocationPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id, trainingLocationId }) => {
+                                render: (_, { id, trainingLocationId, rooms }) => {
                                     if (id && trainingLocationId) {
                                         return (
                                             <Row className="justify-center gap-2">
@@ -282,18 +282,20 @@ export default function TrainingLocationPage() {
                                                     }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteBuilding(id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                {!rooms.length && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteBuilding(id)
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

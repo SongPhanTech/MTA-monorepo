@@ -155,7 +155,7 @@ const PutExpertProfile = () => {
             </Col>
             {isInternal && (
                 <Col span={24}>
-                    <FormItem form={form} name="lecturerId" label="Chuyên gia hướng dẫn">
+                    <FormItem form={form} name="lecturerId" label="Chuyên gia hướng dẫn" required>
                         <Select
                             placeholder="Chọn chuyên gia hướng dẫn"
                             options={lecturer.map((item) => ({
@@ -172,7 +172,7 @@ const PutExpertProfile = () => {
             )}
             {!isInternal && (
                 <Col span={12}>
-                    <FormItem form={form} name="name" label="Họ và tên">
+                    <FormItem form={form} name="name" label="Họ và tên" required>
                         <Input placeholder="Nhập họ và tên" />
                     </FormItem>
                 </Col>
@@ -193,28 +193,28 @@ const PutExpertProfile = () => {
             )}
             {!isInternal && (
                 <Col span={12}>
-                    <FormItem form={form} name="specialization" label="Chuyên ngành">
+                    <FormItem form={form} name="specialization" label="Chuyên ngành" required>
                         <Input placeholder="Nhập chuyên ngành" />
                     </FormItem>
                 </Col>
             )}
             {!isInternal && (
                 <Col span={12}>
-                    <FormItem form={form} name="workplace" label="Đơn vị công tác">
+                    <FormItem form={form} name="workplace" label="Đơn vị công tác" required>
                         <Input placeholder="Nhập đơn vị công tác" />
                     </FormItem>
                 </Col>
             )}
             {!isInternal && (
                 <Col span={12}>
-                    <FormItem form={form} name="phone" label="Số điện thoại">
+                    <FormItem form={form} name="phone" label="Số điện thoại" required>
                         <Input placeholder="Nhập số điện thoại" />
                     </FormItem>
                 </Col>
             )}
             {!isInternal && (
                 <Col span={12}>
-                    <FormItem form={form} name="email" label="Email">
+                    <FormItem form={form} name="email" label="Email" required>
                         <Input placeholder="Nhập email" />
                     </FormItem>
                 </Col>

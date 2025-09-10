@@ -529,10 +529,10 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: 'danh-muc-danh-muc-phong-hoc',
-                        label: 'Danh mục phòng học',
+                        label: 'Danh mục tòa nhà',
                         icon: TeamOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
-                        description: 'Danh mục phòng học',
+                        description: 'Danh mục tòa nhà',
                     },
                     {
                         id: 'lop-bien-che',
