@@ -410,8 +410,14 @@ const NAVIGATION: NavigationType = {
                     {
                         id: 'dang-ky-hoc',
                         label: 'Đăng ký học',
-                        path: '/ke-hoach-giao-duc/dang-ky-hoc',
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DANG_KY_HOC,
                         description: 'Đăng ký học',
+                    },
+                    {
+                        id: 'dot-dang-ky-hoc',
+                        label: 'Đợt đăng ký học',
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                        description: 'Đợt đăng ký học',
                     },
                 ],
             },

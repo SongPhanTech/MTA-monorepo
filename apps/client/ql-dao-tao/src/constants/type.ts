@@ -1,6 +1,7 @@
 import type {
     AcademicActionType,
     ApplicationStatus,
+    ClassRegisterStatus,
     CouncilRole,
     CriteriaField,
     CriteriaOperator,
@@ -132,6 +133,8 @@ export type FilterProps = {
     paymentDate?: Date[]
     role?: CouncilRole[]
     order?: 'asc' | 'desc'
+    subjectClassId?: string
+    classRegisterStatus?: ClassRegisterStatus[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

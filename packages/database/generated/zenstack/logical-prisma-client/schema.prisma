@@ -1368,6 +1368,8 @@ model ClassRegisterLogs {
   updatedAt              DateTime             @default(now()) @updatedAt()
   classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
   classRegisterSessionId String
+  subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
+  subjectClassId         String
   student                Student              @relation(fields: [studentId], references: [id])
   studentId              String
   status                 ClassRegisterStatus  @default(PENDING)
@@ -1423,6 +1425,7 @@ model SubjectClass {
   expertProfile              ExpertProfile[]
   defenseRooms               Room[]                @relation("DefenseRooms")
   surveyObjectTypes          SurveyObjectType[]
+  classRegisterLogs          ClassRegisterLogs[]
 
   @@schema("ql-dao-tao")
 }
