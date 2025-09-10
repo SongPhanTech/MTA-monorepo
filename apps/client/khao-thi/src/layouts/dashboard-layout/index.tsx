@@ -13,10 +13,10 @@ import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
 
 const DashboardLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
+    const menus = useMenuList()
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
-    const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
         where: {
