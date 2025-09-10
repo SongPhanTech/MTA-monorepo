@@ -166,7 +166,7 @@ const PutDecision = () => {
             <Col span={12}>
                 <FormItem form={form} name="type" label="Loại quyết định">
                     <Select
-                        placeholder="Chọn trạng thái"
+                        placeholder="Chọn loại quyết định"
                         options={decisionTypeOptions?.map((item) => ({
                             label: item.label,
                             value: item.value,
