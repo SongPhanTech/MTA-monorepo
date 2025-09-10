@@ -50,7 +50,7 @@ const PutDotRenLuyen = () => {
             }
             if (id) {
                 await updateTrainingScoreSession({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -106,7 +106,7 @@ const PutDotRenLuyen = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt" required>
-                    <Input />
+                    <Input placeholder="Nhập tên đợt" />
                 </FormItem>
             </Col>
             <Col span={24}>

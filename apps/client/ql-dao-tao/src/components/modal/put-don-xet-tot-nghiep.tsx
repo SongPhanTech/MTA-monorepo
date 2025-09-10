@@ -91,7 +91,7 @@ const PutGraduationApplication = () => {
             form.setFieldValue('studentId', value)
         }
     }
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (graduationApplication) {
             form.setFieldsValue({
@@ -106,7 +106,7 @@ const PutGraduationApplication = () => {
                 applicationDate: dayjs(),
             })
         }
-    }, [graduationApplication, form])
+    }, [graduationApplication])
 
     const { mutateAsync: createManyGraduationApplication } =
         useCreateManyStudentGraduationApplication()

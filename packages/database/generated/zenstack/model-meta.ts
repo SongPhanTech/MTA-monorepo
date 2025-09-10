@@ -3161,6 +3161,19 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'classRegisterSession',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -3426,6 +3439,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'subjectClasses',
                     isRelationOwner: true,
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
