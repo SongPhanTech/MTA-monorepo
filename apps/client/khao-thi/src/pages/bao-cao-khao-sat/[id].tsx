@@ -7,7 +7,7 @@ import {
     useGetParticipationByType,
     useGetSurveyStatistics,
 } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, Flex, Row, Typography } from 'antd'
+import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
@@ -77,7 +77,9 @@ function Page() {
 
     const exportReport = async () => {
         try {
-            exportApi()
+            await exportApi({
+                data: { surveyId: router.query.id as string, semesterId: '', organizationId: '' },
+            })
         } catch (_error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }

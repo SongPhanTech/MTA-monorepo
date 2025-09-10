@@ -30,6 +30,7 @@ import type {
     Student,
     SubjectClassSchedule,
     TrainingCourse,
+    TrainingObjectTypes,
     UserProfile,
 } from '@workspace/db'
 import type { UploadFile, UploadProps } from 'antd'
@@ -169,6 +170,7 @@ export type FilterProps = {
     email?: string
     phoneNumber?: string
     idCardNumber?: string
+    trainingObjectType?: TrainingObjectTypes[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
