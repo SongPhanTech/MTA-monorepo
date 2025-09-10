@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 const IndexPage: NextPage = () => {
     const router = useRouter()
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <dont need router>
     useEffect(() => {
         console.log('IndexPage', router)
         if (router.asPath === '/') {

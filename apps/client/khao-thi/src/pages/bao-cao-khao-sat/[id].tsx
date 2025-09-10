@@ -2,7 +2,11 @@ import BarChart from '@components/dashboard/bar-chart'
 import PieChart from '@components/dashboard/org-structure'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useGetParticipationByType, useGetSurveyStatistics } from '@workspace/libs/api/exam'
+import {
+    useExportReportSurveyOrganizational,
+    useGetParticipationByType,
+    useGetSurveyStatistics,
+} from '@workspace/libs/api/exam'
 import { Button, Col, Empty, Flex, Row, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -21,9 +25,9 @@ function Page() {
     const dataBarchart = useMemo(() => {
         const result = []
         if (dataLevel?.status === 200 && dataLevel?.data?.questions?.length) {
-            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <dont need depen>
             for (const i of dataLevel?.data?.questions) {
-                // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+                // biome-ignore lint/correctness/noUnsafeOptionalChaining: <dont need depen>
                 for (const j of i?.answers) {
                     if (j?.count > 0) {
                         result.push({
@@ -44,7 +48,7 @@ function Page() {
     }) => {
         let total = 0
         if (item?.answers?.length) {
-            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
+            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <dont need depen>
             for (const i of item?.answers) {
                 total += i?.count
             }
@@ -69,6 +73,15 @@ function Page() {
             </div>
         )
     }
+    const { mutateAsync: exportApi } = useExportReportSurveyOrganizational()
+
+    const exportReport = async () => {
+        try {
+            exportApi()
+        } catch (_error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+    }
 
     return (
         <div>
@@ -78,7 +91,14 @@ function Page() {
                         <Title level={3}>
                             {(dataLevel?.status === 200 && dataLevel?.data?.surveyName) || ''}
                         </Title>
-                        <Button type="primary">Xuat bao cao</Button>
+                        <Button
+                            onClick={() => {
+                                exportReport()
+                            }}
+                            type="primary"
+                        >
+                            Xuat bao cao
+                        </Button>
                     </Flex>
                 </Col>
                 <Col span={24}>
