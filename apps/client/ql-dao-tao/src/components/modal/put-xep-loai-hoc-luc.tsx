@@ -11,7 +11,7 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message, Radio, Switch } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
@@ -29,6 +29,7 @@ const PutAcademicRanking = () => {
         tag: 'PutAcademicRanking',
         onClose: form.resetFields,
     })
+    const [baseScoreValue, setBaseScoreValue] = useState<string | undefined>()
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: createAcademicRankingConvert } = useCreateAcademicRankingConvert()
@@ -80,6 +81,7 @@ const PutAcademicRanking = () => {
     useEffect(() => {
         if (level) {
             form.setFieldsValue(level)
+            setBaseScoreValue(level.baseScore)
         }
     }, [level])
 
@@ -90,7 +92,15 @@ const PutAcademicRanking = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.id ? 'Chỉnh sửa loại học lực' : 'Thêm mới loại học lực'}
+            title={
+                input?.id
+                    ? input?.type === RankingContext.GRADUATION
+                        ? 'Chỉnh sửa loại tốt nghiệp'
+                        : 'Chỉnh sửa loại học lực'
+                    : input?.type === RankingContext.GRADUATION
+                      ? 'Thêm mới loại tốt nghiệp'
+                      : 'Thêm mới loại học lực'
+            }
             className="w-[40vw]"
         >
             <Col span={12}>
@@ -118,6 +128,7 @@ const PutAcademicRanking = () => {
                             value: item.value,
                         }))}
                         allowClear
+                        onChange={(value) => setBaseScoreValue(value)}
                     />
                 </FormItem>
             </Col>
@@ -136,7 +147,7 @@ const PutAcademicRanking = () => {
                     label="Hệ 10 từ"
                     rules={[
                         {
-                            required: true,
+                            required: AcademicRankingBaseType.Base10 === baseScoreValue,
                             message: 'Vui lòng nhập điểm hệ 10',
                         },
                         ({ getFieldValue }) => ({
@@ -146,7 +157,9 @@ const PutAcademicRanking = () => {
                                     base10Max &&
                                     Number.parseFloat(value) >= Number.parseFloat(base10Max)
                                 ) {
-                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                    return Promise.reject(
+                                        new Error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                    )
                                 }
                                 return Promise.resolve()
                             },
@@ -170,7 +183,7 @@ const PutAcademicRanking = () => {
                     label="Hệ 10 đến"
                     rules={[
                         {
-                            required: true,
+                            required: AcademicRankingBaseType.Base10 === baseScoreValue,
                             message: 'Vui lòng nhập điểm hệ 10',
                         },
                         ({ getFieldValue }) => ({
@@ -180,7 +193,9 @@ const PutAcademicRanking = () => {
                                     base10Min &&
                                     Number.parseFloat(value) <= Number.parseFloat(base10Min)
                                 ) {
-                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                    return Promise.reject(
+                                        new Error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                                    )
                                 }
                                 return Promise.resolve()
                             },
@@ -202,6 +217,7 @@ const PutAcademicRanking = () => {
                     form={form}
                     name="base4Min"
                     label="Điểm hệ 4 từ"
+                    required={AcademicRankingBaseType.Base4 === baseScoreValue}
                     rules={[
                         ({ getFieldValue }) => ({
                             validator(_, value) {
@@ -210,7 +226,9 @@ const PutAcademicRanking = () => {
                                     base4Max &&
                                     Number.parseFloat(value) >= Number.parseFloat(base4Max)
                                 ) {
-                                    message.error('Điểm hệ 4 từ phải nhỏ hơn điểm hệ 4 đến')
+                                    return Promise.reject(
+                                        new Error('Điểm hệ 4 từ phải nhỏ hơn điểm hệ 4 đến')
+                                    )
                                 }
                                 return Promise.resolve()
                             },
@@ -232,6 +250,7 @@ const PutAcademicRanking = () => {
                     form={form}
                     name="base4Max"
                     label="Điểm hệ 4 đến"
+                    required={AcademicRankingBaseType.Base4 === baseScoreValue}
                     rules={[
                         ({ getFieldValue }) => ({
                             validator(_, value) {
@@ -240,7 +259,9 @@ const PutAcademicRanking = () => {
                                     base4Min &&
                                     Number.parseFloat(value) <= Number.parseFloat(base4Min)
                                 ) {
-                                    message.error('Điểm hệ 4 từ phải nhỏ hơn điểm hệ 4 đến')
+                                    return Promise.reject(
+                                        new Error('Điểm hệ 4 từ phải nhỏ hơn điểm hệ 4 đến')
+                                    )
                                 }
                                 return Promise.resolve()
                             },

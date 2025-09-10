@@ -41,6 +41,7 @@ export default function AcademicRankingConvertPage() {
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
+            active: true,
             academicRankingConvert: {
                 every: {
                     active:
@@ -89,7 +90,7 @@ export default function AcademicRankingConvertPage() {
         }, 500),
         []
     )
-    const { onOpen } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<{ id: string }>({
         tag: PutAcademicRanking.name,
     })
 
@@ -207,18 +208,26 @@ export default function AcademicRankingConvertPage() {
                         data={data}
                         headerRight={(record) => (
                             <Row className="justify-center gap-2 mr-2">
-                                <Tooltip title="Nhân bản">
+                                {record.academicRankingConvert.length > 0 ? (
+                                    <Tooltip title="Nhân bản">
+                                        <Copy
+                                            onClick={onOpenCopy.bind(null, { record })}
+                                            size={16}
+                                            strokeWidth={1.5}
+                                            className="text-sm cursor-pointer"
+                                        />
+                                    </Tooltip>
+                                ) : (
                                     <Copy
-                                        onClick={onOpenCopy.bind(null, {
-                                            record,
-                                        })}
                                         size={16}
                                         strokeWidth={1.5}
-                                        className="text-sm cursor-pointer"
+                                        className="text-sm text-gray-400 cursor-not-allowed"
                                     />
-                                </Tooltip>
+                                )}
 
                                 <DeleteIcon
+                                    disabled={!record.academicRankingConvert.length}
+                                    title="Xóa xếp loại của khóa"
                                     popConfirm={{
                                         onConfirm: () => handleDeleteMultil(record),
                                     }}
@@ -272,7 +281,7 @@ export default function AcademicRankingConvertPage() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
+                                                    onClick={() => onOpen({ id })}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                                 <DeleteIcon
