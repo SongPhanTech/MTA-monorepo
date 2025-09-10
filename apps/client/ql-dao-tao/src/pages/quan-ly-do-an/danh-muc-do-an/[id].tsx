@@ -399,6 +399,19 @@ export default function ThesisProjectDetail() {
                             },
                         },
                     ]}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: councilWithName?.[0].members.length,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
+                    }}
                     headerRight={({ id }) => (
                         <div className="flex gap-2.5 w-[85px] items-center">
                             <CreateIcon

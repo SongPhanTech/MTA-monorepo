@@ -15,7 +15,9 @@ export const useCouncilRoleOptions = () => {
     ]
 
     const getCouncilRoleLabel = (value: CouncilRole | null | undefined): string => {
-        return councilRoleOptions.find((opt) => opt.value === value)?.label || ''
+        return (
+            councilRoleOptions.find((opt) => opt.value === value)?.label || 'Giảng viên hướng dẫn'
+        )
     }
 
     return {

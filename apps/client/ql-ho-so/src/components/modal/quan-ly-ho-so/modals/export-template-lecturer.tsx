@@ -112,7 +112,7 @@ const ExportTemplateLecturer = () => {
 
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()
-        saveAs(new Blob([buffer]), 'Mau_nhap_sinh_vien.xlsx')
+        saveAs(new Blob([buffer]), 'Mau_nhap_giang_vien_vien.xlsx')
     }
 
     return (

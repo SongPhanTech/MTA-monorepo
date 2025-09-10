@@ -75,6 +75,8 @@ export default {
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC_COMPONENTS_KET_QUA_DANG_KY_HOC_LOP_QUAN_LY": "/ke-hoach-giao-duc/dang-ky-hoc/components/ket-qua-dang-ky-hoc-lop-quan-ly",
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC_COMPONENTS_LOP_CO_MON_THEO_KHGD": "/ke-hoach-giao-duc/dang-ky-hoc/components/lop-co-mon-theo-khgd",
     "KE_HOACH_GIAO_DUC_DANG_KY_HOC": "/ke-hoach-giao-duc/dang-ky-hoc",
+    "KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC_ID": "/ke-hoach-giao-duc/dot-dang-ky-hoc/[id]",
+    "KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC": "/ke-hoach-giao-duc/dot-dang-ky-hoc",
     "KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
     "KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC": "/ke-hoach-giao-duc/quan-ly-lop-mon-hoc",
     "MOC_HUAN_LUYEN": "/moc-huan-luyen",

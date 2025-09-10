@@ -153,7 +153,7 @@ const PutDecision = () => {
             title={input?.decisionId ? 'Sửa quyết định' : 'Thêm quyết định'}
         >
             <Col span={12}>
-                <FormItem form={form} name="issueDate" label="Ngày họp hội đồng" required>
+                <FormItem form={form} name="issueDate" label="Ngày ban hành" required>
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
@@ -164,9 +164,9 @@ const PutDecision = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="type" label="Trạng thái">
+                <FormItem form={form} name="type" label="Loại quyết định">
                     <Select
-                        placeholder="Chọn trạng thái"
+                        placeholder="Chọn loại quyết định"
                         options={decisionTypeOptions?.map((item) => ({
                             label: item.label,
                             value: item.value,
