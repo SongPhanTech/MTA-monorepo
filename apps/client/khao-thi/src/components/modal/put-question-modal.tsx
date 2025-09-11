@@ -177,6 +177,7 @@ const PutQuestionModal = () => {
                             <Col span={12}>
                                 <FormItem form={form} name="point" label="Điểm" required>
                                     <InputNumber
+                                        min={0}
                                         type="number"
                                         placeholder="Nhập điểm"
                                         defaultValue={1}

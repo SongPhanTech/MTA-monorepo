@@ -136,6 +136,7 @@ const PutAcademicActionCondition = () => {
             <Col span={8}>
                 <FormItem form={form} name="value" label="Giá trị để so sánh" required>
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập giá trị ngưỡng"
                         className="w-full"
@@ -151,6 +152,7 @@ const PutAcademicActionCondition = () => {
                     required
                 >
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập giá trị ngưỡng"
                         className="w-full"

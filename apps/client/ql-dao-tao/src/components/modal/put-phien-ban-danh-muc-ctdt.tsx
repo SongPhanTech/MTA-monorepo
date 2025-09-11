@@ -278,6 +278,7 @@ const PutCurriculumVersion = () => {
                                     <Col span={12}>
                                         <FormItem form={form} name="yearCreation" label="Năm tạo">
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 placeholder="Nhập năm tạo"
                                                 className="w-full"
@@ -292,6 +293,7 @@ const PutCurriculumVersion = () => {
                                             label="Năm áp dụng"
                                         >
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 placeholder="Nhập năm áp dụng"
                                                 className="w-full"
@@ -306,6 +308,7 @@ const PutCurriculumVersion = () => {
                                             label="Số kỳ học"
                                         >
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 placeholder="Nhập Số kỳ học"
                                                 className="w-full"
@@ -396,6 +399,7 @@ const PutCurriculumVersion = () => {
                                             label="Số tín chỉ bắt buộc"
                                         >
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 placeholder="Nhập số tín chỉ bắt buộc"
                                                 className="w-full"
@@ -410,6 +414,7 @@ const PutCurriculumVersion = () => {
                                             label="Số tín chỉ tự chọn"
                                         >
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 placeholder="Nhập số tín chỉ tự chọn"
                                                 className="w-full"

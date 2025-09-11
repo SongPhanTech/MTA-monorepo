@@ -120,12 +120,22 @@ const PutRoomModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="capacity" label="Số chỗ ngồi" required>
-                    <InputNumber type="number" className="w-full" placeholder="Số chỗ ngồi" />
+                    <InputNumber
+                        min={0}
+                        type="number"
+                        className="w-full"
+                        placeholder="Số chỗ ngồi"
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="examCapacity" label="Số chỗ ngồi thi">
-                    <InputNumber type="number" className="w-full" placeholder="Số chỗ ngồi thi" />
+                    <InputNumber
+                        min={0}
+                        type="number"
+                        className="w-full"
+                        placeholder="Số chỗ ngồi thi"
+                    />
                 </FormItem>
             </Col>
             <Col span={6}>

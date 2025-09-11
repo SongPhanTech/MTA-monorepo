@@ -182,6 +182,7 @@ const PutDisciplinaryWarning = () => {
             <Col span={12}>
                 <FormItem form={form} name="increasedFrom" label="Mức CCHĐ hiện tại">
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập hệ số"
                         className="w-full"

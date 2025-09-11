@@ -149,6 +149,7 @@ const PutRankingCondition = () => {
             <Col span={12}>
                 <FormItem form={form} name="value" label="Giá trị ngưỡng để so sánh" required>
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập giá trị ngưỡng"
                         className="w-full"

@@ -103,7 +103,7 @@ const PutDifficulty = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="level" label="Mức độ khó" required>
-                    <InputNumber type="number" className="w-full" step={1} />
+                    <InputNumber min={0} type="number" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={24}>

@@ -927,6 +927,7 @@ export default function SubjectClassScore() {
                                             (currentScore < 0 || currentScore > 10)
                                         return (
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 id={`score-cc-${record.id}`}
                                                 style={{ width: '100%' }}
@@ -1001,6 +1002,7 @@ export default function SubjectClassScore() {
                                             (currentScore < 0 || currentScore > 10)
                                         return (
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 id={`score-tx-${record.id}`}
                                                 style={{ width: '100%' }}
@@ -1080,6 +1082,7 @@ export default function SubjectClassScore() {
                                             (currentScore < 0 || currentScore > 10)
                                         return (
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 id={`score-thi-${record.id}`}
                                                 style={{ width: '100%' }}

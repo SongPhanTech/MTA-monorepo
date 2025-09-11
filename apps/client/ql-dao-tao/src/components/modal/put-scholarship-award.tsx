@@ -206,6 +206,7 @@ const PutScholarshipAward = () => {
             <Col span={12}>
                 <FormItem form={form} name="amount" label="Số tiền học bổng">
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập số tiền học bổng"
                         className="w-full"
@@ -216,6 +217,7 @@ const PutScholarshipAward = () => {
             <Col span={12}>
                 <FormItem form={form} name="gpaAtAward" label="GPA">
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập GPA"
                         className="w-full"
@@ -226,6 +228,7 @@ const PutScholarshipAward = () => {
             <Col span={12}>
                 <FormItem form={form} name="priorityRank" label="Xếp hạng xét học bổng">
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập hệ số"
                         className="w-full"

@@ -115,6 +115,7 @@ const PutCriterionCatalog = () => {
             <Col span={24}>
                 <FormItem form={form} name="order" label="Thứ tự" required>
                     <InputNumber
+                        min={0}
                         type="number"
                         className="w-full"
                         step={1}

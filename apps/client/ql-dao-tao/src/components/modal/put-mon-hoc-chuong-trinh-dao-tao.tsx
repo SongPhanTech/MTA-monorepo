@@ -214,6 +214,7 @@ const PutTrainingBlockSubject = () => {
             <Col span={24}>
                 <FormItem form={form} name="semester" label="Kỳ học dự kiến">
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Chọn kỳ học dự kiến"
                         className="w-full"

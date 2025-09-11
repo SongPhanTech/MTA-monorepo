@@ -209,6 +209,7 @@ export default function ExamFax({ id }: ExamFaxProps) {
                                 type: 'order',
                                 render: (_, record) => (
                                     <InputNumber
+                                        min={0}
                                         type="number"
                                         value={editedData[record.id]?.score ?? record.score ?? ''}
                                         onChange={(e) =>

@@ -304,6 +304,7 @@ const PutTrainingCourseModal = () => {
                     required
                 >
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập điểm tối thiểu được thi"
                         className="w-full"
@@ -313,6 +314,7 @@ const PutTrainingCourseModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="scoreToPass" label="Điểm tối thiểu để qua" required>
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập điểm tối thiểu để qua"
                         className="w-full"
