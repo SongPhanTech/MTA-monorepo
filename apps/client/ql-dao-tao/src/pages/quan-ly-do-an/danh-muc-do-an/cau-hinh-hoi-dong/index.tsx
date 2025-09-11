@@ -225,7 +225,6 @@ export default function SettingClass() {
         const a = arr.slice()
         for (let i = a.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1))
-            // @ts-ignore
             ;[a[i], a[j]] = [a[j], a[i]]
         }
         return a
@@ -352,13 +351,13 @@ export default function SettingClass() {
                     const all = [director, secretary, ...candidates]
                     for (let i = 0; i < all.length; i++) {
                         for (let j = i + 1; j < all.length; j++) {
-                            // @ts-ignore
                             pairCount[all[i].id][all[j].id]++
-                            // @ts-ignore
                             pairCount[all[j].id][all[i].id]++
                         }
                     }
-                    all.forEach((p) => usedInBatch.add(p.id))
+                    all.forEach((p) => {
+                        usedInBatch.add(p.id)
+                    })
                 } // end for committees in batch
 
                 if (!fail && batch.length === committeesThisBatch) {
@@ -389,7 +388,6 @@ export default function SettingClass() {
         let min = Number.POSITIVE_INFINITY
         const best: Person[] = []
         for (const p of candidates) {
-            // @ts-ignore
             const score = currentGroup.reduce((s, q) => s + pairCount[p.id][q.id], 0)
             if (score < min) {
                 min = score
@@ -450,7 +448,9 @@ export default function SettingClass() {
             // feasibility: after removing these candidates + director + secretary + usedInBatch,
             // ensure enough eligible directors & secretaries remain for remainingCommitteesInBatch
             const usedIds = new Set<number>([...usedInBatch])
-            ;[director, secretary, ...cand].forEach((p) => usedIds.add(p.id))
+            ;[director, secretary, ...cand].forEach((p) => {
+                usedIds.add(p.id)
+            })
             const avail = allPeople.filter((p) => !usedIds.has(p.id))
             const availDir = avail.filter((p) => p.eligiblePresident)
             const availSec = avail.filter((p) => p.eligibleSecretary)
@@ -465,7 +465,6 @@ export default function SettingClass() {
             let score = 0
             for (let i = 0; i < group.length; i++) {
                 for (let j = i + 1; j < group.length; j++) {
-                    // @ts-ignore
                     score += pairCount[group[i].id][group[j].id]
                 }
             }

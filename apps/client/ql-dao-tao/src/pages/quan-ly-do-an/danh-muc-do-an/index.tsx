@@ -281,6 +281,10 @@ export default function ThesisProject() {
         tag: 'ModalPrintInvitation',
     })
 
+    const { onOpen: openPrintSupervisorGuide } = useDisclosure({
+        tag: 'ModalPrintSupervisorGuide',
+    })
+
     useEffect(() => {
         if (!isOpen) {
             setSelectedRowKeys([])
@@ -441,6 +445,9 @@ export default function ThesisProject() {
                                     }
                                 >
                                     Tạo thanh toán
+                                </Button>
+                                <Button onClick={() => openPrintSupervisorGuide()} type="primary">
+                                    In quyết định hướng dẫn
                                 </Button>
                                 <Button
                                     onClick={() =>

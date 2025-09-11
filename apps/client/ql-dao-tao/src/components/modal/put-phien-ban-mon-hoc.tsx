@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { DocumentFile, SubjectVersion } from '@workspace/db'
+import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManySubject,
@@ -28,6 +28,11 @@ type PutSubjectVersionFormValues = PutSubjectVersion & {
     prerequisiteSubjectIds?: string[]
     coRequisiteSubjectIds?: string[]
 }
+
+const subjectVersionTypeOptions = [
+    { label: 'Môn thường', value: SubjectVersionType.Normal },
+    { label: 'Đồ án tốt nghiệp', value: SubjectVersionType.Project },
+]
 
 const PutVersionSubjectModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
@@ -122,6 +127,7 @@ const PutVersionSubjectModal = () => {
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
+                type: output.type,
                 prerequisiteSubject: subjectVersionId
                     ? {
                           set:
@@ -327,28 +333,44 @@ const PutVersionSubjectModal = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="credit" label="Số tín chỉ" required>
-                    <InputNumber type="number" placeholder="Số tín chỉ" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        min={0}
+                        placeholder="Số tín chỉ"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="period" label="Số tiết" required>
-                    <InputNumber type="number" placeholder="Số tiết" className="w-full" />
+                    <InputNumber type="number" min={0} placeholder="Số tiết" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết">
-                    <InputNumber type="number" placeholder="Số tiết lý thuyết" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        min={0}
+                        placeholder="Số tiết lý thuyết"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfPractical" label="Số tiết bài tập">
-                    <InputNumber type="number" placeholder="Số tiết bài tập" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        min={0}
+                        placeholder="Số tiết bài tập"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfSelfStudy" label="Số tiết thảo luận/tự học">
                     <InputNumber
                         type="number"
+                        min={0}
                         placeholder="Số tiết thảo luận/tự học"
                         className="w-full"
                     />
@@ -358,6 +380,7 @@ const PutVersionSubjectModal = () => {
                 <FormItem form={form} name="numberOfPractice" label="Số tiết thí nghiệm/thực hành">
                     <InputNumber
                         type="number"
+                        min={0}
                         placeholder="Số tiết thí nghiệm/thực hành"
                         className="w-full"
                     />
@@ -365,12 +388,22 @@ const PutVersionSubjectModal = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfReview" label="Số tiết ôn tập">
-                    <InputNumber type="number" placeholder="Số tiết ôn tập" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        min={0}
+                        placeholder="Số tiết ôn tập"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfExam" label="Số tiết KT/thi">
-                    <InputNumber type="number" placeholder="Số tiết KT/thi" className="w-full" />
+                    <InputNumber
+                        type="number"
+                        min={0}
+                        placeholder="Số tiết KT/thi"
+                        className="w-full"
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
@@ -384,6 +417,18 @@ const PutVersionSubjectModal = () => {
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>
                     </Radio.Group>
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="type" label="Loại môn học">
+                    <Select
+                        placeholder="Chọn loại hệ điểm"
+                        options={subjectVersionTypeOptions?.map((item) => ({
+                            label: item.label,
+                            value: item.value,
+                        }))}
+                        allowClear
+                    />
                 </FormItem>
             </Col>
             {/*  */}
