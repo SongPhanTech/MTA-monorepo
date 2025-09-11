@@ -366,6 +366,8 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
+                                render: (__, record: { userProfile?: UserProfile }) =>
+                                    record.userProfile ? record?.userProfile?.code : '',
                             },
                             {
                                 title: 'Họ và tên',
@@ -410,7 +412,7 @@ export default function UserProfilePageDs() {
                                 })),
                                 render: (__, record: any) => {
                                     if (!record.fixedClass) return ''
-                                    const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
+                                    const fiexedClass = `${record.fixedClass?.code || ''} - ${record.fixedClass?.name}`
                                     return fiexedClass || ''
                                 },
                             },
