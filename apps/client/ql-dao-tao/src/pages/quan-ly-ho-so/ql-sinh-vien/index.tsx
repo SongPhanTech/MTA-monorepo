@@ -366,8 +366,7 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
-                                render: (__, record: { userProfile?: UserProfile }) =>
-                                    record.userProfile ? record?.userProfile?.code : '',
+                                render: (__, record: any) => (record.code ? record?.code : ''),
                             },
                             {
                                 title: 'Họ và tên',
