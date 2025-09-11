@@ -16022,6 +16022,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, standardId_name: {
+                    name: "standardId_name",
+                    fields: ["standardId", "name"]
                 },
             },
         },
@@ -16086,6 +16089,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, criterionCatalogId_name: {
+                    name: "criterionCatalogId_name",
+                    fields: ["criterionCatalogId", "name"]
                 },
             },
         },
@@ -16228,6 +16234,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, periodId_name: {
+                    name: "periodId_name",
+                    fields: ["periodId", "name"]
                 },
             },
         },

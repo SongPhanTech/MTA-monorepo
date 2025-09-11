@@ -9,7 +9,6 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import AuthApp from './api/auth'
-import MinIOApp from './api/minio'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
@@ -65,13 +64,63 @@ app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
 
 const nv = await prisma.dM_NhanVien.findFirstOrThrow({})
-console.log(nv)
+
+const TargetMap = {
+    name: 'Tên',
+    englishName: 'Tên tiếng Anh',
+    code: 'Mã',
+    idCardNumber: 'CCCD',
+    studentId: 'HV/SV',
+    evidenceId: 'Minh chứng',
+    level: 'Bậc',
+    order: 'Thứ tự',
+    rankOrder: 'Thứ tự',
+    correctOrder: 'Thứ tự đúng',
+    examCode: 'Mã đề thi',
+    fax: 'Fax',
+    examFaxId: 'Fax',
+    questionType: 'Loại',
+    trainingBlockId: 'Khối kiến thức',
+    lectureID: 'ID giảng viên',
+    archivedCertificateId: 'Chứng chỉ',
+    archivedAwardId: 'Thành tích',
+    semesterType: 'Học kì chính',
+    originalDiplomaNumber: 'Số vào sổ gốc',
+    diplomaNumber: 'Số hiệu văn bằng',
+}
+
+const TargetKeys = Object.keys(TargetMap) as (keyof typeof TargetMap)[]
+
+const errorTransformer = (err: unknown) => {
+    if (!(err instanceof Prisma.PrismaClientKnownRequestError)) {
+        return err
+    }
+
+    if (err.code === 'P2025') {
+        return new HTTPException(404, { message: 'Dữ liệu không tồn tại' })
+    }
+    if (err.code === 'P2002') {
+        const targets = err.meta ? (err.meta.target as string[]) : []
+
+        const target = targets.find((t) => TargetKeys.includes(t as keyof typeof TargetMap))
+
+        if (target) {
+            return new HTTPException(409, {
+                message: `${TargetMap[target as keyof typeof TargetMap]} bị trùng`,
+            })
+        }
+
+        return new HTTPException(409, { message: 'Dữ liệu bị trùng' })
+    }
+
+    return err
+}
 
 app.use(
     '/api/model/*',
     createHonoHandler({
         getPrisma: async (ctx: Context) => {
-            return enhance(prisma, { user: nv })
+            return enhance(prisma, { user: nv }, { errorTransformer })
             // return enhance(prisma, { user: ctx.get('user') })
         },
     })

@@ -39,6 +39,7 @@ model CriterionCatalog extends Base {
 
   requirementCriterionCatalog RequirementCriterionCatalog[]
 
+  @@unique([standardId, name])
   @@schema("khao-thi")
 }
 
@@ -50,6 +51,7 @@ model RequirementCriterionCatalog extends Base {
   name               String
   questions          String[]
 
+  @@unique([criterionCatalogId, name])
   @@schema("khao-thi")
 }
 
@@ -80,6 +82,7 @@ model EvaluationStandard extends Base {
 
   criteria   EvaluationCriterion[]
 
+  @@unique([periodId, name])
   @@schema("khao-thi")
 }
 

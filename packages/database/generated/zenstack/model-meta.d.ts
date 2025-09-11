@@ -30381,8 +30381,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                standardId_name: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -30391,7 +30395,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         requirementCriterionCatalog: {
             name: string;
@@ -30507,8 +30517,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                criterionCatalogId_name: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -30517,7 +30531,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         scoreScaleCatalog: {
             name: string;
@@ -30782,8 +30802,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                periodId_name: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -30792,7 +30816,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         evaluationCriterion: {
             name: string;

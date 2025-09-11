@@ -4412,6 +4412,7 @@ model CriterionCatalog {
   scoreScaleId                String
   requirementCriterionCatalog RequirementCriterionCatalog[]
 
+  @@unique([standardId, name])
   @@schema("khao-thi")
 }
 
@@ -4430,6 +4431,7 @@ model RequirementCriterionCatalog {
   name               String
   questions          String[]
 
+  @@unique([criterionCatalogId, name])
   @@schema("khao-thi")
 }
 
@@ -4471,6 +4473,7 @@ model EvaluationStandard {
   conclusion  String                @default("")
   criteria    EvaluationCriterion[]
 
+  @@unique([periodId, name])
   @@schema("khao-thi")
 }
 

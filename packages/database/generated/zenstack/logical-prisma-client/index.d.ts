@@ -301504,6 +301504,7 @@ export namespace Prisma {
     export type CriterionCatalogWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        standardId_name?: CriterionCatalogStandardIdNameCompoundUniqueInput
         AND?: CriterionCatalogWhereInput | CriterionCatalogWhereInput[]
         OR?: CriterionCatalogWhereInput[]
         NOT?: CriterionCatalogWhereInput | CriterionCatalogWhereInput[]
@@ -301519,7 +301520,7 @@ export namespace Prisma {
         standard?: XOR<StandardCatalogScalarRelationFilter, StandardCatalogWhereInput>
         scoreScale?: XOR<ScoreScaleCatalogScalarRelationFilter, ScoreScaleCatalogWhereInput>
         requirementCriterionCatalog?: RequirementCriterionCatalogListRelationFilter
-    }, "id" | "code">;
+    }, "id" | "code" | "standardId_name">;
     export type CriterionCatalogOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -301589,6 +301590,7 @@ export namespace Prisma {
     export type RequirementCriterionCatalogWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        criterionCatalogId_name?: RequirementCriterionCatalogCriterionCatalogIdNameCompoundUniqueInput
         AND?: RequirementCriterionCatalogWhereInput | RequirementCriterionCatalogWhereInput[]
         OR?: RequirementCriterionCatalogWhereInput[]
         NOT?: RequirementCriterionCatalogWhereInput | RequirementCriterionCatalogWhereInput[]
@@ -301602,7 +301604,7 @@ export namespace Prisma {
         name?: StringFilter<"RequirementCriterionCatalog"> | string
         questions?: StringNullableListFilter<"RequirementCriterionCatalog">
         criterionCatalog?: XOR<CriterionCatalogScalarRelationFilter, CriterionCatalogWhereInput>
-    }, "id" | "code">;
+    }, "id" | "code" | "criterionCatalogId_name">;
     export type RequirementCriterionCatalogOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -301762,6 +301764,7 @@ export namespace Prisma {
     export type EvaluationStandardWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        periodId_name?: EvaluationStandardPeriodIdNameCompoundUniqueInput
         AND?: EvaluationStandardWhereInput | EvaluationStandardWhereInput[]
         OR?: EvaluationStandardWhereInput[]
         NOT?: EvaluationStandardWhereInput | EvaluationStandardWhereInput[]
@@ -301777,7 +301780,7 @@ export namespace Prisma {
         conclusion?: StringFilter<"EvaluationStandard"> | string
         period?: XOR<EvaluationPeriodScalarRelationFilter, EvaluationPeriodWhereInput>
         criteria?: EvaluationCriterionListRelationFilter
-    }, "id" | "code">;
+    }, "id" | "code" | "periodId_name">;
     export type EvaluationStandardOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -342782,6 +342785,10 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
+    export type CriterionCatalogStandardIdNameCompoundUniqueInput = {
+        standardId: string
+        name: string
+    };
     export type CriterionCatalogCountOrderByAggregateInput = {
         id?: SortOrder
         code?: SortOrder
@@ -342835,6 +342842,10 @@ export namespace Prisma {
         fields: RequirementCriterionCatalogOrderByRelevanceFieldEnum | RequirementCriterionCatalogOrderByRelevanceFieldEnum[]
         sort: SortOrder
         search: string
+    };
+    export type RequirementCriterionCatalogCriterionCatalogIdNameCompoundUniqueInput = {
+        criterionCatalogId: string
+        name: string
     };
     export type RequirementCriterionCatalogCountOrderByAggregateInput = {
         id?: SortOrder
@@ -342949,6 +342960,10 @@ export namespace Prisma {
         fields: EvaluationStandardOrderByRelevanceFieldEnum | EvaluationStandardOrderByRelevanceFieldEnum[]
         sort: SortOrder
         search: string
+    };
+    export type EvaluationStandardPeriodIdNameCompoundUniqueInput = {
+        periodId: string
+        name: string
     };
     export type EvaluationStandardCountOrderByAggregateInput = {
         id?: SortOrder
