@@ -54,7 +54,11 @@ const PutDifficulty = () => {
                 queryKey: ['Difficulty'],
             })
             onClose()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -99,7 +103,7 @@ const PutDifficulty = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="level" label="Mức độ khó" required>
-                    <InputNumber type="number" className="w-full" step={1} />
+                    <InputNumber min={0} type="number" className="w-full" step={1} />
                 </FormItem>
             </Col>
             <Col span={24}>

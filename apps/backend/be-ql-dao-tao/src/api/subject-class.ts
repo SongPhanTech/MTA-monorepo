@@ -440,10 +440,14 @@ app.openapi(openSubjectClass, async (c) => {
                                 self.findIndex((t) => t.subjectClassId === value.subjectClassId) &&
                             !!value.subjectClassId
                     ),
-                    countStudent: item.fixedClass.reduce(
-                        (acc, curr) => acc + curr.fixedClassCount,
-                        0
-                    ),
+                    countStudent: item.fixedClass
+                        .filter(
+                            (value, index, self) =>
+                                index ===
+                                    self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
+                                !!value.fixedClassId
+                        )
+                        .reduce((acc, curr) => acc + curr.fixedClassCount, 0),
                 })),
             success: true,
         },
@@ -815,7 +819,11 @@ app.openapi(putManySubjectClass, async (c) => {
                 select: { id: true },
             })
             return { success: true, id: cls.id }
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             // TODO: send to sentry
             return { success: false, id: cls.id }
         }

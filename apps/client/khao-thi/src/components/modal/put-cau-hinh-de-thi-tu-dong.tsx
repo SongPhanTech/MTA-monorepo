@@ -64,7 +64,11 @@ const PutTestStructureRule = () => {
                 queryKey: ['TestStructureRule'],
             })
             onClose()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -134,6 +138,7 @@ const PutTestStructureRule = () => {
             <Col span={12}>
                 <FormItem form={form} name="questionPoint" label="Điểm câu hỏi" required>
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập Điểm"
                         step={0.1}
@@ -144,6 +149,7 @@ const PutTestStructureRule = () => {
             <Col span={12}>
                 <FormItem form={form} name="count" label="Số lượng câu hỏi" required>
                     <InputNumber
+                        min={0}
                         type="number"
                         placeholder="Nhập số điểm câu hỏi"
                         step={1}

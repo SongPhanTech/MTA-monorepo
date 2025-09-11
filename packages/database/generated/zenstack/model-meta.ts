@@ -3161,6 +3161,19 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'classRegisterSession',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -3426,6 +3439,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'subjectClasses',
                     isRelationOwner: true,
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16048,7 +16067,6 @@ const metadata = {
                 }, initialRankId: {
                     name: "initialRankId",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'initialRank',
                 }, conditions: {
@@ -16065,9 +16083,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, initialRankId: {
-                    name: "initialRankId",
-                    fields: ["initialRankId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
@@ -16921,9 +16936,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, standardId_name: {
+                    name: "standardId_name",
+                    fields: ["standardId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         requirementCriterionCatalog: {
             name: 'RequirementCriterionCatalog', fields: {
@@ -16989,9 +17007,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, criterionCatalogId_name: {
+                    name: "criterionCatalogId_name",
+                    fields: ["criterionCatalogId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         scoreScaleCatalog: {
             name: 'ScoreScaleCatalog', fields: {
@@ -17138,9 +17159,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, periodId_name: {
+                    name: "periodId_name",
+                    fields: ["periodId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evaluationCriterion: {
             name: 'EvaluationCriterion', fields: {

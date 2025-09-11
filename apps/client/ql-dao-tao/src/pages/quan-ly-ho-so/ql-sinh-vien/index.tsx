@@ -5,16 +5,19 @@ import EditIcon from '@components/icons/edit'
 import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
+import {
+    DEFAULT_PAGINATE_SIZE,
+    FIXED_CLASS_STUDENT_STATUS,
+    TRAINING_OBJECT_TYPE,
+} from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import {
-    $Enums,
-    type FixedClass,
-    type TrainingCourse,
-    type TrainingField,
-    type TrainingMajor,
-    type TrainingObjectType,
+import type {
+    FixedClass,
+    TrainingCourse,
+    TrainingField,
+    TrainingMajor,
+    UserProfile,
 } from '@workspace/db'
 import {
     useCountStudent,
@@ -24,7 +27,6 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 // import { ROUTER_PATH } from '@workspace/router'
@@ -50,46 +52,44 @@ export default function UserProfilePageDs() {
         trainingCourse: undefined,
         trainingMajors: undefined,
         curriculumVersion: undefined,
-        trainingObjectTypes: undefined,
+        trainingObjectType: undefined,
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
 
     const router = useRouter()
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
     const { data = [], refetch } = useFindManyStudent({
         where: {
             trainingObjectType: {
                 type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
+                    in: filters?.trainingObjectType
+                        ? filters?.trainingObjectType
+                        : ['MILITARY', 'CIVILIAN', 'INTERNATIONAL_MILITARY'],
                 },
             },
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
-            },
+            ...(filters.name
+                ? {
+                      userProfile: {
+                          OR: [
+                              {
+                                  firstName: {
+                                      contains: filters.name,
+                                  },
+                              },
+                              {
+                                  lastName: {
+                                      contains: filters.name,
+                                  },
+                              },
+                          ],
+                      },
+                  }
+                : {}),
             ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
                           mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
                       },
                   }
                 : {}),
@@ -165,62 +165,38 @@ export default function UserProfilePageDs() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
-        include: {
-            fixedClass: true,
-        },
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: fixedClassData = [] } = useFindManyFixedClass({
-        include: {
-            trainingCourse: true,
-        },
-    })
-
-    const { data: trainingFieldData = [] } = useFindManyTrainingField()
-
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
-        orderBy: { name: 'asc' },
-    })
-
     const { data: count } = useCountStudent({
         where: {
             trainingObjectType: {
                 type: {
-                    equals: $Enums.TrainingObjectTypes.CIVILIAN,
+                    in: filters?.trainingObjectType
+                        ? filters?.trainingObjectType
+                        : ['MILITARY', 'CIVILIAN', 'INTERNATIONAL_MILITARY'],
                 },
             },
-            userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
-            },
+            ...(filters.name
+                ? {
+                      userProfile: {
+                          OR: [
+                              {
+                                  firstName: {
+                                      contains: filters.name,
+                                  },
+                              },
+                              {
+                                  lastName: {
+                                      contains: filters.name,
+                                  },
+                              },
+                          ],
+                      },
+                  }
+                : {}),
             ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
                           mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
                       },
                   }
                 : {}),
@@ -265,6 +241,29 @@ export default function UserProfilePageDs() {
                   }
                 : {}),
         },
+    })
+
+    const { data: TrainingCourseData = [] } = useFindManyTrainingCourse({
+        include: {
+            fixedClass: true,
+        },
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        include: {
+            trainingCourse: true,
+        },
+    })
+
+    const { data: trainingFieldData = [] } = useFindManyTrainingField()
+
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: TrainingCurriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
     })
 
     const debouncedRefetch = useCallback(
@@ -367,57 +366,38 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 fixed: 'left',
                                 type: 'input',
+                                render: (__, record: any) => (record.code ? record?.code : ''),
                             },
                             {
                                 title: 'Họ và tên',
                                 align: 'center',
                                 width: 180,
                                 fixed: 'left',
-                                render: (__, record) =>
+                                dataIndex: 'name',
+                                type: 'input',
+                                render: (__, record: { userProfile?: UserProfile }) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
-                                type: 'input',
-                                dataIndex: 'name',
                             },
-                            // {
-                            //     title: 'Ngày sinh',
-                            //     align: 'center',
-                            //     width: 150,
-                            //     dataIndex: 'dateOfBirth',
-                            //     type: 'date',
-                            //     render: (__, record) =>
-                            //         record.userProfile?.dateOfBirth
-                            //             ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
-                            //             : '',
-                            // },
-                            // {
-                            //     title: 'Giới tính',
-                            //     align: 'center',
-                            //     width: 100,
-                            //     type: 'select',
-                            //     dataIndex: 'gender',
-                            //     options: genderData.map((i) => ({
-                            //         label: i.sTen,
-                            //         value: i.Id,
-                            //     })),
-                            //     render: (__, record) =>
-                            //         record?.userProfile?.gender
-                            //             ? record?.userProfile?.gender?.sTen
-                            //             : '',
-                            // },
                             {
                                 title: 'ĐTĐT',
                                 align: 'center',
                                 width: 150,
                                 type: 'select',
-                                dataIndex: 'trainingObjectTypes',
-                                options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
-                                    label: item.name,
-                                    value: item.id,
-                                })),
-                                render: (__, record) =>
-                                    record.trainingObjectType ? record.trainingObjectType.name : '',
+                                dataIndex: 'trainingObjectType',
+                                options: Object.keys(TRAINING_OBJECT_TYPE).map((key) => {
+                                    return {
+                                        label: TRAINING_OBJECT_TYPE[
+                                            key as keyof typeof TRAINING_OBJECT_TYPE
+                                        ],
+                                        value: key,
+                                    }
+                                }),
+                                render: (__, record: any) =>
+                                    record?.trainingObjectType
+                                        ? record?.trainingObjectType?.name
+                                        : '',
                             },
                             {
                                 title: 'Lớp',
@@ -429,9 +409,9 @@ export default function UserProfilePageDs() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                render: (__, record) => {
+                                render: (__, record: any) => {
                                     if (!record.fixedClass) return ''
-                                    const fiexedClass = `${record.fixedClass?.code}-${record.fixedClass?.name}`
+                                    const fiexedClass = `${record.fixedClass?.code || ''} - ${record.fixedClass?.name}`
                                     return fiexedClass || ''
                                 },
                             },
@@ -445,7 +425,7 @@ export default function UserProfilePageDs() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                render: (__, record) => {
+                                render: (__, record: any) => {
                                     const trainingCourse = record?.fixedClass?.trainingCourse
                                     return trainingCourse ? trainingCourse?.name : ''
                                 },
@@ -460,7 +440,7 @@ export default function UserProfilePageDs() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                render: (__, record) => {
+                                render: (__, record: any) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum
                                         ?.trainingMajor?.trainingField?.name
                                 },
@@ -475,7 +455,7 @@ export default function UserProfilePageDs() {
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                render: (__, record) => {
+                                render: (__, record: any) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum
                                         ?.trainingMajor?.name
                                 },
@@ -485,11 +465,12 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 dataIndex: 'curriculumVersion',
                                 width: 180,
+                                type: 'select',
                                 options: TrainingCurriculumVersionData.map((item) => ({
                                     label: item.name,
                                     value: item.name,
                                 })),
-                                render: (__, record) => {
+                                render: (__, record: any) => {
                                     return record?.fixedClass?.curriculumVersion?.curriculum?.name
                                 },
                             },

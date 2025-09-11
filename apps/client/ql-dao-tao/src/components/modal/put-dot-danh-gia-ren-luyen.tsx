@@ -50,7 +50,7 @@ const PutDotRenLuyen = () => {
             }
             if (id) {
                 await updateTrainingScoreSession({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -66,7 +66,11 @@ const PutDotRenLuyen = () => {
                 queryKey: ['TrainingScoreSession'],
             })
             onClose()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -106,7 +110,7 @@ const PutDotRenLuyen = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt" required>
-                    <Input />
+                    <Input placeholder="Nhập tên đợt" />
                 </FormItem>
             </Col>
             <Col span={24}>

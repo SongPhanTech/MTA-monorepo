@@ -91,7 +91,7 @@ const PutGraduationApplication = () => {
             form.setFieldValue('studentId', value)
         }
     }
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (graduationApplication) {
             form.setFieldsValue({
@@ -106,7 +106,7 @@ const PutGraduationApplication = () => {
                 applicationDate: dayjs(),
             })
         }
-    }, [graduationApplication, form])
+    }, [graduationApplication])
 
     const { mutateAsync: createManyGraduationApplication } =
         useCreateManyStudentGraduationApplication()
@@ -152,7 +152,11 @@ const PutGraduationApplication = () => {
                 queryKey: ['studentGraduationApplications'],
             })
             onClose()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()

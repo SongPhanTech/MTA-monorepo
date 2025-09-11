@@ -1368,6 +1368,8 @@ model ClassRegisterLogs {
   updatedAt              DateTime             @default(now()) @updatedAt()
   classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
   classRegisterSessionId String
+  subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
+  subjectClassId         String
   student                Student              @relation(fields: [studentId], references: [id])
   studentId              String
   status                 ClassRegisterStatus  @default(PENDING)
@@ -1423,6 +1425,7 @@ model SubjectClass {
   expertProfile              ExpertProfile[]
   defenseRooms               Room[]                @relation("DefenseRooms")
   surveyObjectTypes          SurveyObjectType[]
+  classRegisterLogs          ClassRegisterLogs[]
 
   @@schema("ql-dao-tao")
 }
@@ -4662,7 +4665,7 @@ model GraduationRankDowngradeRule {
   createdAt     DateTime                           @default(now())
   updatedAt     DateTime                           @default(now()) @updatedAt()
   initialRank   AcademicRankingConvert             @relation(fields: [initialRankId], references: [id])
-  initialRankId String                             @unique()
+  initialRankId String
   conditions    GraduationRankDowngradeCondition[]
 
   @@schema("ql-dao-tao")
@@ -4911,6 +4914,7 @@ model CriterionCatalog {
   scoreScaleId                String
   requirementCriterionCatalog RequirementCriterionCatalog[]
 
+  @@unique([standardId, name])
   @@schema("khao-thi")
 }
 
@@ -4932,6 +4936,7 @@ model RequirementCriterionCatalog {
   name               String
   questions          String[]
 
+  @@unique([criterionCatalogId, name])
   @@schema("khao-thi")
 }
 
@@ -4979,6 +4984,7 @@ model EvaluationStandard {
   conclusion  String                @default("")
   criteria    EvaluationCriterion[]
 
+  @@unique([periodId, name])
   @@schema("khao-thi")
 }
 

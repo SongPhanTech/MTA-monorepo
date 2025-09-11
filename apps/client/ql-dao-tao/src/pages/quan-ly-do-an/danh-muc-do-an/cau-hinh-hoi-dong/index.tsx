@@ -571,7 +571,11 @@ export default function SettingClass() {
             message.success('Tạo hội đồng thành công')
             setRightData([])
             hideSpinner()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Lỗi khi tạo hội đồng:')
         }
     }

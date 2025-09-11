@@ -216,7 +216,11 @@ const PutVersionSubjectModal = () => {
 
             queryClient.invalidateQueries({ queryKey: ['SubjectVersion'] })
             onClose()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -334,8 +338,8 @@ const PutVersionSubjectModal = () => {
             <Col span={8}>
                 <FormItem form={form} name="credit" label="Số tín chỉ" required>
                     <InputNumber
-                        type="number"
                         min={0}
+                        type="number"
                         placeholder="Số tín chỉ"
                         className="w-full"
                     />
@@ -343,14 +347,14 @@ const PutVersionSubjectModal = () => {
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="period" label="Số tiết" required>
-                    <InputNumber type="number" min={0} placeholder="Số tiết" className="w-full" />
+                    <InputNumber min={0} type="number" placeholder="Số tiết" className="w-full" />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết">
                     <InputNumber
-                        type="number"
                         min={0}
+                        type="number"
                         placeholder="Số tiết lý thuyết"
                         className="w-full"
                     />
@@ -359,8 +363,8 @@ const PutVersionSubjectModal = () => {
             <Col span={8}>
                 <FormItem form={form} name="numberOfPractical" label="Số tiết bài tập">
                     <InputNumber
-                        type="number"
                         min={0}
+                        type="number"
                         placeholder="Số tiết bài tập"
                         className="w-full"
                     />
@@ -369,8 +373,8 @@ const PutVersionSubjectModal = () => {
             <Col span={8}>
                 <FormItem form={form} name="numberOfSelfStudy" label="Số tiết thảo luận/tự học">
                     <InputNumber
-                        type="number"
                         min={0}
+                        type="number"
                         placeholder="Số tiết thảo luận/tự học"
                         className="w-full"
                     />
@@ -379,8 +383,8 @@ const PutVersionSubjectModal = () => {
             <Col span={8}>
                 <FormItem form={form} name="numberOfPractice" label="Số tiết thí nghiệm/thực hành">
                     <InputNumber
-                        type="number"
                         min={0}
+                        type="number"
                         placeholder="Số tiết thí nghiệm/thực hành"
                         className="w-full"
                     />
@@ -389,8 +393,8 @@ const PutVersionSubjectModal = () => {
             <Col span={8}>
                 <FormItem form={form} name="numberOfReview" label="Số tiết ôn tập">
                     <InputNumber
-                        type="number"
                         min={0}
+                        type="number"
                         placeholder="Số tiết ôn tập"
                         className="w-full"
                     />
@@ -399,8 +403,8 @@ const PutVersionSubjectModal = () => {
             <Col span={8}>
                 <FormItem form={form} name="numberOfExam" label="Số tiết KT/thi">
                     <InputNumber
-                        type="number"
                         min={0}
+                        type="number"
                         placeholder="Số tiết KT/thi"
                         className="w-full"
                     />

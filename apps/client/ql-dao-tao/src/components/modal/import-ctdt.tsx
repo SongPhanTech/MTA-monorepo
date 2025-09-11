@@ -73,7 +73,11 @@ const ImportCurriculumVersionModal = ({ visible, onCancel }: ImportCurriculumVer
                         'Nhâp dữ liệu phiên bản chương trình đào tạo từ file thất bại'
                 )
             }
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Có lỗi xảy ra khi nhập dữ liệu từ file')
         } finally {
             hideSpinner()

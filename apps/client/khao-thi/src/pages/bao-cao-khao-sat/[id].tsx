@@ -2,8 +2,12 @@ import BarChart from '@components/dashboard/bar-chart'
 import PieChart from '@components/dashboard/org-structure'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useGetParticipationByType, useGetSurveyStatistics } from '@workspace/libs/api/exam'
-import { Button, Col, Empty, Flex, Row, Typography } from 'antd'
+import {
+    useExportReportSurveyOrganizational,
+    useGetParticipationByType,
+    useGetSurveyStatistics,
+} from '@workspace/libs/api/exam'
+import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
@@ -68,6 +72,21 @@ function Page() {
                 </div>
             </div>
         )
+    }
+    const { mutateAsync: exportApi } = useExportReportSurveyOrganizational()
+
+    const exportReport = async () => {
+        try {
+            await exportApi({
+                data: { surveyId: router.query.id as string, semesterId: '', organizationId: '' },
+            })
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
     }
 
     return (

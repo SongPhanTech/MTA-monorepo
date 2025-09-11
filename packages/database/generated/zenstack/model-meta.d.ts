@@ -5715,6 +5715,29 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                subjectClass: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subjectClassId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
                 student: {
                     name: string;
                     type: string;
@@ -6168,6 +6191,13 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                     isRelationOwner: boolean;
+                };
+                classRegisterLogs: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
             };
             uniqueConstraints: {
@@ -28761,10 +28791,6 @@ declare const metadata: {
                 initialRankId: {
                     name: string;
                     type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -28782,10 +28808,6 @@ declare const metadata: {
                     fields: string[];
                 };
                 code: {
-                    name: string;
-                    fields: string[];
-                };
-                initialRankId: {
                     name: string;
                     fields: string[];
                 };
@@ -30359,8 +30381,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                standardId_name: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -30369,7 +30395,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         requirementCriterionCatalog: {
             name: string;
@@ -30485,8 +30517,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                criterionCatalogId_name: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -30495,7 +30531,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         scoreScaleCatalog: {
             name: string;
@@ -30760,8 +30802,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                periodId_name: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -30770,7 +30816,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         evaluationCriterion: {
             name: string;

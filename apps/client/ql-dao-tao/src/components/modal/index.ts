@@ -34,6 +34,7 @@ import PutAcademicActionCondition from './put-dieu-kien-xu-ly-hoc-tap'
 import PutThesisProject from './put-do-an'
 import PutTrainingObjectTypeModal from './put-doi-tuong-dao-tao'
 import PutGraduationApplication from './put-don-xet-tot-nghiep'
+import PutClassRegisterSession from './put-dot-dang-ky-hoc'
 import PutDotRenLuyen from './put-dot-danh-gia-ren-luyen'
 import PutGraduationSession from './put-dot-xet-tot-nghiep'
 import PutUploadFixedClassModal from './put-file-lop-bien-che'
@@ -172,5 +173,6 @@ export {
     PutMonHocTuongDuong,
     ModalPrintInvitation,
     PutTrainingLevel,
+    PutClassRegisterSession,
     ModalPrintSupervisorGuide,
 }

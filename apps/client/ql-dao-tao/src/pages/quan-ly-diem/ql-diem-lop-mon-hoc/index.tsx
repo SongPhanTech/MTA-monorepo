@@ -378,7 +378,11 @@ export default function SubjectClassScore() {
             showSpinner()
             setSelectedFixedClass(id)
             await refetch()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -508,7 +512,11 @@ export default function SubjectClassScore() {
             } else {
                 message.info('Không có thay đổi nào để cập nhật')
             }
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
         } finally {
             hideSpinner()
@@ -595,7 +603,11 @@ export default function SubjectClassScore() {
             setScoreThi(newScoreThi)
 
             message.success('Nhập điểm từ file thành công!')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Có lỗi xảy ra khi nhập điểm từ file')
         } finally {
             hideSpinner()
@@ -915,6 +927,7 @@ export default function SubjectClassScore() {
                                             (currentScore < 0 || currentScore > 10)
                                         return (
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 id={`score-cc-${record.id}`}
                                                 style={{ width: '100%' }}
@@ -989,6 +1002,7 @@ export default function SubjectClassScore() {
                                             (currentScore < 0 || currentScore > 10)
                                         return (
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 id={`score-tx-${record.id}`}
                                                 style={{ width: '100%' }}
@@ -1068,6 +1082,7 @@ export default function SubjectClassScore() {
                                             (currentScore < 0 || currentScore > 10)
                                         return (
                                             <InputNumber
+                                                min={0}
                                                 type="number"
                                                 id={`score-thi-${record.id}`}
                                                 style={{ width: '100%' }}

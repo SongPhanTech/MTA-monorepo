@@ -84,7 +84,11 @@ const ModalGraduationCriteria = () => {
                 where: { id },
             })
             message.success('Xóa bản ghi thành công')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -101,7 +105,11 @@ const ModalGraduationCriteria = () => {
                 where: { id },
             })
             message.success('Xóa bản ghi thành công')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -115,7 +123,11 @@ const ModalGraduationCriteria = () => {
                 where: { id },
             })
             message.success('Xóa bản ghi thành công')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -132,7 +144,11 @@ const ModalGraduationCriteria = () => {
             await createRankDowngradeRule({
                 data: { initialRankId: id || '' },
             })
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()

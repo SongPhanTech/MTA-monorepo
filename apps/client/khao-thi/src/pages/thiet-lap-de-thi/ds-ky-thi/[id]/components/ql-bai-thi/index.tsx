@@ -144,7 +144,11 @@ export default function ExamSession({ id }: ExamSessionProps) {
             message.success('Cập nhật thành công')
             setEditedData({})
             refetch()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()

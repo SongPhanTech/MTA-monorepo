@@ -122,7 +122,11 @@ export default function ExamFax({ id }: ExamFaxProps) {
             message.success('Cập nhật thành công')
             setEditedData({})
             refetch()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -205,6 +209,7 @@ export default function ExamFax({ id }: ExamFaxProps) {
                                 type: 'order',
                                 render: (_, record) => (
                                     <InputNumber
+                                        min={0}
                                         type="number"
                                         value={editedData[record.id]?.score ?? record.score ?? ''}
                                         onChange={(e) =>

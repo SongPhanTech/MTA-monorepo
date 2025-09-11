@@ -22651,6 +22651,7 @@ export namespace Prisma {
     expertProfile: number
     defenseRooms: number
     surveyObjectTypes: number
+    classRegisterLogs: number
   }
 
   export type SubjectClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -22661,6 +22662,7 @@ export namespace Prisma {
     expertProfile?: boolean | SubjectClassCountOutputTypeCountExpertProfileArgs
     defenseRooms?: boolean | SubjectClassCountOutputTypeCountDefenseRoomsArgs
     surveyObjectTypes?: boolean | SubjectClassCountOutputTypeCountSurveyObjectTypesArgs
+    classRegisterLogs?: boolean | SubjectClassCountOutputTypeCountClassRegisterLogsArgs
   }
 
   // Custom InputTypes
@@ -22721,6 +22723,13 @@ export namespace Prisma {
    */
   export type SubjectClassCountOutputTypeCountSurveyObjectTypesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SurveyObjectTypeWhereInput
+  }
+
+  /**
+   * SubjectClassCountOutputType without action
+   */
+  export type SubjectClassCountOutputTypeCountClassRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClassRegisterLogsWhereInput
   }
 
 
@@ -65515,6 +65524,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     classRegisterSessionId: string | null
+    subjectClassId: string | null
     studentId: string | null
     status: $Enums.ClassRegisterStatus | null
     reason: string | null
@@ -65529,6 +65539,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     classRegisterSessionId: string | null
+    subjectClassId: string | null
     studentId: string | null
     status: $Enums.ClassRegisterStatus | null
     reason: string | null
@@ -65543,6 +65554,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     classRegisterSessionId: number
+    subjectClassId: number
     studentId: number
     status: number
     reason: number
@@ -65559,6 +65571,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     classRegisterSessionId?: true
+    subjectClassId?: true
     studentId?: true
     status?: true
     reason?: true
@@ -65573,6 +65586,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     classRegisterSessionId?: true
+    subjectClassId?: true
     studentId?: true
     status?: true
     reason?: true
@@ -65587,6 +65601,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     classRegisterSessionId?: true
+    subjectClassId?: true
     studentId?: true
     status?: true
     reason?: true
@@ -65674,6 +65689,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     classRegisterSessionId: string
+    subjectClassId: string
     studentId: string
     status: $Enums.ClassRegisterStatus
     reason: string | null
@@ -65705,10 +65721,12 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     classRegisterSessionId?: boolean
+    subjectClassId?: boolean
     studentId?: boolean
     status?: boolean
     reason?: boolean
     classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["classRegisterLogs"]>
 
@@ -65721,10 +65739,12 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     classRegisterSessionId?: boolean
+    subjectClassId?: boolean
     studentId?: boolean
     status?: boolean
     reason?: boolean
     classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["classRegisterLogs"]>
 
@@ -65737,10 +65757,12 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     classRegisterSessionId?: boolean
+    subjectClassId?: boolean
     studentId?: boolean
     status?: boolean
     reason?: boolean
     classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["classRegisterLogs"]>
 
@@ -65753,22 +65775,26 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     classRegisterSessionId?: boolean
+    subjectClassId?: boolean
     studentId?: boolean
     status?: boolean
     reason?: boolean
   }
 
-  export type ClassRegisterLogsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "classRegisterSessionId" | "studentId" | "status" | "reason", ExtArgs["result"]["classRegisterLogs"]>
+  export type ClassRegisterLogsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "classRegisterSessionId" | "subjectClassId" | "studentId" | "status" | "reason", ExtArgs["result"]["classRegisterLogs"]>
   export type ClassRegisterLogsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
   }
   export type ClassRegisterLogsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
   }
   export type ClassRegisterLogsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
   }
 
@@ -65776,6 +65802,7 @@ export namespace Prisma {
     name: "ClassRegisterLogs"
     objects: {
       classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>
+      subjectClass: Prisma.$SubjectClassPayload<ExtArgs>
       student: Prisma.$StudentPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -65787,6 +65814,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       classRegisterSessionId: string
+      subjectClassId: string
       studentId: string
       status: $Enums.ClassRegisterStatus
       reason: string | null
@@ -66185,6 +66213,7 @@ export namespace Prisma {
   export interface Prisma__ClassRegisterLogsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     classRegisterSession<T extends ClassRegisterSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSessionDefaultArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    subjectClass<T extends SubjectClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassDefaultArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -66223,6 +66252,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"ClassRegisterLogs", 'DateTime'>
     readonly updatedAt: FieldRef<"ClassRegisterLogs", 'DateTime'>
     readonly classRegisterSessionId: FieldRef<"ClassRegisterLogs", 'String'>
+    readonly subjectClassId: FieldRef<"ClassRegisterLogs", 'String'>
     readonly studentId: FieldRef<"ClassRegisterLogs", 'String'>
     readonly status: FieldRef<"ClassRegisterLogs", 'ClassRegisterStatus'>
     readonly reason: FieldRef<"ClassRegisterLogs", 'String'>
@@ -67036,6 +67066,7 @@ export namespace Prisma {
     expertProfile?: boolean | SubjectClass$expertProfileArgs<ExtArgs>
     defenseRooms?: boolean | SubjectClass$defenseRoomsArgs<ExtArgs>
     surveyObjectTypes?: boolean | SubjectClass$surveyObjectTypesArgs<ExtArgs>
+    classRegisterLogs?: boolean | SubjectClass$classRegisterLogsArgs<ExtArgs>
     _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjectClass"]>
 
@@ -67162,6 +67193,7 @@ export namespace Prisma {
     expertProfile?: boolean | SubjectClass$expertProfileArgs<ExtArgs>
     defenseRooms?: boolean | SubjectClass$defenseRoomsArgs<ExtArgs>
     surveyObjectTypes?: boolean | SubjectClass$surveyObjectTypesArgs<ExtArgs>
+    classRegisterLogs?: boolean | SubjectClass$classRegisterLogsArgs<ExtArgs>
     _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SubjectClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -67200,6 +67232,7 @@ export namespace Prisma {
       expertProfile: Prisma.$ExpertProfilePayload<ExtArgs>[]
       defenseRooms: Prisma.$RoomPayload<ExtArgs>[]
       surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
+      classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -67638,6 +67671,7 @@ export namespace Prisma {
     expertProfile<T extends SubjectClass$expertProfileArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$expertProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     defenseRooms<T extends SubjectClass$defenseRoomsArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$defenseRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     surveyObjectTypes<T extends SubjectClass$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    classRegisterLogs<T extends SubjectClass$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -68351,6 +68385,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SurveyObjectTypeScalarFieldEnum | SurveyObjectTypeScalarFieldEnum[]
+  }
+
+  /**
+   * SubjectClass.classRegisterLogs
+   */
+  export type SubjectClass$classRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClassRegisterLogs
+     */
+    select?: ClassRegisterLogsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ClassRegisterLogs
+     */
+    omit?: ClassRegisterLogsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClassRegisterLogsInclude<ExtArgs> | null
+    where?: ClassRegisterLogsWhereInput
+    orderBy?: ClassRegisterLogsOrderByWithRelationInput | ClassRegisterLogsOrderByWithRelationInput[]
+    cursor?: ClassRegisterLogsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
   }
 
   /**
@@ -299164,6 +299222,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     classRegisterSessionId: 'classRegisterSessionId',
+    subjectClassId: 'subjectClassId',
     studentId: 'studentId',
     status: 'status',
     reason: 'reason'
@@ -303207,6 +303266,7 @@ export namespace Prisma {
     code: 'code',
     description: 'description',
     classRegisterSessionId: 'classRegisterSessionId',
+    subjectClassId: 'subjectClassId',
     studentId: 'studentId',
     reason: 'reason'
   };
@@ -309697,10 +309757,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
     updatedAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
     classRegisterSessionId?: StringFilter<"ClassRegisterLogs"> | string
+    subjectClassId?: StringFilter<"ClassRegisterLogs"> | string
     studentId?: StringFilter<"ClassRegisterLogs"> | string
     status?: EnumClassRegisterStatusFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
     reason?: StringNullableFilter<"ClassRegisterLogs"> | string | null
     classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+    subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
   }
 
@@ -309713,10 +309775,12 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     classRegisterSessionId?: SortOrder
+    subjectClassId?: SortOrder
     studentId?: SortOrder
     status?: SortOrder
     reason?: SortOrderInput | SortOrder
     classRegisterSession?: ClassRegisterSessionOrderByWithRelationInput
+    subjectClass?: SubjectClassOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
     _relevance?: ClassRegisterLogsOrderByRelevanceInput
   }
@@ -309733,10 +309797,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
     updatedAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
     classRegisterSessionId?: StringFilter<"ClassRegisterLogs"> | string
+    subjectClassId?: StringFilter<"ClassRegisterLogs"> | string
     studentId?: StringFilter<"ClassRegisterLogs"> | string
     status?: EnumClassRegisterStatusFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
     reason?: StringNullableFilter<"ClassRegisterLogs"> | string | null
     classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+    subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
   }, "id" | "code">
 
@@ -309749,6 +309815,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     classRegisterSessionId?: SortOrder
+    subjectClassId?: SortOrder
     studentId?: SortOrder
     status?: SortOrder
     reason?: SortOrderInput | SortOrder
@@ -309769,6 +309836,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ClassRegisterLogs"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ClassRegisterLogs"> | Date | string
     classRegisterSessionId?: StringWithAggregatesFilter<"ClassRegisterLogs"> | string
+    subjectClassId?: StringWithAggregatesFilter<"ClassRegisterLogs"> | string
     studentId?: StringWithAggregatesFilter<"ClassRegisterLogs"> | string
     status?: EnumClassRegisterStatusWithAggregatesFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
     reason?: StringNullableWithAggregatesFilter<"ClassRegisterLogs"> | string | null
@@ -309820,6 +309888,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileListRelationFilter
     defenseRooms?: RoomListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+    classRegisterLogs?: ClassRegisterLogsListRelationFilter
   }
 
   export type SubjectClassOrderByWithRelationInput = {
@@ -309865,6 +309934,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileOrderByRelationAggregateInput
     defenseRooms?: RoomOrderByRelationAggregateInput
     surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
+    classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
     _relevance?: SubjectClassOrderByRelevanceInput
   }
 
@@ -309914,6 +309984,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileListRelationFilter
     defenseRooms?: RoomListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+    classRegisterLogs?: ClassRegisterLogsListRelationFilter
   }, "id" | "code">
 
   export type SubjectClassOrderByWithAggregationInput = {
@@ -323569,7 +323640,6 @@ export namespace Prisma {
   export type GraduationRankDowngradeRuleWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    initialRankId?: string
     AND?: GraduationRankDowngradeRuleWhereInput | GraduationRankDowngradeRuleWhereInput[]
     OR?: GraduationRankDowngradeRuleWhereInput[]
     NOT?: GraduationRankDowngradeRuleWhereInput | GraduationRankDowngradeRuleWhereInput[]
@@ -323578,9 +323648,10 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"GraduationRankDowngradeRule"> | Date | string | null
     createdAt?: DateTimeFilter<"GraduationRankDowngradeRule"> | Date | string
     updatedAt?: DateTimeFilter<"GraduationRankDowngradeRule"> | Date | string
+    initialRankId?: StringFilter<"GraduationRankDowngradeRule"> | string
     initialRank?: XOR<AcademicRankingConvertScalarRelationFilter, AcademicRankingConvertWhereInput>
     conditions?: GraduationRankDowngradeConditionListRelationFilter
-  }, "id" | "code" | "initialRankId">
+  }, "id" | "code">
 
   export type GraduationRankDowngradeRuleOrderByWithAggregationInput = {
     id?: SortOrder
@@ -324554,6 +324625,7 @@ export namespace Prisma {
   export type CriterionCatalogWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
+    standardId_name?: CriterionCatalogStandardIdNameCompoundUniqueInput
     AND?: CriterionCatalogWhereInput | CriterionCatalogWhereInput[]
     OR?: CriterionCatalogWhereInput[]
     NOT?: CriterionCatalogWhereInput | CriterionCatalogWhereInput[]
@@ -324569,7 +324641,7 @@ export namespace Prisma {
     standard?: XOR<StandardCatalogScalarRelationFilter, StandardCatalogWhereInput>
     scoreScale?: XOR<ScoreScaleCatalogScalarRelationFilter, ScoreScaleCatalogWhereInput>
     requirementCriterionCatalog?: RequirementCriterionCatalogListRelationFilter
-  }, "id" | "code">
+  }, "id" | "code" | "standardId_name">
 
   export type CriterionCatalogOrderByWithAggregationInput = {
     id?: SortOrder
@@ -324644,6 +324716,7 @@ export namespace Prisma {
   export type RequirementCriterionCatalogWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
+    criterionCatalogId_name?: RequirementCriterionCatalogCriterionCatalogIdNameCompoundUniqueInput
     AND?: RequirementCriterionCatalogWhereInput | RequirementCriterionCatalogWhereInput[]
     OR?: RequirementCriterionCatalogWhereInput[]
     NOT?: RequirementCriterionCatalogWhereInput | RequirementCriterionCatalogWhereInput[]
@@ -324657,7 +324730,7 @@ export namespace Prisma {
     name?: StringFilter<"RequirementCriterionCatalog"> | string
     questions?: StringNullableListFilter<"RequirementCriterionCatalog">
     criterionCatalog?: XOR<CriterionCatalogScalarRelationFilter, CriterionCatalogWhereInput>
-  }, "id" | "code">
+  }, "id" | "code" | "criterionCatalogId_name">
 
   export type RequirementCriterionCatalogOrderByWithAggregationInput = {
     id?: SortOrder
@@ -324827,6 +324900,7 @@ export namespace Prisma {
   export type EvaluationStandardWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
+    periodId_name?: EvaluationStandardPeriodIdNameCompoundUniqueInput
     AND?: EvaluationStandardWhereInput | EvaluationStandardWhereInput[]
     OR?: EvaluationStandardWhereInput[]
     NOT?: EvaluationStandardWhereInput | EvaluationStandardWhereInput[]
@@ -324842,7 +324916,7 @@ export namespace Prisma {
     conclusion?: StringFilter<"EvaluationStandard"> | string
     period?: XOR<EvaluationPeriodScalarRelationFilter, EvaluationPeriodWhereInput>
     criteria?: EvaluationCriterionListRelationFilter
-  }, "id" | "code">
+  }, "id" | "code" | "periodId_name">
 
   export type EvaluationStandardOrderByWithAggregationInput = {
     id?: SortOrder
@@ -333032,6 +333106,7 @@ export namespace Prisma {
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
     classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutClassRegisterLogsInput
+    subjectClass: SubjectClassCreateNestedOneWithoutClassRegisterLogsInput
     student: StudentCreateNestedOneWithoutClassRegisterLogsInput
   }
 
@@ -333044,6 +333119,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     classRegisterSessionId: string
+    subjectClassId: string
     studentId: string
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
@@ -333060,6 +333136,7 @@ export namespace Prisma {
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+    subjectClass?: SubjectClassUpdateOneRequiredWithoutClassRegisterLogsNestedInput
     student?: StudentUpdateOneRequiredWithoutClassRegisterLogsNestedInput
   }
 
@@ -333072,6 +333149,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+    subjectClassId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -333086,6 +333164,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     classRegisterSessionId: string
+    subjectClassId: string
     studentId: string
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
@@ -333112,6 +333191,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+    subjectClassId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -333153,6 +333233,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateInput = {
@@ -333191,6 +333272,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUpdateInput = {
@@ -333229,6 +333311,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateInput = {
@@ -333267,6 +333350,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassCreateManyInput = {
@@ -358509,6 +358593,11 @@ export namespace Prisma {
     isNot?: ClassRegisterSessionWhereInput
   }
 
+  export type SubjectClassScalarRelationFilter = {
+    is?: SubjectClassWhereInput
+    isNot?: SubjectClassWhereInput
+  }
+
   export type ClassRegisterLogsOrderByRelevanceInput = {
     fields: ClassRegisterLogsOrderByRelevanceFieldEnum | ClassRegisterLogsOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -358524,6 +358613,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     classRegisterSessionId?: SortOrder
+    subjectClassId?: SortOrder
     studentId?: SortOrder
     status?: SortOrder
     reason?: SortOrder
@@ -358538,6 +358628,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     classRegisterSessionId?: SortOrder
+    subjectClassId?: SortOrder
     studentId?: SortOrder
     status?: SortOrder
     reason?: SortOrder
@@ -358552,6 +358643,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     classRegisterSessionId?: SortOrder
+    subjectClassId?: SortOrder
     studentId?: SortOrder
     status?: SortOrder
     reason?: SortOrder
@@ -358748,11 +358840,6 @@ export namespace Prisma {
     in?: $Enums.PeriodType[] | ListEnumPeriodTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.PeriodType[] | ListEnumPeriodTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumPeriodTypeFilter<$PrismaModel> | $Enums.PeriodType
-  }
-
-  export type SubjectClassScalarRelationFilter = {
-    is?: SubjectClassWhereInput
-    isNot?: SubjectClassWhereInput
   }
 
   export type ClassScheduleNullableScalarRelationFilter = {
@@ -368992,6 +369079,11 @@ export namespace Prisma {
     search: string
   }
 
+  export type CriterionCatalogStandardIdNameCompoundUniqueInput = {
+    standardId: string
+    name: string
+  }
+
   export type CriterionCatalogCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -369051,6 +369143,11 @@ export namespace Prisma {
     fields: RequirementCriterionCatalogOrderByRelevanceFieldEnum | RequirementCriterionCatalogOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type RequirementCriterionCatalogCriterionCatalogIdNameCompoundUniqueInput = {
+    criterionCatalogId: string
+    name: string
   }
 
   export type RequirementCriterionCatalogCountOrderByAggregateInput = {
@@ -369180,6 +369277,11 @@ export namespace Prisma {
     fields: EvaluationStandardOrderByRelevanceFieldEnum | EvaluationStandardOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type EvaluationStandardPeriodIdNameCompoundUniqueInput = {
+    periodId: string
+    name: string
   }
 
   export type EvaluationStandardCountOrderByAggregateInput = {
@@ -375817,6 +375919,12 @@ export namespace Prisma {
     connect?: ClassRegisterSessionWhereUniqueInput
   }
 
+  export type SubjectClassCreateNestedOneWithoutClassRegisterLogsInput = {
+    create?: XOR<SubjectClassCreateWithoutClassRegisterLogsInput, SubjectClassUncheckedCreateWithoutClassRegisterLogsInput>
+    connectOrCreate?: SubjectClassCreateOrConnectWithoutClassRegisterLogsInput
+    connect?: SubjectClassWhereUniqueInput
+  }
+
   export type StudentCreateNestedOneWithoutClassRegisterLogsInput = {
     create?: XOR<StudentCreateWithoutClassRegisterLogsInput, StudentUncheckedCreateWithoutClassRegisterLogsInput>
     connectOrCreate?: StudentCreateOrConnectWithoutClassRegisterLogsInput
@@ -375833,6 +375941,14 @@ export namespace Prisma {
     upsert?: ClassRegisterSessionUpsertWithoutClassRegisterLogsInput
     connect?: ClassRegisterSessionWhereUniqueInput
     update?: XOR<XOR<ClassRegisterSessionUpdateToOneWithWhereWithoutClassRegisterLogsInput, ClassRegisterSessionUpdateWithoutClassRegisterLogsInput>, ClassRegisterSessionUncheckedUpdateWithoutClassRegisterLogsInput>
+  }
+
+  export type SubjectClassUpdateOneRequiredWithoutClassRegisterLogsNestedInput = {
+    create?: XOR<SubjectClassCreateWithoutClassRegisterLogsInput, SubjectClassUncheckedCreateWithoutClassRegisterLogsInput>
+    connectOrCreate?: SubjectClassCreateOrConnectWithoutClassRegisterLogsInput
+    upsert?: SubjectClassUpsertWithoutClassRegisterLogsInput
+    connect?: SubjectClassWhereUniqueInput
+    update?: XOR<XOR<SubjectClassUpdateToOneWithWhereWithoutClassRegisterLogsInput, SubjectClassUpdateWithoutClassRegisterLogsInput>, SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput>
   }
 
   export type StudentUpdateOneRequiredWithoutClassRegisterLogsNestedInput = {
@@ -375930,6 +376046,13 @@ export namespace Prisma {
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
   }
 
+  export type ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput = {
+    create?: XOR<ClassRegisterLogsCreateWithoutSubjectClassInput, ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput> | ClassRegisterLogsCreateWithoutSubjectClassInput[] | ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput | ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput[]
+    createMany?: ClassRegisterLogsCreateManySubjectClassInputEnvelope
+    connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+  }
+
   export type StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput = {
     create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
     connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -375973,6 +376096,13 @@ export namespace Prisma {
     create?: XOR<SurveyObjectTypeCreateWithoutSubjectClassesInput, SurveyObjectTypeUncheckedCreateWithoutSubjectClassesInput> | SurveyObjectTypeCreateWithoutSubjectClassesInput[] | SurveyObjectTypeUncheckedCreateWithoutSubjectClassesInput[]
     connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutSubjectClassesInput | SurveyObjectTypeCreateOrConnectWithoutSubjectClassesInput[]
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
+  }
+
+  export type ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput = {
+    create?: XOR<ClassRegisterLogsCreateWithoutSubjectClassInput, ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput> | ClassRegisterLogsCreateWithoutSubjectClassInput[] | ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput | ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput[]
+    createMany?: ClassRegisterLogsCreateManySubjectClassInputEnvelope
+    connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
   }
 
   export type EnumSubjectClassScheduleFieldUpdateOperationsInput = {
@@ -376143,6 +376273,20 @@ export namespace Prisma {
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
   }
 
+  export type ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput = {
+    create?: XOR<ClassRegisterLogsCreateWithoutSubjectClassInput, ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput> | ClassRegisterLogsCreateWithoutSubjectClassInput[] | ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput | ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput[]
+    upsert?: ClassRegisterLogsUpsertWithWhereUniqueWithoutSubjectClassInput | ClassRegisterLogsUpsertWithWhereUniqueWithoutSubjectClassInput[]
+    createMany?: ClassRegisterLogsCreateManySubjectClassInputEnvelope
+    set?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    disconnect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    delete?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutSubjectClassInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutSubjectClassInput[]
+    updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput | ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput[]
+    deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+  }
+
   export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput = {
     create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
     connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -376235,6 +376379,20 @@ export namespace Prisma {
     update?: SurveyObjectTypeUpdateWithWhereUniqueWithoutSubjectClassesInput | SurveyObjectTypeUpdateWithWhereUniqueWithoutSubjectClassesInput[]
     updateMany?: SurveyObjectTypeUpdateManyWithWhereWithoutSubjectClassesInput | SurveyObjectTypeUpdateManyWithWhereWithoutSubjectClassesInput[]
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
+  }
+
+  export type ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput = {
+    create?: XOR<ClassRegisterLogsCreateWithoutSubjectClassInput, ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput> | ClassRegisterLogsCreateWithoutSubjectClassInput[] | ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput[]
+    connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput | ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput[]
+    upsert?: ClassRegisterLogsUpsertWithWhereUniqueWithoutSubjectClassInput | ClassRegisterLogsUpsertWithWhereUniqueWithoutSubjectClassInput[]
+    createMany?: ClassRegisterLogsCreateManySubjectClassInputEnvelope
+    set?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    disconnect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    delete?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutSubjectClassInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutSubjectClassInput[]
+    updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput | ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput[]
+    deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
   }
 
   export type SubjectClassCreateNestedOneWithoutClassSchedulesInput = {
@@ -394185,6 +394343,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExamInput = {
@@ -394222,6 +394381,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExamInput = {
@@ -396096,6 +396256,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectClassStudentInput = {
@@ -396133,6 +396294,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectClassStudentInput = {
@@ -396504,6 +396666,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectClassStudentInput = {
@@ -396541,6 +396704,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectVersionUpsertWithoutStudentSubjectScoreInput = {
@@ -397967,6 +398131,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSemesterInput = {
@@ -398004,6 +398169,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSemesterInput = {
@@ -400486,6 +400652,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutFixedClassesInput = {
@@ -400523,6 +400690,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutFixedClassesInput = {
@@ -403448,6 +403616,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSubjectInput = {
@@ -403485,6 +403654,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSubjectInput = {
@@ -404734,6 +404904,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
+    subjectClass: SubjectClassCreateNestedOneWithoutClassRegisterLogsInput
     student: StudentCreateNestedOneWithoutClassRegisterLogsInput
   }
 
@@ -404745,6 +404916,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectClassId: string
     studentId: string
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
@@ -404863,6 +405035,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
     updatedAt?: DateTimeFilter<"ClassRegisterLogs"> | Date | string
     classRegisterSessionId?: StringFilter<"ClassRegisterLogs"> | string
+    subjectClassId?: StringFilter<"ClassRegisterLogs"> | string
     studentId?: StringFilter<"ClassRegisterLogs"> | string
     status?: EnumClassRegisterStatusFilter<"ClassRegisterLogs"> | $Enums.ClassRegisterStatus
     reason?: StringNullableFilter<"ClassRegisterLogs"> | string | null
@@ -404901,6 +405074,87 @@ export namespace Prisma {
   export type ClassRegisterSessionCreateOrConnectWithoutClassRegisterLogsInput = {
     where: ClassRegisterSessionWhereUniqueInput
     create: XOR<ClassRegisterSessionCreateWithoutClassRegisterLogsInput, ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput>
+  }
+
+  export type SubjectClassCreateWithoutClassRegisterLogsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    schedule: $Enums.SubjectClassSchedule
+    maxStudent: number
+    cancelled?: boolean
+    lecturerAssignmentDeadline?: Date | string | null
+    examDate?: Date | string | null
+    scoreDeadline?: Date | string | null
+    examScoreDeadline?: Date | string | null
+    examType?: $Enums.ExamType | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    issuedScoreAt?: Date | string | null
+    subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
+    semester: SemesterCreateNestedOneWithoutSubjectClassesInput
+    exam?: ExamCreateNestedOneWithoutSubjectClassInput
+    room?: RoomCreateNestedOneWithoutSubjectClassesInput
+    mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
+    extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
+    enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
+    subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
+    fixedClasses?: FixedClassCreateNestedManyWithoutSubjectClassesInput
+    classSchedules?: ClassScheduleCreateNestedManyWithoutSubjectClassInput
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
+    defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+  }
+
+  export type SubjectClassUncheckedCreateWithoutClassRegisterLogsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    subjectId: string
+    schedule: $Enums.SubjectClassSchedule
+    maxStudent: number
+    semesterId: string
+    cancelled?: boolean
+    lecturerAssignmentDeadline?: Date | string | null
+    examDate?: Date | string | null
+    scoreDeadline?: Date | string | null
+    examScoreDeadline?: Date | string | null
+    examType?: $Enums.ExamType | null
+    examId?: string | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    issuedScoreAt?: Date | string | null
+    roomId?: string | null
+    lecturerId?: string | null
+    extraLecturerId?: string | null
+    enterGradeLecturerId?: string | null
+    subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
+    fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutSubjectClassInput
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
+    defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+  }
+
+  export type SubjectClassCreateOrConnectWithoutClassRegisterLogsInput = {
+    where: SubjectClassWhereUniqueInput
+    create: XOR<SubjectClassCreateWithoutClassRegisterLogsInput, SubjectClassUncheckedCreateWithoutClassRegisterLogsInput>
   }
 
   export type StudentCreateWithoutClassRegisterLogsInput = {
@@ -405055,6 +405309,93 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     semesterId?: StringFieldUpdateOperationsInput | string
     trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+  }
+
+  export type SubjectClassUpsertWithoutClassRegisterLogsInput = {
+    update: XOR<SubjectClassUpdateWithoutClassRegisterLogsInput, SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput>
+    create: XOR<SubjectClassCreateWithoutClassRegisterLogsInput, SubjectClassUncheckedCreateWithoutClassRegisterLogsInput>
+    where?: SubjectClassWhereInput
+  }
+
+  export type SubjectClassUpdateToOneWithWhereWithoutClassRegisterLogsInput = {
+    where?: SubjectClassWhereInput
+    data: XOR<SubjectClassUpdateWithoutClassRegisterLogsInput, SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput>
+  }
+
+  export type SubjectClassUpdateWithoutClassRegisterLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    maxStudent?: IntFieldUpdateOperationsInput | number
+    cancelled?: BoolFieldUpdateOperationsInput | boolean
+    lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+    isLockScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
+    semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
+    exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+    room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+    mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
+    extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
+    enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
+    subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
+    fixedClasses?: FixedClassUpdateManyWithoutSubjectClassesNestedInput
+    classSchedules?: ClassScheduleUpdateManyWithoutSubjectClassNestedInput
+    thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
+    defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+  }
+
+  export type SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subjectId?: StringFieldUpdateOperationsInput | string
+    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    maxStudent?: IntFieldUpdateOperationsInput | number
+    semesterId?: StringFieldUpdateOperationsInput | string
+    cancelled?: BoolFieldUpdateOperationsInput | boolean
+    lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    isLockScore?: BoolFieldUpdateOperationsInput | boolean
+    isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+    issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
+    fixedClasses?: FixedClassUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classSchedules?: ClassScheduleUncheckedUpdateManyWithoutSubjectClassNestedInput
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
+    defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
   }
 
   export type StudentUpsertWithoutClassRegisterLogsInput = {
@@ -406017,6 +406358,44 @@ export namespace Prisma {
     create: XOR<SurveyObjectTypeCreateWithoutSubjectClassesInput, SurveyObjectTypeUncheckedCreateWithoutSubjectClassesInput>
   }
 
+  export type ClassRegisterLogsCreateWithoutSubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.ClassRegisterStatus
+    reason?: string | null
+    classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutClassRegisterLogsInput
+    student: StudentCreateNestedOneWithoutClassRegisterLogsInput
+  }
+
+  export type ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    classRegisterSessionId: string
+    studentId: string
+    status?: $Enums.ClassRegisterStatus
+    reason?: string | null
+  }
+
+  export type ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput = {
+    where: ClassRegisterLogsWhereUniqueInput
+    create: XOR<ClassRegisterLogsCreateWithoutSubjectClassInput, ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput>
+  }
+
+  export type ClassRegisterLogsCreateManySubjectClassInputEnvelope = {
+    data: ClassRegisterLogsCreateManySubjectClassInput | ClassRegisterLogsCreateManySubjectClassInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SubjectVersionUpsertWithoutSubjectClassInput = {
     update: XOR<SubjectVersionUpdateWithoutSubjectClassInput, SubjectVersionUncheckedUpdateWithoutSubjectClassInput>
     create: XOR<SubjectVersionCreateWithoutSubjectClassInput, SubjectVersionUncheckedCreateWithoutSubjectClassInput>
@@ -406691,6 +407070,22 @@ export namespace Prisma {
     data: XOR<SurveyObjectTypeUpdateManyMutationInput, SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesInput>
   }
 
+  export type ClassRegisterLogsUpsertWithWhereUniqueWithoutSubjectClassInput = {
+    where: ClassRegisterLogsWhereUniqueInput
+    update: XOR<ClassRegisterLogsUpdateWithoutSubjectClassInput, ClassRegisterLogsUncheckedUpdateWithoutSubjectClassInput>
+    create: XOR<ClassRegisterLogsCreateWithoutSubjectClassInput, ClassRegisterLogsUncheckedCreateWithoutSubjectClassInput>
+  }
+
+  export type ClassRegisterLogsUpdateWithWhereUniqueWithoutSubjectClassInput = {
+    where: ClassRegisterLogsWhereUniqueInput
+    data: XOR<ClassRegisterLogsUpdateWithoutSubjectClassInput, ClassRegisterLogsUncheckedUpdateWithoutSubjectClassInput>
+  }
+
+  export type ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput = {
+    where: ClassRegisterLogsScalarWhereInput
+    data: XOR<ClassRegisterLogsUpdateManyMutationInput, ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassInput>
+  }
+
   export type SubjectClassCreateWithoutClassSchedulesInput = {
     id?: string
     code?: string | null
@@ -406726,6 +407121,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutClassSchedulesInput = {
@@ -406763,6 +407159,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutClassSchedulesInput = {
@@ -407087,6 +407484,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutClassSchedulesInput = {
@@ -407124,6 +407522,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type RoomUpsertWithoutClassSchedulesInput = {
@@ -409033,6 +409432,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutRoomInput = {
@@ -409070,6 +409470,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutRoomInput = {
@@ -409117,6 +409518,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutDefenseRoomsInput = {
@@ -409154,6 +409556,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutDefenseRoomsInput = {
@@ -413151,6 +413554,7 @@ export namespace Prisma {
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
     classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutClassRegisterLogsInput
+    subjectClass: SubjectClassCreateNestedOneWithoutClassRegisterLogsInput
   }
 
   export type ClassRegisterLogsUncheckedCreateWithoutStudentInput = {
@@ -413162,6 +413566,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     classRegisterSessionId: string
+    subjectClassId: string
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
   }
@@ -452400,6 +452805,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutMainLecturerInput = {
@@ -452437,6 +452843,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutMainLecturerInput = {
@@ -452484,6 +452891,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExtraLecturerInput = {
@@ -452521,6 +452929,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExtraLecturerInput = {
@@ -452568,6 +452977,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutEnterGradeLecturerInput = {
@@ -452605,6 +453015,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutEnterGradeLecturerInput = {
@@ -455508,6 +455919,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutThesisProjectsInput = {
@@ -455545,6 +455957,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutThesisProjectsInput = {
@@ -456104,6 +456517,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutThesisProjectsInput = {
@@ -456141,6 +456555,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type ExpertProfileUpsertWithoutSupervisedThesesInput = {
@@ -457787,6 +458202,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutExpertProfileInput = {
@@ -457824,6 +458240,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutExpertProfileInput = {
@@ -471461,6 +471878,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
     expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
+    classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput = {
@@ -471498,6 +471916,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
     expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
     defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
   }
 
   export type SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput = {
@@ -479437,6 +479856,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExamInput = {
@@ -479474,6 +479894,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExamInput = {
@@ -480871,6 +481292,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSemesterInput = {
@@ -480908,6 +481330,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSemesterInput = {
@@ -482224,6 +482647,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutFixedClassesInput = {
@@ -482261,6 +482685,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutFixedClassesInput = {
@@ -483988,6 +484413,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSubjectInput = {
@@ -484025,6 +484451,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSubjectInput = {
@@ -484306,6 +484733,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectClassId: string
     studentId: string
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
@@ -484418,6 +484846,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectClass?: SubjectClassUpdateOneRequiredWithoutClassRegisterLogsNestedInput
     student?: StudentUpdateOneRequiredWithoutClassRegisterLogsNestedInput
   }
 
@@ -484429,6 +484858,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClassId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -484442,6 +484872,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClassId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -484521,6 +484952,20 @@ export namespace Prisma {
     registrationEnd?: Date | string | null
     projectStart?: Date | string | null
     projectEnd?: Date | string | null
+  }
+
+  export type ClassRegisterLogsCreateManySubjectClassInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    classRegisterSessionId: string
+    studentId: string
+    status?: $Enums.ClassRegisterStatus
+    reason?: string | null
   }
 
   export type StudentSubjectScoreUpdateWithoutSubjectClassInput = {
@@ -485029,6 +485474,48 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: SurveyObjectTypeUpdatetypeInput | $Enums.SurveyObject[]
+  }
+
+  export type ClassRegisterLogsUpdateWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+    student?: StudentUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+  }
+
+  export type ClassRegisterLogsUncheckedUpdateWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingCourseCreateManyTrainingObjectTypeInput = {
@@ -486922,6 +487409,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutRoomInput = {
@@ -486959,6 +487447,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutRoomInput = {
@@ -487026,6 +487515,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutDefenseRoomsInput = {
@@ -487063,6 +487553,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutDefenseRoomsInput = {
@@ -488591,6 +489082,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     classRegisterSessionId: string
+    subjectClassId: string
     status?: $Enums.ClassRegisterStatus
     reason?: string | null
   }
@@ -489570,6 +490062,7 @@ export namespace Prisma {
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutClassRegisterLogsNestedInput
+    subjectClass?: SubjectClassUpdateOneRequiredWithoutClassRegisterLogsNestedInput
   }
 
   export type ClassRegisterLogsUncheckedUpdateWithoutStudentInput = {
@@ -489581,6 +490074,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+    subjectClassId?: StringFieldUpdateOperationsInput | string
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -489594,6 +490088,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+    subjectClassId?: StringFieldUpdateOperationsInput | string
     status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
     reason?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -511299,6 +511794,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutMainLecturerInput = {
@@ -511336,6 +511832,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutMainLecturerInput = {
@@ -511403,6 +511900,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExtraLecturerInput = {
@@ -511440,6 +511938,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExtraLecturerInput = {
@@ -511507,6 +512006,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutEnterGradeLecturerInput = {
@@ -511544,6 +512044,7 @@ export namespace Prisma {
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerInput = {
@@ -513004,6 +513505,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutExpertProfileInput = {
@@ -513041,6 +513543,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutExpertProfileInput = {
@@ -516332,6 +516835,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
     expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
+    classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateWithoutSurveyObjectTypesInput = {
@@ -516369,6 +516873,7 @@ export namespace Prisma {
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
     expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
     defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+    classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
   }
 
   export type SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesInput = {

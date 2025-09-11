@@ -112,13 +112,13 @@ export type OrgTreeItem = {
 }
 
 function buildOrgTree(
-    list: Array<{ Id: string; sTen: string | null; sParentId: string | null }>,
+    list: Array<{ Id: string; sTen: string | null; sParentId: string | null; sMa: string | null }>,
     parentId = '0'
 ): OrgTreeItem[] {
     return list
         .filter((item) => (item.sParentId ?? '0') === parentId)
         .map((item) => ({
-            label: item.sTen || '',
+            label: [item.sMa, item.sTen].filter(Boolean).join(' - ') || '',
             value: item.Id,
             children: buildOrgTree(list, item.Id),
         }))
