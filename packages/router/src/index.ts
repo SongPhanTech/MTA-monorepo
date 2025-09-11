@@ -2,7 +2,6 @@ import {
     ApartmentOutlined,
     BookOutlined,
     FileOutlined,
-    HomeOutlined,
     MessageOutlined,
     PieChartOutlined,
     ReadOutlined,
@@ -134,7 +133,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'home',
                 label: 'Trang chủ',
-                icon: HomeOutlined,
+                icon: House,
                 path: ROUTER_PATH.PORTAL.HOME,
                 description: 'Thông tin thời khoá biểu, lịch thi, thông báo...',
             },
@@ -147,7 +146,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'dang-ky-hoc',
                 label: 'Đăng ký học',
-                icon: FileOutlined,
+                icon: CalendarRange,
                 path: ROUTER_PATH.PORTAL.DANG_KY_HOC,
             },
             {
@@ -160,7 +159,7 @@ const NAVIGATION: NavigationType = {
             {
                 id: 'chuong-trinh-dao-tao',
                 label: 'Chương trình đào tạo',
-                icon: UserOutlined,
+                icon: Library,
                 path: ROUTER_PATH.PORTAL.CHUONG_TRINH_DAO_TAO,
             },
         ],
