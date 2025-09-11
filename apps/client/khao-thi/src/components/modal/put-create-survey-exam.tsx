@@ -231,8 +231,11 @@ const PutSurveyExamModal = () => {
             }
 
             onClose()
-        } catch (_error) {
-            console.log(_error, 'e')
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
 
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {

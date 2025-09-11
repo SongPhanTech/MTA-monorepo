@@ -78,7 +78,11 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
             } else {
                 message.error(res?.data?.message || 'Nhâp dữ liệu giảng viên từ file thất bại')
             }
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Có lỗi xảy ra khi nhập dữ liệu từ file')
         } finally {
             hideSpinner()

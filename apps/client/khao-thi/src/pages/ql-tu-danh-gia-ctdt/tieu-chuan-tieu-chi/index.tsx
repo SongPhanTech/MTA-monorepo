@@ -137,7 +137,11 @@ export default function StandardCatalog() {
             await deleteStandardCatalog({
                 where: { id },
             })
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -151,7 +155,11 @@ export default function StandardCatalog() {
             await deleteCriterionCatalog({
                 where: { id },
             })
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()

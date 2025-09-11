@@ -61,7 +61,11 @@ export default function DangKyTaiKhoanPage() {
             })
             setPasswordValue('')
             message.success('Đăng ký tài khoản trợ lý ảo thành công!')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Có lỗi xảy ra. Vui lòng thử lại sau.')
         } finally {
             setIsLoading(false)

@@ -52,7 +52,11 @@ const PutPaymentRecordDetail = () => {
                 message.success('Thêm mới thành công')
             }
             onClose()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
