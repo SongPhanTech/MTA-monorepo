@@ -425,8 +425,9 @@ export default function TeachingAssignment() {
     useEffect(() => {
         if (data) {
             setDataSubmit([...data])
+            setIsEdit(false)
         }
-    }, [data?.length])
+    }, [data])
 
     return (
         <div>
@@ -717,25 +718,25 @@ export default function TeachingAssignment() {
                                             record?.mainLecturer && record?.extraLecturer
                                                 ? [
                                                       {
-                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.firstName} ${record?.mainLecturer?.userProfile?.lastName}`,
                                                           value: record?.lecturerId,
                                                       },
                                                       {
-                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.firstName} ${record?.extraLecturer?.userProfile?.lastName}`,
                                                           value: record?.extraLecturerId,
                                                       },
                                                   ]
                                                 : record?.mainLecturer
                                                   ? [
                                                         {
-                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
+                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.firstName} ${record?.mainLecturer?.userProfile?.lastName}`,
                                                             value: record?.lecturerId,
                                                         },
                                                     ]
                                                   : record?.extraLecturer
                                                     ? [
                                                           {
-                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
+                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.firstName} ${record?.extraLecturer?.userProfile?.lastName}`,
                                                               value: record?.extraLecturerId,
                                                           },
                                                       ]
@@ -860,6 +861,8 @@ export default function TeachingAssignment() {
                             total: count,
 
                             onChange: (page, pageSize) => {
+                                console.log(page, pageSize)
+
                                 if (numberOfPages === pageSize) {
                                     setCurrentPage(page)
                                 } else {
@@ -867,8 +870,6 @@ export default function TeachingAssignment() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>
