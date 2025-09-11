@@ -819,7 +819,11 @@ app.openapi(putManySubjectClass, async (c) => {
                 select: { id: true },
             })
             return { success: true, id: cls.id }
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             // TODO: send to sentry
             return { success: false, id: cls.id }
         }

@@ -52,7 +52,11 @@ const PutBuildingModal = () => {
                 queryKey: ['Building'],
             })
             onClose()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -116,7 +120,7 @@ const PutBuildingModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name={'active'} label="Trạng thái" required>
+                <FormItem form={form} name={'active'} label="Trạng thái">
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>

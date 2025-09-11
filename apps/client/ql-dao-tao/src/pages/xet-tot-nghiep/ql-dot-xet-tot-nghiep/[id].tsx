@@ -200,7 +200,11 @@ export default function StudentGraduationApplication() {
                 data: { deletedAt: new Date() },
             })
             message.success('Xóa thành công')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -215,7 +219,11 @@ export default function StudentGraduationApplication() {
                 data: { status: ApplicationStatus.REJECTED },
             })
             message.success('Từ chối thành công')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()

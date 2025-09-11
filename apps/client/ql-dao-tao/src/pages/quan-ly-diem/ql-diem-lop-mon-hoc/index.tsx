@@ -378,7 +378,11 @@ export default function SubjectClassScore() {
             showSpinner()
             setSelectedFixedClass(id)
             await refetch()
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -508,7 +512,11 @@ export default function SubjectClassScore() {
             } else {
                 message.info('Không có thay đổi nào để cập nhật')
             }
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
         } finally {
             hideSpinner()
@@ -595,7 +603,11 @@ export default function SubjectClassScore() {
             setScoreThi(newScoreThi)
 
             message.success('Nhập điểm từ file thành công!')
-        } catch (_error) {
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
             message.error('Có lỗi xảy ra khi nhập điểm từ file')
         } finally {
             hideSpinner()
