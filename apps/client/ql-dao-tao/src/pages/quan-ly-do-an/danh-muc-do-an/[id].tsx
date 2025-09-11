@@ -402,7 +402,7 @@ export default function ThesisProjectDetail() {
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
-                        total: councilWithName?.[0].members.length,
+                        total: councilWithName?.[0]?.members?.length,
                         onChange: (page, pageSize) => {
                             if (numberOfPages === pageSize) {
                                 setCurrentPage(page)
