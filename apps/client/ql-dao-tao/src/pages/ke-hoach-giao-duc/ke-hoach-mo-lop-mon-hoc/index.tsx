@@ -208,7 +208,7 @@ export default function SubjectOpeningPlan() {
                                 title: 'Danh sách lớp MH',
                                 dataIndex: 'subjectClass',
                                 width: 200,
-                                align: 'center',
+                                align: 'left',
                                 render: (
                                     values: {
                                         subjectClassName: string
@@ -224,6 +224,7 @@ export default function SubjectOpeningPlan() {
                                         {values?.map((val, index) => (
                                             // biome-ignore lint/suspicious/noArrayIndexKey: <>
                                             <li key={index}>
+                                                -{' '}
                                                 {`${val.subjectClassName} ${val.subjectClassCode}`}
                                             </li>
                                         ))}
@@ -234,7 +235,7 @@ export default function SubjectOpeningPlan() {
                                 title: 'Danh sách lớp niên chế',
                                 dataIndex: 'fixedClass',
                                 width: 200,
-                                align: 'center',
+                                align: 'left',
                                 render: (
                                     values: {
                                         fixedClassId: string
@@ -250,7 +251,7 @@ export default function SubjectOpeningPlan() {
                                     >
                                         {values?.map((val, index) => (
                                             // biome-ignore lint/suspicious/noArrayIndexKey: <>
-                                            <li key={index}>{`${val.fixedClassName}`}</li>
+                                            <li key={index}>- {`${val.fixedClassName}`}</li>
                                         ))}
                                     </ul>
                                 ),

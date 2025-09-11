@@ -69,6 +69,9 @@ const PutOpenClassModal = () => {
         // if (!output) return
         try {
             showSpinner()
+            const dataSubmit = form.getFieldValue('list')
+            console.log('dataSubmit', dataSubmit, dataClass)
+
             if (!isEdit) {
                 await createMany({
                     data: form.getFieldValue('list').map((i: SubjectClass) => ({
@@ -76,7 +79,7 @@ const PutOpenClassModal = () => {
                         startDate: i.startDate,
                         subjectId: i.subjectId,
                         schedule: i.schedule,
-                        semesterId: i.semesterId,
+                        semesterId: dataClass?.semester,
                         code: i?.code,
                         roomId: i?.roomId,
                         maxStudent: i?.maxStudent,
@@ -99,6 +102,7 @@ const PutOpenClassModal = () => {
                         lecturerAssignmentDeadline: i.lecturerAssignmentDeadline,
                         scoreDeadline: i.scoreDeadline,
                         examType: i.examType,
+                        semesterId: dataClass?.semester,
                     }))
                 )
             }
