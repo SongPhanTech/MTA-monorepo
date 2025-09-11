@@ -353,10 +353,7 @@ export const buildSubjectMapOrThrow = async (
     return new Map(existing.map(({ name, id }) => [name, id]))
 }
 
-export const buildOrganizationMapOrThrow = async (
-    prisma: PrismaClient,
-    codes: (string | null)[]
-) => {
+export const buildOrgCodeMapOrThrow = async (prisma: PrismaClient, codes: (string | null)[]) => {
     const uniqCodes = Array.from(new Set(codes.filter((code): code is string => Boolean(code))))
 
     const existing = await prisma.dM_DonVi.findMany({
@@ -373,6 +370,28 @@ export const buildOrganizationMapOrThrow = async (
     }
 
     return new Map(existing.map(({ sMa, Id }) => [sMa, Id]))
+}
+
+export const buildOrgNameMapOrThrow = async (
+    prisma: PrismaClient,
+    names: (string | undefined)[]
+) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    const existing = await prisma.dM_DonVi.findMany({
+        where: { sTen: { in: uniqNames } },
+        select: { sTen: true, Id: true },
+    })
+
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Đơn vị không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+
+    return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
 export const buildFixedClassMap = async (
@@ -400,4 +419,80 @@ export const buildFixedClassMap = async (
 
     // const missing = uniqueTuples.filter(([name]) => !existing.some((cls) => cls.name === name))
     return new Map(existing.map(({ name, id }) => [name, id]))
+}
+
+export const buildLecturerTypeMapOrThrow = async (
+    prisma: PrismaClient,
+    names: (string | undefined)[]
+) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    const existing = await prisma.lecturerType.findMany({
+        where: { name: { in: uniqNames } },
+        select: { name: true, id: true },
+    })
+
+    const missing = uniqNames.filter((name) => !existing.some((item) => item.name === name))
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Loại giáo viên không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+
+    return new Map(existing.map(({ name, id }) => [name, id]))
+}
+
+export const buildDegreeTypeMapOrThrow = async (
+    prisma: PrismaClient,
+    names: (string | undefined)[]
+) => {
+    const skipValue = 'Chưa xác định'
+    const uniqNames = Array.from(
+        new Set(names.filter((name): name is string => Boolean(name) && name !== skipValue))
+    )
+
+    const existing = await prisma.dM_HocVi.findMany({
+        where: { sTen: { in: uniqNames } },
+        select: { sTen: true, Id: true },
+    })
+
+    const missing = uniqNames.filter(
+        (name) => !existing.some(({ sTen }) => sTen === name && name !== skipValue)
+    )
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Học vị không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+
+    return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
+}
+
+export const buildDegreeRankTypeMapOrThrow = async (
+    prisma: PrismaClient,
+    names: (string | undefined)[]
+) => {
+    const skipValue = 'Chưa xác định'
+
+    const uniqNames = Array.from(
+        new Set(names.filter((name): name is string => Boolean(name) && name !== skipValue))
+    )
+
+    const existing = await prisma.dM_HocHam.findMany({
+        where: { sTen: { in: uniqNames } },
+        select: { sTen: true, Id: true },
+    })
+
+    const missing = uniqNames.filter(
+        (name) => !existing.some(({ sTen }) => sTen === name && name !== skipValue)
+    )
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Học hàm không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+    return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }

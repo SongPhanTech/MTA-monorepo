@@ -280,6 +280,7 @@ app.openapi(importHeQuanSu, async (c) => {
 
             for (const student of data.students) {
                 const studentData: Prisma.StudentCreateInput = {
+                    entryScore: Number.parseFloat(student.admissionScore ?? '') || null,
                     trainingObjectType: {
                         connect: { id: trainingObjectType.id },
                     },
@@ -294,6 +295,7 @@ app.openapi(importHeQuanSu, async (c) => {
                 const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
                     {
                         ...splitFullName(student.fullname),
+                        dateOfBirth: student.dateOfBirth,
                         // TODO: need to use idCardNumber
                         idCardNumber: student.code,
                         code: student.code,

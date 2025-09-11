@@ -12,6 +12,7 @@ import { Registry } from 'prom-client'
 import CurriculumApp from './api/curriculum'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
+import ImportApp from './api/import'
 import PlanTraining from './api/plan-training'
 import RoomApp from './api/room'
 import Stats from './api/stats'
@@ -83,6 +84,7 @@ app.route('/api/curriculum', CurriculumApp)
 app.route('/api/graduation', GraduationApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
+app.route('/api/import', ImportApp)
 
 const nv = await prisma.dM_NhanVien.findFirstOrThrow()
 

@@ -71,6 +71,11 @@ async function main() {
         ],
     })
 
+    await prisma.lecturerType.createMany({
+        skipDuplicates: true,
+        data: [{ name: 'Cơ hữu' }, { name: 'Thuê ngoài' }],
+    })
+
     // Seed TrainingObjectType
     await prisma.trainingObjectType.createMany({
         skipDuplicates: true,
