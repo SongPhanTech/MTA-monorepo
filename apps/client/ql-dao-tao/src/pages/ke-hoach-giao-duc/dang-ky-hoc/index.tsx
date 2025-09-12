@@ -53,11 +53,6 @@ export default function RegisterClass() {
                 label: 'Lớp có môn theo KHGD',
                 content: <FixedClass semesterId={semesterId} subjectClassId={subjectClassId} />,
             },
-            {
-                key: '2',
-                label: 'Lớp đăng ký thiếu',
-                content: <p>Lớp đăng ký thiếu</p>,
-            },
         ],
         '2': [
             {
@@ -66,11 +61,6 @@ export default function RegisterClass() {
                 content: (
                     <StudentCourseByPlan semesterId={semesterId} subjectClassId={subjectClassId} />
                 ),
-            },
-            {
-                key: '2',
-                label: 'Lớp đăng ký thiếu',
-                content: <p>Lớp đăng ký thiếu</p>,
             },
         ],
     }

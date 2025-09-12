@@ -210,6 +210,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     )
 
     const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
+    console.log(dataStudents)
 
     const handleSummaryClick = async () => {
         if (!semesterId) {
@@ -389,24 +390,28 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 dataIndex: ['studentSemesterResult', '0', 'gpaBase4'],
                                 width: 90,
                                 align: 'center',
+                                render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Tích lỹ hệ 4',
                                 dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase4'],
                                 width: 90,
                                 align: 'center',
+                                render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Trung bình hệ 10',
                                 dataIndex: ['studentSemesterResult', '0', 'gpaBase10'],
                                 width: 90,
                                 align: 'center',
+                                render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Tích lỹ hệ 10',
                                 dataIndex: ['studentSemesterResult', '0', 'cumulativeGpaBase10'],
                                 width: 90,
                                 align: 'center',
+                                render: (value) => value?.toString(),
                             },
                             {
                                 title: 'Xếp loại rèn luyện',

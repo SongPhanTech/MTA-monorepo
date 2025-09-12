@@ -102,7 +102,7 @@ const PutUserProfileLectureModal = () => {
                         organizationId: output.organizationId,
                     },
                     where: {
-                        id: id,
+                        id,
                     },
                 })
 

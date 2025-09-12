@@ -1,5 +1,5 @@
 import { CopyOutlined, FileSyncOutlined } from '@ant-design/icons'
-import XuLyVanBanLayout from '@layouts/xu-ly-van-ban-layout'
+import ChatLayout from '@layouts/chat-layout'
 import { Button, Col, Input, message, Row, Select, Space, Typography } from 'antd'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
@@ -197,7 +197,7 @@ function Page() {
 }
 
 Page.getLayout = function getLayout(page: ReactElement) {
-    return <XuLyVanBanLayout>{page}</XuLyVanBanLayout>
+    return <ChatLayout showSiderChat={false}>{page}</ChatLayout>
 }
 
 export default Page

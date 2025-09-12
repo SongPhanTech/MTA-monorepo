@@ -76,7 +76,7 @@ const PreviewTaiLieu = () => {
                     </div>
                     <div>
                         <p className="font-semibold">Người đăng</p>
-                        <p>{selectedDocument.uploadedBy.name}</p>
+                        <p>{selectedDocument.uploadedBy.sTen}</p>
                     </div>
                     <div>
                         <p className="font-semibold">Ngày đăng</p>

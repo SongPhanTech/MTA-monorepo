@@ -269,6 +269,7 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>
@@ -279,6 +280,7 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>
@@ -289,6 +291,7 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>
@@ -299,6 +302,7 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>
@@ -309,6 +313,7 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>
@@ -319,6 +324,7 @@ const PutPaymentRecord = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>

@@ -38,6 +38,27 @@ export const ModalVanBang = () => {
     const handlePrint = useReactToPrint({
         contentRef: printRef,
         documentTitle: `Van_bang_${data?.id}_${data?.userProfile?.fullname}.pdf`,
+        pageStyle: `
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        @media print {
+            .page-break {
+                page-break-after: always;
+            }
+            .blank-page {
+                height: 100vh;
+                visibility: hidden;
+            }
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+            }
+        }
+      `,
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: updateGraduationDecision } = useUpdateGraduationDecision()

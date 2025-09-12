@@ -59,7 +59,7 @@ const PutRankingCondition = () => {
             }
             if (input?.rankingConditionId) {
                 await updateRankingCondition({
-                    data: data,
+                    data,
                     where: {
                         id: input?.rankingConditionId,
                     },
@@ -67,7 +67,7 @@ const PutRankingCondition = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createRankingCondition({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

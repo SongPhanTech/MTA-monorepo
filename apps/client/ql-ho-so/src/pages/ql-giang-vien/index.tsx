@@ -535,7 +535,7 @@ export default function UserProfilePageLecture() {
                                     <Row className="justify-center gap-2">
                                         <EditIcon
                                             onClick={onOpen.bind(id, {
-                                                id: id,
+                                                id,
                                             })}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />

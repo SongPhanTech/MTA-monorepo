@@ -11,6 +11,7 @@ export namespace $DbEnums {
   type SubjectVersionType = "Normal" | "Project"
   type EquivalencySide = "SOURCE" | "TARGET"
   type SubjectRequirementType = "None" | "Mandatory" | "Optional"
+  type ClassRegisterStatus = "PENDING" | "CANCELLED" | "SUCCESS" | "FAILED"
   type SubjectClassSchedule = "MORNING" | "AFTERNOON" | "EVENING"
   type PeriodType = "THEORY" | "PRACTICE" | "LAB" | "SEMINAR" | "EXAM" | "MAKEUP" | "REVIEW"
   type TrainingObjectTypes = "MILITARY" | "CIVILIAN" | "INTERNATIONAL_MILITARY"

@@ -230,7 +230,7 @@ export default function SupervisorPaymentRecordPage() {
                                 dataIndex: 'amount',
                                 width: 150,
                                 align: 'center',
-                                render: (record) => record?.toString(),
+                                render: (record) => record && `${record?.toString()} VND`,
                             },
                             {
                                 title: 'Thời gian thanh toán',

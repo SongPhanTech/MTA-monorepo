@@ -39,7 +39,7 @@ const PutEvidenceCategory = () => {
                 await updateEvidenceCategory({
                     data,
                     where: {
-                        id: id,
+                        id,
                     },
                 })
                 message.success('Cập nhật thành công')
@@ -66,7 +66,7 @@ const PutEvidenceCategory = () => {
 
     const { data: initialValue } = useFindUniqueEvidenceCategory(
         {
-            where: { id: id },
+            where: { id },
         },
         {
             enabled: !!id,

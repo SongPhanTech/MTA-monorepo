@@ -5,11 +5,7 @@ import EditIcon from '@components/icons/edit'
 import ExportTemplateStudent from '@components/modal/export-template-student'
 import ImportStudentModal from '@components/modal/import-excel-student'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
-import {
-    DEFAULT_PAGINATE_SIZE,
-    FIXED_CLASS_STUDENT_STATUS,
-    TRAINING_OBJECT_TYPE,
-} from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type {
@@ -17,31 +13,32 @@ import type {
     TrainingCourse,
     TrainingField,
     TrainingMajor,
+    TrainingObjectType,
     UserProfile,
 } from '@workspace/db'
 import {
     useCountStudent,
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
+    useFindManySemester,
     useFindManyStudent,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-// import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
-import { useRouter } from 'next/router'
-import type React from 'react'
-import { useCallback, useState } from 'react'
+import { BookCheckIcon } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [student, setStudent] = useState<any>(null)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -52,44 +49,47 @@ export default function UserProfilePageDs() {
         trainingCourse: undefined,
         trainingMajors: undefined,
         curriculumVersion: undefined,
-        trainingObjectType: undefined,
+        trainingObjectTypes: undefined,
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
 
-    const router = useRouter()
-    const { data = [], refetch } = useFindManyStudent({
-        where: {
-            trainingObjectType: {
-                type: {
-                    in: filters?.trainingObjectType
-                        ? filters?.trainingObjectType
-                        : ['MILITARY', 'CIVILIAN', 'INTERNATIONAL_MILITARY'],
-                },
-            },
-            ...(filters.name
+    const where = useMemo(
+        () => ({
+            ...(filters.trainingObjectTypes && {
+                trainingObjectTypeId: { in: filters.trainingObjectTypes },
+            }),
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
                 ? {
                       userProfile: {
                           OR: [
                               {
                                   firstName: {
                                       contains: filters.name,
+                                      mode: 'insensitive' as const,
                                   },
                               },
                               {
                                   lastName: {
                                       contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                              {
+                                  fullname: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
                                   },
                               },
                           ],
-                      },
-                  }
-                : {}),
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
                       },
                   }
                 : {}),
@@ -104,6 +104,15 @@ export default function UserProfilePageDs() {
                 ? {
                       fixedClassId: {
                           in: filters.fixedClass,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourse
+                ? {
+                      fixedClass: {
+                          trainingCourseId: {
+                              in: filters.trainingCourse,
+                          },
                       },
                   }
                 : {}),
@@ -133,13 +142,31 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-        },
+        }),
+        [
+            filters.code,
+            filters.name,
+            filters?.trainingObjectTypes,
+            filters.trainingMajors,
+            filters.fixedClass,
+            filters.trainingField,
+            filters.curriculumVersion,
+            filters.trainingCourse,
+        ]
+    )
+
+    const { data = [] } = useFindManyStudent({
+        where,
         include: {
             userProfile: true,
             trainingObjectType: true,
             fixedClass: {
                 include: {
-                    trainingCourse: true,
+                    trainingCourse: {
+                        include: {
+                            scoreConverts: true,
+                        },
+                    },
                     curriculumVersion: {
                         include: {
                             curriculum: {
@@ -155,6 +182,21 @@ export default function UserProfilePageDs() {
                     },
                 },
             },
+            curriculumVersion: {
+                include: {
+                    trainingLevel: true,
+                    curriculum: {
+                        include: {
+                            trainingMajor: {
+                                include: {
+                                    trainingField: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            trainingForm: true,
         },
         orderBy: {
             userProfile: {
@@ -167,79 +209,8 @@ export default function UserProfilePageDs() {
 
     const { data: count } = useCountStudent({
         where: {
-            trainingObjectType: {
-                type: {
-                    in: filters?.trainingObjectType
-                        ? filters?.trainingObjectType
-                        : ['MILITARY', 'CIVILIAN', 'INTERNATIONAL_MILITARY'],
-                },
-            },
-            ...(filters.name
-                ? {
-                      userProfile: {
-                          OR: [
-                              {
-                                  firstName: {
-                                      contains: filters.name,
-                                  },
-                              },
-                              {
-                                  lastName: {
-                                      contains: filters.name,
-                                  },
-                              },
-                          ],
-                      },
-                  }
-                : {}),
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.curriculumVersion
-                ? {
-                      curriculumVersionId: {
-                          in: filters.curriculumVersion,
-                      },
-                  }
-                : {}),
-            ...(filters.fixedClass
-                ? {
-                      fixedClassId: {
-                          in: filters.fixedClass,
-                      },
-                  }
-                : {}),
-            ...(filters.trainingMajors || filters.trainingField
-                ? {
-                      fixedClass: {
-                          curriculumVersion: {
-                              curriculum: {
-                                  trainingMajor: {
-                                      ...(filters.trainingMajors
-                                          ? {
-                                                id: {
-                                                    in: filters.trainingMajors,
-                                                },
-                                            }
-                                          : {}),
-                                      ...(filters.trainingField
-                                          ? {
-                                                trainingFieldId: {
-                                                    in: filters.trainingField,
-                                                },
-                                            }
-                                          : {}),
-                                  },
-                              },
-                          },
-                      },
-                  }
-                : {}),
+            ...where,
+            deletedAt: null,
         },
     })
 
@@ -257,6 +228,7 @@ export default function UserProfilePageDs() {
     })
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -266,12 +238,6 @@ export default function UserProfilePageDs() {
         orderBy: { name: 'asc' },
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
     const { onOpen, onClose } = useDisclosure<{
         tag?: string
         preSelectedValues?: {
@@ -318,6 +284,73 @@ export default function UserProfilePageDs() {
             hideSpinner()
         }
     }
+
+    const { data: dataTable } = useFindManySemester(
+        {
+            where: {
+                subjectClasses: {
+                    some: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                },
+            },
+            include: {
+                subjectClasses: {
+                    where: {
+                        subjectClassStudent: {
+                            some: {
+                                studentId: student?.id,
+                            },
+                        },
+                    },
+                    include: {
+                        subjectClassStudent: {
+                            where: {
+                                studentId: student?.id,
+                            },
+                            include: {
+                                subjectVersion: true,
+                                certificates: {
+                                    include: {
+                                        archivedCertificate: true,
+                                    },
+                                },
+                                awards: {
+                                    include: {
+                                        archivedAward: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                trainingCoursesStart: {
+                    where: {
+                        id: student?.fixedClass?.trainingCourseId ?? undefined,
+                    },
+                    include: {
+                        scoreConverts: true,
+                    },
+                },
+                schoolYear: true,
+            },
+            orderBy: {
+                createdAt: 'asc',
+            },
+        },
+        { enabled: !!student?.id }
+    )
+
+    const { onOpen: onOpenPhuLucVanBang } = useDisclosure<{
+        dataTable: any
+        dataStudent: any
+    }>({
+        tag: 'ModalPrintToKQHT',
+    })
 
     return (
         <div>
@@ -385,15 +418,11 @@ export default function UserProfilePageDs() {
                                 align: 'center',
                                 width: 150,
                                 type: 'select',
-                                dataIndex: 'trainingObjectType',
-                                options: Object.keys(TRAINING_OBJECT_TYPE).map((key) => {
-                                    return {
-                                        label: TRAINING_OBJECT_TYPE[
-                                            key as keyof typeof TRAINING_OBJECT_TYPE
-                                        ],
-                                        value: key,
-                                    }
-                                }),
+                                dataIndex: 'trainingObjectTypes',
+                                options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
                                 render: (__, record: any) =>
                                     record?.trainingObjectType
                                         ? record?.trainingObjectType?.name
@@ -468,10 +497,10 @@ export default function UserProfilePageDs() {
                                 type: 'select',
                                 options: TrainingCurriculumVersionData.map((item) => ({
                                     label: item.name,
-                                    value: item.name,
+                                    value: item.id,
                                 })),
                                 render: (__, record: any) => {
-                                    return record?.fixedClass?.curriculumVersion?.curriculum?.name
+                                    return record?.fixedClass?.curriculumVersion?.name
                                 },
                             },
                             {
@@ -495,27 +524,30 @@ export default function UserProfilePageDs() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (_, { id }) => (
+                                render: (_, record) => (
                                     <Row className="justify-center gap-2">
-                                        {/* <ViewIcon
-                                            onClick={() =>
-                                                router.push(
-                                                    ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_QL_SINH_VIEN_ID.replace(
-                                                        '[id]',
-                                                        id
-                                                    )
-                                                )
-                                            }
-                                        /> */}
+                                        <Tooltip title="Phụ lục văn bằng" placement="top">
+                                            <BookCheckIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setStudent(record)
+                                                    onOpenPhuLucVanBang({
+                                                        dataStudent: record,
+                                                        dataTable,
+                                                    })
+                                                }}
+                                                size={16}
+                                            />
+                                        </Tooltip>
                                         <EditIcon
                                             onClick={onOpenUpdate.bind(null, {
-                                                id: id,
+                                                id: record.id,
                                             })}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                         <DeleteIcon
                                             popConfirm={{
-                                                onConfirm: () => handleDelete(id),
+                                                onConfirm: () => handleDelete(record.id),
                                             }}
                                         />
                                     </Row>

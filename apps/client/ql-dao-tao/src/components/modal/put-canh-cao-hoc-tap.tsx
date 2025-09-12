@@ -63,13 +63,13 @@ const PutAcademicWarningRule = () => {
             }
             if (input?.academicWarningRuleId) {
                 await updateAcademicWarningRule({
-                    data: data,
+                    data,
                     where: { id: input?.academicWarningRuleId },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createAcademicWarningRule({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

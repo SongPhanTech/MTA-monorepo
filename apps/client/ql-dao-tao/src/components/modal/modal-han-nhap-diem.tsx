@@ -71,7 +71,7 @@ const HanNhapDiem = () => {
             }
             if (id) {
                 await update({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },

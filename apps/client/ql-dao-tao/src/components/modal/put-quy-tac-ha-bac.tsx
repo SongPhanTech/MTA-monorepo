@@ -60,7 +60,7 @@ const PutRankDowngradeCondition = () => {
             }
             if (input?.downgradeConditionId) {
                 await updateRankDowngradeCondition({
-                    data: data,
+                    data,
                     where: {
                         id: input?.downgradeConditionId,
                     },

@@ -130,6 +130,7 @@ const PutPaymentRecordDetail = () => {
                         className="w-full"
                         min={0}
                         placeholder="Nhập số tiền thanh toán"
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>

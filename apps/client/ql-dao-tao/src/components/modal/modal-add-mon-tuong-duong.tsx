@@ -43,7 +43,7 @@ const PutMonHocTuongDuong = () => {
                 subjectId: output?.subjectId,
             }
             await createSubjectInGroup({
-                data: data,
+                data,
             })
             message.success('Thêm mới thành công')
             queryClient.invalidateQueries({

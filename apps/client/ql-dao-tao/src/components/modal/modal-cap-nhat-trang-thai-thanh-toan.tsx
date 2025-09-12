@@ -158,7 +158,8 @@ const PutUpdatePaymentStatus = () => {
                             title: 'Số tiền thanh toán',
                             width: 250,
                             align: 'center',
-                            render: (_, record) => record?.amount.toString(),
+                            render: (_, record) =>
+                                record?.amount && `${record?.amount?.toString()} VND`,
                         },
                     ]}
                     pagination={{
@@ -196,7 +197,8 @@ const PutUpdatePaymentStatus = () => {
                             title: 'Số tiền thanh toán',
                             width: 250,
                             align: 'center',
-                            render: (_, record) => record?.amount.toString(),
+                            render: (_, record) =>
+                                record?.amount && `${record?.amount?.toString()} VND`,
                         },
                     ]}
                     pagination={{

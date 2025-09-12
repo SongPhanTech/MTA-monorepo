@@ -46,7 +46,7 @@ const PutStudentModal = () => {
 
     const { data: studentData } = useFindUniqueStudent(
         {
-            where: { id: id },
+            where: { id },
             include: {
                 userProfile: true,
                 trainingObjectType: true,
@@ -188,7 +188,7 @@ const PutStudentModal = () => {
                         code: output.code,
                     },
                     where: {
-                        id: id,
+                        id,
                     },
                 })
 

@@ -36,14 +36,13 @@ with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
                       join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
                       join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
                       join "ql-dao-tao"."Student" S on FC.id = S."fixedClassId"
-                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId"
+                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId" and SC."deletedAt" is null
                       left join "mta"."DM_DonVi" DV on C."managementOrganizationId" = DV."Id"
              where FC.active = true
                and TBS."deletedAt" is null
                and TBOCV."deletedAt" is null
                and CV."deletedAt" is null
                and FC."deletedAt" is null
-               and SC."deletedAt" is null
              group by CV.id, CV.name, FC.id, FC."startYear",
                       FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
                       "ql-dao-tao"."SubjectVersion".credit,
