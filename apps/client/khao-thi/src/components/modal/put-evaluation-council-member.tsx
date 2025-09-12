@@ -45,7 +45,7 @@ const PutEvaluationCouncilMember = () => {
                 await updateEvaluationCouncilMember({
                     data,
                     where: {
-                        id: id,
+                        id,
                     },
                 })
                 message.success('Cập nhật thành công')
@@ -85,7 +85,7 @@ const PutEvaluationCouncilMember = () => {
 
     const { data: initialValue } = useFindUniqueEvaluationCouncilMember(
         {
-            where: { id: id },
+            where: { id },
         },
         {
             enabled: !!id,

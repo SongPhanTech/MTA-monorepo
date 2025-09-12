@@ -10,7 +10,6 @@ import DefaultLayout from '@layouts/default-layout'
 import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingScoreSession,
-    useFindManySemester,
     useFindManyTrainingObjectType,
     useFindManyTrainingScoreSession,
     useUpdateTrainingScoreSession,
@@ -123,13 +122,6 @@ export default function SubjectClassScore() {
     }
 
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
-        orderBy: { createdAt: 'desc' },
-    })
-
-    const { data: semesterData = [] } = useFindManySemester({
-        include: {
-            schoolYear: true,
-        },
         orderBy: { createdAt: 'desc' },
     })
 

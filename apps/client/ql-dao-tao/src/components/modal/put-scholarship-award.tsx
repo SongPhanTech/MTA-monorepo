@@ -60,7 +60,7 @@ const PutScholarshipAward = () => {
             }
             if (input?.id) {
                 await updateScholarshipAward({
-                    data: data,
+                    data,
                     where: {
                         id: input?.id,
                     },
@@ -68,7 +68,7 @@ const PutScholarshipAward = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createScholarshipAward({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

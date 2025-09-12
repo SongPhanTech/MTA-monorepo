@@ -176,6 +176,7 @@ const ModalPrintStudentSubjectScore = () => {
             queryClient.invalidateQueries({
                 queryKey: ['SubjectClass'],
             })
+            handlePrint()
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
@@ -193,19 +194,15 @@ const ModalPrintStudentSubjectScore = () => {
         pageStyle: `
         @page {
             size: A4;
+            margin: 1cm;
         }
         @media print {
-            @page { margin: 1 1 1 1 !important; }
-            body, html, #root {
-                height: auto !important;
-                overflow: visible !important;
+            .page-break {
+                page-break-after: always;
             }
-            .page {
-                page-break-after: auto !important;
-                break-after: auto !important;
-                min-height: 297mm;
-                width: 210mm;
-                padding: 15mm;
+            .blank-page {
+                height: 100vh;
+                visibility: hidden;
             }
             table {
                 page-break-inside: auto;
@@ -300,9 +297,17 @@ const ModalPrintStudentSubjectScore = () => {
                     <Button
                         icon={<PrinterOutlined />}
                         onClick={() => {
-                            handlePrint()
                             if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
-                                onOk(data as PutSubjectClass)
+                                Modal.confirm({
+                                    title: 'Xác nhận khóa điểm',
+                                    content:
+                                        'Bạn có chắc chắn muốn khóa điểm lớp môn học này không?',
+                                    okText: 'Xác nhận',
+                                    cancelText: 'Hủy',
+                                    onOk: () => onOk(data as PutSubjectClass),
+                                })
+                            } else {
+                                handlePrint()
                             }
                         }}
                         size="small"
@@ -315,7 +320,7 @@ const ModalPrintStudentSubjectScore = () => {
         >
             <div
                 ref={printRef}
-                className="mx-auto p-10 page text-sm leading-relaxed !font-time-news-roman"
+                className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman"
             >
                 <div className="text-center font-bold uppercase">
                     <div className="flex items-center justify-between">

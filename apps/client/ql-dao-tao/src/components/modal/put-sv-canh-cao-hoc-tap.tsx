@@ -72,7 +72,7 @@ const PutAcademicWarning = () => {
             }
             if (input?.id) {
                 await updateAcademicWarning({
-                    data: data,
+                    data,
                     where: {
                         id: input?.id,
                     },
@@ -80,7 +80,7 @@ const PutAcademicWarning = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createAcademicWarning({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

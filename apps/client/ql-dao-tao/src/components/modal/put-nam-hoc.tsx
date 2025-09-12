@@ -44,7 +44,7 @@ const PutSchoolYearModal = () => {
             }
             if (id) {
                 await updateSchoolYear({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -52,11 +52,10 @@ const PutSchoolYearModal = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createSchoolYear({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['SchoolYear'],
             })

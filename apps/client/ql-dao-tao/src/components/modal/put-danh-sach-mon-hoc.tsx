@@ -14,11 +14,13 @@ import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import useTrimText from '@hooks/trimText'
 import { buildOrgTree } from '@lib/utils'
 export type PutSubject = Subject
 dayjs.locale('vi')
 const PutSubjectListModal = () => {
     const [form] = Form.useForm<PutSubject>()
+    const { trimObjectFields } = useTrimText()
     const {
         isOpen,
         onClose,
@@ -39,24 +41,17 @@ const PutSubjectListModal = () => {
         try {
             showSpinner()
 
-            const payload = {
-                code: output.code,
-                name: output.name,
-                description: output.description,
-                active: output.active,
-                information: output.information,
-                managementOrganizationId: output.managementOrganizationId,
-            }
+            const data = trimObjectFields(output)
 
             if (id) {
                 await updateSubject({
-                    data: payload,
+                    data,
                     where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createSubject({
-                    data: payload,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

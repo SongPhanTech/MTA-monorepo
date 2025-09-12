@@ -38,7 +38,7 @@ const PutScoreScaleCatalog = () => {
             }
             if (id) {
                 await updateScoreScaleCatalog({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -46,7 +46,7 @@ const PutScoreScaleCatalog = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createScoreScaleCatalog({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

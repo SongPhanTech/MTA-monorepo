@@ -84,9 +84,9 @@ const PutExpertProfile = () => {
 
         if (selectedLecturer) {
             payload = {
-                name: selectedLecturer.userProfile.fullname,
-                phone: selectedLecturer.userProfile.phoneNumber,
-                email: selectedLecturer.userProfile.email,
+                name: selectedLecturer.userProfile.fullname || null,
+                phone: selectedLecturer.userProfile.phoneNumber || null,
+                email: selectedLecturer.userProfile.email || null,
                 lecturerId: selectedLecturer.id,
                 eligibleSecretary: output.eligibleSecretary,
                 eligiblePresident: output.eligiblePresident,

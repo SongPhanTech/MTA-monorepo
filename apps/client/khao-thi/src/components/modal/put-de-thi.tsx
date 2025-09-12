@@ -33,7 +33,7 @@ const PutExamBank = () => {
             }
             if (input?.id) {
                 await updateExamBank({
-                    data: data,
+                    data,
                     where: {
                         id: input.id,
                     },
@@ -41,7 +41,7 @@ const PutExamBank = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createExamBank({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

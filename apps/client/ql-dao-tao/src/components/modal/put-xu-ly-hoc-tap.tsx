@@ -47,10 +47,10 @@ const PutAcademicActionConfig = () => {
                 trainingCourseId: input.trainingCourseId,
             }
             if (input?.id) {
-                await updateAcademicActionConfig({ data: data, where: { id: input?.id } })
+                await updateAcademicActionConfig({ data, where: { id: input?.id } })
                 message.success('Cập nhật thành công')
             } else {
-                await createAcademicActionConfig({ data: data })
+                await createAcademicActionConfig({ data })
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({

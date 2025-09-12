@@ -76,7 +76,7 @@ export default function ĐONANGKY() {
                     : undefined,
             }
             await createDiplomaVerificationApplication({
-                data: data,
+                data,
             })
             form.resetFields()
             message.success('Thêm mới thành công')

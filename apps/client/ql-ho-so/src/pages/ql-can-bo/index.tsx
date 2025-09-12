@@ -605,7 +605,7 @@ export default function StaffManagement() {
                                         /> */}
                                         <EditIcon
                                             onClick={onOpen.bind(id, {
-                                                id: id,
+                                                id,
                                             })}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />

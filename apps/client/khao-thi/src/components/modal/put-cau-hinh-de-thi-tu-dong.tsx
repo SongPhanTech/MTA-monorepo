@@ -48,7 +48,7 @@ const PutTestStructureRule = () => {
             }
             if (input?.id) {
                 await updateTestStructureRule({
-                    data: data,
+                    data,
                     where: {
                         id: input.id,
                     },
@@ -56,7 +56,7 @@ const PutTestStructureRule = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createTestStructureRule({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

@@ -99,7 +99,7 @@ const PutDisciplinaryWarning = () => {
             }
             if (input?.id) {
                 await updateDisciplinaryWarning({
-                    data: data,
+                    data,
                     where: { id: input?.id },
                 })
                 message.success('Cập nhật thành công')

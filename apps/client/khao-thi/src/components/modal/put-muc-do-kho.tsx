@@ -38,7 +38,7 @@ const PutDifficulty = () => {
             }
             if (id) {
                 await updateDifficulty({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -46,7 +46,7 @@ const PutDifficulty = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createDifficulty({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

@@ -122,7 +122,7 @@ export default function AcademicActionCondition() {
             const data = {
                 configId,
             }
-            await createAcademicActionRuleSet({ data: data })
+            await createAcademicActionRuleSet({ data })
             message.success('Thêm mới thành công')
 
             queryClient.invalidateQueries({
