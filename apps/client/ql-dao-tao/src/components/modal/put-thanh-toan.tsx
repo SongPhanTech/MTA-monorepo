@@ -15,6 +15,7 @@ import {
 import { Col, Form, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { formatter } from '@/utils/formatterInputNumber'
 export type PaymentRecord = DefaultCouncilRolePayAmount & {
     chairman: number
     secretary: number
@@ -265,66 +266,102 @@ const PutPaymentRecord = () => {
             <Col span={12}>
                 <FormItem form={form} name="chairman" label="Chủ tịch" required>
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
+                        formatter={formatter}
+                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+                        onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                                e.preventDefault()
+                            }
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="secretary" label="Thư kí" required>
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
+                        formatter={formatter}
+                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+                        onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                                e.preventDefault()
+                            }
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="reviewer1" label="Phản biện 1" required>
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
+                        formatter={formatter}
+                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+                        onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                                e.preventDefault()
+                            }
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="reviewer2" label="Phản biện 2" required>
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
+                        formatter={formatter}
+                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+                        onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                                e.preventDefault()
+                            }
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="member" label="Ủy viên" required>
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
+                        formatter={formatter}
+                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+                        onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                                e.preventDefault()
+                            }
+                        }}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="supervisor" label="Giảng viên hướng dẫn" required>
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
+                        formatter={formatter}
+                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+                        onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                                e.preventDefault()
+                            }
+                        }}
                     />
                 </FormItem>
             </Col>
