@@ -30,7 +30,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 export type PutSettingClass = SubjectClass & {
     roomIds?: string[]
     defenseSessionIds?: string[]
-    defenseDate: Date
+    defenseDate?: Date
 }
 dayjs.locale('vi')
 
@@ -187,7 +187,7 @@ export default function SettingClass() {
             form.setFieldsValue({
                 roomIds,
                 defenseSessionIds,
-                defenseDate: subjectClass.thesisProjects[0]?.defenseDate
+                defenseDate: subjectClass?.thesisProjects[0]?.defenseDate
                     ? dayjs(subjectClass.thesisProjects[0].defenseDate)
                     : undefined,
             })
@@ -641,409 +641,443 @@ export default function SettingClass() {
         >
     )
 
-    return (
-        <Col span={24}>
-            <Col span={24} className="flex justify-end">
-                <Button onClick={() => handleCreateCouncil()} type="primary">
-                    Tạo hội đồng
-                </Button>
-            </Col>
-            <Form form={form}>
-                <Col span={12}>
-                    <FormItem form={form} name="defenseSessionIds" label="Danh sách ca bảo vệ">
-                        <Select
-                            mode="multiple"
-                            placeholder="Chọn danh sách ca bảo vệ"
-                            options={defenseSession?.map((item) => ({
-                                label: `${
-                                    item.startTime ? dayjs(item.startTime).format('HH:mm') : ''
-                                }`,
-                                value: item.id,
-                            }))}
-                            showSearch
-                            allowClear
-                            onChange={(values: string[]) => {
-                                setSelectedDefenseSessionIds(values)
-                            }}
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={12} className="mt-4">
-                    <FormItem
-                        form={form}
-                        name="roomIds"
-                        label={`Danh sách phòng ${
-                            selectedDefenseSessionIds.length
-                                ? `(Cần ít nhất ${Math.ceil((subjectClass?.thesisProjects.length || 0) / selectedDefenseSessionIds.length)} phòng)`
-                                : ''
-                        }`}
-                    >
-                        <Select
-                            mode="multiple"
-                            placeholder="Chọn danh sách phòng"
-                            options={room.map((item) => ({
-                                label: item.name,
-                                value: item.id,
-                            }))}
-                            showSearch
-                            onSearch={handleSearchRoom}
-                            filterOption={false}
-                            allowClear
-                            onChange={(values: string[]) => {
-                                setSelectedRoomIds(values)
-                            }}
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="defenseDate" label="Thời gian bảo vệ">
-                        <DatePicker
-                            format={{
-                                format: 'DD/MM/YYYY',
-                                type: 'mask',
-                            }}
-                            className="w-full"
-                        />
-                    </FormItem>
-                </Col>
-            </Form>
-            <Col span={24} className="flex flex-row gap-2">
-                <Col span={12}>
-                    <div
-                        style={{
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        Danh sách chuyên gia
-                    </div>
-                    <Table
-                        rowKey="id"
-                        id="expert-profile"
-                        filters={filters}
-                        setFilters={setFilters}
-                        rowSelection={{
-                            selectedRowKeys: selectedLeftKeys,
-                            onChange: setSelectedLeftKeys,
-                        }}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index: number) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Tên chuyên gia',
-                                dataIndex: 'name',
-                                width: 150,
-                                type: 'input',
-                                align: 'center',
-                            },
-                            {
-                                title: 'Học hàm',
-                                dataIndex: 'academicRank',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Hàm vị',
-                                dataIndex: 'academicDegree',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Chuyên ngành',
-                                dataIndex: 'specialization',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Đơn vị công tác',
-                                dataIndex: 'workplace',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Số điện thoại',
-                                dataIndex: 'phone',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Email',
-                                dataIndex: 'email',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                            },
-                        ]}
-                        data={leftData}
-                    />
-                </Col>
-                <Col
-                    span={1}
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        gap: '8px',
-                    }}
-                >
-                    <Button onClick={moveRight} disabled={!selectedLeftKeys.length}>
-                        →
-                    </Button>
-                    <Button onClick={moveLeft} disabled={!selectedRightKeys.length}>
-                        ←
+    if (subjectClass && subjectClass?.thesisProjects.length > 0) {
+        return (
+            <Col span={24}>
+                <Col span={24} className="flex justify-end">
+                    <Button onClick={() => handleCreateCouncil()} type="primary">
+                        Tạo hội đồng
                     </Button>
                 </Col>
-                <Col span={11}>
-                    <div
+                <Form form={form}>
+                    <Col span={12}>
+                        <FormItem form={form} name="defenseSessionIds" label="Danh sách ca bảo vệ">
+                            <Select
+                                mode="multiple"
+                                placeholder="Chọn danh sách ca bảo vệ"
+                                options={defenseSession?.map((item) => ({
+                                    label: `${
+                                        item.startTime ? dayjs(item.startTime).format('HH:mm') : ''
+                                    }`,
+                                    value: item.id,
+                                }))}
+                                showSearch
+                                allowClear
+                                onChange={(values: string[]) => {
+                                    setSelectedDefenseSessionIds(values)
+                                }}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12} className="mt-4">
+                        <FormItem
+                            form={form}
+                            name="roomIds"
+                            label={`Danh sách phòng ${
+                                selectedDefenseSessionIds.length
+                                    ? `(Cần ít nhất ${Math.ceil((subjectClass?.thesisProjects.length || 0) / selectedDefenseSessionIds.length)} phòng)`
+                                    : ''
+                            }`}
+                        >
+                            <Select
+                                mode="multiple"
+                                placeholder="Chọn danh sách phòng"
+                                options={room.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                }))}
+                                showSearch
+                                onSearch={handleSearchRoom}
+                                filterOption={false}
+                                allowClear
+                                onChange={(values: string[]) => {
+                                    setSelectedRoomIds(values)
+                                }}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem form={form} name="defenseDate" label="Thời gian bảo vệ">
+                            <DatePicker
+                                format={{
+                                    format: 'DD/MM/YYYY',
+                                    type: 'mask',
+                                }}
+                                className="w-full"
+                            />
+                        </FormItem>
+                    </Col>
+                </Form>
+                <Col span={24} className="flex flex-row gap-2">
+                    <Col span={12}>
+                        <div
+                            style={{
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            Danh sách chuyên gia
+                        </div>
+                        <Table
+                            rowKey="id"
+                            id="expert-profile"
+                            filters={filters}
+                            setFilters={setFilters}
+                            rowSelection={{
+                                selectedRowKeys: selectedLeftKeys,
+                                onChange: setSelectedLeftKeys,
+                            }}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 60,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index: number) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                },
+                                {
+                                    title: 'Tên chuyên gia',
+                                    dataIndex: 'name',
+                                    width: 150,
+                                    type: 'input',
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Học hàm',
+                                    dataIndex: 'academicRank',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'input',
+                                },
+                                {
+                                    title: 'Hàm vị',
+                                    dataIndex: 'academicDegree',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'input',
+                                },
+                                {
+                                    title: 'Chuyên ngành',
+                                    dataIndex: 'specialization',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'input',
+                                },
+                                {
+                                    title: 'Đơn vị công tác',
+                                    dataIndex: 'workplace',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'input',
+                                },
+                                {
+                                    title: 'Số điện thoại',
+                                    dataIndex: 'phone',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'input',
+                                },
+                                {
+                                    title: 'Email',
+                                    dataIndex: 'email',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'input',
+                                },
+                            ]}
+                            data={leftData}
+                        />
+                    </Col>
+                    <Col
+                        span={1}
                         style={{
-                            fontWeight: 'bold',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: '8px',
                         }}
                     >
-                        Danh sách chuyên gia hội đồng{' '}
-                        {selectedDefenseSessionIds.length
-                            ? `(Cần ít nhất ${Math.ceil((subjectClass?.thesisProjects.length || 0) / selectedDefenseSessionIds.length) * 5} chuyên gia)`
-                            : ''}
-                    </div>
-                    <Table
-                        rowKey="id"
-                        id="expert-profile"
-                        rowSelection={{
-                            selectedRowKeys: selectedRightKeys,
-                            onChange: setSelectedRightKeys,
-                        }}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index: number) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Tên chuyên gia',
-                                dataIndex: 'name',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Học hàm',
-                                dataIndex: 'academicRank',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Hàm vị',
-                                dataIndex: 'academicDegree',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Chuyên ngành',
-                                dataIndex: 'specialization',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Đơn vị công tác',
-                                dataIndex: 'workplace',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Số điện thoại',
-                                dataIndex: 'phone',
-                                width: 150,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Email',
-                                dataIndex: 'email',
-                                width: 150,
-                                align: 'center',
-                            },
-                        ]}
-                        data={rightData}
-                    />
+                        <Button onClick={moveRight} disabled={!selectedLeftKeys.length}>
+                            →
+                        </Button>
+                        <Button onClick={moveLeft} disabled={!selectedRightKeys.length}>
+                            ←
+                        </Button>
+                    </Col>
+                    <Col span={11}>
+                        <div
+                            style={{
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            Danh sách chuyên gia hội đồng{' '}
+                            {selectedDefenseSessionIds.length
+                                ? `(Cần ít nhất ${Math.ceil((subjectClass?.thesisProjects.length || 0) / selectedDefenseSessionIds.length) * 5} chuyên gia)`
+                                : ''}
+                        </div>
+                        <Table
+                            rowKey="id"
+                            id="expert-profile"
+                            rowSelection={{
+                                selectedRowKeys: selectedRightKeys,
+                                onChange: setSelectedRightKeys,
+                            }}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 60,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index: number) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                },
+                                {
+                                    title: 'Tên chuyên gia',
+                                    dataIndex: 'name',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Học hàm',
+                                    dataIndex: 'academicRank',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Hàm vị',
+                                    dataIndex: 'academicDegree',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Chuyên ngành',
+                                    dataIndex: 'specialization',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Đơn vị công tác',
+                                    dataIndex: 'workplace',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Số điện thoại',
+                                    dataIndex: 'phone',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Email',
+                                    dataIndex: 'email',
+                                    width: 150,
+                                    align: 'center',
+                                },
+                            ]}
+                            data={rightData}
+                        />
+                    </Col>
                 </Col>
-            </Col>
-            {Object.values(defenseSessions ?? {}).length > 0 && (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12 }}>
-                        <thead>
-                            <tr>
-                                <th rowSpan={2} style={{ ...cell, width: '50px' }}>
-                                    TT
-                                </th>
-                                <th rowSpan={2} style={{ ...cell, width: '120px' }}>
-                                    Thời gian bắt đầu
-                                </th>
-
-                                {Array.from(
-                                    new Map(
-                                        Object.values(defenseSessions ?? {})
-                                            .flatMap((ds) => Object.values(ds.rooms))
-                                            .map((r) => [r.room.id, r])
-                                    ).values()
-                                ).map((r) => (
-                                    <th key={r.room.id} colSpan={3} style={cell}>
-                                        {r.room?.name}
+                {Object.values(defenseSessions ?? {}).length > 0 && (
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12 }}>
+                            <thead>
+                                <tr>
+                                    <th rowSpan={2} style={{ ...cell, width: '50px' }}>
+                                        TT
                                     </th>
-                                ))}
-                            </tr>
+                                    <th rowSpan={2} style={{ ...cell, width: '120px' }}>
+                                        Thời gian bắt đầu
+                                    </th>
 
-                            <tr>
-                                {Array.from(
-                                    new Map(
-                                        Object.values(defenseSessions ?? {})
-                                            .flatMap((ds) => Object.values(ds.rooms))
-                                            .map((r) => [r.room.id, r])
-                                    ).values()
-                                ).map((r, index) => (
-                                    <React.Fragment key={`${r.room.id} ${index}-em`}>
-                                        <th style={cell}>CD</th>
-                                        <th style={cell}>Hội đồng</th>
-                                        <th style={cell}>PB</th>
+                                    {Array.from(
+                                        new Map(
+                                            Object.values(defenseSessions ?? {})
+                                                .flatMap((ds) => Object.values(ds.rooms))
+                                                .map((r) => [r.room.id, r])
+                                        ).values()
+                                    ).map((r) => (
+                                        <th key={r.room.id} colSpan={3} style={cell}>
+                                            {r.room?.name}
+                                        </th>
+                                    ))}
+                                </tr>
+
+                                <tr>
+                                    {Array.from(
+                                        new Map(
+                                            Object.values(defenseSessions ?? {})
+                                                .flatMap((ds) => Object.values(ds.rooms))
+                                                .map((r) => [r.room.id, r])
+                                        ).values()
+                                    ).map((r, index) => (
+                                        <React.Fragment key={`${r.room.id} ${index}-em`}>
+                                            <th style={cell}>CD</th>
+                                            <th style={cell}>Hội đồng</th>
+                                            <th style={cell}>PB</th>
+                                        </React.Fragment>
+                                    ))}
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {Object.values(defenseSessions ?? {}).map((ds, idx) => (
+                                    <React.Fragment key={ds.session.id}>
+                                        <tr>
+                                            <td rowSpan={6} style={cell}>
+                                                {idx + 1}
+                                            </td>
+                                            <td rowSpan={6} style={cell}>
+                                                <div>
+                                                    {new Date(
+                                                        ds.session.startTime
+                                                    ).toLocaleTimeString('vi-VN', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                    })}
+                                                </div>
+                                                <div>
+                                                    {subjectClass?.thesisProjects[0]?.defenseDate
+                                                        ? dayjs(
+                                                              subjectClass.thesisProjects[0]
+                                                                  ?.defenseDate
+                                                          ).format('DD/MM/YYYY')
+                                                        : ''}
+                                                </div>
+                                            </td>
+
+                                            {Object.values(ds.rooms).map((r, index) => (
+                                                <td
+                                                    colSpan={3}
+                                                    style={cell}
+                                                    key={`${r.room.id}-${index}-tt`}
+                                                >
+                                                    {r.thesisProjects.map((tp) => (
+                                                        <React.Fragment key={tp.id}>
+                                                            {tp.registrations.map((reg) => (
+                                                                <div key={reg.id}>
+                                                                    {
+                                                                        reg.student.userProfile
+                                                                            .fullname
+                                                                    }
+                                                                </div>
+                                                            ))}
+                                                            <div>GVHD: {tp.supervisor?.name}</div>
+                                                        </React.Fragment>
+                                                    ))}
+                                                </td>
+                                            ))}
+                                        </tr>
+
+                                        <tr>
+                                            {Object.values(ds.rooms).map((r, index) => {
+                                                const ct =
+                                                    r.thesisProjects[0]?.council?.members.find(
+                                                        (m) => m.role === 'CHAIRMAN'
+                                                    )
+                                                return (
+                                                    <React.Fragment
+                                                        key={`${r.room.id}-${index}-ch`}
+                                                    >
+                                                        <td style={cell}>CT</td>
+                                                        <td style={cell}>
+                                                            {ct?.expert?.name || ''}
+                                                        </td>
+                                                        <td style={cell}> </td>
+                                                    </React.Fragment>
+                                                )
+                                            })}
+                                        </tr>
+
+                                        <tr>
+                                            {Object.values(ds.rooms).map((r, index) => {
+                                                const tk =
+                                                    r.thesisProjects[0]?.council?.members.find(
+                                                        (m) => m.role === 'SECRETARY'
+                                                    )
+                                                return (
+                                                    <React.Fragment
+                                                        key={`${r.room.id} ${index} se`}
+                                                    >
+                                                        <td style={cell}>TK</td>
+                                                        <td style={cell}>
+                                                            {tk?.expert?.name || ''}
+                                                        </td>
+                                                        <td style={cell}> </td>
+                                                    </React.Fragment>
+                                                )
+                                            })}
+                                        </tr>
+
+                                        <tr>
+                                            {Object.values(ds.rooms).map((r, index) => {
+                                                const pb1 =
+                                                    r.thesisProjects[0]?.council?.members.find(
+                                                        (m) => m.role === 'REVIEWER_1'
+                                                    )
+                                                return (
+                                                    <React.Fragment
+                                                        key={`${r.room.id} ${index} rv1`}
+                                                    >
+                                                        <td style={cell}>UV</td>
+                                                        <td style={cell}>
+                                                            {pb1?.expert?.name || ''}
+                                                        </td>
+                                                        <td style={cell}>PB1</td>
+                                                    </React.Fragment>
+                                                )
+                                            })}
+                                        </tr>
+
+                                        <tr>
+                                            {Object.values(ds.rooms).map((r, index) => {
+                                                const pb2 =
+                                                    r.thesisProjects[0]?.council?.members.find(
+                                                        (m) => m.role === 'REVIEWER_2'
+                                                    )
+                                                return (
+                                                    <React.Fragment
+                                                        key={`${r.room.id}-${index}-rv2`}
+                                                    >
+                                                        <td style={cell}>UV</td>
+                                                        <td style={cell}>
+                                                            {pb2?.expert?.name || ''}
+                                                        </td>
+                                                        <td style={cell}>PB2</td>
+                                                    </React.Fragment>
+                                                )
+                                            })}
+                                        </tr>
+
+                                        <tr>
+                                            {Object.values(ds.rooms).map((r, index) => {
+                                                const uv =
+                                                    r.thesisProjects[0]?.council?.members.find(
+                                                        (m) => m.role === 'MEMBER'
+                                                    )
+                                                return (
+                                                    <React.Fragment
+                                                        key={`${r.room.id} ${index}-me`}
+                                                    >
+                                                        <td style={cell}>UV</td>
+                                                        <td style={cell}>
+                                                            {uv?.expert?.name || ''}
+                                                        </td>
+                                                        <td style={cell}> </td>
+                                                    </React.Fragment>
+                                                )
+                                            })}
+                                        </tr>
                                     </React.Fragment>
                                 ))}
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {Object.values(defenseSessions ?? {}).map((ds, idx) => (
-                                <React.Fragment key={ds.session.id}>
-                                    <tr>
-                                        <td rowSpan={6} style={cell}>
-                                            {idx + 1}
-                                        </td>
-                                        <td rowSpan={6} style={cell}>
-                                            <div>
-                                                {new Date(ds.session.startTime).toLocaleTimeString(
-                                                    'vi-VN',
-                                                    { hour: '2-digit', minute: '2-digit' }
-                                                )}
-                                            </div>
-                                            <div>
-                                                {subjectClass?.thesisProjects[0].defenseDate
-                                                    ? dayjs(
-                                                          subjectClass.thesisProjects[0].defenseDate
-                                                      ).format('DD/MM/YYYY')
-                                                    : ''}
-                                            </div>
-                                        </td>
-
-                                        {Object.values(ds.rooms).map((r, index) => (
-                                            <td
-                                                colSpan={3}
-                                                style={cell}
-                                                key={`${r.room.id}-${index}-tt`}
-                                            >
-                                                {r.thesisProjects.map((tp) => (
-                                                    <React.Fragment key={tp.id}>
-                                                        {tp.registrations.map((reg) => (
-                                                            <div key={reg.id}>
-                                                                {reg.student.userProfile.fullname}
-                                                            </div>
-                                                        ))}
-                                                        <div>GVHD: {tp.supervisor?.name}</div>
-                                                    </React.Fragment>
-                                                ))}
-                                            </td>
-                                        ))}
-                                    </tr>
-
-                                    <tr>
-                                        {Object.values(ds.rooms).map((r, index) => {
-                                            const ct = r.thesisProjects[0]?.council?.members.find(
-                                                (m) => m.role === 'CHAIRMAN'
-                                            )
-                                            return (
-                                                <React.Fragment key={`${r.room.id}-${index}-ch`}>
-                                                    <td style={cell}>CT</td>
-                                                    <td style={cell}>{ct?.expert?.name || ''}</td>
-                                                    <td style={cell}> </td>
-                                                </React.Fragment>
-                                            )
-                                        })}
-                                    </tr>
-
-                                    <tr>
-                                        {Object.values(ds.rooms).map((r, index) => {
-                                            const tk = r.thesisProjects[0]?.council?.members.find(
-                                                (m) => m.role === 'SECRETARY'
-                                            )
-                                            return (
-                                                <React.Fragment key={`${r.room.id} ${index} se`}>
-                                                    <td style={cell}>TK</td>
-                                                    <td style={cell}>{tk?.expert?.name || ''}</td>
-                                                    <td style={cell}> </td>
-                                                </React.Fragment>
-                                            )
-                                        })}
-                                    </tr>
-
-                                    <tr>
-                                        {Object.values(ds.rooms).map((r, index) => {
-                                            const pb1 = r.thesisProjects[0]?.council?.members.find(
-                                                (m) => m.role === 'REVIEWER_1'
-                                            )
-                                            return (
-                                                <React.Fragment key={`${r.room.id} ${index} rv1`}>
-                                                    <td style={cell}>UV</td>
-                                                    <td style={cell}>{pb1?.expert?.name || ''}</td>
-                                                    <td style={cell}>PB1</td>
-                                                </React.Fragment>
-                                            )
-                                        })}
-                                    </tr>
-
-                                    <tr>
-                                        {Object.values(ds.rooms).map((r, index) => {
-                                            const pb2 = r.thesisProjects[0]?.council?.members.find(
-                                                (m) => m.role === 'REVIEWER_2'
-                                            )
-                                            return (
-                                                <React.Fragment key={`${r.room.id}-${index}-rv2`}>
-                                                    <td style={cell}>UV</td>
-                                                    <td style={cell}>{pb2?.expert?.name || ''}</td>
-                                                    <td style={cell}>PB2</td>
-                                                </React.Fragment>
-                                            )
-                                        })}
-                                    </tr>
-
-                                    <tr>
-                                        {Object.values(ds.rooms).map((r, index) => {
-                                            const uv = r.thesisProjects[0]?.council?.members.find(
-                                                (m) => m.role === 'MEMBER'
-                                            )
-                                            return (
-                                                <React.Fragment key={`${r.room.id} ${index}-me`}>
-                                                    <td style={cell}>UV</td>
-                                                    <td style={cell}>{uv?.expert?.name || ''}</td>
-                                                    <td style={cell}> </td>
-                                                </React.Fragment>
-                                            )
-                                        })}
-                                    </tr>
-                                </React.Fragment>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </Col>
-    )
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </Col>
+        )
+    }
+    return <div className="text-center text-lg">Hiện chưa có đề tài nào trong lớp đồ án</div>
 }
 
 const cell: React.CSSProperties = {

@@ -450,7 +450,19 @@ export default function ThesisProject() {
                                 >
                                     Tạo thanh toán
                                 </Button>
-                                <Button onClick={() => openPrintSupervisorGuide()} type="primary">
+                                <Button
+                                    onClick={() => openPrintSupervisorGuide()}
+                                    type="primary"
+                                    disabled={
+                                        !subjectClass ||
+                                        subjectClass.length === 0 ||
+                                        !subjectClass.some(
+                                            (item) =>
+                                                item.thesisProjects &&
+                                                item.thesisProjects.length > 0
+                                        )
+                                    }
+                                >
                                     In quyết định hướng dẫn
                                 </Button>
                                 <Button
@@ -461,6 +473,15 @@ export default function ThesisProject() {
                                         })
                                     }
                                     type="primary"
+                                    disabled={
+                                        !subjectClass ||
+                                        subjectClass.length === 0 ||
+                                        !subjectClass.some(
+                                            (item) =>
+                                                item.thesisProjects &&
+                                                item.thesisProjects.length > 0
+                                        )
+                                    }
                                 >
                                     Quyết định
                                 </Button>
@@ -472,10 +493,23 @@ export default function ThesisProject() {
                                         })
                                     }
                                     type="primary"
+                                    disabled={
+                                        !subjectClass ||
+                                        subjectClass.length === 0 ||
+                                        !subjectClass.some(
+                                            (item) =>
+                                                item.thesisProjects &&
+                                                item.thesisProjects.length > 0
+                                        )
+                                    }
                                 >
                                     In bản sao Quyết định
                                 </Button>
-                                <Button onClick={createInvitations} type="primary">
+                                <Button
+                                    onClick={createInvitations}
+                                    type="primary"
+                                    disabled={selectedRowKeys.length === 0}
+                                >
                                     <BookPlus />
                                     Tạo thư mời
                                 </Button>
