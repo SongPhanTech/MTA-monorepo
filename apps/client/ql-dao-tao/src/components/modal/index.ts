@@ -12,6 +12,7 @@ import ModalPrintToDSHV from './modal-print-ds-sinh-vien-lop'
 import ModalPrintInvitation from './modal-print-giay-moi'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import ModalPrintDecision from './modal-print-quyet-dinh-hoi-dong'
+import ModalPrintSupervisorGuide from './modal-print-quyet-dinh-huong-dan'
 import ModalGraduationCriteria from './modal-tieu-chi-xet-tn'
 import ModalTraCuuVanBang from './modal-tra-cuu-van-bang'
 import ModalVanBang from './modal-van-bang'
@@ -173,4 +174,5 @@ export {
     ModalPrintInvitation,
     PutTrainingLevel,
     PutClassRegisterSession,
+    ModalPrintSupervisorGuide,
 }

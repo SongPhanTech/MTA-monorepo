@@ -25,9 +25,9 @@ function Page() {
     const dataBarchart = useMemo(() => {
         const result = []
         if (dataLevel?.status === 200 && dataLevel?.data?.questions?.length) {
-            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <dont need depen>
+            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
             for (const i of dataLevel?.data?.questions) {
-                // biome-ignore lint/correctness/noUnsafeOptionalChaining: <dont need depen>
+                // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
                 for (const j of i?.answers) {
                     if (j?.count > 0) {
                         result.push({
@@ -48,7 +48,7 @@ function Page() {
     }) => {
         let total = 0
         if (item?.answers?.length) {
-            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <dont need depen>
+            // biome-ignore lint/correctness/noUnsafeOptionalChaining: <explanation>
             for (const i of item?.answers) {
                 total += i?.count
             }
@@ -97,14 +97,7 @@ function Page() {
                         <Title level={3}>
                             {(dataLevel?.status === 200 && dataLevel?.data?.surveyName) || ''}
                         </Title>
-                        <Button
-                            onClick={() => {
-                                exportReport()
-                            }}
-                            type="primary"
-                        >
-                            Xuat bao cao
-                        </Button>
+                        <Button type="primary">Xuat bao cao</Button>
                     </Flex>
                 </Col>
                 <Col span={24}>

@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { DocumentFile, SubjectVersion } from '@workspace/db'
+import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@workspace/db'
 import {
     useCreateSubjectVersion,
     useFindManySubject,
@@ -28,6 +28,11 @@ type PutSubjectVersionFormValues = PutSubjectVersion & {
     prerequisiteSubjectIds?: string[]
     coRequisiteSubjectIds?: string[]
 }
+
+const subjectVersionTypeOptions = [
+    { label: 'Môn thường', value: SubjectVersionType.Normal },
+    { label: 'Đồ án tốt nghiệp', value: SubjectVersionType.Project },
+]
 
 const PutVersionSubjectModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
@@ -122,6 +127,7 @@ const PutVersionSubjectModal = () => {
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
+                type: output.type,
                 prerequisiteSubject: subjectVersionId
                     ? {
                           set:
@@ -415,6 +421,18 @@ const PutVersionSubjectModal = () => {
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>
                     </Radio.Group>
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="type" label="Loại môn học">
+                    <Select
+                        placeholder="Chọn loại hệ điểm"
+                        options={subjectVersionTypeOptions?.map((item) => ({
+                            label: item.label,
+                            value: item.value,
+                        }))}
+                        allowClear
+                    />
                 </FormItem>
             </Col>
             {/*  */}
