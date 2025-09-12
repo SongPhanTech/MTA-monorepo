@@ -640,7 +640,6 @@ export default function SettingClass() {
             }
         >
     )
-    console.log(subjectClass?.thesisProjects.length)
 
     if (subjectClass && subjectClass?.thesisProjects.length > 0) {
         return (
