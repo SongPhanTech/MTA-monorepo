@@ -43,18 +43,24 @@ export default function UserProfilePageLecture() {
     const { data = [], refetch } = useFindManyLecturer({
         where: {
             userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
+                ...(filters.name
+                    ? {
+                          OR: [
+                              {
+                                  firstName: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                              {
+                                  lastName: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                          ],
+                      }
+                    : {}),
                 ...(filters.idCardNumber
                     ? {
                           idCardNumber: {
@@ -168,18 +174,24 @@ export default function UserProfilePageLecture() {
     const { data: count } = useCountLecturer({
         where: {
             userProfile: {
-                OR: [
-                    {
-                        firstName: {
-                            contains: filters.name,
-                        },
-                    },
-                    {
-                        lastName: {
-                            contains: filters.name,
-                        },
-                    },
-                ],
+                ...(filters.name
+                    ? {
+                          OR: [
+                              {
+                                  firstName: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                              {
+                                  lastName: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                          ],
+                      }
+                    : {}),
                 ...(filters.idCardNumber
                     ? {
                           idCardNumber: {
@@ -269,6 +281,8 @@ export default function UserProfilePageLecture() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Table
+                        setFilters={setFilters}
+                        filters={filters}
                         columns={[
                             {
                                 title: 'STT',

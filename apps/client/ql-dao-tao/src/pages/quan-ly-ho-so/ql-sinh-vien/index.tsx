@@ -74,11 +74,13 @@ export default function UserProfilePageDs() {
                               {
                                   firstName: {
                                       contains: filters.name,
+                                      mode: 'insensitive' as const,
                                   },
                               },
                               {
                                   lastName: {
                                       contains: filters.name,
+                                      mode: 'insensitive' as const,
                                   },
                               },
                           ],
@@ -181,11 +183,13 @@ export default function UserProfilePageDs() {
                               {
                                   firstName: {
                                       contains: filters.name,
+                                      mode: 'insensitive' as const,
                                   },
                               },
                               {
                                   lastName: {
                                       contains: filters.name,
+                                      mode: 'insensitive' as const,
                                   },
                               },
                           ],
