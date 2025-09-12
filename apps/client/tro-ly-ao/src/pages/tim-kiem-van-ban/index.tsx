@@ -2,7 +2,7 @@ import { SearchOutlined } from '@ant-design/icons'
 import { CardDocument } from '@components/commons/card-document'
 import { FileUploadIcon } from '@components/commons/upload'
 import { DOCUMENT_TYPE } from '@constants/constants'
-import TimKiemVanBanLayout from '@layouts/tim-kiem-van-ban-layout'
+import ChatLayout from '@layouts/chat-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db'
@@ -139,7 +139,7 @@ export default function Page() {
                             </div>
                             <div>
                                 <p className="font-semibold text-gray-700">Người đăng</p>
-                                <p>{selectedDocument.uploadedBy.name}</p>
+                                <p>{selectedDocument.uploadedBy.sTen}</p>
                             </div>
                             <div>
                                 <p className="font-semibold text-gray-700">Ngày đăng</p>
@@ -167,5 +167,5 @@ export default function Page() {
 }
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
-    return <TimKiemVanBanLayout>{page}</TimKiemVanBanLayout>
+    return <ChatLayout showSiderChat={false}>{page}</ChatLayout>
 }
