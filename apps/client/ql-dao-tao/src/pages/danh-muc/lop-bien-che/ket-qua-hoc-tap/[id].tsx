@@ -274,6 +274,13 @@ export default function StudentScoreClassPage() {
                                 },
                             },
                             {
+                                title: 'Số tín chỉ',
+                                align: 'center',
+                                dataIndex: ['subjectClassStudent', '0', 'subjectVersion', 'credit'],
+                                fixed: 'left',
+                                width: 100,
+                            },
+                            {
                                 title: 'Điểm hệ 10',
                                 align: 'center',
                                 width: 100,
