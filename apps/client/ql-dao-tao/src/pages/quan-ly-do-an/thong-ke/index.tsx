@@ -225,15 +225,20 @@ export default function ThongKe() {
             .filter((s): s is number => s !== null)
 
         const step = 0.25
-        const bins = Array.from({ length: Math.ceil(10 / step) }, (_, i) => ({
-            range: (i * step).toFixed(2),
+        const numberOfBins = Math.ceil(10 / step)
+        const bins = Array.from({ length: numberOfBins }, (_, i) => ({
+            range: `${(i * step).toFixed(2)} - ${((i + 1) * step).toFixed(2)}`,
             count: 0,
+            min: i * step,
+            max: (i + 1) * step,
         }))
 
         allScores.forEach((score) => {
-            const idx = Math.floor(score / step)
-            if (idx >= 0 && idx < bins.length) {
-                bins[idx].count++
+            const binIndex = bins.findIndex((bin) => score >= bin.min && score < bin.max)
+            if (binIndex !== -1) {
+                bins[binIndex].count++
+            } else if (score === 10) {
+                bins[bins.length - 1].count++
             }
         })
 
@@ -256,21 +261,25 @@ export default function ThongKe() {
     const chartOptions = {
         responsive: true,
         plugins: {
-            legend: { position: 'top' as const },
-            // title: { display: true, text: 'Phổ điểm' },
+            legend: {
+                position: 'top' as const,
+                display: false,
+            },
         },
         scales: {
             x: {
-                title: { display: true, text: 'Điểm' },
-                min: 0,
-                max: 10,
+                title: { display: true, text: 'Khoảng điểm' },
                 ticks: {
-                    stepSize: 0.25,
+                    maxRotation: 45,
+                    minRotation: 45,
                 },
             },
             y: {
                 title: { display: true, text: 'Số lượng SV' },
                 beginAtZero: true,
+                ticks: {
+                    stepSize: 1,
+                },
             },
         },
     }
