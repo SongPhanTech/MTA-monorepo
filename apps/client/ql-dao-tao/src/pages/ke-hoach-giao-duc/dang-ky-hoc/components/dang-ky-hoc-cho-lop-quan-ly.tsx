@@ -161,7 +161,7 @@ export default function RegisterClassManager({
                     {
                         title: 'STT',
                         dataIndex: '',
-                        width: 60,
+                        width: 50,
                         align: 'center',
                         fixed: 'left',
                         render: (_, __, index) =>
@@ -177,6 +177,7 @@ export default function RegisterClassManager({
                     {
                         title: 'Thời gian học',
                         dataIndex: 'startDate',
+                        align: 'center',
                         width: 150,
                         render: (record: string) =>
                             record ? dayjs(record).format('DD/MM/YYYY') : '',
@@ -233,7 +234,6 @@ export default function RegisterClassManager({
                     {
                         title: 'Số SV đã ĐK',
                         align: 'center',
-                        fixed: 'right',
                         width: 120,
                         render: (record: SubjectClassData) =>
                             record?.fixedClasses?.reduce(
@@ -244,7 +244,6 @@ export default function RegisterClassManager({
                     {
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
-                        fixed: 'right',
                         width: 150,
                         render: (record: SubjectClassData) =>
                             record.fixedClasses.map((e) => e.name).join(', '),
