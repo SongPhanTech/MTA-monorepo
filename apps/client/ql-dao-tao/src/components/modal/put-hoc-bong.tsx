@@ -145,6 +145,7 @@ const PutHocBong = () => {
                             const parsedValue = Number.parseFloat(value?.replace(/,/g, '') || '0')
                             return Math.min(Math.max(parsedValue, 0), 1000000000) as 0 | 1000000000
                         }}
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>

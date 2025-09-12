@@ -187,7 +187,7 @@ export default function SettingClass() {
             form.setFieldsValue({
                 roomIds,
                 defenseSessionIds,
-                defenseDate: subjectClass.thesisProjects[0].defenseDate
+                defenseDate: subjectClass.thesisProjects[0]?.defenseDate
                     ? dayjs(subjectClass.thesisProjects[0].defenseDate)
                     : undefined,
             })

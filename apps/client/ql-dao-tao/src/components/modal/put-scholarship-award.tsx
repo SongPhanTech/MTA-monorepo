@@ -211,6 +211,7 @@ const PutScholarshipAward = () => {
                         placeholder="Nhập số tiền học bổng"
                         className="w-full"
                         step={1}
+                        suffix="VNĐ"
                     />
                 </FormItem>
             </Col>

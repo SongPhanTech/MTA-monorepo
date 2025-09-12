@@ -494,6 +494,8 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                 title: 'Số tiền học bổng',
                                                 dataIndex: ['amount'],
                                                 width: 150,
+                                                render: (__, record) =>
+                                                    record?.amount && `${record?.amount} VNĐ`,
                                             },
                                             {
                                                 title: 'Học bổng',
