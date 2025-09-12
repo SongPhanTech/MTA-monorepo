@@ -1,7 +1,6 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import { useExamTypeOptions } from '@hooks/examType'
-import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import useScoreToWords from '@hooks/useScoreToWords'
 import type { Prisma, SubjectClass } from '@workspace/db'
@@ -135,10 +134,6 @@ const ModalPrintStudentSubjectScore = () => {
         { enabel: input?.dataTable?.[0]?.subjectClass?.id }
     )
 
-    const { convertScore } = useScoreConverter(
-        data?.subjectClassStudent?.[0]?.student?.fixedClass?.trainingCourse?.scoreConverts
-    )
-
     const firstTrainingCourse = useMemo(() => {
         return data?.subjectClassStudent.find(({ student }) =>
             Boolean(student.fixedClass?.trainingCourse)
@@ -177,7 +172,6 @@ const ModalPrintStudentSubjectScore = () => {
                 queryKey: ['SubjectClass'],
             })
             handlePrint()
-            onClose()
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
