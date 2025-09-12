@@ -39,6 +39,8 @@ export const SqlTransactionBodyItemModel = {
     EquivalencyGroup: 'EquivalencyGroup',
     SubjectInGroup: 'SubjectInGroup',
     TrainingBlockSubject: 'TrainingBlockSubject',
+    ClassRegisterSession: 'ClassRegisterSession',
+    ClassRegisterLogs: 'ClassRegisterLogs',
     SubjectClass: 'SubjectClass',
     ClassSchedule: 'ClassSchedule',
     TrainingObjectType: 'TrainingObjectType',

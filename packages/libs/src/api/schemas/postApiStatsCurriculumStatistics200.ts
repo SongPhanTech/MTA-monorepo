@@ -5,7 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { PostApiStatsCurriculumStatistics200DataItem } from './postApiStatsCurriculumStatistics200DataItem'
+import type { PostApiStatsCurriculumStatistics200Summary } from './postApiStatsCurriculumStatistics200Summary'
+
 export type PostApiStatsCurriculumStatistics200 = {
-    activeCurricula: number
-    activeCurriculumVersions: number
+    summary: PostApiStatsCurriculumStatistics200Summary
+    count: number
+    preview?: boolean
+    data: PostApiStatsCurriculumStatistics200DataItem[]
 }

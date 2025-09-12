@@ -103,7 +103,7 @@ const getClassesInfo = createRoute({
     description: 'Lấy thống tin lớp học',
     method: 'get',
     request: {
-        params: z.object({
+        query: z.object({
             sessionId: z.string().openapi({ description: 'ID đợt đăng ký lớp học' }),
             curriculumVersionId: z.string(),
             byCurriculum: z.boolean().default(true),
@@ -184,7 +184,7 @@ app.openapi(getClassesInfo, async (c) => {
         },
     })
 
-    const { sessionId, curriculumVersionId, byCurriculum } = c.req.valid('param')
+    const { sessionId, curriculumVersionId, byCurriculum } = c.req.valid('query')
 
     const now = new Date()
     const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({

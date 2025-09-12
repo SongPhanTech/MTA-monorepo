@@ -52,6 +52,9 @@ import type {
     ImportHeQuanSu,
     ImportHeQuanSu200,
     ImportHeQuanSu400,
+    ImportLecturer200,
+    ImportLecturer400,
+    ImportLecturerBody,
     ImportPhanCongGiangDay,
     ImportPhanCongGiangDay200,
     ImportPhanCongGiangDay400,
@@ -67,52 +70,88 @@ import type {
     PostApiStatsAcademicPerformanceByYear200,
     PostApiStatsAcademicPerformanceByYearBody,
     PostApiStatsAcademicPerformanceByYearFiltered200,
+    PostApiStatsAcademicPerformanceByYearFilteredBody,
     PostApiStatsAcademicPerformanceByYearFilteredParams,
     PostApiStatsAverageEntryScoreByCourse200,
+    PostApiStatsAverageEntryScoreByCourseBody,
     PostApiStatsAverageEntryScoreByCourseFiltered200,
+    PostApiStatsAverageEntryScoreByCourseFilteredBody,
     PostApiStatsAverageEntryScoreByCourseFilteredParams,
     PostApiStatsAverageExamScoreTrend200,
+    PostApiStatsAverageExamScoreTrendBody,
     PostApiStatsAverageGpaByCourse200,
+    PostApiStatsAverageGpaByCourseBody,
     PostApiStatsAverageGpaByCourseFiltered200,
+    PostApiStatsAverageGpaByCourseFilteredBody,
     PostApiStatsAverageGpaByCourseFilteredParams,
     PostApiStatsAverageGpaByFixedClass200,
+    PostApiStatsAverageGpaByFixedClassBody,
     PostApiStatsAverageGpaByTrainingMajor200,
+    PostApiStatsAverageGpaByTrainingMajorBody,
     PostApiStatsCurriculumStatistics200,
+    PostApiStatsCurriculumStatisticsBody,
     PostApiStatsDemographics200,
+    PostApiStatsDemographicsBody,
     PostApiStatsEnrollmentTrend200,
+    PostApiStatsEnrollmentTrendBody,
     PostApiStatsExamParticipantsBySemester200,
+    PostApiStatsExamParticipantsBySemesterBody,
     PostApiStatsExamParticipantsBySemesterParams,
     PostApiStatsGraduationRankingStatistics200,
+    PostApiStatsGraduationRankingStatisticsBody,
     PostApiStatsGraduationRateByCourse200,
+    PostApiStatsGraduationRateByCourseBody,
     PostApiStatsGraduationRateByCourseFiltered200,
+    PostApiStatsGraduationRateByCourseFilteredBody,
     PostApiStatsGraduationRateByCourseFilteredParams,
     PostApiStatsHighestIncorrectAnswerRateQuestions200,
+    PostApiStatsHighestIncorrectAnswerRateQuestionsBody,
     PostApiStatsKpiCards200,
+    PostApiStatsKpiCardsBody,
     PostApiStatsLecturerWorkload200,
+    PostApiStatsLecturerWorkloadBody,
     PostApiStatsMostUsedQuestions200,
+    PostApiStatsMostUsedQuestionsBody,
     PostApiStatsQuestionStatistics200,
+    PostApiStatsQuestionStatisticsBody,
     PostApiStatsStudentDistributionByProvince200,
+    PostApiStatsStudentDistributionByProvinceBody,
     PostApiStatsStudentDistributionByProvinceFiltered200,
+    PostApiStatsStudentDistributionByProvinceFilteredBody,
     PostApiStatsStudentDistributionByProvinceFilteredParams,
     PostApiStatsStudentDistributionByTrainingCourse200,
+    PostApiStatsStudentDistributionByTrainingCourseBody,
     PostApiStatsStudentDistributionByTrainingCourseFiltered200,
+    PostApiStatsStudentDistributionByTrainingCourseFilteredBody,
     PostApiStatsStudentDistributionByTrainingCourseFilteredParams,
     PostApiStatsStudentDistributionByTrainingLevel200,
+    PostApiStatsStudentDistributionByTrainingLevelBody,
     PostApiStatsStudentDistributionByTrainingLevelFiltered200,
+    PostApiStatsStudentDistributionByTrainingLevelFilteredBody,
     PostApiStatsStudentDistributionByTrainingLevelFilteredParams,
     PostApiStatsStudentDistributionByTrainingObjectType200,
+    PostApiStatsStudentDistributionByTrainingObjectTypeBody,
     PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200,
+    PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody,
     PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
     PostApiStatsStudentsForAcademicAction200,
+    PostApiStatsStudentsForAcademicActionBody,
     PostApiStatsStudentsOfInterest200,
+    PostApiStatsStudentsOfInterestBody,
     PostApiStatsStudentsOfInterestParams,
     PostApiStatsSubjectClassStatistics200,
+    PostApiStatsSubjectClassStatisticsBody,
     PostApiStatsSubjectClassStatisticsParams,
     PostApiStatsSubjectPassFailRate200,
+    PostApiStatsSubjectPassFailRateBody,
     PutManySubjectClass200,
+    Room200Item,
+    Room400,
     SerializedFields,
     StudentBySubjectClassSemesterParams,
     SubjectClasses,
+    TrainingField200Item,
+    TrainingField400,
     UploadExcelCreateFixedClass,
     UploadExcelCreateFixedClass200,
     UploadExcelCreateFixedClass400,
@@ -133,6 +172,240 @@ type AwaitedInput<T> = PromiseLike<T> | T
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+export type trainingFieldResponse200 = {
+    data: TrainingField200Item[]
+    status: 200
+}
+
+export type trainingFieldResponse400 = {
+    data: TrainingField400
+    status: 400
+}
+
+export type trainingFieldResponseComposite = trainingFieldResponse200 | trainingFieldResponse400
+
+export type trainingFieldResponse = trainingFieldResponseComposite & {
+    headers: Headers
+}
+
+export const getTrainingFieldUrl = () => {
+    return '/api/training-field'
+}
+
+export const trainingField = async (options?: RequestInit): Promise<trainingFieldResponse> => {
+    return customTrainingFetch<trainingFieldResponse>(getTrainingFieldUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getTrainingFieldQueryKey = () => {
+    return ['/api/training-field'] as const
+}
+
+export const getTrainingFieldQueryOptions = <
+    TData = Awaited<ReturnType<typeof trainingField>>,
+    TError = TrainingField400,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getTrainingFieldQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof trainingField>>> = ({ signal }) =>
+        trainingField({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof trainingField>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type TrainingFieldQueryResult = NonNullable<Awaited<ReturnType<typeof trainingField>>>
+export type TrainingFieldQueryError = TrainingField400
+
+export function useTrainingField<
+    TData = Awaited<ReturnType<typeof trainingField>>,
+    TError = TrainingField400,
+>(
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof trainingField>>,
+                    TError,
+                    Awaited<ReturnType<typeof trainingField>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTrainingField<
+    TData = Awaited<ReturnType<typeof trainingField>>,
+    TError = TrainingField400,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof trainingField>>,
+                    TError,
+                    Awaited<ReturnType<typeof trainingField>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTrainingField<
+    TData = Awaited<ReturnType<typeof trainingField>>,
+    TError = TrainingField400,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useTrainingField<
+    TData = Awaited<ReturnType<typeof trainingField>>,
+    TError = TrainingField400,
+>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof trainingField>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getTrainingFieldQueryOptions(options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type roomResponse200 = {
+    data: Room200Item[]
+    status: 200
+}
+
+export type roomResponse400 = {
+    data: Room400
+    status: 400
+}
+
+export type roomResponseComposite = roomResponse200 | roomResponse400
+
+export type roomResponse = roomResponseComposite & {
+    headers: Headers
+}
+
+export const getRoomUrl = () => {
+    return '/api/room'
+}
+
+export const room = async (options?: RequestInit): Promise<roomResponse> => {
+    return customTrainingFetch<roomResponse>(getRoomUrl(), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getRoomQueryKey = () => {
+    return ['/api/room'] as const
+}
+
+export const getRoomQueryOptions = <
+    TData = Awaited<ReturnType<typeof room>>,
+    TError = Room400,
+>(options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
+    request?: SecondParameter<typeof customTrainingFetch>
+}) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getRoomQueryKey()
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof room>>> = ({ signal }) =>
+        room({ signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof room>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type RoomQueryResult = NonNullable<Awaited<ReturnType<typeof room>>>
+export type RoomQueryError = Room400
+
+export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof room>>,
+                    TError,
+                    Awaited<ReturnType<typeof room>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>> &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof room>>,
+                    TError,
+                    Awaited<ReturnType<typeof room>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useRoom<TData = Awaited<ReturnType<typeof room>>, TError = Room400>(
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof room>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getRoomQueryOptions(options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
 
 /**
  * Thêm mới danh sách học viên/sinh viên 
@@ -3385,6 +3658,7 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeUrl = () => {
 }
 
 export const postApiStatsStudentDistributionByTrainingObjectType = async (
+    postApiStatsStudentDistributionByTrainingObjectTypeBody: PostApiStatsStudentDistributionByTrainingObjectTypeBody,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByTrainingObjectTypeResponse> => {
     return customTrainingFetch<postApiStatsStudentDistributionByTrainingObjectTypeResponse>(
@@ -3392,6 +3666,8 @@ export const postApiStatsStudentDistributionByTrainingObjectType = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeBody),
         }
     )
 }
@@ -3403,14 +3679,14 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptio
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
         TError,
-        void,
+        { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectType']
@@ -3422,9 +3698,11 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptio
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
-        void
-    > = () => {
-        return postApiStatsStudentDistributionByTrainingObjectType(requestOptions)
+        { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingObjectType(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3433,7 +3711,8 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeMutationOptio
 export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>
 >
-
+export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationBody =
+    PostApiStatsStudentDistributionByTrainingObjectTypeBody
 export type PostApiStatsStudentDistributionByTrainingObjectTypeMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByTrainingObjectType = <
@@ -3444,7 +3723,7 @@ export const usePostApiStatsStudentDistributionByTrainingObjectType = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
             TError,
-            void,
+            { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -3453,7 +3732,7 @@ export const usePostApiStatsStudentDistributionByTrainingObjectType = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectType>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByTrainingObjectTypeBody },
     TContext
 > => {
     const mutationOptions =
@@ -3480,6 +3759,7 @@ export const getPostApiStatsStudentDistributionByTrainingLevelUrl = () => {
 }
 
 export const postApiStatsStudentDistributionByTrainingLevel = async (
+    postApiStatsStudentDistributionByTrainingLevelBody: PostApiStatsStudentDistributionByTrainingLevelBody,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByTrainingLevelResponse> => {
     return customTrainingFetch<postApiStatsStudentDistributionByTrainingLevelResponse>(
@@ -3487,6 +3767,8 @@ export const postApiStatsStudentDistributionByTrainingLevel = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelBody),
         }
     )
 }
@@ -3498,14 +3780,14 @@ export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = 
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
         TError,
-        void,
+        { data: PostApiStatsStudentDistributionByTrainingLevelBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByTrainingLevelBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingLevel']
@@ -3517,9 +3799,11 @@ export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = 
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
-        void
-    > = () => {
-        return postApiStatsStudentDistributionByTrainingLevel(requestOptions)
+        { data: PostApiStatsStudentDistributionByTrainingLevelBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingLevel(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3528,7 +3812,8 @@ export const getPostApiStatsStudentDistributionByTrainingLevelMutationOptions = 
 export type PostApiStatsStudentDistributionByTrainingLevelMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>
 >
-
+export type PostApiStatsStudentDistributionByTrainingLevelMutationBody =
+    PostApiStatsStudentDistributionByTrainingLevelBody
 export type PostApiStatsStudentDistributionByTrainingLevelMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByTrainingLevel = <
@@ -3539,7 +3824,7 @@ export const usePostApiStatsStudentDistributionByTrainingLevel = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
             TError,
-            void,
+            { data: PostApiStatsStudentDistributionByTrainingLevelBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -3548,7 +3833,7 @@ export const usePostApiStatsStudentDistributionByTrainingLevel = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevel>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByTrainingLevelBody },
     TContext
 > => {
     const mutationOptions =
@@ -3575,6 +3860,7 @@ export const getPostApiStatsStudentDistributionByTrainingCourseUrl = () => {
 }
 
 export const postApiStatsStudentDistributionByTrainingCourse = async (
+    postApiStatsStudentDistributionByTrainingCourseBody: PostApiStatsStudentDistributionByTrainingCourseBody,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByTrainingCourseResponse> => {
     return customTrainingFetch<postApiStatsStudentDistributionByTrainingCourseResponse>(
@@ -3582,6 +3868,8 @@ export const postApiStatsStudentDistributionByTrainingCourse = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseBody),
         }
     )
 }
@@ -3593,14 +3881,14 @@ export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions =
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
         TError,
-        void,
+        { data: PostApiStatsStudentDistributionByTrainingCourseBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByTrainingCourseBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingCourse']
@@ -3612,9 +3900,11 @@ export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions =
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
-        void
-    > = () => {
-        return postApiStatsStudentDistributionByTrainingCourse(requestOptions)
+        { data: PostApiStatsStudentDistributionByTrainingCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByTrainingCourse(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3623,7 +3913,8 @@ export const getPostApiStatsStudentDistributionByTrainingCourseMutationOptions =
 export type PostApiStatsStudentDistributionByTrainingCourseMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>
 >
-
+export type PostApiStatsStudentDistributionByTrainingCourseMutationBody =
+    PostApiStatsStudentDistributionByTrainingCourseBody
 export type PostApiStatsStudentDistributionByTrainingCourseMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByTrainingCourse = <
@@ -3634,7 +3925,7 @@ export const usePostApiStatsStudentDistributionByTrainingCourse = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
             TError,
-            void,
+            { data: PostApiStatsStudentDistributionByTrainingCourseBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -3643,7 +3934,7 @@ export const usePostApiStatsStudentDistributionByTrainingCourse = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourse>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByTrainingCourseBody },
     TContext
 > => {
     const mutationOptions =
@@ -3670,6 +3961,7 @@ export const getPostApiStatsAverageEntryScoreByCourseUrl = () => {
 }
 
 export const postApiStatsAverageEntryScoreByCourse = async (
+    postApiStatsAverageEntryScoreByCourseBody: PostApiStatsAverageEntryScoreByCourseBody,
     options?: RequestInit
 ): Promise<postApiStatsAverageEntryScoreByCourseResponse> => {
     return customTrainingFetch<postApiStatsAverageEntryScoreByCourseResponse>(
@@ -3677,6 +3969,8 @@ export const postApiStatsAverageEntryScoreByCourse = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageEntryScoreByCourseBody),
         }
     )
 }
@@ -3688,14 +3982,14 @@ export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
         TError,
-        void,
+        { data: PostApiStatsAverageEntryScoreByCourseBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
     TError,
-    void,
+    { data: PostApiStatsAverageEntryScoreByCourseBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageEntryScoreByCourse']
@@ -3707,9 +4001,11 @@ export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
-        void
-    > = () => {
-        return postApiStatsAverageEntryScoreByCourse(requestOptions)
+        { data: PostApiStatsAverageEntryScoreByCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageEntryScoreByCourse(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3718,7 +4014,8 @@ export const getPostApiStatsAverageEntryScoreByCourseMutationOptions = <
 export type PostApiStatsAverageEntryScoreByCourseMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>
 >
-
+export type PostApiStatsAverageEntryScoreByCourseMutationBody =
+    PostApiStatsAverageEntryScoreByCourseBody
 export type PostApiStatsAverageEntryScoreByCourseMutationError = unknown
 
 export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown, TContext = unknown>(
@@ -3726,7 +4023,7 @@ export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown, TCont
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
             TError,
-            void,
+            { data: PostApiStatsAverageEntryScoreByCourseBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -3735,7 +4032,7 @@ export const usePostApiStatsAverageEntryScoreByCourse = <TError = unknown, TCont
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourse>>,
     TError,
-    void,
+    { data: PostApiStatsAverageEntryScoreByCourseBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAverageEntryScoreByCourseMutationOptions(options)
@@ -3761,6 +4058,7 @@ export const getPostApiStatsAverageGpaByCourseUrl = () => {
 }
 
 export const postApiStatsAverageGpaByCourse = async (
+    postApiStatsAverageGpaByCourseBody: PostApiStatsAverageGpaByCourseBody,
     options?: RequestInit
 ): Promise<postApiStatsAverageGpaByCourseResponse> => {
     return customTrainingFetch<postApiStatsAverageGpaByCourseResponse>(
@@ -3768,6 +4066,8 @@ export const postApiStatsAverageGpaByCourse = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByCourseBody),
         }
     )
 }
@@ -3779,14 +4079,14 @@ export const getPostApiStatsAverageGpaByCourseMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
         TError,
-        void,
+        { data: PostApiStatsAverageGpaByCourseBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
     TError,
-    void,
+    { data: PostApiStatsAverageGpaByCourseBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByCourse']
@@ -3798,9 +4098,11 @@ export const getPostApiStatsAverageGpaByCourseMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
-        void
-    > = () => {
-        return postApiStatsAverageGpaByCourse(requestOptions)
+        { data: PostApiStatsAverageGpaByCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageGpaByCourse(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3809,7 +4111,7 @@ export const getPostApiStatsAverageGpaByCourseMutationOptions = <
 export type PostApiStatsAverageGpaByCourseMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>
 >
-
+export type PostApiStatsAverageGpaByCourseMutationBody = PostApiStatsAverageGpaByCourseBody
 export type PostApiStatsAverageGpaByCourseMutationError = unknown
 
 export const usePostApiStatsAverageGpaByCourse = <TError = unknown, TContext = unknown>(
@@ -3817,7 +4119,7 @@ export const usePostApiStatsAverageGpaByCourse = <TError = unknown, TContext = u
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
             TError,
-            void,
+            { data: PostApiStatsAverageGpaByCourseBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -3826,7 +4128,7 @@ export const usePostApiStatsAverageGpaByCourse = <TError = unknown, TContext = u
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourse>>,
     TError,
-    void,
+    { data: PostApiStatsAverageGpaByCourseBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAverageGpaByCourseMutationOptions(options)
@@ -3852,6 +4154,7 @@ export const getPostApiStatsGraduationRateByCourseUrl = () => {
 }
 
 export const postApiStatsGraduationRateByCourse = async (
+    postApiStatsGraduationRateByCourseBody: PostApiStatsGraduationRateByCourseBody,
     options?: RequestInit
 ): Promise<postApiStatsGraduationRateByCourseResponse> => {
     return customTrainingFetch<postApiStatsGraduationRateByCourseResponse>(
@@ -3859,6 +4162,8 @@ export const postApiStatsGraduationRateByCourse = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsGraduationRateByCourseBody),
         }
     )
 }
@@ -3870,14 +4175,14 @@ export const getPostApiStatsGraduationRateByCourseMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
         TError,
-        void,
+        { data: PostApiStatsGraduationRateByCourseBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
     TError,
-    void,
+    { data: PostApiStatsGraduationRateByCourseBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsGraduationRateByCourse']
@@ -3889,9 +4194,11 @@ export const getPostApiStatsGraduationRateByCourseMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
-        void
-    > = () => {
-        return postApiStatsGraduationRateByCourse(requestOptions)
+        { data: PostApiStatsGraduationRateByCourseBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsGraduationRateByCourse(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -3900,7 +4207,7 @@ export const getPostApiStatsGraduationRateByCourseMutationOptions = <
 export type PostApiStatsGraduationRateByCourseMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>
 >
-
+export type PostApiStatsGraduationRateByCourseMutationBody = PostApiStatsGraduationRateByCourseBody
 export type PostApiStatsGraduationRateByCourseMutationError = unknown
 
 export const usePostApiStatsGraduationRateByCourse = <TError = unknown, TContext = unknown>(
@@ -3908,7 +4215,7 @@ export const usePostApiStatsGraduationRateByCourse = <TError = unknown, TContext
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
             TError,
-            void,
+            { data: PostApiStatsGraduationRateByCourseBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -3917,7 +4224,7 @@ export const usePostApiStatsGraduationRateByCourse = <TError = unknown, TContext
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourse>>,
     TError,
-    void,
+    { data: PostApiStatsGraduationRateByCourseBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsGraduationRateByCourseMutationOptions(options)
@@ -4038,11 +4345,14 @@ export const getPostApiStatsKpiCardsUrl = () => {
 }
 
 export const postApiStatsKpiCards = async (
+    postApiStatsKpiCardsBody: PostApiStatsKpiCardsBody,
     options?: RequestInit
 ): Promise<postApiStatsKpiCardsResponse> => {
     return customTrainingFetch<postApiStatsKpiCardsResponse>(getPostApiStatsKpiCardsUrl(), {
         ...options,
         method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsKpiCardsBody),
     })
 }
 
@@ -4053,14 +4363,14 @@ export const getPostApiStatsKpiCardsMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsKpiCards>>,
         TError,
-        void,
+        { data: PostApiStatsKpiCardsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsKpiCards>>,
     TError,
-    void,
+    { data: PostApiStatsKpiCardsBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsKpiCards']
@@ -4072,9 +4382,11 @@ export const getPostApiStatsKpiCardsMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsKpiCards>>,
-        void
-    > = () => {
-        return postApiStatsKpiCards(requestOptions)
+        { data: PostApiStatsKpiCardsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsKpiCards(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4083,7 +4395,7 @@ export const getPostApiStatsKpiCardsMutationOptions = <
 export type PostApiStatsKpiCardsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsKpiCards>>
 >
-
+export type PostApiStatsKpiCardsMutationBody = PostApiStatsKpiCardsBody
 export type PostApiStatsKpiCardsMutationError = unknown
 
 export const usePostApiStatsKpiCards = <TError = unknown, TContext = unknown>(
@@ -4091,13 +4403,18 @@ export const usePostApiStatsKpiCards = <TError = unknown, TContext = unknown>(
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsKpiCards>>,
             TError,
-            void,
+            { data: PostApiStatsKpiCardsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof postApiStatsKpiCards>>, TError, void, TContext> => {
+): UseMutationResult<
+    Awaited<ReturnType<typeof postApiStatsKpiCards>>,
+    TError,
+    { data: PostApiStatsKpiCardsBody },
+    TContext
+> => {
     const mutationOptions = getPostApiStatsKpiCardsMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
@@ -4121,6 +4438,7 @@ export const getPostApiStatsStudentDistributionByProvinceUrl = () => {
 }
 
 export const postApiStatsStudentDistributionByProvince = async (
+    postApiStatsStudentDistributionByProvinceBody: PostApiStatsStudentDistributionByProvinceBody,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByProvinceResponse> => {
     return customTrainingFetch<postApiStatsStudentDistributionByProvinceResponse>(
@@ -4128,6 +4446,8 @@ export const postApiStatsStudentDistributionByProvince = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByProvinceBody),
         }
     )
 }
@@ -4139,14 +4459,14 @@ export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
         TError,
-        void,
+        { data: PostApiStatsStudentDistributionByProvinceBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByProvinceBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByProvince']
@@ -4158,9 +4478,11 @@ export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
-        void
-    > = () => {
-        return postApiStatsStudentDistributionByProvince(requestOptions)
+        { data: PostApiStatsStudentDistributionByProvinceBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentDistributionByProvince(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4169,7 +4491,8 @@ export const getPostApiStatsStudentDistributionByProvinceMutationOptions = <
 export type PostApiStatsStudentDistributionByProvinceMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>
 >
-
+export type PostApiStatsStudentDistributionByProvinceMutationBody =
+    PostApiStatsStudentDistributionByProvinceBody
 export type PostApiStatsStudentDistributionByProvinceMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByProvince = <TError = unknown, TContext = unknown>(
@@ -4177,7 +4500,7 @@ export const usePostApiStatsStudentDistributionByProvince = <TError = unknown, T
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
             TError,
-            void,
+            { data: PostApiStatsStudentDistributionByProvinceBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4186,7 +4509,7 @@ export const usePostApiStatsStudentDistributionByProvince = <TError = unknown, T
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvince>>,
     TError,
-    void,
+    { data: PostApiStatsStudentDistributionByProvinceBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsStudentDistributionByProvinceMutationOptions(options)
@@ -4226,6 +4549,7 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredUrl =
 }
 
 export const postApiStatsStudentDistributionByTrainingObjectTypeFiltered = async (
+    postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody,
     params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByTrainingObjectTypeFilteredResponse> => {
@@ -4234,6 +4558,8 @@ export const postApiStatsStudentDistributionByTrainingObjectTypeFiltered = async
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingObjectTypeFilteredBody),
         }
     )
 }
@@ -4245,14 +4571,20 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutat
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
         TError,
-        { params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams },
+        {
+            data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
+            params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
+        params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingObjectTypeFiltered']
@@ -4264,11 +4596,18 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutat
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
-        { params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams }
+        {
+            data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
+            params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingObjectTypeFiltered(params, requestOptions)
+        return postApiStatsStudentDistributionByTrainingObjectTypeFiltered(
+            data,
+            params,
+            requestOptions
+        )
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4277,7 +4616,8 @@ export const getPostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutat
 export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>
 >
-
+export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationBody =
+    PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
 export type PostApiStatsStudentDistributionByTrainingObjectTypeFilteredMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <
@@ -4288,7 +4628,10 @@ export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
             TError,
-            { params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams },
+            {
+                data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
+                params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4297,7 +4640,10 @@ export const usePostApiStatsStudentDistributionByTrainingObjectTypeFiltered = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingObjectTypeFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredBody
+        params: PostApiStatsStudentDistributionByTrainingObjectTypeFilteredParams
+    },
     TContext
 > => {
     const mutationOptions =
@@ -4338,6 +4684,7 @@ export const getPostApiStatsStudentDistributionByTrainingLevelFilteredUrl = (
 }
 
 export const postApiStatsStudentDistributionByTrainingLevelFiltered = async (
+    postApiStatsStudentDistributionByTrainingLevelFilteredBody: PostApiStatsStudentDistributionByTrainingLevelFilteredBody,
     params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByTrainingLevelFilteredResponse> => {
@@ -4346,6 +4693,8 @@ export const postApiStatsStudentDistributionByTrainingLevelFiltered = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingLevelFilteredBody),
         }
     )
 }
@@ -4357,14 +4706,20 @@ export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOp
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
         TError,
-        { params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams },
+        {
+            data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody
+            params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody
+        params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingLevelFiltered']
@@ -4376,11 +4731,14 @@ export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOp
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
-        { params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams }
+        {
+            data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody
+            params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingLevelFiltered(params, requestOptions)
+        return postApiStatsStudentDistributionByTrainingLevelFiltered(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4389,7 +4747,8 @@ export const getPostApiStatsStudentDistributionByTrainingLevelFilteredMutationOp
 export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>
 >
-
+export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationBody =
+    PostApiStatsStudentDistributionByTrainingLevelFilteredBody
 export type PostApiStatsStudentDistributionByTrainingLevelFilteredMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <
@@ -4400,7 +4759,10 @@ export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
             TError,
-            { params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams },
+            {
+                data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody
+                params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4409,7 +4771,10 @@ export const usePostApiStatsStudentDistributionByTrainingLevelFiltered = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingLevelFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByTrainingLevelFilteredBody
+        params: PostApiStatsStudentDistributionByTrainingLevelFilteredParams
+    },
     TContext
 > => {
     const mutationOptions =
@@ -4450,6 +4815,7 @@ export const getPostApiStatsStudentDistributionByTrainingCourseFilteredUrl = (
 }
 
 export const postApiStatsStudentDistributionByTrainingCourseFiltered = async (
+    postApiStatsStudentDistributionByTrainingCourseFilteredBody: PostApiStatsStudentDistributionByTrainingCourseFilteredBody,
     params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByTrainingCourseFilteredResponse> => {
@@ -4458,6 +4824,8 @@ export const postApiStatsStudentDistributionByTrainingCourseFiltered = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByTrainingCourseFilteredBody),
         }
     )
 }
@@ -4469,14 +4837,20 @@ export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationO
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
         TError,
-        { params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams },
+        {
+            data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody
+            params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody
+        params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByTrainingCourseFiltered']
@@ -4488,11 +4862,14 @@ export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationO
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
-        { params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams }
+        {
+            data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody
+            params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsStudentDistributionByTrainingCourseFiltered(params, requestOptions)
+        return postApiStatsStudentDistributionByTrainingCourseFiltered(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4501,7 +4878,8 @@ export const getPostApiStatsStudentDistributionByTrainingCourseFilteredMutationO
 export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>
 >
-
+export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationBody =
+    PostApiStatsStudentDistributionByTrainingCourseFilteredBody
 export type PostApiStatsStudentDistributionByTrainingCourseFilteredMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <
@@ -4512,7 +4890,10 @@ export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
             TError,
-            { params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams },
+            {
+                data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody
+                params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4521,7 +4902,10 @@ export const usePostApiStatsStudentDistributionByTrainingCourseFiltered = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByTrainingCourseFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByTrainingCourseFilteredBody
+        params: PostApiStatsStudentDistributionByTrainingCourseFilteredParams
+    },
     TContext
 > => {
     const mutationOptions =
@@ -4562,6 +4946,7 @@ export const getPostApiStatsAverageEntryScoreByCourseFilteredUrl = (
 }
 
 export const postApiStatsAverageEntryScoreByCourseFiltered = async (
+    postApiStatsAverageEntryScoreByCourseFilteredBody: PostApiStatsAverageEntryScoreByCourseFilteredBody,
     params: PostApiStatsAverageEntryScoreByCourseFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsAverageEntryScoreByCourseFilteredResponse> => {
@@ -4570,6 +4955,8 @@ export const postApiStatsAverageEntryScoreByCourseFiltered = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageEntryScoreByCourseFilteredBody),
         }
     )
 }
@@ -4581,14 +4968,20 @@ export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
         TError,
-        { params: PostApiStatsAverageEntryScoreByCourseFilteredParams },
+        {
+            data: PostApiStatsAverageEntryScoreByCourseFilteredBody
+            params: PostApiStatsAverageEntryScoreByCourseFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
     TError,
-    { params: PostApiStatsAverageEntryScoreByCourseFilteredParams },
+    {
+        data: PostApiStatsAverageEntryScoreByCourseFilteredBody
+        params: PostApiStatsAverageEntryScoreByCourseFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageEntryScoreByCourseFiltered']
@@ -4600,11 +4993,14 @@ export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
-        { params: PostApiStatsAverageEntryScoreByCourseFilteredParams }
+        {
+            data: PostApiStatsAverageEntryScoreByCourseFilteredBody
+            params: PostApiStatsAverageEntryScoreByCourseFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsAverageEntryScoreByCourseFiltered(params, requestOptions)
+        return postApiStatsAverageEntryScoreByCourseFiltered(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4613,7 +5009,8 @@ export const getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions = <
 export type PostApiStatsAverageEntryScoreByCourseFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>
 >
-
+export type PostApiStatsAverageEntryScoreByCourseFilteredMutationBody =
+    PostApiStatsAverageEntryScoreByCourseFilteredBody
 export type PostApiStatsAverageEntryScoreByCourseFilteredMutationError = unknown
 
 export const usePostApiStatsAverageEntryScoreByCourseFiltered = <
@@ -4624,7 +5021,10 @@ export const usePostApiStatsAverageEntryScoreByCourseFiltered = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
             TError,
-            { params: PostApiStatsAverageEntryScoreByCourseFilteredParams },
+            {
+                data: PostApiStatsAverageEntryScoreByCourseFilteredBody
+                params: PostApiStatsAverageEntryScoreByCourseFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4633,7 +5033,10 @@ export const usePostApiStatsAverageEntryScoreByCourseFiltered = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAverageEntryScoreByCourseFiltered>>,
     TError,
-    { params: PostApiStatsAverageEntryScoreByCourseFilteredParams },
+    {
+        data: PostApiStatsAverageEntryScoreByCourseFilteredBody
+        params: PostApiStatsAverageEntryScoreByCourseFilteredParams
+    },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAverageEntryScoreByCourseFilteredMutationOptions(options)
@@ -4673,6 +5076,7 @@ export const getPostApiStatsAverageGpaByCourseFilteredUrl = (
 }
 
 export const postApiStatsAverageGpaByCourseFiltered = async (
+    postApiStatsAverageGpaByCourseFilteredBody: PostApiStatsAverageGpaByCourseFilteredBody,
     params: PostApiStatsAverageGpaByCourseFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsAverageGpaByCourseFilteredResponse> => {
@@ -4681,6 +5085,8 @@ export const postApiStatsAverageGpaByCourseFiltered = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByCourseFilteredBody),
         }
     )
 }
@@ -4692,14 +5098,20 @@ export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
         TError,
-        { params: PostApiStatsAverageGpaByCourseFilteredParams },
+        {
+            data: PostApiStatsAverageGpaByCourseFilteredBody
+            params: PostApiStatsAverageGpaByCourseFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
     TError,
-    { params: PostApiStatsAverageGpaByCourseFilteredParams },
+    {
+        data: PostApiStatsAverageGpaByCourseFilteredBody
+        params: PostApiStatsAverageGpaByCourseFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByCourseFiltered']
@@ -4711,11 +5123,14 @@ export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
-        { params: PostApiStatsAverageGpaByCourseFilteredParams }
+        {
+            data: PostApiStatsAverageGpaByCourseFilteredBody
+            params: PostApiStatsAverageGpaByCourseFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsAverageGpaByCourseFiltered(params, requestOptions)
+        return postApiStatsAverageGpaByCourseFiltered(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4724,7 +5139,8 @@ export const getPostApiStatsAverageGpaByCourseFilteredMutationOptions = <
 export type PostApiStatsAverageGpaByCourseFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>
 >
-
+export type PostApiStatsAverageGpaByCourseFilteredMutationBody =
+    PostApiStatsAverageGpaByCourseFilteredBody
 export type PostApiStatsAverageGpaByCourseFilteredMutationError = unknown
 
 export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown, TContext = unknown>(
@@ -4732,7 +5148,10 @@ export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown, TCon
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
             TError,
-            { params: PostApiStatsAverageGpaByCourseFilteredParams },
+            {
+                data: PostApiStatsAverageGpaByCourseFilteredBody
+                params: PostApiStatsAverageGpaByCourseFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4741,7 +5160,10 @@ export const usePostApiStatsAverageGpaByCourseFiltered = <TError = unknown, TCon
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByCourseFiltered>>,
     TError,
-    { params: PostApiStatsAverageGpaByCourseFilteredParams },
+    {
+        data: PostApiStatsAverageGpaByCourseFilteredBody
+        params: PostApiStatsAverageGpaByCourseFilteredParams
+    },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAverageGpaByCourseFilteredMutationOptions(options)
@@ -4781,6 +5203,7 @@ export const getPostApiStatsGraduationRateByCourseFilteredUrl = (
 }
 
 export const postApiStatsGraduationRateByCourseFiltered = async (
+    postApiStatsGraduationRateByCourseFilteredBody: PostApiStatsGraduationRateByCourseFilteredBody,
     params: PostApiStatsGraduationRateByCourseFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsGraduationRateByCourseFilteredResponse> => {
@@ -4789,6 +5212,8 @@ export const postApiStatsGraduationRateByCourseFiltered = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsGraduationRateByCourseFilteredBody),
         }
     )
 }
@@ -4800,14 +5225,20 @@ export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
         TError,
-        { params: PostApiStatsGraduationRateByCourseFilteredParams },
+        {
+            data: PostApiStatsGraduationRateByCourseFilteredBody
+            params: PostApiStatsGraduationRateByCourseFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
     TError,
-    { params: PostApiStatsGraduationRateByCourseFilteredParams },
+    {
+        data: PostApiStatsGraduationRateByCourseFilteredBody
+        params: PostApiStatsGraduationRateByCourseFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsGraduationRateByCourseFiltered']
@@ -4819,11 +5250,14 @@ export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
-        { params: PostApiStatsGraduationRateByCourseFilteredParams }
+        {
+            data: PostApiStatsGraduationRateByCourseFilteredBody
+            params: PostApiStatsGraduationRateByCourseFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsGraduationRateByCourseFiltered(params, requestOptions)
+        return postApiStatsGraduationRateByCourseFiltered(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4832,7 +5266,8 @@ export const getPostApiStatsGraduationRateByCourseFilteredMutationOptions = <
 export type PostApiStatsGraduationRateByCourseFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>
 >
-
+export type PostApiStatsGraduationRateByCourseFilteredMutationBody =
+    PostApiStatsGraduationRateByCourseFilteredBody
 export type PostApiStatsGraduationRateByCourseFilteredMutationError = unknown
 
 export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown, TContext = unknown>(
@@ -4840,7 +5275,10 @@ export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown, 
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
             TError,
-            { params: PostApiStatsGraduationRateByCourseFilteredParams },
+            {
+                data: PostApiStatsGraduationRateByCourseFilteredBody
+                params: PostApiStatsGraduationRateByCourseFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4849,7 +5287,10 @@ export const usePostApiStatsGraduationRateByCourseFiltered = <TError = unknown, 
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsGraduationRateByCourseFiltered>>,
     TError,
-    { params: PostApiStatsGraduationRateByCourseFilteredParams },
+    {
+        data: PostApiStatsGraduationRateByCourseFilteredBody
+        params: PostApiStatsGraduationRateByCourseFilteredParams
+    },
     TContext
 > => {
     const mutationOptions = getPostApiStatsGraduationRateByCourseFilteredMutationOptions(options)
@@ -4889,6 +5330,7 @@ export const getPostApiStatsAcademicPerformanceByYearFilteredUrl = (
 }
 
 export const postApiStatsAcademicPerformanceByYearFiltered = async (
+    postApiStatsAcademicPerformanceByYearFilteredBody: PostApiStatsAcademicPerformanceByYearFilteredBody,
     params: PostApiStatsAcademicPerformanceByYearFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsAcademicPerformanceByYearFilteredResponse> => {
@@ -4897,6 +5339,8 @@ export const postApiStatsAcademicPerformanceByYearFiltered = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAcademicPerformanceByYearFilteredBody),
         }
     )
 }
@@ -4908,14 +5352,20 @@ export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
         TError,
-        { params: PostApiStatsAcademicPerformanceByYearFilteredParams },
+        {
+            data: PostApiStatsAcademicPerformanceByYearFilteredBody
+            params: PostApiStatsAcademicPerformanceByYearFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
     TError,
-    { params: PostApiStatsAcademicPerformanceByYearFilteredParams },
+    {
+        data: PostApiStatsAcademicPerformanceByYearFilteredBody
+        params: PostApiStatsAcademicPerformanceByYearFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsAcademicPerformanceByYearFiltered']
@@ -4927,11 +5377,14 @@ export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
-        { params: PostApiStatsAcademicPerformanceByYearFilteredParams }
+        {
+            data: PostApiStatsAcademicPerformanceByYearFilteredBody
+            params: PostApiStatsAcademicPerformanceByYearFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsAcademicPerformanceByYearFiltered(params, requestOptions)
+        return postApiStatsAcademicPerformanceByYearFiltered(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -4940,7 +5393,8 @@ export const getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions = <
 export type PostApiStatsAcademicPerformanceByYearFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>
 >
-
+export type PostApiStatsAcademicPerformanceByYearFilteredMutationBody =
+    PostApiStatsAcademicPerformanceByYearFilteredBody
 export type PostApiStatsAcademicPerformanceByYearFilteredMutationError = unknown
 
 export const usePostApiStatsAcademicPerformanceByYearFiltered = <
@@ -4951,7 +5405,10 @@ export const usePostApiStatsAcademicPerformanceByYearFiltered = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
             TError,
-            { params: PostApiStatsAcademicPerformanceByYearFilteredParams },
+            {
+                data: PostApiStatsAcademicPerformanceByYearFilteredBody
+                params: PostApiStatsAcademicPerformanceByYearFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -4960,7 +5417,10 @@ export const usePostApiStatsAcademicPerformanceByYearFiltered = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAcademicPerformanceByYearFiltered>>,
     TError,
-    { params: PostApiStatsAcademicPerformanceByYearFilteredParams },
+    {
+        data: PostApiStatsAcademicPerformanceByYearFilteredBody
+        params: PostApiStatsAcademicPerformanceByYearFilteredParams
+    },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAcademicPerformanceByYearFilteredMutationOptions(options)
@@ -5000,6 +5460,7 @@ export const getPostApiStatsStudentDistributionByProvinceFilteredUrl = (
 }
 
 export const postApiStatsStudentDistributionByProvinceFiltered = async (
+    postApiStatsStudentDistributionByProvinceFilteredBody: PostApiStatsStudentDistributionByProvinceFilteredBody,
     params: PostApiStatsStudentDistributionByProvinceFilteredParams,
     options?: RequestInit
 ): Promise<postApiStatsStudentDistributionByProvinceFilteredResponse> => {
@@ -5008,6 +5469,8 @@ export const postApiStatsStudentDistributionByProvinceFiltered = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentDistributionByProvinceFilteredBody),
         }
     )
 }
@@ -5019,14 +5482,20 @@ export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
         TError,
-        { params: PostApiStatsStudentDistributionByProvinceFilteredParams },
+        {
+            data: PostApiStatsStudentDistributionByProvinceFilteredBody
+            params: PostApiStatsStudentDistributionByProvinceFilteredParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByProvinceFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByProvinceFilteredBody
+        params: PostApiStatsStudentDistributionByProvinceFilteredParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentDistributionByProvinceFiltered']
@@ -5038,11 +5507,14 @@ export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
-        { params: PostApiStatsStudentDistributionByProvinceFilteredParams }
+        {
+            data: PostApiStatsStudentDistributionByProvinceFilteredBody
+            params: PostApiStatsStudentDistributionByProvinceFilteredParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsStudentDistributionByProvinceFiltered(params, requestOptions)
+        return postApiStatsStudentDistributionByProvinceFiltered(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5051,7 +5523,8 @@ export const getPostApiStatsStudentDistributionByProvinceFilteredMutationOptions
 export type PostApiStatsStudentDistributionByProvinceFilteredMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>
 >
-
+export type PostApiStatsStudentDistributionByProvinceFilteredMutationBody =
+    PostApiStatsStudentDistributionByProvinceFilteredBody
 export type PostApiStatsStudentDistributionByProvinceFilteredMutationError = unknown
 
 export const usePostApiStatsStudentDistributionByProvinceFiltered = <
@@ -5062,7 +5535,10 @@ export const usePostApiStatsStudentDistributionByProvinceFiltered = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
             TError,
-            { params: PostApiStatsStudentDistributionByProvinceFilteredParams },
+            {
+                data: PostApiStatsStudentDistributionByProvinceFilteredBody
+                params: PostApiStatsStudentDistributionByProvinceFilteredParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5071,7 +5547,10 @@ export const usePostApiStatsStudentDistributionByProvinceFiltered = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentDistributionByProvinceFiltered>>,
     TError,
-    { params: PostApiStatsStudentDistributionByProvinceFilteredParams },
+    {
+        data: PostApiStatsStudentDistributionByProvinceFilteredBody
+        params: PostApiStatsStudentDistributionByProvinceFilteredParams
+    },
     TContext
 > => {
     const mutationOptions =
@@ -5112,6 +5591,7 @@ export const getPostApiStatsStudentsOfInterestUrl = (
 }
 
 export const postApiStatsStudentsOfInterest = async (
+    postApiStatsStudentsOfInterestBody: PostApiStatsStudentsOfInterestBody,
     params?: PostApiStatsStudentsOfInterestParams,
     options?: RequestInit
 ): Promise<postApiStatsStudentsOfInterestResponse> => {
@@ -5120,6 +5600,8 @@ export const postApiStatsStudentsOfInterest = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentsOfInterestBody),
         }
     )
 }
@@ -5131,14 +5613,14 @@ export const getPostApiStatsStudentsOfInterestMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
         TError,
-        { params?: PostApiStatsStudentsOfInterestParams },
+        { data: PostApiStatsStudentsOfInterestBody; params?: PostApiStatsStudentsOfInterestParams },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
     TError,
-    { params?: PostApiStatsStudentsOfInterestParams },
+    { data: PostApiStatsStudentsOfInterestBody; params?: PostApiStatsStudentsOfInterestParams },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentsOfInterest']
@@ -5150,11 +5632,11 @@ export const getPostApiStatsStudentsOfInterestMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
-        { params?: PostApiStatsStudentsOfInterestParams }
+        { data: PostApiStatsStudentsOfInterestBody; params?: PostApiStatsStudentsOfInterestParams }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsStudentsOfInterest(params, requestOptions)
+        return postApiStatsStudentsOfInterest(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5163,7 +5645,7 @@ export const getPostApiStatsStudentsOfInterestMutationOptions = <
 export type PostApiStatsStudentsOfInterestMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>
 >
-
+export type PostApiStatsStudentsOfInterestMutationBody = PostApiStatsStudentsOfInterestBody
 export type PostApiStatsStudentsOfInterestMutationError = unknown
 
 export const usePostApiStatsStudentsOfInterest = <TError = unknown, TContext = unknown>(
@@ -5171,7 +5653,10 @@ export const usePostApiStatsStudentsOfInterest = <TError = unknown, TContext = u
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
             TError,
-            { params?: PostApiStatsStudentsOfInterestParams },
+            {
+                data: PostApiStatsStudentsOfInterestBody
+                params?: PostApiStatsStudentsOfInterestParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5180,7 +5665,7 @@ export const usePostApiStatsStudentsOfInterest = <TError = unknown, TContext = u
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentsOfInterest>>,
     TError,
-    { params?: PostApiStatsStudentsOfInterestParams },
+    { data: PostApiStatsStudentsOfInterestBody; params?: PostApiStatsStudentsOfInterestParams },
     TContext
 > => {
     const mutationOptions = getPostApiStatsStudentsOfInterestMutationOptions(options)
@@ -5206,6 +5691,7 @@ export const getPostApiStatsAverageGpaByFixedClassUrl = () => {
 }
 
 export const postApiStatsAverageGpaByFixedClass = async (
+    postApiStatsAverageGpaByFixedClassBody: PostApiStatsAverageGpaByFixedClassBody,
     options?: RequestInit
 ): Promise<postApiStatsAverageGpaByFixedClassResponse> => {
     return customTrainingFetch<postApiStatsAverageGpaByFixedClassResponse>(
@@ -5213,6 +5699,8 @@ export const postApiStatsAverageGpaByFixedClass = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByFixedClassBody),
         }
     )
 }
@@ -5224,14 +5712,14 @@ export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
         TError,
-        void,
+        { data: PostApiStatsAverageGpaByFixedClassBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
     TError,
-    void,
+    { data: PostApiStatsAverageGpaByFixedClassBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByFixedClass']
@@ -5243,9 +5731,11 @@ export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
-        void
-    > = () => {
-        return postApiStatsAverageGpaByFixedClass(requestOptions)
+        { data: PostApiStatsAverageGpaByFixedClassBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageGpaByFixedClass(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5254,7 +5744,7 @@ export const getPostApiStatsAverageGpaByFixedClassMutationOptions = <
 export type PostApiStatsAverageGpaByFixedClassMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>
 >
-
+export type PostApiStatsAverageGpaByFixedClassMutationBody = PostApiStatsAverageGpaByFixedClassBody
 export type PostApiStatsAverageGpaByFixedClassMutationError = unknown
 
 export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown, TContext = unknown>(
@@ -5262,7 +5752,7 @@ export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown, TContext
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
             TError,
-            void,
+            { data: PostApiStatsAverageGpaByFixedClassBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5271,7 +5761,7 @@ export const usePostApiStatsAverageGpaByFixedClass = <TError = unknown, TContext
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByFixedClass>>,
     TError,
-    void,
+    { data: PostApiStatsAverageGpaByFixedClassBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAverageGpaByFixedClassMutationOptions(options)
@@ -5297,6 +5787,7 @@ export const getPostApiStatsAverageGpaByTrainingMajorUrl = () => {
 }
 
 export const postApiStatsAverageGpaByTrainingMajor = async (
+    postApiStatsAverageGpaByTrainingMajorBody: PostApiStatsAverageGpaByTrainingMajorBody,
     options?: RequestInit
 ): Promise<postApiStatsAverageGpaByTrainingMajorResponse> => {
     return customTrainingFetch<postApiStatsAverageGpaByTrainingMajorResponse>(
@@ -5304,6 +5795,8 @@ export const postApiStatsAverageGpaByTrainingMajor = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageGpaByTrainingMajorBody),
         }
     )
 }
@@ -5315,14 +5808,14 @@ export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
         TError,
-        void,
+        { data: PostApiStatsAverageGpaByTrainingMajorBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
     TError,
-    void,
+    { data: PostApiStatsAverageGpaByTrainingMajorBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageGpaByTrainingMajor']
@@ -5334,9 +5827,11 @@ export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
-        void
-    > = () => {
-        return postApiStatsAverageGpaByTrainingMajor(requestOptions)
+        { data: PostApiStatsAverageGpaByTrainingMajorBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageGpaByTrainingMajor(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5345,7 +5840,8 @@ export const getPostApiStatsAverageGpaByTrainingMajorMutationOptions = <
 export type PostApiStatsAverageGpaByTrainingMajorMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>
 >
-
+export type PostApiStatsAverageGpaByTrainingMajorMutationBody =
+    PostApiStatsAverageGpaByTrainingMajorBody
 export type PostApiStatsAverageGpaByTrainingMajorMutationError = unknown
 
 export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown, TContext = unknown>(
@@ -5353,7 +5849,7 @@ export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown, TCont
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
             TError,
-            void,
+            { data: PostApiStatsAverageGpaByTrainingMajorBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5362,7 +5858,7 @@ export const usePostApiStatsAverageGpaByTrainingMajor = <TError = unknown, TCont
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAverageGpaByTrainingMajor>>,
     TError,
-    void,
+    { data: PostApiStatsAverageGpaByTrainingMajorBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAverageGpaByTrainingMajorMutationOptions(options)
@@ -5388,6 +5884,7 @@ export const getPostApiStatsSubjectPassFailRateUrl = () => {
 }
 
 export const postApiStatsSubjectPassFailRate = async (
+    postApiStatsSubjectPassFailRateBody: PostApiStatsSubjectPassFailRateBody,
     options?: RequestInit
 ): Promise<postApiStatsSubjectPassFailRateResponse> => {
     return customTrainingFetch<postApiStatsSubjectPassFailRateResponse>(
@@ -5395,6 +5892,8 @@ export const postApiStatsSubjectPassFailRate = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectPassFailRateBody),
         }
     )
 }
@@ -5406,14 +5905,14 @@ export const getPostApiStatsSubjectPassFailRateMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
         TError,
-        void,
+        { data: PostApiStatsSubjectPassFailRateBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
     TError,
-    void,
+    { data: PostApiStatsSubjectPassFailRateBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsSubjectPassFailRate']
@@ -5425,9 +5924,11 @@ export const getPostApiStatsSubjectPassFailRateMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
-        void
-    > = () => {
-        return postApiStatsSubjectPassFailRate(requestOptions)
+        { data: PostApiStatsSubjectPassFailRateBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsSubjectPassFailRate(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5436,7 +5937,7 @@ export const getPostApiStatsSubjectPassFailRateMutationOptions = <
 export type PostApiStatsSubjectPassFailRateMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>
 >
-
+export type PostApiStatsSubjectPassFailRateMutationBody = PostApiStatsSubjectPassFailRateBody
 export type PostApiStatsSubjectPassFailRateMutationError = unknown
 
 export const usePostApiStatsSubjectPassFailRate = <TError = unknown, TContext = unknown>(
@@ -5444,7 +5945,7 @@ export const usePostApiStatsSubjectPassFailRate = <TError = unknown, TContext = 
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
             TError,
-            void,
+            { data: PostApiStatsSubjectPassFailRateBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5453,7 +5954,7 @@ export const usePostApiStatsSubjectPassFailRate = <TError = unknown, TContext = 
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsSubjectPassFailRate>>,
     TError,
-    void,
+    { data: PostApiStatsSubjectPassFailRateBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsSubjectPassFailRateMutationOptions(options)
@@ -5479,6 +5980,7 @@ export const getPostApiStatsCurriculumStatisticsUrl = () => {
 }
 
 export const postApiStatsCurriculumStatistics = async (
+    postApiStatsCurriculumStatisticsBody: PostApiStatsCurriculumStatisticsBody,
     options?: RequestInit
 ): Promise<postApiStatsCurriculumStatisticsResponse> => {
     return customTrainingFetch<postApiStatsCurriculumStatisticsResponse>(
@@ -5486,6 +5988,8 @@ export const postApiStatsCurriculumStatistics = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsCurriculumStatisticsBody),
         }
     )
 }
@@ -5497,14 +6001,14 @@ export const getPostApiStatsCurriculumStatisticsMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
         TError,
-        void,
+        { data: PostApiStatsCurriculumStatisticsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
     TError,
-    void,
+    { data: PostApiStatsCurriculumStatisticsBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsCurriculumStatistics']
@@ -5516,9 +6020,11 @@ export const getPostApiStatsCurriculumStatisticsMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
-        void
-    > = () => {
-        return postApiStatsCurriculumStatistics(requestOptions)
+        { data: PostApiStatsCurriculumStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsCurriculumStatistics(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5527,7 +6033,7 @@ export const getPostApiStatsCurriculumStatisticsMutationOptions = <
 export type PostApiStatsCurriculumStatisticsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>
 >
-
+export type PostApiStatsCurriculumStatisticsMutationBody = PostApiStatsCurriculumStatisticsBody
 export type PostApiStatsCurriculumStatisticsMutationError = unknown
 
 export const usePostApiStatsCurriculumStatistics = <TError = unknown, TContext = unknown>(
@@ -5535,7 +6041,7 @@ export const usePostApiStatsCurriculumStatistics = <TError = unknown, TContext =
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
             TError,
-            void,
+            { data: PostApiStatsCurriculumStatisticsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5544,7 +6050,7 @@ export const usePostApiStatsCurriculumStatistics = <TError = unknown, TContext =
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsCurriculumStatistics>>,
     TError,
-    void,
+    { data: PostApiStatsCurriculumStatisticsBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsCurriculumStatisticsMutationOptions(options)
@@ -5584,6 +6090,7 @@ export const getPostApiStatsSubjectClassStatisticsUrl = (
 }
 
 export const postApiStatsSubjectClassStatistics = async (
+    postApiStatsSubjectClassStatisticsBody: PostApiStatsSubjectClassStatisticsBody,
     params: PostApiStatsSubjectClassStatisticsParams,
     options?: RequestInit
 ): Promise<postApiStatsSubjectClassStatisticsResponse> => {
@@ -5592,6 +6099,8 @@ export const postApiStatsSubjectClassStatistics = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsSubjectClassStatisticsBody),
         }
     )
 }
@@ -5603,14 +6112,20 @@ export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
         TError,
-        { params: PostApiStatsSubjectClassStatisticsParams },
+        {
+            data: PostApiStatsSubjectClassStatisticsBody
+            params: PostApiStatsSubjectClassStatisticsParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
     TError,
-    { params: PostApiStatsSubjectClassStatisticsParams },
+    {
+        data: PostApiStatsSubjectClassStatisticsBody
+        params: PostApiStatsSubjectClassStatisticsParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsSubjectClassStatistics']
@@ -5622,11 +6137,14 @@ export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
-        { params: PostApiStatsSubjectClassStatisticsParams }
+        {
+            data: PostApiStatsSubjectClassStatisticsBody
+            params: PostApiStatsSubjectClassStatisticsParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsSubjectClassStatistics(params, requestOptions)
+        return postApiStatsSubjectClassStatistics(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5635,7 +6153,7 @@ export const getPostApiStatsSubjectClassStatisticsMutationOptions = <
 export type PostApiStatsSubjectClassStatisticsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>
 >
-
+export type PostApiStatsSubjectClassStatisticsMutationBody = PostApiStatsSubjectClassStatisticsBody
 export type PostApiStatsSubjectClassStatisticsMutationError = unknown
 
 export const usePostApiStatsSubjectClassStatistics = <TError = unknown, TContext = unknown>(
@@ -5643,7 +6161,10 @@ export const usePostApiStatsSubjectClassStatistics = <TError = unknown, TContext
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
             TError,
-            { params: PostApiStatsSubjectClassStatisticsParams },
+            {
+                data: PostApiStatsSubjectClassStatisticsBody
+                params: PostApiStatsSubjectClassStatisticsParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5652,7 +6173,10 @@ export const usePostApiStatsSubjectClassStatistics = <TError = unknown, TContext
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsSubjectClassStatistics>>,
     TError,
-    { params: PostApiStatsSubjectClassStatisticsParams },
+    {
+        data: PostApiStatsSubjectClassStatisticsBody
+        params: PostApiStatsSubjectClassStatisticsParams
+    },
     TContext
 > => {
     const mutationOptions = getPostApiStatsSubjectClassStatisticsMutationOptions(options)
@@ -5676,6 +6200,7 @@ export const getPostApiStatsLecturerWorkloadUrl = () => {
 }
 
 export const postApiStatsLecturerWorkload = async (
+    postApiStatsLecturerWorkloadBody: PostApiStatsLecturerWorkloadBody,
     options?: RequestInit
 ): Promise<postApiStatsLecturerWorkloadResponse> => {
     return customTrainingFetch<postApiStatsLecturerWorkloadResponse>(
@@ -5683,6 +6208,8 @@ export const postApiStatsLecturerWorkload = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsLecturerWorkloadBody),
         }
     )
 }
@@ -5694,14 +6221,14 @@ export const getPostApiStatsLecturerWorkloadMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
         TError,
-        void,
+        { data: PostApiStatsLecturerWorkloadBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
     TError,
-    void,
+    { data: PostApiStatsLecturerWorkloadBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsLecturerWorkload']
@@ -5713,9 +6240,11 @@ export const getPostApiStatsLecturerWorkloadMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
-        void
-    > = () => {
-        return postApiStatsLecturerWorkload(requestOptions)
+        { data: PostApiStatsLecturerWorkloadBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsLecturerWorkload(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5724,7 +6253,7 @@ export const getPostApiStatsLecturerWorkloadMutationOptions = <
 export type PostApiStatsLecturerWorkloadMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>
 >
-
+export type PostApiStatsLecturerWorkloadMutationBody = PostApiStatsLecturerWorkloadBody
 export type PostApiStatsLecturerWorkloadMutationError = unknown
 
 export const usePostApiStatsLecturerWorkload = <TError = unknown, TContext = unknown>(
@@ -5732,7 +6261,7 @@ export const usePostApiStatsLecturerWorkload = <TError = unknown, TContext = unk
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
             TError,
-            void,
+            { data: PostApiStatsLecturerWorkloadBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5741,7 +6270,7 @@ export const usePostApiStatsLecturerWorkload = <TError = unknown, TContext = unk
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsLecturerWorkload>>,
     TError,
-    void,
+    { data: PostApiStatsLecturerWorkloadBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsLecturerWorkloadMutationOptions(options)
@@ -5767,6 +6296,7 @@ export const getPostApiStatsGraduationRankingStatisticsUrl = () => {
 }
 
 export const postApiStatsGraduationRankingStatistics = async (
+    postApiStatsGraduationRankingStatisticsBody: PostApiStatsGraduationRankingStatisticsBody,
     options?: RequestInit
 ): Promise<postApiStatsGraduationRankingStatisticsResponse> => {
     return customTrainingFetch<postApiStatsGraduationRankingStatisticsResponse>(
@@ -5774,6 +6304,8 @@ export const postApiStatsGraduationRankingStatistics = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsGraduationRankingStatisticsBody),
         }
     )
 }
@@ -5785,14 +6317,14 @@ export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
         TError,
-        void,
+        { data: PostApiStatsGraduationRankingStatisticsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
     TError,
-    void,
+    { data: PostApiStatsGraduationRankingStatisticsBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsGraduationRankingStatistics']
@@ -5804,9 +6336,11 @@ export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
-        void
-    > = () => {
-        return postApiStatsGraduationRankingStatistics(requestOptions)
+        { data: PostApiStatsGraduationRankingStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsGraduationRankingStatistics(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5815,7 +6349,8 @@ export const getPostApiStatsGraduationRankingStatisticsMutationOptions = <
 export type PostApiStatsGraduationRankingStatisticsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>
 >
-
+export type PostApiStatsGraduationRankingStatisticsMutationBody =
+    PostApiStatsGraduationRankingStatisticsBody
 export type PostApiStatsGraduationRankingStatisticsMutationError = unknown
 
 export const usePostApiStatsGraduationRankingStatistics = <TError = unknown, TContext = unknown>(
@@ -5823,7 +6358,7 @@ export const usePostApiStatsGraduationRankingStatistics = <TError = unknown, TCo
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
             TError,
-            void,
+            { data: PostApiStatsGraduationRankingStatisticsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5832,7 +6367,7 @@ export const usePostApiStatsGraduationRankingStatistics = <TError = unknown, TCo
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsGraduationRankingStatistics>>,
     TError,
-    void,
+    { data: PostApiStatsGraduationRankingStatisticsBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsGraduationRankingStatisticsMutationOptions(options)
@@ -5858,6 +6393,7 @@ export const getPostApiStatsStudentsForAcademicActionUrl = () => {
 }
 
 export const postApiStatsStudentsForAcademicAction = async (
+    postApiStatsStudentsForAcademicActionBody: PostApiStatsStudentsForAcademicActionBody,
     options?: RequestInit
 ): Promise<postApiStatsStudentsForAcademicActionResponse> => {
     return customTrainingFetch<postApiStatsStudentsForAcademicActionResponse>(
@@ -5865,6 +6401,8 @@ export const postApiStatsStudentsForAcademicAction = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsStudentsForAcademicActionBody),
         }
     )
 }
@@ -5876,14 +6414,14 @@ export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
         TError,
-        void,
+        { data: PostApiStatsStudentsForAcademicActionBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
     TError,
-    void,
+    { data: PostApiStatsStudentsForAcademicActionBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsStudentsForAcademicAction']
@@ -5895,9 +6433,11 @@ export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
-        void
-    > = () => {
-        return postApiStatsStudentsForAcademicAction(requestOptions)
+        { data: PostApiStatsStudentsForAcademicActionBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsStudentsForAcademicAction(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -5906,7 +6446,8 @@ export const getPostApiStatsStudentsForAcademicActionMutationOptions = <
 export type PostApiStatsStudentsForAcademicActionMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>
 >
-
+export type PostApiStatsStudentsForAcademicActionMutationBody =
+    PostApiStatsStudentsForAcademicActionBody
 export type PostApiStatsStudentsForAcademicActionMutationError = unknown
 
 export const usePostApiStatsStudentsForAcademicAction = <TError = unknown, TContext = unknown>(
@@ -5914,7 +6455,7 @@ export const usePostApiStatsStudentsForAcademicAction = <TError = unknown, TCont
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
             TError,
-            void,
+            { data: PostApiStatsStudentsForAcademicActionBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -5923,7 +6464,7 @@ export const usePostApiStatsStudentsForAcademicAction = <TError = unknown, TCont
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsStudentsForAcademicAction>>,
     TError,
-    void,
+    { data: PostApiStatsStudentsForAcademicActionBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsStudentsForAcademicActionMutationOptions(options)
@@ -5963,6 +6504,7 @@ export const getPostApiStatsExamParticipantsBySemesterUrl = (
 }
 
 export const postApiStatsExamParticipantsBySemester = async (
+    postApiStatsExamParticipantsBySemesterBody: PostApiStatsExamParticipantsBySemesterBody,
     params: PostApiStatsExamParticipantsBySemesterParams,
     options?: RequestInit
 ): Promise<postApiStatsExamParticipantsBySemesterResponse> => {
@@ -5971,6 +6513,8 @@ export const postApiStatsExamParticipantsBySemester = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsExamParticipantsBySemesterBody),
         }
     )
 }
@@ -5982,14 +6526,20 @@ export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
         TError,
-        { params: PostApiStatsExamParticipantsBySemesterParams },
+        {
+            data: PostApiStatsExamParticipantsBySemesterBody
+            params: PostApiStatsExamParticipantsBySemesterParams
+        },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
     TError,
-    { params: PostApiStatsExamParticipantsBySemesterParams },
+    {
+        data: PostApiStatsExamParticipantsBySemesterBody
+        params: PostApiStatsExamParticipantsBySemesterParams
+    },
     TContext
 > => {
     const mutationKey = ['postApiStatsExamParticipantsBySemester']
@@ -6001,11 +6551,14 @@ export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
-        { params: PostApiStatsExamParticipantsBySemesterParams }
+        {
+            data: PostApiStatsExamParticipantsBySemesterBody
+            params: PostApiStatsExamParticipantsBySemesterParams
+        }
     > = (props) => {
-        const { params } = props ?? {}
+        const { data, params } = props ?? {}
 
-        return postApiStatsExamParticipantsBySemester(params, requestOptions)
+        return postApiStatsExamParticipantsBySemester(data, params, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6014,7 +6567,8 @@ export const getPostApiStatsExamParticipantsBySemesterMutationOptions = <
 export type PostApiStatsExamParticipantsBySemesterMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>
 >
-
+export type PostApiStatsExamParticipantsBySemesterMutationBody =
+    PostApiStatsExamParticipantsBySemesterBody
 export type PostApiStatsExamParticipantsBySemesterMutationError = unknown
 
 export const usePostApiStatsExamParticipantsBySemester = <TError = unknown, TContext = unknown>(
@@ -6022,7 +6576,10 @@ export const usePostApiStatsExamParticipantsBySemester = <TError = unknown, TCon
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
             TError,
-            { params: PostApiStatsExamParticipantsBySemesterParams },
+            {
+                data: PostApiStatsExamParticipantsBySemesterBody
+                params: PostApiStatsExamParticipantsBySemesterParams
+            },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -6031,7 +6588,10 @@ export const usePostApiStatsExamParticipantsBySemester = <TError = unknown, TCon
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsExamParticipantsBySemester>>,
     TError,
-    { params: PostApiStatsExamParticipantsBySemesterParams },
+    {
+        data: PostApiStatsExamParticipantsBySemesterBody
+        params: PostApiStatsExamParticipantsBySemesterParams
+    },
     TContext
 > => {
     const mutationOptions = getPostApiStatsExamParticipantsBySemesterMutationOptions(options)
@@ -6057,6 +6617,7 @@ export const getPostApiStatsAverageExamScoreTrendUrl = () => {
 }
 
 export const postApiStatsAverageExamScoreTrend = async (
+    postApiStatsAverageExamScoreTrendBody: PostApiStatsAverageExamScoreTrendBody,
     options?: RequestInit
 ): Promise<postApiStatsAverageExamScoreTrendResponse> => {
     return customTrainingFetch<postApiStatsAverageExamScoreTrendResponse>(
@@ -6064,6 +6625,8 @@ export const postApiStatsAverageExamScoreTrend = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsAverageExamScoreTrendBody),
         }
     )
 }
@@ -6075,14 +6638,14 @@ export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
         TError,
-        void,
+        { data: PostApiStatsAverageExamScoreTrendBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
     TError,
-    void,
+    { data: PostApiStatsAverageExamScoreTrendBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsAverageExamScoreTrend']
@@ -6094,9 +6657,11 @@ export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
-        void
-    > = () => {
-        return postApiStatsAverageExamScoreTrend(requestOptions)
+        { data: PostApiStatsAverageExamScoreTrendBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsAverageExamScoreTrend(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6105,7 +6670,7 @@ export const getPostApiStatsAverageExamScoreTrendMutationOptions = <
 export type PostApiStatsAverageExamScoreTrendMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>
 >
-
+export type PostApiStatsAverageExamScoreTrendMutationBody = PostApiStatsAverageExamScoreTrendBody
 export type PostApiStatsAverageExamScoreTrendMutationError = unknown
 
 export const usePostApiStatsAverageExamScoreTrend = <TError = unknown, TContext = unknown>(
@@ -6113,7 +6678,7 @@ export const usePostApiStatsAverageExamScoreTrend = <TError = unknown, TContext 
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
             TError,
-            void,
+            { data: PostApiStatsAverageExamScoreTrendBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -6122,7 +6687,7 @@ export const usePostApiStatsAverageExamScoreTrend = <TError = unknown, TContext 
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsAverageExamScoreTrend>>,
     TError,
-    void,
+    { data: PostApiStatsAverageExamScoreTrendBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsAverageExamScoreTrendMutationOptions(options)
@@ -6148,6 +6713,7 @@ export const getPostApiStatsQuestionStatisticsUrl = () => {
 }
 
 export const postApiStatsQuestionStatistics = async (
+    postApiStatsQuestionStatisticsBody: PostApiStatsQuestionStatisticsBody,
     options?: RequestInit
 ): Promise<postApiStatsQuestionStatisticsResponse> => {
     return customTrainingFetch<postApiStatsQuestionStatisticsResponse>(
@@ -6155,6 +6721,8 @@ export const postApiStatsQuestionStatistics = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsQuestionStatisticsBody),
         }
     )
 }
@@ -6166,14 +6734,14 @@ export const getPostApiStatsQuestionStatisticsMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
         TError,
-        void,
+        { data: PostApiStatsQuestionStatisticsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
     TError,
-    void,
+    { data: PostApiStatsQuestionStatisticsBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsQuestionStatistics']
@@ -6185,9 +6753,11 @@ export const getPostApiStatsQuestionStatisticsMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
-        void
-    > = () => {
-        return postApiStatsQuestionStatistics(requestOptions)
+        { data: PostApiStatsQuestionStatisticsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsQuestionStatistics(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6196,7 +6766,7 @@ export const getPostApiStatsQuestionStatisticsMutationOptions = <
 export type PostApiStatsQuestionStatisticsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>
 >
-
+export type PostApiStatsQuestionStatisticsMutationBody = PostApiStatsQuestionStatisticsBody
 export type PostApiStatsQuestionStatisticsMutationError = unknown
 
 export const usePostApiStatsQuestionStatistics = <TError = unknown, TContext = unknown>(
@@ -6204,7 +6774,7 @@ export const usePostApiStatsQuestionStatistics = <TError = unknown, TContext = u
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
             TError,
-            void,
+            { data: PostApiStatsQuestionStatisticsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -6213,7 +6783,7 @@ export const usePostApiStatsQuestionStatistics = <TError = unknown, TContext = u
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsQuestionStatistics>>,
     TError,
-    void,
+    { data: PostApiStatsQuestionStatisticsBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsQuestionStatisticsMutationOptions(options)
@@ -6239,6 +6809,7 @@ export const getPostApiStatsHighestIncorrectAnswerRateQuestionsUrl = () => {
 }
 
 export const postApiStatsHighestIncorrectAnswerRateQuestions = async (
+    postApiStatsHighestIncorrectAnswerRateQuestionsBody: PostApiStatsHighestIncorrectAnswerRateQuestionsBody,
     options?: RequestInit
 ): Promise<postApiStatsHighestIncorrectAnswerRateQuestionsResponse> => {
     return customTrainingFetch<postApiStatsHighestIncorrectAnswerRateQuestionsResponse>(
@@ -6246,6 +6817,8 @@ export const postApiStatsHighestIncorrectAnswerRateQuestions = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsHighestIncorrectAnswerRateQuestionsBody),
         }
     )
 }
@@ -6257,14 +6830,14 @@ export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions =
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
         TError,
-        void,
+        { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
     TError,
-    void,
+    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsHighestIncorrectAnswerRateQuestions']
@@ -6276,9 +6849,11 @@ export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions =
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
-        void
-    > = () => {
-        return postApiStatsHighestIncorrectAnswerRateQuestions(requestOptions)
+        { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsHighestIncorrectAnswerRateQuestions(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6287,7 +6862,8 @@ export const getPostApiStatsHighestIncorrectAnswerRateQuestionsMutationOptions =
 export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>
 >
-
+export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationBody =
+    PostApiStatsHighestIncorrectAnswerRateQuestionsBody
 export type PostApiStatsHighestIncorrectAnswerRateQuestionsMutationError = unknown
 
 export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <
@@ -6298,7 +6874,7 @@ export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
             TError,
-            void,
+            { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -6307,7 +6883,7 @@ export const usePostApiStatsHighestIncorrectAnswerRateQuestions = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsHighestIncorrectAnswerRateQuestions>>,
     TError,
-    void,
+    { data: PostApiStatsHighestIncorrectAnswerRateQuestionsBody },
     TContext
 > => {
     const mutationOptions =
@@ -6334,6 +6910,7 @@ export const getPostApiStatsMostUsedQuestionsUrl = () => {
 }
 
 export const postApiStatsMostUsedQuestions = async (
+    postApiStatsMostUsedQuestionsBody: PostApiStatsMostUsedQuestionsBody,
     options?: RequestInit
 ): Promise<postApiStatsMostUsedQuestionsResponse> => {
     return customTrainingFetch<postApiStatsMostUsedQuestionsResponse>(
@@ -6341,6 +6918,8 @@ export const postApiStatsMostUsedQuestions = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsMostUsedQuestionsBody),
         }
     )
 }
@@ -6352,14 +6931,14 @@ export const getPostApiStatsMostUsedQuestionsMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
         TError,
-        void,
+        { data: PostApiStatsMostUsedQuestionsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
     TError,
-    void,
+    { data: PostApiStatsMostUsedQuestionsBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsMostUsedQuestions']
@@ -6371,9 +6950,11 @@ export const getPostApiStatsMostUsedQuestionsMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
-        void
-    > = () => {
-        return postApiStatsMostUsedQuestions(requestOptions)
+        { data: PostApiStatsMostUsedQuestionsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsMostUsedQuestions(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6382,7 +6963,7 @@ export const getPostApiStatsMostUsedQuestionsMutationOptions = <
 export type PostApiStatsMostUsedQuestionsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>
 >
-
+export type PostApiStatsMostUsedQuestionsMutationBody = PostApiStatsMostUsedQuestionsBody
 export type PostApiStatsMostUsedQuestionsMutationError = unknown
 
 export const usePostApiStatsMostUsedQuestions = <TError = unknown, TContext = unknown>(
@@ -6390,7 +6971,7 @@ export const usePostApiStatsMostUsedQuestions = <TError = unknown, TContext = un
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
             TError,
-            void,
+            { data: PostApiStatsMostUsedQuestionsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -6399,7 +6980,7 @@ export const usePostApiStatsMostUsedQuestions = <TError = unknown, TContext = un
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsMostUsedQuestions>>,
     TError,
-    void,
+    { data: PostApiStatsMostUsedQuestionsBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsMostUsedQuestionsMutationOptions(options)
@@ -6423,11 +7004,14 @@ export const getPostApiStatsDemographicsUrl = () => {
 }
 
 export const postApiStatsDemographics = async (
+    postApiStatsDemographicsBody: PostApiStatsDemographicsBody,
     options?: RequestInit
 ): Promise<postApiStatsDemographicsResponse> => {
     return customTrainingFetch<postApiStatsDemographicsResponse>(getPostApiStatsDemographicsUrl(), {
         ...options,
         method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(postApiStatsDemographicsBody),
     })
 }
 
@@ -6438,14 +7022,14 @@ export const getPostApiStatsDemographicsMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsDemographics>>,
         TError,
-        void,
+        { data: PostApiStatsDemographicsBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsDemographics>>,
     TError,
-    void,
+    { data: PostApiStatsDemographicsBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsDemographics']
@@ -6457,9 +7041,11 @@ export const getPostApiStatsDemographicsMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsDemographics>>,
-        void
-    > = () => {
-        return postApiStatsDemographics(requestOptions)
+        { data: PostApiStatsDemographicsBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsDemographics(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6468,7 +7054,7 @@ export const getPostApiStatsDemographicsMutationOptions = <
 export type PostApiStatsDemographicsMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsDemographics>>
 >
-
+export type PostApiStatsDemographicsMutationBody = PostApiStatsDemographicsBody
 export type PostApiStatsDemographicsMutationError = unknown
 
 export const usePostApiStatsDemographics = <TError = unknown, TContext = unknown>(
@@ -6476,7 +7062,7 @@ export const usePostApiStatsDemographics = <TError = unknown, TContext = unknown
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsDemographics>>,
             TError,
-            void,
+            { data: PostApiStatsDemographicsBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -6485,7 +7071,7 @@ export const usePostApiStatsDemographics = <TError = unknown, TContext = unknown
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsDemographics>>,
     TError,
-    void,
+    { data: PostApiStatsDemographicsBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsDemographicsMutationOptions(options)
@@ -6509,6 +7095,7 @@ export const getPostApiStatsEnrollmentTrendUrl = () => {
 }
 
 export const postApiStatsEnrollmentTrend = async (
+    postApiStatsEnrollmentTrendBody: PostApiStatsEnrollmentTrendBody,
     options?: RequestInit
 ): Promise<postApiStatsEnrollmentTrendResponse> => {
     return customTrainingFetch<postApiStatsEnrollmentTrendResponse>(
@@ -6516,6 +7103,8 @@ export const postApiStatsEnrollmentTrend = async (
         {
             ...options,
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(postApiStatsEnrollmentTrendBody),
         }
     )
 }
@@ -6527,14 +7116,14 @@ export const getPostApiStatsEnrollmentTrendMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
         TError,
-        void,
+        { data: PostApiStatsEnrollmentTrendBody },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
     TError,
-    void,
+    { data: PostApiStatsEnrollmentTrendBody },
     TContext
 > => {
     const mutationKey = ['postApiStatsEnrollmentTrend']
@@ -6546,9 +7135,11 @@ export const getPostApiStatsEnrollmentTrendMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
-        void
-    > = () => {
-        return postApiStatsEnrollmentTrend(requestOptions)
+        { data: PostApiStatsEnrollmentTrendBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return postApiStatsEnrollmentTrend(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
@@ -6557,7 +7148,7 @@ export const getPostApiStatsEnrollmentTrendMutationOptions = <
 export type PostApiStatsEnrollmentTrendMutationResult = NonNullable<
     Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>
 >
-
+export type PostApiStatsEnrollmentTrendMutationBody = PostApiStatsEnrollmentTrendBody
 export type PostApiStatsEnrollmentTrendMutationError = unknown
 
 export const usePostApiStatsEnrollmentTrend = <TError = unknown, TContext = unknown>(
@@ -6565,7 +7156,7 @@ export const usePostApiStatsEnrollmentTrend = <TError = unknown, TContext = unkn
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
             TError,
-            void,
+            { data: PostApiStatsEnrollmentTrendBody },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -6574,10 +7165,109 @@ export const usePostApiStatsEnrollmentTrend = <TError = unknown, TContext = unkn
 ): UseMutationResult<
     Awaited<ReturnType<typeof postApiStatsEnrollmentTrend>>,
     TError,
-    void,
+    { data: PostApiStatsEnrollmentTrendBody },
     TContext
 > => {
     const mutationOptions = getPostApiStatsEnrollmentTrendMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importLecturerResponse200 = {
+    data: ImportLecturer200
+    status: 200
+}
+
+export type importLecturerResponse400 = {
+    data: ImportLecturer400
+    status: 400
+}
+
+export type importLecturerResponseComposite = importLecturerResponse200 | importLecturerResponse400
+
+export type importLecturerResponse = importLecturerResponseComposite & {
+    headers: Headers
+}
+
+export const getImportLecturerUrl = () => {
+    return '/api/import/import-lecturer'
+}
+
+export const importLecturer = async (
+    importLecturerBody: ImportLecturerBody,
+    options?: RequestInit
+): Promise<importLecturerResponse> => {
+    const formData = new FormData()
+    formData.append('file', importLecturerBody.file)
+    if (importLecturerBody.timeout !== undefined && importLecturerBody.timeout !== null) {
+        formData.append('timeout', importLecturerBody.timeout.toString())
+    }
+
+    return customTrainingFetch<importLecturerResponse>(getImportLecturerUrl(), {
+        ...options,
+        method: 'POST',
+        body: formData,
+    })
+}
+
+export const getImportLecturerMutationOptions = <
+    TError = ImportLecturer400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importLecturer>>,
+        TError,
+        { data: ImportLecturerBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importLecturer>>,
+    TError,
+    { data: ImportLecturerBody },
+    TContext
+> => {
+    const mutationKey = ['importLecturer']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importLecturer>>,
+        { data: ImportLecturerBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importLecturer(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportLecturerMutationResult = NonNullable<Awaited<ReturnType<typeof importLecturer>>>
+export type ImportLecturerMutationBody = ImportLecturerBody
+export type ImportLecturerMutationError = ImportLecturer400
+
+export const useImportLecturer = <TError = ImportLecturer400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importLecturer>>,
+            TError,
+            { data: ImportLecturerBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importLecturer>>,
+    TError,
+    { data: ImportLecturerBody },
+    TContext
+> => {
+    const mutationOptions = getImportLecturerMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

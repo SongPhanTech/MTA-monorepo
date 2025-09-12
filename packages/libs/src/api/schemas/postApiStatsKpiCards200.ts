@@ -5,10 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { PostApiStatsKpiCards200DataItem } from './postApiStatsKpiCards200DataItem'
+import type { PostApiStatsKpiCards200Summary } from './postApiStatsKpiCards200Summary'
+
 export type PostApiStatsKpiCards200 = {
-    totalStudents: number
-    totalLecturers: number
-    studentLecturerRatio: number
-    activeCurricula: number
-    academicWarningRate: number
+    summary: PostApiStatsKpiCards200Summary
+    count: number
+    preview?: boolean
+    data: PostApiStatsKpiCards200DataItem[]
 }

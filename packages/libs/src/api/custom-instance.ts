@@ -75,6 +75,15 @@ export const customExamFetch = async <T>(url: string, options: RequestInit): Pro
     return { status: response.status, data, headers: response.headers } as T
 }
 
+export const customPortalFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
+    const requestUrl = getUrl('https://api.portal.mta.swantech.vn', url)
+
+    const response = await fetchInstance(requestUrl, options)
+    const data = await getBody<T>(response)
+
+    return { status: response.status, data, headers: response.headers } as T
+}
+
 export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl('https://mta.swantech.vn', url)
 
