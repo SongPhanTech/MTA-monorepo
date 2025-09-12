@@ -57,7 +57,7 @@ const PutSemesterModal = () => {
             }
             if (input?.semesterId) {
                 await updateSemester({
-                    data: data,
+                    data,
                     where: {
                         id: input?.semesterId,
                     },
@@ -65,11 +65,10 @@ const PutSemesterModal = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createSemester({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }
-            // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['Semester'],
             })

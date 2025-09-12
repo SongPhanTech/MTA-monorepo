@@ -912,14 +912,14 @@ export default function SubjectClassScore() {
                                     const isEditable = record.subjectClass?.scoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         : false
-
+                                    const openClock = record.subjectClass?.isLockScore
                                     const Score =
                                         scoreCC.find((item) => item.id === record.id)?.value ??
                                         (record.attendanceScore !== undefined
                                             ? Number(record.attendanceScore)
                                             : null)
 
-                                    if (isEditable) {
+                                    if (isEditable && !openClock) {
                                         const currentScore =
                                             Score !== null && Score !== undefined ? Score : ''
                                         const isInvalid =
@@ -987,14 +987,14 @@ export default function SubjectClassScore() {
                                     const isEditable = record.subjectClass?.scoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         : false
-
+                                    const openClock = record.subjectClass?.isLockScore
                                     const Score =
                                         scoreTX.find((item) => item.id === record.id)?.value ??
                                         (record.midtermScore !== undefined
                                             ? Number(record.midtermScore)
                                             : null)
 
-                                    if (isEditable) {
+                                    if (isEditable && !openClock) {
                                         const currentScore =
                                             Score !== null && Score !== undefined ? Score : ''
                                         const isInvalid =
@@ -1062,7 +1062,6 @@ export default function SubjectClassScore() {
                                     const isEditable = record.subjectClass?.examScoreDeadline
                                         ? dayjs().isBefore(record.subjectClass.examScoreDeadline)
                                         : false
-
                                     const Score =
                                         scoreThi.find((item) => item.id === record.id)?.value ??
                                         (record.examScore !== undefined

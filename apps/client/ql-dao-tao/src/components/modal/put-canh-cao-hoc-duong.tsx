@@ -41,7 +41,7 @@ const PutDisciplinaryWarningReason = () => {
             }
             if (id) {
                 await updateDisciplinaryWarningReason({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -49,7 +49,7 @@ const PutDisciplinaryWarningReason = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createDisciplinaryWarningReason({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

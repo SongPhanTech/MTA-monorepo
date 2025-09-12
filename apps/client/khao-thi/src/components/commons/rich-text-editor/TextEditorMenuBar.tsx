@@ -129,7 +129,7 @@ export default function TextEditorMenuBar({ editor, id }: { editor: Editor | nul
         if (!editor) return
         if (id) {
             onOpenPinEvidenceToPeriod({
-                id: id,
+                id,
                 changeValue: (value) => {
                     insertPinFormula(value)
                 },

@@ -43,7 +43,7 @@ const PutDiplomaType = () => {
             }
             if (id) {
                 await updateDiplomaType({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -51,7 +51,7 @@ const PutDiplomaType = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createDiplomaType({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

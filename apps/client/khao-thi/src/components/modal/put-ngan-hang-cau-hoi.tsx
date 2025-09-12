@@ -40,7 +40,7 @@ const PutQuestionBank = () => {
             }
             if (id) {
                 await updateQuestionBank({
-                    data: data,
+                    data,
                     where: {
                         id,
                     },
@@ -48,7 +48,7 @@ const PutQuestionBank = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createQuestionBank({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

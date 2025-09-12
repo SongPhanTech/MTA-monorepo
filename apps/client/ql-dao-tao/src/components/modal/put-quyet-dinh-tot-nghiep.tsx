@@ -116,7 +116,7 @@ const PutGraduationDecision = () => {
             }
             if (input?.id) {
                 await updateGraduationDecision({
-                    data: data,
+                    data,
                     where: {
                         id: input?.id,
                     },

@@ -86,7 +86,7 @@ const PutUserProfileStaffModal = () => {
                         staffTypeId: output.staffTypeId,
                     },
                     where: {
-                        id: id,
+                        id,
                     },
                 })
 

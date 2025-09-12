@@ -1,8 +1,6 @@
 import Table from '@components/commons/table'
-
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import type { FixedClass, SubjectClass } from '@workspace/db'
@@ -15,10 +13,9 @@ import {
 import { ROUTER_PATH } from '@workspace/router'
 import { Col, Row } from 'antd'
 import dayjs from 'dayjs'
-import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 dayjs.locale('vi')
 
@@ -40,11 +37,11 @@ export default function UserProfilePageLecture() {
         idCardNumber: undefined,
     })
 
-    const { data = [], refetch } = useFindManyLecturer({
-        where: {
-            userProfile: {
-                ...(filters.name
-                    ? {
+    const where = useMemo(
+        () => ({
+            ...(filters.name && filters.name !== ''
+                ? {
+                      userProfile: {
                           OR: [
                               {
                                   firstName: {
@@ -58,67 +55,87 @@ export default function UserProfilePageLecture() {
                                       mode: 'insensitive' as const,
                                   },
                               },
+                              {
+                                  fullname: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
                           ],
-                      }
-                    : {}),
-                ...(filters.idCardNumber
-                    ? {
+                      },
+                  }
+                : {}),
+            ...(filters.idCardNumber
+                ? {
+                      userProfile: {
                           idCardNumber: {
                               contains: filters.idCardNumber,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
-                      }
-                    : {}),
-                ...(filters.gender
-                    ? {
+                      },
+                  }
+                : {}),
+            ...(filters.gender
+                ? {
+                      userProfile: {
                           genderId: {
                               in: filters.gender,
                           },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
+                      },
+                  }
+                : {}),
+            ...(filters.dateOfBirth?.length === 2
+                ? {
+                      userProfile: {
                           dateOfBirth: {
                               gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
                               lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
                           },
-                      }
-                    : {}),
-                ...(filters.officerNumber
-                    ? {
+                      },
+                  }
+                : {}),
+            ...(filters.officerNumber
+                ? {
+                      userProfile: {
                           officerNumber: {
                               contains: filters.officerNumber,
-                              mode: 'insensitive',
+                              mode: 'insensitive' as const,
                           },
-                      }
-                    : {}),
-                ...(filters.academicRankType
-                    ? {
+                      },
+                  }
+                : {}),
+            ...(filters.academicRankType
+                ? {
+                      userProfile: {
                           academicRankTypeId: {
                               in: filters.academicRankType,
                           },
-                      }
-                    : {}),
-                ...(filters.academicDegreeType
-                    ? {
+                      },
+                  }
+                : {}),
+            ...(filters.academicDegreeType
+                ? {
+                      userProfile: {
                           academicDegreeTypeId: {
                               in: filters.academicDegreeType,
                           },
-                      }
-                    : {}),
-                ...(filters.rankId
-                    ? {
+                      },
+                  }
+                : {}),
+            ...(filters.rankId
+                ? {
+                      userProfile: {
                           rankId: {
                               in: filters.rankId,
                           },
-                      }
-                    : {}),
-            },
+                      },
+                  }
+                : {}),
             ...(filters.code
                 ? {
                       code: {
                           contains: filters.code,
-                          mode: 'insensitive',
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -136,7 +153,24 @@ export default function UserProfilePageLecture() {
                       },
                   }
                 : {}),
-        },
+        }),
+        [
+            filters.code,
+            filters.name,
+            filters.dateOfBirth,
+            filters.academicRankType,
+            filters.academicDegreeType,
+            filters.organization,
+            filters.gender,
+            filters.rankId,
+            filters.officerNumber,
+            filters.lecturerType,
+            filters.idCardNumber,
+        ]
+    )
+
+    const { data = [] } = useFindManyLecturer({
+        where,
         include: {
             userProfile: {
                 include: {
@@ -152,123 +186,24 @@ export default function UserProfilePageLecture() {
             manageFixedClass: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            userProfile: {
+                firstName: 'asc',
+            },
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const debouncedRefetch = useCallback(
-        _.debounce(() => {
-            refetch()
-        }, 500),
-        []
-    )
-
-    const { showSpinner, hideSpinner } = useSpinner()
+    const { data: count } = useCountLecturer({
+        where: {
+            ...where,
+            deletedAt: null,
+        },
+    })
 
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
-
-    const { data: count } = useCountLecturer({
-        where: {
-            userProfile: {
-                ...(filters.name
-                    ? {
-                          OR: [
-                              {
-                                  firstName: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                              },
-                              {
-                                  lastName: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                              },
-                          ],
-                      }
-                    : {}),
-                ...(filters.idCardNumber
-                    ? {
-                          idCardNumber: {
-                              contains: filters.idCardNumber,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.gender
-                    ? {
-                          genderId: {
-                              in: filters.gender,
-                          },
-                      }
-                    : {}),
-                ...(filters.dateOfBirth?.length === 2
-                    ? {
-                          dateOfBirth: {
-                              gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                              lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                          },
-                      }
-                    : {}),
-                ...(filters.officerNumber
-                    ? {
-                          officerNumber: {
-                              contains: filters.officerNumber,
-                              mode: 'insensitive',
-                          },
-                      }
-                    : {}),
-                ...(filters.academicRankType
-                    ? {
-                          academicRankTypeId: {
-                              in: filters.academicRankType,
-                          },
-                      }
-                    : {}),
-                ...(filters.academicDegreeType
-                    ? {
-                          academicDegreeTypeId: {
-                              in: filters.academicDegreeType,
-                          },
-                      }
-                    : {}),
-                ...(filters.rankId
-                    ? {
-                          rankId: {
-                              in: filters.rankId,
-                          },
-                      }
-                    : {}),
-            },
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.organization
-                ? {
-                      organizationId: {
-                          in: filters.organization,
-                      },
-                  }
-                : {}),
-            ...(filters.lecturerType
-                ? {
-                      lecturerTypeId: {
-                          in: filters.lecturerType,
-                      },
-                  }
-                : {}),
-        },
-    })
 
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
@@ -281,8 +216,8 @@ export default function UserProfilePageLecture() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Table
-                        setFilters={setFilters}
                         filters={filters}
+                        setFilters={setFilters}
                         columns={[
                             {
                                 title: 'STT',
@@ -379,10 +314,11 @@ export default function UserProfilePageLecture() {
                                                 paddingLeft: 16,
                                                 margin: 0,
                                             }}
+                                            className="text-left"
                                         >
                                             {record?.extraSubjectClasses?.map(
                                                 (val: SubjectClass) => (
-                                                    <li key={val.id}>{val.name}</li>
+                                                    <li key={val.id}>- {val.name}</li>
                                                 )
                                             )}
                                         </ul>
@@ -417,15 +353,10 @@ export default function UserProfilePageLecture() {
                         data={data}
                         rowKey="id"
                         onRowClick={(record) => handleRowClick(record)}
-                        // rowSelection={{
-                        //     selectedRowKeys,
-                        //     onChange: (selectedKeys) => setSelectedRowKeys(selectedKeys),
-                        // }}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
                             total: count,
-
                             onChange: (page, pageSize) => {
                                 if (numberOfPages === pageSize) {
                                     setCurrentPage(page)
@@ -434,8 +365,6 @@ export default function UserProfilePageLecture() {
                                     setNumberOfPages(pageSize)
                                 }
                             },
-                            showTotal: (total, range) =>
-                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                         }}
                     />
                 </Col>

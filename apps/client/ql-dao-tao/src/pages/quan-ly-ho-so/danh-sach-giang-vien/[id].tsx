@@ -13,10 +13,8 @@ import DefaultLayout from '@layouts/default-layout'
 import type { SubjectVersion } from '@workspace/db'
 import { useFindUniqueLecturer } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Col, Collapse, Row } from 'antd'
+import { Col, Row } from 'antd'
 import { useRouter } from 'next/router'
-
-const { Panel } = Collapse
 
 export default function StudentDetailPage() {
     const router = useRouter()
@@ -84,7 +82,7 @@ export default function StudentDetailPage() {
                         </div>
                     </Col>
                     <Col span={24} className="mb-6">
-                        <div className="text-lg font-[500]">Dánh sách lớp được quản lý</div>
+                        <div className="text-lg font-[500]">Danh sách lớp được quản lý</div>
                         <Table
                             rowKey="id"
                             id="fixed-class"
@@ -171,7 +169,7 @@ export default function StudentDetailPage() {
                         />
                     </Col>
                     <Col span={24} className="mb-6">
-                        <div className="text-lg font-[500]">Dánh sách lớp giảng dạy</div>
+                        <div className="text-lg font-[500]">Danh sách lớp giảng dạy</div>
                         <Table
                             rowKey="id"
                             id="training-category"
@@ -239,7 +237,7 @@ export default function StudentDetailPage() {
                         />
                     </Col>
                     <Col span={24}>
-                        <div className="text-lg font-[500]">Dánh sách lớp trợ giảng</div>
+                        <div className="text-lg font-[500]">Danh sách lớp trợ giảng</div>
                         <Table
                             rowKey="id"
                             id="1iu23"

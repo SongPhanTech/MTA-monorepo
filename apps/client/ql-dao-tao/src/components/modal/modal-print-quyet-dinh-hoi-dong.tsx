@@ -61,23 +61,15 @@ const ModalPrintDecision = () => {
         pageStyle: `
         @page {
             size: A4;
+            margin: 1cm;
         }
         @media print {
-            @page { margin: 1 1 1 1 !important; }
-            body, html, #root {
-                height: auto !important;
-                overflow: visible !important;
-            }
             .page-break {
                 page-break-after: always;
-                break-after: page;
             }
-            .page {
-                page-break-after: auto !important;
-                break-after: auto !important;
-                min-height: 297mm;
-                width: 210mm;
-                padding: 15mm;
+            .blank-page {
+                height: 100vh;
+                visibility: hidden;
             }
             table {
                 page-break-inside: auto;
@@ -112,7 +104,7 @@ const ModalPrintDecision = () => {
         >
             <div
                 ref={printRef}
-                className="mx-auto p-10 page text-sm leading-relaxed !font-time-news-roman"
+                className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman"
             >
                 {allThesisProjects.map((tp: ThesisProjectInput, index: number) => (
                     <div key={tp.id}>

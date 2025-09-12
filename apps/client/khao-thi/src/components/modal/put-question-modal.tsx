@@ -58,7 +58,7 @@ const PutQuestionModal = () => {
             }
             if (input?.id) {
                 await updateQuestion({
-                    data: data,
+                    data,
                     where: {
                         id: input.id,
                     },
@@ -66,7 +66,7 @@ const PutQuestionModal = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createQuestion({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

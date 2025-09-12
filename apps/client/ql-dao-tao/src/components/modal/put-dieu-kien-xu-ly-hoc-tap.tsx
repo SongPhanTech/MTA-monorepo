@@ -49,10 +49,10 @@ const PutAcademicActionCondition = () => {
                 ruleSetId: input.ruleSetId,
             }
             if (input?.id) {
-                await updateAcademicActionCondition({ data: data, where: { id: input?.id } })
+                await updateAcademicActionCondition({ data, where: { id: input?.id } })
                 message.success('Cập nhật thành công')
             } else {
-                await createAcademicActionCondition({ data: data })
+                await createAcademicActionCondition({ data })
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({

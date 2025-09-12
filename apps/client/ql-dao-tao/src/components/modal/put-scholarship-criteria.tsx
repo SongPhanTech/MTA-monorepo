@@ -62,7 +62,7 @@ const PutScholarshipCriteria = () => {
             }
             if (input?.scholarshipCriteriaId) {
                 await updateScholarshipCriteria({
-                    data: data,
+                    data,
                     where: {
                         id: input?.scholarshipCriteriaId,
                     },
@@ -70,7 +70,7 @@ const PutScholarshipCriteria = () => {
                 message.success('Cập nhật thành công')
             } else {
                 await createScholarshipCriteria({
-                    data: data,
+                    data,
                 })
                 message.success('Thêm mới thành công')
             }

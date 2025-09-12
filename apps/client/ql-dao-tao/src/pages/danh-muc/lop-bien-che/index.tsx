@@ -56,13 +56,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                       },
                   }
                 : {}),
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
-                      },
-                  }
-                : {}),
             ...(filters.trainingLevel
                 ? {
                       trainingLevelId: {
@@ -107,6 +100,15 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                 ? {
                       curriculumVersionId: {
                           in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingObjectTypes
+                ? {
+                      trainingCourse: {
+                          trainingObjectTypeId: {
+                              in: filters.trainingObjectTypes,
+                          },
                       },
                   }
                 : {}),

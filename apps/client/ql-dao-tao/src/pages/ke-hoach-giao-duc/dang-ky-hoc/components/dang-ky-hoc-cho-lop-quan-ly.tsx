@@ -246,7 +246,9 @@ export default function RegisterClassManager({
                         align: 'center',
                         width: 150,
                         render: (record: SubjectClassData) =>
-                            record.fixedClasses.map((e) => e.name).join(', '),
+                            record.fixedClasses.map((e) => {
+                                return <div className="text-left">- {e.name}</div>
+                            }),
                     },
                 ]}
             />
