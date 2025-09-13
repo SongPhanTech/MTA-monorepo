@@ -251,13 +251,13 @@ export function useGroupByDiplomaType<TArgs extends Prisma.DiplomaTypeGroupByArg
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DiplomaTypeGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.DiplomaTypeGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.DiplomaTypeGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DiplomaTypeGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('DiplomaType', `${endpoint}/diplomaType/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByDiplomaType<TArgs extends Prisma.DiplomaTypeGr
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DiplomaTypeGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.DiplomaTypeGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.DiplomaTypeGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.DiplomaTypeGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DiplomaTypeGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DiplomaType', `${endpoint}/diplomaType/groupBy`, args, options, fetch);

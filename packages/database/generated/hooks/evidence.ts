@@ -251,13 +251,13 @@ export function useGroupByEvidence<TArgs extends Prisma.EvidenceGroupByArgs, Has
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.EvidenceGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.EvidenceGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.EvidenceGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.EvidenceGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('Evidence', `${endpoint}/evidence/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByEvidence<TArgs extends Prisma.EvidenceGroupByA
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.EvidenceGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.EvidenceGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.EvidenceGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.EvidenceGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.EvidenceGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Evidence', `${endpoint}/evidence/groupBy`, args, options, fetch);

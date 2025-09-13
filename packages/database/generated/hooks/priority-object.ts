@@ -251,13 +251,13 @@ export function useGroupByPriorityObject<TArgs extends Prisma.PriorityObjectGrou
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.PriorityObjectGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.PriorityObjectGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.PriorityObjectGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.PriorityObjectGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('PriorityObject', `${endpoint}/priorityObject/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByPriorityObject<TArgs extends Prisma.PriorityOb
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.PriorityObjectGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.PriorityObjectGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.PriorityObjectGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.PriorityObjectGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.PriorityObjectGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('PriorityObject', `${endpoint}/priorityObject/groupBy`, args, options, fetch);

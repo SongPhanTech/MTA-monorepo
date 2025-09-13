@@ -251,13 +251,13 @@ export function useGroupByRequirementCriterion<TArgs extends Prisma.RequirementC
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.RequirementCriterionGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.RequirementCriterionGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.RequirementCriterionGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.RequirementCriterionGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('RequirementCriterion', `${endpoint}/requirementCriterion/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByRequirementCriterion<TArgs extends Prisma.Requ
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.RequirementCriterionGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.RequirementCriterionGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.RequirementCriterionGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.RequirementCriterionGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.RequirementCriterionGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('RequirementCriterion', `${endpoint}/requirementCriterion/groupBy`, args, options, fetch);

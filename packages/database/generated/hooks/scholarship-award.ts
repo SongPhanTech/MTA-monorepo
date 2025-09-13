@@ -251,13 +251,13 @@ export function useGroupByScholarshipAward<TArgs extends Prisma.ScholarshipAward
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ScholarshipAwardGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.ScholarshipAwardGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.ScholarshipAwardGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ScholarshipAwardGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('ScholarshipAward', `${endpoint}/scholarshipAward/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByScholarshipAward<TArgs extends Prisma.Scholars
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ScholarshipAwardGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.ScholarshipAwardGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.ScholarshipAwardGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.ScholarshipAwardGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ScholarshipAwardGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ScholarshipAward', `${endpoint}/scholarshipAward/groupBy`, args, options, fetch);

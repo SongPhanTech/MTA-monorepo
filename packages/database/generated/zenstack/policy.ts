@@ -1239,6 +1239,26 @@ const policy: PolicyDef = {
             },
 
         },
+        userSession: {
+            modelLevel: {
+                read: { guard: UserSession_read, },
+                create: { guard: UserSession_create, inputChecker: UserSession_create_input, },
+                update: { guard: UserSession_update, },
+                postUpdate: { guard: UserSession_postUpdate, },
+                delete: { guard: UserSession_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         document: {
             modelLevel: {
                 read: { guard: Document_read, },
@@ -4520,6 +4540,7 @@ const policy: PolicyDef = {
         role: { hasValidation: false },
         permission: { hasValidation: false },
         chatBotConfig: { hasValidation: false },
+        userSession: { hasValidation: false },
         document: { hasValidation: false },
         fAQ: { hasValidation: false },
         prompt: { hasValidation: false },
@@ -8514,6 +8535,71 @@ function ChatBotConfig_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_ChatBotConfig_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function UserSession_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_UserSession_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function UserSession_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_UserSession_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function UserSession_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function UserSession_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_UserSession_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function UserSession_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_UserSession_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function UserSession_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_UserSession_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

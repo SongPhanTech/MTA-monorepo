@@ -1082,6 +1082,19 @@ exports.Prisma.ChatBotConfigScalarFieldEnum = {
   value: 'value'
 };
 
+exports.Prisma.UserSessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  email: 'email',
+  phoneNumber: 'phoneNumber'
+};
+
 exports.Prisma.DocumentScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -1143,6 +1156,7 @@ exports.Prisma.ConversationScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   userId: 'userId',
+  sessionId: 'sessionId',
   type: 'type'
 };
 
@@ -4239,6 +4253,15 @@ exports.Prisma.ChatBotConfigOrderByRelevanceFieldEnum = {
   value: 'value'
 };
 
+exports.Prisma.UserSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  email: 'email',
+  phoneNumber: 'phoneNumber'
+};
+
 exports.Prisma.DocumentOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4276,7 +4299,8 @@ exports.Prisma.ConversationOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   name: 'name',
-  userId: 'userId'
+  userId: 'userId',
+  sessionId: 'sessionId'
 };
 
 exports.Prisma.MessageOrderByRelevanceFieldEnum = {
@@ -6317,6 +6341,7 @@ exports.Prisma.ModelName = {
   Role: 'Role',
   Permission: 'Permission',
   ChatBotConfig: 'ChatBotConfig',
+  UserSession: 'UserSession',
   Document: 'Document',
   FAQ: 'FAQ',
   Prompt: 'Prompt',

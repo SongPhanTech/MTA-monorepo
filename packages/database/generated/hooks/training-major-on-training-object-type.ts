@@ -251,13 +251,13 @@ export function useGroupByTrainingMajorOnTrainingObjectType<TArgs extends Prisma
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.TrainingMajorOnTrainingObjectTypeGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('TrainingMajorOnTrainingObjectType', `${endpoint}/trainingMajorOnTrainingObjectType/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByTrainingMajorOnTrainingObjectType<TArgs extend
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.TrainingMajorOnTrainingObjectTypeGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.TrainingMajorOnTrainingObjectTypeGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingMajorOnTrainingObjectType', `${endpoint}/trainingMajorOnTrainingObjectType/groupBy`, args, options, fetch);

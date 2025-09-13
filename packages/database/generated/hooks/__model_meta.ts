@@ -13,7 +13,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -21,7 +21,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -33,11 +33,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, key: {
                     name: "key",
                     type: "ConfigKey",
@@ -64,7 +64,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -72,7 +72,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -84,11 +84,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -136,7 +136,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -144,7 +144,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -156,11 +156,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -197,7 +197,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -205,7 +205,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -217,11 +217,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, subjectVersion: {
                     name: "subjectVersion",
                     type: "SubjectVersion",
@@ -269,7 +269,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -277,7 +277,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -289,22 +289,22 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, content: {
                     name: "content",
                     type: "String",
                 }, type: {
                     name: "type",
                     type: "QuestionType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, point: {
                     name: "point",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 1 }] }],
                 }, explanation: {
                     name: "explanation",
                     type: "String",
@@ -312,7 +312,7 @@ const metadata = {
                 }, isAutoGraded: {
                     name: "isAutoGraded",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, questionBank: {
                     name: "questionBank",
                     type: "QuestionBank",
@@ -382,7 +382,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -390,7 +390,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -402,11 +402,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, sessionId: {
                     name: "sessionId",
                     type: "String",
@@ -467,7 +467,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -475,7 +475,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -487,18 +487,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, title: {
                     name: "title",
                     type: "String",
                 }, status: {
                     name: "status",
                     type: "ExamStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, questionBank: {
                     name: "questionBank",
                     type: "QuestionBank",
@@ -523,23 +523,23 @@ const metadata = {
                 }, passScore: {
                     name: "passScore",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
                 }, maxScore: {
                     name: "maxScore",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 10 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 10 }] }],
                 }, shuffleQuestions: {
                     name: "shuffleQuestions",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, shuffleAnswers: {
                     name: "shuffleAnswers",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, showResult: {
                     name: "showResult",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, room: {
                     name: "room",
                     type: "Room",
@@ -594,7 +594,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -602,7 +602,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -614,11 +614,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -672,7 +672,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -680,7 +680,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -692,11 +692,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -744,7 +744,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -752,7 +752,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -764,11 +764,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, examBankId: {
                     name: "examBankId",
                     type: "String",
@@ -821,7 +821,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -829,7 +829,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -841,11 +841,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, examId: {
                     name: "examId",
                     type: "String",
@@ -892,7 +892,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -900,7 +900,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -912,11 +912,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, startTime: {
                     name: "startTime",
                     type: "DateTime",
@@ -1022,7 +1022,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1030,7 +1030,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1042,11 +1042,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -1108,23 +1108,23 @@ const metadata = {
                 }, examPostponed: {
                     name: "examPostponed",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, exempted: {
                     name: "exempted",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, withdrew: {
                     name: "withdrew",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, examBanned: {
                     name: "examBanned",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, certificates: {
                     name: "certificates",
                     type: "ArchivedCertificateOnStudentSubjectScore",
@@ -1163,7 +1163,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1171,7 +1171,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1183,11 +1183,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -1232,7 +1232,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1240,7 +1240,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1252,11 +1252,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1296,7 +1296,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1304,7 +1304,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1316,11 +1316,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
@@ -1365,7 +1365,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1373,7 +1373,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1385,11 +1385,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1429,7 +1429,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1437,7 +1437,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1449,11 +1449,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1505,7 +1505,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1513,7 +1513,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1525,11 +1525,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1634,7 +1634,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1642,7 +1642,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1654,11 +1654,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1705,7 +1705,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1713,7 +1713,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1725,11 +1725,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1771,35 +1771,35 @@ const metadata = {
                 }, coef_1: {
                     name: "coef_1",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, coef_2: {
                     name: "coef_2",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, coef_3: {
                     name: "coef_3",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, scoreToTakeExam: {
                     name: "scoreToTakeExam",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, scoreToPass: {
                     name: "scoreToPass",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 4 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 4 }] }],
                 }, scoreToPassConditional: {
                     name: "scoreToPassConditional",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
                 }, scoreToTakeGraduation: {
                     name: "scoreToTakeGraduation",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
                 }, scoreToPassGraduation: {
                     name: "scoreToPassGraduation",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -1886,7 +1886,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1894,7 +1894,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1906,11 +1906,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1926,7 +1926,7 @@ const metadata = {
                     name: "graduated",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, classMonitor: {
                     name: "classMonitor",
                     type: "Student",
@@ -2012,7 +2012,7 @@ const metadata = {
                 }, initSize: {
                     name: "initSize",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, students: {
                     name: "students",
                     type: "Student",
@@ -2080,7 +2080,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2088,7 +2088,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2100,11 +2100,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2173,7 +2173,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2181,7 +2181,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2193,11 +2193,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2212,7 +2212,7 @@ const metadata = {
                 }, trainingLanguage: {
                     name: "trainingLanguage",
                     type: "TrainingLanguage",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, numberOfSemesters: {
                     name: "numberOfSemesters",
                     type: "Int",
@@ -2380,7 +2380,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2388,7 +2388,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2400,11 +2400,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2459,7 +2459,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2467,7 +2467,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2479,11 +2479,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2493,7 +2493,7 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "SubjectVersionType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, credit: {
                     name: "credit",
                     type: "Int",
@@ -2504,7 +2504,7 @@ const metadata = {
                 }, period: {
                     name: "period",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, numberOfTheory: {
                     name: "numberOfTheory",
                     type: "Int",
@@ -2670,7 +2670,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2678,7 +2678,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2690,11 +2690,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, subjects: {
                     name: "subjects",
                     type: "SubjectInGroup",
@@ -2718,7 +2718,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2726,7 +2726,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2738,11 +2738,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
@@ -2792,7 +2792,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2800,7 +2800,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2812,11 +2812,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
@@ -2848,7 +2848,7 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "SubjectRequirementType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, useForFinalScore: {
                     name: "useForFinalScore",
                     type: "Boolean",
@@ -2878,7 +2878,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2886,7 +2886,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2898,11 +2898,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2954,7 +2954,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2962,7 +2962,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2974,11 +2974,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
@@ -3018,7 +3018,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ClassRegisterStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, reason: {
                     name: "reason",
                     type: "String",
@@ -3040,7 +3040,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3048,7 +3048,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3060,11 +3060,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3108,7 +3108,7 @@ const metadata = {
                 }, cancelled: {
                     name: "cancelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, lecturerAssignmentDeadline: {
                     name: "lecturerAssignmentDeadline",
                     type: "DateTime",
@@ -3146,11 +3146,11 @@ const metadata = {
                 }, isLockScore: {
                     name: "isLockScore",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, isLockExamScore: {
                     name: "isLockExamScore",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, issuedScoreAt: {
                     name: "issuedScoreAt",
                     type: "DateTime",
@@ -3279,7 +3279,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3287,7 +3287,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3299,11 +3299,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -3319,7 +3319,7 @@ const metadata = {
                 }, periodType: {
                     name: "periodType",
                     type: "PeriodType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, startPeriod: {
                     name: "startPeriod",
                     type: "Int",
@@ -3378,7 +3378,7 @@ const metadata = {
                 }, isReplacement: {
                     name: "isReplacement",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, originalSchedule: {
                     name: "originalSchedule",
                     type: "ClassSchedule",
@@ -3423,7 +3423,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3431,7 +3431,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3443,11 +3443,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3510,7 +3510,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3518,7 +3518,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3530,11 +3530,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3565,7 +3565,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3573,7 +3573,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3585,11 +3585,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3619,7 +3619,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3627,7 +3627,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3639,11 +3639,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3679,7 +3679,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3687,7 +3687,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3699,11 +3699,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3733,7 +3733,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3741,7 +3741,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3753,11 +3753,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3793,7 +3793,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3801,7 +3801,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3813,11 +3813,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3865,7 +3865,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3873,7 +3873,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3885,30 +3885,30 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
                 }, trainingRoom: {
                     name: "trainingRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, computerRoom: {
                     name: "computerRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, laboratoryRoom: {
                     name: "laboratoryRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, examRoom: {
                     name: "examRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, capacity: {
                     name: "capacity",
                     type: "Int",
@@ -3987,7 +3987,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3995,7 +3995,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4007,11 +4007,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4072,7 +4072,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4080,7 +4080,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4092,11 +4092,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, trainingField: {
                     name: "trainingField",
                     type: "TrainingField",
@@ -4141,7 +4141,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4149,7 +4149,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4161,11 +4161,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4179,15 +4179,15 @@ const metadata = {
                 }, numberCreditsMajor: {
                     name: "numberCreditsMajor",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, numberCreditsRequired: {
                     name: "numberCreditsRequired",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, numberCreditsElective: {
                     name: "numberCreditsElective",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
@@ -4264,7 +4264,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4272,7 +4272,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4284,11 +4284,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, trainingMajor: {
                     name: "trainingMajor",
                     type: "TrainingMajor",
@@ -4333,7 +4333,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4341,7 +4341,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4353,18 +4353,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
                 }, priority: {
                     name: "priority",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, curriculumVersions: {
                     name: "curriculumVersions",
                     type: "TrainingBlockOnCurriculumVersion",
@@ -4391,7 +4391,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4399,7 +4399,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4411,11 +4411,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, trainingBlock: {
                     name: "trainingBlock",
                     type: "TrainingBlock",
@@ -4443,11 +4443,11 @@ const metadata = {
                 }, priority: {
                     name: "priority",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, electiveCreditsRequired: {
                     name: "electiveCreditsRequired",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, subjects: {
                     name: "subjects",
                     type: "TrainingBlockSubject",
@@ -4474,7 +4474,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4482,7 +4482,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4494,11 +4494,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4525,7 +4525,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4533,7 +4533,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4545,11 +4545,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4592,7 +4592,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4600,7 +4600,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4612,11 +4612,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, classification: {
                     name: "classification",
                     type: "String",
@@ -4638,7 +4638,7 @@ const metadata = {
                 }, improvementRegister: {
                     name: "improvementRegister",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
@@ -4668,7 +4668,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4676,7 +4676,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4688,11 +4688,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4713,7 +4713,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4721,7 +4721,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4733,11 +4733,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, entryScore: {
                     name: "entryScore",
                     type: "Float",
@@ -4782,7 +4782,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "StudentStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, classMonitor: {
                     name: "classMonitor",
                     type: "FixedClass",
@@ -4914,35 +4914,35 @@ const metadata = {
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, disciplinaryWarningLevel: {
                     name: "disciplinaryWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, expelled: {
                     name: "expelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, foreignLangPass: {
                     name: "foreignLangPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, ITCertificationPass: {
                     name: "ITCertificationPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, strengthTrainingPass: {
                     name: "strengthTrainingPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, militaryTrainingPass: {
                     name: "militaryTrainingPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, studentTrainingScore: {
                     name: "studentTrainingScore",
                     type: "StudentTrainingScore",
@@ -5069,7 +5069,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5077,7 +5077,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5089,11 +5089,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -5199,23 +5199,23 @@ const metadata = {
                 }, postponeWithReason: {
                     name: "postponeWithReason",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, disciplinaryWarningLevel: {
                     name: "disciplinaryWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, expelled: {
                     name: "expelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -5236,7 +5236,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5244,7 +5244,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5256,11 +5256,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -5328,19 +5328,19 @@ const metadata = {
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, disciplinaryWarningLevel: {
                     name: "disciplinaryWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, expelled: {
                     name: "expelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -5361,7 +5361,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5369,7 +5369,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5381,11 +5381,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -5395,15 +5395,15 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "NotificationType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, priority: {
                     name: "priority",
                     type: "NotificationPriority",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, publishedAt: {
                     name: "publishedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, expiresAt: {
                     name: "expiresAt",
                     type: "DateTime",
@@ -5411,7 +5411,7 @@ const metadata = {
                 }, targetAll: {
                     name: "targetAll",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, targetCourses: {
                     name: "targetCourses",
                     type: "TrainingCourse",
@@ -5468,7 +5468,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5476,7 +5476,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5488,11 +5488,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5532,7 +5532,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5540,7 +5540,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5552,11 +5552,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5591,7 +5591,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5599,7 +5599,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5611,11 +5611,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5625,7 +5625,7 @@ const metadata = {
                 }, disabled: {
                     name: "disabled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, role: {
                     name: "role",
                     type: "Role",
@@ -5653,7 +5653,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5661,7 +5661,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5673,11 +5673,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5698,13 +5698,13 @@ const metadata = {
                 },
             },
         },
-        document: {
-            name: 'Document', fields: {
+        userSession: {
+            name: 'UserSession', fields: {
                 id: {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5712,7 +5712,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5724,11 +5724,71 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                    isOptional: true,
+                }, email: {
+                    name: "email",
+                    type: "String",
+                    isOptional: true,
+                }, phoneNumber: {
+                    name: "phoneNumber",
+                    type: "String",
+                    isOptional: true,
+                }, conversation: {
+                    name: "conversation",
+                    type: "Conversation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'session',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        document: {
+            name: 'Document', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -5740,7 +5800,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DocumentStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, uri: {
                     name: "uri",
                     type: "String",
@@ -5770,7 +5830,7 @@ const metadata = {
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                     defaultValueProvider: $default$Document$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -5805,7 +5865,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5813,7 +5873,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5825,11 +5885,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, question: {
                     name: "question",
                     type: "String",
@@ -5841,7 +5901,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DocumentStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, type: {
                     name: "type",
                     type: "DocumentType",
@@ -5859,7 +5919,7 @@ const metadata = {
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                     defaultValueProvider: $default$FAQ$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -5894,7 +5954,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5902,7 +5962,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5914,11 +5974,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, prompt: {
                     name: "prompt",
                     type: "String",
@@ -5926,7 +5986,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DocumentStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, type: {
                     name: "type",
                     type: "DocumentType",
@@ -5951,7 +6011,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5959,7 +6019,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5971,11 +6031,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5994,6 +6054,20 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'user',
+                }, session: {
+                    name: "session",
+                    type: "UserSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'conversation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "sessionId" },
+                }, sessionId: {
+                    name: "sessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'session',
                 }, type: {
                     name: "type",
                     type: "DocumentType",
@@ -6021,7 +6095,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -6029,7 +6103,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -6041,11 +6115,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, conversationId: {
                     name: "conversationId",
                     type: "String",
@@ -6084,7 +6158,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6101,27 +6175,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6172,7 +6246,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6189,27 +6263,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6238,7 +6312,7 @@ const metadata = {
                     name: "iLoaiChucDanh",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -6259,7 +6333,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6276,27 +6350,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6325,7 +6399,7 @@ const metadata = {
                     name: "iNhomChucVu",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -6358,7 +6432,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6375,27 +6449,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6446,7 +6520,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6463,27 +6537,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6534,7 +6608,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6551,27 +6625,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6626,7 +6700,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6643,27 +6717,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6722,7 +6796,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6739,27 +6813,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6901,7 +6975,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6918,27 +6992,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6981,7 +7055,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6998,27 +7072,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7067,7 +7141,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7084,27 +7158,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7149,7 +7223,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7166,27 +7240,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7231,7 +7305,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7248,27 +7322,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7317,7 +7391,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7334,27 +7408,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7399,7 +7473,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7416,27 +7490,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7481,7 +7555,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7498,27 +7572,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7689,7 +7763,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7706,27 +7780,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7765,7 +7839,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7782,27 +7856,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7841,7 +7915,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7858,27 +7932,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7917,7 +7991,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7934,27 +8008,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7997,7 +8071,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8014,27 +8088,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8095,7 +8169,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8112,27 +8186,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8207,7 +8281,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8224,27 +8298,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8319,7 +8393,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8336,27 +8410,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8431,7 +8505,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8448,27 +8522,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8547,7 +8621,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8564,27 +8638,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8655,7 +8729,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8672,27 +8746,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8739,7 +8813,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -8747,7 +8821,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -8759,11 +8833,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, bLaNguoiDung: {
                     name: "bLaNguoiDung",
                     type: "Boolean",
@@ -9747,7 +9821,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -9755,7 +9829,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -9767,11 +9841,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, academicRankType: {
                     name: "academicRankType",
                     type: "DM_HocHam",
@@ -9831,7 +9905,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -9839,7 +9913,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -9851,11 +9925,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, academicDegreeType: {
                     name: "academicDegreeType",
                     type: "DM_HocVi",
@@ -9935,7 +10009,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -9943,7 +10017,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -9955,11 +10029,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10015,7 +10089,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10023,7 +10097,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10035,11 +10109,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -10099,7 +10173,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10107,7 +10181,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10119,11 +10193,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -10183,7 +10257,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10191,7 +10265,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10203,11 +10277,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, ngonNgu: {
                     name: "ngonNgu",
                     type: "DM_NgoaiNgu",
@@ -10279,7 +10353,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10287,7 +10361,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10299,11 +10373,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -10361,7 +10435,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10369,7 +10443,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10381,11 +10455,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10427,7 +10501,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10435,7 +10509,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10447,11 +10521,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, noiRaQuyetDinh: {
                     name: "noiRaQuyetDinh",
                     type: "String",
@@ -10505,7 +10579,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10513,7 +10587,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10525,11 +10599,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -10611,7 +10685,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10619,7 +10693,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10631,11 +10705,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -10688,7 +10762,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10696,7 +10770,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10708,11 +10782,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -10774,7 +10848,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10782,7 +10856,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10794,11 +10868,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, hinhThucKhenThuong: {
                     name: "hinhThucKhenThuong",
                     type: "String",
@@ -10852,7 +10926,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10860,7 +10934,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10872,11 +10946,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, hinhThucKyLuat: {
                     name: "hinhThucKyLuat",
                     type: "String",
@@ -10930,7 +11004,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10938,7 +11012,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10950,11 +11024,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, tenDoiTuong: {
                     name: "tenDoiTuong",
                     type: "String",
@@ -11000,7 +11074,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11008,7 +11082,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11020,11 +11094,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, loai: {
                     name: "loai",
                     type: "String",
@@ -11066,7 +11140,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11074,7 +11148,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11086,11 +11160,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, danToc: {
                     name: "danToc",
                     type: "DM_DanToc",
@@ -11146,7 +11220,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11154,7 +11228,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11166,11 +11240,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, cuongVi: {
                     name: "cuongVi",
                     type: "String",
@@ -11228,7 +11302,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11236,7 +11310,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11248,11 +11322,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, tenNuoc: {
                     name: "tenNuoc",
                     type: "DM_QuocGia",
@@ -11306,7 +11380,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11314,7 +11388,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11326,11 +11400,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, loai: {
                     name: "loai",
                     type: "DM_LoaiThuongTat",
@@ -11392,7 +11466,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11400,7 +11474,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11412,11 +11486,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -11454,7 +11528,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11462,7 +11536,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11474,11 +11548,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, tenTruong: {
                     name: "tenTruong",
                     type: "DM_TruongDaoTaoBacDH",
@@ -11562,7 +11636,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11570,7 +11644,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11582,11 +11656,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, ten: {
                     name: "ten",
                     type: "DM_ToChucXaHoi",
@@ -11640,7 +11714,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11648,7 +11722,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11660,11 +11734,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, tuNgay: {
                     name: "tuNgay",
                     type: "DateTime",
@@ -11741,7 +11815,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11749,7 +11823,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11761,11 +11835,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11801,7 +11875,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11809,7 +11883,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11821,11 +11895,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11861,7 +11935,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11869,7 +11943,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11881,11 +11955,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11918,7 +11992,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11926,7 +12000,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11938,11 +12012,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -12092,7 +12166,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12100,7 +12174,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12112,11 +12186,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -12195,7 +12269,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12203,7 +12277,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12215,11 +12289,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -12272,7 +12346,7 @@ const metadata = {
                 }, currentStudents: {
                     name: "currentStudents",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, registrationStart: {
                     name: "registrationStart",
                     type: "DateTime",
@@ -12290,7 +12364,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ResearchProjectStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, registrations: {
                     name: "registrations",
                     type: "StudentResearchRegistration",
@@ -12314,7 +12388,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12322,7 +12396,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12334,11 +12408,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -12366,7 +12440,7 @@ const metadata = {
                 }, registeredAt: {
                     name: "registeredAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, motivation: {
                     name: "motivation",
                     type: "String",
@@ -12378,7 +12452,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "RegistrationStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, reviewedAt: {
                     name: "reviewedAt",
                     type: "DateTime",
@@ -12421,7 +12495,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12429,7 +12503,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12441,11 +12515,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -12483,7 +12557,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ThesisProjectStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -12540,7 +12614,7 @@ const metadata = {
                 }, currentStudents: {
                     name: "currentStudents",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, council: {
                     name: "council",
                     type: "Council",
@@ -12650,7 +12724,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12658,7 +12732,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12670,11 +12744,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, startTime: {
                     name: "startTime",
                     type: "DateTime",
@@ -12701,7 +12775,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12709,7 +12783,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12721,11 +12795,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -12765,7 +12839,7 @@ const metadata = {
                 }, registeredAt: {
                     name: "registeredAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, motivation: {
                     name: "motivation",
                     type: "String",
@@ -12781,7 +12855,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "StudentThesisRegistrationStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, reviewedAt: {
                     name: "reviewedAt",
                     type: "DateTime",
@@ -12830,7 +12904,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12838,7 +12912,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12850,11 +12924,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
@@ -12975,7 +13049,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12983,7 +13057,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12995,11 +13069,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, issueDate: {
                     name: "issueDate",
                     type: "DateTime",
@@ -13041,7 +13115,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13049,7 +13123,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13061,19 +13135,19 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, sentDate: {
                     name: "sentDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, isConfirmed: {
                     name: "isConfirmed",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, councilMember: {
                     name: "councilMember",
                     type: "CouncilMember",
@@ -13106,7 +13180,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13114,7 +13188,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13126,19 +13200,19 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, proposedDate: {
                     name: "proposedDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, status: {
                     name: "status",
                     type: "CouncilProposalStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, studentThesisRegistration: {
                     name: "studentThesisRegistration",
                     type: "StudentThesisRegistration",
@@ -13185,7 +13259,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13193,7 +13267,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13205,11 +13279,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -13269,7 +13343,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13277,7 +13351,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13289,11 +13363,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, finalScore: {
                     name: "finalScore",
                     type: "Decimal",
@@ -13305,7 +13379,7 @@ const metadata = {
                 }, isProfileComplete: {
                     name: "isProfileComplete",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, thesis: {
                     name: "thesis",
                     type: "ThesisProject",
@@ -13344,7 +13418,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13352,7 +13426,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13364,23 +13438,23 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, submissionDate: {
                     name: "submissionDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, isHardcopy: {
                     name: "isHardcopy",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, isSoftcopy: {
                     name: "isSoftcopy",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, librarianNote: {
                     name: "librarianNote",
                     type: "String",
@@ -13421,7 +13495,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13429,7 +13503,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13441,11 +13515,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -13472,7 +13546,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13480,7 +13554,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13492,18 +13566,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
                 }, status: {
                     name: "status",
                     type: "PaymentStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, paymentDate: {
                     name: "paymentDate",
                     type: "DateTime",
@@ -13558,7 +13632,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13566,7 +13640,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13578,11 +13652,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, thesisProject: {
                     name: "thesisProject",
                     type: "ThesisProject",
@@ -13613,7 +13687,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "PaymentStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, paymentDate: {
                     name: "paymentDate",
                     type: "DateTime",
@@ -13639,7 +13713,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13647,7 +13721,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13659,11 +13733,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -13919,7 +13993,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13927,7 +14001,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13939,11 +14013,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -13994,7 +14068,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14002,7 +14076,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14014,11 +14088,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, config: {
                     name: "config",
                     type: "AcademicActionConfig",
@@ -14054,7 +14128,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14062,7 +14136,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14074,11 +14148,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, ruleSet: {
                     name: "ruleSet",
                     type: "AcademicActionRuleSet",
@@ -14100,7 +14174,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, value: {
                     name: "value",
                     type: "Float",
@@ -14108,7 +14182,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, yearCondition: {
                     name: "yearCondition",
                     type: "Int",
@@ -14134,7 +14208,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14142,7 +14216,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14154,11 +14228,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -14219,7 +14293,7 @@ const metadata = {
                 }, decisionDate: {
                     name: "decisionDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, validUntil: {
                     name: "validUntil",
                     type: "DateTime",
@@ -14237,7 +14311,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DecisionStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -14258,7 +14332,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14266,7 +14340,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14278,18 +14352,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
                 }, time: {
                     name: "time",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, semester: {
                     name: "semester",
                     type: "Semester",
@@ -14337,7 +14411,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14345,7 +14419,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14357,11 +14431,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, trainingScoreSession: {
                     name: "trainingScoreSession",
                     type: "TrainingScoreSession",
@@ -14389,7 +14463,7 @@ const metadata = {
                 }, score: {
                     name: "score",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
@@ -14414,7 +14488,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14422,7 +14496,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14434,11 +14508,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14451,7 +14525,7 @@ const metadata = {
                 }, multiplier: {
                     name: "multiplier",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 1 }] }],
                 }, effectiveFrom: {
                     name: "effectiveFrom",
                     type: "DateTime",
@@ -14504,7 +14578,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14512,7 +14586,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14524,11 +14598,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, scholarshipId: {
                     name: "scholarshipId",
                     type: "String",
@@ -14547,7 +14621,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, operator: {
                     name: "operator",
                     type: "CriteriaOperator",
@@ -14558,11 +14632,11 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, bonusValue: {
                     name: "bonusValue",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -14580,7 +14654,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14588,7 +14662,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14600,11 +14674,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -14670,7 +14744,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14678,7 +14752,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14690,11 +14764,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14710,7 +14784,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "GraduationSessionStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, applications: {
                     name: "applications",
                     type: "StudentGraduationApplication",
@@ -14734,7 +14808,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14742,7 +14816,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14754,11 +14828,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -14786,11 +14860,11 @@ const metadata = {
                 }, applicationDate: {
                     name: "applicationDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, status: {
                     name: "status",
                     type: "ApplicationStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, applicationCheckResult: {
                     name: "applicationCheckResult",
                     type: "ApplicationCheckResult",
@@ -14823,7 +14897,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14831,7 +14905,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14843,11 +14917,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, studentGraduationApplication: {
                     name: "studentGraduationApplication",
                     type: "StudentGraduationApplication",
@@ -14902,7 +14976,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14910,7 +14984,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14922,11 +14996,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, application: {
                     name: "application",
                     type: "StudentGraduationApplication",
@@ -14954,7 +15028,7 @@ const metadata = {
                 }, decisionDate: {
                     name: "decisionDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, notes: {
                     name: "notes",
                     type: "String",
@@ -15030,7 +15104,7 @@ const metadata = {
                     name: "totalCopy",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15060,7 +15134,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15068,7 +15142,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15080,11 +15154,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, classification: {
                     name: "classification",
                     type: "String",
@@ -15166,7 +15240,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15174,7 +15248,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15186,11 +15260,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, initialRank: {
                     name: "initialRank",
                     type: "AcademicRankingConvert",
@@ -15226,7 +15300,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15234,7 +15308,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15246,11 +15320,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, downgradeRule: {
                     name: "downgradeRule",
                     type: "GraduationRankDowngradeRule",
@@ -15272,7 +15346,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, value: {
                     name: "value",
                     type: "Float",
@@ -15280,7 +15354,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15298,7 +15372,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15306,7 +15380,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15318,11 +15392,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, ranking: {
                     name: "ranking",
                     type: "AcademicRankingConvert",
@@ -15344,7 +15418,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, value: {
                     name: "value",
                     type: "Float",
@@ -15352,7 +15426,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, applicationCheckResult: {
                     name: "applicationCheckResult",
                     type: "ApplicationCheckResult",
@@ -15376,7 +15450,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15384,7 +15458,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15396,11 +15470,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, fullname: {
                     name: "fullname",
                     type: "String",
@@ -15475,7 +15549,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DiplomaVerificationStatus",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, studentId: {
                     name: "studentId",
                     type: "String",
@@ -15507,7 +15581,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15515,7 +15589,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15527,18 +15601,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, content: {
                     name: "content",
                     type: "String",
                 }, isPinned: {
                     name: "isPinned",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -15601,7 +15675,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15609,7 +15683,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15621,11 +15695,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -15636,7 +15710,7 @@ const metadata = {
                 }, sortOrder: {
                     name: "sortOrder",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -15692,7 +15766,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15700,7 +15774,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15712,11 +15786,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -15751,7 +15825,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15759,7 +15833,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15771,11 +15845,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -15785,7 +15859,7 @@ const metadata = {
                 }, isCompleted: {
                     name: "isCompleted",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, completedAt: {
                     name: "completedAt",
                     type: "DateTime",
@@ -15793,11 +15867,11 @@ const metadata = {
                 }, repeatType: {
                     name: "repeatType",
                     type: "ReminderRepeatType",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, isNotified: {
                     name: "isNotified",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, note: {
                     name: "note",
                     type: "Note",
@@ -15828,7 +15902,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15836,7 +15910,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15848,18 +15922,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, endDate: {
                     name: "endDate",
                     type: "DateTime",
@@ -15899,7 +15973,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15907,7 +15981,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15919,11 +15993,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, order: {
                     name: "order",
                     type: "Int",
@@ -15953,7 +16027,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15961,7 +16035,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15973,11 +16047,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, standard: {
                     name: "standard",
                     type: "StandardCatalog",
@@ -16034,7 +16108,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16042,7 +16116,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16054,11 +16128,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, criterionCatalog: {
                     name: "criterionCatalog",
                     type: "CriterionCatalog",
@@ -16101,7 +16175,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16109,7 +16183,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16121,11 +16195,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16168,7 +16242,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16176,7 +16250,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16188,11 +16262,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
@@ -16215,11 +16289,11 @@ const metadata = {
                 }, opening: {
                     name: "opening",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, conclusion: {
                     name: "conclusion",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, criteria: {
                     name: "criteria",
                     type: "EvaluationCriterion",
@@ -16246,7 +16320,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16254,7 +16328,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16266,11 +16340,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, standard: {
                     name: "standard",
                     type: "EvaluationStandard",
@@ -16325,19 +16399,19 @@ const metadata = {
                 }, currentSituation: {
                     name: "currentSituation",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, strengths: {
                     name: "strengths",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, weakness: {
                     name: "weakness",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, actionPlan: {
                     name: "actionPlan",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, score: {
                     name: "score",
                     type: "Int",
@@ -16362,7 +16436,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16370,7 +16444,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16382,11 +16456,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16413,7 +16487,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16421,7 +16495,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16433,11 +16507,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, category: {
                     name: "category",
                     type: "EvidenceCategory",
@@ -16488,7 +16562,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16496,7 +16570,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16508,11 +16582,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, evaluationCriterion: {
                     name: "evaluationCriterion",
                     type: "EvaluationCriterion",
@@ -16545,11 +16619,11 @@ const metadata = {
                 }, evidencePlaces: {
                     name: "evidencePlaces",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 }, collectionMethod: {
                     name: "collectionMethod",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16567,7 +16641,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16575,7 +16649,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16587,11 +16661,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, requirementCriterion: {
                     name: "requirementCriterion",
                     type: "RequirementCriterion",
@@ -16640,7 +16714,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16648,7 +16722,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16660,11 +16734,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
@@ -16710,7 +16784,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16718,7 +16792,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16730,11 +16804,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, evaluationCouncil: {
                     name: "evaluationCouncil",
                     type: "EvaluationCouncil",
@@ -16781,7 +16855,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16789,7 +16863,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16801,11 +16875,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
@@ -16848,7 +16922,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16856,7 +16930,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16868,11 +16942,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
@@ -16917,7 +16991,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16925,7 +16999,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16937,11 +17011,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16997,7 +17071,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17005,7 +17079,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17017,11 +17091,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17095,7 +17169,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17103,7 +17177,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17115,11 +17189,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17152,7 +17226,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17160,7 +17234,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17172,11 +17246,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17215,7 +17289,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17223,7 +17297,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17235,11 +17309,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17253,11 +17327,11 @@ const metadata = {
                 }, isPublic: {
                     name: "isPublic",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, anonymous: {
                     name: "anonymous",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",
@@ -17329,7 +17403,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17337,7 +17411,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17349,11 +17423,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17411,7 +17485,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17419,7 +17493,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17431,11 +17505,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, answer: {
                     name: "answer",
                     type: "String",
@@ -17477,7 +17551,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17485,7 +17559,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17497,11 +17571,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, survey: {
                     name: "survey",
                     type: "Survey",
@@ -17535,7 +17609,7 @@ const metadata = {
                 }, startedAt: {
                     name: "startedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, completedAt: {
                     name: "completedAt",
                     type: "DateTime",
@@ -17543,7 +17617,7 @@ const metadata = {
                 }, isCompleted: {
                     name: "isCompleted",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, responses: {
                     name: "responses",
                     type: "SurveyResponse",
@@ -17570,7 +17644,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17578,7 +17652,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17590,11 +17664,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, surveySession: {
                     name: "surveySession",
                     type: "SurveySession",
@@ -17644,7 +17718,7 @@ const metadata = {
                 }, answeredAt: {
                     name: "answeredAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17665,7 +17739,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17673,7 +17747,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17685,11 +17759,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -17768,7 +17842,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17776,7 +17850,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17788,11 +17862,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -17869,7 +17943,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17877,7 +17951,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17889,11 +17963,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17923,7 +17997,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17931,7 +18005,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17943,11 +18017,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17977,7 +18051,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17985,7 +18059,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17997,11 +18071,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18031,7 +18105,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18039,7 +18113,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18051,11 +18125,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18079,7 +18153,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18087,7 +18161,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18099,11 +18173,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18127,7 +18201,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18135,7 +18209,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18147,11 +18221,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18175,7 +18249,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18183,7 +18257,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18195,11 +18269,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18223,7 +18297,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18231,7 +18305,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18243,11 +18317,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18271,7 +18345,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18279,7 +18353,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18291,11 +18365,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18319,7 +18393,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18327,7 +18401,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18339,11 +18413,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18373,7 +18447,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18381,7 +18455,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18393,11 +18467,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18421,7 +18495,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18429,7 +18503,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18441,11 +18515,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18475,7 +18549,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18483,7 +18557,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18495,11 +18569,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18523,7 +18597,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18531,7 +18605,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18543,11 +18617,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18571,7 +18645,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18579,7 +18653,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18591,11 +18665,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18619,7 +18693,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18627,7 +18701,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18639,11 +18713,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18667,7 +18741,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18675,7 +18749,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18687,11 +18761,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18715,7 +18789,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18723,7 +18797,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18735,11 +18809,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18775,7 +18849,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18783,7 +18857,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18795,11 +18869,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18829,7 +18903,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18837,7 +18911,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18849,11 +18923,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18883,7 +18957,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18891,7 +18965,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18903,11 +18977,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18937,7 +19011,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18945,7 +19019,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18957,11 +19031,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18991,7 +19065,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18999,7 +19073,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19011,11 +19085,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19045,7 +19119,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19053,7 +19127,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19065,11 +19139,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19099,7 +19173,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19107,7 +19181,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19119,11 +19193,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19153,7 +19227,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19161,7 +19235,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19173,11 +19247,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19207,7 +19281,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19215,7 +19289,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19227,11 +19301,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19261,7 +19335,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19269,7 +19343,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19281,11 +19355,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19315,7 +19389,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19323,7 +19397,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19335,11 +19409,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, content: {
                     name: "content",
                     type: "String",
@@ -19378,7 +19452,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19386,7 +19460,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19398,11 +19472,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, field: {
                     name: "field",
                     type: "CriteriaField",
@@ -19412,7 +19486,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
                 }, threshold: {
                     name: "threshold",
                     type: "Float",
@@ -19420,7 +19494,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, severity: {
                     name: "severity",
                     type: "Int",
@@ -19468,7 +19542,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19476,7 +19550,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19488,11 +19562,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -19552,7 +19626,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19560,7 +19634,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19572,11 +19646,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -19634,7 +19708,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19642,7 +19716,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19654,11 +19728,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19692,7 +19766,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19700,7 +19774,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19712,11 +19786,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19735,7 +19809,7 @@ const metadata = {
                     name: "numberField",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19756,7 +19830,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19764,7 +19838,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19776,11 +19850,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@default", "args": [] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
                 }, ipAddress: {
                     name: "ipAddress",
                     type: "String",
