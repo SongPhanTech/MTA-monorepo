@@ -251,13 +251,13 @@ export function useGroupBySurveyQuestionGroup<TArgs extends Prisma.SurveyQuestio
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.SurveyQuestionGroupGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.SurveyQuestionGroupGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.SurveyQuestionGroupGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.SurveyQuestionGroupGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('SurveyQuestionGroup', `${endpoint}/surveyQuestionGroup/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupBySurveyQuestionGroup<TArgs extends Prisma.Surve
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.SurveyQuestionGroupGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.SurveyQuestionGroupGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.SurveyQuestionGroupGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.SurveyQuestionGroupGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.SurveyQuestionGroupGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SurveyQuestionGroup', `${endpoint}/surveyQuestionGroup/groupBy`, args, options, fetch);

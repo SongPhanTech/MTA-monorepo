@@ -251,13 +251,13 @@ export function useGroupByArchivedCertificateOnStudentSubjectScore<TArgs extends
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('ArchivedCertificateOnStudentSubjectScore', `${endpoint}/archivedCertificateOnStudentSubjectScore/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByArchivedCertificateOnStudentSubjectScore<TArgs
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType, TArgs['by']> &
-    {
-        [P in ((keyof TArgs) & (keyof Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType))]: P extends '_count'
-        ? TArgs[P] extends boolean
-        ? number
-        : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
-        : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
-    }
+        {
+            [P in ((keyof TArgs) & (keyof Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType))]: P extends '_count'
+            ? TArgs[P] extends boolean
+            ? number
+            : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
+            : Prisma.GetScalarType<TArgs[P], Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByOutputType[P]>
+        }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ArchivedCertificateOnStudentSubjectScoreGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ArchivedCertificateOnStudentSubjectScore', `${endpoint}/archivedCertificateOnStudentSubjectScore/groupBy`, args, options, fetch);

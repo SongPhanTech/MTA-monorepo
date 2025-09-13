@@ -773,6 +773,19 @@ const policy = {
                 update: {},
             },
         },
+        userSession: {
+            modelLevel: {
+                read: { guard: UserSession_read, },
+                create: { guard: UserSession_create, inputChecker: UserSession_create_input, },
+                update: { guard: UserSession_update, },
+                postUpdate: { guard: UserSession_postUpdate, },
+                delete: { guard: UserSession_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         document: {
             modelLevel: {
                 read: { guard: Document_read, },
@@ -2927,6 +2940,7 @@ const policy = {
         role: { hasValidation: false },
         permission: { hasValidation: false },
         chatBotConfig: { hasValidation: false },
+        userSession: { hasValidation: false },
         document: { hasValidation: false },
         fAQ: { hasValidation: false },
         prompt: { hasValidation: false },
@@ -7685,6 +7699,84 @@ function ChatBotConfig_delete(context, db) {
     return { OR: [] };
 }
 function $check_ChatBotConfig_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_UserSession_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_UserSession_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function UserSession_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_UserSession_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_UserSession_postUpdate(input, context) {
+    return true;
+}
+function UserSession_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_UserSession_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

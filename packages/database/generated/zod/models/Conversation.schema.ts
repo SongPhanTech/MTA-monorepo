@@ -21,11 +21,13 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     user: z.record(z.unknown()).optional(),
+    session: z.record(z.unknown()).optional(),
     message: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     userId: z.string().uuid().nullish(),
+    sessionId: z.string().nullish(),
 }
 );
 

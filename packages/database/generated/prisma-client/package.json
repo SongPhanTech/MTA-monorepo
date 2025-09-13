@@ -1,5 +1,5 @@
 {
-  "name": "prisma-client-289eb793bafd0f1d472a514e353f8cfcf5d60dd6b925054f421c378e37beb061",
+  "name": "prisma-client-17223452c5c5cf6d5cca7d878818c42cff83817cad132374f66eb9f21ac88a5b",
   "main": "index.js",
   "types": "index.d.ts",
   "browser": "index-browser.js",
@@ -128,22 +128,16 @@
     },
     "./sql": {
       "require": {
-        "types": "./sql/index.d.ts",
-        "edge-light": "./sql/index.edge.js",
-        "workerd": "./sql/index.edge.js",
-        "worker": "./sql/index.edge.js",
-        "node": "./sql/index.js",
-        "default": "./sql/index.js"
+        "types": "./sql.d.ts",
+        "node": "./sql.js",
+        "default": "./sql.js"
       },
       "import": {
-        "types": "./sql/index.d.ts",
-        "edge-light": "./sql/index.edge.mjs",
-        "workerd": "./sql/index.edge.mjs",
-        "worker": "./sql/index.edge.mjs",
-        "node": "./sql/index.mjs",
-        "default": "./sql/index.mjs"
+        "types": "./sql.d.ts",
+        "node": "./sql.mjs",
+        "default": "./sql.mjs"
       },
-      "default": "./sql/index.js"
+      "default": "./sql.js"
     },
     "./*": "./*"
   },

@@ -1928,6 +1928,22 @@ model ChatBotConfig {
   @@schema("tro-ly-ao")
 }
 
+model UserSession {
+  id           String         @id() @default(cuid())
+  code         String?        @unique()
+  active       Boolean        @default(true)
+  description  String?        @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now()) @updatedAt()
+  name         String?
+  email        String?
+  phoneNumber  String?
+  conversation Conversation[]
+
+  @@schema("tro-ly-ao")
+}
+
 model Document {
   id           String         @id() @default(cuid())
   code         String?        @unique()
@@ -2000,6 +2016,8 @@ model Conversation {
   name        String?
   user        DM_NhanVien?  @relation(fields: [userId], references: [Id])
   userId      String?       @db.Uuid()
+  session     UserSession?  @relation(fields: [sessionId], references: [id])
+  sessionId   String?
   type        DocumentType?
   message     Message[]
 
