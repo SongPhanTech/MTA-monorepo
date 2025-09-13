@@ -154,6 +154,7 @@ export default function SettingClass() {
 
     const { data: room = [], refetch } = useFindManyRoom({
         where: {
+            active: true,
             ...(searchRoom ? { name: { contains: searchRoom, mode: 'insensitive' } } : {}),
         },
     })
